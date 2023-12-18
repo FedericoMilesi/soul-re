@@ -1,0 +1,60 @@
+name: SLUS_007.08
+sha1: b7f430596aa0c4f1f7b6550aa12a31c38f980cbb
+options:
+  basename: slus_007.08
+  target_path: SLUS_007.08
+  base_path: .
+  platform: psx
+  compiler: GCC
+
+  # asm_path: asm
+  # src_path: src
+  # build_path: build
+  # create_asm_dependencies: True
+
+  ld_script_path: slus_007.08.ld
+
+  find_file_boundaries: False
+  gp_value: 0x800D5CF8
+
+  o_as_suffix: True
+  use_legacy_include_asm: False
+
+  asm_function_macro: glabel
+  asm_jtbl_label_macro: jlabel
+  asm_data_macro: dlabel
+
+  section_order: [".rodata", ".text", ".data", ".bss"]
+  # auto_all_sections: [".data", ".rodata", ".bss"]
+
+  symbol_addrs_path:
+    - symbol_addrs.txt
+  reloc_addrs_path:
+    - reloc_addrs.txt
+
+  # undefined_funcs_auto_path: undefined_funcs_auto.txt
+  # undefined_syms_auto_path: undefined_syms_auto.txt
+
+  extensions_path: tools/splat_ext
+
+  subalign: 2
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+segments:
+  - name: header
+    type: header
+    start: 0x0
+
+  - name: main
+    type: code
+    start: 0x800
+    vram: 0x80010000
+    bss_size: 0x0
+    subsegments:
+      - [0x800, rodata, 800]
+      - [0x355C, asm, 355C]
+      - [0xB8D84, data, B8D84]
+  - [0xC3000]
