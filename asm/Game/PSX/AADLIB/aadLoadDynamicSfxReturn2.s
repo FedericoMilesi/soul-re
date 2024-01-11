@@ -95,7 +95,7 @@ glabel aadLoadDynamicSfxReturn2
 /* 445A0 80053DA0 6400248E */  lw         $a0, 0x64($s1)
 /* 445A4 80053DA4 21987002 */  addu       $s3, $s3, $s0
 /* 445A8 80053DA8 6CFF8424 */  addiu      $a0, $a0, -0x94
-/* 445AC 80053DAC 02E5010C */  jal        func_80079408
+/* 445AC 80053DAC 02E5010C */  jal        memcpy
 /* 445B0 80053DB0 23202402 */   subu      $a0, $s1, $a0
 /* 445B4 80053DB4 6400228E */  lw         $v0, 0x64($s1)
 /* 445B8 80053DB8 23905002 */  subu       $s2, $s2, $s0
@@ -140,13 +140,13 @@ glabel aadLoadDynamicSfxReturn2
 /* 44644 80053E44 2151010C */  jal        aadWaitForSramTransferComplete
 /* 44648 80053E48 23905002 */   subu      $s2, $s2, $s0
 /* 4464C 80053E4C 0580043C */  lui        $a0, %hi(HackCallback)
-/* 44650 80053E50 E4FF020C */  jal        func_800BFF90
+/* 44650 80053E50 E4FF020C */  jal        SpuSetTransferCallback
 /* 44654 80053E54 243C8424 */   addiu     $a0, $a0, %lo(HackCallback)
 /* 44658 80053E58 7000248E */  lw         $a0, 0x70($s1)
-/* 4465C 80053E5C 59FE020C */  jal        func_800BF964
+/* 4465C 80053E5C 59FE020C */  jal        SpuSetTransferStartAddr
 /* 44660 80053E60 00000000 */   nop
 /* 44664 80053E64 21209302 */  addu       $a0, $s4, $s3
-/* 44668 80053E68 71FE020C */  jal        func_800BF9C4
+/* 44668 80053E68 71FE020C */  jal        SpuWrite
 /* 4466C 80053E6C 21280002 */   addu      $a1, $s0, $zero
 /* 44670 80053E70 21987002 */  addu       $s3, $s3, $s0
 /* 44674 80053E74 7000228E */  lw         $v0, 0x70($s1)
@@ -164,7 +164,7 @@ glabel aadLoadDynamicSfxReturn2
 /* 446A4 80053EA4 740022AE */  sw         $v0, 0x74($s1)
 /* 446A8 80053EA8 07006014 */  bnez       $v1, .L80053EC8
 /* 446AC 80053EAC 680023AE */   sw        $v1, 0x68($s1)
-/* 446B0 80053EB0 E4FF020C */  jal        func_800BFF90
+/* 446B0 80053EB0 E4FF020C */  jal        SpuSetTransferCallback
 /* 446B4 80053EB4 21200000 */   addu      $a0, $zero, $zero
 .L80053EB8:
 /* 446B8 80053EB8 AB4C010C */  jal        aadLoadDynamicSfxDone
@@ -183,7 +183,7 @@ glabel aadLoadDynamicSfxReturn2
 /* 446E4 80053EE4 BF4F0108 */  j          .L80053EFC
 /* 446E8 80053EE8 00000000 */   nop
 .L80053EEC:
-/* 446EC 80053EEC E4FF020C */  jal        func_800BFF90
+/* 446EC 80053EEC E4FF020C */  jal        SpuSetTransferCallback
 /* 446F0 80053EF0 21200000 */   addu      $a0, $zero, $zero
 .L80053EF4:
 /* 446F4 80053EF4 69FF4016 */  bnez       $s2, .L80053C9C

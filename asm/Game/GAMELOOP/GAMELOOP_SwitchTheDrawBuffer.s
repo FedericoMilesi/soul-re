@@ -6,7 +6,7 @@ glabel GAMELOOP_SwitchTheDrawBuffer
 /* 1FE04 8002F604 1000BFAF */  sw         $ra, 0x10($sp)
 /* 1FE08 8002F608 56BD000C */  jal        GAMELOOP_AddClearPrim
 /* 1FE0C 8002F60C 21280000 */   addu      $a1, $zero, $zero
-/* 1FE10 8002F610 0FE9020C */  jal        func_800BA43C
+/* 1FE10 8002F610 0FE9020C */  jal        DrawSync
 /* 1FE14 8002F614 21200000 */   addu      $a0, $zero, $zero
 /* 1FE18 8002F618 E4BE828F */  lw         $v0, %gp_rel(gameTrackerX + 0x11C)($gp)
 /* 1FE1C 8002F61C 00000000 */  nop
@@ -29,7 +29,7 @@ glabel GAMELOOP_SwitchTheDrawBuffer
 /* 1FE5C 8002F65C 23208200 */  subu       $a0, $a0, $v0
 /* 1FE60 8002F660 80200400 */  sll        $a0, $a0, 2
 /* 1FE64 8002F664 88BC8227 */  addiu      $v0, $gp, %gp_rel(draw)
-/* 1FE68 8002F668 38EA020C */  jal        func_800BA8E0
+/* 1FE68 8002F668 38EA020C */  jal        PutDrawEnv
 /* 1FE6C 8002F66C 21208200 */   addu      $a0, $a0, $v0
 /* 1FE70 8002F670 1000BF8F */  lw         $ra, 0x10($sp)
 /* 1FE74 8002F674 00000000 */  nop

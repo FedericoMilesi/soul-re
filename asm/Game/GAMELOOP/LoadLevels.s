@@ -10,7 +10,7 @@ glabel LoadLevels
 /* 1E7D4 8002DFD4 80918427 */  addiu      $a0, $gp, %gp_rel(fontsObject + 0x4)
 /* 1E7D8 8002DFD8 2800BFAF */  sw         $ra, 0x28($sp)
 /* 1E7DC 8002DFDC 1C00B1AF */  sw         $s1, 0x1C($sp)
-/* 1E7E0 8002DFE0 ACF4020C */  jal        func_800BD2B0
+/* 1E7E0 8002DFE0 ACF4020C */  jal        strlen
 /* 1E7E4 8002DFE4 1800B0AF */   sw        $s0, 0x18($sp)
 /* 1E7E8 8002DFE8 04004010 */  beqz       $v0, .L8002DFFC
 /* 1E7EC 8002DFEC 00000000 */   nop
@@ -19,7 +19,7 @@ glabel LoadLevels
 /* 1E7F8 8002DFF8 00000000 */   nop
 .L8002DFFC:
 /* 1E7FC 8002DFFC 80918427 */  addiu      $a0, $gp, %gp_rel(fontsObject + 0x4)
-/* 1E800 8002E000 1CF4020C */  jal        func_800BD070
+/* 1E800 8002E000 1CF4020C */  jal        strcpy
 /* 1E804 8002E004 21284002 */   addu      $a1, $s2, $zero
 /* 1E808 8002E008 5182010C */  jal        LOAD_ChangeDirectory
 /* 1E80C 8002E00C 21204002 */   addu      $a0, $s2, $zero

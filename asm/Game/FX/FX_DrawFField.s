@@ -26,7 +26,7 @@ glabel FX_DrawFField
 /* 3F45C 8004EC5C 21104300 */  addu       $v0, $v0, $v1
 /* 3F460 8004EC60 5400A2A7 */  sh         $v0, 0x54($sp)
 /* 3F464 8004EC64 1E000486 */  lh         $a0, 0x1E($s0)
-/* 3F468 8004EC68 DCE4010C */  jal        func_80079370
+/* 3F468 8004EC68 DCE4010C */  jal        rcos
 /* 3F46C 8004EC6C 5800A0AF */   sw        $zero, 0x58($sp)
 /* 3F470 8004EC70 1C000386 */  lh         $v1, 0x1C($s0)
 /* 3F474 8004EC74 00000000 */  nop
@@ -82,7 +82,7 @@ glabel FX_DrawFField
 /* 3F524 8004ED24 28000426 */  addiu      $a0, $s0, 0x28
 /* 3F528 8004ED28 5800A527 */  addiu      $a1, $sp, 0x58
 /* 3F52C 8004ED2C 00100624 */  addiu      $a2, $zero, 0x1000
-/* 3F530 8004ED30 A8F3020C */  jal        func_800BCEA0
+/* 3F530 8004ED30 A8F3020C */  jal        LoadAverageCol
 /* 3F534 8004ED34 2330C700 */   subu      $a2, $a2, $a3
 /* 3F538 8004ED38 543B0108 */  j          .L8004ED50
 /* 3F53C 8004ED3C FF00033C */   lui       $v1, (0xFFFFFF >> 16)
@@ -99,7 +99,7 @@ glabel FX_DrawFField
 /* 3F560 8004ED60 4CE8000C */  jal        MATH3D_SetUnityMatrix
 /* 3F564 8004ED64 5C00A2AF */   sw        $v0, 0x5C($sp)
 /* 3F568 8004ED68 00040424 */  addiu      $a0, $zero, 0x400
-/* 3F56C 8004ED6C 32E4010C */  jal        func_800790C8
+/* 3F56C 8004ED6C 32E4010C */  jal        RotMatrixZ
 /* 3F570 8004ED70 3000A527 */   addiu     $a1, $sp, 0x30
 /* 3F574 8004ED74 0D000392 */  lbu        $v1, 0xD($s0)
 /* 3F578 8004ED78 01000224 */  addiu      $v0, $zero, 0x1
@@ -111,7 +111,7 @@ glabel FX_DrawFField
 /* 3F590 8004ED90 21204002 */   addu      $a0, $s2, $zero
 .L8004ED94:
 /* 3F594 8004ED94 40AD8487 */  lh         $a0, %gp_rel(theCamera + 0xB0)($gp)
-/* 3F598 8004ED98 98E3010C */  jal        func_80078E60
+/* 3F598 8004ED98 98E3010C */  jal        RotMatrixX
 /* 3F59C 8004ED9C 3000A527 */   addiu     $a1, $sp, 0x30
 /* 3F5A0 8004EDA0 21204002 */  addu       $a0, $s2, $zero
 .L8004EDA4:

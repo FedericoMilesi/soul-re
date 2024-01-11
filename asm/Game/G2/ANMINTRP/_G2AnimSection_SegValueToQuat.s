@@ -40,7 +40,7 @@ glabel _G2AnimSection_SegValueToQuat
 /* 83108 80092908 1600C016 */  bnez       $s6, .L80092964
 /* 8310C 8009290C 1400A2A7 */   sh        $v0, 0x14($sp)
 /* 83110 80092910 21200002 */  addu       $a0, $s0, $zero
-/* 83114 80092914 63E7010C */  jal        func_80079D8C
+/* 83114 80092914 63E7010C */  jal        G2Quat_FromEuler_S
 /* 83118 80092918 1000A527 */   addiu     $a1, $sp, 0x10
 /* 8311C 8009291C F4FF2296 */  lhu        $v0, -0xC($s1)
 /* 83120 80092920 00000000 */  nop
@@ -62,7 +62,7 @@ glabel _G2AnimSection_SegValueToQuat
 /* 83160 80092960 200002A6 */   sh        $v0, 0x20($s0)
 .L80092964:
 /* 83164 80092964 08000426 */  addiu      $a0, $s0, 0x8
-/* 83168 80092968 63E7010C */  jal        func_80079D8C
+/* 83168 80092968 63E7010C */  jal        G2Quat_FromEuler_S
 /* 8316C 8009296C 1000A527 */   addiu     $a1, $sp, 0x10
 /* 83170 80092970 F4FF2296 */  lhu        $v0, -0xC($s1)
 /* 83174 80092974 00000000 */  nop

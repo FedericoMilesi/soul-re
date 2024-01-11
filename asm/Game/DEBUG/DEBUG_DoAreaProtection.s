@@ -5,7 +5,7 @@ glabel DEBUG_DoAreaProtection
 /* 527C 80014A7C E8FFBD27 */  addiu      $sp, $sp, -0x18
 /* 5280 80014A80 1000BFAF */  sw         $ra, 0x10($sp)
 .L80014A84:
-/* 5284 80014A84 F2F2020C */  jal        func_800BCBC8
+/* 5284 80014A84 F2F2020C */  jal        checkagain
 /* 5288 80014A88 00000000 */   nop
 /* 528C 80014A8C FDFF4014 */  bnez       $v0, .L80014A84
 /* 5290 80014A90 00000000 */   nop

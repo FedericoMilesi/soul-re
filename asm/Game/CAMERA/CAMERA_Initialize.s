@@ -10,11 +10,11 @@ glabel CAMERA_Initialize
 /* 6700 80015F00 2000BFAF */  sw         $ra, 0x20($sp)
 /* 6704 80015F04 1C00B3AF */  sw         $s3, 0x1C($sp)
 /* 6708 80015F08 1800B2AF */  sw         $s2, 0x18($sp)
-/* 670C 80015F0C 2EF2020C */  jal        func_800BC8B8
+/* 670C 80015F0C 2EF2020C */  jal        memset
 /* 6710 80015F10 1000B0AF */   sw        $s0, 0x10($sp)
 /* 6714 80015F14 21900000 */  addu       $s2, $zero, $zero
 .L80015F18:
-/* 6718 80015F18 3AF2020C */  jal        func_800BC8E8
+/* 6718 80015F18 3AF2020C */  jal        rand
 /* 671C 80015F1C 00000000 */   nop
 /* 6720 80015F20 21204000 */  addu       $a0, $v0, $zero
 /* 6724 80015F24 21288000 */  addu       $a1, $a0, $zero
@@ -28,7 +28,7 @@ glabel CAMERA_Initialize
 /* 6740 80015F40 00120200 */  sll        $v0, $v0, 8
 /* 6744 80015F44 23108200 */  subu       $v0, $a0, $v0
 /* 6748 80015F48 80FF4224 */  addiu      $v0, $v0, -0x80
-/* 674C 80015F4C 3AF2020C */  jal        func_800BC8E8
+/* 674C 80015F4C 3AF2020C */  jal        rand
 /* 6750 80015F50 000002A6 */   sh        $v0, 0x0($s0)
 /* 6754 80015F54 21184000 */  addu       $v1, $v0, $zero
 /* 6758 80015F58 03006104 */  bgez       $v1, .L80015F68
@@ -39,7 +39,7 @@ glabel CAMERA_Initialize
 /* 6768 80015F68 00120200 */  sll        $v0, $v0, 8
 /* 676C 80015F6C 23106200 */  subu       $v0, $v1, $v0
 /* 6770 80015F70 80FF4224 */  addiu      $v0, $v0, -0x80
-/* 6774 80015F74 3AF2020C */  jal        func_800BC8E8
+/* 6774 80015F74 3AF2020C */  jal        rand
 /* 6778 80015F78 020002A6 */   sh        $v0, 0x2($s0)
 /* 677C 80015F7C 21184000 */  addu       $v1, $v0, $zero
 /* 6780 80015F80 03006104 */  bgez       $v1, .L80015F90

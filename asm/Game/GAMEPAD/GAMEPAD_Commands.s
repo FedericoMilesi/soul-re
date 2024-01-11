@@ -167,11 +167,11 @@ glabel GAMEPAD_Commands
 /* 21C8C 8003148C 21500000 */   addu      $t2, $zero, $zero
 /* 21C90 80031490 10BE8427 */  addiu      $a0, $gp, %gp_rel(gameTrackerX + 0x48)
 /* 21C94 80031494 21280000 */  addu       $a1, $zero, $zero
-/* 21C98 80031498 2EF2020C */  jal        func_800BC8B8
+/* 21C98 80031498 2EF2020C */  jal        memset
 /* 21C9C 8003149C 28000624 */   addiu     $a2, $zero, 0x28
 /* 21CA0 800314A0 38BE8427 */  addiu      $a0, $gp, %gp_rel(gameTrackerX + 0x70)
 /* 21CA4 800314A4 21280000 */  addu       $a1, $zero, $zero
-/* 21CA8 800314A8 2EF2020C */  jal        func_800BC8B8
+/* 21CA8 800314A8 2EF2020C */  jal        memset
 /* 21CAC 800314AC 28000624 */   addiu     $a2, $zero, 0x28
 /* 21CB0 800314B0 7CC50008 */  j          .L800315F0
 /* 21CB4 800314B4 00000000 */   nop

@@ -211,7 +211,7 @@ glabel aadUpdateSlotVolPan
 /* 462C4 80055AC4 82330200 */  srl        $a2, $v0, 14
 /* 462C8 80055AC8 1200A6A7 */  sh         $a2, 0x12($sp)
 /* 462CC 80055ACC 00340600 */  sll        $a2, $a2, 16
-/* 462D0 80055AD0 D000030C */  jal        func_800C0340
+/* 462D0 80055AD0 D000030C */  jal        SpuSetVoiceVolume
 /* 462D4 80055AD4 03340600 */   sra       $a2, $a2, 16
 .L80055AD8:
 /* 462D8 80055AD8 01001026 */  addiu      $s0, $s0, 0x1

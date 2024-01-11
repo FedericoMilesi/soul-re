@@ -79,7 +79,7 @@ glabel MON_CutOut_Monster
 /* 77F64 80087764 23104801 */  subu       $v0, $t2, $t0
 /* 77F68 80087768 3400A2A7 */  sh         $v0, 0x34($sp)
 /* 77F6C 8008776C 1800A227 */  addiu      $v0, $sp, 0x18
-/* 77F70 80087770 86F3020C */  jal        func_800BCE18
+/* 77F70 80087770 86F3020C */  jal        LoadAverageShort12
 /* 77F74 80087774 1000A2AF */   sw        $v0, 0x10($sp)
 /* 77F78 80087778 3A014296 */  lhu        $v0, 0x13A($s2)
 /* 77F7C 8008777C 00000000 */  nop

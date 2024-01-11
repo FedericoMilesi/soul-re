@@ -20,7 +20,7 @@ glabel DRAW_InitShadow
 /* 1B1C4 8002A9C4 FF0F4426 */  addiu      $a0, $s2, 0xFFF
 .L8002A9C8:
 /* 1B1C8 8002A9C8 03830400 */  sra        $s0, $a0, 12
-/* 1B1CC 8002A9CC DCE4010C */  jal        func_80079370
+/* 1B1CC 8002A9CC DCE4010C */  jal        rcos
 /* 1B1D0 8002A9D0 21200002 */   addu      $a0, $s0, $zero
 /* 1B1D4 8002A9D4 02004104 */  bgez       $v0, .L8002A9E0
 /* 1B1D8 8002A9D8 00000000 */   nop
@@ -28,7 +28,7 @@ glabel DRAW_InitShadow
 .L8002A9E0:
 /* 1B1E0 8002A9E0 43110200 */  sra        $v0, $v0, 5
 /* 1B1E4 8002A9E4 000022A6 */  sh         $v0, 0x0($s1)
-/* 1B1E8 8002A9E8 D0E4010C */  jal        func_80079340
+/* 1B1E8 8002A9E8 D0E4010C */  jal        rsin
 /* 1B1EC 8002A9EC 21200002 */   addu      $a0, $s0, $zero
 /* 1B1F0 8002A9F0 02004104 */  bgez       $v0, .L8002A9FC
 /* 1B1F4 8002A9F4 00000000 */   nop

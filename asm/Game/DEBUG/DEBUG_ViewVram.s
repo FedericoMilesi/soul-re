@@ -59,13 +59,13 @@ glabel DEBUG_ViewVram
 /* 4F44 80014744 008E858F */  lw         $a1, %gp_rel(AXIS_LENGTH + 0xD4)($gp)
 /* 4F48 80014748 048E868F */  lw         $a2, %gp_rel(AXIS_LENGTH + 0xD8)($gp)
 /* 4F4C 8001474C F0001024 */  addiu      $s0, $zero, 0xF0
-/* 4F50 80014750 E2F2020C */  jal        func_800BCB88
+/* 4F50 80014750 E2F2020C */  jal        SetDefDispEnv
 /* 4F54 80014754 1000B0AF */   sw        $s0, 0x10($sp)
 /* 4F58 80014758 70BC8427 */  addiu      $a0, $gp, %gp_rel(disp + 0x14)
 /* 4F5C 8001475C 008E858F */  lw         $a1, %gp_rel(AXIS_LENGTH + 0xD4)($gp)
 /* 4F60 80014760 048E868F */  lw         $a2, %gp_rel(AXIS_LENGTH + 0xD8)($gp)
 /* 4F64 80014764 00020724 */  addiu      $a3, $zero, 0x200
-/* 4F68 80014768 E2F2020C */  jal        func_800BCB88
+/* 4F68 80014768 E2F2020C */  jal        SetDefDispEnv
 /* 4F6C 8001476C 1000B0AF */   sw        $s0, 0x10($sp)
 /* 4F70 80014770 2C00238E */  lw         $v1, 0x2C($s1)
 /* 4F74 80014774 00000000 */  nop

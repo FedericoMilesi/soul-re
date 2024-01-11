@@ -31,7 +31,7 @@ glabel aadLoadDynamicSfx
 /* 43364 80052B64 080005AE */  sw         $a1, 0x8($s0)
 /* 43368 80052B68 2128E000 */  addu       $a1, $a3, $zero
 /* 4336C 80052B6C 0C0006AE */  sw         $a2, 0xC($s0)
-/* 43370 80052B70 3DFE020C */  jal        func_800BF8F4
+/* 43370 80052B70 3DFE020C */  jal        strncpy
 /* 43374 80052B74 0B000624 */   addiu     $a2, $zero, 0xB
 /* 43378 80052B78 D89B848F */  lw         $a0, %gp_rel(aadMem)($gp)
 /* 4337C 80052B7C 00000000 */  nop

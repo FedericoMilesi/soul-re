@@ -34,7 +34,7 @@ glabel CAMERA_NearestPointOnLineVec
 /* B1F0 8001A9F0 1E00A2A7 */  sh         $v0, 0x1E($sp)
 /* B1F4 8001A9F4 0400E294 */  lhu        $v0, 0x4($a3)
 /* B1F8 8001A9F8 3000A627 */  addiu      $a2, $sp, 0x30
-/* B1FC 8001A9FC 1AF2020C */  jal        func_800BC868
+/* B1FC 8001A9FC 1AF2020C */  jal        ApplyMatrix
 /* B200 8001AA00 2000A2A7 */   sh        $v0, 0x20($sp)
 /* B204 8001AA04 3400A28F */  lw         $v0, 0x34($sp)
 /* B208 8001AA08 3800A38F */  lw         $v1, 0x38($sp)

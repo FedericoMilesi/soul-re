@@ -40,7 +40,7 @@ glabel LIGHT_DrawShadow
 /* 27450 80036C50 1200A2A7 */  sh         $v0, 0x12($sp)
 /* 27454 80036C54 78002296 */  lhu        $v0, 0x78($s1)
 /* 27458 80036C58 1800A527 */  addiu      $a1, $sp, 0x18
-/* 2745C 80036C5C 3DE3010C */  jal        func_80078CF4
+/* 2745C 80036C5C 3DE3010C */  jal        RotMatrix
 /* 27460 80036C60 1400A2A7 */   sh        $v0, 0x14($sp)
 /* 27464 80036C64 20012286 */  lh         $v0, 0x120($s1)
 /* 27468 80036C68 00000000 */  nop
@@ -168,11 +168,11 @@ glabel LIGHT_DrawShadow
 /* 27650 80036E50 03130300 */  sra        $v0, $v1, 12
 /* 27654 80036E54 6000A2AF */  sw         $v0, 0x60($sp)
 /* 27658 80036E58 5C00A2AF */  sw         $v0, 0x5C($sp)
-/* 2765C 80036E5C 96E4010C */  jal        func_80079258
+/* 2765C 80036E5C 96E4010C */  jal        ScaleMatrix
 /* 27660 80036E60 5800A2AF */   sw        $v0, 0x58($sp)
-/* 27664 80036E64 52F2020C */  jal        func_800BC948
+/* 27664 80036E64 52F2020C */  jal        SetRotMatrix
 /* 27668 80036E68 21200002 */   addu      $a0, $s0, $zero
-/* 2766C 80036E6C 4AF2020C */  jal        func_800BC928
+/* 2766C 80036E6C 4AF2020C */  jal        SetTransMatrix
 /* 27670 80036E70 21200002 */   addu      $a0, $s0, $zero
 /* 27674 80036E74 21206002 */  addu       $a0, $s3, $zero
 /* 27678 80036E78 21280000 */  addu       $a1, $zero, $zero

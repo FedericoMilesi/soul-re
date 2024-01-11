@@ -42,7 +42,7 @@ glabel voiceCmdPlay
 /* A7704 800B6F04 EBDA020C */  jal        putCdCommand
 /* A7708 800B6F08 4800A2A3 */   sb        $v0, 0x48($sp)
 /* A770C 800B6F0C 0000048E */  lw         $a0, 0x0($s0)
-/* A7710 800B6F10 15FC020C */  jal        func_800BF054
+/* A7710 800B6F10 15FC020C */  jal        CdIntToPos
 /* A7714 800B6F14 21284002 */   addu      $a1, $s2, $zero
 /* A7718 800B6F18 00002296 */  lhu        $v0, 0x0($s1)
 /* A771C 800B6F1C 0000038E */  lw         $v1, 0x0($s0)
@@ -51,7 +51,7 @@ glabel voiceCmdPlay
 /* A7728 800B6F28 080043AE */  sw         $v1, 0x8($s2)
 /* A772C 800B6F2C 0000048E */  lw         $a0, 0x0($s0)
 /* A7730 800B6F30 1800B027 */  addiu      $s0, $sp, 0x18
-/* A7734 800B6F34 15FC020C */  jal        func_800BF054
+/* A7734 800B6F34 15FC020C */  jal        CdIntToPos
 /* A7738 800B6F38 21280002 */   addu      $a1, $s0, $zero
 /* A773C 800B6F3C 21204002 */  addu       $a0, $s2, $zero
 /* A7740 800B6F40 1B000524 */  addiu      $a1, $zero, 0x1B
@@ -77,7 +77,7 @@ glabel voiceCmdPlay
 /* A7790 800B6F90 4400A5AF */  sw         $a1, 0x44($sp)
 /* A7794 800B6F94 001A0300 */  sll        $v1, $v1, 8
 /* A7798 800B6F98 3000A3A7 */  sh         $v1, 0x30($sp)
-/* A779C 800B6F9C DD01030C */  jal        func_800C0774
+/* A779C 800B6F9C DD01030C */  jal        SpuSetCommonAttr
 /* A77A0 800B6FA0 3200A3A7 */   sh        $v1, 0x32($sp)
 /* A77A4 800B6FA4 7CBF828F */  lw         $v0, %gp_rel(gameTrackerX + 0x1B4)($gp)
 /* A77A8 800B6FA8 00000000 */  nop

@@ -85,13 +85,13 @@ glabel FX_ContinueRain
 /* 3A1E4 800499E4 21A00000 */  addu       $s4, $zero, $zero
 /* 3A1E8 800499E8 1800B527 */  addiu      $s5, $sp, 0x18
 .L800499EC:
-/* 3A1EC 800499EC 3AF2020C */  jal        func_800BC8E8
+/* 3A1EC 800499EC 3AF2020C */  jal        rand
 /* 3A1F0 800499F0 00000000 */   nop
 /* 3A1F4 800499F4 FF034230 */  andi       $v0, $v0, 0x3FF
 /* 3A1F8 800499F8 2A10C202 */  slt        $v0, $s6, $v0
 /* 3A1FC 800499FC 6E004014 */  bnez       $v0, .L80049BB8
 /* 3A200 80049A00 00000000 */   nop
-/* 3A204 80049A04 3AF2020C */  jal        func_800BC8E8
+/* 3A204 80049A04 3AF2020C */  jal        rand
 /* 3A208 80049A08 00000000 */   nop
 /* 3A20C 80049A0C 00022326 */  addiu      $v1, $s1, 0x200
 /* 3A210 80049A10 1A004300 */  div        $zero, $v0, $v1
@@ -102,14 +102,14 @@ glabel FX_ContinueRain
 /* 3A224 80049A24 21102202 */  addu       $v0, $s1, $v0
 /* 3A228 80049A28 43100200 */  sra        $v0, $v0, 1
 /* 3A22C 80049A2C 23186200 */  subu       $v1, $v1, $v0
-/* 3A230 80049A30 3AF2020C */  jal        func_800BC8E8
+/* 3A230 80049A30 3AF2020C */  jal        rand
 /* 3A234 80049A34 1000A3A7 */   sh        $v1, 0x10($sp)
 /* 3A238 80049A38 1000A427 */  addiu      $a0, $sp, 0x10
 /* 3A23C 80049A3C 2128A002 */  addu       $a1, $s5, $zero
 /* 3A240 80049A40 FF074230 */  andi       $v0, $v0, 0x7FF
 /* 3A244 80049A44 9124010C */  jal        FX_ConvertCamPersToWorld
 /* 3A248 80049A48 1400A2A7 */   sh        $v0, 0x14($sp)
-/* 3A24C 80049A4C 3AF2020C */  jal        func_800BC8E8
+/* 3A24C 80049A4C 3AF2020C */  jal        rand
 /* 3A250 80049A50 00000000 */   nop
 /* 3A254 80049A54 03004230 */  andi       $v0, $v0, 0x3
 /* 3A258 80049A58 F2FF0324 */  addiu      $v1, $zero, -0xE
@@ -151,7 +151,7 @@ glabel FX_ContinueRain
 /* 3A2E4 80049AE4 00000000 */  nop
 /* 3A2E8 80049AE8 3E0002A6 */  sh         $v0, 0x3E($s0)
 /* 3A2EC 80049AEC 1C00A297 */  lhu        $v0, 0x1C($sp)
-/* 3A2F0 80049AF0 3AF2020C */  jal        func_800BC8E8
+/* 3A2F0 80049AF0 3AF2020C */  jal        rand
 /* 3A2F4 80049AF4 400002A6 */   sh        $v0, 0x40($s0)
 /* 3A2F8 80049AF8 FF034230 */  andi       $v0, $v0, 0x3FF
 /* 3A2FC 80049AFC A49A8387 */  lh         $v1, %gp_rel(windx)($gp)
@@ -163,7 +163,7 @@ glabel FX_ContinueRain
 /* 3A314 80049B14 FF0F4224 */  addiu      $v0, $v0, 0xFFF
 .L80049B18:
 /* 3A318 80049B18 03130200 */  sra        $v0, $v0, 12
-/* 3A31C 80049B1C 3AF2020C */  jal        func_800BC8E8
+/* 3A31C 80049B1C 3AF2020C */  jal        rand
 /* 3A320 80049B20 5C0002A6 */   sh        $v0, 0x5C($s0)
 /* 3A324 80049B24 FF034230 */  andi       $v0, $v0, 0x3FF
 /* 3A328 80049B28 A69A8387 */  lh         $v1, %gp_rel(windy)($gp)

@@ -43,7 +43,7 @@ glabel processPeriodicSound
 /* 2FA18 8003F218 00000000 */  nop
 /* 2FA1C 8003F21C F5004010 */  beqz       $v0, .L8003F5F4
 /* 2FA20 8003F220 00000000 */   nop
-/* 2FA24 8003F224 3AF2020C */  jal        func_800BC8E8
+/* 2FA24 8003F224 3AF2020C */  jal        rand
 /* 2FA28 8003F228 00000000 */   nop
 /* 2FA2C 8003F22C 0D002492 */  lbu        $a0, 0xD($s1)
 /* 2FA30 8003F230 F5FC0008 */  j          .L8003F3D4
@@ -87,7 +87,7 @@ glabel processPeriodicSound
 /* 2FAB8 8003F2B8 00000000 */  nop
 /* 2FABC 8003F2BC 0D004010 */  beqz       $v0, .L8003F2F4
 /* 2FAC0 8003F2C0 00000000 */   nop
-/* 2FAC4 8003F2C4 3AF2020C */  jal        func_800BC8E8
+/* 2FAC4 8003F2C4 3AF2020C */  jal        rand
 /* 2FAC8 8003F2C8 00000000 */   nop
 /* 2FACC 8003F2CC 0B002392 */  lbu        $v1, 0xB($s1)
 /* 2FAD0 8003F2D0 00000000 */  nop
@@ -107,7 +107,7 @@ glabel processPeriodicSound
 /* 2FB04 8003F304 00000000 */  nop
 /* 2FB08 8003F308 0C004010 */  beqz       $v0, .L8003F33C
 /* 2FB0C 8003F30C 00000000 */   nop
-/* 2FB10 8003F310 3AF2020C */  jal        func_800BC8E8
+/* 2FB10 8003F310 3AF2020C */  jal        rand
 /* 2FB14 8003F314 00000000 */   nop
 /* 2FB18 8003F318 08002496 */  lhu        $a0, 0x8($s1)
 /* 2FB1C 8003F31C 00000000 */  nop
@@ -124,7 +124,7 @@ glabel processPeriodicSound
 /* 2FB44 8003F344 0200422C */  sltiu      $v0, $v0, 0x2
 /* 2FB48 8003F348 09004014 */  bnez       $v0, .L8003F370
 /* 2FB4C 8003F34C 21180000 */   addu      $v1, $zero, $zero
-/* 2FB50 8003F350 3AF2020C */  jal        func_800BC8E8
+/* 2FB50 8003F350 3AF2020C */  jal        rand
 /* 2FB54 8003F354 00000000 */   nop
 /* 2FB58 8003F358 01002392 */  lbu        $v1, 0x1($s1)
 /* 2FB5C 8003F35C 00000000 */  nop
@@ -154,7 +154,7 @@ glabel processPeriodicSound
 /* 2FBB4 8003F3B4 00000000 */  nop
 /* 2FBB8 8003F3B8 8E004010 */  beqz       $v0, .L8003F5F4
 /* 2FBBC 8003F3BC 00000000 */   nop
-/* 2FBC0 8003F3C0 3AF2020C */  jal        func_800BC8E8
+/* 2FBC0 8003F3C0 3AF2020C */  jal        rand
 /* 2FBC4 8003F3C4 00000000 */   nop
 /* 2FBC8 8003F3C8 0F002492 */  lbu        $a0, 0xF($s1)
 /* 2FBCC 8003F3CC 00000000 */  nop
@@ -230,7 +230,7 @@ glabel processPeriodicSound
 /* 2FCCC 8003F4CC 0E004010 */  beqz       $v0, .L8003F508
 /* 2FCD0 8003F4D0 00000000 */   nop
 /* 2FCD4 8003F4D4 0A002292 */  lbu        $v0, 0xA($s1)
-/* 2FCD8 8003F4D8 3AF2020C */  jal        func_800BC8E8
+/* 2FCD8 8003F4D8 3AF2020C */  jal        rand
 /* 2FCDC 8003F4DC 080002A6 */   sh        $v0, 0x8($s0)
 /* 2FCE0 8003F4E0 0B002392 */  lbu        $v1, 0xB($s1)
 /* 2FCE4 8003F4E4 00000000 */  nop
@@ -248,7 +248,7 @@ glabel processPeriodicSound
 /* 2FD10 8003F510 0D004010 */  beqz       $v0, .L8003F548
 /* 2FD14 8003F514 00000000 */   nop
 /* 2FD18 8003F518 06002296 */  lhu        $v0, 0x6($s1)
-/* 2FD1C 8003F51C 3AF2020C */  jal        func_800BC8E8
+/* 2FD1C 8003F51C 3AF2020C */  jal        rand
 /* 2FD20 8003F520 160002A6 */   sh        $v0, 0x16($s0)
 /* 2FD24 8003F524 08002496 */  lhu        $a0, 0x8($s1)
 /* 2FD28 8003F528 00000000 */  nop
@@ -267,7 +267,7 @@ glabel processPeriodicSound
 /* 2FD58 8003F558 00000000 */  nop
 /* 2FD5C 8003F55C 0C004010 */  beqz       $v0, .L8003F590
 /* 2FD60 8003F560 00000000 */   nop
-/* 2FD64 8003F564 3AF2020C */  jal        func_800BC8E8
+/* 2FD64 8003F564 3AF2020C */  jal        rand
 /* 2FD68 8003F568 00000000 */   nop
 /* 2FD6C 8003F56C 0F002492 */  lbu        $a0, 0xF($s1)
 /* 2FD70 8003F570 00000000 */  nop

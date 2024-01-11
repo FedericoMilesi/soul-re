@@ -41,7 +41,7 @@ glabel CAMERA_SetFocus
 /* 7370 80016B70 040043A6 */  sh         $v1, 0x4($s2)
 /* 7374 80016B74 4000048E */  lw         $a0, 0x40($s0)
 /* 7378 80016B78 2800A627 */  addiu      $a2, $sp, 0x28
-/* 737C 80016B7C 1AF2020C */  jal        func_800BC868
+/* 737C 80016B7C 1AF2020C */  jal        ApplyMatrix
 /* 7380 80016B80 20008424 */   addiu     $a0, $a0, 0x20
 /* 7384 80016B84 5C000226 */  addiu      $v0, $s0, 0x5C
 /* 7388 80016B88 5C000396 */  lhu        $v1, 0x5C($s0)
@@ -103,7 +103,7 @@ glabel CAMERA_SetFocus
 /* 7460 80016C60 D8AB8787 */  lh         $a3, %gp_rel(combat_cam_weight)($gp)
 /* 7464 80016C64 00100624 */  addiu      $a2, $zero, 0x1000
 /* 7468 80016C68 1000B0AF */  sw         $s0, 0x10($sp)
-/* 746C 80016C6C 86F3020C */  jal        func_800BCE18
+/* 746C 80016C6C 86F3020C */  jal        LoadAverageShort12
 /* 7470 80016C70 2330C700 */   subu      $a2, $a2, $a3
 /* 7474 80016C74 3800A297 */  lhu        $v0, 0x38($sp)
 /* 7478 80016C78 02000396 */  lhu        $v1, 0x2($s0)

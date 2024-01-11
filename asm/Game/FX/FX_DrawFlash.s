@@ -69,7 +69,7 @@ glabel FX_DrawFlash
 /* 3CC0C 8004C40C 00100624 */  addiu      $a2, $zero, 0x1000
 /* 3CC10 8004C410 2330C700 */  subu       $a2, $a2, $a3
 .L8004C414:
-/* 3CC14 8004C414 A8F3020C */  jal        func_800BCEA0
+/* 3CC14 8004C414 A8F3020C */  jal        LoadAverageCol
 /* 3CC18 8004C418 00000000 */   nop
 .L8004C41C:
 /* 3CC1C 8004C41C 21200002 */  addu       $a0, $s0, $zero

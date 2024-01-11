@@ -57,7 +57,7 @@ glabel VOICEXA_Tick
 .L800B736C:
 /* A7B6C 800B736C 10000424 */  addiu      $a0, $zero, 0x10
 /* A7B70 800B7370 00FF8627 */  addiu      $a2, $gp, %gp_rel(voiceTracker + 0x10)
-/* A7B74 800B7374 ECF8020C */  jal        func_800BE3B0
+/* A7B74 800B7374 ECF8020C */  jal        CdControlB
 /* A7B78 800B7378 21280000 */   addu      $a1, $zero, $zero
 /* A7B7C 800B737C 13000292 */  lbu        $v0, 0x13($s0)
 /* A7B80 800B7380 00000000 */  nop
@@ -72,7 +72,7 @@ glabel VOICEXA_Tick
 /* A7BA4 800B73A4 030000A2 */  sb         $zero, 0x3($s0)
 /* A7BA8 800B73A8 F0FE83A3 */  sb         $v1, %gp_rel(voiceTracker)($gp)
 /* A7BAC 800B73AC 010005A2 */  sb         $a1, 0x1($s0)
-/* A7BB0 800B73B0 56FC020C */  jal        func_800BF158
+/* A7BB0 800B73B0 56FC020C */  jal        CdPosToInt
 /* A7BB4 800B73B4 020006A2 */   sb        $a2, 0x2($s0)
 /* A7BB8 800B73B8 0800038E */  lw         $v1, 0x8($s0)
 /* A7BBC 800B73BC 6AFF4224 */  addiu      $v0, $v0, -0x96

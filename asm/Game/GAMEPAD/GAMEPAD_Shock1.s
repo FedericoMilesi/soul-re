@@ -11,7 +11,7 @@ glabel GAMEPAD_Shock1
 /* 21FFC 800317FC 1CA2A524 */  addiu      $a1, $a1, %lo(dualshock_motors)
 /* 22000 80031800 0100A4A0 */  sb         $a0, 0x1($a1)
 /* 22004 80031804 21200000 */  addu       $a0, $zero, $zero
-/* 22008 80031808 6EF7020C */  jal        func_800BDDB8
+/* 22008 80031808 6EF7020C */  jal        PadSetAct
 /* 2200C 8003180C 02000624 */   addiu     $a2, $zero, 0x2
 .L80031810:
 /* 22010 80031810 1000BF8F */  lw         $ra, 0x10($sp)

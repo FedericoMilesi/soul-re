@@ -20,11 +20,11 @@ glabel EVENT_CompareRotationVectors
 /* 56B6C 8006636C 21A00000 */   addu      $s4, $zero, $zero
 /* 56B70 80066370 1000308E */  lw         $s0, 0x10($s1)
 .L80066374:
-/* 56B74 80066374 D8E2010C */  jal        func_80078B60
+/* 56B74 80066374 D8E2010C */  jal        RotMatrixZYX
 /* 56B78 80066378 1000A527 */   addiu     $a1, $sp, 0x10
 /* 56B7C 8006637C 21202002 */  addu       $a0, $s1, $zero
 /* 56B80 80066380 3000B127 */  addiu      $s1, $sp, 0x30
-/* 56B84 80066384 D8E2010C */  jal        func_80078B60
+/* 56B84 80066384 D8E2010C */  jal        RotMatrixZYX
 /* 56B88 80066388 21282002 */   addu      $a1, $s1, $zero
 /* 56B8C 8006638C 08000224 */  addiu      $v0, $zero, 0x8
 /* 56B90 80066390 3F000212 */  beq        $s0, $v0, .L80066490

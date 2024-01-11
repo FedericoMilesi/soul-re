@@ -32,7 +32,7 @@ glabel SAVE_DeleteBlock
 /* A6880 800B6080 0400C624 */   addiu     $a2, $a2, 0x4
 .L800B6084:
 /* A6884 800B6084 E4FD868F */  lw         $a2, %gp_rel(savedInfoTracker + 0x8)($gp)
-/* A6888 800B6088 BD01030C */  jal        func_800C06F4
+/* A6888 800B6088 BD01030C */  jal        memmove
 /* A688C 800B608C 2330C500 */   subu      $a2, $a2, $a1
 /* A6890 800B6090 E4FD828F */  lw         $v0, %gp_rel(savedInfoTracker + 0x8)($gp)
 /* A6894 800B6094 1400BF8F */  lw         $ra, 0x14($sp)

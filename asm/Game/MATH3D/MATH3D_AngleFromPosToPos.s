@@ -9,7 +9,7 @@ glabel MATH3D_AngleFromPosToPos
 /* 2AA2C 8003A22C 00008384 */  lh         $v1, 0x0($a0)
 /* 2AA30 8003A230 0000A584 */  lh         $a1, 0x0($a1)
 /* 2AA34 8003A234 2320C200 */  subu       $a0, $a2, $v0
-/* 2AA38 8003A238 26F3020C */  jal        func_800BCC98
+/* 2AA38 8003A238 26F3020C */  jal        ratan2
 /* 2AA3C 8003A23C 23286500 */   subu      $a1, $v1, $a1
 /* 2AA40 8003A240 000C4224 */  addiu      $v0, $v0, 0xC00
 /* 2AA44 8003A244 1000BF8F */  lw         $ra, 0x10($sp)

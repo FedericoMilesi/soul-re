@@ -4,7 +4,7 @@
 glabel HackCallback
 /* 44424 80053C24 E0FFBD27 */  addiu      $sp, $sp, -0x20
 /* 44428 80053C28 1800BFAF */  sw         $ra, 0x18($sp)
-/* 4442C 80053C2C E4FF020C */  jal        func_800BFF90
+/* 4442C 80053C2C E4FF020C */  jal        SpuSetTransferCallback
 /* 44430 80053C30 21200000 */   addu      $a0, $zero, $zero
 /* 44434 80053C34 08C7848F */  lw         $a0, %gp_rel(smfDataPtr)($gp)
 /* 44438 80053C38 0CC7858F */  lw         $a1, %gp_rel(smfBytesLeft)($gp)

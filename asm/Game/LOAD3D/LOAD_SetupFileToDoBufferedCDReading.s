@@ -20,11 +20,11 @@ glabel LOAD_SetupFileToDoBufferedCDReading
 /* 27F80 80037780 C3120600 */  sra        $v0, $a2, 11
 /* 27F84 80037784 21208200 */  addu       $a0, $a0, $v0
 /* 27F88 80037788 28BC84AF */  sw         $a0, %gp_rel(loadStatus + 0x94)($gp)
-/* 27F8C 8003778C 15FC020C */  jal        func_800BF054
+/* 27F8C 8003778C 15FC020C */  jal        CdIntToPos
 /* 27F90 80037790 1000A527 */   addiu     $a1, $sp, 0x10
 /* 27F94 80037794 06000424 */  addiu      $a0, $zero, 0x6
 /* 27F98 80037798 1000A527 */  addiu      $a1, $sp, 0x10
-/* 27F9C 8003779C 50F8020C */  jal        func_800BE140
+/* 27F9C 8003779C 50F8020C */  jal        CdControl
 /* 27FA0 800377A0 21300000 */   addu      $a2, $zero, $zero
 /* 27FA4 800377A4 6FF7000C */  jal        TIMER_GetTimeMS
 /* 27FA8 800377A8 00000000 */   nop

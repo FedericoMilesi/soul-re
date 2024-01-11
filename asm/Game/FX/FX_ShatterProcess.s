@@ -10,7 +10,7 @@ glabel FX_ShatterProcess
 /* 330BC 800428BC 3000A427 */  addiu      $a0, $sp, 0x30
 /* 330C0 800428C0 21280000 */  addu       $a1, $zero, $zero
 /* 330C4 800428C4 4800BFAF */  sw         $ra, 0x48($sp)
-/* 330C8 800428C8 2EF2020C */  jal        func_800BC8B8
+/* 330C8 800428C8 2EF2020C */  jal        memset
 /* 330CC 800428CC 08000624 */   addiu     $a2, $zero, 0x8
 /* 330D0 800428D0 10000286 */  lh         $v0, 0x10($s0)
 /* 330D4 800428D4 10000396 */  lhu        $v1, 0x10($s0)
@@ -164,11 +164,11 @@ glabel FX_ShatterProcess
 /* 33318 80042B18 12300000 */  mflo       $a2
 /* 3331C 80042B1C 031B0600 */  sra        $v1, $a2, 12
 /* 33320 80042B20 21104300 */  addu       $v0, $v0, $v1
-/* 33324 80042B24 3DE3010C */  jal        func_80078CF4
+/* 33324 80042B24 3DE3010C */  jal        RotMatrix
 /* 33328 80042B28 3C00A2A7 */   sh        $v0, 0x3C($sp)
 /* 3332C 80042B2C 1800058E */  lw         $a1, 0x18($s0)
 /* 33330 80042B30 1000A427 */  addiu      $a0, $sp, 0x10
-/* 33334 80042B34 15FD020C */  jal        func_800BF454
+/* 33334 80042B34 15FD020C */  jal        MulMatrix2
 /* 33338 80042B38 0C00A524 */   addiu     $a1, $a1, 0xC
 .L80042B3C:
 /* 3333C 80042B3C 4800BF8F */  lw         $ra, 0x48($sp)

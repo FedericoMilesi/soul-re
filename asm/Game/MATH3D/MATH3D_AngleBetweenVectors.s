@@ -58,7 +58,7 @@ glabel MATH3D_AngleBetweenVectors
 /* 2A834 8003A034 A6E7000C */  jal        MATH3D_FastSqrt0
 /* 2A838 8003A038 23208800 */   subu      $a0, $a0, $t0
 /* 2A83C 8003A03C 21204000 */  addu       $a0, $v0, $zero
-/* 2A840 8003A040 26F3020C */  jal        func_800BCC98
+/* 2A840 8003A040 26F3020C */  jal        ratan2
 /* 2A844 8003A044 21280002 */   addu      $a1, $s0, $zero
 /* 2A848 8003A048 00140200 */  sll        $v0, $v0, 16
 /* 2A84C 8003A04C 03140200 */  sra        $v0, $v0, 16

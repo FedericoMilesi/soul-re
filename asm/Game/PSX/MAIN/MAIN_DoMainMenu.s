@@ -13,7 +13,7 @@ glabel MAIN_DoMainMenu
 /* 29B48 80039348 3000048E */  lw         $a0, 0x30($s0)
 /* 29B4C 8003934C D401118E */  lw         $s1, 0x1D4($s0)
 /* 29B50 80039350 00210400 */  sll        $a0, $a0, 4
-/* 29B54 80039354 05EA020C */  jal        func_800BA814
+/* 29B54 80039354 05EA020C */  jal        DrawPrim
 /* 29B58 80039358 21208200 */   addu      $a0, $a0, $v0
 /* 29B5C 8003935C 01C8000C */  jal        GAMEPAD_Process
 /* 29B60 80039360 21200002 */   addu      $a0, $s0, $zero

@@ -25,7 +25,7 @@ glabel CAMERA_CalcZRotation
 /* 82E8 80017AE8 1A00A2A7 */   sh        $v0, 0x1A($sp)
 /* 82EC 80017AEC 1200A487 */  lh         $a0, 0x12($sp)
 /* 82F0 80017AF0 1000A587 */  lh         $a1, 0x10($sp)
-/* 82F4 80017AF4 26F3020C */  jal        func_800BCC98
+/* 82F4 80017AF4 26F3020C */  jal        ratan2
 /* 82F8 80017AF8 00000000 */   nop
 /* 82FC 80017AFC 00044224 */  addiu      $v0, $v0, 0x400
 /* 8300 80017B00 2000BF8F */  lw         $ra, 0x20($sp)

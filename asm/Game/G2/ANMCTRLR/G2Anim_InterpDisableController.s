@@ -16,7 +16,7 @@ glabel G2Anim_InterpDisableController
 /* 80EA0 800906A0 06000624 */  addiu      $a2, $zero, 0x6
 /* 80EA4 800906A4 4000BFAF */  sw         $ra, 0x40($sp)
 /* 80EA8 800906A8 3C00B5AF */  sw         $s5, 0x3C($sp)
-/* 80EAC 800906AC 2EF2020C */  jal        func_800BC8B8
+/* 80EAC 800906AC 2EF2020C */  jal        memset
 /* 80EB0 800906B0 2C00B1AF */   sw        $s1, 0x2C($sp)
 /* 80EB4 800906B4 21A80002 */  addu       $s5, $s0, $zero
 /* 80EB8 800906B8 00841000 */  sll        $s0, $s0, 16

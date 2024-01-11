@@ -59,7 +59,7 @@ glabel processOneShotSound
 /* 305D4 8003FDD4 00000000 */  nop
 /* 305D8 8003FDD8 0C004010 */  beqz       $v0, .L8003FE0C
 /* 305DC 8003FDDC 00000000 */   nop
-/* 305E0 8003FDE0 3AF2020C */  jal        func_800BC8E8
+/* 305E0 8003FDE0 3AF2020C */  jal        rand
 /* 305E4 8003FDE4 00000000 */   nop
 /* 305E8 8003FDE8 0D004492 */  lbu        $a0, 0xD($s2)
 /* 305EC 8003FDEC 00000000 */  nop
@@ -153,7 +153,7 @@ glabel processOneShotSound
 /* 3072C 8003FF2C 00000000 */  nop
 /* 30730 8003FF30 0D004010 */  beqz       $v0, .L8003FF68
 /* 30734 8003FF34 00000000 */   nop
-/* 30738 8003FF38 3AF2020C */  jal        func_800BC8E8
+/* 30738 8003FF38 3AF2020C */  jal        rand
 /* 3073C 8003FF3C 00000000 */   nop
 /* 30740 8003FF40 0B004392 */  lbu        $v1, 0xB($s2)
 /* 30744 8003FF44 00000000 */  nop
@@ -173,7 +173,7 @@ glabel processOneShotSound
 /* 30778 8003FF78 00000000 */  nop
 /* 3077C 8003FF7C 0C004010 */  beqz       $v0, .L8003FFB0
 /* 30780 8003FF80 00000000 */   nop
-/* 30784 8003FF84 3AF2020C */  jal        func_800BC8E8
+/* 30784 8003FF84 3AF2020C */  jal        rand
 /* 30788 8003FF88 00000000 */   nop
 /* 3078C 8003FF8C 08004496 */  lhu        $a0, 0x8($s2)
 /* 30790 8003FF90 00000000 */  nop
@@ -190,7 +190,7 @@ glabel processOneShotSound
 /* 307B8 8003FFB8 0200422C */  sltiu      $v0, $v0, 0x2
 /* 307BC 8003FFBC 09004014 */  bnez       $v0, .L8003FFE4
 /* 307C0 8003FFC0 21180000 */   addu      $v1, $zero, $zero
-/* 307C4 8003FFC4 3AF2020C */  jal        func_800BC8E8
+/* 307C4 8003FFC4 3AF2020C */  jal        rand
 /* 307C8 8003FFC8 00000000 */   nop
 /* 307CC 8003FFCC 01004392 */  lbu        $v1, 0x1($s2)
 /* 307D0 8003FFD0 00000000 */  nop

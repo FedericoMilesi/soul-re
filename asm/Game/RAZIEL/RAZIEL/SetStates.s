@@ -16,7 +16,7 @@ glabel SetStates
 /* A243C 800B1C3C 2C00B5AF */  sw         $s5, 0x2C($sp)
 /* A2440 800B1C40 2000B2AF */  sw         $s2, 0x20($sp)
 /* A2444 800B1C44 1C00B1AF */  sw         $s1, 0x1C($sp)
-/* A2448 800B1C48 EBF4020C */  jal        func_800BD3AC
+/* A2448 800B1C48 EBF4020C */  jal        GetRCnt
 /* A244C 800B1C4C 1800B0AF */   sw        $s0, 0x18($sp)
 /* A2450 800B1C50 21886002 */  addu       $s1, $s3, $zero
 /* A2454 800B1C54 C8F69527 */  addiu      $s5, $gp, %gp_rel(Raziel + 0x98)

@@ -9,14 +9,14 @@ glabel SCRIPT_CombineEulerAngles
 /* 2D4CC 8003CCCC 1000A527 */  addiu      $a1, $sp, 0x10
 /* 2D4D0 8003CCD0 5800B0AF */  sw         $s0, 0x58($sp)
 /* 2D4D4 8003CCD4 6000BFAF */  sw         $ra, 0x60($sp)
-/* 2D4D8 8003CCD8 3DE3010C */  jal        func_80078CF4
+/* 2D4D8 8003CCD8 3DE3010C */  jal        RotMatrix
 /* 2D4DC 8003CCDC 2180C000 */   addu      $s0, $a2, $zero
 /* 2D4E0 8003CCE0 21200002 */  addu       $a0, $s0, $zero
 /* 2D4E4 8003CCE4 3000B027 */  addiu      $s0, $sp, 0x30
-/* 2D4E8 8003CCE8 3DE3010C */  jal        func_80078CF4
+/* 2D4E8 8003CCE8 3DE3010C */  jal        RotMatrix
 /* 2D4EC 8003CCEC 21280002 */   addu      $a1, $s0, $zero
 /* 2D4F0 8003CCF0 21200002 */  addu       $a0, $s0, $zero
-/* 2D4F4 8003CCF4 15FD020C */  jal        func_800BF454
+/* 2D4F4 8003CCF4 15FD020C */  jal        MulMatrix2
 /* 2D4F8 8003CCF8 1000A527 */   addiu     $a1, $sp, 0x10
 /* 2D4FC 8003CCFC 5000B027 */  addiu      $s0, $sp, 0x50
 /* 2D500 8003CD00 21200002 */  addu       $a0, $s0, $zero

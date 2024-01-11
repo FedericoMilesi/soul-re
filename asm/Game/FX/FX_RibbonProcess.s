@@ -62,7 +62,7 @@ glabel FX_RibbonProcess
 /* 38140 80047940 2800C784 */  lh         $a3, 0x28($a2)
 /* 38144 80047944 00100624 */  addiu      $a2, $zero, 0x1000
 /* 38148 80047948 1000A2AF */  sw         $v0, 0x10($sp)
-/* 3814C 8004794C A8F3020C */  jal        func_800BCEA0
+/* 3814C 8004794C A8F3020C */  jal        LoadAverageCol
 /* 38150 80047950 2330C700 */   subu      $a2, $a2, $a3
 .L80047954:
 /* 38154 80047954 1800BF8F */  lw         $ra, 0x18($sp)

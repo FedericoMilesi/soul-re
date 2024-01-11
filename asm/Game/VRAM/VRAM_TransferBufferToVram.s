@@ -17,10 +17,10 @@ glabel VRAM_TransferBufferToVram
 /* 648A0 800740A0 3800BEAF */  sw         $fp, 0x38($sp)
 /* 648A4 800740A4 2C00B5AF */  sw         $s5, 0x2C($sp)
 /* 648A8 800740A8 2800B4AF */  sw         $s4, 0x28($sp)
-/* 648AC 800740AC 7401030C */  jal        func_800C05D0
+/* 648AC 800740AC 7401030C */  jal        BreakDraw
 /* 648B0 800740B0 1C00B1AF */   sw        $s1, 0x1C($sp)
 /* 648B4 800740B4 21200000 */  addu       $a0, $zero, $zero
-/* 648B8 800740B8 0FE9020C */  jal        func_800BA43C
+/* 648B8 800740B8 0FE9020C */  jal        DrawSync
 /* 648BC 800740BC 21A84000 */   addu      $s5, $v0, $zero
 /* 648C0 800740C0 E4BE9E8F */  lw         $fp, %gp_rel(gameTrackerX + 0x11C)($gp)
 /* 648C4 800740C4 21880002 */  addu       $s1, $s0, $zero
@@ -51,7 +51,7 @@ glabel VRAM_TransferBufferToVram
 /* 64924 80074124 21286002 */   addu      $a1, $s3, $zero
 /* 64928 80074128 1000248E */  lw         $a0, 0x10($s1)
 /* 6492C 8007412C 21304002 */  addu       $a2, $s2, $zero
-/* 64930 80074130 02E5010C */  jal        func_80079408
+/* 64930 80074130 02E5010C */  jal        memcpy
 /* 64934 80074134 21208700 */   addu      $a0, $a0, $a3
 /* 64938 80074138 0E002296 */  lhu        $v0, 0xE($s1)
 /* 6493C 8007413C 00000000 */  nop
@@ -62,7 +62,7 @@ glabel VRAM_TransferBufferToVram
 .L80074150:
 /* 64950 80074150 1000248E */  lw         $a0, 0x10($s1)
 /* 64954 80074154 21300002 */  addu       $a2, $s0, $zero
-/* 64958 80074158 02E5010C */  jal        func_80079408
+/* 64958 80074158 02E5010C */  jal        memcpy
 /* 6495C 8007415C 21208700 */   addu      $a0, $a0, $a3
 /* 64960 80074160 21987002 */  addu       $s3, $s3, $s0
 /* 64964 80074164 23905002 */  subu       $s2, $s2, $s0
@@ -83,7 +83,7 @@ glabel VRAM_TransferBufferToVram
 /* 649A0 800741A0 0C002296 */  lhu        $v0, 0xC($s1)
 /* 649A4 800741A4 1000258E */  lw         $a1, 0x10($s1)
 /* 649A8 800741A8 01004224 */  addiu      $v0, $v0, 0x1
-/* 649AC 800741AC 94E9020C */  jal        func_800BA650
+/* 649AC 800741AC 94E9020C */  jal        LoadImage
 /* 649B0 800741B0 0C0022A6 */   sh        $v0, 0xC($s1)
 /* 649B4 800741B4 0E0020A6 */  sh         $zero, 0xE($s1)
 .L800741B8:
@@ -109,7 +109,7 @@ glabel VRAM_TransferBufferToVram
 /* 64A04 80074204 21286002 */  addu       $a1, $s3, $zero
 /* 64A08 80074208 1600B0A7 */  sh         $s0, 0x16($sp)
 /* 64A0C 8007420C 12A00000 */  mflo       $s4
-/* 64A10 80074210 94E9020C */  jal        func_800BA650
+/* 64A10 80074210 94E9020C */  jal        LoadImage
 /* 64A14 80074214 1400A2A7 */   sh        $v0, 0x14($sp)
 /* 64A18 80074218 0C002296 */  lhu        $v0, 0xC($s1)
 /* 64A1C 8007421C 00000000 */  nop
@@ -124,7 +124,7 @@ glabel VRAM_TransferBufferToVram
 /* 64A40 80074240 0E002286 */  lh         $v0, 0xE($s1)
 /* 64A44 80074244 1000248E */  lw         $a0, 0x10($s1)
 /* 64A48 80074248 21304002 */  addu       $a2, $s2, $zero
-/* 64A4C 8007424C 02E5010C */  jal        func_80079408
+/* 64A4C 8007424C 02E5010C */  jal        memcpy
 /* 64A50 80074250 21208200 */   addu      $a0, $a0, $v0
 /* 64A54 80074254 0E002296 */  lhu        $v0, 0xE($s1)
 /* 64A58 80074258 00000000 */  nop
@@ -145,14 +145,14 @@ glabel VRAM_TransferBufferToVram
 /* 64A8C 8007428C 02000224 */   addiu     $v0, $zero, 0x2
 /* 64A90 80074290 1400C2A6 */  sh         $v0, 0x14($s6)
 .L80074294:
-/* 64A94 80074294 0FE9020C */  jal        func_800BA43C
+/* 64A94 80074294 0FE9020C */  jal        DrawSync
 /* 64A98 80074298 21200000 */   addu      $a0, $zero, $zero
 /* 64A9C 8007429C E4BE9EAF */  sw         $fp, %gp_rel(gameTrackerX + 0x11C)($gp)
 /* 64AA0 800742A0 0500A012 */  beqz       $s5, .L800742B8
 /* 64AA4 800742A4 FFFF0224 */   addiu     $v0, $zero, -0x1
 /* 64AA8 800742A8 0300A212 */  beq        $s5, $v0, .L800742B8
 /* 64AAC 800742AC 00000000 */   nop
-/* 64AB0 800742B0 1CEA020C */  jal        func_800BA870
+/* 64AB0 800742B0 1CEA020C */  jal        DrawOTag
 /* 64AB4 800742B4 2120A002 */   addu      $a0, $s5, $zero
 .L800742B8:
 /* 64AB8 800742B8 3C00BF8F */  lw         $ra, 0x3C($sp)

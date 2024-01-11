@@ -178,7 +178,7 @@ glabel FX_Spiral
 /* 3E628 8004DE28 5000A8AF */  sw         $t0, 0x50($sp)
 /* 3E62C 8004DE2C 5400A9AF */  sw         $t1, 0x54($sp)
 /* 3E630 8004DE30 5800AAAF */  sw         $t2, 0x58($sp)
-/* 3E634 8004DE34 A8F3020C */  jal        func_800BCEA0
+/* 3E634 8004DE34 A8F3020C */  jal        LoadAverageCol
 /* 3E638 8004DE38 5C00ABAF */   sw        $t3, 0x5C($sp)
 /* 3E63C 8004DE3C 3800A28F */  lw         $v0, 0x38($sp)
 /* 3E640 8004DE40 4800AC8F */  lw         $t4, 0x48($sp)

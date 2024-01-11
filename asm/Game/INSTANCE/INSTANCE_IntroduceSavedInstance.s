@@ -81,7 +81,7 @@ glabel INSTANCE_IntroduceSavedInstance
 /* 252F0 80034AF0 4AD0000C */  jal        INSTANCE_DefaultInit
 /* 252F4 80034AF4 160022A6 */   sh        $v0, 0x16($s1)
 /* 252F8 80034AF8 5C010426 */  addiu      $a0, $s0, 0x15C
-/* 252FC 80034AFC 1CF4020C */  jal        func_800BD070
+/* 252FC 80034AFC 1CF4020C */  jal        strcpy
 /* 25300 80034B00 2128C002 */   addu      $a1, $s6, $zero
 /* 25304 80034B04 0C004286 */  lh         $v0, 0xC($s2)
 /* 25308 80034B08 00000000 */  nop

@@ -26,7 +26,7 @@ glabel MATH3D_ElevationFromPosToPos
 /* 2AB04 8003A304 04000386 */  lh         $v1, 0x4($s0)
 /* 2AB08 8003A308 04002486 */  lh         $a0, 0x4($s1)
 /* 2AB0C 8003A30C 032C0200 */  sra        $a1, $v0, 16
-/* 2AB10 8003A310 26F3020C */  jal        func_800BCC98
+/* 2AB10 8003A310 26F3020C */  jal        ratan2
 /* 2AB14 8003A314 23206400 */   subu      $a0, $v1, $a0
 /* 2AB18 8003A318 23100200 */  negu       $v0, $v0
 /* 2AB1C 8003A31C 1800BF8F */  lw         $ra, 0x18($sp)

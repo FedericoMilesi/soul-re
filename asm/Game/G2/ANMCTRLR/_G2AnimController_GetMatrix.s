@@ -15,7 +15,7 @@ glabel _G2AnimController_GetMatrix
 /* 822F0 80091AF0 00206230 */  andi       $v0, $v1, 0x2000
 /* 822F4 80091AF4 05004010 */  beqz       $v0, .L80091B0C
 /* 822F8 80091AF8 00000000 */   nop
-/* 822FC 80091AFC 27E7010C */  jal        func_80079C9C
+/* 822FC 80091AFC 27E7010C */  jal        G2Quat_ToMatrix_S
 /* 82300 80091B00 1C000426 */   addiu     $a0, $s0, 0x1C
 /* 82304 80091B04 E3460208 */  j          .L80091B8C
 /* 82308 80091B08 00000000 */   nop
@@ -35,7 +35,7 @@ glabel _G2AnimController_GetMatrix
 /* 8233C 80091B3C 0D59020C */  jal        G2Quat_Slerp_VM
 /* 82340 80091B40 1000A0AF */   sw        $zero, 0x10($sp)
 /* 82344 80091B44 1800A427 */  addiu      $a0, $sp, 0x18
-/* 82348 80091B48 27E7010C */  jal        func_80079C9C
+/* 82348 80091B48 27E7010C */  jal        G2Quat_ToMatrix_S
 /* 8234C 80091B4C 21282002 */   addu      $a1, $s1, $zero
 /* 82350 80091B50 E3460208 */  j          .L80091B8C
 /* 82354 80091B54 00000000 */   nop
@@ -46,13 +46,13 @@ glabel _G2AnimController_GetMatrix
 /* 82364 80091B64 15000224 */   addiu     $v0, $zero, 0x15
 /* 82368 80091B68 08006214 */  bne        $v1, $v0, .L80091B8C
 /* 8236C 80091B6C 14000426 */   addiu     $a0, $s0, 0x14
-/* 82370 80091B70 3DE3010C */  jal        func_80078CF4
+/* 82370 80091B70 3DE3010C */  jal        RotMatrix
 /* 82374 80091B74 21282002 */   addu      $a1, $s1, $zero
 /* 82378 80091B78 E3460208 */  j          .L80091B8C
 /* 8237C 80091B7C 00000000 */   nop
 .L80091B80:
 /* 82380 80091B80 14000426 */  addiu      $a0, $s0, 0x14
-/* 82384 80091B84 D8E2010C */  jal        func_80078B60
+/* 82384 80091B84 D8E2010C */  jal        RotMatrixZYX
 /* 82388 80091B88 21282002 */   addu      $a1, $s1, $zero
 .L80091B8C:
 /* 8238C 80091B8C 2800BF8F */  lw         $ra, 0x28($sp)

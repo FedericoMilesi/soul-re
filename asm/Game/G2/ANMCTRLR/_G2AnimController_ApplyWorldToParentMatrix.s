@@ -41,7 +41,7 @@ glabel _G2AnimController_ApplyWorldToParentMatrix
 /* 821F4 800919F4 B246020C */  jal        _G2AnimController_GetMatrix
 /* 821F8 800919F8 1000A527 */   addiu     $a1, $sp, 0x10
 /* 821FC 800919FC 1000A427 */  addiu      $a0, $sp, 0x10
-/* 82200 80091A00 15FD020C */  jal        func_800BF454
+/* 82200 80091A00 15FD020C */  jal        MulMatrix2
 /* 82204 80091A04 21280002 */   addu      $a1, $s0, $zero
 /* 82208 80091A08 AD460208 */  j          .L80091AB4
 /* 8220C 80091A0C 00000000 */   nop
@@ -55,7 +55,7 @@ glabel _G2AnimController_ApplyWorldToParentMatrix
 /* 82228 80091A28 3800A527 */  addiu      $a1, $sp, 0x38
 /* 8222C 80091A2C 3800A2AF */  sw         $v0, 0x38($sp)
 /* 82230 80091A30 3C00A3AF */  sw         $v1, 0x3C($sp)
-/* 82234 80091A34 96E4010C */  jal        func_80079258
+/* 82234 80091A34 96E4010C */  jal        ScaleMatrix
 /* 82238 80091A38 4000A6AF */   sw        $a2, 0x40($sp)
 /* 8223C 80091A3C AD460208 */  j          .L80091AB4
 /* 82240 80091A40 00000000 */   nop

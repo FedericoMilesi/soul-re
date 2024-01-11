@@ -221,15 +221,15 @@ glabel FX_StandardFXPrimProcess
 /* 38EC4 800486C4 1400A2A7 */  sh         $v0, 0x14($sp)
 /* 38EC8 800486C8 1800058E */  lw         $a1, 0x18($s0)
 /* 38ECC 800486CC 80200400 */  sll        $a0, $a0, 2
-/* 38ED0 800486D0 98E3010C */  jal        func_80078E60
+/* 38ED0 800486D0 98E3010C */  jal        RotMatrixX
 /* 38ED4 800486D4 0C00A524 */   addiu     $a1, $a1, 0xC
 /* 38ED8 800486D8 1800058E */  lw         $a1, 0x18($s0)
 /* 38EDC 800486DC 1200A487 */  lh         $a0, 0x12($sp)
-/* 38EE0 800486E0 E5E3010C */  jal        func_80078F94
+/* 38EE0 800486E0 E5E3010C */  jal        RotMatrixY
 /* 38EE4 800486E4 0C00A524 */   addiu     $a1, $a1, 0xC
 /* 38EE8 800486E8 1800058E */  lw         $a1, 0x18($s0)
 /* 38EEC 800486EC 1400A487 */  lh         $a0, 0x14($sp)
-/* 38EF0 800486F0 32E4010C */  jal        func_800790C8
+/* 38EF0 800486F0 32E4010C */  jal        RotMatrixZ
 /* 38EF4 800486F4 0C00A524 */   addiu     $a1, $a1, 0xC
 .L800486F8:
 /* 38EF8 800486F8 2400BF8F */  lw         $ra, 0x24($sp)

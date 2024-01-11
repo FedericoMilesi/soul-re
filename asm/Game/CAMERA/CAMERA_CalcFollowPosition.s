@@ -66,7 +66,7 @@ glabel CAMERA_CalcFollowPosition
 /* D838 8001D038 AC042286 */  lh         $v0, 0x4AC($s1)
 /* D83C 8001D03C 9C012486 */  lh         $a0, 0x19C($s1)
 /* D840 8001D040 21286002 */  addu       $a1, $s3, $zero
-/* D844 8001D044 26F3020C */  jal        func_800BCC98
+/* D844 8001D044 26F3020C */  jal        ratan2
 /* D848 8001D048 23204400 */   subu      $a0, $v0, $a0
 /* D84C 8001D04C 21204000 */  addu       $a0, $v0, $zero
 /* D850 8001D050 9C04228E */  lw         $v0, 0x49C($s1)
@@ -104,7 +104,7 @@ glabel CAMERA_CalcFollowPosition
 /* D8C8 8001D0C8 00000000 */  nop
 /* D8CC 8001D0CC 23206200 */  subu       $a0, $v1, $v0
 .L8001D0D0:
-/* D8D0 8001D0D0 26F3020C */  jal        func_800BCC98
+/* D8D0 8001D0D0 26F3020C */  jal        ratan2
 /* D8D4 8001D0D4 21286002 */   addu      $a1, $s3, $zero
 /* D8D8 8001D0D8 21804000 */  addu       $s0, $v0, $zero
 /* D8DC 8001D0DC B2042586 */  lh         $a1, 0x4B2($s1)

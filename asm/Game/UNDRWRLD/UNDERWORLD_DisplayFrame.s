@@ -80,7 +80,7 @@ glabel UNDERWORLD_DisplayFrame
 /* A54F0 800B4CF0 0000C28F */  lw         $v0, 0x0($fp)
 /* A54F4 800B4CF4 2120A000 */  addu       $a0, $a1, $zero
 /* A54F8 800B4CF8 25104300 */  or         $v0, $v0, $v1
-/* A54FC 800B4CFC 1CEA020C */  jal        func_800BA870
+/* A54FC 800B4CFC 1CEA020C */  jal        DrawOTag
 /* A5500 800B4D00 0000C2AF */   sw        $v0, 0x0($fp)
 /* A5504 800B4D04 3C00BF8F */  lw         $ra, 0x3C($sp)
 /* A5508 800B4D08 3800BE8F */  lw         $fp, 0x38($sp)

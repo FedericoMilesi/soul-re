@@ -6,7 +6,7 @@ glabel SaveOT
 /* 209CC 800301CC 21200000 */  addu       $a0, $zero, $zero
 /* 209D0 800301D0 1800BFAF */  sw         $ra, 0x18($sp)
 /* 209D4 800301D4 1400B1AF */  sw         $s1, 0x14($sp)
-/* 209D8 800301D8 0FE9020C */  jal        func_800BA43C
+/* 209D8 800301D8 0FE9020C */  jal        DrawSync
 /* 209DC 800301DC 1000B0AF */   sw        $s0, 0x10($sp)
 /* 209E0 800301E0 9CBF828F */  lw         $v0, %gp_rel(gameTrackerX + 0x1D4)($gp)
 /* 209E4 800301E4 21800000 */  addu       $s0, $zero, $zero

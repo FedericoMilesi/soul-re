@@ -34,7 +34,7 @@ glabel GetFogColor
 /* 4F828 8005F028 00100724 */  addiu      $a3, $zero, 0x1000
 /* 4F82C 8005F02C 2338E600 */  subu       $a3, $a3, $a2
 /* 4F830 8005F030 1800A227 */  addiu      $v0, $sp, 0x18
-/* 4F834 8005F034 A8F3020C */  jal        func_800BCEA0
+/* 4F834 8005F034 A8F3020C */  jal        LoadAverageCol
 /* 4F838 8005F038 1000A2AF */   sw        $v0, 0x10($sp)
 /* 4F83C 8005F03C FF00033C */  lui        $v1, (0xFFFFFF >> 16)
 /* 4F840 8005F040 1800A28F */  lw         $v0, 0x18($sp)
@@ -196,7 +196,7 @@ glabel GetFogColor
 /* 4FA6C 8005F26C 1800A527 */  addiu      $a1, $sp, 0x18
 /* 4FA70 8005F270 21300002 */  addu       $a2, $s0, $zero
 /* 4FA74 8005F274 00100724 */  addiu      $a3, $zero, 0x1000
-/* 4FA78 8005F278 A8F3020C */  jal        func_800BCEA0
+/* 4FA78 8005F278 A8F3020C */  jal        LoadAverageCol
 /* 4FA7C 8005F27C 2338F000 */   subu      $a3, $a3, $s0
 /* 4FA80 8005F280 FB0F022A */  slti       $v0, $s0, 0xFFB
 /* 4FA84 8005F284 0C004014 */  bnez       $v0, .L8005F2B8

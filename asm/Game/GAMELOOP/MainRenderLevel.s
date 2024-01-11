@@ -26,11 +26,11 @@ glabel MainRenderLevel
 /* 1F470 8002EC70 2000E2AE */  sw         $v0, 0x20($s7)
 /* 1F474 8002EC74 46000496 */  lhu        $a0, 0x46($s0)
 /* 1F478 8002EC78 44000596 */  lhu        $a1, 0x44($s0)
-/* 1F47C 8002EC7C C8F3020C */  jal        func_800BCF20
+/* 1F47C 8002EC7C C8F3020C */  jal        SetFogNearFar
 /* 1F480 8002EC80 40010624 */   addiu     $a2, $zero, 0x140
 /* 1F484 8002EC84 21200000 */  addu       $a0, $zero, $zero
 /* 1F488 8002EC88 21288000 */  addu       $a1, $a0, $zero
-/* 1F48C 8002EC8C BCF4020C */  jal        func_800BD2F0
+/* 1F48C 8002EC8C BCF4020C */  jal        SetFarColor
 /* 1F490 8002EC90 21308000 */   addu      $a2, $a0, $zero
 /* 1F494 8002EC94 3C000292 */  lbu        $v0, 0x3C($s0)
 /* 1F498 8002EC98 A4BD8327 */  addiu      $v1, $gp, %gp_rel(clearRect)
@@ -73,7 +73,7 @@ glabel MainRenderLevel
 /* 1F528 8002ED28 40000426 */  addiu      $a0, $s0, 0x40
 /* 1F52C 8002ED2C 3C000526 */  addiu      $a1, $s0, 0x3C
 /* 1F530 8002ED30 00100724 */  addiu      $a3, $zero, 0x1000
-/* 1F534 8002ED34 A8F3020C */  jal        func_800BCEA0
+/* 1F534 8002ED34 A8F3020C */  jal        LoadAverageCol
 /* 1F538 8002ED38 2338E600 */   subu      $a3, $a3, $a2
 /* 1F53C 8002ED3C 5CBB0008 */  j          .L8002ED70
 /* 1F540 8002ED40 4800A427 */   addiu     $a0, $sp, 0x48
@@ -236,11 +236,11 @@ glabel MainRenderLevel
 /* 1F78C 8002EF8C 23104800 */  subu       $v0, $v0, $t0
 /* 1F790 8002EF90 94AC82A7 */  sh         $v0, %gp_rel(theCamera + 0x4)($gp)
 /* 1F794 8002EF94 23100200 */  negu       $v0, $v0
-/* 1F798 8002EF98 1AF2020C */  jal        func_800BC868
+/* 1F798 8002EF98 1AF2020C */  jal        ApplyMatrix
 /* 1F79C 8002EF9C 4400A2A7 */   sh        $v0, 0x44($sp)
 /* 1F7A0 8002EFA0 21200002 */  addu       $a0, $s0, $zero
 /* 1F7A4 8002EFA4 1CBA868F */  lw         $a2, %gp_rel(gPolytopeList)($gp)
-/* 1F7A8 8002EFA8 30E5010C */  jal        func_800794C0
+/* 1F7A8 8002EFA8 30E5010C */  jal        BSP_MarkVisibleLeaves_S
 /* 1F7AC 8002EFAC 2128C002 */   addu      $a1, $s6, $zero
 /* 1F7B0 8002EFB0 21288002 */  addu       $a1, $s4, $zero
 /* 1F7B4 8002EFB4 4000A78E */  lw         $a3, 0x40($s5)

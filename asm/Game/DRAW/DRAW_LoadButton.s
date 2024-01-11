@@ -79,7 +79,7 @@ glabel DRAW_LoadButton
 /* 1B828 8002B028 1C00A2A7 */  sh         $v0, 0x1C($sp)
 /* 1B82C 8002B02C 06002296 */  lhu        $v0, 0x6($s1)
 /* 1B830 8002B030 0C000526 */  addiu      $a1, $s0, 0xC
-/* 1B834 8002B034 94E9020C */  jal        func_800BA650
+/* 1B834 8002B034 94E9020C */  jal        LoadImage
 /* 1B838 8002B038 1E00A2A7 */   sh        $v0, 0x1E($sp)
 /* 1B83C 8002B03C 10006012 */  beqz       $s3, .L8002B080
 /* 1B840 8002B040 1800A427 */   addiu     $a0, $sp, 0x18
@@ -89,7 +89,7 @@ glabel DRAW_LoadButton
 /* 1B850 8002B050 1C00B2A7 */  sh         $s2, 0x1C($sp)
 /* 1B854 8002B054 1E00B4A7 */  sh         $s4, 0x1E($sp)
 /* 1B858 8002B058 21104300 */  addu       $v0, $v0, $v1
-/* 1B85C 8002B05C 94E9020C */  jal        func_800BA650
+/* 1B85C 8002B05C 94E9020C */  jal        LoadImage
 /* 1B860 8002B060 1A00A2A7 */   sh        $v0, 0x1A($sp)
 /* 1B864 8002B064 1A00A397 */  lhu        $v1, 0x1A($sp)
 /* 1B868 8002B068 1800A297 */  lhu        $v0, 0x18($sp)
@@ -99,7 +99,7 @@ glabel DRAW_LoadButton
 /* 1B878 8002B078 25186200 */  or         $v1, $v1, $v0
 /* 1B87C 8002B07C 020023A6 */  sh         $v1, 0x2($s1)
 .L8002B080:
-/* 1B880 8002B080 0FE9020C */  jal        func_800BA43C
+/* 1B880 8002B080 0FE9020C */  jal        DrawSync
 /* 1B884 8002B084 21200000 */   addu      $a0, $zero, $zero
 /* 1B888 8002B088 3400BF8F */  lw         $ra, 0x34($sp)
 /* 1B88C 8002B08C 3000B48F */  lw         $s4, 0x30($sp)

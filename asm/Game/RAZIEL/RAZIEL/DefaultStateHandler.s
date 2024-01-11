@@ -460,7 +460,7 @@ glabel DefaultStateHandler
 /* A0D7C 800B057C B8002016 */  bnez       $s1, .L800B0860
 /* A0D80 800B0580 1800A427 */   addiu     $a0, $sp, 0x18
 /* A0D84 800B0584 21280000 */  addu       $a1, $zero, $zero
-/* A0D88 800B0588 2EF2020C */  jal        func_800BC8B8
+/* A0D88 800B0588 2EF2020C */  jal        memset
 /* A0D8C 800B058C 08000624 */   addiu     $a2, $zero, 0x8
 /* A0D90 800B0590 FF00023C */  lui        $v0, (0xFF8010 >> 16)
 /* A0D94 800B0594 10804234 */  ori        $v0, $v0, (0xFF8010 & 0xFFFF)

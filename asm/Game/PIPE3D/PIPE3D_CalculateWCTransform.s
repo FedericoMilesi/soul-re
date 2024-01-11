@@ -27,15 +27,15 @@ glabel PIPE3D_CalculateWCTransform
 /* 2B0AC 8003A8AC 1000A427 */   addiu     $a0, $sp, 0x10
 /* 2B0B0 8003A8B0 B4004486 */  lh         $a0, 0xB4($s2)
 /* 2B0B4 8003A8B4 1000A527 */  addiu      $a1, $sp, 0x10
-/* 2B0B8 8003A8B8 32E4010C */  jal        func_800790C8
+/* 2B0B8 8003A8B8 32E4010C */  jal        RotMatrixZ
 /* 2B0BC 8003A8BC 23200400 */   negu      $a0, $a0
 /* 2B0C0 8003A8C0 B0004486 */  lh         $a0, 0xB0($s2)
 /* 2B0C4 8003A8C4 1000A527 */  addiu      $a1, $sp, 0x10
-/* 2B0C8 8003A8C8 98E3010C */  jal        func_80078E60
+/* 2B0C8 8003A8C8 98E3010C */  jal        RotMatrixX
 /* 2B0CC 8003A8CC 23200400 */   negu      $a0, $a0
 /* 2B0D0 8003A8D0 B2004486 */  lh         $a0, 0xB2($s2)
 /* 2B0D4 8003A8D4 1000A527 */  addiu      $a1, $sp, 0x10
-/* 2B0D8 8003A8D8 E5E3010C */  jal        func_80078F94
+/* 2B0D8 8003A8D8 E5E3010C */  jal        RotMatrixY
 /* 2B0DC 8003A8DC 23200400 */   negu      $a0, $a0
 /* 2B0E0 8003A8E0 00004296 */  lhu        $v0, 0x0($s2)
 /* 2B0E4 8003A8E4 00000000 */  nop
@@ -55,15 +55,15 @@ glabel PIPE3D_CalculateWCTransform
 /* 2B118 8003A918 1000A427 */   addiu     $a0, $sp, 0x10
 /* 2B11C 8003A91C D0004486 */  lh         $a0, 0xD0($s2)
 /* 2B120 8003A920 1000A527 */  addiu      $a1, $sp, 0x10
-/* 2B124 8003A924 32E4010C */  jal        func_800790C8
+/* 2B124 8003A924 32E4010C */  jal        RotMatrixZ
 /* 2B128 8003A928 23200400 */   negu      $a0, $a0
 /* 2B12C 8003A92C CE004486 */  lh         $a0, 0xCE($s2)
 /* 2B130 8003A930 1000A527 */  addiu      $a1, $sp, 0x10
-/* 2B134 8003A934 E5E3010C */  jal        func_80078F94
+/* 2B134 8003A934 E5E3010C */  jal        RotMatrixY
 /* 2B138 8003A938 23200400 */   negu      $a0, $a0
 /* 2B13C 8003A93C CC004486 */  lh         $a0, 0xCC($s2)
 /* 2B140 8003A940 1000A527 */  addiu      $a1, $sp, 0x10
-/* 2B144 8003A944 98E3010C */  jal        func_80078E60
+/* 2B144 8003A944 98E3010C */  jal        RotMatrixX
 /* 2B148 8003A948 23200400 */   negu      $a0, $a0
 /* 2B14C 8003A94C C4004296 */  lhu        $v0, 0xC4($s2)
 /* 2B150 8003A950 00000000 */  nop
@@ -104,11 +104,11 @@ glabel PIPE3D_CalculateWCTransform
 /* 2B1D8 8003A9D8 3A00A2A7 */  sh         $v0, 0x3A($sp)
 /* 2B1DC 8003A9DC 3C00A0A7 */  sh         $zero, 0x3C($sp)
 /* 2B1E0 8003A9E0 3E00A3A7 */  sh         $v1, 0x3E($sp)
-/* 2B1E4 8003A9E4 BFF7020C */  jal        func_800BDEFC
+/* 2B1E4 8003A9E4 BFF7020C */  jal        MulMatrix0
 /* 2B1E8 8003A9E8 4000A0A7 */   sh        $zero, 0x40($sp)
 /* 2B1EC 8003A9EC 21200002 */  addu       $a0, $s0, $zero
 /* 2B1F0 8003A9F0 7000468E */  lw         $a2, 0x70($s2)
-/* 2B1F4 8003A9F4 BFF7020C */  jal        func_800BDEFC
+/* 2B1F4 8003A9F4 BFF7020C */  jal        MulMatrix0
 /* 2B1F8 8003A9F8 1000A527 */   addiu     $a1, $sp, 0x10
 /* 2B1FC 8003A9FC F4E9000C */  jal        PIPE3D_AspectAdjustMatrix
 /* 2B200 8003AA00 21206002 */   addu      $a0, $s3, $zero
@@ -196,7 +196,7 @@ glabel PIPE3D_CalculateWCTransform
 /* 2B348 8003AB48 04001AEA */  swc2       $26, 0x4($s0) # handwritten instruction
 /* 2B34C 8003AB4C 08001BEA */  swc2       $27, 0x8($s0) # handwritten instruction
 /* 2B350 8003AB50 21206002 */  addu       $a0, $s3, $zero
-/* 2B354 8003AB54 B1FD020C */  jal        func_800BF6C4
+/* 2B354 8003AB54 B1FD020C */  jal        TransMatrix
 /* 2B358 8003AB58 21280002 */   addu      $a1, $s0, $zero
 /* 2B35C 8003AB5C 7000488E */  lw         $t0, 0x70($s2)
 /* 2B360 8003AB60 00000000 */  nop
@@ -219,7 +219,7 @@ glabel PIPE3D_CalculateWCTransform
 /* 2B3A4 8003ABA4 04001AEA */  swc2       $26, 0x4($s0) # handwritten instruction
 /* 2B3A8 8003ABA8 08001BEA */  swc2       $27, 0x8($s0) # handwritten instruction
 /* 2B3AC 8003ABAC 7000448E */  lw         $a0, 0x70($s2)
-/* 2B3B0 8003ABB0 B1FD020C */  jal        func_800BF6C4
+/* 2B3B0 8003ABB0 B1FD020C */  jal        TransMatrix
 /* 2B3B4 8003ABB4 21280002 */   addu      $a1, $s0, $zero
 /* 2B3B8 8003ABB8 7800BF8F */  lw         $ra, 0x78($sp)
 /* 2B3BC 8003ABBC 7400B38F */  lw         $s3, 0x74($sp)

@@ -14,7 +14,7 @@ glabel PhysicsMoveLocalZClamp
 /* 68088 80077888 1000A427 */  addiu      $a0, $sp, 0x10
 /* 6808C 8007788C 21280000 */  addu       $a1, $zero, $zero
 /* 68090 80077890 3800BFAF */  sw         $ra, 0x38($sp)
-/* 68094 80077894 2EF2020C */  jal        func_800BC8B8
+/* 68094 80077894 2EF2020C */  jal        memset
 /* 68098 80077898 06000624 */   addiu     $a2, $zero, 0x6
 /* 6809C 8007789C 21206002 */  addu       $a0, $s3, $zero
 /* 680A0 800778A0 1000A527 */  addiu      $a1, $sp, 0x10
@@ -31,7 +31,7 @@ glabel PhysicsMoveLocalZClamp
 /* 680CC 800778CC 1A00A2A7 */  sh         $v0, 0x1A($sp)
 /* 680D0 800778D0 4000648E */  lw         $a0, 0x40($s3)
 /* 680D4 800778D4 40811000 */  sll        $s0, $s0, 5
-/* 680D8 800778D8 0EF3020C */  jal        func_800BCC38
+/* 680D8 800778D8 0EF3020C */  jal        ApplyMatrixSV
 /* 680DC 800778DC 21209000 */   addu      $a0, $a0, $s0
 /* 680E0 800778E0 5C006296 */  lhu        $v0, 0x5C($s3)
 /* 680E4 800778E4 2000A397 */  lhu        $v1, 0x20($sp)

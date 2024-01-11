@@ -430,7 +430,7 @@ glabel InitPhysicalObject
 /* 5BDDC 8006B5DC 1A00A2A7 */  sh         $v0, 0x1A($sp)
 /* 5BDE0 8006B5E0 78004296 */  lhu        $v0, 0x78($s2)
 /* 5BDE4 8006B5E4 21280002 */  addu       $a1, $s0, $zero
-/* 5BDE8 8006B5E8 D8E2010C */  jal        func_80078B60
+/* 5BDE8 8006B5E8 D8E2010C */  jal        RotMatrixZYX
 /* 5BDEC 8006B5EC 1C00A2A7 */   sh        $v0, 0x1C($sp)
 /* 5BDF0 8006B5F0 4000A427 */  addiu      $a0, $sp, 0x40
 /* 5BDF4 8006B5F4 21280002 */  addu       $a1, $s0, $zero

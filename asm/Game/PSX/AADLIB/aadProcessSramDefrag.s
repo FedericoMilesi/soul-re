@@ -158,7 +158,7 @@ glabel aadProcessSramDefrag
 /* 44A1C 8005421C C5500108 */  j          .L80054314
 /* 44A20 80054220 000062AE */   sw        $v0, 0x0($s3)
 .L80054224:
-/* 44A24 80054224 79FC020C */  jal        func_800BF1E4
+/* 44A24 80054224 79FC020C */  jal        SpuIsTransferCompleted
 /* 44A28 80054228 21200000 */   addu      $a0, $zero, $zero
 /* 44A2C 8005422C 39004010 */  beqz       $v0, .L80054314
 /* 44A30 80054230 00000000 */   nop
@@ -170,26 +170,26 @@ glabel aadProcessSramDefrag
 /* 44A48 80054248 21806000 */  addu       $s0, $v1, $zero
 .L8005424C:
 /* 44A4C 8005424C 1400648E */  lw         $a0, 0x14($s3)
-/* 44A50 80054250 59FE020C */  jal        func_800BF964
+/* 44A50 80054250 59FE020C */  jal        SpuSetTransferStartAddr
 /* 44A54 80054254 00000000 */   nop
 /* 44A58 80054258 0400648E */  lw         $a0, 0x4($s3)
-/* 44A5C 8005425C CCFF020C */  jal        func_800BFF30
+/* 44A5C 8005425C CCFF020C */  jal        SpuRead
 /* 44A60 80054260 21280002 */   addu      $a1, $s0, $zero
 /* 44A64 80054264 03000224 */  addiu      $v0, $zero, 0x3
 /* 44A68 80054268 1C0070AE */  sw         $s0, 0x1C($s3)
 /* 44A6C 8005426C C5500108 */  j          .L80054314
 /* 44A70 80054270 E80722AE */   sw        $v0, 0x7E8($s1)
 .L80054274:
-/* 44A74 80054274 79FC020C */  jal        func_800BF1E4
+/* 44A74 80054274 79FC020C */  jal        SpuIsTransferCompleted
 /* 44A78 80054278 21200000 */   addu      $a0, $zero, $zero
 /* 44A7C 8005427C 25004010 */  beqz       $v0, .L80054314
 /* 44A80 80054280 00000000 */   nop
 /* 44A84 80054284 1000648E */  lw         $a0, 0x10($s3)
-/* 44A88 80054288 59FE020C */  jal        func_800BF964
+/* 44A88 80054288 59FE020C */  jal        SpuSetTransferStartAddr
 /* 44A8C 8005428C 00000000 */   nop
 /* 44A90 80054290 1C00708E */  lw         $s0, 0x1C($s3)
 /* 44A94 80054294 0400648E */  lw         $a0, 0x4($s3)
-/* 44A98 80054298 71FE020C */  jal        func_800BF9C4
+/* 44A98 80054298 71FE020C */  jal        SpuWrite
 /* 44A9C 8005429C 21280002 */   addu      $a1, $s0, $zero
 /* 44AA0 800542A0 1400628E */  lw         $v0, 0x14($s3)
 /* 44AA4 800542A4 1800638E */  lw         $v1, 0x18($s3)

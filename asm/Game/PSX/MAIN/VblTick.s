@@ -22,7 +22,7 @@ glabel VblTick
 /* 29400 80038C00 2B104300 */  sltu       $v0, $v0, $v1
 /* 29404 80038C04 05004010 */  beqz       $v0, .L80038C1C
 /* 29408 80038C08 00000000 */   nop
-/* 2940C 80038C0C 68EA020C */  jal        func_800BA9A0
+/* 2940C 80038C0C 68EA020C */  jal        PutDispEnv
 /* 29410 80038C10 00000000 */   nop
 /* 29414 80038C14 E0BE80AF */  sw         $zero, %gp_rel(gameTrackerX + 0x118)($gp)
 /* 29418 80038C18 FCBE80AF */  sw         $zero, %gp_rel(gameTrackerX + 0x134)($gp)

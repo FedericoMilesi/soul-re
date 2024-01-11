@@ -25,7 +25,7 @@ glabel MENUFACE_ChangeStateRandomly
 /* A9C1C 800B941C FEFF0396 */  lhu        $v1, -0x2($s0)
 /* A9C20 800B9420 19004014 */  bnez       $v0, .L800B9488
 /* A9C24 800B9424 00000000 */   nop
-/* A9C28 800B9428 3AF2020C */  jal        func_800BC8E8
+/* A9C28 800B9428 3AF2020C */  jal        rand
 /* A9C2C 800B942C 00000000 */   nop
 /* A9C30 800B9430 6210033C */  lui        $v1, (0x10624DD3 >> 16)
 /* A9C34 800B9434 D34D6334 */  ori        $v1, $v1, (0x10624DD3 & 0xFFFF)

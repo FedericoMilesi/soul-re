@@ -9,12 +9,12 @@ glabel FX_UpdraftPrimModify
 /* 3AD00 8004A500 2188C000 */  addu       $s1, $a2, $zero
 /* 3AD04 8004A504 2000BFAF */  sw         $ra, 0x20($sp)
 /* 3AD08 8004A508 1800B2AF */  sw         $s2, 0x18($sp)
-/* 3AD0C 8004A50C 3AF2020C */  jal        func_800BC8E8
+/* 3AD0C 8004A50C 3AF2020C */  jal        rand
 /* 3AD10 8004A510 1000B0AF */   sw        $s0, 0x10($sp)
 /* 3AD14 8004A514 FF0F5230 */  andi       $s2, $v0, 0xFFF
-/* 3AD18 8004A518 DCE4010C */  jal        func_80079370
+/* 3AD18 8004A518 DCE4010C */  jal        rcos
 /* 3AD1C 8004A51C 21204002 */   addu      $a0, $s2, $zero
-/* 3AD20 8004A520 3AF2020C */  jal        func_800BC8E8
+/* 3AD20 8004A520 3AF2020C */  jal        rand
 /* 3AD24 8004A524 21804000 */   addu      $s0, $v0, $zero
 /* 3AD28 8004A528 24002386 */  lh         $v1, 0x24($s1)
 /* 3AD2C 8004A52C 00000000 */  nop
@@ -38,9 +38,9 @@ glabel FX_UpdraftPrimModify
 /* 3AD70 8004A570 FF0F6324 */  addiu      $v1, $v1, 0xFFF
 .L8004A574:
 /* 3AD74 8004A574 03130300 */  sra        $v0, $v1, 12
-/* 3AD78 8004A578 D0E4010C */  jal        func_80079340
+/* 3AD78 8004A578 D0E4010C */  jal        rsin
 /* 3AD7C 8004A57C 5C0062A6 */   sh        $v0, 0x5C($s3)
-/* 3AD80 8004A580 3AF2020C */  jal        func_800BC8E8
+/* 3AD80 8004A580 3AF2020C */  jal        rand
 /* 3AD84 8004A584 21804000 */   addu      $s0, $v0, $zero
 /* 3AD88 8004A588 24002386 */  lh         $v1, 0x24($s1)
 /* 3AD8C 8004A58C 00000000 */  nop
@@ -64,7 +64,7 @@ glabel FX_UpdraftPrimModify
 /* 3ADD0 8004A5D0 FF0F6324 */  addiu      $v1, $v1, 0xFFF
 /* 3ADD4 8004A5D4 03130300 */  sra        $v0, $v1, 12
 .L8004A5D8:
-/* 3ADD8 8004A5D8 3AF2020C */  jal        func_800BC8E8
+/* 3ADD8 8004A5D8 3AF2020C */  jal        rand
 /* 3ADDC 8004A5DC 5E0062A6 */   sh        $v0, 0x5E($s3)
 /* 3ADE0 8004A5E0 21204000 */  addu       $a0, $v0, $zero
 /* 3ADE4 8004A5E4 28002386 */  lh         $v1, 0x28($s1)

@@ -20,7 +20,7 @@ glabel MONSENSE_DoSenses
 /* 77918 80087118 08004010 */  beqz       $v0, .L8008713C
 /* 7791C 8008711C 21280000 */   addu      $a1, $zero, $zero
 /* 77920 80087120 BCED8427 */  addiu      $a0, $gp, %gp_rel(monsterSensed)
-/* 77924 80087124 2EF2020C */  jal        func_800BC8B8
+/* 77924 80087124 2EF2020C */  jal        memset
 /* 77928 80087128 28000624 */   addiu     $a2, $zero, 0x28
 /* 7792C 8008712C F4BE828F */  lw         $v0, %gp_rel(gameTrackerX + 0x12C)($gp)
 /* 77930 80087130 00000000 */  nop

@@ -215,7 +215,7 @@ glabel sfxCmdSetToneVolumeAndPan
 /* 481E4 800579E4 82330200 */  srl        $a2, $v0, 14
 /* 481E8 800579E8 1200A6A7 */  sh         $a2, 0x12($sp)
 /* 481EC 800579EC 00340600 */  sll        $a2, $a2, 16
-/* 481F0 800579F0 D000030C */  jal        func_800C0340
+/* 481F0 800579F0 D000030C */  jal        SpuSetVoiceVolume
 /* 481F4 800579F4 03340600 */   sra       $a2, $a2, 16
 /* 481F8 800579F8 855E0108 */  j          .L80057A14
 /* 481FC 800579FC 00000000 */   nop

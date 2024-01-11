@@ -129,7 +129,7 @@ jlabel .L8008AE80
 /* 7B684 8008AE84 04000224 */  addiu      $v0, $zero, 0x4
 /* 7B688 8008AE88 0D006210 */  beq        $v1, $v0, .L8008AEC0
 /* 7B68C 8008AE8C 14000524 */   addiu     $a1, $zero, 0x14
-/* 7B690 8008AE90 3AF2020C */  jal        func_800BC8E8
+/* 7B690 8008AE90 3AF2020C */  jal        rand
 /* 7B694 8008AE94 00000000 */   nop
 /* 7B698 8008AE98 03004230 */  andi       $v0, $v0, 0x3
 /* 7B69C 8008AE9C 08004014 */  bnez       $v0, .L8008AEC0

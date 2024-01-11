@@ -70,7 +70,7 @@ glabel PhysicsCheckLinkedMove
 /* 652F8 80074AF8 1000A527 */  addiu      $a1, $sp, 0x10
 /* 652FC 80074AFC 880140AE */  sw         $zero, 0x188($s2)
 /* 65300 80074B00 7C0140AE */  sw         $zero, 0x17C($s2)
-/* 65304 80074B04 88F4020C */  jal        func_800BD220
+/* 65304 80074B04 88F4020C */  jal        TransposeMatrix
 /* 65308 80074B08 900042AE */   sw        $v0, 0x90($s2)
 /* 6530C 80074B0C 1000A427 */  addiu      $a0, $sp, 0x10
 /* 65310 80074B10 3000B127 */  addiu      $s1, $sp, 0x30
@@ -87,15 +87,15 @@ glabel PhysicsCheckLinkedMove
 /* 6533C 80074B3C 21300002 */  addu       $a2, $s0, $zero
 /* 65340 80074B40 3400A2AF */  sw         $v0, 0x34($sp)
 /* 65344 80074B44 2310E800 */  subu       $v0, $a3, $t0
-/* 65348 80074B48 30F4020C */  jal        func_800BD0C0
+/* 65348 80074B48 30F4020C */  jal        ApplyMatrixLV
 /* 6534C 80074B4C 3800A2AF */   sw        $v0, 0x38($sp)
 /* 65350 80074B50 1000A427 */  addiu      $a0, $sp, 0x10
 /* 65354 80074B54 4000458E */  lw         $a1, 0x40($s2)
-/* 65358 80074B58 BFF7020C */  jal        func_800BDEFC
+/* 65358 80074B58 BFF7020C */  jal        MulMatrix0
 /* 6535C 80074B5C 94004626 */   addiu     $a2, $s2, 0x94
 /* 65360 80074B60 21208002 */  addu       $a0, $s4, $zero
 /* 65364 80074B64 21280002 */  addu       $a1, $s0, $zero
-/* 65368 80074B68 30F4020C */  jal        func_800BD0C0
+/* 65368 80074B68 30F4020C */  jal        ApplyMatrixLV
 /* 6536C 80074B6C 21302002 */   addu      $a2, $s1, $zero
 /* 65370 80074B70 140060A6 */  sh         $zero, 0x14($s3)
 /* 65374 80074B74 120060A6 */  sh         $zero, 0x12($s3)
@@ -153,12 +153,12 @@ glabel PhysicsCheckLinkedMove
 /* 65430 80074C30 26000012 */  beqz       $s0, .L80074CCC
 /* 65434 80074C34 A8004526 */   addiu     $a1, $s2, 0xA8
 .L80074C38:
-/* 65438 80074C38 88F4020C */  jal        func_800BD220
+/* 65438 80074C38 88F4020C */  jal        TransposeMatrix
 /* 6543C 80074C3C 1000A527 */   addiu     $a1, $sp, 0x10
 /* 65440 80074C40 04000012 */  beqz       $s0, .L80074C54
 /* 65444 80074C44 1000A427 */   addiu     $a0, $sp, 0x10
 /* 65448 80074C48 4000458E */  lw         $a1, 0x40($s2)
-/* 6544C 80074C4C BFF7020C */  jal        func_800BDEFC
+/* 6544C 80074C4C BFF7020C */  jal        MulMatrix0
 /* 65450 80074C50 94004626 */   addiu     $a2, $s2, 0x94
 .L80074C54:
 /* 65454 80074C54 1B002012 */  beqz       $s1, .L80074CC4
@@ -172,7 +172,7 @@ glabel PhysicsCheckLinkedMove
 /* 65474 80074C74 23101E01 */  subu       $v0, $t0, $fp
 /* 65478 80074C78 3400A2AF */  sw         $v0, 0x34($sp)
 /* 6547C 80074C7C 2310F700 */  subu       $v0, $a3, $s7
-/* 65480 80074C80 30F4020C */  jal        func_800BD0C0
+/* 65480 80074C80 30F4020C */  jal        ApplyMatrixLV
 /* 65484 80074C84 3800A2AF */   sw        $v0, 0x38($sp)
 /* 65488 80074C88 A800428E */  lw         $v0, 0xA8($s2)
 /* 6548C 80074C8C 3000A38F */  lw         $v1, 0x30($sp)
@@ -193,11 +193,11 @@ glabel PhysicsCheckLinkedMove
 /* 654C4 80074CC4 21208002 */  addu       $a0, $s4, $zero
 /* 654C8 80074CC8 A8004526 */  addiu      $a1, $s2, 0xA8
 .L80074CCC:
-/* 654CC 80074CCC 30F4020C */  jal        func_800BD0C0
+/* 654CC 80074CCC 30F4020C */  jal        ApplyMatrixLV
 /* 654D0 80074CD0 4800A627 */   addiu     $a2, $sp, 0x48
 /* 654D4 80074CD4 21208002 */  addu       $a0, $s4, $zero
 /* 654D8 80074CD8 94004526 */  addiu      $a1, $s2, 0x94
-/* 654DC 80074CDC BFF7020C */  jal        func_800BDEFC
+/* 654DC 80074CDC BFF7020C */  jal        MulMatrix0
 /* 654E0 80074CE0 1000A627 */   addiu     $a2, $sp, 0x10
 /* 654E4 80074CE4 4000A427 */  addiu      $a0, $sp, 0x40
 /* 654E8 80074CE8 1000A527 */  addiu      $a1, $sp, 0x10

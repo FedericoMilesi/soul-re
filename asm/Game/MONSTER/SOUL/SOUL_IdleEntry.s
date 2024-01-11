@@ -13,7 +13,7 @@ glabel SOUL_IdleEntry
 /* 7EF88 8008E788 11000224 */  addiu      $v0, $zero, 0x11
 /* 7EF8C 8008E78C 9006020C */  jal        MON_GetTime
 /* 7EF90 8008E790 940182AC */   sw        $v0, 0x194($a0)
-/* 7EF94 8008E794 3AF2020C */  jal        func_800BC8E8
+/* 7EF94 8008E794 3AF2020C */  jal        rand
 /* 7EF98 8008E798 21804000 */   addu      $s0, $v0, $zero
 /* 7EF9C 8008E79C 7605033C */  lui        $v1, (0x57619F1 >> 16)
 /* 7EFA0 8008E7A0 F1196334 */  ori        $v1, $v1, (0x57619F1 & 0xFFFF)

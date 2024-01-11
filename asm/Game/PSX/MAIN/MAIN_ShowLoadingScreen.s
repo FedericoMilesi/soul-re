@@ -14,7 +14,7 @@ glabel MAIN_ShowLoadingScreen
 /* 29658 80038E58 1300A3AB */  swl        $v1, 0x13($sp)
 /* 2965C 80038E5C 1000A3BB */  swr        $v1, 0x10($sp)
 /* 29660 80038E60 1400A7A3 */  sb         $a3, 0x14($sp)
-/* 29664 80038E64 5EF2020C */  jal        func_800BC978
+/* 29664 80038E64 5EF2020C */  jal        VSync
 /* 29668 80038E68 21200000 */   addu      $a0, $zero, $zero
 /* 2966C 80038E6C 8CDD020C */  jal        localstr_get_language
 /* 29670 80038E70 00000000 */   nop

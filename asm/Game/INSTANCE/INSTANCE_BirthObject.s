@@ -76,10 +76,10 @@ glabel INSTANCE_BirthObject
 /* 247CC 80033FCC 7600A3A4 */  sh         $v1, 0x76($a1)
 /* 247D0 80033FD0 3C0002AE */  sw         $v0, 0x3C($s0)
 /* 247D4 80033FD4 2400858E */  lw         $a1, 0x24($s4)
-/* 247D8 80033FD8 1CF4020C */  jal        func_800BD070
+/* 247D8 80033FD8 1CF4020C */  jal        strcpy
 /* 247DC 80033FDC 5F001324 */   addiu     $s3, $zero, 0x5F
 .L80033FE0:
-/* 247E0 80033FE0 ACF4020C */  jal        func_800BD2B0
+/* 247E0 80033FE0 ACF4020C */  jal        strlen
 /* 247E4 80033FE4 5C010426 */   addiu     $a0, $s0, 0x15C
 /* 247E8 80033FE8 2A102202 */  slt        $v0, $s1, $v0
 /* 247EC 80033FEC 06004010 */  beqz       $v0, .L80034008

@@ -15,10 +15,10 @@ glabel SIGNAL_HandleStreamLevel
 /* E5F0 8001DDF0 0C008526 */  addiu      $a1, $s4, 0xC
 /* E5F4 8001DDF4 3800BFAF */  sw         $ra, 0x38($sp)
 /* E5F8 8001DDF8 2400B1AF */  sw         $s1, 0x24($sp)
-/* E5FC 8001DDFC 1CF4020C */  jal        func_800BD070
+/* E5FC 8001DDFC 1CF4020C */  jal        strcpy
 /* E600 8001DE00 2000B0AF */   sw        $s0, 0x20($sp)
 /* E604 8001DE04 1000A427 */  addiu      $a0, $sp, 0x10
-/* E608 8001DE08 0CF4020C */  jal        func_800BD030
+/* E608 8001DE08 0CF4020C */  jal        strchr
 /* E60C 8001DE0C 2C000524 */   addiu     $a1, $zero, 0x2C
 /* E610 8001DE10 21804000 */  addu       $s0, $v0, $zero
 /* E614 8001DE14 06000012 */  beqz       $s0, .L8001DE30
@@ -58,7 +58,7 @@ glabel SIGNAL_HandleStreamLevel
 /* E698 8001DE98 1000A28C */  lw         $v0, 0x10($a1)
 /* E69C 8001DE9C 00000000 */  nop
 /* E6A0 8001DEA0 0000518C */  lw         $s1, 0x0($v0)
-/* E6A4 8001DEA4 1CF4020C */  jal        func_800BD070
+/* E6A4 8001DEA4 1CF4020C */  jal        strcpy
 /* E6A8 8001DEA8 1000A427 */   addiu     $a0, $sp, 0x10
 /* E6AC 8001DEAC FCA0838F */  lw         $v1, %gp_rel(CurrentWarpNumber)($gp)
 /* E6B0 8001DEB0 00000000 */  nop
@@ -92,7 +92,7 @@ glabel SIGNAL_HandleStreamLevel
 /* E718 8001DF18 F4BF828F */  lw         $v0, %gp_rel(gameTrackerX + 0x22C)($gp)
 /* E71C 8001DF1C 44BF83A7 */  sh         $v1, %gp_rel(gameTrackerX + 0x17C)($gp)
 /* E720 8001DF20 748E82AF */  sw         $v0, %gp_rel(HandleGlobalValueSignal + 0x4)($gp)
-/* E724 8001DF24 1CF4020C */  jal        func_800BD070
+/* E724 8001DF24 1CF4020C */  jal        strcpy
 /* E728 8001DF28 1000A527 */   addiu     $a1, $sp, 0x10
 /* E72C 8001DF2C 58BF95A7 */  sh         $s5, %gp_rel(gameTrackerX + 0x190)($gp)
 /* E730 8001DF30 04008296 */  lhu        $v0, 0x4($s4)

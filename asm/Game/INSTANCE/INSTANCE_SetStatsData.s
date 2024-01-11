@@ -46,7 +46,7 @@ glabel INSTANCE_SetStatsData
 /* 25CAC 800354AC 60002396 */  lhu        $v1, 0x60($s1)
 /* 25CB0 800354B0 08006626 */  addiu      $a2, $s3, 0x8
 /* 25CB4 800354B4 23104300 */  subu       $v0, $v0, $v1
-/* 25CB8 800354B8 0EF3020C */  jal        func_800BCC38
+/* 25CB8 800354B8 0EF3020C */  jal        ApplyMatrixSV
 /* 25CBC 800354BC 040002A6 */   sh        $v0, (0x1F800004 & 0xFFFF)($s0)
 /* 25CC0 800354C0 000075AE */  sw         $s5, 0x0($s3)
 /* 25CC4 800354C4 040074AE */  sw         $s4, 0x4($s3)

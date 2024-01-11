@@ -22,7 +22,7 @@ glabel aadPutSfxCommand
 /* 47AEC 800572EC 23004010 */  beqz       $v0, .L8005737C
 /* 47AF0 800572F0 04001024 */   addiu     $s0, $zero, 0x4
 .L800572F4:
-/* 47AF4 800572F4 A5FC020C */  jal        func_800BF294
+/* 47AF4 800572F4 A5FC020C */  jal        EnterCriticalSection
 /* 47AF8 800572F8 00000000 */   nop
 /* 47AFC 800572FC D89B838F */  lw         $v1, %gp_rel(aadMem)($gp)
 /* 47B00 80057300 00000000 */  nop
@@ -55,7 +55,7 @@ glabel aadPutSfxCommand
 /* 47B68 80057368 D6016294 */  lhu        $v0, 0x1D6($v1)
 /* 47B6C 8005736C 00000000 */  nop
 /* 47B70 80057370 01004224 */  addiu      $v0, $v0, 0x1
-/* 47B74 80057374 11FC020C */  jal        func_800BF044
+/* 47B74 80057374 11FC020C */  jal        ExitCriticalSection
 /* 47B78 80057378 D60162A4 */   sh        $v0, 0x1D6($v1)
 .L8005737C:
 /* 47B7C 8005737C 2400BF8F */  lw         $ra, 0x24($sp)

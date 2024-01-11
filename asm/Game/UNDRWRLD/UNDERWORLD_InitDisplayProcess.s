@@ -6,12 +6,12 @@ glabel UNDERWORLD_InitDisplayProcess
 /* A55E4 800B4DE4 1000BFAF */  sw         $ra, 0x10($sp)
 .L800B4DE8:
 /* A55E8 800B4DE8 E4BE848F */  lw         $a0, %gp_rel(gameTrackerX + 0x11C)($gp)
-/* A55EC 800B4DEC 8494000C */  jal        func_80025210
+/* A55EC 800B4DEC 8494000C */  jal        CheckVolatile
 /* A55F0 800B4DF0 00000000 */   nop
 /* A55F4 800B4DF4 FCFF4014 */  bnez       $v0, .L800B4DE8
 /* A55F8 800B4DF8 00000000 */   nop
 /* A55FC 800B4DFC E0BE848F */  lw         $a0, %gp_rel(gameTrackerX + 0x118)($gp)
-/* A5600 800B4E00 8494000C */  jal        func_80025210
+/* A5600 800B4E00 8494000C */  jal        CheckVolatile
 /* A5604 800B4E04 00000000 */   nop
 /* A5608 800B4E08 F7FF4014 */  bnez       $v0, .L800B4DE8
 /* A560C 800B4E0C 48000424 */   addiu     $a0, $zero, 0x48

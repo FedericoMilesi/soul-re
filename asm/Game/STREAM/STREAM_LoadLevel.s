@@ -42,7 +42,7 @@ glabel STREAM_LoadLevel
 /* 4B324 8005AB24 0E008016 */  bnez       $s4, .L8005AB60
 /* 4B328 8005AB28 200020AE */   sw        $zero, 0x20($s1)
 /* 4B32C 8005AB2C 24BF8427 */  addiu      $a0, $gp, %gp_rel(gameTrackerX + 0x15C)
-/* 4B330 8005AB30 1CF4020C */  jal        func_800BD070
+/* 4B330 8005AB30 1CF4020C */  jal        strcpy
 /* 4B334 8005AB34 21286002 */   addu      $a1, $s3, $zero
 /* 4B338 8005AB38 B766010C */  jal        STREAM_SetMainFog
 /* 4B33C 8005AB3C 21202002 */   addu      $a0, $s1, $zero
@@ -102,14 +102,14 @@ glabel STREAM_LoadLevel
 /* 4B3F8 8005ABF8 0C002426 */  addiu      $a0, $s1, 0xC
 /* 4B3FC 8005ABFC 21286002 */  addu       $a1, $s3, $zero
 /* 4B400 8005AC00 01000224 */  addiu      $v0, $zero, 0x1
-/* 4B404 8005AC04 1CF4020C */  jal        func_800BD070
+/* 4B404 8005AC04 1CF4020C */  jal        strcpy
 /* 4B408 8005AC08 040022A6 */   sh        $v0, 0x4($s1)
 /* 4B40C 8005AC0C 000035AE */  sw         $s5, 0x0($s1)
 /* 4B410 8005AC10 200020AE */  sw         $zero, 0x20($s1)
 /* 4B414 8005AC14 11008016 */  bnez       $s4, .L8005AC5C
 /* 4B418 8005AC18 060020A6 */   sh        $zero, 0x6($s1)
 /* 4B41C 8005AC1C 24BF8427 */  addiu      $a0, $gp, %gp_rel(gameTrackerX + 0x15C)
-/* 4B420 8005AC20 1CF4020C */  jal        func_800BD070
+/* 4B420 8005AC20 1CF4020C */  jal        strcpy
 /* 4B424 8005AC24 21286002 */   addu      $a1, $s3, $zero
 /* 4B428 8005AC28 1800A427 */  addiu      $a0, $sp, 0x18
 /* 4B42C 8005AC2C 0680053C */  lui        $a1, %hi(STREAM_LoadLevelReturn)

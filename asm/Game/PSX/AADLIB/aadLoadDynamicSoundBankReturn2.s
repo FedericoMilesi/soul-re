@@ -88,10 +88,10 @@ glabel aadLoadDynamicSoundBankReturn2
 /* 43068 80052868 2151010C */  jal        aadWaitForSramTransferComplete
 /* 4306C 8005286C 00000000 */   nop
 /* 43070 80052870 5000048E */  lw         $a0, 0x50($s0)
-/* 43074 80052874 59FE020C */  jal        func_800BF964
+/* 43074 80052874 59FE020C */  jal        SpuSetTransferStartAddr
 /* 43078 80052878 00000000 */   nop
 /* 4307C 8005287C 21202002 */  addu       $a0, $s1, $zero
-/* 43080 80052880 71FE020C */  jal        func_800BF9C4
+/* 43080 80052880 71FE020C */  jal        SpuWrite
 /* 43084 80052884 21284002 */   addu      $a1, $s2, $zero
 /* 43088 80052888 5000028E */  lw         $v0, 0x50($s0)
 /* 4308C 8005288C 01000324 */  addiu      $v1, $zero, 0x1

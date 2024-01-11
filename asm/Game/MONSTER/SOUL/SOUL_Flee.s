@@ -28,7 +28,7 @@ glabel SOUL_Flee
 /* 7EE5C 8008E65C F4010624 */   addiu     $a2, $zero, 0x1F4
 /* 7EE60 8008E660 00140200 */  sll        $v0, $v0, 16
 /* 7EE64 8008E664 038C0200 */  sra        $s1, $v0, 16
-/* 7EE68 8008E668 D0E4010C */  jal        func_80079340
+/* 7EE68 8008E668 D0E4010C */  jal        rsin
 /* 7EE6C 8008E66C 21202002 */   addu      $a0, $s1, $zero
 /* 7EE70 8008E670 40190200 */  sll        $v1, $v0, 5
 /* 7EE74 8008E674 23186200 */  subu       $v1, $v1, $v0
@@ -39,7 +39,7 @@ glabel SOUL_Flee
 /* 7EE88 8008E688 21202002 */   addu      $a0, $s1, $zero
 /* 7EE8C 8008E68C FF0F4224 */  addiu      $v0, $v0, 0xFFF
 .L8008E690:
-/* 7EE90 8008E690 DCE4010C */  jal        func_80079370
+/* 7EE90 8008E690 DCE4010C */  jal        rcos
 /* 7EE94 8008E694 038B0200 */   sra       $s1, $v0, 12
 /* 7EE98 8008E698 40190200 */  sll        $v1, $v0, 5
 /* 7EE9C 8008E69C 23186200 */  subu       $v1, $v1, $v0

@@ -27,7 +27,7 @@ glabel STREAM_SetUpQueueEntry
 /* 50E14 80060614 21804000 */  addu       $s0, $v0, $zero
 .L80060618:
 /* 50E18 80060618 3C000426 */  addiu      $a0, $s0, 0x3C
-/* 50E1C 8006061C 1CF4020C */  jal        func_800BD070
+/* 50E1C 8006061C 1CF4020C */  jal        strcpy
 /* 50E20 80060620 21282002 */   addu      $a1, $s1, $zero
 /* 50E24 80060624 75DF000C */  jal        LOAD_HashName
 /* 50E28 80060628 21202002 */   addu      $a0, $s1, $zero

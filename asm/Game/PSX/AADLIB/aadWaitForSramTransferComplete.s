@@ -8,7 +8,7 @@ glabel aadWaitForSramTransferComplete
 /* 44C90 80054490 A0861036 */  ori        $s0, $s0, (0x186A0 & 0xFFFF)
 /* 44C94 80054494 1400BFAF */  sw         $ra, 0x14($sp)
 .L80054498:
-/* 44C98 80054498 79FC020C */  jal        func_800BF1E4
+/* 44C98 80054498 79FC020C */  jal        SpuIsTransferCompleted
 /* 44C9C 8005449C 21200000 */   addu      $a0, $zero, $zero
 /* 44CA0 800544A0 04004014 */  bnez       $v0, .L800544B4
 /* 44CA4 800544A4 01000224 */   addiu     $v0, $zero, 0x1

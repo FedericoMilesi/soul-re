@@ -85,7 +85,7 @@ glabel CAMERA_SphereToSphereWithLines
 /* 86E0 80017EE0 21200002 */   addu      $a0, $s0, $zero
 /* 86E4 80017EE4 BC00A487 */  lh         $a0, 0xBC($sp)
 /* 86E8 80017EE8 21280002 */  addu       $a1, $s0, $zero
-/* 86EC 80017EEC 32E4010C */  jal        func_800790C8
+/* 86EC 80017EEC 32E4010C */  jal        RotMatrixZ
 /* 86F0 80017EF0 00048424 */   addiu     $a0, $a0, 0x400
 /* 86F4 80017EF4 E800C28E */  lw         $v0, 0xE8($s6)
 /* 86F8 80017EF8 00000000 */  nop
@@ -104,7 +104,7 @@ glabel CAMERA_SphereToSphereWithLines
 /* 872C 80017F2C 7800A527 */  addiu      $a1, $sp, 0x78
 /* 8730 80017F30 E000A627 */  addiu      $a2, $sp, 0xE0
 /* 8734 80017F34 00100224 */  addiu      $v0, $zero, 0x1000
-/* 8738 80017F38 1AF2020C */  jal        func_800BC868
+/* 8738 80017F38 1AF2020C */  jal        ApplyMatrix
 /* 873C 80017F3C 7A00A2A7 */   sh        $v0, 0x7A($sp)
 /* 8740 80017F40 2801C386 */  lh         $v1, 0x128($s6)
 /* 8744 80017F44 E000A28F */  lw         $v0, 0xE0($sp)
@@ -212,12 +212,12 @@ glabel CAMERA_SphereToSphereWithLines
 /* 88B4 800180B4 21202002 */  addu       $a0, $s1, $zero
 /* 88B8 800180B8 7800A527 */  addiu      $a1, $sp, 0x78
 /* 88BC 800180BC 8000B027 */  addiu      $s0, $sp, 0x80
-/* 88C0 800180C0 1AF2020C */  jal        func_800BC868
+/* 88C0 800180C0 1AF2020C */  jal        ApplyMatrix
 /* 88C4 800180C4 21300002 */   addu      $a2, $s0, $zero
 /* 88C8 800180C8 21202002 */  addu       $a0, $s1, $zero
 /* 88CC 800180CC 9000A527 */  addiu      $a1, $sp, 0x90
 /* 88D0 800180D0 9800B127 */  addiu      $s1, $sp, 0x98
-/* 88D4 800180D4 1AF2020C */  jal        func_800BC868
+/* 88D4 800180D4 1AF2020C */  jal        ApplyMatrix
 /* 88D8 800180D8 21302002 */   addu      $a2, $s1, $zero
 /* 88DC 800180DC 7C01AC8F */  lw         $t4, 0x17C($sp)
 /* 88E0 800180E0 8000A597 */  lhu        $a1, 0x80($sp)
@@ -283,13 +283,13 @@ glabel CAMERA_SphereToSphereWithLines
 /* 89C4 800181C4 7800B427 */  addiu      $s4, $sp, 0x78
 /* 89C8 800181C8 21288002 */  addu       $a1, $s4, $zero
 /* 89CC 800181CC 8000B027 */  addiu      $s0, $sp, 0x80
-/* 89D0 800181D0 1AF2020C */  jal        func_800BC868
+/* 89D0 800181D0 1AF2020C */  jal        ApplyMatrix
 /* 89D4 800181D4 21300002 */   addu      $a2, $s0, $zero
 /* 89D8 800181D8 21204002 */  addu       $a0, $s2, $zero
 /* 89DC 800181DC 9000B527 */  addiu      $s5, $sp, 0x90
 /* 89E0 800181E0 2128A002 */  addu       $a1, $s5, $zero
 /* 89E4 800181E4 9800B127 */  addiu      $s1, $sp, 0x98
-/* 89E8 800181E8 1AF2020C */  jal        func_800BC868
+/* 89E8 800181E8 1AF2020C */  jal        ApplyMatrix
 /* 89EC 800181EC 21302002 */   addu      $a2, $s1, $zero
 /* 89F0 800181F0 3800B327 */  addiu      $s3, $sp, 0x38
 /* 89F4 800181F4 7C01AD8F */  lw         $t5, 0x17C($sp)
@@ -328,18 +328,18 @@ glabel CAMERA_SphereToSphereWithLines
 /* 8A78 80018278 7A00A2A7 */   sh        $v0, 0x7A($sp)
 /* 8A7C 8001827C B800A487 */  lh         $a0, 0xB8($sp)
 /* 8A80 80018280 21284002 */  addu       $a1, $s2, $zero
-/* 8A84 80018284 98E3010C */  jal        func_80078E60
+/* 8A84 80018284 98E3010C */  jal        RotMatrixX
 /* 8A88 80018288 00048424 */   addiu     $a0, $a0, 0x400
 /* 8A8C 8001828C BC00A487 */  lh         $a0, 0xBC($sp)
-/* 8A90 80018290 32E4010C */  jal        func_800790C8
+/* 8A90 80018290 32E4010C */  jal        RotMatrixZ
 /* 8A94 80018294 21284002 */   addu      $a1, $s2, $zero
 /* 8A98 80018298 21204002 */  addu       $a0, $s2, $zero
 /* 8A9C 8001829C 21288002 */  addu       $a1, $s4, $zero
-/* 8AA0 800182A0 1AF2020C */  jal        func_800BC868
+/* 8AA0 800182A0 1AF2020C */  jal        ApplyMatrix
 /* 8AA4 800182A4 21300002 */   addu      $a2, $s0, $zero
 /* 8AA8 800182A8 21204002 */  addu       $a0, $s2, $zero
 /* 8AAC 800182AC 2128A002 */  addu       $a1, $s5, $zero
-/* 8AB0 800182B0 1AF2020C */  jal        func_800BC868
+/* 8AB0 800182B0 1AF2020C */  jal        ApplyMatrix
 /* 8AB4 800182B4 21302002 */   addu      $a2, $s1, $zero
 /* 8AB8 800182B8 21204002 */  addu       $a0, $s2, $zero
 /* 8ABC 800182BC 7C01AC8F */  lw         $t4, 0x17C($sp)
@@ -430,7 +430,7 @@ glabel CAMERA_SphereToSphereWithLines
 /* 8C10 80018410 21186A00 */  addu       $v1, $v1, $t2
 /* 8C14 80018414 2138E900 */  addu       $a3, $a3, $t1
 /* 8C18 80018418 020043A4 */  sh         $v1, 0x2($v0)
-/* 8C1C 8001841C 1AF2020C */  jal        func_800BC868
+/* 8C1C 8001841C 1AF2020C */  jal        ApplyMatrix
 /* 8C20 80018420 040047A4 */   sh        $a3, 0x4($v0)
 /* 8C24 80018424 21204002 */  addu       $a0, $s2, $zero
 /* 8C28 80018428 21288002 */  addu       $a1, $s4, $zero
@@ -442,7 +442,7 @@ glabel CAMERA_SphereToSphereWithLines
 /* 8C40 80018440 64AC82A7 */  sh         $v0, %gp_rel(camera_plane)($gp)
 /* 8C44 80018444 66AC83A7 */  sh         $v1, %gp_rel(camera_plane + 0x2)($gp)
 /* 8C48 80018448 68AC87A7 */  sh         $a3, %gp_rel(camera_plane + 0x4)($gp)
-/* 8C4C 8001844C 1AF2020C */  jal        func_800BC868
+/* 8C4C 8001844C 1AF2020C */  jal        ApplyMatrix
 /* 8C50 80018450 A800A627 */   addiu     $a2, $sp, 0xA8
 /* 8C54 80018454 7C01AD8F */  lw         $t5, 0x17C($sp)
 /* 8C58 80018458 00000000 */  nop

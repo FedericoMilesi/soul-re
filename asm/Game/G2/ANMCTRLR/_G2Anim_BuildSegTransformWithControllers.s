@@ -70,7 +70,7 @@ glabel _G2Anim_BuildSegTransformWithControllers
 /* 81754 80090F54 00100224 */  addiu      $v0, $zero, 0x1000
 /* 81758 80090F58 05006210 */  beq        $v1, $v0, .L80090F70
 /* 8175C 80090F5C 21204002 */   addu      $a0, $s2, $zero
-/* 81760 80090F60 96E4010C */  jal        func_80079258
+/* 81760 80090F60 96E4010C */  jal        ScaleMatrix
 /* 81764 80090F64 1000A527 */   addiu     $a1, $sp, 0x10
 /* 81768 80090F68 01000224 */  addiu      $v0, $zero, 0x1
 /* 8176C 80090F6C 120042A6 */  sh         $v0, 0x12($s2)

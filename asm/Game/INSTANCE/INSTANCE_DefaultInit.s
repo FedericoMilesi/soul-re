@@ -13,7 +13,7 @@ glabel INSTANCE_DefaultInit
 /* 24948 80034148 21280000 */  addu       $a1, $zero, $zero
 /* 2494C 8003414C 88020624 */  addiu      $a2, $zero, 0x288
 /* 24950 80034150 2000BFAF */  sw         $ra, 0x20($sp)
-/* 24954 80034154 2EF2020C */  jal        func_800BC8B8
+/* 24954 80034154 2EF2020C */  jal        memset
 /* 24958 80034158 1C00B3AF */   sw        $s3, 0x1C($sp)
 /* 2495C 8003415C 1C0032AE */  sw         $s2, 0x1C($s1)
 /* 24960 80034160 1C00428E */  lw         $v0, 0x1C($s2)

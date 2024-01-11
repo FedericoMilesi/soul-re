@@ -27,7 +27,7 @@ glabel razCenterWithBlock
 /* 96A04 800A6204 4CE8000C */  jal        MATH3D_SetUnityMatrix
 /* 96A08 800A6208 01005438 */   xori      $s4, $v0, 0x1
 /* 96A0C 800A620C 2C00A487 */  lh         $a0, 0x2C($sp)
-/* 96A10 800A6210 32E4010C */  jal        func_800790C8
+/* 96A10 800A6210 32E4010C */  jal        RotMatrixZ
 /* 96A14 800A6214 21280002 */   addu      $a1, $s0, $zero
 /* 96A18 800A6218 21200002 */  addu       $a0, $s0, $zero
 /* 96A1C 800A621C 1800A527 */  addiu      $a1, $sp, 0x18
@@ -36,7 +36,7 @@ glabel razCenterWithBlock
 /* 96A28 800A6228 23105200 */  subu       $v0, $v0, $s2
 /* 96A2C 800A622C 1C00A0A7 */  sh         $zero, 0x1C($sp)
 /* 96A30 800A6230 1800A0A7 */  sh         $zero, 0x18($sp)
-/* 96A34 800A6234 0EF3020C */  jal        func_800BCC38
+/* 96A34 800A6234 0EF3020C */  jal        ApplyMatrixSV
 /* 96A38 800A6238 1A00A2A7 */   sh        $v0, 0x1A($sp)
 /* 96A3C 800A623C 5C006396 */  lhu        $v1, 0x5C($s3)
 /* 96A40 800A6240 5C002296 */  lhu        $v0, 0x5C($s1)

@@ -27,7 +27,7 @@ glabel aadResumeSound
 /* 455E0 80054DE0 40101000 */   sll       $v0, $s0, 1
 /* 455E4 80054DE4 21106200 */  addu       $v0, $v1, $v0
 /* 455E8 80054DE8 94044594 */  lhu        $a1, 0x494($v0)
-/* 455EC 80054DEC 9DFE020C */  jal        func_800BFA74
+/* 455EC 80054DEC 9DFE020C */  jal        SpuSetVoicePitch
 /* 455F0 80054DF0 21200002 */   addu      $a0, $s0, $zero
 .L80054DF4:
 /* 455F4 80054DF4 01001026 */  addiu      $s0, $s0, 0x1

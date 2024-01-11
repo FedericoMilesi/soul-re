@@ -58,11 +58,11 @@ glabel aadLoadDynamicSoundBank
 /* 42DCC 800525CC D89B828F */  lw         $v0, %gp_rel(aadMem)($gp)
 /* 42DD0 800525D0 01000324 */  addiu      $v1, $zero, 0x1
 /* 42DD4 800525D4 21105000 */  addu       $v0, $v0, $s0
-/* 42DD8 800525D8 3DFE020C */  jal        func_800BF8F4
+/* 42DD8 800525D8 3DFE020C */  jal        strncpy
 /* 42DDC 800525DC 000543AC */   sw        $v1, 0x500($v0)
 /* 42DE0 800525E0 20002426 */  addiu      $a0, $s1, 0x20
 /* 42DE4 800525E4 21288002 */  addu       $a1, $s4, $zero
-/* 42DE8 800525E8 3DFE020C */  jal        func_800BF8F4
+/* 42DE8 800525E8 3DFE020C */  jal        strncpy
 /* 42DEC 800525EC 1F000624 */   addiu     $a2, $zero, 0x1F
 /* 42DF0 800525F0 21206002 */  addu       $a0, $s3, $zero
 /* 42DF4 800525F4 0580053C */  lui        $a1, %hi(aadLoadDynamicSoundBankReturn)

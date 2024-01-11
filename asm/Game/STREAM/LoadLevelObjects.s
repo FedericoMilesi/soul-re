@@ -22,7 +22,7 @@ glabel LoadLevelObjects
 .L80059200:
 /* 49A00 80059200 8C00858C */  lw         $a1, 0x8C($a0)
 /* 49A04 80059204 1000A427 */  addiu      $a0, $sp, 0x10
-/* 49A08 80059208 1CF4020C */  jal        func_800BD070
+/* 49A08 80059208 1CF4020C */  jal        strcpy
 /* 49A0C 8005920C 2128B000 */   addu      $a1, $a1, $s0
 /* 49A10 80059210 C8BD8527 */  addiu      $a1, $gp, %gp_rel(gameTrackerX)
 /* 49A14 80059214 F563010C */  jal        InsertGlobalObject

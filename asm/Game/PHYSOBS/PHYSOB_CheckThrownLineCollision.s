@@ -44,11 +44,11 @@ glabel PHYSOB_CheckThrownLineCollision
 /* 5F0CC 8006E8CC 00000000 */  nop
 /* 5F0D0 8006E8D0 5C00A2A7 */  sh         $v0, 0x5C($sp)
 /* 5F0D4 8006E8D4 78002486 */  lh         $a0, 0x78($s1)
-/* 5F0D8 8006E8D8 D0E4010C */  jal        func_80079340
+/* 5F0D8 8006E8D8 D0E4010C */  jal        rsin
 /* 5F0DC 8006E8DC 00000000 */   nop
 /* 5F0E0 8006E8E0 7000A2A7 */  sh         $v0, 0x70($sp)
 /* 5F0E4 8006E8E4 78002486 */  lh         $a0, 0x78($s1)
-/* 5F0E8 8006E8E8 DCE4010C */  jal        func_80079370
+/* 5F0E8 8006E8E8 DCE4010C */  jal        rcos
 /* 5F0EC 8006E8EC 00000000 */   nop
 /* 5F0F0 8006E8F0 23100200 */  negu       $v0, $v0
 /* 5F0F4 8006E8F4 7200A2A7 */  sh         $v0, 0x72($sp)

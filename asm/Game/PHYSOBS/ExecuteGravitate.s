@@ -101,7 +101,7 @@ glabel ExecuteGravitate
 /* 6034C 8006FB4C 780022A6 */  sh         $v0, 0x78($s1)
 /* 60350 8006FB50 1C00658E */  lw         $a1, 0x1C($s3)
 /* 60354 8006FB54 40008424 */  addiu      $a0, $a0, 0x40
-/* 60358 8006FB58 1AF2020C */  jal        func_800BC868
+/* 60358 8006FB58 1AF2020C */  jal        ApplyMatrix
 /* 6035C 8006FB5C 3C00A524 */   addiu     $a1, $a1, 0x3C
 /* 60360 8006FB60 1400448E */  lw         $a0, 0x14($s2)
 /* 60364 8006FB64 1800A28F */  lw         $v0, 0x18($sp)

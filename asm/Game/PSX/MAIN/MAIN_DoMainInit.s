@@ -6,12 +6,12 @@ glabel MAIN_DoMainInit
 /* 29754 80038F54 1000BFAF */  sw         $ra, 0x10($sp)
 /* 29758 80038F58 76E2000C */  jal        InitDisplay
 /* 2975C 80038F5C 00000000 */   nop
-/* 29760 80038F60 B3FC020C */  jal        func_800BF2CC
+/* 29760 80038F60 B3FC020C */  jal        InitGeom
 /* 29764 80038F64 00000000 */   nop
 /* 29768 80038F68 00010424 */  addiu      $a0, $zero, 0x100
-/* 2976C 80038F6C A9FC020C */  jal        func_800BF2A4
+/* 2976C 80038F6C A9FC020C */  jal        SetGeomOffset
 /* 29770 80038F70 78000524 */   addiu     $a1, $zero, 0x78
-/* 29774 80038F74 0AF3020C */  jal        func_800BCC28
+/* 29774 80038F74 0AF3020C */  jal        SetGeomScreen
 /* 29778 80038F78 40010424 */   addiu     $a0, $zero, 0x140
 /* 2977C 80038F7C A5CB010C */  jal        VRAM_InitVramBlockCache
 /* 29780 80038F80 00000000 */   nop
@@ -19,10 +19,10 @@ glabel MAIN_DoMainInit
 /* 29788 80038F88 00000000 */   nop
 /* 2978C 80038F8C 0480043C */  lui        $a0, %hi(VblTick)
 /* 29790 80038F90 E0BE80AF */  sw         $zero, %gp_rel(gameTrackerX + 0x118)($gp)
-/* 29794 80038F94 C3E6020C */  jal        func_800B9B0C
+/* 29794 80038F94 C3E6020C */  jal        VSyncCallback
 /* 29798 80038F98 C08B8424 */   addiu     $a0, $a0, %lo(VblTick)
 /* 2979C 80038F9C 0480043C */  lui        $a0, %hi(DrawCallback)
-/* 297A0 80038FA0 D1E8020C */  jal        func_800BA344
+/* 297A0 80038FA0 D1E8020C */  jal        DrawSyncCallback
 /* 297A4 80038FA4 2C8C8424 */   addiu     $a0, $a0, %lo(DrawCallback)
 /* 297A8 80038FA8 4AC6000C */  jal        GAMEPAD_Init
 /* 297AC 80038FAC 00000000 */   nop
@@ -60,7 +60,7 @@ glabel MAIN_DoMainInit
 /* 29820 80039020 88BE8427 */  addiu      $a0, $gp, %gp_rel(gameTrackerX + 0xC0)
 /* 29824 80039024 C0D4020C */  jal        SAVE_Init
 /* 29828 80039028 40FF8424 */   addiu     $a0, $a0, -0xC0
-/* 2982C 8003902C 46F2020C */  jal        func_800BC918
+/* 2982C 8003902C 46F2020C */  jal        srand
 /* 29830 80039030 21200000 */   addu      $a0, $zero, $zero
 /* 29834 80039034 1000BF8F */  lw         $ra, 0x10($sp)
 /* 29838 80039038 00000000 */  nop

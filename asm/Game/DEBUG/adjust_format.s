@@ -19,13 +19,13 @@ glabel adjust_format
 /* 4430 80013C30 21202002 */  addu       $a0, $s1, $zero
 .L80013C34:
 /* 4434 80013C34 6401A526 */  addiu      $a1, $s5, %lo(cem_item_leading + 0x4)
-/* 4438 80013C38 3DE8020C */  jal        func_800BA0F4
+/* 4438 80013C38 3DE8020C */  jal        strncmp
 /* 443C 80013C3C 05000624 */   addiu     $a2, $zero, 0x5
 /* 4440 80013C40 07004010 */  beqz       $v0, .L80013C60
 /* 4444 80013C44 21202002 */   addu      $a0, $s1, $zero
 /* 4448 80013C48 0D80053C */  lui        $a1, %hi(cem_item_leading + 0xC)
 /* 444C 80013C4C 6C01A524 */  addiu      $a1, $a1, %lo(cem_item_leading + 0xC)
-/* 4450 80013C50 3DE8020C */  jal        func_800BA0F4
+/* 4450 80013C50 3DE8020C */  jal        strncmp
 /* 4454 80013C54 05000624 */   addiu     $a2, $zero, 0x5
 /* 4458 80013C58 36004014 */  bnez       $v0, .L80013D34
 /* 445C 80013C5C 21202002 */   addu      $a0, $s1, $zero
@@ -73,7 +73,7 @@ glabel adjust_format
 /* 44F0 80013CF0 01001026 */  addiu      $s0, $s0, 0x1
 .L80013CF4:
 /* 44F4 80013CF4 6401A526 */  addiu      $a1, $s5, %lo(cem_item_leading + 0x4)
-/* 44F8 80013CF8 3DE8020C */  jal        func_800BA0F4
+/* 44F8 80013CF8 3DE8020C */  jal        strncmp
 /* 44FC 80013CFC 05000624 */   addiu     $a2, $zero, 0x5
 /* 4500 80013D00 04004014 */  bnez       $v0, .L80013D14
 /* 4504 80013D04 00000000 */   nop
@@ -93,7 +93,7 @@ glabel adjust_format
 .L80013D34:
 /* 4534 80013D34 0D80053C */  lui        $a1, %hi(cem_item_leading + 0x14)
 /* 4538 80013D38 7401A524 */  addiu      $a1, $a1, %lo(cem_item_leading + 0x14)
-/* 453C 80013D3C 3DE8020C */  jal        func_800BA0F4
+/* 453C 80013D3C 3DE8020C */  jal        strncmp
 /* 4540 80013D40 07000624 */   addiu     $a2, $zero, 0x7
 /* 4544 80013D44 06004010 */  beqz       $v0, .L80013D60
 /* 4548 80013D48 0D80043C */   lui       $a0, %hi(cem_item_leading + 0x1C)

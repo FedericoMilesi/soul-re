@@ -21,31 +21,31 @@ glabel MATH3D_RotMatAboutVec
 /* 2A8A0 8003A0A0 00084424 */   addiu     $a0, $v0, 0x800
 /* 2A8A4 8003A0A4 02002486 */  lh         $a0, 0x2($s1)
 /* 2A8A8 8003A0A8 04002586 */  lh         $a1, 0x4($s1)
-/* 2A8AC 8003A0AC 26F3020C */  jal        func_800BCC98
+/* 2A8AC 8003A0AC 26F3020C */  jal        ratan2
 /* 2A8B0 8003A0B0 21804000 */   addu      $s0, $v0, $zero
 /* 2A8B4 8003A0B4 23100200 */  negu       $v0, $v0
 /* 2A8B8 8003A0B8 1000A2A7 */  sh         $v0, 0x10($sp)
 /* 2A8BC 8003A0BC 00002486 */  lh         $a0, 0x0($s1)
-/* 2A8C0 8003A0C0 26F3020C */  jal        func_800BCC98
+/* 2A8C0 8003A0C0 26F3020C */  jal        ratan2
 /* 2A8C4 8003A0C4 21280002 */   addu      $a1, $s0, $zero
 /* 2A8C8 8003A0C8 1000A427 */  addiu      $a0, $sp, 0x10
 /* 2A8CC 8003A0CC 1800B127 */  addiu      $s1, $sp, 0x18
 /* 2A8D0 8003A0D0 21282002 */  addu       $a1, $s1, $zero
 /* 2A8D4 8003A0D4 1200A2A7 */  sh         $v0, 0x12($sp)
-/* 2A8D8 8003A0D8 3DE3010C */  jal        func_80078CF4
+/* 2A8D8 8003A0D8 3DE3010C */  jal        RotMatrix
 /* 2A8DC 8003A0DC 1400A0A7 */   sh        $zero, 0x14($sp)
 /* 2A8E0 8003A0E0 21202002 */  addu       $a0, $s1, $zero
 /* 2A8E4 8003A0E4 3800B027 */  addiu      $s0, $sp, 0x38
-/* 2A8E8 8003A0E8 88F4020C */  jal        func_800BD220
+/* 2A8E8 8003A0E8 88F4020C */  jal        TransposeMatrix
 /* 2A8EC 8003A0EC 21280002 */   addu      $a1, $s0, $zero
 /* 2A8F0 8003A0F0 21200002 */  addu       $a0, $s0, $zero
-/* 2A8F4 8003A0F4 15FD020C */  jal        func_800BF454
+/* 2A8F4 8003A0F4 15FD020C */  jal        MulMatrix2
 /* 2A8F8 8003A0F8 21284002 */   addu      $a1, $s2, $zero
 /* 2A8FC 8003A0FC 21206002 */  addu       $a0, $s3, $zero
-/* 2A900 8003A100 32E4010C */  jal        func_800790C8
+/* 2A900 8003A100 32E4010C */  jal        RotMatrixZ
 /* 2A904 8003A104 21284002 */   addu      $a1, $s2, $zero
 /* 2A908 8003A108 21202002 */  addu       $a0, $s1, $zero
-/* 2A90C 8003A10C 15FD020C */  jal        func_800BF454
+/* 2A90C 8003A10C 15FD020C */  jal        MulMatrix2
 /* 2A910 8003A110 21284002 */   addu      $a1, $s2, $zero
 .L8003A114:
 /* 2A914 8003A114 6800BF8F */  lw         $ra, 0x68($sp)

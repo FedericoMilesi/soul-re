@@ -7,11 +7,11 @@ glabel aadInit
 /* 422BC 80051ABC 21888000 */  addu       $s1, $a0, $zero
 /* 422C0 80051AC0 1000B0AF */  sw         $s0, 0x10($sp)
 /* 422C4 80051AC4 1800BFAF */  sw         $ra, 0x18($sp)
-/* 422C8 80051AC8 3800030C */  jal        func_800C00E0
+/* 422C8 80051AC8 3800030C */  jal        GetGp
 /* 422CC 80051ACC 2180A000 */   addu      $s0, $a1, $zero
 /* 422D0 80051AD0 0D80013C */  lui        $at, %hi(aadGp)
 /* 422D4 80051AD4 F4C322AC */  sw         $v0, %lo(aadGp)($at)
-/* 422D8 80051AD8 A5FC020C */  jal        func_800BF294
+/* 422D8 80051AD8 A5FC020C */  jal        EnterCriticalSection
 /* 422DC 80051ADC 00000000 */   nop
 /* 422E0 80051AE0 A446010C */  jal        aadGetMemorySize
 /* 422E4 80051AE4 21202002 */   addu      $a0, $s1, $zero
@@ -22,7 +22,7 @@ glabel aadInit
 /* 422F8 80051AF8 09100224 */   addiu     $v0, $zero, 0x1009
 .L80051AFC:
 /* 422FC 80051AFC 21280000 */  addu       $a1, $zero, $zero
-/* 42300 80051B00 2EF2020C */  jal        func_800BC8B8
+/* 42300 80051B00 2EF2020C */  jal        memset
 /* 42304 80051B04 21304000 */   addu      $a2, $v0, $zero
 /* 42308 80051B08 0800238E */  lw         $v1, 0x8($s1)
 /* 4230C 80051B0C 00000000 */  nop
@@ -50,12 +50,12 @@ glabel aadInit
 /* 42360 80051B60 380743AC */  sw         $v1, 0x738($v0)
 /* 42364 80051B64 1400238E */  lw         $v1, 0x14($s1)
 /* 42368 80051B68 08084424 */  addiu      $a0, $v0, 0x808
-/* 4236C 80051B6C 2EF2020C */  jal        func_800BC8B8
+/* 4236C 80051B6C 2EF2020C */  jal        memset
 /* 42370 80051B70 3C0743AC */   sw        $v1, 0x73C($v0)
 /* 42374 80051B74 FF000524 */  addiu      $a1, $zero, 0xFF
 /* 42378 80051B78 D89B848F */  lw         $a0, %gp_rel(aadMem)($gp)
 /* 4237C 80051B7C 00020624 */  addiu      $a2, $zero, 0x200
-/* 42380 80051B80 2EF2020C */  jal        func_800BC8B8
+/* 42380 80051B80 2EF2020C */  jal        memset
 /* 42384 80051B84 080A8424 */   addiu     $a0, $a0, 0xA08
 /* 42388 80051B88 D89B838F */  lw         $v1, %gp_rel(aadMem)($gp)
 /* 4238C 80051B8C FF000524 */  addiu      $a1, $zero, 0xFF
@@ -72,10 +72,10 @@ glabel aadInit
 /* 423B8 80051BB8 F41762A4 */  sh         $v0, 0x17F4($v1)
 /* 423BC 80051BBC B44B010C */  jal        aadPurgeLoadQueue
 /* 423C0 80051BC0 F71785A0 */   sb        $a1, 0x17F7($a0)
-/* 423C4 80051BC4 3000030C */  jal        func_800C00C0
+/* 423C4 80051BC4 3000030C */  jal        SpuInit
 /* 423C8 80051BC8 00000000 */   nop
 /* 423CC 80051BCC 21200000 */  addu       $a0, $zero, $zero
-/* 423D0 80051BD0 C4FF020C */  jal        func_800BFF10
+/* 423D0 80051BD0 C4FF020C */  jal        SpuSetCommonMasterVolume
 /* 423D4 80051BD4 21288000 */   addu      $a1, $a0, $zero
 /* 423D8 80051BD8 0400228E */  lw         $v0, 0x4($s1)
 /* 423DC 80051BDC 00000000 */  nop
@@ -171,7 +171,7 @@ glabel aadInit
 /* 42534 80051D34 681F8424 */   addiu     $a0, $a0, %lo(aadSlotUpdateWrapper)
 .L80051D38:
 /* 42538 80051D38 D89B828F */  lw         $v0, %gp_rel(aadMem)($gp)
-/* 4253C 80051D3C 11FC020C */  jal        func_800BF044
+/* 4253C 80051D3C 11FC020C */  jal        ExitCriticalSection
 /* 42540 80051D40 240040AC */   sw        $zero, 0x24($v0)
 /* 42544 80051D44 21100000 */  addu       $v0, $zero, $zero
 .L80051D48:

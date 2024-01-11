@@ -82,7 +82,7 @@ glabel ProcessMovement
 /* 92C8C 800A248C C32F0500 */  sra        $a1, $a1, 31
 /* 92C90 800A2490 10180000 */  mfhi       $v1
 /* 92C94 800A2494 03110300 */  sra        $v0, $v1, 4
-/* 92C98 800A2498 26F3020C */  jal        func_800BCC98
+/* 92C98 800A2498 26F3020C */  jal        ratan2
 /* 92C9C 800A249C 23284500 */   subu      $a1, $v0, $a1
 /* 92CA0 800A24A0 00040324 */  addiu      $v1, $zero, 0x400
 /* 92CA4 800A24A4 23186200 */  subu       $v1, $v1, $v0

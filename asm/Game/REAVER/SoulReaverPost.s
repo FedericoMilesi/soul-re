@@ -148,7 +148,7 @@ glabel SoulReaverPost
 /* 6B020 8007A820 1200A0A7 */  sh         $zero, 0x12($sp)
 /* 6B024 8007A824 1400A2A7 */  sh         $v0, 0x14($sp)
 /* 6B028 8007A828 4000248E */  lw         $a0, 0x40($s1)
-/* 6B02C 8007A82C 0EF3020C */  jal        func_800BCC38
+/* 6B02C 8007A82C 0EF3020C */  jal        ApplyMatrixSV
 /* 6B030 8007A830 21304002 */   addu      $a2, $s2, $zero
 /* 6B034 8007A834 1800A297 */  lhu        $v0, 0x18($sp)
 /* 6B038 8007A838 5C002396 */  lhu        $v1, 0x5C($s1)

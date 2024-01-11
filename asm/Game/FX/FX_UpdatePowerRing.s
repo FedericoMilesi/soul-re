@@ -49,26 +49,26 @@ glabel FX_UpdatePowerRing
 .L8004B1D4:
 /* 3B9D4 8004B1D4 C8000424 */  addiu      $a0, $zero, 0xC8
 /* 3B9D8 8004B1D8 14005126 */  addiu      $s1, $s2, 0x14
-/* 3B9DC 8004B1DC D0E4010C */  jal        func_80079340
+/* 3B9DC 8004B1DC D0E4010C */  jal        rsin
 /* 3B9E0 8004B1E0 060020A6 */   sh        $zero, 0x6($s1)
 /* 3B9E4 8004B1E4 21208002 */  addu       $a0, $s4, $zero
-/* 3B9E8 8004B1E8 D0E4010C */  jal        func_80079340
+/* 3B9E8 8004B1E8 D0E4010C */  jal        rsin
 /* 3B9EC 8004B1EC 21804000 */   addu      $s0, $v0, $zero
 /* 3B9F0 8004B1F0 18000202 */  mult       $s0, $v0
 /* 3B9F4 8004B1F4 C8000424 */  addiu      $a0, $zero, 0xC8
 /* 3B9F8 8004B1F8 12180000 */  mflo       $v1
 /* 3B9FC 8004B1FC 03130300 */  sra        $v0, $v1, 12
-/* 3BA00 8004B200 D0E4010C */  jal        func_80079340
+/* 3BA00 8004B200 D0E4010C */  jal        rsin
 /* 3BA04 8004B204 140042A6 */   sh        $v0, 0x14($s2)
 /* 3BA08 8004B208 21208002 */  addu       $a0, $s4, $zero
-/* 3BA0C 8004B20C DCE4010C */  jal        func_80079370
+/* 3BA0C 8004B20C DCE4010C */  jal        rcos
 /* 3BA10 8004B210 21804000 */   addu      $s0, $v0, $zero
 /* 3BA14 8004B214 23801000 */  negu       $s0, $s0
 /* 3BA18 8004B218 18000202 */  mult       $s0, $v0
 /* 3BA1C 8004B21C C8000424 */  addiu      $a0, $zero, 0xC8
 /* 3BA20 8004B220 12180000 */  mflo       $v1
 /* 3BA24 8004B224 03130300 */  sra        $v0, $v1, 12
-/* 3BA28 8004B228 DCE4010C */  jal        func_80079370
+/* 3BA28 8004B228 DCE4010C */  jal        rcos
 /* 3BA2C 8004B22C 020022A6 */   sh        $v0, 0x2($s1)
 /* 3BA30 8004B230 040022A6 */  sh         $v0, 0x4($s1)
 /* 3BA34 8004B234 14004386 */  lh         $v1, 0x14($s2)

@@ -17,7 +17,7 @@ glabel GAMELOOP_DoTimeProcess
 /* 20BF4 800303F4 93F7000C */  jal        TIMER_TimeDiff
 /* 20BF8 800303F8 00000000 */   nop
 /* 20BFC 800303FC 1CC082AF */  sw         $v0, %gp_rel(gameTrackerX + 0x254)($gp)
-/* 20C00 80030400 EBF4020C */  jal        func_800BD3AC
+/* 20C00 80030400 EBF4020C */  jal        GetRCnt
 /* 20C04 80030404 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 20C08 80030408 FFFF4230 */  andi       $v0, $v0, 0xFFFF
 /* 20C0C 8003040C 5890838F */  lw         $v1, %gp_rel(gameTimer)($gp)

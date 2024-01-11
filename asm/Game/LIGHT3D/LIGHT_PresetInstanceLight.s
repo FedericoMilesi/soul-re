@@ -133,7 +133,7 @@ glabel LIGHT_PresetInstanceLight
 /* 2681C 8003601C 03006229 */  slti       $v0, $t3, 0x3
 /* 26820 80036020 DFFF4014 */  bnez       $v0, .L80035FA0
 /* 26824 80036024 0200A524 */   addiu     $a1, $a1, 0x2
-/* 26828 80036028 B3F7020C */  jal        func_800BDECC
+/* 26828 80036028 B3F7020C */  jal        SetColorMatrix
 /* 2682C 8003602C 1000A427 */   addiu     $a0, $sp, 0x10
 /* 26830 80036030 5C00BF8F */  lw         $ra, 0x5C($sp)
 /* 26834 80036034 5800B48F */  lw         $s4, 0x58($sp)

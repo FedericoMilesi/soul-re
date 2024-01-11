@@ -78,7 +78,7 @@ glabel MEMPACK_DoGarbageCollection
 /* 4126C 80050A6C 21202002 */  addu       $a0, $s1, $zero
 .L80050A70:
 /* 41270 80050A70 21280002 */  addu       $a1, $s0, $zero
-/* 41274 80050A74 02E5010C */  jal        func_80079408
+/* 41274 80050A74 02E5010C */  jal        memcpy
 /* 41278 80050A78 21306002 */   addu      $a2, $s3, $zero
 /* 4127C 80050A7C 06005416 */  bne        $s2, $s4, .L80050A98
 /* 41280 80050A80 F8FF2426 */   addiu     $a0, $s1, -0x8

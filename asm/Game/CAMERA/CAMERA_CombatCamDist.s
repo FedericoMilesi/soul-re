@@ -20,10 +20,10 @@ glabel CAMERA_CombatCamDist
 /* A4E0 80019CE0 00000000 */   nop
 .L80019CE4:
 /* A4E4 80019CE4 6000048E */  lw         $a0, 0x60($s0)
-/* A4E8 80019CE8 52F2020C */  jal        func_800BC948
+/* A4E8 80019CE8 52F2020C */  jal        SetRotMatrix
 /* A4EC 80019CEC 00000000 */   nop
 /* A4F0 80019CF0 6000048E */  lw         $a0, 0x60($s0)
-/* A4F4 80019CF4 4AF2020C */  jal        func_800BC928
+/* A4F4 80019CF4 4AF2020C */  jal        SetTransMatrix
 /* A4F8 80019CF8 00000000 */   nop
 /* A4FC 80019CFC 0801028E */  lw         $v0, 0x108($s0)
 /* A500 80019D00 00000000 */  nop
@@ -146,7 +146,7 @@ glabel CAMERA_CombatCamDist
 /* A6B0 80019EB0 1800A287 */  lh         $v0, 0x18($sp)
 /* A6B4 80019EB4 1000A587 */  lh         $a1, 0x10($sp)
 /* A6B8 80019EB8 23206400 */  subu       $a0, $v1, $a0
-/* A6BC 80019EBC 26F3020C */  jal        func_800BCC98
+/* A6BC 80019EBC 26F3020C */  jal        ratan2
 /* A6C0 80019EC0 23284500 */   subu      $a1, $v0, $a1
 /* A6C4 80019EC4 0A004004 */  bltz       $v0, .L80019EF0
 /* A6C8 80019EC8 00000000 */   nop
@@ -155,7 +155,7 @@ glabel CAMERA_CombatCamDist
 /* A6D4 80019ED4 1800A287 */  lh         $v0, 0x18($sp)
 /* A6D8 80019ED8 1000A587 */  lh         $a1, 0x10($sp)
 /* A6DC 80019EDC 23206400 */  subu       $a0, $v1, $a0
-/* A6E0 80019EE0 26F3020C */  jal        func_800BCC98
+/* A6E0 80019EE0 26F3020C */  jal        ratan2
 /* A6E4 80019EE4 23284500 */   subu      $a1, $v0, $a1
 /* A6E8 80019EE8 C4670008 */  j          .L80019F10
 /* A6EC 80019EEC 21184000 */   addu      $v1, $v0, $zero
@@ -165,7 +165,7 @@ glabel CAMERA_CombatCamDist
 /* A6F8 80019EF8 1800A287 */  lh         $v0, 0x18($sp)
 /* A6FC 80019EFC 1000A587 */  lh         $a1, 0x10($sp)
 /* A700 80019F00 23206400 */  subu       $a0, $v1, $a0
-/* A704 80019F04 26F3020C */  jal        func_800BCC98
+/* A704 80019F04 26F3020C */  jal        ratan2
 /* A708 80019F08 23284500 */   subu      $a1, $v0, $a1
 /* A70C 80019F0C 23180200 */  negu       $v1, $v0
 .L80019F10:

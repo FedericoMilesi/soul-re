@@ -60,7 +60,7 @@ glabel PIPE3D_InstanceTransformAndDraw
 /* 2B98C 8003B18C 1C00A3AF */  sw         $v1, 0x1C($sp)
 /* 2B990 8003B190 6000278E */  lw         $a3, 0x60($s1)
 /* 2B994 8003B194 5C9082AF */  sw         $v0, %gp_rel(modelFadeValue)($gp)
-/* 2B998 8003B198 5C9C000C */  jal        func_80027170
+/* 2B998 8003B198 5C9C000C */  jal        PIPE3D_TransformAnimatedInstanceVertices_S
 /* 2B99C 8003B19C 21308002 */   addu      $a2, $s4, $zero
 /* 2B9A0 8003B1A0 21884000 */  addu       $s1, $v0, $zero
 /* 2B9A4 8003B1A4 21204002 */  addu       $a0, $s2, $zero
@@ -71,9 +71,9 @@ glabel PIPE3D_InstanceTransformAndDraw
 /* 2B9B8 8003B1B8 06014586 */  lh         $a1, 0x106($s2)
 /* 2B9BC 8003B1BC 21300002 */  addu       $a2, $s0, $zero
 /* 2B9C0 8003B1C0 40290500 */  sll        $a1, $a1, 5
-/* 2B9C4 8003B1C4 BFF7020C */  jal        func_800BDEFC
+/* 2B9C4 8003B1C4 BFF7020C */  jal        MulMatrix0
 /* 2B9C8 8003B1C8 21286502 */   addu      $a1, $s3, $a1
-/* 2B9CC 8003B1CC 9FF7020C */  jal        func_800BDE7C
+/* 2B9CC 8003B1CC 9FF7020C */  jal        SetLightMatrix
 /* 2B9D0 8003B1D0 21200002 */   addu      $a0, $s0, $zero
 /* 2B9D4 8003B1D4 00802232 */  andi       $v0, $s1, 0x8000
 /* 2B9D8 8003B1D8 03004010 */  beqz       $v0, .L8003B1E8
@@ -111,10 +111,10 @@ glabel PIPE3D_InstanceTransformAndDraw
 /* 2BA50 8003B250 0D004014 */  bnez       $v0, .L8003B288
 /* 2BA54 8003B254 4400A0AF */   sw        $zero, 0x44($sp)
 /* 2BA58 8003B258 F0AC848F */  lw         $a0, %gp_rel(theCamera + 0x60)($gp)
-/* 2BA5C 8003B25C 52F2020C */  jal        func_800BC948
+/* 2BA5C 8003B25C 52F2020C */  jal        SetRotMatrix
 /* 2BA60 8003B260 00000000 */   nop
 /* 2BA64 8003B264 F0AC848F */  lw         $a0, %gp_rel(theCamera + 0x60)($gp)
-/* 2BA68 8003B268 4AF2020C */  jal        func_800BC928
+/* 2BA68 8003B268 4AF2020C */  jal        SetTransMatrix
 /* 2BA6C 8003B26C 00000000 */   nop
 /* 2BA70 8003B270 5C004226 */  addiu      $v0, $s2, 0x5C
 /* 2BA74 8003B274 000040C8 */  lwc2       $0, 0x0($v0)
@@ -141,7 +141,7 @@ glabel PIPE3D_InstanceTransformAndDraw
 /* 2BAC4 8003B2C4 2338E600 */  subu       $a3, $a3, $a2
 /* 2BAC8 8003B2C8 4400A3AF */  sw         $v1, 0x44($sp)
 /* 2BACC 8003B2CC 489082AF */  sw         $v0, %gp_rel(depthQBlendStart)($gp)
-/* 2BAD0 8003B2D0 A8F3020C */  jal        func_800BCEA0
+/* 2BAD0 8003B2D0 A8F3020C */  jal        LoadAverageCol
 /* 2BAD4 8003B2D4 1000A5AF */   sw        $a1, 0x10($sp)
 /* 2BAD8 8003B2D8 72014286 */  lh         $v0, 0x172($s2)
 /* 2BADC 8003B2DC 4000A38F */  lw         $v1, 0x40($sp)

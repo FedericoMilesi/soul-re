@@ -5,13 +5,13 @@ glabel TIMER_GetTimeMS
 /* 2E5BC 8003DDBC E0FFBD27 */  addiu      $sp, $sp, -0x20
 /* 2E5C0 8003DDC0 1800BFAF */  sw         $ra, 0x18($sp)
 /* 2E5C4 8003DDC4 1400B1AF */  sw         $s1, 0x14($sp)
-/* 2E5C8 8003DDC8 A5FC020C */  jal        func_800BF294
+/* 2E5C8 8003DDC8 A5FC020C */  jal        EnterCriticalSection
 /* 2E5CC 8003DDCC 1000B0AF */   sw        $s0, 0x10($sp)
-/* 2E5D0 8003DDD0 EBF4020C */  jal        func_800BD3AC
+/* 2E5D0 8003DDD0 EBF4020C */  jal        GetRCnt
 /* 2E5D4 8003DDD4 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 2E5D8 8003DDD8 FFFF5130 */  andi       $s1, $v0, 0xFFFF
 /* 2E5DC 8003DDDC 5890908F */  lw         $s0, %gp_rel(gameTimer)($gp)
-/* 2E5E0 8003DDE0 11FC020C */  jal        func_800BF044
+/* 2E5E0 8003DDE0 11FC020C */  jal        ExitCriticalSection
 /* 2E5E4 8003DDE4 00000000 */   nop
 /* 2E5E8 8003DDE8 00141000 */  sll        $v0, $s0, 16
 /* 2E5EC 8003DDEC 25882202 */  or         $s1, $s1, $v0

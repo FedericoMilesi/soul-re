@@ -123,7 +123,7 @@ glabel PIPE3D_TransformFromZAxis
 /* 2C1EC 8003B9EC 1758020C */  jal        G2EulerAngles_FromMatrix
 /* 2C1F0 8003B9F0 100002A6 */   sh        $v0, 0x10($s0)
 /* 2C1F4 8003B9F4 1000A427 */  addiu      $a0, $sp, 0x10
-/* 2C1F8 8003B9F8 3DE3010C */  jal        func_80078CF4
+/* 2C1F8 8003B9F8 3DE3010C */  jal        RotMatrix
 /* 2C1FC 8003B9FC 21280002 */   addu      $a1, $s0, $zero
 .L8003BA00:
 /* 2C200 8003BA00 3000BF8F */  lw         $ra, 0x30($sp)

@@ -247,14 +247,14 @@ glabel LIGHT_CalcLightValue
 /* 26BEC 800363EC 21384002 */  addu       $a3, $s2, $zero
 /* 26BF0 800363F0 2000AD27 */  addiu      $t5, $sp, 0x20
 /* 26BF4 800363F4 4400ADAF */  sw         $t5, 0x44($sp)
-/* 26BF8 800363F8 A8F3020C */  jal        func_800BCEA0
+/* 26BF8 800363F8 A8F3020C */  jal        LoadAverageCol
 /* 26BFC 800363FC 1000ADAF */   sw        $t5, 0x10($sp)
 /* 26C00 80036400 21200002 */  addu       $a0, $s0, $zero
 /* 26C04 80036404 08006526 */  addiu      $a1, $s3, 0x8
 /* 26C08 80036408 2330D103 */  subu       $a2, $fp, $s1
 /* 26C0C 8003640C 21382002 */  addu       $a3, $s1, $zero
 /* 26C10 80036410 2800B027 */  addiu      $s0, $sp, 0x28
-/* 26C14 80036414 A8F3020C */  jal        func_800BCEA0
+/* 26C14 80036414 A8F3020C */  jal        LoadAverageCol
 /* 26C18 80036418 1000B0AF */   sw        $s0, 0x10($sp)
 /* 26C1C 8003641C 40281600 */  sll        $a1, $s6, 1
 /* 26C20 80036420 2110B500 */  addu       $v0, $a1, $s5
@@ -310,7 +310,7 @@ glabel LIGHT_CalcLightValue
 /* 26CD4 800364D4 2330C703 */  subu       $a2, $fp, $a3
 /* 26CD8 800364D8 4400A48F */  lw         $a0, 0x44($sp)
 /* 26CDC 800364DC 1800A227 */  addiu      $v0, $sp, 0x18
-/* 26CE0 800364E0 A8F3020C */  jal        func_800BCEA0
+/* 26CE0 800364E0 A8F3020C */  jal        LoadAverageCol
 /* 26CE4 800364E4 1000A2AF */   sw        $v0, 0x10($sp)
 /* 26CE8 800364E8 1800A293 */  lbu        $v0, 0x18($sp)
 /* 26CEC 800364EC 1900A593 */  lbu        $a1, 0x19($sp)
@@ -503,7 +503,7 @@ glabel LIGHT_CalcLightValue
 /* 26F8C 8003678C 1000A5AF */  sw         $a1, 0x10($sp)
 /* 26F90 80036790 1800A427 */  addiu      $a0, $sp, 0x18
 /* 26F94 80036794 00100724 */  addiu      $a3, $zero, 0x1000
-/* 26F98 80036798 A8F3020C */  jal        func_800BCEA0
+/* 26F98 80036798 A8F3020C */  jal        LoadAverageCol
 /* 26F9C 8003679C 2338E600 */   subu      $a3, $a3, $a2
 .L800367A0:
 /* 26FA0 800367A0 6C00BF8F */  lw         $ra, 0x6C($sp)

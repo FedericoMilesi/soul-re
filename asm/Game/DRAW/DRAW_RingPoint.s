@@ -9,21 +9,21 @@ glabel DRAW_RingPoint
 /* 1BA08 8002B208 2C00B1AF */  sw         $s1, 0x2C($sp)
 /* 1BA0C 8002B20C 2188E000 */  addu       $s1, $a3, $zero
 /* 1BA10 8002B210 3400BFAF */  sw         $ra, 0x34($sp)
-/* 1BA14 8002B214 3AF2020C */  jal        func_800BC8E8
+/* 1BA14 8002B214 3AF2020C */  jal        rand
 /* 1BA18 8002B218 2800B0AF */   sw        $s0, 0x28($sp)
 /* 1BA1C 8002B21C 3F004230 */  andi       $v0, $v0, 0x3F
 /* 1BA20 8002B220 18004228 */  slti       $v0, $v0, 0x18
 /* 1BA24 8002B224 33004014 */  bnez       $v0, .L8002B2F4
 /* 1BA28 8002B228 00000000 */   nop
-/* 1BA2C 8002B22C 3AF2020C */  jal        func_800BC8E8
+/* 1BA2C 8002B22C 3AF2020C */  jal        rand
 /* 1BA30 8002B230 00000000 */   nop
 /* 1BA34 8002B234 1F004230 */  andi       $v0, $v0, 0x1F
 /* 1BA38 8002B238 F1FF4224 */  addiu      $v0, $v0, -0xF
-/* 1BA3C 8002B23C 3AF2020C */  jal        func_800BC8E8
+/* 1BA3C 8002B23C 3AF2020C */  jal        rand
 /* 1BA40 8002B240 000022A6 */   sh        $v0, 0x0($s1)
 /* 1BA44 8002B244 1F004230 */  andi       $v0, $v0, 0x1F
 /* 1BA48 8002B248 F1FF4224 */  addiu      $v0, $v0, -0xF
-/* 1BA4C 8002B24C 3AF2020C */  jal        func_800BC8E8
+/* 1BA4C 8002B24C 3AF2020C */  jal        rand
 /* 1BA50 8002B250 020022A6 */   sh        $v0, 0x2($s1)
 /* 1BA54 8002B254 0F004230 */  andi       $v0, $v0, 0xF
 /* 1BA58 8002B258 2000B027 */  addiu      $s0, $sp, 0x20
@@ -34,19 +34,19 @@ glabel DRAW_RingPoint
 /* 1BA6C 8002B26C 00000CA6 */  sh         $t4, 0x0($s0)
 /* 1BA70 8002B270 02000DA6 */  sh         $t5, 0x2($s0)
 /* 1BA74 8002B274 04000EA6 */  sh         $t6, 0x4($s0)
-/* 1BA78 8002B278 3AF2020C */  jal        func_800BC8E8
+/* 1BA78 8002B278 3AF2020C */  jal        rand
 /* 1BA7C 8002B27C 00000000 */   nop
 /* 1BA80 8002B280 2000A397 */  lhu        $v1, 0x20($sp)
 /* 1BA84 8002B284 03004230 */  andi       $v0, $v0, 0x3
 /* 1BA88 8002B288 FFFF6324 */  addiu      $v1, $v1, -0x1
 /* 1BA8C 8002B28C 21186200 */  addu       $v1, $v1, $v0
-/* 1BA90 8002B290 3AF2020C */  jal        func_800BC8E8
+/* 1BA90 8002B290 3AF2020C */  jal        rand
 /* 1BA94 8002B294 2000A3A7 */   sh        $v1, 0x20($sp)
 /* 1BA98 8002B298 2200A397 */  lhu        $v1, 0x22($sp)
 /* 1BA9C 8002B29C 03004230 */  andi       $v0, $v0, 0x3
 /* 1BAA0 8002B2A0 FFFF6324 */  addiu      $v1, $v1, -0x1
 /* 1BAA4 8002B2A4 21186200 */  addu       $v1, $v1, $v0
-/* 1BAA8 8002B2A8 3AF2020C */  jal        func_800BC8E8
+/* 1BAA8 8002B2A8 3AF2020C */  jal        rand
 /* 1BAAC 8002B2AC 2200A3A7 */   sh        $v1, 0x22($sp)
 /* 1BAB0 8002B2B0 03004230 */  andi       $v0, $v0, 0x3
 /* 1BAB4 8002B2B4 21200002 */  addu       $a0, $s0, $zero

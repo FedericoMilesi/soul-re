@@ -69,9 +69,9 @@ glabel PIPE3D_TransformVerticesToWorld
 /* 2B688 8003AE88 21882202 */  addu       $s1, $s1, $v0
 /* 2B68C 8003AE8C 21202002 */  addu       $a0, $s1, $zero
 /* 2B690 8003AE90 C0100300 */  sll        $v0, $v1, 3
-/* 2B694 8003AE94 52F2020C */  jal        func_800BC948
+/* 2B694 8003AE94 52F2020C */  jal        SetRotMatrix
 /* 2B698 8003AE98 21B04201 */   addu      $s6, $t2, $v0
-/* 2B69C 8003AE9C 4AF2020C */  jal        func_800BC928
+/* 2B69C 8003AE9C 4AF2020C */  jal        SetTransMatrix
 /* 2B6A0 8003AEA0 21202002 */   addu      $a0, $s1, $zero
 /* 2B6A4 8003AEA4 2B10D002 */  sltu       $v0, $s6, $s0
 /* 2B6A8 8003AEA8 44004014 */  bnez       $v0, .L8003AFBC

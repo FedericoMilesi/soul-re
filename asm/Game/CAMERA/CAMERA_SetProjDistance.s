@@ -11,7 +11,7 @@ glabel CAMERA_SetProjDistance
 /* 5744 80014F44 2400BFAF */  sw         $ra, 0x24($sp)
 /* 5748 80014F48 2000B4AF */  sw         $s4, 0x20($sp)
 /* 574C 80014F4C 1800B2AF */  sw         $s2, 0x18($sp)
-/* 5750 80014F50 0AF3020C */  jal        func_800BCC28
+/* 5750 80014F50 0AF3020C */  jal        SetGeomScreen
 /* 5754 80014F54 1400B1AF */   sw        $s1, 0x14($sp)
 /* 5758 80014F58 21206002 */  addu       $a0, $s3, $zero
 /* 575C 80014F5C A952000C */  jal        CAMERA_CalculateViewVolumeNormals
@@ -28,7 +28,7 @@ glabel CAMERA_SetProjDistance
 /* 5784 80014F84 6800668E */  lw         $a2, 0x68($s3)
 /* 5788 80014F88 46000496 */  lhu        $a0, 0x46($s0)
 /* 578C 80014F8C 44000596 */  lhu        $a1, 0x44($s0)
-/* 5790 80014F90 C8F3020C */  jal        func_800BCF20
+/* 5790 80014F90 C8F3020C */  jal        SetFogNearFar
 /* 5794 80014F94 00000000 */   nop
 /* 5798 80014F98 6DDC000C */  jal        LIGHT_CalcDQPTable
 /* 579C 80014F9C 21200002 */   addu      $a0, $s0, $zero

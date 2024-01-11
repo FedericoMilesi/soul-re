@@ -13,12 +13,12 @@ glabel SAVE_ClearMemory
 /* A5AA0 800B52A0 E0FD84AF */  sw         $a0, %gp_rel(savedInfoTracker + 0x4)($gp)
 /* A5AA4 800B52A4 E4FD84AF */  sw         $a0, %gp_rel(savedInfoTracker + 0x8)($gp)
 /* A5AA8 800B52A8 E8FD82AF */  sw         $v0, %gp_rel(savedInfoTracker + 0xC)($gp)
-/* A5AAC 800B52AC 2EF2020C */  jal        func_800BC8B8
+/* A5AAC 800B52AC 2EF2020C */  jal        memset
 /* A5AB0 800B52B0 2330C300 */   subu      $a2, $a2, $v1
 /* A5AB4 800B52B4 ECFD8427 */  addiu      $a0, $gp, %gp_rel(bufferSavedIntroArray)
 /* A5AB8 800B52B8 21280000 */  addu       $a1, $zero, $zero
 /* A5ABC 800B52BC 44A880AF */  sw         $zero, %gp_rel(numbufferedIntros)($gp)
-/* A5AC0 800B52C0 2EF2020C */  jal        func_800BC8B8
+/* A5AC0 800B52C0 2EF2020C */  jal        memset
 /* A5AC4 800B52C4 00010624 */   addiu     $a2, $zero, 0x100
 /* A5AC8 800B52C8 06000424 */  addiu      $a0, $zero, 0x6
 /* A5ACC 800B52CC E1D4020C */  jal        SAVE_GetSavedBlock

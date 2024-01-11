@@ -9,7 +9,7 @@ glabel menu_initialize
 /* A7F10 800B7710 2188A000 */  addu       $s1, $a1, $zero
 /* A7F14 800B7714 21280000 */  addu       $a1, $zero, $zero
 /* A7F18 800B7718 1800BFAF */  sw         $ra, 0x18($sp)
-/* A7F1C 800B771C 2EF2020C */  jal        func_800BC8B8
+/* A7F1C 800B771C 2EF2020C */  jal        memset
 /* A7F20 800B7720 88030624 */   addiu     $a2, $zero, 0x388
 /* A7F24 800B7724 FFFF0224 */  addiu      $v0, $zero, -0x1
 /* A7F28 800B7728 000002AE */  sw         $v0, 0x0($s0)

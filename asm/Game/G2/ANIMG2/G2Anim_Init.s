@@ -17,7 +17,7 @@ glabel G2Anim_Init
 /* 833D4 80092BD4 020000A6 */  sh         $zero, 0x2($s0)
 /* 833D8 80092BD8 040000A6 */  sh         $zero, 0x4($s0)
 /* 833DC 80092BDC 140000AE */  sw         $zero, 0x14($s0)
-/* 833E0 80092BE0 2EF2020C */  jal        func_800BC8B8
+/* 833E0 80092BE0 2EF2020C */  jal        memset
 /* 833E4 80092BE4 100011AE */   sw        $s1, 0x10($s0)
 /* 833E8 80092BE8 21200000 */  addu       $a0, $zero, $zero
 /* 833EC 80092BEC FFFF0624 */  addiu      $a2, $zero, -0x1

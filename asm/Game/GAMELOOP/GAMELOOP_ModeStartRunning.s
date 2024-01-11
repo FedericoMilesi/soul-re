@@ -33,7 +33,7 @@ glabel GAMELOOP_ModeStartRunning
 /* 21464 80030C64 24106200 */  and        $v0, $v1, $v0
 /* 21468 80030C68 08BF82AF */  sw         $v0, %gp_rel(gameTrackerX + 0x140)($gp)
 /* 2146C 80030C6C A4BF80AF */  sw         $zero, %gp_rel(gameTrackerX + 0x1DC)($gp)
-/* 21470 80030C70 0FE9020C */  jal        func_800BA43C
+/* 21470 80030C70 0FE9020C */  jal        DrawSync
 /* 21474 80030C74 21200000 */   addu      $a0, $zero, $zero
 .L80030C78:
 /* 21478 80030C78 FFEF033C */  lui        $v1, (0xEFFFFFFF >> 16)

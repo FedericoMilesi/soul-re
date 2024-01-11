@@ -59,7 +59,7 @@ glabel MAIN_MainMenuInit
 /* 2999C 8003919C 0300E8A8 */  swl        $t0, 0x3($a3)
 /* 299A0 800391A0 0000E8B8 */  swr        $t0, 0x0($a3)
 /* 299A4 800391A4 0700E9A8 */  swl        $t1, 0x7($a3)
-/* 299A8 800391A8 2EF2020C */  jal        func_800BC8B8
+/* 299A8 800391A8 2EF2020C */  jal        memset
 /* 299AC 800391AC 0400E9B8 */   swr       $t1, 0x4($a3)
 /* 299B0 800391B0 38BC80AF */  sw         $zero, %gp_rel(mainMenuSfx)($gp)
 /* 299B4 800391B4 1FE0000C */  jal        LOAD_DoesFileExist

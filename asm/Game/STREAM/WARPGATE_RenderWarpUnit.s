@@ -57,7 +57,7 @@ glabel WARPGATE_RenderWarpUnit
 /* 50270 8005FA70 21206002 */   addu      $a0, $s3, $zero
 /* 50274 8005FA74 000C0524 */  addiu      $a1, $zero, 0xC00
 /* 50278 8005FA78 00306226 */  addiu      $v0, $s3, 0x3000
-/* 5027C 8005FA7C DAE9020C */  jal        func_800BA768
+/* 5027C 8005FA7C DAE9020C */  jal        ClearOTagR
 /* 50280 8005FA80 040062AC */   sw        $v0, 0x4($v1)
 /* 50284 8005FA84 00002296 */  lhu        $v0, 0x0($s1)
 /* 50288 8005FA88 21200002 */  addu       $a0, $s0, $zero
@@ -73,14 +73,14 @@ glabel WARPGATE_RenderWarpUnit
 /* 502B0 8005FAB0 21804000 */  addu       $s0, $v0, $zero
 /* 502B4 8005FAB4 B77C010C */  jal        DrawFogRectangle
 /* 502B8 8005FAB8 1000B0AF */   sw        $s0, 0x10($sp)
-/* 502BC 8005FABC CDFD020C */  jal        func_800BF734
+/* 502BC 8005FABC CDFD020C */  jal        PushMatrix
 /* 502C0 8005FAC0 0002163C */   lui       $s6, (0x2000000 >> 16)
 /* 502C4 8005FAC4 21202002 */  addu       $a0, $s1, $zero
 /* 502C8 8005FAC8 21306002 */  addu       $a2, $s3, $zero
 /* 502CC 8005FACC 0800858E */  lw         $a1, 0x8($s4)
 /* 502D0 8005FAD0 57BC000C */  jal        StreamRenderLevel
 /* 502D4 8005FAD4 21380002 */   addu      $a3, $s0, $zero
-/* 502D8 8005FAD8 F6FD020C */  jal        func_800BF7D8
+/* 502D8 8005FAD8 F6FD020C */  jal        PopMatrix
 /* 502DC 8005FADC FF00143C */   lui       $s4, (0xFFFFFF >> 16)
 /* 502E0 8005FAE0 08BE838F */  lw         $v1, %gp_rel(gameTrackerX + 0x40)($gp)
 /* 502E4 8005FAE4 00000000 */  nop
@@ -113,7 +113,7 @@ glabel WARPGATE_RenderWarpUnit
 /* 50350 8005FB50 0A004294 */  lhu        $v0, 0xA($v0)
 /* 50354 8005FB54 21200002 */  addu       $a0, $s0, $zero
 /* 50358 8005FB58 21186200 */  addu       $v1, $v1, $v0
-/* 5035C 8005FB5C A6EB020C */  jal        func_800BAE98
+/* 5035C 8005FB5C A6EB020C */  jal        SetDrawArea
 /* 50360 8005FB60 3A00A3A7 */   sh        $v1, 0x3A($sp)
 /* 50364 8005FB64 FFFF9436 */  ori        $s4, $s4, (0xFFFFFF & 0xFFFF)
 /* 50368 8005FB68 F82F628E */  lw         $v0, 0x2FF8($s3)
@@ -224,7 +224,7 @@ glabel WARPGATE_RenderWarpUnit
 /* 50508 8005FD08 3C00A2A7 */  sh         $v0, 0x3C($sp)
 /* 5050C 8005FD0C F0000224 */  addiu      $v0, $zero, 0xF0
 /* 50510 8005FD10 3E00A2A7 */  sh         $v0, 0x3E($sp)
-/* 50514 8005FD14 A6EB020C */  jal        func_800BAE98
+/* 50514 8005FD14 A6EB020C */  jal        SetDrawArea
 /* 50518 8005FD18 3A00A3A7 */   sh        $v1, 0x3A($sp)
 /* 5051C 8005FD1C 0400628E */  lw         $v0, 0x4($s3)
 /* 50520 8005FD20 00000000 */  nop

@@ -50,11 +50,11 @@ glabel FX_SoulReaverBlade
 /* 3B0EC 8004A8EC 1400A0A7 */  sh         $zero, 0x14($sp)
 /* 3B0F0 8004A8F0 4000858C */  lw         $a1, 0x40($a0)
 /* 3B0F4 8004A8F4 F0AC848F */  lw         $a0, %gp_rel(theCamera + 0x60)($gp)
-/* 3B0F8 8004A8F8 59FD020C */  jal        func_800BF564
+/* 3B0F8 8004A8F8 59FD020C */  jal        CompMatrix
 /* 3B0FC 8004A8FC 2000A524 */   addiu     $a1, $a1, 0x20
-/* 3B100 8004A900 52F2020C */  jal        func_800BC948
+/* 3B100 8004A900 52F2020C */  jal        SetRotMatrix
 /* 3B104 8004A904 21200002 */   addu      $a0, $s0, $zero
-/* 3B108 8004A908 4AF2020C */  jal        func_800BC928
+/* 3B108 8004A908 4AF2020C */  jal        SetTransMatrix
 /* 3B10C 8004A90C 21200002 */   addu      $a0, $s0, $zero
 /* 3B110 8004A910 02002386 */  lh         $v1, 0x2($s1)
 /* 3B114 8004A914 1C002286 */  lh         $v0, 0x1C($s1)
@@ -125,7 +125,7 @@ glabel FX_SoulReaverBlade
 /* 3B20C 8004AA0C FF0F4224 */  addiu      $v0, $v0, 0xFFF
 /* 3B210 8004AA10 03830200 */  sra        $s0, $v0, 12
 .L8004AA14:
-/* 3B214 8004AA14 DCE4010C */  jal        func_80079370
+/* 3B214 8004AA14 DCE4010C */  jal        rcos
 /* 3B218 8004AA18 21208002 */   addu      $a0, $s4, $zero
 /* 3B21C 8004AA1C 02004104 */  bgez       $v0, .L8004AA28
 /* 3B220 8004AA20 00000000 */   nop
@@ -140,7 +140,7 @@ glabel FX_SoulReaverBlade
 .L8004AA40:
 /* 3B240 8004AA40 03130200 */  sra        $v0, $v0, 12
 /* 3B244 8004AA44 1000A2A7 */  sh         $v0, 0x10($sp)
-/* 3B248 8004AA48 D0E4010C */  jal        func_80079340
+/* 3B248 8004AA48 D0E4010C */  jal        rsin
 /* 3B24C 8004AA4C 21208002 */   addu      $a0, $s4, $zero
 /* 3B250 8004AA50 02004104 */  bgez       $v0, .L8004AA5C
 /* 3B254 8004AA54 00000000 */   nop

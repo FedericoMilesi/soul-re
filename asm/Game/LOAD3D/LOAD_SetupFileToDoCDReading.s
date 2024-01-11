@@ -22,11 +22,11 @@ glabel LOAD_SetupFileToDoCDReading
 /* 27F0C 8003770C C3120600 */  sra        $v0, $a2, 11
 /* 27F10 80037710 21208200 */  addu       $a0, $a0, $v0
 /* 27F14 80037714 28BC84AF */  sw         $a0, %gp_rel(loadStatus + 0x94)($gp)
-/* 27F18 80037718 15FC020C */  jal        func_800BF054
+/* 27F18 80037718 15FC020C */  jal        CdIntToPos
 /* 27F1C 8003771C 1000A527 */   addiu     $a1, $sp, 0x10
 /* 27F20 80037720 06000424 */  addiu      $a0, $zero, 0x6
 /* 27F24 80037724 1000A527 */  addiu      $a1, $sp, 0x10
-/* 27F28 80037728 50F8020C */  jal        func_800BE140
+/* 27F28 80037728 50F8020C */  jal        CdControl
 /* 27F2C 8003772C 21300000 */   addu      $a2, $zero, $zero
 /* 27F30 80037730 6FF7000C */  jal        TIMER_GetTimeMS
 /* 27F34 80037734 00000000 */   nop

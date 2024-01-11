@@ -61,15 +61,15 @@ glabel MONSTER_StartVertexBurnt
 /* 7CF30 8008C730 0400318E */  lw         $s1, 0x4($s1)
 /* 7CF34 8008C734 40110200 */  sll        $v0, $v0, 5
 /* 7CF38 8008C738 21800202 */  addu       $s0, $s0, $v0
-/* 7CF3C 8008C73C 52F2020C */  jal        func_800BC948
+/* 7CF3C 8008C73C 52F2020C */  jal        SetRotMatrix
 /* 7CF40 8008C740 21200002 */   addu      $a0, $s0, $zero
-/* 7CF44 8008C744 4AF2020C */  jal        func_800BC928
+/* 7CF44 8008C744 4AF2020C */  jal        SetTransMatrix
 /* 7CF48 8008C748 21200002 */   addu      $a0, $s0, $zero
 /* 7CF4C 8008C74C 2800A527 */  addiu      $a1, $sp, 0x28
 /* 7CF50 8008C750 1000A48F */  lw         $a0, 0x10($sp)
 /* 7CF54 8008C754 3800A627 */  addiu      $a2, $sp, 0x38
 /* 7CF58 8008C758 C0200400 */  sll        $a0, $a0, 3
-/* 7CF5C 8008C75C 98F4020C */  jal        func_800BD260
+/* 7CF5C 8008C75C 98F4020C */  jal        RotTrans
 /* 7CF60 8008C760 21202402 */   addu      $a0, $s1, $a0
 /* 7CF64 8008C764 2800A297 */  lhu        $v0, 0x28($sp)
 /* 7CF68 8008C768 2C00A397 */  lhu        $v1, 0x2C($sp)

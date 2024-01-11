@@ -14,9 +14,9 @@ glabel _FX_SetupLighting
 /* 33694 80042E94 06010586 */  lh         $a1, 0x106($s0)
 /* 33698 80042E98 4000028E */  lw         $v0, 0x40($s0)
 /* 3369C 80042E9C 40290500 */  sll        $a1, $a1, 5
-/* 336A0 80042EA0 BFF7020C */  jal        func_800BDEFC
+/* 336A0 80042EA0 BFF7020C */  jal        MulMatrix0
 /* 336A4 80042EA4 21284500 */   addu      $a1, $v0, $a1
-/* 336A8 80042EA8 9FF7020C */  jal        func_800BDE7C
+/* 336A8 80042EA8 9FF7020C */  jal        SetLightMatrix
 /* 336AC 80042EAC 1000A427 */   addiu     $a0, $sp, 0x10
 /* 336B0 80042EB0 3400BF8F */  lw         $ra, 0x34($sp)
 /* 336B4 80042EB4 3000B08F */  lw         $s0, 0x30($sp)

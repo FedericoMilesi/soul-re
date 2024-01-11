@@ -32,7 +32,7 @@ glabel DRAW_DrawButton
 /* 1B60C 8002AE0C 0C007294 */  lhu        $s2, 0xC($v1)
 /* 1B610 8002AE10 0E007190 */  lbu        $s1, 0xE($v1)
 /* 1B614 8002AE14 3F005232 */  andi       $s2, $s2, 0x3F
-/* 1B618 8002AE18 A4F4020C */  jal        func_800BD290
+/* 1B618 8002AE18 A4F4020C */  jal        SetPolyFT4
 /* 1B61C 8002AE1C 04905200 */   sllv      $s2, $s2, $v0
 /* 1B620 8002AE20 FF00043C */  lui        $a0, (0xFFFFFF >> 16)
 /* 1B624 8002AE24 2118D002 */  addu       $v1, $s6, $s0

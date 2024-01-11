@@ -23,7 +23,7 @@ glabel OBTABLE_InitObjectWithID
 /* 2EA44 8003E244 1CA39024 */  addiu      $s0, $a0, %lo(objectFunc)
 .L8003E248:
 /* 2EA48 8003E248 0000048E */  lw         $a0, 0x0($s0)
-/* 2EA4C 8003E24C 83F7020C */  jal        func_800BDE0C
+/* 2EA4C 8003E24C 83F7020C */  jal        strcmp
 /* 2EA50 8003E250 A80E6526 */   addiu     $a1, $s3, %lo(gTimerEnabled + 0x148)
 /* 2EA54 8003E254 31004010 */  beqz       $v0, .L8003E31C
 /* 2EA58 8003E258 0D80023C */   lui       $v0, %hi(objectFunc)
@@ -48,7 +48,7 @@ glabel OBTABLE_InitObjectWithID
 /* 2EAA0 8003E2A0 1CA39024 */  addiu      $s0, $a0, %lo(objectFunc)
 .L8003E2A4:
 /* 2EAA4 8003E2A4 0000048E */  lw         $a0, 0x0($s0)
-/* 2EAA8 8003E2A8 83F7020C */  jal        func_800BDE0C
+/* 2EAA8 8003E2A8 83F7020C */  jal        strcmp
 /* 2EAAC 8003E2AC B40E6526 */   addiu     $a1, $s3, %lo(gTimerEnabled + 0x154)
 /* 2EAB0 8003E2B0 1A004010 */  beqz       $v0, .L8003E31C
 /* 2EAB4 8003E2B4 0D80023C */   lui       $v0, %hi(objectFunc)
@@ -69,7 +69,7 @@ glabel OBTABLE_InitObjectWithID
 .L8003E2EC:
 /* 2EAEC 8003E2EC 0000048E */  lw         $a0, 0x0($s0)
 /* 2EAF0 8003E2F0 2000458E */  lw         $a1, 0x20($s2)
-/* 2EAF4 8003E2F4 83F7020C */  jal        func_800BDE0C
+/* 2EAF4 8003E2F4 83F7020C */  jal        strcmp
 /* 2EAF8 8003E2F8 00000000 */   nop
 /* 2EAFC 8003E2FC 07004010 */  beqz       $v0, .L8003E31C
 /* 2EB00 8003E300 0D80023C */   lui       $v0, %hi(objectFunc)

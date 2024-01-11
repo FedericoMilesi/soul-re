@@ -18,7 +18,7 @@ glabel TrailWaterFX
 /* A4CEC 800B44EC 5C00B5AF */  sw         $s5, 0x5C($sp)
 /* A4CF0 800B44F0 5800B4AF */  sw         $s4, 0x58($sp)
 /* A4CF4 800B44F4 5400B3AF */  sw         $s3, 0x54($sp)
-/* A4CF8 800B44F8 2EF2020C */  jal        func_800BC8B8
+/* A4CF8 800B44F8 2EF2020C */  jal        memset
 /* A4CFC 800B44FC 4C00B1AF */   sw        $s1, 0x4C($sp)
 /* A4D00 800B4500 3800448E */  lw         $a0, 0x38($s2)
 /* A4D04 800B4504 1C66010C */  jal        STREAM_GetLevelWithID
@@ -101,7 +101,7 @@ glabel TrailWaterFX
 /* A4E34 800B4634 7100E01A */  blez       $s7, .L800B47FC
 /* A4E38 800B4638 1C00A3A7 */   sh        $v1, 0x1C($sp)
 .L800B463C:
-/* A4E3C 800B463C 3AF2020C */  jal        func_800BC8E8
+/* A4E3C 800B463C 3AF2020C */  jal        rand
 /* A4E40 800B4640 00000000 */   nop
 /* A4E44 800B4644 18005300 */  mult       $v0, $s3
 /* A4E48 800B4648 4400438E */  lw         $v1, 0x44($s2)
@@ -120,7 +120,7 @@ glabel TrailWaterFX
 /* A4E7C 800B467C 23104300 */  subu       $v0, $v0, $v1
 /* A4E80 800B4680 2128A200 */  addu       $a1, $a1, $v0
 /* A4E84 800B4684 F6FFA524 */  addiu      $a1, $a1, -0xA
-/* A4E88 800B4688 3AF2020C */  jal        func_800BC8E8
+/* A4E88 800B4688 3AF2020C */  jal        rand
 /* A4E8C 800B468C 2000A5A7 */   sh        $a1, 0x20($sp)
 /* A4E90 800B4690 18005300 */  mult       $v0, $s3
 /* A4E94 800B4694 4400438E */  lw         $v1, 0x44($s2)
@@ -141,7 +141,7 @@ glabel TrailWaterFX
 /* A4ED0 800B46D0 F6FFA524 */  addiu      $a1, $a1, -0xA
 /* A4ED4 800B46D4 2100C016 */  bnez       $s6, .L800B475C
 /* A4ED8 800B46D8 2200A5A7 */   sh        $a1, 0x22($sp)
-/* A4EDC 800B46DC 3AF2020C */  jal        func_800BC8E8
+/* A4EDC 800B46DC 3AF2020C */  jal        rand
 /* A4EE0 800B46E0 00000000 */   nop
 /* A4EE4 800B46E4 18005300 */  mult       $v0, $s3
 /* A4EE8 800B46E8 4400438E */  lw         $v1, 0x44($s2)
@@ -178,7 +178,7 @@ glabel TrailWaterFX
 /* A4F5C 800B475C 01000224 */  addiu      $v0, $zero, 0x1
 /* A4F60 800B4760 2200C216 */  bne        $s6, $v0, .L800B47EC
 /* A4F64 800B4764 00000000 */   nop
-/* A4F68 800B4768 3AF2020C */  jal        func_800BC8E8
+/* A4F68 800B4768 3AF2020C */  jal        rand
 /* A4F6C 800B476C 00000000 */   nop
 /* A4F70 800B4770 18005300 */  mult       $v0, $s3
 /* A4F74 800B4774 C31F0200 */  sra        $v1, $v0, 31
@@ -190,7 +190,7 @@ glabel TrailWaterFX
 /* A4F8C 800B478C 80180300 */  sll        $v1, $v1, 2
 /* A4F90 800B4790 23104300 */  subu       $v0, $v0, $v1
 /* A4F94 800B4794 06004224 */  addiu      $v0, $v0, 0x6
-/* A4F98 800B4798 3AF2020C */  jal        func_800BC8E8
+/* A4F98 800B4798 3AF2020C */  jal        rand
 /* A4F9C 800B479C 2400A2A7 */   sh        $v0, 0x24($sp)
 /* A4FA0 800B47A0 21184000 */  addu       $v1, $v0, $zero
 /* A4FA4 800B47A4 02006104 */  bgez       $v1, .L800B47B0

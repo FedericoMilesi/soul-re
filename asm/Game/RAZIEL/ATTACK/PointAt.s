@@ -19,7 +19,7 @@ glabel PointAt
 /* 8EB28 8009E328 1A00A3A7 */  sh         $v1, 0x1A($sp)
 /* 8EB2C 8009E32C 0E004294 */  lhu        $v0, 0xE($v0)
 /* 8EB30 8009E330 2000A627 */  addiu      $a2, $sp, 0x20
-/* 8EB34 8009E334 1AF2020C */  jal        func_800BC868
+/* 8EB34 8009E334 1AF2020C */  jal        ApplyMatrix
 /* 8EB38 8009E338 1C00A2A7 */   sh        $v0, 0x1C($sp)
 /* 8EB3C 8009E33C 5C000386 */  lh         $v1, 0x5C($s0)
 /* 8EB40 8009E340 2000A28F */  lw         $v0, 0x20($sp)

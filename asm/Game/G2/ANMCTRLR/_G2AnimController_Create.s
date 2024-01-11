@@ -14,7 +14,7 @@ glabel _G2AnimController_Create
 /* 824A8 80091CA8 21804000 */  addu       $s0, $v0, $zero
 /* 824AC 80091CAC 21200002 */  addu       $a0, $s0, $zero
 /* 824B0 80091CB0 21280000 */  addu       $a1, $zero, $zero
-/* 824B4 80091CB4 2EF2020C */  jal        func_800BC8B8
+/* 824B4 80091CB4 2EF2020C */  jal        memset
 /* 824B8 80091CB8 24000624 */   addiu     $a2, $zero, 0x24
 /* 824BC 80091CBC 21100002 */  addu       $v0, $s0, $zero
 /* 824C0 80091CC0 15000324 */  addiu      $v1, $zero, 0x15

@@ -42,7 +42,7 @@ glabel SpuSetVoiceADSR1ADSR2
 /* 4892C 8005812C 1000AAAF */  sw         $t2, 0x10($sp)
 /* 48930 80058130 1400ABAF */  sw         $t3, 0x14($sp)
 /* 48934 80058134 1800A9AF */  sw         $t1, 0x18($sp)
-/* 48938 80058138 1001030C */  jal        func_800C0440
+/* 48938 80058138 1001030C */  jal        SpuSetVoiceADSRAttr
 /* 4893C 8005813C 2000A8AF */   sw        $t0, 0x20($sp)
 /* 48940 80058140 2800BF8F */  lw         $ra, 0x28($sp)
 /* 48944 80058144 00000000 */  nop

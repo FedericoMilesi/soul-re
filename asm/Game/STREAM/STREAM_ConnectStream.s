@@ -35,10 +35,10 @@ glabel STREAM_ConnectStream
 /* 4A438 80059C38 2C007124 */  addiu      $s1, $v1, 0x2C
 .L80059C3C:
 /* 4A43C 80059C3C 1000A427 */  addiu      $a0, $sp, 0x10
-/* 4A440 80059C40 1CF4020C */  jal        func_800BD070
+/* 4A440 80059C40 1CF4020C */  jal        strcpy
 /* 4A444 80059C44 21288002 */   addu      $a1, $s4, $zero
 /* 4A448 80059C48 1000A427 */  addiu      $a0, $sp, 0x10
-/* 4A44C 80059C4C 0CF4020C */  jal        func_800BD030
+/* 4A44C 80059C4C 0CF4020C */  jal        strchr
 /* 4A450 80059C50 2C000524 */   addiu     $a1, $zero, 0x2C
 /* 4A454 80059C54 1A004010 */  beqz       $v0, .L80059CC0
 /* 4A458 80059C58 21900000 */   addu      $s2, $zero, $zero
@@ -143,10 +143,10 @@ glabel STREAM_ConnectStream
 .L80059DC4:
 /* 4A5C4 80059DC4 21800000 */  addu       $s0, $zero, $zero
 /* 4A5C8 80059DC8 1000A427 */  addiu      $a0, $sp, 0x10
-/* 4A5CC 80059DCC 1CF4020C */  jal        func_800BD070
+/* 4A5CC 80059DCC 1CF4020C */  jal        strcpy
 /* 4A5D0 80059DD0 21288002 */   addu      $a1, $s4, $zero
 /* 4A5D4 80059DD4 1000A427 */  addiu      $a0, $sp, 0x10
-/* 4A5D8 80059DD8 0CF4020C */  jal        func_800BD030
+/* 4A5D8 80059DD8 0CF4020C */  jal        strchr
 /* 4A5DC 80059DDC 2C000524 */   addiu     $a1, $zero, 0x2C
 /* 4A5E0 80059DE0 05004010 */  beqz       $v0, .L80059DF8
 /* 4A5E4 80059DE4 21900000 */   addu      $s2, $zero, $zero

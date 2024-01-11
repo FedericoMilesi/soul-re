@@ -25,12 +25,12 @@ glabel FONT_MakeSpecialFogClut
 /* 1D720 8002CF20 3000A7A7 */  sh         $a3, 0x30($sp)
 /* 1D724 8002CF24 3200A5A7 */  sh         $a1, 0x32($sp)
 /* 1D728 8002CF28 E8B383A7 */  sh         $v1, %gp_rel(SpecialFogClut)($gp)
-/* 1D72C 8002CF2C 0FE9020C */  jal        func_800BA43C
+/* 1D72C 8002CF2C 0FE9020C */  jal        DrawSync
 /* 1D730 8002CF30 21200000 */   addu      $a0, $zero, $zero
 /* 1D734 8002CF34 3000A427 */  addiu      $a0, $sp, 0x30
-/* 1D738 8002CF38 94E9020C */  jal        func_800BA650
+/* 1D738 8002CF38 94E9020C */  jal        LoadImage
 /* 1D73C 8002CF3C 1000A527 */   addiu     $a1, $sp, 0x10
-/* 1D740 8002CF40 0FE9020C */  jal        func_800BA43C
+/* 1D740 8002CF40 0FE9020C */  jal        DrawSync
 /* 1D744 8002CF44 21200000 */   addu      $a0, $zero, $zero
 /* 1D748 8002CF48 3800BF8F */  lw         $ra, 0x38($sp)
 /* 1D74C 8002CF4C 00000000 */  nop

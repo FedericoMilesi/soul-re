@@ -92,7 +92,7 @@ glabel MON_Pupate
 /* 7C1EC 8008B9EC 2B186200 */  sltu       $v1, $v1, $v0
 /* 7C1F0 8008B9F0 19006010 */  beqz       $v1, .L8008BA58
 /* 7C1F4 8008B9F4 00000000 */   nop
-/* 7C1F8 8008B9F8 3AF2020C */  jal        func_800BC8E8
+/* 7C1F8 8008B9F8 3AF2020C */  jal        rand
 /* 7C1FC 8008B9FC 00000000 */   nop
 /* 7C200 8008BA00 0F004230 */  andi       $v0, $v0, 0xF
 /* 7C204 8008BA04 14004014 */  bnez       $v0, .L8008BA58
@@ -110,7 +110,7 @@ glabel MON_Pupate
 /* 7C234 8008BA34 21304000 */   addu      $a2, $v0, $zero
 /* 7C238 8008BA38 9006020C */  jal        MON_GetTime
 /* 7C23C 8008BA3C 21204002 */   addu      $a0, $s2, $zero
-/* 7C240 8008BA40 3AF2020C */  jal        func_800BC8E8
+/* 7C240 8008BA40 3AF2020C */  jal        rand
 /* 7C244 8008BA44 21804000 */   addu      $s0, $v0, $zero
 /* 7C248 8008BA48 FF0F4230 */  andi       $v0, $v0, 0xFFF
 /* 7C24C 8008BA4C D0074224 */  addiu      $v0, $v0, 0x7D0

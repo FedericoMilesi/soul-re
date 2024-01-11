@@ -97,7 +97,7 @@ glabel aadUpdateChannelPitchBend
 .L80055C68:
 /* 46468 80055C68 2128A600 */  addu       $a1, $a1, $a2
 /* 4646C 80055C6C 21200002 */  addu       $a0, $s0, $zero
-/* 46470 80055C70 9DFE020C */  jal        func_800BFA74
+/* 46470 80055C70 9DFE020C */  jal        SpuSetVoicePitch
 /* 46474 80055C74 FFFFA530 */   andi      $a1, $a1, 0xFFFF
 .L80055C78:
 /* 46478 80055C78 01001026 */  addiu      $s0, $s0, 0x1

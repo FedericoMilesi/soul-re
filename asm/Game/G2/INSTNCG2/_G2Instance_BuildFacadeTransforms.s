@@ -35,7 +35,7 @@ glabel _G2Instance_BuildFacadeTransforms
 /* 863A4 80095BA4 2120C002 */  addu       $a0, $s6, $zero
 /* 863A8 80095BA8 0C002526 */  addiu      $a1, $s1, 0xC
 /* 863AC 80095BAC 801F063C */  lui        $a2, (0x1F800008 >> 16)
-/* 863B0 80095BB0 0EF3020C */  jal        func_800BCC38
+/* 863B0 80095BB0 0EF3020C */  jal        ApplyMatrixSV
 /* 863B4 80095BB4 0800C634 */   ori       $a2, $a2, (0x1F800008 & 0xFFFF)
 /* 863B8 80095BB8 00006296 */  lhu        $v0, 0x0($s3)
 /* 863BC 80095BBC 5C000396 */  lhu        $v1, 0x5C($s0)
@@ -116,12 +116,12 @@ glabel _G2Instance_BuildFacadeTransforms
 /* 864E0 80095CE0 801F053C */  lui        $a1, (0x1F800070 >> 16)
 /* 864E4 80095CE4 7000A534 */  ori        $a1, $a1, (0x1F800070 & 0xFFFF)
 /* 864E8 80095CE8 020082A6 */  sh         $v0, 0x2($s4)
-/* 864EC 80095CEC 3DE3010C */  jal        func_80078CF4
+/* 864EC 80095CEC 3DE3010C */  jal        RotMatrix
 /* 864F0 80095CF0 040080A6 */   sh        $zero, 0x4($s4)
 /* 864F4 80095CF4 801F043C */  lui        $a0, (0x1F800070 >> 16)
 /* 864F8 80095CF8 70008434 */  ori        $a0, $a0, (0x1F800070 & 0xFFFF)
 /* 864FC 80095CFC 801F053C */  lui        $a1, (0x1F800038 >> 16)
-/* 86500 80095D00 88F4020C */  jal        func_800BD220
+/* 86500 80095D00 88F4020C */  jal        TransposeMatrix
 /* 86504 80095D04 3800A534 */   ori       $a1, $a1, (0x1F800038 & 0xFFFF)
 /* 86508 80095D08 801F043C */  lui        $a0, (0x1F800038 >> 16)
 /* 8650C 80095D0C 38008434 */  ori        $a0, $a0, (0x1F800038 & 0xFFFF)
@@ -140,7 +140,7 @@ glabel _G2Instance_BuildFacadeTransforms
 /* 86540 80095D40 23104700 */  subu       $v0, $v0, $a3
 /* 86544 80095D44 23186800 */  subu       $v1, $v1, $t0
 /* 86548 80095D48 020042A6 */  sh         $v0, 0x2($s2)
-/* 8654C 80095D4C 0EF3020C */  jal        func_800BCC38
+/* 8654C 80095D4C 0EF3020C */  jal        ApplyMatrixSV
 /* 86550 80095D50 040043A6 */   sh        $v1, 0x4($s2)
 /* 86554 80095D54 4CE8000C */  jal        MATH3D_SetUnityMatrix
 /* 86558 80095D58 2120A002 */   addu      $a0, $s5, $zero
@@ -149,7 +149,7 @@ glabel _G2Instance_BuildFacadeTransforms
 /* 86564 80095D64 04002011 */  beqz       $t1, .L80095D78
 /* 86568 80095D68 00000000 */   nop
 /* 8656C 80095D6C 2120A002 */  addu       $a0, $s5, $zero
-/* 86570 80095D70 96E4010C */  jal        func_80079258
+/* 86570 80095D70 96E4010C */  jal        ScaleMatrix
 /* 86574 80095D74 2128C003 */   addu      $a1, $fp, $zero
 .L80095D78:
 /* 86578 80095D78 0200C496 */  lhu        $a0, 0x2($s6)
@@ -161,15 +161,15 @@ glabel _G2Instance_BuildFacadeTransforms
 /* 86590 80095D90 00240200 */  sll        $a0, $v0, 16
 /* 86594 80095D94 03240400 */  sra        $a0, $a0, 16
 /* 86598 80095D98 2128A002 */  addu       $a1, $s5, $zero
-/* 8659C 80095D9C 32E4010C */  jal        func_800790C8
+/* 8659C 80095D9C 32E4010C */  jal        RotMatrixZ
 /* 865A0 80095DA0 040082A6 */   sh        $v0, 0x4($s4)
 /* 865A4 80095DA4 02008496 */  lhu        $a0, 0x2($s4)
 /* 865A8 80095DA8 2128A002 */  addu       $a1, $s5, $zero
 /* 865AC 80095DAC 00240400 */  sll        $a0, $a0, 16
-/* 865B0 80095DB0 E5E3010C */  jal        func_80078F94
+/* 865B0 80095DB0 E5E3010C */  jal        RotMatrixY
 /* 865B4 80095DB4 03240400 */   sra       $a0, $a0, 16
 /* 865B8 80095DB8 00008486 */  lh         $a0, 0x0($s4)
-/* 865BC 80095DBC 98E3010C */  jal        func_80078E60
+/* 865BC 80095DBC 98E3010C */  jal        RotMatrixX
 /* 865C0 80095DC0 2128A002 */   addu      $a1, $s5, $zero
 /* 865C4 80095DC4 A7570208 */  j          .L80095E9C
 /* 865C8 80095DC8 00000000 */   nop
@@ -216,16 +216,16 @@ glabel _G2Instance_BuildFacadeTransforms
 /* 86668 80095E68 04002011 */  beqz       $t1, .L80095E7C
 /* 8666C 80095E6C 00000000 */   nop
 /* 86670 80095E70 2120A002 */  addu       $a0, $s5, $zero
-/* 86674 80095E74 96E4010C */  jal        func_80079258
+/* 86674 80095E74 96E4010C */  jal        ScaleMatrix
 /* 86678 80095E78 2128C003 */   addu      $a1, $fp, $zero
 .L80095E7C:
 /* 8667C 80095E7C 00008486 */  lh         $a0, 0x0($s4)
-/* 86680 80095E80 98E3010C */  jal        func_80078E60
+/* 86680 80095E80 98E3010C */  jal        RotMatrixX
 /* 86684 80095E84 2128A002 */   addu      $a1, $s5, $zero
 /* 86688 80095E88 04008496 */  lhu        $a0, 0x4($s4)
 /* 8668C 80095E8C 2128A002 */  addu       $a1, $s5, $zero
 /* 86690 80095E90 00240400 */  sll        $a0, $a0, 16
-/* 86694 80095E94 32E4010C */  jal        func_800790C8
+/* 86694 80095E94 32E4010C */  jal        RotMatrixZ
 /* 86698 80095E98 03240400 */   sra       $a0, $a0, 16
 .L80095E9C:
 /* 8669C 80095E9C 3400BF8F */  lw         $ra, 0x34($sp)

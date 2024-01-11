@@ -106,7 +106,7 @@ glabel CAMERA_SplineGetNearestPoint
 /* B89C 8001B09C 2138C002 */  addu       $a3, $s6, $zero
 /* B8A0 8001B0A0 3800A2A7 */  sh         $v0, 0x38($sp)
 /* B8A4 8001B0A4 0200C8A4 */  sh         $t0, 0x2($a2)
-/* B8A8 8001B0A8 79E0010C */  jal        func_800781E4
+/* B8A8 8001B0A8 79E0010C */  jal        COLLIDE_NearestPointOnLine_S
 /* B8AC 8001B0AC 0400C3A4 */   sh        $v1, 0x4($a2)
 /* B8B0 8001B0B0 1000A427 */  addiu      $a0, $sp, 0x10
 /* B8B4 8001B0B4 2128C002 */  addu       $a1, $s6, $zero
@@ -151,7 +151,7 @@ glabel CAMERA_SplineGetNearestPoint
 /* B940 8001B140 2138C002 */  addu       $a3, $s6, $zero
 /* B944 8001B144 4000A2A7 */  sh         $v0, 0x40($sp)
 /* B948 8001B148 0200C8A4 */  sh         $t0, 0x2($a2)
-/* B94C 8001B14C 79E0010C */  jal        func_800781E4
+/* B94C 8001B14C 79E0010C */  jal        COLLIDE_NearestPointOnLine_S
 /* B950 8001B150 0400C3A4 */   sh        $v1, 0x4($a2)
 /* B954 8001B154 21A04000 */  addu       $s4, $v0, $zero
 /* B958 8001B158 0010A22A */  slti       $v0, $s5, 0x1000
@@ -176,7 +176,7 @@ glabel CAMERA_SplineGetNearestPoint
 /* B99C 8001B19C 2138C002 */  addu       $a3, $s6, $zero
 /* B9A0 8001B1A0 2800A2A7 */  sh         $v0, 0x28($sp)
 /* B9A4 8001B1A4 0200A8A4 */  sh         $t0, 0x2($a1)
-/* B9A8 8001B1A8 79E0010C */  jal        func_800781E4
+/* B9A8 8001B1A8 79E0010C */  jal        COLLIDE_NearestPointOnLine_S
 /* B9AC 8001B1AC 0400A3A4 */   sh        $v1, 0x4($a1)
 /* B9B0 8001B1B0 0400A01E */  bgtz       $s5, .L8001B1C4
 /* B9B4 8001B1B4 21804000 */   addu      $s0, $v0, $zero

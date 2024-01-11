@@ -8,7 +8,7 @@ glabel STREAM_LoadObjectReturn
 /* 4944C 80058C4C 5400B1AF */  sw         $s1, 0x54($sp)
 /* 49450 80058C50 2188A000 */  addu       $s1, $a1, $zero
 /* 49454 80058C54 5800BFAF */  sw         $ra, 0x58($sp)
-/* 49458 80058C58 EBF4020C */  jal        func_800BD3AC
+/* 49458 80058C58 EBF4020C */  jal        GetRCnt
 /* 4945C 80058C5C 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 49460 80058C60 5890828F */  lw         $v0, %gp_rel(gameTimer)($gp)
 /* 49464 80058C64 0000028E */  lw         $v0, 0x0($s0)

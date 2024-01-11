@@ -11,7 +11,7 @@ glabel PLANAPI_UpdatePlanningDatabase
 /* 88AE8 800982E8 2000B2AF */  sw         $s2, 0x20($sp)
 /* 88AEC 800982EC 1C00B1AF */  sw         $s1, 0x1C($sp)
 /* 88AF0 800982F0 1002938C */  lw         $s3, 0x210($a0)
-/* 88AF4 800982F4 EBF4020C */  jal        func_800BD3AC
+/* 88AF4 800982F4 EBF4020C */  jal        GetRCnt
 /* 88AF8 800982F8 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 88AFC 800982FC 01000324 */  addiu      $v1, $zero, 0x1
 /* 88B00 80098300 FFFF4230 */  andi       $v0, $v0, 0xFFFF

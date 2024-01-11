@@ -15,7 +15,7 @@ glabel MON_PupateEntry
 /* 7C060 8008B860 25104300 */  or         $v0, $v0, $v1
 /* 7C064 8008B864 9006020C */  jal        MON_GetTime
 /* 7C068 8008B868 180082AC */   sw        $v0, 0x18($a0)
-/* 7C06C 8008B86C 3AF2020C */  jal        func_800BC8E8
+/* 7C06C 8008B86C 3AF2020C */  jal        rand
 /* 7C070 8008B870 21804000 */   addu      $s0, $v0, $zero
 /* 7C074 8008B874 FF0F4230 */  andi       $v0, $v0, 0xFFF
 /* 7C078 8008B878 D0074224 */  addiu      $v0, $v0, 0x7D0

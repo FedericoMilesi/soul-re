@@ -36,7 +36,7 @@ glabel PhysicsCheckEdgeGrabbing
 /* 65F84 80075784 00000000 */   nop
 /* 65F88 80075788 4CEC8527 */  addiu      $a1, $gp, %gp_rel(TempMat.40)
 /* 65F8C 8007578C 6CEC85AF */  sw         $a1, %gp_rel(pTempMat.41)($gp)
-/* 65F90 80075790 3DE3010C */  jal        func_80078CF4
+/* 65F90 80075790 3DE3010C */  jal        RotMatrix
 /* 65F94 80075794 21204000 */   addu      $a0, $v0, $zero
 /* 65F98 80075798 ECD50108 */  j          .L800757B0
 /* 65F9C 8007579C 21200000 */   addu      $a0, $zero, $zero

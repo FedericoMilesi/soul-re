@@ -10,11 +10,11 @@ glabel PIPE3D_Segment2ScreenPt
 /* 2D414 8003CC14 2120A000 */  addu       $a0, $a1, $zero
 /* 2D418 8003CC18 40290600 */  sll        $a1, $a2, 5
 /* 2D41C 8003CC1C 1000A627 */  addiu      $a2, $sp, 0x10
-/* 2D420 8003CC20 59FD020C */  jal        func_800BF564
+/* 2D420 8003CC20 59FD020C */  jal        CompMatrix
 /* 2D424 8003CC24 21284500 */   addu      $a1, $v0, $a1
-/* 2D428 8003CC28 52F2020C */  jal        func_800BC948
+/* 2D428 8003CC28 52F2020C */  jal        SetRotMatrix
 /* 2D42C 8003CC2C 1000A427 */   addiu     $a0, $sp, 0x10
-/* 2D430 8003CC30 4AF2020C */  jal        func_800BC928
+/* 2D430 8003CC30 4AF2020C */  jal        SetTransMatrix
 /* 2D434 8003CC34 1000A427 */   addiu     $a0, $sp, 0x10
 /* 2D438 8003CC38 3000A227 */  addiu      $v0, $sp, 0x30
 /* 2D43C 8003CC3C 3400A0A7 */  sh         $zero, 0x34($sp)

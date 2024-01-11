@@ -13,11 +13,11 @@ glabel STREAM_FillOutFileNames
 /* 49220 80058A20 2198E000 */  addu       $s3, $a3, $zero
 /* 49224 80058A24 1000A427 */  addiu      $a0, $sp, 0x10
 /* 49228 80058A28 3000BFAF */  sw         $ra, 0x30($sp)
-/* 4922C 80058A2C 1CF4020C */  jal        func_800BD070
+/* 4922C 80058A2C 1CF4020C */  jal        strcpy
 /* 49230 80058A30 21280002 */   addu      $a1, $s0, $zero
 /* 49234 80058A34 1000A427 */  addiu      $a0, $sp, 0x10
 /* 49238 80058A38 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x118)
-/* 4923C 80058A3C 21FE020C */  jal        func_800BF884
+/* 4923C 80058A3C 21FE020C */  jal        strpbrk
 /* 49240 80058A40 B017A524 */   addiu     $a1, $a1, %lo(WarpRoomArray + 0x118)
 /* 49244 80058A44 02004010 */  beqz       $v0, .L80058A50
 /* 49248 80058A48 00000000 */   nop

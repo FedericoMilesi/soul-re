@@ -96,7 +96,7 @@ glabel PhysicsDefaultEdgeGrabResponse
 /* 66714 80075F14 5000A2A7 */  sh         $v0, 0x50($sp)
 /* 66718 80075F18 08002296 */  lhu        $v0, 0x8($s1)
 /* 6671C 80075F1C 21280002 */  addu       $a1, $s0, $zero
-/* 66720 80075F20 3DE3010C */  jal        func_80078CF4
+/* 66720 80075F20 3DE3010C */  jal        RotMatrix
 /* 66724 80075F24 5200A2A7 */   sh        $v0, 0x52($sp)
 /* 66728 80075F28 00000C8E */  lw         $t4, 0x0($s0)
 /* 6672C 80075F2C 04000D8E */  lw         $t5, 0x4($s0)

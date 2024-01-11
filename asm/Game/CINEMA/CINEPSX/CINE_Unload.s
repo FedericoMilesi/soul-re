@@ -6,7 +6,7 @@ glabel CINE_Unload
 /* A7D9C 800B759C 0480043C */  lui        $a0, %hi(VblTick)
 /* A7DA0 800B75A0 C08B8424 */  addiu      $a0, $a0, %lo(VblTick)
 /* A7DA4 800B75A4 1400BFAF */  sw         $ra, 0x14($sp)
-/* A7DA8 800B75A8 C3E6020C */  jal        func_800B9B0C
+/* A7DA8 800B75A8 C3E6020C */  jal        VSyncCallback
 /* A7DAC 800B75AC 1000B0AF */   sw        $s0, 0x10($sp)
 /* A7DB0 800B75B0 0D80103C */  lui        $s0, %hi(the_cine_tracker)
 /* A7DB4 800B75B4 78C8048E */  lw         $a0, %lo(the_cine_tracker)($s0)

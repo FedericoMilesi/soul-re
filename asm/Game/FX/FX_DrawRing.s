@@ -27,16 +27,16 @@ glabel FX_DrawRing
 /* 3ED98 8004E598 2B104300 */  sltu       $v0, $v0, $v1
 /* 3ED9C 8004E59C 87004010 */  beqz       $v0, .L8004E7BC
 /* 3EDA0 8004E5A0 4C00A8AF */   sw        $t0, 0x4C($sp)
-/* 3EDA4 8004E5A4 CDFD020C */  jal        func_800BF734
+/* 3EDA4 8004E5A4 CDFD020C */  jal        PushMatrix
 /* 3EDA8 8004E5A8 00000000 */   nop
-/* 3EDAC 8004E5AC 52F2020C */  jal        func_800BC948
+/* 3EDAC 8004E5AC 52F2020C */  jal        SetRotMatrix
 /* 3EDB0 8004E5B0 21200002 */   addu      $a0, $s0, $zero
-/* 3EDB4 8004E5B4 4AF2020C */  jal        func_800BC928
+/* 3EDB4 8004E5B4 4AF2020C */  jal        SetTransMatrix
 /* 3EDB8 8004E5B8 21200002 */   addu      $a0, $s0, $zero
 /* 3EDBC 8004E5BC 3A39010C */  jal        fx_get_startz
 /* 3EDC0 8004E5C0 21206002 */   addu      $a0, $s3, $zero
 /* 3EDC4 8004E5C4 21208002 */  addu       $a0, $s4, $zero
-/* 3EDC8 8004E5C8 52F2020C */  jal        func_800BC948
+/* 3EDC8 8004E5C8 52F2020C */  jal        SetRotMatrix
 /* 3EDCC 8004E5CC 21B84000 */   addu      $s7, $v0, $zero
 /* 3EDD0 8004E5D0 9000A28F */  lw         $v0, 0x90($sp)
 /* 3EDD4 8004E5D4 8400A68F */  lw         $a2, 0x84($sp)
@@ -164,7 +164,7 @@ glabel FX_DrawRing
 /* 3EFA8 8004E7A8 A5FF4014 */  bnez       $v0, .L8004E640
 /* 3EFAC 8004E7AC 8000D626 */   addiu     $s6, $s6, 0x80
 /* 3EFB0 8004E7B0 08BE828F */  lw         $v0, %gp_rel(gameTrackerX + 0x40)($gp)
-/* 3EFB4 8004E7B4 F6FD020C */  jal        func_800BF7D8
+/* 3EFB4 8004E7B4 F6FD020C */  jal        PopMatrix
 /* 3EFB8 8004E7B8 040051AC */   sw        $s1, 0x4($v0)
 .L8004E7BC:
 /* 3EFBC 8004E7BC 7400BF8F */  lw         $ra, 0x74($sp)

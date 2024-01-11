@@ -38,7 +38,7 @@ glabel FX_MakeWaterBubble
 /* 36F34 80046734 2000A2AF */  sw         $v0, 0x20($sp)
 /* 36F38 80046738 5C22010C */  jal        FX_DFacadeParticleSetup
 /* 36F3C 8004673C 1C00A3AF */   sw        $v1, 0x1C($sp)
-/* 36F40 80046740 3AF2020C */  jal        func_800BC8E8
+/* 36F40 80046740 3AF2020C */  jal        rand
 /* 36F44 80046744 00000000 */   nop
 /* 36F48 80046748 12004386 */  lh         $v1, 0x12($s2)
 /* 36F4C 8004674C 00000000 */  nop
@@ -62,7 +62,7 @@ glabel FX_MakeWaterBubble
 /* 36F94 80046794 420020A6 */  sh         $zero, 0x42($s1)
 /* 36F98 80046798 24186400 */  and        $v1, $v1, $a0
 /* 36F9C 8004679C 25187000 */  or         $v1, $v1, $s0
-/* 36FA0 800467A0 3AF2020C */  jal        func_800BC8E8
+/* 36FA0 800467A0 3AF2020C */  jal        rand
 /* 36FA4 800467A4 1C0023AE */   sw        $v1, 0x1C($s1)
 /* 36FA8 800467A8 08004386 */  lh         $v1, 0x8($s2)
 /* 36FAC 800467AC 00000000 */  nop
@@ -71,7 +71,7 @@ glabel FX_MakeWaterBubble
 /* 36FB8 800467B8 06004296 */  lhu        $v0, 0x6($s2)
 /* 36FBC 800467BC 00000000 */  nop
 /* 36FC0 800467C0 21104300 */  addu       $v0, $v0, $v1
-/* 36FC4 800467C4 3AF2020C */  jal        func_800BC8E8
+/* 36FC4 800467C4 3AF2020C */  jal        rand
 /* 36FC8 800467C8 4A0022A6 */   sh        $v0, 0x4A($s1)
 /* 36FCC 800467CC 0C004386 */  lh         $v1, 0xC($s2)
 /* 36FD0 800467D0 00000000 */  nop
@@ -80,7 +80,7 @@ glabel FX_MakeWaterBubble
 /* 36FDC 800467DC 0A004296 */  lhu        $v0, 0xA($s2)
 /* 36FE0 800467E0 00000000 */  nop
 /* 36FE4 800467E4 21104300 */  addu       $v0, $v0, $v1
-/* 36FE8 800467E8 3AF2020C */  jal        func_800BC8E8
+/* 36FE8 800467E8 3AF2020C */  jal        rand
 /* 36FEC 800467EC 520022A6 */   sh        $v0, 0x52($s1)
 /* 36FF0 800467F0 10004386 */  lh         $v1, 0x10($s2)
 /* 36FF4 800467F4 00000000 */  nop

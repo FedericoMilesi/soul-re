@@ -17,11 +17,11 @@ glabel LOAD_HashName
 /* 28604 80037E04 1800B2AF */  sw         $s2, 0x18($sp)
 /* 28608 80037E08 1400B1AF */  sw         $s1, 0x14($sp)
 /* 2860C 80037E0C 1000B0AF */  sw         $s0, 0x10($sp)
-/* 28610 80037E10 ACF4020C */  jal        func_800BD2B0
+/* 28610 80037E10 ACF4020C */  jal        strlen
 /* 28614 80037E14 3800A4AF */   sw        $a0, 0x38($sp)
 /* 28618 80037E18 FFFF5224 */  addiu      $s2, $v0, -0x1
 /* 2861C 80037E1C 3800A48F */  lw         $a0, 0x38($sp)
-/* 28620 80037E20 0CF4020C */  jal        func_800BD030
+/* 28620 80037E20 0CF4020C */  jal        strchr
 /* 28624 80037E24 2E000524 */   addiu     $a1, $zero, 0x2E
 /* 28628 80037E28 21984000 */  addu       $s3, $v0, $zero
 /* 2862C 80037E2C 13006012 */  beqz       $s3, .L80037E7C

@@ -8,7 +8,7 @@ glabel G2AnimSection_SetInterpInfo
 /* 80930 80090130 2C0085AC */   sw        $a1, 0x2C($a0)
 /* 80934 80090134 2120A000 */  addu       $a0, $a1, $zero
 /* 80938 80090138 21280000 */  addu       $a1, $zero, $zero
-/* 8093C 8009013C 2EF2020C */  jal        func_800BC8B8
+/* 8093C 8009013C 2EF2020C */  jal        memset
 /* 80940 80090140 0C000624 */   addiu     $a2, $zero, 0xC
 .L80090144:
 /* 80944 80090144 1000BF8F */  lw         $ra, 0x10($sp)

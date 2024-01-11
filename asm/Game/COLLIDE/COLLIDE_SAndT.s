@@ -256,7 +256,7 @@ glabel COLLIDE_SAndT
 /* 13B6C 8002336C 060002A6 */  sh         $v0, 0x6($s0)
 /* 13B70 80023370 080003A6 */  sh         $v1, 0x8($s0)
 /* 13B74 80023374 0A0005A6 */  sh         $a1, 0xA($s0)
-/* 13B78 80023378 52F2020C */  jal        func_800BC948
+/* 13B78 80023378 52F2020C */  jal        SetRotMatrix
 /* 13B7C 8002337C 000031AE */   sw        $s1, 0x0($s1)
 /* 13B80 80023380 0000828E */  lw         $v0, 0x0($s4)
 /* 13B84 80023384 04003126 */  addiu      $s1, $s1, 0x4
@@ -551,7 +551,7 @@ glabel COLLIDE_SAndT
 /* 13FDC 800237DC 000002AE */  sw         $v0, 0x0($s0)
 /* 13FE0 800237E0 040004A6 */  sh         $a0, 0x4($s0)
 .L800237E4:
-/* 13FE4 800237E4 52F2020C */  jal        func_800BC948
+/* 13FE4 800237E4 52F2020C */  jal        SetRotMatrix
 /* 13FE8 800237E8 21200002 */   addu      $a0, $s0, $zero
 .L800237EC:
 /* 13FEC 800237EC 0C005226 */  addiu      $s2, $s2, 0xC

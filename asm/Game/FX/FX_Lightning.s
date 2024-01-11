@@ -22,17 +22,17 @@ glabel FX_Lightning
 /* 3F930 8004F130 9400A5AF */  sw         $a1, 0x94($sp)
 /* 3F934 8004F134 0600C010 */  beqz       $a2, .L8004F150
 /* 3F938 8004F138 9800A6AF */   sw        $a2, 0x98($sp)
-/* 3F93C 8004F13C 52F2020C */  jal        func_800BC948
+/* 3F93C 8004F13C 52F2020C */  jal        SetRotMatrix
 /* 3F940 8004F140 2120C000 */   addu      $a0, $a2, $zero
 /* 3F944 8004F144 9800A48F */  lw         $a0, 0x98($sp)
 /* 3F948 8004F148 573C0108 */  j          .L8004F15C
 /* 3F94C 8004F14C 00000000 */   nop
 .L8004F150:
-/* 3F950 8004F150 52F2020C */  jal        func_800BC948
+/* 3F950 8004F150 52F2020C */  jal        SetRotMatrix
 /* 3F954 8004F154 21200002 */   addu      $a0, $s0, $zero
 /* 3F958 8004F158 21200002 */  addu       $a0, $s0, $zero
 .L8004F15C:
-/* 3F95C 8004F15C 4AF2020C */  jal        func_800BC928
+/* 3F95C 8004F15C 4AF2020C */  jal        SetTransMatrix
 /* 3F960 8004F160 FF7F1524 */   addiu     $s5, $zero, 0x7FFF
 /* 3F964 8004F164 80101E00 */  sll        $v0, $fp, 2
 /* 3F968 8004F168 21105E00 */  addu       $v0, $v0, $fp
@@ -56,11 +56,11 @@ glabel FX_Lightning
 /* 3F9AC 8004F1AC A000A48F */  lw         $a0, 0xA0($sp)
 /* 3F9B0 8004F1B0 A400A58F */  lw         $a1, 0xA4($sp)
 /* 3F9B4 8004F1B4 21386002 */  addu       $a3, $s3, $zero
-/* 3F9B8 8004F1B8 86F3020C */  jal        func_800BCE18
+/* 3F9B8 8004F1B8 86F3020C */  jal        LoadAverageShort12
 /* 3F9BC 8004F1BC 1000A2AF */   sw        $v0, 0x10($sp)
 /* 3F9C0 8004F1C0 C2271300 */  srl        $a0, $s3, 31
 /* 3F9C4 8004F1C4 21206402 */  addu       $a0, $s3, $a0
-/* 3F9C8 8004F1C8 D0E4010C */  jal        func_80079340
+/* 3F9C8 8004F1C8 D0E4010C */  jal        rsin
 /* 3F9CC 8004F1CC 43200400 */   sra       $a0, $a0, 1
 /* 3F9D0 8004F1D0 4200C012 */  beqz       $s6, .L8004F2DC
 /* 3F9D4 8004F1D4 21904000 */   addu      $s2, $v0, $zero
@@ -70,9 +70,9 @@ glabel FX_Lightning
 /* 3F9E4 8004F1E4 00000000 */  nop
 /* 3F9E8 8004F1E8 40000015 */  bnez       $t0, .L8004F2EC
 /* 3F9EC 8004F1EC 00000000 */   nop
-/* 3F9F0 8004F1F0 D0E4010C */  jal        func_80079340
+/* 3F9F0 8004F1F0 D0E4010C */  jal        rsin
 /* 3F9F4 8004F1F4 80201300 */   sll       $a0, $s3, 2
-/* 3F9F8 8004F1F8 3AF2020C */  jal        func_800BC8E8
+/* 3F9F8 8004F1F8 3AF2020C */  jal        rand
 /* 3F9FC 8004F1FC 21804000 */   addu      $s0, $v0, $zero
 /* 3FA00 8004F200 1A005600 */  div        $zero, $v0, $s6
 /* 3FA04 8004F204 10180000 */  mfhi       $v1
@@ -89,7 +89,7 @@ glabel FX_Lightning
 /* 3FA2C 8004F22C 5000A297 */  lhu        $v0, 0x50($sp)
 /* 3FA30 8004F230 031B0300 */  sra        $v1, $v1, 12
 /* 3FA34 8004F234 21104300 */  addu       $v0, $v0, $v1
-/* 3FA38 8004F238 3AF2020C */  jal        func_800BC8E8
+/* 3FA38 8004F238 3AF2020C */  jal        rand
 /* 3FA3C 8004F23C 5000A2A7 */   sh        $v0, 0x50($sp)
 /* 3FA40 8004F240 1A005600 */  div        $zero, $v0, $s6
 /* 3FA44 8004F244 10180000 */  mfhi       $v1
@@ -106,9 +106,9 @@ glabel FX_Lightning
 /* 3FA6C 8004F26C 5200A297 */  lhu        $v0, 0x52($sp)
 /* 3FA70 8004F270 21206802 */  addu       $a0, $s3, $t0
 /* 3FA74 8004F274 21104300 */  addu       $v0, $v0, $v1
-/* 3FA78 8004F278 D0E4010C */  jal        func_80079340
+/* 3FA78 8004F278 D0E4010C */  jal        rsin
 /* 3FA7C 8004F27C 5200A2A7 */   sh        $v0, 0x52($sp)
-/* 3FA80 8004F280 3AF2020C */  jal        func_800BC8E8
+/* 3FA80 8004F280 3AF2020C */  jal        rand
 /* 3FA84 8004F284 21804000 */   addu      $s0, $v0, $zero
 /* 3FA88 8004F288 B400A88F */  lw         $t0, 0xB4($sp)
 /* 3FA8C 8004F28C 00000000 */  nop
@@ -142,9 +142,9 @@ glabel FX_Lightning
 /* 3FAEC 8004F2EC 6000A88F */  lw         $t0, 0x60($sp)
 /* 3FAF0 8004F2F0 40121400 */  sll        $v0, $s4, 9
 /* 3FAF4 8004F2F4 21880201 */  addu       $s1, $t0, $v0
-/* 3FAF8 8004F2F8 DCE4010C */  jal        func_80079370
+/* 3FAF8 8004F2F8 DCE4010C */  jal        rcos
 /* 3FAFC 8004F2FC 21202002 */   addu      $a0, $s1, $zero
-/* 3FB00 8004F300 3AF2020C */  jal        func_800BC8E8
+/* 3FB00 8004F300 3AF2020C */  jal        rand
 /* 3FB04 8004F304 21804000 */   addu      $s0, $v0, $zero
 /* 3FB08 8004F308 B400A88F */  lw         $t0, 0xB4($sp)
 /* 3FB0C 8004F30C 00000000 */  nop
@@ -165,9 +165,9 @@ glabel FX_Lightning
 .L8004F344:
 /* 3FB44 8004F344 03130200 */  sra        $v0, $v0, 12
 /* 3FB48 8004F348 21202002 */  addu       $a0, $s1, $zero
-/* 3FB4C 8004F34C D0E4010C */  jal        func_80079340
+/* 3FB4C 8004F34C D0E4010C */  jal        rsin
 /* 3FB50 8004F350 5000A2A7 */   sh        $v0, 0x50($sp)
-/* 3FB54 8004F354 3AF2020C */  jal        func_800BC8E8
+/* 3FB54 8004F354 3AF2020C */  jal        rand
 /* 3FB58 8004F358 21804000 */   addu      $s0, $v0, $zero
 /* 3FB5C 8004F35C B400A88F */  lw         $t0, 0xB4($sp)
 /* 3FB60 8004F360 00000000 */  nop
@@ -187,7 +187,7 @@ glabel FX_Lightning
 /* 3FB94 8004F394 FF0F4224 */  addiu      $v0, $v0, 0xFFF
 .L8004F398:
 /* 3FB98 8004F398 03130200 */  sra        $v0, $v0, 12
-/* 3FB9C 8004F39C 3AF2020C */  jal        func_800BC8E8
+/* 3FB9C 8004F39C 3AF2020C */  jal        rand
 /* 3FBA0 8004F3A0 5200A2A7 */   sh        $v0, 0x52($sp)
 /* 3FBA4 8004F3A4 5400A397 */  lhu        $v1, 0x54($sp)
 /* 3FBA8 8004F3A8 07004230 */  andi       $v0, $v0, 0x7

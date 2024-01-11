@@ -9,11 +9,11 @@ glabel PHYSOBS_CheckObjectAxisAlignment
 /* 610DC 800708DC 2180C000 */  addu       $s0, $a2, $zero
 /* 610E0 800708E0 21280002 */  addu       $a1, $s0, $zero
 /* 610E4 800708E4 4800BFAF */  sw         $ra, 0x48($sp)
-/* 610E8 800708E8 1AF2020C */  jal        func_800BC868
+/* 610E8 800708E8 1AF2020C */  jal        ApplyMatrix
 /* 610EC 800708EC 1000A627 */   addiu     $a2, $sp, 0x10
 /* 610F0 800708F0 21202002 */  addu       $a0, $s1, $zero
 /* 610F4 800708F4 21280002 */  addu       $a1, $s0, $zero
-/* 610F8 800708F8 1AF2020C */  jal        func_800BC868
+/* 610F8 800708F8 1AF2020C */  jal        ApplyMatrix
 /* 610FC 800708FC 2000A627 */   addiu     $a2, $sp, 0x20
 /* 61100 80070900 1000A897 */  lhu        $t0, 0x10($sp)
 /* 61104 80070904 2000A997 */  lhu        $t1, 0x20($sp)

@@ -5,7 +5,7 @@ glabel FX_UpdateWind
 /* 39E74 80049674 E0FFBD27 */  addiu      $sp, $sp, -0x20
 /* 39E78 80049678 1800BFAF */  sw         $ra, 0x18($sp)
 /* 39E7C 8004967C 1400B1AF */  sw         $s1, 0x14($sp)
-/* 39E80 80049680 3AF2020C */  jal        func_800BC8E8
+/* 39E80 80049680 3AF2020C */  jal        rand
 /* 39E84 80049684 1000B0AF */   sw        $s0, 0x10($sp)
 /* 39E88 80049688 21184000 */  addu       $v1, $v0, $zero
 /* 39E8C 8004968C 03006104 */  bgez       $v1, .L8004969C
@@ -15,7 +15,7 @@ glabel FX_UpdateWind
 .L8004969C:
 /* 39E9C 8004969C 80100200 */  sll        $v0, $v0, 2
 /* 39EA0 800496A0 23886200 */  subu       $s1, $v1, $v0
-/* 39EA4 800496A4 3AF2020C */  jal        func_800BC8E8
+/* 39EA4 800496A4 3AF2020C */  jal        rand
 /* 39EA8 800496A8 21802002 */   addu      $s0, $s1, $zero
 /* 39EAC 800496AC 01004230 */  andi       $v0, $v0, 0x1
 /* 39EB0 800496B0 02004010 */  beqz       $v0, .L800496BC
@@ -40,7 +40,7 @@ glabel FX_UpdateWind
 /* 39EF4 800496F4 0F000224 */   addiu     $v0, $zero, 0xF
 /* 39EF8 800496F8 AA9A82A7 */  sh         $v0, %gp_rel(wind_speed)($gp)
 .L800496FC:
-/* 39EFC 800496FC 3AF2020C */  jal        func_800BC8E8
+/* 39EFC 800496FC 3AF2020C */  jal        rand
 /* 39F00 80049700 00000000 */   nop
 /* 39F04 80049704 21184000 */  addu       $v1, $v0, $zero
 /* 39F08 80049708 03006104 */  bgez       $v1, .L80049718
@@ -50,7 +50,7 @@ glabel FX_UpdateWind
 .L80049718:
 /* 39F18 80049718 C0100200 */  sll        $v0, $v0, 3
 /* 39F1C 8004971C 23886200 */  subu       $s1, $v1, $v0
-/* 39F20 80049720 3AF2020C */  jal        func_800BC8E8
+/* 39F20 80049720 3AF2020C */  jal        rand
 /* 39F24 80049724 21802002 */   addu      $s0, $s1, $zero
 /* 39F28 80049728 01004230 */  andi       $v0, $v0, 0x1
 /* 39F2C 8004972C 02004010 */  beqz       $v0, .L80049738
@@ -76,7 +76,7 @@ glabel FX_UpdateWind
 /* 39F74 80049774 A89A82A7 */  sh         $v0, %gp_rel(wind_deg)($gp)
 .L80049778:
 /* 39F78 80049778 A89A8487 */  lh         $a0, %gp_rel(wind_deg)($gp)
-/* 39F7C 8004977C DCE4010C */  jal        func_80079370
+/* 39F7C 8004977C DCE4010C */  jal        rcos
 /* 39F80 80049780 00000000 */   nop
 /* 39F84 80049784 AA9A8387 */  lh         $v1, %gp_rel(wind_speed)($gp)
 /* 39F88 80049788 00000000 */  nop
@@ -89,7 +89,7 @@ glabel FX_UpdateWind
 /* 39FA0 800497A0 A89A8487 */  lh         $a0, %gp_rel(wind_deg)($gp)
 /* 39FA4 800497A4 03130200 */  sra        $v0, $v0, 12
 /* 39FA8 800497A8 A49A82A7 */  sh         $v0, %gp_rel(windx)($gp)
-/* 39FAC 800497AC D0E4010C */  jal        func_80079340
+/* 39FAC 800497AC D0E4010C */  jal        rsin
 /* 39FB0 800497B0 00000000 */   nop
 /* 39FB4 800497B4 AA9A8387 */  lh         $v1, %gp_rel(wind_speed)($gp)
 /* 39FB8 800497B8 00000000 */  nop

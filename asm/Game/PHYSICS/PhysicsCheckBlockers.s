@@ -53,7 +53,7 @@ glabel PhysicsCheckBlockers
 /* 66ED0 800766D0 00F00224 */  addiu      $v0, $zero, -0x1000
 /* 66ED4 800766D4 6200A0A7 */  sh         $zero, 0x62($sp)
 /* 66ED8 800766D8 6000A0A7 */  sh         $zero, 0x60($sp)
-/* 66EDC 800766DC 1AF2020C */  jal        func_800BC868
+/* 66EDC 800766DC 1AF2020C */  jal        ApplyMatrix
 /* 66EE0 800766E0 6200A2A7 */   sh        $v0, 0x62($sp)
 /* 66EE4 800766E4 2C00A387 */  lh         $v1, 0x2C($sp)
 /* 66EE8 800766E8 1000A28F */  lw         $v0, 0x10($sp)
@@ -172,7 +172,7 @@ glabel PhysicsCheckBlockers
 /* 67090 80076890 F0FF0224 */  addiu      $v0, $zero, -0x10
 /* 67094 80076894 5000A0A7 */  sh         $zero, 0x50($sp)
 /* 67098 80076898 5200A2A7 */  sh         $v0, 0x52($sp)
-/* 6709C 8007689C 1AF2020C */  jal        func_800BC868
+/* 6709C 8007689C 1AF2020C */  jal        ApplyMatrix
 /* 670A0 800768A0 5400A0A7 */   sh        $zero, 0x54($sp)
 /* 670A4 800768A4 3400A48F */  lw         $a0, 0x34($sp)
 /* 670A8 800768A8 1000A297 */  lhu        $v0, 0x10($sp)

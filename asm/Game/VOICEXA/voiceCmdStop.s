@@ -15,7 +15,7 @@ glabel voiceCmdStop
 /* A7808 800B7008 00220224 */  addiu      $v0, $zero, 0x2200
 /* A780C 800B700C 1000A2AF */  sw         $v0, 0x10($sp)
 /* A7810 800B7010 2800A0AF */  sw         $zero, 0x28($sp)
-/* A7814 800B7014 DD01030C */  jal        func_800C0774
+/* A7814 800B7014 DD01030C */  jal        SpuSetCommonAttr
 /* A7818 800B7018 3400A0AF */   sw        $zero, 0x34($sp)
 /* A781C 800B701C 01000524 */  addiu      $a1, $zero, 0x1
 /* A7820 800B7020 7CBF848F */  lw         $a0, %gp_rel(gameTrackerX + 0x1B4)($gp)

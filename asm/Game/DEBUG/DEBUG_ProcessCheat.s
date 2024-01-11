@@ -64,12 +64,12 @@ glabel DEBUG_ProcessCheat
 /* 51D4 800149D4 22004012 */  beqz       $s2, .L80014A60
 /* 51D8 800149D8 1000A427 */   addiu     $a0, $sp, 0x10
 /* 51DC 800149DC 21280000 */  addu       $a1, $zero, $zero
-/* 51E0 800149E0 2EF2020C */  jal        func_800BC8B8
+/* 51E0 800149E0 2EF2020C */  jal        memset
 /* 51E4 800149E4 08000624 */   addiu     $a2, $zero, 0x8
 /* 51E8 800149E8 1800B127 */  addiu      $s1, $sp, 0x18
 /* 51EC 800149EC 21202002 */  addu       $a0, $s1, $zero
 /* 51F0 800149F0 21280000 */  addu       $a1, $zero, $zero
-/* 51F4 800149F4 2EF2020C */  jal        func_800BC8B8
+/* 51F4 800149F4 2EF2020C */  jal        memset
 /* 51F8 800149F8 10000624 */   addiu     $a2, $zero, 0x10
 /* 51FC 800149FC 2800B027 */  addiu      $s0, $sp, 0x28
 /* 5200 80014A00 21200002 */  addu       $a0, $s0, $zero
@@ -78,11 +78,11 @@ glabel DEBUG_ProcessCheat
 /* 520C 80014A0C 1200A2A7 */   sh        $v0, 0x12($sp)
 /* 5210 80014A10 44AD8487 */  lh         $a0, %gp_rel(theCamera + 0xB4)($gp)
 /* 5214 80014A14 21280002 */  addu       $a1, $s0, $zero
-/* 5218 80014A18 32E4010C */  jal        func_800790C8
+/* 5218 80014A18 32E4010C */  jal        RotMatrixZ
 /* 521C 80014A1C 21209200 */   addu      $a0, $a0, $s2
 /* 5220 80014A20 21200002 */  addu       $a0, $s0, $zero
 /* 5224 80014A24 1000A527 */  addiu      $a1, $sp, 0x10
-/* 5228 80014A28 1AF2020C */  jal        func_800BC868
+/* 5228 80014A28 1AF2020C */  jal        ApplyMatrix
 /* 522C 80014A2C 21302002 */   addu      $a2, $s1, $zero
 /* 5230 80014A30 2C00648E */  lw         $a0, 0x2C($s3)
 /* 5234 80014A34 1800A397 */  lhu        $v1, 0x18($sp)

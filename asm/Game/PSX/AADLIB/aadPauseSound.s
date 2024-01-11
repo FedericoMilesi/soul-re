@@ -26,10 +26,10 @@ glabel aadPauseSound
 /* 45528 80054D28 EE014394 */  lhu        $v1, 0x1EE($v0)
 /* 4552C 80054D2C 1C003126 */  addiu      $s1, $s1, 0x1C
 /* 45530 80054D30 FDFF6330 */  andi       $v1, $v1, 0xFFFD
-/* 45534 80054D34 95FE020C */  jal        func_800BFA54
+/* 45534 80054D34 95FE020C */  jal        SpuGetVoicePitch
 /* 45538 80054D38 EE0143A4 */   sh        $v1, 0x1EE($v0)
 /* 4553C 80054D3C 21200002 */  addu       $a0, $s0, $zero
-/* 45540 80054D40 9DFE020C */  jal        func_800BFA74
+/* 45540 80054D40 9DFE020C */  jal        SpuSetVoicePitch
 /* 45544 80054D44 21280000 */   addu      $a1, $zero, $zero
 /* 45548 80054D48 01001026 */  addiu      $s0, $s0, 0x1
 /* 4554C 80054D4C 1800022A */  slti       $v0, $s0, 0x18

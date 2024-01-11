@@ -91,7 +91,7 @@ glabel _G2Instance_RebuildAnimatedTransforms
 /* 85A74 80095274 07000724 */   addiu     $a3, $zero, 0x7
 /* 85A78 80095278 21200002 */  addu       $a0, $s0, $zero
 /* 85A7C 8009527C 1800B227 */  addiu      $s2, $sp, 0x18
-/* 85A80 80095280 D8E2010C */  jal        func_80078B60
+/* 85A80 80095280 D8E2010C */  jal        RotMatrixZYX
 /* 85A84 80095284 21284002 */   addu      $a1, $s2, $zero
 /* 85A88 80095288 21202002 */  addu       $a0, $s1, $zero
 /* 85A8C 8009528C 02000524 */  addiu      $a1, $zero, 0x2
@@ -100,13 +100,13 @@ glabel _G2Instance_RebuildAnimatedTransforms
 /* 85A98 80095298 07000724 */   addiu     $a3, $zero, 0x7
 /* 85A9C 8009529C 21200002 */  addu       $a0, $s0, $zero
 /* 85AA0 800952A0 3800B027 */  addiu      $s0, $sp, 0x38
-/* 85AA4 800952A4 D8E2010C */  jal        func_80078B60
+/* 85AA4 800952A4 D8E2010C */  jal        RotMatrixZYX
 /* 85AA8 800952A8 21280002 */   addu      $a1, $s0, $zero
 /* 85AAC 800952AC 21204002 */  addu       $a0, $s2, $zero
-/* 85AB0 800952B0 15FD020C */  jal        func_800BF454
+/* 85AB0 800952B0 15FD020C */  jal        MulMatrix2
 /* 85AB4 800952B4 21280002 */   addu      $a1, $s0, $zero
 /* 85AB8 800952B8 21200002 */  addu       $a0, $s0, $zero
-/* 85ABC 800952BC 88F4020C */  jal        func_800BD220
+/* 85ABC 800952BC 88F4020C */  jal        TransposeMatrix
 /* 85AC0 800952C0 21288002 */   addu      $a1, $s4, $zero
 /* 85AC4 800952C4 5401628E */  lw         $v0, 0x154($s3)
 /* 85AC8 800952C8 4801638E */  lw         $v1, 0x148($s3)
@@ -131,7 +131,7 @@ glabel _G2Instance_RebuildAnimatedTransforms
 /* 85B14 80095314 18008AAC */  sw         $t2, 0x18($a0)
 /* 85B18 80095318 1C008BAC */  sw         $t3, 0x1C($a0)
 /* 85B1C 8009531C 4000648E */  lw         $a0, 0x40($s3)
-/* 85B20 80095320 15FD020C */  jal        func_800BF454
+/* 85B20 80095320 15FD020C */  jal        MulMatrix2
 /* 85B24 80095324 21288002 */   addu      $a1, $s4, $zero
 /* 85B28 80095328 4000628E */  lw         $v0, 0x40($s3)
 /* 85B2C 8009532C 4000638E */  lw         $v1, 0x40($s3)
@@ -146,7 +146,7 @@ glabel _G2Instance_RebuildAnimatedTransforms
 /* 85B50 80095350 600062A6 */   sh        $v0, 0x60($s3)
 .L80095354:
 /* 85B54 80095354 74006426 */  addiu      $a0, $s3, 0x74
-/* 85B58 80095358 3DE3010C */  jal        func_80078CF4
+/* 85B58 80095358 3DE3010C */  jal        RotMatrix
 /* 85B5C 8009535C 21288002 */   addu      $a1, $s4, $zero
 .L80095360:
 /* 85B60 80095360 0010033C */  lui        $v1, (0x10001000 >> 16)
@@ -169,7 +169,7 @@ glabel _G2Instance_RebuildAnimatedTransforms
 /* 85B9C 8009539C 040062AC */  sw         $v0, 0x4($v1)
 /* 85BA0 800953A0 88006286 */  lh         $v0, 0x88($s3)
 /* 85BA4 800953A4 2000A534 */  ori        $a1, $a1, (0x1F800020 & 0xFFFF)
-/* 85BA8 800953A8 96E4010C */  jal        func_80079258
+/* 85BA8 800953A8 96E4010C */  jal        ScaleMatrix
 /* 85BAC 800953AC 080062AC */   sw        $v0, 0x8($v1)
 /* 85BB0 800953B0 01000224 */  addiu      $v0, $zero, 0x1
 /* 85BB4 800953B4 120082A6 */  sh         $v0, 0x12($s4)

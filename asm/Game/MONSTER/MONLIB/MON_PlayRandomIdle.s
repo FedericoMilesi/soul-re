@@ -13,7 +13,7 @@ glabel MON_PlayRandomIdle
 /* 714F0 80080CF0 1000B0AF */  sw         $s0, 0x10($sp)
 /* 714F4 80080CF4 6C01938E */  lw         $s3, 0x16C($s4)
 /* 714F8 80080CF8 2400928E */  lw         $s2, 0x24($s4)
-/* 714FC 80080CFC 3AF2020C */  jal        func_800BC8E8
+/* 714FC 80080CFC 3AF2020C */  jal        rand
 /* 71500 80080D00 21A8A000 */   addu      $s5, $a1, $zero
 /* 71504 80080D04 EB51033C */  lui        $v1, (0x51EB851F >> 16)
 /* 71508 80080D08 1F856334 */  ori        $v1, $v1, (0x51EB851F & 0xFFFF)

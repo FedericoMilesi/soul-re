@@ -13,14 +13,14 @@ glabel FX_SubDividePrim
 /* 38524 80047D24 2138C000 */  addu       $a3, $a2, $zero
 /* 38528 80047D28 1800A227 */  addiu      $v0, $sp, 0x18
 /* 3852C 80047D2C 3000BFAF */  sw         $ra, 0x30($sp)
-/* 38530 80047D30 86F3020C */  jal        func_800BCE18
+/* 38530 80047D30 86F3020C */  jal        LoadAverageShort12
 /* 38534 80047D34 1000A2AF */   sw        $v0, 0x10($sp)
 /* 38538 80047D38 44000426 */  addiu      $a0, $s0, 0x44
 /* 3853C 80047D3C 54002526 */  addiu      $a1, $s1, 0x54
 /* 38540 80047D40 00080624 */  addiu      $a2, $zero, 0x800
 /* 38544 80047D44 2138C000 */  addu       $a3, $a2, $zero
 /* 38548 80047D48 2000A227 */  addiu      $v0, $sp, 0x20
-/* 3854C 80047D4C 86F3020C */  jal        func_800BCE18
+/* 3854C 80047D4C 86F3020C */  jal        LoadAverageShort12
 /* 38550 80047D50 1000A2AF */   sw        $v0, 0x10($sp)
 /* 38554 80047D54 1B00A38B */  lwl        $v1, 0x1B($sp)
 /* 38558 80047D58 1800A39B */  lwr        $v1, 0x18($sp)

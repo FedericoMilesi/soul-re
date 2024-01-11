@@ -14,10 +14,10 @@ glabel fx_calc_points
 /* 3EBFC 8004E3FC 1800B2AF */  sw         $s2, 0x18($sp)
 /* 3EC00 8004E400 3800B28F */  lw         $s2, 0x38($sp)
 /* 3EC04 8004E404 2400BFAF */  sw         $ra, 0x24($sp)
-/* 3EC08 8004E408 DCE4010C */  jal        func_80079370
+/* 3EC08 8004E408 DCE4010C */  jal        rcos
 /* 3EC0C 8004E40C 21200002 */   addu      $a0, $s0, $zero
 /* 3EC10 8004E410 21200002 */  addu       $a0, $s0, $zero
-/* 3EC14 8004E414 D0E4010C */  jal        func_80079340
+/* 3EC14 8004E414 D0E4010C */  jal        rsin
 /* 3EC18 8004E418 21804000 */   addu      $s0, $v0, $zero
 /* 3EC1C 8004E41C 18001302 */  mult       $s0, $s3
 /* 3EC20 8004E420 12480000 */  mflo       $t1

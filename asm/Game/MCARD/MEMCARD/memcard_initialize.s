@@ -12,7 +12,7 @@ glabel memcard_initialize
 /* A9EF4 800B96F4 21280000 */  addu       $a1, $zero, $zero
 /* A9EF8 800B96F8 10000624 */  addiu      $a2, $zero, 0x10
 /* A9EFC 800B96FC 2000BFAF */  sw         $ra, 0x20($sp)
-/* A9F00 800B9700 2EF2020C */  jal        func_800BC8B8
+/* A9F00 800B9700 2EF2020C */  jal        memset
 /* A9F04 800B9704 1400B1AF */   sw        $s1, 0x14($sp)
 /* A9F08 800B9708 6CE5020C */  jal        load
 /* A9F0C 800B970C 21200002 */   addu      $a0, $s0, $zero

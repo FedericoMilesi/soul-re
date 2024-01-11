@@ -175,7 +175,7 @@ jlabel .L800395F8
 /* 29E74 80039674 08004014 */  bnez       $v0, .L80039698
 /* 29E78 80039678 00000000 */   nop
 .L8003967C:
-/* 29E7C 8003967C 5EF2020C */  jal        func_800BC978
+/* 29E7C 8003967C 5EF2020C */  jal        VSync
 /* 29E80 80039680 21200000 */   addu      $a0, $zero, $zero
 /* 29E84 80039684 30002396 */  lhu        $v1, 0x30($s1)
 /* 29E88 80039688 21100002 */  addu       $v0, $s0, $zero
@@ -281,7 +281,7 @@ jlabel .L80039788
 /* 29FF8 800397F8 00000000 */   nop
 /* 29FFC 800397FC 1EB4000C */  jal        FONT_ReloadFont
 /* 2A000 80039800 00000000 */   nop
-/* 2A004 80039804 0FE9020C */  jal        func_800BA43C
+/* 2A004 80039804 0FE9020C */  jal        DrawSync
 /* 2A008 80039808 21200000 */   addu      $a0, $zero, $zero
 /* 2A00C 8003980C C262010C */  jal        STREAM_Init
 /* 2A010 80039810 2C0160AE */   sw        $zero, 0x12C($s3)
@@ -398,35 +398,35 @@ jlabel .L80039980
 /* 2A19C 8003999C 00000000 */   nop
 /* 2A1A0 800399A0 5E01010C */  jal        SOUND_Free
 /* 2A1A4 800399A4 00000000 */   nop
-/* 2A1A8 800399A8 E9E8020C */  jal        func_800BA3A4
+/* 2A1A8 800399A8 E9E8020C */  jal        SetDispMask
 /* 2A1AC 800399AC 21200000 */   addu      $a0, $zero, $zero
-/* 2A1B0 800399B0 0FE9020C */  jal        func_800BA43C
+/* 2A1B0 800399B0 0FE9020C */  jal        DrawSync
 /* 2A1B4 800399B4 21200000 */   addu      $a0, $zero, $zero
-/* 2A1B8 800399B8 5EF2020C */  jal        func_800BC978
+/* 2A1B8 800399B8 5EF2020C */  jal        VSync
 /* 2A1BC 800399BC 21200000 */   addu      $a0, $zero, $zero
-/* 2A1C0 800399C0 D1E8020C */  jal        func_800BA344
+/* 2A1C0 800399C0 D1E8020C */  jal        DrawSyncCallback
 /* 2A1C4 800399C4 21200000 */   addu      $a0, $zero, $zero
-/* 2A1C8 800399C8 C3E6020C */  jal        func_800B9B0C
+/* 2A1C8 800399C8 C3E6020C */  jal        VSyncCallback
 /* 2A1CC 800399CC 21200000 */   addu      $a0, $zero, $zero
-/* 2A1D0 800399D0 A5FC020C */  jal        func_800BF294
+/* 2A1D0 800399D0 A5FC020C */  jal        EnterCriticalSection
 /* 2A1D4 800399D4 00000000 */   nop
-/* 2A1D8 800399D8 05F5020C */  jal        func_800BD414
+/* 2A1D8 800399D8 05F5020C */  jal        StopRCnt
 /* 2A1DC 800399DC 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 2A1E0 800399E0 A0BD848F */  lw         $a0, %gp_rel(__timerEvent)($gp)
-/* 2A1E4 800399E4 DDFC020C */  jal        func_800BF374
+/* 2A1E4 800399E4 DDFC020C */  jal        DisableEvent
 /* 2A1E8 800399E8 00000000 */   nop
 /* 2A1EC 800399EC A0BD848F */  lw         $a0, %gp_rel(__timerEvent)($gp)
-/* 2A1F0 800399F0 11FD020C */  jal        func_800BF444
+/* 2A1F0 800399F0 11FD020C */  jal        CloseEvent
 /* 2A1F4 800399F4 00000000 */   nop
-/* 2A1F8 800399F8 11FC020C */  jal        func_800BF044
+/* 2A1F8 800399F8 11FC020C */  jal        ExitCriticalSection
 /* 2A1FC 800399FC 00000000 */   nop
-/* 2A200 80039A00 5EF2020C */  jal        func_800BC978
+/* 2A200 80039A00 5EF2020C */  jal        VSync
 /* 2A204 80039A04 05000424 */   addiu     $a0, $zero, 0x5
-/* 2A208 80039A08 DCE6020C */  jal        func_800B9B70
+/* 2A208 80039A08 DCE6020C */  jal        StopCallback
 /* 2A20C 80039A0C 00000000 */   nop
-/* 2A210 80039A10 B2F6020C */  jal        func_800BDAC8
+/* 2A210 80039A10 B2F6020C */  jal        PadStopCom
 /* 2A214 80039A14 00000000 */   nop
-/* 2A218 80039A18 5DE8020C */  jal        func_800BA174
+/* 2A218 80039A18 5DE8020C */  jal        ResetGraph
 /* 2A21C 80039A1C 03000424 */   addiu     $a0, $zero, 0x3
 .L80039A20:
 /* 2A220 80039A20 B557020C */  jal        MainG2_ShutDownEngine

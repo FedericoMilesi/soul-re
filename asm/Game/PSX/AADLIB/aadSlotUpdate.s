@@ -20,7 +20,7 @@ glabel aadSlotUpdate
 /* 427E8 80051FE8 02004230 */  andi       $v0, $v0, 0x2
 /* 427EC 80051FEC E6004014 */  bnez       $v0, .L80052388
 /* 427F0 80051FF0 00000000 */   nop
-/* 427F4 80051FF4 39FF020C */  jal        func_800BFCE4
+/* 427F4 80051FF4 39FF020C */  jal        SpuGetAllKeysStatus
 /* 427F8 80051FF8 7C048424 */   addiu     $a0, $a0, 0x47C
 /* 427FC 80051FFC 21380000 */  addu       $a3, $zero, $zero
 /* 42800 80052000 01000624 */  addiu      $a2, $zero, 0x1
@@ -246,19 +246,19 @@ glabel aadSlotUpdate
 /* 42B1C 8005231C 24288300 */  and        $a1, $a0, $v1
 /* 42B20 80052320 0300A010 */  beqz       $a1, .L80052330
 /* 42B24 80052324 C40445AC */   sw        $a1, 0x4C4($v0)
-/* 42B28 80052328 C9FE020C */  jal        func_800BFB24
+/* 42B28 80052328 C9FE020C */  jal        SpuSetKey
 /* 42B2C 8005232C 21200000 */   addu      $a0, $zero, $zero
 .L80052330:
 /* 42B30 80052330 D89B828F */  lw         $v0, %gp_rel(aadMem)($gp)
 /* 42B34 80052334 00000000 */  nop
 /* 42B38 80052338 CC04458C */  lw         $a1, 0x4CC($v0)
-/* 42B3C 8005233C F0FF020C */  jal        func_800BFFC0
+/* 42B3C 8005233C F0FF020C */  jal        SpuSetReverbVoice
 /* 42B40 80052340 01000424 */   addiu     $a0, $zero, 0x1
 /* 42B44 80052344 D89B828F */  lw         $v0, %gp_rel(aadMem)($gp)
 /* 42B48 80052348 00000000 */  nop
 /* 42B4C 8005234C CC04458C */  lw         $a1, 0x4CC($v0)
 /* 42B50 80052350 21200000 */  addu       $a0, $zero, $zero
-/* 42B54 80052354 F0FF020C */  jal        func_800BFFC0
+/* 42B54 80052354 F0FF020C */  jal        SpuSetReverbVoice
 /* 42B58 80052358 27280500 */   nor       $a1, $zero, $a1
 /* 42B5C 8005235C D89B828F */  lw         $v0, %gp_rel(aadMem)($gp)
 /* 42B60 80052360 00000000 */  nop
@@ -266,7 +266,7 @@ glabel aadSlotUpdate
 /* 42B68 80052368 00000000 */  nop
 /* 42B6C 8005236C 0600A010 */  beqz       $a1, .L80052388
 /* 42B70 80052370 00000000 */   nop
-/* 42B74 80052374 C9FE020C */  jal        func_800BFB24
+/* 42B74 80052374 C9FE020C */  jal        SpuSetKey
 /* 42B78 80052378 01000424 */   addiu     $a0, $zero, 0x1
 /* 42B7C 8005237C D89B828F */  lw         $v0, %gp_rel(aadMem)($gp)
 /* 42B80 80052380 00000000 */  nop

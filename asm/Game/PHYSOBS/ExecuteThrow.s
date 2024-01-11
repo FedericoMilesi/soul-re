@@ -16,7 +16,7 @@ glabel ExecuteThrow
 /* 5EB9C 8006E39C 1B004010 */  beqz       $v0, .L8006E40C
 /* 5EBA0 8006E3A0 1000A427 */   addiu     $a0, $sp, 0x10
 /* 5EBA4 8006E3A4 21280000 */  addu       $a1, $zero, $zero
-/* 5EBA8 8006E3A8 2EF2020C */  jal        func_800BC8B8
+/* 5EBA8 8006E3A8 2EF2020C */  jal        memset
 /* 5EBAC 8006E3AC 06000624 */   addiu     $a2, $zero, 0x6
 /* 5EBB0 8006E3B0 74012296 */  lhu        $v0, 0x174($s1)
 /* 5EBB4 8006E3B4 1000A427 */  addiu      $a0, $sp, 0x10

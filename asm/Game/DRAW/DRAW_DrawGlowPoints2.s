@@ -47,7 +47,7 @@ glabel DRAW_DrawGlowPoints2
 /* 1C6DC 8002BEDC 21885400 */  addu       $s1, $v0, $s4
 /* 1C6E0 8002BEE0 5800A58F */  lw         $a1, 0x58($sp)
 /* 1C6E4 8002BEE4 5C00A48F */  lw         $a0, 0x5C($sp)
-/* 1C6E8 8002BEE8 26F3020C */  jal        func_800BCC98
+/* 1C6E8 8002BEE8 26F3020C */  jal        ratan2
 /* 1C6EC 8002BEEC 23280500 */   negu      $a1, $a1
 /* 1C6F0 8002BEF0 21385002 */  addu       $a3, $s2, $s0
 /* 1C6F4 8002BEF4 4800A38F */  lw         $v1, 0x48($sp)

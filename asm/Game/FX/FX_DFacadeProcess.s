@@ -109,15 +109,15 @@ glabel FX_DFacadeProcess
 /* 334E0 80042CE0 1400A2A7 */  sh         $v0, 0x14($sp)
 /* 334E4 80042CE4 1800058E */  lw         $a1, 0x18($s0)
 /* 334E8 80042CE8 80200400 */  sll        $a0, $a0, 2
-/* 334EC 80042CEC 98E3010C */  jal        func_80078E60
+/* 334EC 80042CEC 98E3010C */  jal        RotMatrixX
 /* 334F0 80042CF0 0C00A524 */   addiu     $a1, $a1, 0xC
 /* 334F4 80042CF4 1800058E */  lw         $a1, 0x18($s0)
 /* 334F8 80042CF8 1200A487 */  lh         $a0, 0x12($sp)
-/* 334FC 80042CFC E5E3010C */  jal        func_80078F94
+/* 334FC 80042CFC E5E3010C */  jal        RotMatrixY
 /* 33500 80042D00 0C00A524 */   addiu     $a1, $a1, 0xC
 /* 33504 80042D04 1800058E */  lw         $a1, 0x18($s0)
 /* 33508 80042D08 1400A487 */  lh         $a0, 0x14($sp)
-/* 3350C 80042D0C 32E4010C */  jal        func_800790C8
+/* 3350C 80042D0C 32E4010C */  jal        RotMatrixZ
 /* 33510 80042D10 0C00A524 */   addiu     $a1, $a1, 0xC
 .L80042D14:
 /* 33514 80042D14 1C00BF8F */  lw         $ra, 0x1C($sp)

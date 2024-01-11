@@ -122,7 +122,7 @@ glabel LIGHT_SetMatrixForLightGroupInstance
 /* 271BC 800369BC 73DA0008 */  j          .L800369CC
 /* 271C0 800369C0 00000000 */   nop
 .L800369C4:
-/* 271C4 800369C4 3DE3010C */  jal        func_80078CF4
+/* 271C4 800369C4 3DE3010C */  jal        RotMatrix
 /* 271C8 800369C8 1000A527 */   addiu     $a1, $sp, 0x10
 .L800369CC:
 /* 271CC 800369CC F400428E */  lw         $v0, 0xF4($s2)
@@ -203,25 +203,25 @@ glabel LIGHT_SetMatrixForLightGroupInstance
 /* 272F8 80036AF8 0A004290 */  lbu        $v0, 0xA($v0)
 /* 272FC 80036AFC 2130A000 */  addu       $a2, $a1, $zero
 /* 27300 80036B00 00110200 */  sll        $v0, $v0, 4
-/* 27304 80036B04 BFF7020C */  jal        func_800BDEFC
+/* 27304 80036B04 BFF7020C */  jal        MulMatrix0
 /* 27308 80036B08 6000A2A7 */   sh        $v0, 0x60($sp)
-/* 2730C 80036B0C 9FF7020C */  jal        func_800BDE7C
+/* 2730C 80036B0C 9FF7020C */  jal        SetLightMatrix
 /* 27310 80036B10 1000A427 */   addiu     $a0, $sp, 0x10
 /* 27314 80036B14 1400428E */  lw         $v0, 0x14($s2)
 /* 27318 80036B18 2000033C */  lui        $v1, (0x200000 >> 16)
 /* 2731C 80036B1C 24104300 */  and        $v0, $v0, $v1
 /* 27320 80036B20 03004010 */  beqz       $v0, .L80036B30
 /* 27324 80036B24 5000A427 */   addiu     $a0, $sp, 0x50
-/* 27328 80036B28 96E4010C */  jal        func_80079258
+/* 27328 80036B28 96E4010C */  jal        ScaleMatrix
 /* 2732C 80036B2C 7000A527 */   addiu     $a1, $sp, 0x70
 .L80036B30:
 /* 27330 80036B30 EADA0008 */  j          .L80036BA8
 /* 27334 80036B34 5000A427 */   addiu     $a0, $sp, 0x50
 .L80036B38:
 /* 27338 80036B38 21200002 */  addu       $a0, $s0, $zero
-/* 2733C 80036B3C BFF7020C */  jal        func_800BDEFC
+/* 2733C 80036B3C BFF7020C */  jal        MulMatrix0
 /* 27340 80036B40 2130A000 */   addu      $a2, $a1, $zero
-/* 27344 80036B44 9FF7020C */  jal        func_800BDE7C
+/* 27344 80036B44 9FF7020C */  jal        SetLightMatrix
 /* 27348 80036B48 1000A427 */   addiu     $a0, $sp, 0x10
 /* 2734C 80036B4C 1400428E */  lw         $v0, 0x14($s2)
 /* 27350 80036B50 2000033C */  lui        $v1, (0x200000 >> 16)
@@ -241,14 +241,14 @@ glabel LIGHT_SetMatrixForLightGroupInstance
 /* 27388 80036B88 6000A8AF */  sw         $t0, 0x60($sp)
 /* 2738C 80036B8C 5000B027 */  addiu      $s0, $sp, 0x50
 /* 27390 80036B90 21200002 */  addu       $a0, $s0, $zero
-/* 27394 80036B94 96E4010C */  jal        func_80079258
+/* 27394 80036B94 96E4010C */  jal        ScaleMatrix
 /* 27398 80036B98 7000A527 */   addiu     $a1, $sp, 0x70
 /* 2739C 80036B9C EADA0008 */  j          .L80036BA8
 /* 273A0 80036BA0 21200002 */   addu      $a0, $s0, $zero
 .L80036BA4:
 /* 273A4 80036BA4 20000426 */  addiu      $a0, $s0, 0x20
 .L80036BA8:
-/* 273A8 80036BA8 B3F7020C */  jal        func_800BDECC
+/* 273A8 80036BA8 B3F7020C */  jal        SetColorMatrix
 /* 273AC 80036BAC 00000000 */   nop
 .L80036BB0:
 /* 273B0 80036BB0 8C00BF8F */  lw         $ra, 0x8C($sp)

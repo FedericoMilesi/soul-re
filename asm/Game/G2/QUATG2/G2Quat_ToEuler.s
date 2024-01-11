@@ -8,7 +8,7 @@ glabel G2Quat_ToEuler
 /* 86824 80096024 3400B1AF */  sw         $s1, 0x34($sp)
 /* 86828 80096028 2188C000 */  addu       $s1, $a2, $zero
 /* 8682C 8009602C 3800BFAF */  sw         $ra, 0x38($sp)
-/* 86830 80096030 27E7010C */  jal        func_80079C9C
+/* 86830 80096030 27E7010C */  jal        G2Quat_ToMatrix_S
 /* 86834 80096034 1000A527 */   addiu     $a1, $sp, 0x10
 /* 86838 80096038 21200002 */  addu       $a0, $s0, $zero
 /* 8683C 8009603C 1000A527 */  addiu      $a1, $sp, 0x10

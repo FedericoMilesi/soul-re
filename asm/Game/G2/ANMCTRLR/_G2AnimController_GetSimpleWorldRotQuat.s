@@ -24,10 +24,10 @@ glabel _G2AnimController_GetSimpleWorldRotQuat
 /* 82808 80092008 DA50020C */  jal        _G2Anim_BuildSegLocalRotMatrix
 /* 8280C 8009200C 21800202 */   addu      $s0, $s0, $v0
 /* 82810 80092010 21200002 */  addu       $a0, $s0, $zero
-/* 82814 80092014 15FD020C */  jal        func_800BF454
+/* 82814 80092014 15FD020C */  jal        MulMatrix2
 /* 82818 80092018 1000A527 */   addiu     $a1, $sp, 0x10
 /* 8281C 8009201C 21202002 */  addu       $a0, $s1, $zero
-/* 82820 80092020 A4E6010C */  jal        func_80079A90
+/* 82820 80092020 A4E6010C */  jal        G2Quat_FromMatrix_S
 /* 82824 80092024 1000A527 */   addiu     $a1, $sp, 0x10
 /* 82828 80092028 3800BF8F */  lw         $ra, 0x38($sp)
 /* 8282C 8009202C 3400B18F */  lw         $s1, 0x34($sp)

@@ -32,7 +32,7 @@ glabel INSTANCE_SpatialRelationships
 /* 25B10 80035310 21804000 */   addu      $s0, $v0, $zero
 /* 25B14 80035314 31000012 */  beqz       $s0, .L800353DC
 /* 25B18 80035318 21200002 */   addu      $a0, $s0, $zero
-/* 25B1C 8003531C 88F4020C */  jal        func_800BD220
+/* 25B1C 8003531C 88F4020C */  jal        TransposeMatrix
 /* 25B20 80035320 1800A527 */   addiu     $a1, $sp, 0x18
 /* 25B24 80035324 0400908E */  lw         $s0, 0x4($s4)
 /* 25B28 80035328 00000000 */  nop

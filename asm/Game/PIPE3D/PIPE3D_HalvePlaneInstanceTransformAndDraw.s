@@ -64,7 +64,7 @@ glabel PIPE3D_HalvePlaneInstanceTransformAndDraw
 /* 2CD4C 8003C54C 2800A527 */   addiu     $a1, $sp, 0x28
 /* 2CD50 8003C550 21202002 */  addu       $a0, $s1, $zero
 /* 2CD54 8003C554 21280002 */  addu       $a1, $s0, $zero
-/* 2CD58 8003C558 59FD020C */  jal        func_800BF564
+/* 2CD58 8003C558 59FD020C */  jal        CompMatrix
 /* 2CD5C 8003C55C 6800A627 */   addiu     $a2, $sp, 0x68
 /* 2CD60 8003C560 31008012 */  beqz       $s4, .L8003C628
 /* 2CD64 8003C564 21204002 */   addu      $a0, $s2, $zero
@@ -115,7 +115,7 @@ glabel PIPE3D_HalvePlaneInstanceTransformAndDraw
 /* 2CE10 8003C610 F000A28F */  lw         $v0, 0xF0($sp)
 /* 2CE14 8003C614 6800A727 */  addiu      $a3, $sp, 0x68
 /* 2CE18 8003C618 1000B5AF */  sw         $s5, 0x10($sp)
-/* 2CE1C 8003C61C E3A1000C */  jal        func_8002878C
+/* 2CE1C 8003C61C E3A1000C */  jal        DRAW_SplitModel_S
 /* 2CE20 8003C620 1400A2AF */   sw        $v0, 0x14($sp)
 /* 2CE24 8003C624 0400A2AE */  sw         $v0, 0x4($s5)
 .L8003C628:

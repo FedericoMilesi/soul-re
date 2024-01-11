@@ -511,7 +511,7 @@ glabel MON_DefaultMessageHandler
 /* 75CCC 800854CC 00000000 */  nop
 /* 75CD0 800854D0 D00022AE */  sw         $v0, 0xD0($s1)
 /* 75CD4 800854D4 08000486 */  lh         $a0, 0x8($s0)
-/* 75CD8 800854D8 D0E4010C */  jal        func_80079340
+/* 75CD8 800854D8 D0E4010C */  jal        rsin
 /* 75CDC 800854DC 00000000 */   nop
 /* 75CE0 800854E0 12000386 */  lh         $v1, 0x12($s0)
 /* 75CE4 800854E4 00000000 */  nop
@@ -524,7 +524,7 @@ glabel MON_DefaultMessageHandler
 /* 75CFC 800854FC 03130200 */  sra        $v0, $v0, 12
 /* 75D00 80085500 0C000396 */  lhu        $v1, 0xC($s0)
 /* 75D04 80085504 08000486 */  lh         $a0, 0x8($s0)
-/* 75D08 80085508 DCE4010C */  jal        func_80079370
+/* 75D08 80085508 DCE4010C */  jal        rcos
 /* 75D0C 8008550C 21886200 */   addu      $s1, $v1, $v0
 /* 75D10 80085510 12000386 */  lh         $v1, 0x12($s0)
 /* 75D14 80085514 00000000 */  nop

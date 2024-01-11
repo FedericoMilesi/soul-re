@@ -16,7 +16,7 @@ glabel CAMERA_CalcFocusOffsetForSwim
 /* 9724 80018F24 2400A2A7 */  sh         $v0, 0x24($sp)
 /* 9728 80018F28 4000648C */  lw         $a0, 0x40($v1)
 /* 972C 80018F2C 2000A527 */  addiu      $a1, $sp, 0x20
-/* 9730 80018F30 1AF2020C */  jal        func_800BC868
+/* 9730 80018F30 1AF2020C */  jal        ApplyMatrix
 /* 9734 80018F34 20008424 */   addiu     $a0, $a0, 0x20
 /* 9738 80018F38 1000A227 */  addiu      $v0, $sp, 0x10
 /* 973C 80018F3C 1000A397 */  lhu        $v1, 0x10($sp)

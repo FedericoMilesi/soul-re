@@ -342,7 +342,7 @@ glabel CollidePhysicalObject
 /* 5E324 8006DB24 4000B027 */   addiu     $s0, $sp, 0x40
 /* 5E328 8006DB28 21200002 */  addu       $a0, $s0, $zero
 /* 5E32C 8006DB2C 21280000 */  addu       $a1, $zero, $zero
-/* 5E330 8006DB30 2EF2020C */  jal        func_800BC8B8
+/* 5E330 8006DB30 2EF2020C */  jal        memset
 /* 5E334 8006DB34 06000624 */   addiu     $a2, $zero, 0x6
 /* 5E338 8006DB38 21202002 */  addu       $a0, $s1, $zero
 /* 5E33C 8006DB3C 21280002 */  addu       $a1, $s0, $zero

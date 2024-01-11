@@ -89,7 +89,7 @@ glabel _G2Instance_BuildDeactivatedTransforms
 /* 86224 80095A24 00000000 */  nop
 /* 86228 80095A28 03004010 */  beqz       $v0, .L80095A38
 /* 8622C 80095A2C 00000000 */   nop
-/* 86230 80095A30 02E5010C */  jal        func_80079408
+/* 86230 80095A30 02E5010C */  jal        memcpy
 /* 86234 80095A34 40311100 */   sll       $a2, $s1, 5
 .L80095A38:
 /* 86238 80095A38 4C01108E */  lw         $s0, 0x14C($s0)

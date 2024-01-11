@@ -12,7 +12,7 @@ glabel FX_GetSpiralPoint
 /* 3DF38 8004D738 1C00B3AF */  sw         $s3, 0x1C($sp)
 /* 3DF3C 8004D73C 2198E000 */  addu       $s3, $a3, $zero
 /* 3DF40 8004D740 2000BFAF */  sw         $ra, 0x20($sp)
-/* 3DF44 8004D744 DCE4010C */  jal        func_80079370
+/* 3DF44 8004D744 DCE4010C */  jal        rcos
 /* 3DF48 8004D748 21200002 */   addu      $a0, $s0, $zero
 /* 3DF4C 8004D74C 23181100 */  negu       $v1, $s1
 /* 3DF50 8004D750 18006200 */  mult       $v1, $v0
@@ -37,7 +37,7 @@ glabel FX_GetSpiralPoint
 /* 3DF94 8004D794 03130400 */  sra        $v0, $a0, 12
 /* 3DF98 8004D798 B6014224 */  addiu      $v0, $v0, 0x1B6
 /* 3DF9C 8004D79C 000042AE */  sw         $v0, 0x0($s2)
-/* 3DFA0 8004D7A0 D0E4010C */  jal        func_80079340
+/* 3DFA0 8004D7A0 D0E4010C */  jal        rsin
 /* 3DFA4 8004D7A4 21200002 */   addu      $a0, $s0, $zero
 /* 3DFA8 8004D7A8 18002202 */  mult       $s1, $v0
 /* 3DFAC 8004D7AC 12400000 */  mflo       $t0

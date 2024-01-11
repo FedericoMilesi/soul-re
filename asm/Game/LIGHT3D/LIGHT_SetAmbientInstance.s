@@ -8,7 +8,7 @@ glabel LIGHT_SetAmbientInstance
 /* 26FDC 800367DC 94024490 */  lbu        $a0, 0x294($v0)
 /* 26FE0 800367E0 95024590 */  lbu        $a1, 0x295($v0)
 /* 26FE4 800367E4 96024690 */  lbu        $a2, 0x296($v0)
-/* 26FE8 800367E8 ABF7020C */  jal        func_800BDEAC
+/* 26FE8 800367E8 ABF7020C */  jal        SetBackColor
 /* 26FEC 800367EC 00000000 */   nop
 /* 26FF0 800367F0 1000BF8F */  lw         $ra, 0x10($sp)
 /* 26FF4 800367F4 00000000 */  nop

@@ -6,7 +6,7 @@ glabel TIMER_TimeDiff
 /* 2E650 8003DE50 1000B0AF */  sw         $s0, 0x10($sp)
 /* 2E654 8003DE54 21808000 */  addu       $s0, $a0, $zero
 /* 2E658 8003DE58 1400BFAF */  sw         $ra, 0x14($sp)
-/* 2E65C 8003DE5C EBF4020C */  jal        func_800BD3AC
+/* 2E65C 8003DE5C EBF4020C */  jal        GetRCnt
 /* 2E660 8003DE60 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 2E664 8003DE64 FFFF4630 */  andi       $a2, $v0, 0xFFFF
 /* 2E668 8003DE68 022C1000 */  srl        $a1, $s0, 16

@@ -30,7 +30,7 @@ glabel CAMERA_CalcIntersectAngle
 /* 97C8 80018FC8 12180000 */  mflo       $v1
 /* 97CC 80018FCC 21104300 */  addu       $v0, $v0, $v1
 /* 97D0 80018FD0 03130200 */  sra        $v0, $v0, 12
-/* 97D4 80018FD4 BDE0010C */  jal        func_800782F4
+/* 97D4 80018FD4 BDE0010C */  jal        COLLIDE_IntersectLineAndPlane_S
 /* 97D8 80018FD8 1000A2AF */   sw        $v0, 0x10($sp)
 /* 97DC 80018FDC 16004010 */  beqz       $v0, .L80019038
 /* 97E0 80018FE0 21200002 */   addu      $a0, $s0, $zero

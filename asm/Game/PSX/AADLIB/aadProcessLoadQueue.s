@@ -58,11 +58,11 @@ glabel aadProcessLoadQueue
 /* 437B8 80052FB8 88006014 */  bnez       $v1, .L800531DC
 /* 437BC 80052FBC 1800A427 */   addiu     $a0, $sp, 0x18
 /* 437C0 80052FC0 10005126 */  addiu      $s1, $s2, 0x10
-/* 437C4 80052FC4 1CF4020C */  jal        func_800BD070
+/* 437C4 80052FC4 1CF4020C */  jal        strcpy
 /* 437C8 80052FC8 21282002 */   addu      $a1, $s1, $zero
 /* 437CC 80052FCC 1800A427 */  addiu      $a0, $sp, 0x18
 /* 437D0 80052FD0 0D80053C */  lui        $a1, %hi(gDefragRequest + 0x4)
-/* 437D4 80052FD4 21FE020C */  jal        func_800BF884
+/* 437D4 80052FD4 21FE020C */  jal        strpbrk
 /* 437D8 80052FD8 7811A524 */   addiu     $a1, $a1, %lo(gDefragRequest + 0x4)
 /* 437DC 80052FDC 02004010 */  beqz       $v0, .L80052FE8
 /* 437E0 80052FE0 00000000 */   nop

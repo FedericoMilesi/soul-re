@@ -18,7 +18,7 @@ glabel razAlignYRotMove
 /* 95954 800A5154 5400B3AF */  sw         $s3, 0x54($sp)
 /* 95958 800A5158 7800B38F */  lw         $s3, 0x78($sp)
 /* 9595C 800A515C 6000BFAF */  sw         $ra, 0x60($sp)
-/* 95960 800A5160 2EF2020C */  jal        func_800BC8B8
+/* 95960 800A5160 2EF2020C */  jal        memset
 /* 95964 800A5164 08000624 */   addiu     $a2, $zero, 0x8
 /* 95968 800A5168 21204002 */  addu       $a0, $s2, $zero
 /* 9596C 800A516C 87E8000C */  jal        MATH3D_AngleFromPosToPos
@@ -28,14 +28,14 @@ glabel razAlignYRotMove
 /* 9597C 800A517C 21280002 */  addu       $a1, $s0, $zero
 /* 95980 800A5180 21105300 */  addu       $v0, $v0, $s3
 /* 95984 800A5184 040082A6 */  sh         $v0, 0x4($s4)
-/* 95988 800A5188 3DE3010C */  jal        func_80078CF4
+/* 95988 800A5188 3DE3010C */  jal        RotMatrix
 /* 9598C 800A518C 2400A2A7 */   sh        $v0, 0x24($sp)
 /* 95990 800A5190 21200002 */  addu       $a0, $s0, $zero
 /* 95994 800A5194 1000A527 */  addiu      $a1, $sp, 0x10
 /* 95998 800A5198 1800A627 */  addiu      $a2, $sp, 0x18
 /* 9599C 800A519C 1000A0A7 */  sh         $zero, 0x10($sp)
 /* 959A0 800A51A0 1400A0A7 */  sh         $zero, 0x14($sp)
-/* 959A4 800A51A4 0EF3020C */  jal        func_800BCC38
+/* 959A4 800A51A4 0EF3020C */  jal        ApplyMatrixSV
 /* 959A8 800A51A8 1200B5A7 */   sh        $s5, 0x12($sp)
 /* 959AC 800A51AC 5C002296 */  lhu        $v0, 0x5C($s1)
 /* 959B0 800A51B0 1800A397 */  lhu        $v1, 0x18($sp)

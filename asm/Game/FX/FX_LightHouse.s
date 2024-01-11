@@ -46,9 +46,9 @@ glabel FX_LightHouse
 /* 3FE80 8004F680 2A00A2A7 */  sh         $v0, 0x2A($sp)
 /* 3FE84 8004F684 1C006294 */  lhu        $v0, 0x1C($v1)
 /* 3FE88 8004F688 FF7F1424 */  addiu      $s4, $zero, 0x7FFF
-/* 3FE8C 8004F68C 52F2020C */  jal        func_800BC948
+/* 3FE8C 8004F68C 52F2020C */  jal        SetRotMatrix
 /* 3FE90 8004F690 2C00A2A7 */   sh        $v0, 0x2C($sp)
-/* 3FE94 8004F694 4AF2020C */  jal        func_800BC928
+/* 3FE94 8004F694 4AF2020C */  jal        SetTransMatrix
 /* 3FE98 8004F698 21200002 */   addu      $a0, $s0, $zero
 /* 3FE9C 8004F69C 2000A427 */  addiu      $a0, $sp, 0x20
 /* 3FEA0 8004F6A0 2800A527 */  addiu      $a1, $sp, 0x28
@@ -92,7 +92,7 @@ glabel FX_LightHouse
 /* 3FF2C 8004F72C 2800A527 */  addiu      $a1, $sp, 0x28
 /* 3FF30 8004F730 00100624 */  addiu      $a2, $zero, 0x1000
 /* 3FF34 8004F734 2330D200 */  subu       $a2, $a2, $s2
-/* 3FF38 8004F738 86F3020C */  jal        func_800BCE18
+/* 3FF38 8004F738 86F3020C */  jal        LoadAverageShort12
 /* 3FF3C 8004F73C 21384002 */   addu      $a3, $s2, $zero
 /* 3FF40 8004F740 0000A0CA */  lwc2       $0, 0x0($s5)
 /* 3FF44 8004F744 0400A1CA */  lwc2       $1, 0x4($s5)
@@ -164,7 +164,7 @@ glabel FX_LightHouse
 /* 4003C 8004F83C 2800A527 */  addiu      $a1, $sp, 0x28
 /* 40040 8004F840 2330B202 */  subu       $a2, $s5, $s2
 /* 40044 8004F844 21384002 */  addu       $a3, $s2, $zero
-/* 40048 8004F848 86F3020C */  jal        func_800BCE18
+/* 40048 8004F848 86F3020C */  jal        LoadAverageShort12
 /* 4004C 8004F84C 1000A2AF */   sw        $v0, 0x10($sp)
 /* 40050 8004F850 7C00A88F */  lw         $t0, 0x7C($sp)
 /* 40054 8004F854 00000000 */  nop
@@ -192,7 +192,7 @@ glabel FX_LightHouse
 /* 400A4 8004F8A4 6800A527 */  addiu      $a1, $sp, 0x68
 /* 400A8 8004F8A8 2330A702 */  subu       $a2, $s5, $a3
 /* 400AC 8004F8AC 6C00A227 */  addiu      $v0, $sp, 0x6C
-/* 400B0 8004F8B0 A8F3020C */  jal        func_800BCEA0
+/* 400B0 8004F8B0 A8F3020C */  jal        LoadAverageCol
 /* 400B4 8004F8B4 1000A2AF */   sw        $v0, 0x10($sp)
 /* 400B8 8004F8B8 5800A227 */  addiu      $v0, $sp, 0x58
 /* 400BC 8004F8BC 000040C8 */  lwc2       $0, 0x0($v0)

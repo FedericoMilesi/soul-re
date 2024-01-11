@@ -9,7 +9,7 @@ glabel _G2Anim_BuildSegLocalRotMatrix
 /* 84B78 80094378 00000000 */  nop
 /* 84B7C 8009437C 05004010 */  beqz       $v0, .L80094394
 /* 84B80 80094380 FF0F063C */   lui       $a2, (0xFFF0FFF >> 16)
-/* 84B84 80094384 27E7010C */  jal        func_80079C9C
+/* 84B84 80094384 27E7010C */  jal        G2Quat_ToMatrix_S
 /* 84B88 80094388 00000000 */   nop
 /* 84B8C 8009438C EE500208 */  j          .L800943B8
 /* 84B90 80094390 00000000 */   nop
@@ -21,7 +21,7 @@ glabel _G2Anim_BuildSegLocalRotMatrix
 /* 84BA4 800943A4 FF0F4230 */  andi       $v0, $v0, 0xFFF
 /* 84BA8 800943A8 24186600 */  and        $v1, $v1, $a2
 /* 84BAC 800943AC 040082A4 */  sh         $v0, 0x4($a0)
-/* 84BB0 800943B0 D8E2010C */  jal        func_80078B60
+/* 84BB0 800943B0 D8E2010C */  jal        RotMatrixZYX
 /* 84BB4 800943B4 1000A3AF */   sw        $v1, 0x10($sp)
 .L800943B8:
 /* 84BB8 800943B8 1800BF8F */  lw         $ra, 0x18($sp)

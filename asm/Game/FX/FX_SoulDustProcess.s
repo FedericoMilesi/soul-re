@@ -39,7 +39,7 @@ glabel FX_SoulDustProcess
 /* 376E4 80046EE4 1C006394 */  lhu        $v1, 0x1C($v1)
 /* 376E8 80046EE8 03240400 */  sra        $a0, $a0, 16
 /* 376EC 80046EEC 440002A6 */  sh         $v0, 0x44($s0)
-/* 376F0 80046EF0 DCE4010C */  jal        func_80079370
+/* 376F0 80046EF0 DCE4010C */  jal        rcos
 /* 376F4 80046EF4 300003A6 */   sh        $v1, 0x30($s0)
 /* 376F8 80046EF8 4A000386 */  lh         $v1, 0x4A($s0)
 /* 376FC 80046EFC 00000000 */  nop
@@ -53,7 +53,7 @@ glabel FX_SoulDustProcess
 /* 37718 80046F18 2C000296 */  lhu        $v0, 0x2C($s0)
 /* 3771C 80046F1C 44000486 */  lh         $a0, 0x44($s0)
 /* 37720 80046F20 21104300 */  addu       $v0, $v0, $v1
-/* 37724 80046F24 D0E4010C */  jal        func_80079340
+/* 37724 80046F24 D0E4010C */  jal        rsin
 /* 37728 80046F28 2C0002A6 */   sh        $v0, 0x2C($s0)
 /* 3772C 80046F2C 4A000386 */  lh         $v1, 0x4A($s0)
 /* 37730 80046F30 00000000 */  nop
@@ -67,7 +67,7 @@ glabel FX_SoulDustProcess
 /* 3774C 80046F4C 2E000296 */  lhu        $v0, 0x2E($s0)
 /* 37750 80046F50 46000486 */  lh         $a0, 0x46($s0)
 /* 37754 80046F54 21104300 */  addu       $v0, $v0, $v1
-/* 37758 80046F58 DCE4010C */  jal        func_80079370
+/* 37758 80046F58 DCE4010C */  jal        rcos
 /* 3775C 80046F5C 2E0002A6 */   sh        $v0, 0x2E($s0)
 /* 37760 80046F60 42000386 */  lh         $v1, 0x42($s0)
 /* 37764 80046F64 00000000 */  nop
@@ -103,7 +103,7 @@ glabel FX_SoulDustProcess
 /* 377D4 80046FD4 1C000226 */  addiu      $v0, $s0, 0x1C
 /* 377D8 80046FD8 00100624 */  addiu      $a2, $zero, 0x1000
 /* 377DC 80046FDC 2330C700 */  subu       $a2, $a2, $a3
-/* 377E0 80046FE0 A8F3020C */  jal        func_800BCEA0
+/* 377E0 80046FE0 A8F3020C */  jal        LoadAverageCol
 /* 377E4 80046FE4 1000A2AF */   sw        $v0, 0x10($sp)
 /* 377E8 80046FE8 FF00033C */  lui        $v1, (0xFFFFFF >> 16)
 /* 377EC 80046FEC 1C00028E */  lw         $v0, 0x1C($s0)

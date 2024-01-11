@@ -20,24 +20,24 @@ glabel FX_DrawModel
 /* 3E99C 8004E19C 6000BFAF */  sw         $ra, 0x60($sp)
 /* 3E9A0 8004E1A0 5000B4AF */  sw         $s4, 0x50($sp)
 /* 3E9A4 8004E1A4 0400548C */  lw         $s4, 0x4($v0)
-/* 3E9A8 8004E1A8 CDFD020C */  jal        func_800BF734
+/* 3E9A8 8004E1A8 CDFD020C */  jal        PushMatrix
 /* 3E9AC 8004E1AC 2188E000 */   addu      $s1, $a3, $zero
 /* 3E9B0 8004E1B0 4CE8000C */  jal        MATH3D_SetUnityMatrix
 /* 3E9B4 8004E1B4 1000A427 */   addiu     $a0, $sp, 0x10
 /* 3E9B8 8004E1B8 00000486 */  lh         $a0, 0x0($s0)
-/* 3E9BC 8004E1BC 98E3010C */  jal        func_80078E60
+/* 3E9BC 8004E1BC 98E3010C */  jal        RotMatrixX
 /* 3E9C0 8004E1C0 1000A527 */   addiu     $a1, $sp, 0x10
 /* 3E9C4 8004E1C4 02000486 */  lh         $a0, 0x2($s0)
-/* 3E9C8 8004E1C8 E5E3010C */  jal        func_80078F94
+/* 3E9C8 8004E1C8 E5E3010C */  jal        RotMatrixY
 /* 3E9CC 8004E1CC 1000A527 */   addiu     $a1, $sp, 0x10
 /* 3E9D0 8004E1D0 04000486 */  lh         $a0, 0x4($s0)
-/* 3E9D4 8004E1D4 32E4010C */  jal        func_800790C8
+/* 3E9D4 8004E1D4 32E4010C */  jal        RotMatrixZ
 /* 3E9D8 8004E1D8 1000A527 */   addiu     $a1, $sp, 0x10
 /* 3E9DC 8004E1DC F4E9000C */  jal        PIPE3D_AspectAdjustMatrix
 /* 3E9E0 8004E1E0 1000A427 */   addiu     $a0, $sp, 0x10
 /* 3E9E4 8004E1E4 1000A427 */  addiu      $a0, $sp, 0x10
 /* 3E9E8 8004E1E8 21284002 */  addu       $a1, $s2, $zero
-/* 3E9EC 8004E1EC 0EF3020C */  jal        func_800BCC38
+/* 3E9EC 8004E1EC 0EF3020C */  jal        ApplyMatrixSV
 /* 3E9F0 8004E1F0 3000A627 */   addiu     $a2, $sp, 0x30
 /* 3E9F4 8004E1F4 00002286 */  lh         $v0, 0x0($s1)
 /* 3E9F8 8004E1F8 3000A387 */  lh         $v1, 0x30($sp)
@@ -53,9 +53,9 @@ glabel FX_DrawModel
 /* 3EA20 8004E220 3400A387 */  lh         $v1, 0x34($sp)
 /* 3EA24 8004E224 1000A427 */  addiu      $a0, $sp, 0x10
 /* 3EA28 8004E228 21104300 */  addu       $v0, $v0, $v1
-/* 3EA2C 8004E22C 52F2020C */  jal        func_800BC948
+/* 3EA2C 8004E22C 52F2020C */  jal        SetRotMatrix
 /* 3EA30 8004E230 2C00A2AF */   sw        $v0, 0x2C($sp)
-/* 3EA34 8004E234 4AF2020C */  jal        func_800BC928
+/* 3EA34 8004E234 4AF2020C */  jal        SetTransMatrix
 /* 3EA38 8004E238 1000A427 */   addiu     $a0, $sp, 0x10
 /* 3EA3C 8004E23C 8034093C */  lui        $t1, (0x34808080 >> 16)
 /* 3EA40 8004E240 03006012 */  beqz       $s3, .L8004E250
@@ -153,7 +153,7 @@ glabel FX_DrawModel
 /* 3EB9C 8004E39C 00000000 */  nop
 /* 3EBA0 8004E3A0 040054AC */  sw         $s4, 0x4($v0)
 .L8004E3A4:
-/* 3EBA4 8004E3A4 F6FD020C */  jal        func_800BF7D8
+/* 3EBA4 8004E3A4 F6FD020C */  jal        PopMatrix
 /* 3EBA8 8004E3A8 00000000 */   nop
 /* 3EBAC 8004E3AC 6000BF8F */  lw         $ra, 0x60($sp)
 /* 3EBB0 8004E3B0 5C00B78F */  lw         $s7, 0x5C($sp)

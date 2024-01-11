@@ -130,7 +130,7 @@ glabel vsprintf
 .L80074658:
 /* 64E58 80074658 01007326 */  addiu      $s3, $s3, 0x1
 .L8007465C:
-/* 64E5C 8007465C ACF4020C */  jal        func_800BD2B0
+/* 64E5C 8007465C ACF4020C */  jal        strlen
 /* 64E60 80074660 21202002 */   addu      $a0, $s1, $zero
 /* 64E64 80074664 14000012 */  beqz       $s0, .L800746B8
 /* 64E68 80074668 21904000 */   addu      $s2, $v0, $zero
@@ -139,25 +139,25 @@ glabel vsprintf
 /* 64E74 80074674 2120F402 */   addu      $a0, $s7, $s4
 /* 64E78 80074678 0B00C013 */  beqz       $fp, .L800746A8
 /* 64E7C 8007467C 2128C002 */   addu      $a1, $s6, $zero
-/* 64E80 80074680 1CF4020C */  jal        func_800BD070
+/* 64E80 80074680 1CF4020C */  jal        strcpy
 /* 64E84 80074684 21282002 */   addu      $a1, $s1, $zero
 /* 64E88 80074688 21A09202 */  addu       $s4, $s4, $s2
 /* 64E8C 8007468C 2120F402 */  addu       $a0, $s7, $s4
 /* 64E90 80074690 2128C002 */  addu       $a1, $s6, $zero
 /* 64E94 80074694 23801202 */  subu       $s0, $s0, $s2
-/* 64E98 80074698 2EF2020C */  jal        func_800BC8B8
+/* 64E98 80074698 2EF2020C */  jal        memset
 /* 64E9C 8007469C 21300002 */   addu      $a2, $s0, $zero
 /* 64EA0 800746A0 B2D10108 */  j          .L800746C8
 /* 64EA4 800746A4 21A09002 */   addu      $s4, $s4, $s0
 .L800746A8:
 /* 64EA8 800746A8 23801202 */  subu       $s0, $s0, $s2
-/* 64EAC 800746AC 2EF2020C */  jal        func_800BC8B8
+/* 64EAC 800746AC 2EF2020C */  jal        memset
 /* 64EB0 800746B0 21300002 */   addu      $a2, $s0, $zero
 /* 64EB4 800746B4 21A09002 */  addu       $s4, $s4, $s0
 .L800746B8:
 /* 64EB8 800746B8 2120F402 */  addu       $a0, $s7, $s4
 .L800746BC:
-/* 64EBC 800746BC 1CF4020C */  jal        func_800BD070
+/* 64EBC 800746BC 1CF4020C */  jal        strcpy
 /* 64EC0 800746C0 21282002 */   addu      $a1, $s1, $zero
 /* 64EC4 800746C4 21A09202 */  addu       $s4, $s4, $s2
 .L800746C8:

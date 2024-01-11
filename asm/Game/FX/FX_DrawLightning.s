@@ -39,7 +39,7 @@ glabel FX_DrawLightning
 /* 3C118 8004B918 4800A627 */  addiu      $a2, $sp, 0x48
 /* 3C11C 8004B91C 40110200 */  sll        $v0, $v0, 5
 /* 3C120 8004B920 21808200 */  addu       $s0, $a0, $v0
-/* 3C124 8004B924 0EF3020C */  jal        func_800BCC38
+/* 3C124 8004B924 0EF3020C */  jal        ApplyMatrixSV
 /* 3C128 8004B928 21200002 */   addu      $a0, $s0, $zero
 /* 3C12C 8004B92C 14000296 */  lhu        $v0, 0x14($s0)
 /* 3C130 8004B930 4800A397 */  lhu        $v1, 0x48($sp)
@@ -102,7 +102,7 @@ glabel FX_DrawLightning
 /* 3C200 8004BA00 4800A627 */  addiu      $a2, $sp, 0x48
 /* 3C204 8004BA04 40110200 */  sll        $v0, $v0, 5
 /* 3C208 8004BA08 21808200 */  addu       $s0, $a0, $v0
-/* 3C20C 8004BA0C 0EF3020C */  jal        func_800BCC38
+/* 3C20C 8004BA0C 0EF3020C */  jal        ApplyMatrixSV
 /* 3C210 8004BA10 21200002 */   addu      $a0, $s0, $zero
 /* 3C214 8004BA14 14000296 */  lhu        $v0, 0x14($s0)
 /* 3C218 8004BA18 4800A397 */  lhu        $v1, 0x48($sp)
@@ -149,7 +149,7 @@ glabel FX_DrawLightning
 /* 3C2B0 8004BAB0 40290500 */  sll        $a1, $a1, 5
 /* 3C2B4 8004BAB4 21284500 */  addu       $a1, $v0, $a1
 /* 3C2B8 8004BAB8 5000B027 */  addiu      $s0, $sp, 0x50
-/* 3C2BC 8004BABC 59FD020C */  jal        func_800BF564
+/* 3C2BC 8004BABC 59FD020C */  jal        CompMatrix
 /* 3C2C0 8004BAC0 21300002 */   addu      $a2, $s0, $zero
 .L8004BAC4:
 /* 3C2C4 8004BAC4 10002786 */  lh         $a3, 0x10($s1)

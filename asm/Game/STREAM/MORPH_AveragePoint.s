@@ -30,7 +30,7 @@ glabel MORPH_AveragePoint
 /* 4E60C 8005DE0C 00106624 */  addiu      $a2, $v1, 0x1000
 /* 4E610 8005DE10 23380300 */  negu       $a3, $v1
 .L8005DE14:
-/* 4E614 8005DE14 86F3020C */  jal        func_800BCE18
+/* 4E614 8005DE14 86F3020C */  jal        LoadAverageShort12
 /* 4E618 8005DE18 00000000 */   nop
 /* 4E61C 8005DE1C 1800BF8F */  lw         $ra, 0x18($sp)
 /* 4E620 8005DE20 00000000 */  nop

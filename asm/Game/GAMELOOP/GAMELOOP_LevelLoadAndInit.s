@@ -106,11 +106,11 @@ glabel GAMELOOP_LevelLoadAndInit
 /* 1EB98 8002E398 00000000 */  nop
 /* 1EB9C 8002E39C 46004494 */  lhu        $a0, 0x46($v0)
 /* 1EBA0 8002E3A0 44004594 */  lhu        $a1, 0x44($v0)
-/* 1EBA4 8002E3A4 C8F3020C */  jal        func_800BCF20
+/* 1EBA4 8002E3A4 C8F3020C */  jal        SetFogNearFar
 /* 1EBA8 8002E3A8 40010624 */   addiu     $a2, $zero, 0x140
 /* 1EBAC 8002E3AC 21200000 */  addu       $a0, $zero, $zero
 /* 1EBB0 8002E3B0 21288000 */  addu       $a1, $a0, $zero
-/* 1EBB4 8002E3B4 BCF4020C */  jal        func_800BD2F0
+/* 1EBB4 8002E3B4 BCF4020C */  jal        SetFarColor
 /* 1EBB8 8002E3B8 21308000 */   addu      $a2, $a0, $zero
 /* 1EBBC 8002E3BC 0800428E */  lw         $v0, 0x8($s2)
 /* 1EBC0 8002E3C0 00000000 */  nop

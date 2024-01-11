@@ -33,7 +33,7 @@ glabel SCRIPT_RelativisticSpline
 /* 2DB48 8003D348 4400A3A7 */  sh         $v1, 0x44($sp)
 /* 2DB4C 8003D34C 2000048E */  lw         $a0, 0x20($s0)
 /* 2DB50 8003D350 1800A527 */  addiu      $a1, $sp, 0x18
-/* 2DB54 8003D354 3DE3010C */  jal        func_80078CF4
+/* 2DB54 8003D354 3DE3010C */  jal        RotMatrix
 /* 2DB58 8003D358 18008424 */   addiu     $a0, $a0, 0x18
 /* 2DB5C 8003D35C 4000A487 */  lh         $a0, 0x40($sp)
 /* 2DB60 8003D360 1800A287 */  lh         $v0, 0x18($sp)

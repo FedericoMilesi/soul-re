@@ -116,7 +116,7 @@ glabel COLLIDE_SphereAndHFace
 /* 1328C 80022A8C 801F073C */  lui        $a3, (0x1F800054 >> 16)
 /* 13290 80022A90 3000028E */  lw         $v0, 0x30($s0)
 /* 13294 80022A94 5400E734 */  ori        $a3, $a3, (0x1F800054 & 0xFFFF)
-/* 13298 80022A98 BDE0010C */  jal        func_800782F4
+/* 13298 80022A98 BDE0010C */  jal        COLLIDE_IntersectLineAndPlane_S
 /* 1329C 80022A9C 1000A2AF */   sw        $v0, 0x10($sp)
 /* 132A0 80022AA0 0A004014 */  bnez       $v0, .L80022ACC
 /* 132A4 80022AA4 3C001326 */   addiu     $s3, $s0, 0x3C
@@ -127,7 +127,7 @@ glabel COLLIDE_SphereAndHFace
 /* 132B4 80022AB4 801F053C */  lui        $a1, (0x1F800054 >> 16)
 /* 132B8 80022AB8 5400A534 */  ori        $a1, $a1, (0x1F800054 & 0xFFFF)
 /* 132BC 80022ABC 3000068E */  lw         $a2, 0x30($s0)
-/* 132C0 80022AC0 F3E0010C */  jal        func_800783CC
+/* 132C0 80022AC0 F3E0010C */  jal        COLLIDE_NearestPointOnPlane_S
 /* 132C4 80022AC4 21384002 */   addu      $a3, $s2, $zero
 /* 132C8 80022AC8 3C001326 */  addiu      $s3, $s0, 0x3C
 .L80022ACC:
@@ -198,7 +198,7 @@ glabel COLLIDE_SphereAndHFace
 .L80022BCC:
 /* 133CC 80022BCC 1400858E */  lw         $a1, 0x14($s4)
 /* 133D0 80022BD0 1800868E */  lw         $a2, 0x18($s4)
-/* 133D4 80022BD4 79E0010C */  jal        func_800781E4
+/* 133D4 80022BD4 79E0010C */  jal        COLLIDE_NearestPointOnLine_S
 /* 133D8 80022BD8 21384002 */   addu      $a3, $s2, $zero
 /* 133DC 80022BDC 00004586 */  lh         $a1, 0x0($s2)
 /* 133E0 80022BE0 34000286 */  lh         $v0, 0x34($s0)
@@ -227,7 +227,7 @@ glabel COLLIDE_SphereAndHFace
 /* 1343C 80022C3C 21206002 */  addu       $a0, $s3, $zero
 /* 13440 80022C40 1800858E */  lw         $a1, 0x18($s4)
 /* 13444 80022C44 1C00868E */  lw         $a2, 0x1C($s4)
-/* 13448 80022C48 79E0010C */  jal        func_800781E4
+/* 13448 80022C48 79E0010C */  jal        COLLIDE_NearestPointOnLine_S
 /* 1344C 80022C4C 21384002 */   addu      $a3, $s2, $zero
 /* 13450 80022C50 00004486 */  lh         $a0, 0x0($s2)
 /* 13454 80022C54 3C000286 */  lh         $v0, 0x3C($s0)
@@ -269,7 +269,7 @@ glabel COLLIDE_SphereAndHFace
 /* 134E0 80022CE0 21206002 */  addu       $a0, $s3, $zero
 /* 134E4 80022CE4 1C00858E */  lw         $a1, 0x1C($s4)
 /* 134E8 80022CE8 1400868E */  lw         $a2, 0x14($s4)
-/* 134EC 80022CEC 79E0010C */  jal        func_800781E4
+/* 134EC 80022CEC 79E0010C */  jal        COLLIDE_NearestPointOnLine_S
 /* 134F0 80022CF0 21384002 */   addu      $a3, $s2, $zero
 /* 134F4 80022CF4 00004486 */  lh         $a0, 0x0($s2)
 /* 134F8 80022CF8 3C000286 */  lh         $v0, 0x3C($s0)

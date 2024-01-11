@@ -33,7 +33,7 @@ glabel MON_DamageEffect
 /* 7D0F0 8008C8F0 0010023C */  lui        $v0, (0x10000000 >> 16)
 /* 7D0F4 8008C8F4 39006214 */  bne        $v1, $v0, .L8008C9DC
 /* 7D0F8 8008C8F8 8000033C */   lui       $v1, (0x800010 >> 16)
-/* 7D0FC 8008C8FC 3AF2020C */  jal        func_800BC8E8
+/* 7D0FC 8008C8FC 3AF2020C */  jal        rand
 /* 7D100 8008C900 04001024 */   addiu     $s0, $zero, 0x4
 /* 7D104 8008C904 1C00448E */  lw         $a0, 0x1C($s2)
 /* 7D108 8008C908 26014386 */  lh         $v1, 0x126($s2)
@@ -58,11 +58,11 @@ glabel MON_DamageEffect
 /* 7D154 8008C954 3F00A9AB */  swl        $t1, 0x3F($sp)
 /* 7D158 8008C958 3C00A9BB */  swr        $t1, 0x3C($sp)
 /* 7D15C 8008C95C 40190300 */  sll        $v1, $v1, 5
-/* 7D160 8008C960 3AF2020C */  jal        func_800BC8E8
+/* 7D160 8008C960 3AF2020C */  jal        rand
 /* 7D164 8008C964 21882302 */   addu      $s1, $s1, $v1
 /* 7D168 8008C968 07004230 */  andi       $v0, $v0, 0x7
 /* 7D16C 8008C96C 23100202 */  subu       $v0, $s0, $v0
-/* 7D170 8008C970 3AF2020C */  jal        func_800BC8E8
+/* 7D170 8008C970 3AF2020C */  jal        rand
 /* 7D174 8008C974 3000A2A7 */   sh        $v0, 0x30($sp)
 /* 7D178 8008C978 FF00033C */  lui        $v1, (0xFF2828 >> 16)
 /* 7D17C 8008C97C 28286334 */  ori        $v1, $v1, (0xFF2828 & 0xFFFF)
@@ -101,7 +101,7 @@ glabel MON_DamageEffect
 /* 7D1FC 8008C9FC 18006292 */  lbu        $v0, 0x18($s3)
 /* 7D200 8008CA00 4000508E */  lw         $s0, 0x40($s2)
 /* 7D204 8008CA04 40110200 */  sll        $v0, $v0, 5
-/* 7D208 8008CA08 2EF2020C */  jal        func_800BC8B8
+/* 7D208 8008CA08 2EF2020C */  jal        memset
 /* 7D20C 8008CA0C 21800202 */   addu      $s0, $s0, $v0
 /* 7D210 8008CA10 1800033C */  lui        $v1, (0x1800D0 >> 16)
 /* 7D214 8008CA14 D0006334 */  ori        $v1, $v1, (0x1800D0 & 0xFFFF)
@@ -199,22 +199,22 @@ glabel MON_DamageEffect
 .L8008CB78:
 /* 7D378 8008CB78 4000508E */  lw         $s0, 0x40($s2)
 /* 7D37C 8008CB7C 40111100 */  sll        $v0, $s1, 5
-/* 7D380 8008CB80 3AF2020C */  jal        func_800BC8E8
+/* 7D380 8008CB80 3AF2020C */  jal        rand
 /* 7D384 8008CB84 21800202 */   addu      $s0, $s0, $v0
 /* 7D388 8008CB88 14000396 */  lhu        $v1, 0x14($s0)
 /* 7D38C 8008CB8C 03004230 */  andi       $v0, $v0, 0x3
 /* 7D390 8008CB90 21186200 */  addu       $v1, $v1, $v0
-/* 7D394 8008CB94 3AF2020C */  jal        func_800BC8E8
+/* 7D394 8008CB94 3AF2020C */  jal        rand
 /* 7D398 8008CB98 5000A3A7 */   sh        $v1, 0x50($sp)
 /* 7D39C 8008CB9C 18000396 */  lhu        $v1, 0x18($s0)
 /* 7D3A0 8008CBA0 03004230 */  andi       $v0, $v0, 0x3
 /* 7D3A4 8008CBA4 21186200 */  addu       $v1, $v1, $v0
-/* 7D3A8 8008CBA8 3AF2020C */  jal        func_800BC8E8
+/* 7D3A8 8008CBA8 3AF2020C */  jal        rand
 /* 7D3AC 8008CBAC 5200A3A7 */   sh        $v1, 0x52($sp)
 /* 7D3B0 8008CBB0 1C000396 */  lhu        $v1, 0x1C($s0)
 /* 7D3B4 8008CBB4 03004230 */  andi       $v0, $v0, 0x3
 /* 7D3B8 8008CBB8 21186200 */  addu       $v1, $v1, $v0
-/* 7D3BC 8008CBBC 3AF2020C */  jal        func_800BC8E8
+/* 7D3BC 8008CBBC 3AF2020C */  jal        rand
 /* 7D3C0 8008CBC0 5400A3A7 */   sh        $v1, 0x54($sp)
 /* 7D3C4 8008CBC4 1F004230 */  andi       $v0, $v0, 0x1F
 /* 7D3C8 8008CBC8 06004014 */  bnez       $v0, .L8008CBE4

@@ -32,14 +32,14 @@ glabel processCdCommands
 /* A7504 800B6D04 AB0025A2 */  sb         $a1, 0xAB($s1)
 /* A7508 800B6D08 C0100200 */  sll        $v0, $v0, 3
 /* A750C 800B6D0C 18004224 */  addiu      $v0, $v0, 0x18
-/* A7510 800B6D10 46F8020C */  jal        func_800BE118
+/* A7510 800B6D10 46F8020C */  jal        CdSyncCallback
 /* A7514 800B6D14 21802202 */   addu      $s0, $s1, $v0
 /* A7518 800B6D18 04000526 */  addiu      $a1, $s0, 0x4
 /* A751C 800B6D1C 0C0022AE */  sw         $v0, 0xC($s1)
 /* A7520 800B6D20 03000492 */  lbu        $a0, 0x3($s0)
 /* A7524 800B6D24 10002626 */  addiu      $a2, $s1, 0x10
 .L800B6D28:
-/* A7528 800B6D28 50F8020C */  jal        func_800BE140
+/* A7528 800B6D28 50F8020C */  jal        CdControl
 /* A752C 800B6D2C 00000000 */   nop
 .L800B6D30:
 /* A7530 800B6D30 1800BF8F */  lw         $ra, 0x18($sp)

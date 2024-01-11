@@ -29,7 +29,7 @@ glabel G2Anim_SetInterpController_Vector
 /* 8129C 80090A9C 1800A527 */   addiu     $a1, $sp, 0x18
 /* 812A0 80090AA0 2000B027 */  addiu      $s0, $sp, 0x20
 /* 812A4 80090AA4 21200002 */  addu       $a0, $s0, $zero
-/* 812A8 80090AA8 63E7010C */  jal        func_80079D8C
+/* 812A8 80090AA8 63E7010C */  jal        G2Quat_FromEuler_S
 /* 812AC 80090AAC 1800A527 */   addiu     $a1, $sp, 0x18
 /* 812B0 80090AB0 21204002 */  addu       $a0, $s2, $zero
 /* 812B4 80090AB4 21286002 */  addu       $a1, $s3, $zero

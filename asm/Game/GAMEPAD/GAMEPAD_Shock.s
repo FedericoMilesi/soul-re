@@ -13,7 +13,7 @@ glabel GAMEPAD_Shock
 /* 21F84 80031784 21200000 */  addu       $a0, $zero, $zero
 /* 21F88 80031788 6CBA87AF */  sw         $a3, %gp_rel(dualshock1_time)($gp)
 /* 21F8C 8003178C 0100A6A0 */  sb         $a2, 0x1($a1)
-/* 21F90 80031790 6EF7020C */  jal        func_800BDDB8
+/* 21F90 80031790 6EF7020C */  jal        PadSetAct
 /* 21F94 80031794 02000624 */   addiu     $a2, $zero, 0x2
 .L80031798:
 /* 21F98 80031798 1000BF8F */  lw         $ra, 0x10($sp)

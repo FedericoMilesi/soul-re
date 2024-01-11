@@ -59,7 +59,7 @@ glabel MonsterInit
 /* 6E6B0 8007DEB0 00000000 */   nop
 .L8007DEB4:
 /* 6E6B4 8007DEB4 21280000 */  addu       $a1, $zero, $zero
-/* 6E6B8 8007DEB8 2EF2020C */  jal        func_800BC8B8
+/* 6E6B8 8007DEB8 2EF2020C */  jal        memset
 /* 6E6BC 8007DEBC 60020624 */   addiu     $a2, $zero, 0x260
 /* 6E6C0 8007DEC0 24C3010C */  jal        InitMessageQueue
 /* 6E6C4 8007DEC4 08002426 */   addiu     $a0, $s1, 0x8

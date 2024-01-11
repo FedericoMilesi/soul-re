@@ -29,10 +29,10 @@ glabel EVENT_CompareListWithOperation
 /* 56D84 80066584 0000628E */  lw         $v0, 0x0($s3)
 /* 56D88 80066588 3800B027 */  addiu      $s0, $sp, 0x38
 /* 56D8C 8006658C 0800458C */  lw         $a1, 0x8($v0)
-/* 56D90 80066590 1CF4020C */  jal        func_800BD070
+/* 56D90 80066590 1CF4020C */  jal        strcpy
 /* 56D94 80066594 21200002 */   addu      $a0, $s0, $zero
 /* 56D98 80066598 21200002 */  addu       $a0, $s0, $zero
-/* 56D9C 8006659C 0CF4020C */  jal        func_800BD030
+/* 56D9C 8006659C 0CF4020C */  jal        strchr
 /* 56DA0 800665A0 3F000524 */   addiu     $a1, $zero, 0x3F
 /* 56DA4 800665A4 02004010 */  beqz       $v0, .L800665B0
 /* 56DA8 800665A8 00000000 */   nop

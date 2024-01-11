@@ -11,7 +11,7 @@ glabel GAMEPAD_HandleDualShock
 /* 21E84 80031684 2000BFAF */  sw         $ra, 0x20($sp)
 /* 21E88 80031688 1800B2AF */  sw         $s2, 0x18($sp)
 /* 21E8C 8003168C 1400B1AF */  sw         $s1, 0x14($sp)
-/* 21E90 80031690 EDF6020C */  jal        func_800BDBB4
+/* 21E90 80031690 EDF6020C */  jal        PadInfoMode
 /* 21E94 80031694 1000B0AF */   sw        $s0, 0x10($sp)
 /* 21E98 80031698 18004010 */  beqz       $v0, .L800316FC
 /* 21E9C 8003169C 00000000 */   nop
@@ -22,14 +22,14 @@ glabel GAMEPAD_HandleDualShock
 /* 21EB0 800316B0 21200002 */  addu       $a0, $s0, $zero
 /* 21EB4 800316B4 0D80053C */  lui        $a1, %hi(dualshock_motors)
 /* 21EB8 800316B8 1CA2A524 */  addiu      $a1, $a1, %lo(dualshock_motors)
-/* 21EBC 800316BC 6EF7020C */  jal        func_800BDDB8
+/* 21EBC 800316BC 6EF7020C */  jal        PadSetAct
 /* 21EC0 800316C0 02000624 */   addiu     $a2, $zero, 0x2
 /* 21EC4 800316C4 0D80123C */  lui        $s2, %hi(dualshock_align)
 /* 21EC8 800316C8 0100113C */  lui        $s1, (0x1869F >> 16)
 /* 21ECC 800316CC 9F863136 */  ori        $s1, $s1, (0x1869F & 0xFFFF)
 .L800316D0:
 /* 21ED0 800316D0 21200000 */  addu       $a0, $zero, $zero
-/* 21ED4 800316D4 60F7020C */  jal        func_800BDD80
+/* 21ED4 800316D4 60F7020C */  jal        PadSetActAlign
 /* 21ED8 800316D8 20A24526 */   addiu     $a1, $s2, %lo(dualshock_align)
 /* 21EDC 800316DC 03004014 */  bnez       $v0, .L800316EC
 /* 21EE0 800316E0 2A103002 */   slt       $v0, $s1, $s0

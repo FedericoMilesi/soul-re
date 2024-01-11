@@ -20,9 +20,9 @@ glabel GAMEPAD_Detect
 .L8003185C:
 /* 2205C 8003185C 21800000 */  addu       $s0, $zero, $zero
 .L80031860:
-/* 22060 80031860 5EF2020C */  jal        func_800BC978
+/* 22060 80031860 5EF2020C */  jal        VSync
 /* 22064 80031864 21200000 */   addu      $a0, $zero, $zero
-/* 22068 80031868 BAF6020C */  jal        func_800BDAE8
+/* 22068 80031868 BAF6020C */  jal        PadGetState
 /* 2206C 8003186C 21200000 */   addu      $a0, $zero, $zero
 /* 22070 80031870 21184000 */  addu       $v1, $v0, $zero
 /* 22074 80031874 05006014 */  bnez       $v1, .L8003188C
@@ -57,9 +57,9 @@ glabel GAMEPAD_Detect
 /* 220D8 800318D8 21800000 */   addu      $s0, $zero, $zero
 /* 220DC 800318DC 06001124 */  addiu      $s1, $zero, 0x6
 .L800318E0:
-/* 220E0 800318E0 5EF2020C */  jal        func_800BC978
+/* 220E0 800318E0 5EF2020C */  jal        VSync
 /* 220E4 800318E4 21200000 */   addu      $a0, $zero, $zero
-/* 220E8 800318E8 BAF6020C */  jal        func_800BDAE8
+/* 220E8 800318E8 BAF6020C */  jal        PadGetState
 /* 220EC 800318EC 21200000 */   addu      $a0, $zero, $zero
 /* 220F0 800318F0 04005110 */  beq        $v0, $s1, .L80031904
 /* 220F4 800318F4 01001026 */   addiu     $s0, $s0, 0x1
@@ -67,7 +67,7 @@ glabel GAMEPAD_Detect
 /* 220FC 800318FC F8FF4014 */  bnez       $v0, .L800318E0
 /* 22100 80031900 00000000 */   nop
 .L80031904:
-/* 22104 80031904 5EF2020C */  jal        func_800BC978
+/* 22104 80031904 5EF2020C */  jal        VSync
 /* 22108 80031908 03000424 */   addiu     $a0, $zero, 0x3
 /* 2210C 8003190C 2000BF8F */  lw         $ra, 0x20($sp)
 /* 22110 80031910 1C00B38F */  lw         $s3, 0x1C($sp)

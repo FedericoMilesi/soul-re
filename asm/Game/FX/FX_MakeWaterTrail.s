@@ -78,15 +78,15 @@ glabel FX_MakeWaterTrail
 /* 37C88 80047488 3C00A2A7 */  sh         $v0, 0x3C($sp)
 /* 37C8C 8004748C 4400A3A7 */  sh         $v1, 0x44($sp)
 .L80047490:
-/* 37C90 80047490 3AF2020C */  jal        func_800BC8E8
+/* 37C90 80047490 3AF2020C */  jal        rand
 /* 37C94 80047494 00000000 */   nop
 /* 37C98 80047498 FF0F5030 */  andi       $s0, $v0, 0xFFF
-/* 37C9C 8004749C DCE4010C */  jal        func_80079370
+/* 37C9C 8004749C DCE4010C */  jal        rcos
 /* 37CA0 800474A0 21200002 */   addu      $a0, $s0, $zero
 /* 37CA4 800474A4 21200002 */  addu       $a0, $s0, $zero
-/* 37CA8 800474A8 D0E4010C */  jal        func_80079340
+/* 37CA8 800474A8 D0E4010C */  jal        rsin
 /* 37CAC 800474AC 21804000 */   addu      $s0, $v0, $zero
-/* 37CB0 800474B0 3AF2020C */  jal        func_800BC8E8
+/* 37CB0 800474B0 3AF2020C */  jal        rand
 /* 37CB4 800474B4 21884000 */   addu      $s1, $v0, $zero
 /* 37CB8 800474B8 03004230 */  andi       $v0, $v0, 0x3
 /* 37CBC 800474BC 0B004324 */  addiu      $v1, $v0, 0xB

@@ -54,7 +54,7 @@ glabel menu_draw_item
 .L800B7DE8:
 /* A85E8 800B7DE8 00000000 */  nop
 /* A85EC 800B7DEC 21400701 */  addu       $t0, $t0, $a3
-/* A85F0 800B7DF0 ACF4020C */  jal        func_800BD2B0
+/* A85F0 800B7DF0 ACF4020C */  jal        strlen
 /* A85F4 800B7DF4 5401A8AF */   sw        $t0, 0x154($sp)
 /* A85F8 800B7DF8 01000524 */  addiu      $a1, $zero, 0x1
 /* A85FC 800B7DFC 21204000 */  addu       $a0, $v0, $zero
@@ -97,7 +97,7 @@ glabel menu_draw_item
 /* A867C 800B7E7C 1C01A2AF */  sw         $v0, 0x11C($sp)
 /* A8680 800B7E80 21200002 */  addu       $a0, $s0, $zero
 /* A8684 800B7E84 0D80053C */  lui        $a1, %hi(voiceList + 0x58)
-/* A8688 800B7E88 BD02030C */  jal        func_800C0AF4
+/* A8688 800B7E88 BD02030C */  jal        strtok
 /* A868C 800B7E8C 3C1FA524 */   addiu     $a1, $a1, %lo(voiceList + 0x58)
 /* A8690 800B7E90 21284000 */  addu       $a1, $v0, $zero
 /* A8694 800B7E94 8300A010 */  beqz       $a1, .L800B80A4
@@ -124,12 +124,12 @@ glabel menu_draw_item
 /* A86E0 800B7EE0 00000000 */   nop
 /* A86E4 800B7EE4 0800F5AE */  sw         $s5, 0x8($s7)
 .L800B7EE8:
-/* A86E8 800B7EE8 1CF4020C */  jal        func_800BD070
+/* A86E8 800B7EE8 1CF4020C */  jal        strcpy
 /* A86EC 800B7EEC 1000A427 */   addiu     $a0, $sp, 0x10
 /* A86F0 800B7EF0 1000B127 */  addiu      $s1, $sp, 0x10
 .L800B7EF4:
 /* A86F4 800B7EF4 21202002 */  addu       $a0, $s1, $zero
-/* A86F8 800B7EF8 0CF4020C */  jal        func_800BD030
+/* A86F8 800B7EF8 0CF4020C */  jal        strchr
 /* A86FC 800B7EFC 0A000524 */   addiu     $a1, $zero, 0xA
 /* A8700 800B7F00 21B04000 */  addu       $s6, $v0, $zero
 /* A8704 800B7F04 0200C012 */  beqz       $s6, .L800B7F10
@@ -140,14 +140,14 @@ glabel menu_draw_item
 /* A8714 800B7F14 00000000 */   nop
 .L800B7F18:
 /* A8718 800B7F18 21202002 */  addu       $a0, $s1, $zero
-/* A871C 800B7F1C 0CF4020C */  jal        func_800BD030
+/* A871C 800B7F1C 0CF4020C */  jal        strchr
 /* A8720 800B7F20 20000524 */   addiu     $a1, $zero, 0x20
 /* A8724 800B7F24 21904000 */  addu       $s2, $v0, $zero
 /* A8728 800B7F28 17004012 */  beqz       $s2, .L800B7F88
 /* A872C 800B7F2C 00000000 */   nop
 .L800B7F30:
 /* A8730 800B7F30 01004426 */  addiu      $a0, $s2, 0x1
-/* A8734 800B7F34 0CF4020C */  jal        func_800BD030
+/* A8734 800B7F34 0CF4020C */  jal        strchr
 /* A8738 800B7F38 20000524 */   addiu     $a1, $zero, 0x20
 /* A873C 800B7F3C 21804000 */  addu       $s0, $v0, $zero
 /* A8740 800B7F40 02000012 */  beqz       $s0, .L800B7F4C
@@ -240,7 +240,7 @@ glabel menu_draw_item
 /* A8870 800B8070 2001A98F */  lw         $t1, 0x120($sp)
 /* A8874 800B8074 3C1FA524 */  addiu      $a1, $a1, %lo(voiceList + 0x58)
 /* A8878 800B8078 21483E01 */  addu       $t1, $t1, $fp
-/* A887C 800B807C BD02030C */  jal        func_800C0AF4
+/* A887C 800B807C BD02030C */  jal        strtok
 /* A8880 800B8080 2001A9AF */   sw        $t1, 0x120($sp)
 /* A8884 800B8084 1401A88F */  lw         $t0, 0x114($sp)
 /* A8888 800B8088 21284000 */  addu       $a1, $v0, $zero

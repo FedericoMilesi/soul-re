@@ -113,7 +113,7 @@ glabel CAMERA_FollowPlayerTilt
 /* D3E8 8001CBE8 A6E7000C */  jal        MATH3D_FastSqrt0
 /* D3EC 8001CBEC 23204300 */   subu      $a0, $v0, $v1
 /* D3F0 8001CBF0 21200002 */  addu       $a0, $s0, $zero
-/* D3F4 8001CBF4 26F3020C */  jal        func_800BCC98
+/* D3F4 8001CBF4 26F3020C */  jal        ratan2
 /* D3F8 8001CBF8 21284000 */   addu      $a1, $v0, $zero
 /* D3FC 8001CBFC 9E012386 */  lh         $v1, 0x19E($s1)
 /* D400 8001CC00 00000000 */  nop

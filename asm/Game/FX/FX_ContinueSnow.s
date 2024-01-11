@@ -22,7 +22,7 @@ glabel FX_ContinueSnow
 /* 39D5C 8004955C 40006210 */  beq        $v1, $v0, .L80049660
 /* 39D60 80049560 00000000 */   nop
 .L80049564:
-/* 39D64 80049564 3AF2020C */  jal        func_800BC8E8
+/* 39D64 80049564 3AF2020C */  jal        rand
 /* 39D68 80049568 00000000 */   nop
 /* 39D6C 8004956C 749A8387 */  lh         $v1, %gp_rel(snow_amount)($gp)
 /* 39D70 80049570 FF034230 */  andi       $v0, $v0, 0x3FF
@@ -36,12 +36,12 @@ glabel FX_ContinueSnow
 /* 39D90 80049590 33000012 */  beqz       $s0, .L80049660
 /* 39D94 80049594 00000000 */   nop
 /* 39D98 80049598 3000A0A7 */  sh         $zero, 0x30($sp)
-/* 39D9C 8004959C 3AF2020C */  jal        func_800BC8E8
+/* 39D9C 8004959C 3AF2020C */  jal        rand
 /* 39DA0 800495A0 3200A0A7 */   sh        $zero, 0x32($sp)
 /* 39DA4 800495A4 03004230 */  andi       $v0, $v0, 0x3
 /* 39DA8 800495A8 F3FF0324 */  addiu      $v1, $zero, -0xD
 /* 39DAC 800495AC 23186200 */  subu       $v1, $v1, $v0
-/* 39DB0 800495B0 3AF2020C */  jal        func_800BC8E8
+/* 39DB0 800495B0 3AF2020C */  jal        rand
 /* 39DB4 800495B4 3400A3A7 */   sh        $v1, 0x34($sp)
 /* 39DB8 800495B8 21184000 */  addu       $v1, $v0, $zero
 /* 39DBC 800495BC 03006104 */  bgez       $v1, .L800495CC
@@ -53,7 +53,7 @@ glabel FX_ContinueSnow
 /* 39DD0 800495D0 23106200 */  subu       $v0, $v1, $v0
 /* 39DD4 800495D4 3800A2A7 */  sh         $v0, 0x38($sp)
 /* 39DD8 800495D8 05000224 */  addiu      $v0, $zero, 0x5
-/* 39DDC 800495DC 3AF2020C */  jal        func_800BC8E8
+/* 39DDC 800495DC 3AF2020C */  jal        rand
 /* 39DE0 800495E0 3A00A2A7 */   sh        $v0, 0x3A($sp)
 /* 39DE4 800495E4 3800A427 */  addiu      $a0, $sp, 0x38
 /* 39DE8 800495E8 2800A527 */  addiu      $a1, $sp, 0x28

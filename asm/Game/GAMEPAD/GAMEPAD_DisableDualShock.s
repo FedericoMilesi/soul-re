@@ -12,7 +12,7 @@ glabel GAMEPAD_DisableDualShock
 /* 21E34 80031634 1CA240A0 */  sb         $zero, %lo(dualshock_motors)($v0)
 /* 21E38 80031638 6CBA80AF */  sw         $zero, %gp_rel(dualshock1_time)($gp)
 /* 21E3C 8003163C 68BA80AF */  sw         $zero, %gp_rel(dualshock0_time)($gp)
-/* 21E40 80031640 6EF7020C */  jal        func_800BDDB8
+/* 21E40 80031640 6EF7020C */  jal        PadSetAct
 /* 21E44 80031644 02000624 */   addiu     $a2, $zero, 0x2
 /* 21E48 80031648 1000BF8F */  lw         $ra, 0x10($sp)
 /* 21E4C 8003164C 00000000 */  nop

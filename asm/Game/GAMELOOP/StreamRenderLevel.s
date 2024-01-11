@@ -21,7 +21,7 @@ glabel StreamRenderLevel
 /* 1F99C 8002F19C 0800F18E */  lw         $s1, 0x8($s7)
 /* 1F9A0 8002F1A0 F4AC9E8F */  lw         $fp, %gp_rel(theCamera + 0x64)($gp)
 /* 1F9A4 8002F1A4 0000328E */  lw         $s2, 0x0($s1)
-/* 1F9A8 8002F1A8 BCF4020C */  jal        func_800BD2F0
+/* 1F9A8 8002F1A8 BCF4020C */  jal        SetFarColor
 /* 1F9AC 8002F1AC 21308000 */   addu      $a2, $a0, $zero
 /* 1F9B0 8002F1B0 2120E002 */  addu       $a0, $s7, $zero
 /* 1F9B4 8002F1B4 6EBA000C */  jal        UpdateFogSettings
@@ -45,7 +45,7 @@ glabel StreamRenderLevel
 /* 1F9F8 8002F1F8 489082AF */  sw         $v0, %gp_rel(depthQBlendStart)($gp)
 /* 1F9FC 8002F1FC 4C90848F */  lw         $a0, %gp_rel(depthQFogStart)($gp)
 /* 1FA00 8002F200 5090858F */  lw         $a1, %gp_rel(depthQFogFar)($gp)
-/* 1FA04 8002F204 C8F3020C */  jal        func_800BCF20
+/* 1FA04 8002F204 C8F3020C */  jal        SetFogNearFar
 /* 1FA08 8002F208 40010624 */   addiu     $a2, $zero, 0x140
 /* 1FA0C 8002F20C 2800448E */  lw         $a0, 0x28($s2)
 /* 1FA10 8002F210 2C01858E */  lw         $a1, 0x12C($s4)
@@ -125,11 +125,11 @@ glabel StreamRenderLevel
 /* 1FB34 8002F334 23104800 */  subu       $v0, $v0, $t0
 /* 1FB38 8002F338 94AC82A7 */  sh         $v0, %gp_rel(theCamera + 0x4)($gp)
 /* 1FB3C 8002F33C 23100200 */  negu       $v0, $v0
-/* 1FB40 8002F340 1AF2020C */  jal        func_800BC868
+/* 1FB40 8002F340 1AF2020C */  jal        ApplyMatrix
 /* 1FB44 8002F344 4400A2A7 */   sh        $v0, 0x44($sp)
 /* 1FB48 8002F348 21200002 */  addu       $a0, $s0, $zero
 /* 1FB4C 8002F34C 1CBA868F */  lw         $a2, %gp_rel(gPolytopeList)($gp)
-/* 1FB50 8002F350 30E5010C */  jal        func_800794C0
+/* 1FB50 8002F350 30E5010C */  jal        BSP_MarkVisibleLeaves_S
 /* 1FB54 8002F354 2128A002 */   addu      $a1, $s5, $zero
 /* 1FB58 8002F358 21284002 */  addu       $a1, $s2, $zero
 /* 1FB5C 8002F35C 4000878E */  lw         $a3, 0x40($s4)

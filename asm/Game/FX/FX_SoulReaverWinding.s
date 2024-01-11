@@ -31,7 +31,7 @@ glabel FX_SoulReaverWinding
 /* 3B49C 8004AC9C 06009096 */  lhu        $s0, 0x6($s4)
 /* 3B4A0 8004ACA0 4000458C */  lw         $a1, 0x40($v0)
 /* 3B4A4 8004ACA4 23801000 */  negu       $s0, $s0
-/* 3B4A8 8004ACA8 59FD020C */  jal        func_800BF564
+/* 3B4A8 8004ACA8 59FD020C */  jal        CompMatrix
 /* 3B4AC 8004ACAC 0005A524 */   addiu     $a1, $a1, 0x500
 /* 3B4B0 8004ACB0 3800A627 */  addiu      $a2, $sp, 0x38
 /* 3B4B4 8004ACB4 00841000 */  sll        $s0, $s0, 16
@@ -69,7 +69,7 @@ glabel FX_SoulReaverWinding
 /* 3B534 8004AD34 3800A627 */  addiu      $a2, $sp, 0x38
 /* 3B538 8004AD38 4000458C */  lw         $a1, 0x40($v0)
 /* 3B53C 8004AD3C A400A48F */  lw         $a0, 0xA4($sp)
-/* 3B540 8004AD40 59FD020C */  jal        func_800BF564
+/* 3B540 8004AD40 59FD020C */  jal        CompMatrix
 /* 3B544 8004AD44 E004A524 */   addiu     $a1, $a1, 0x4E0
 /* 3B548 8004AD48 3800A627 */  addiu      $a2, $sp, 0x38
 /* 3B54C 8004AD4C 2138C003 */  addu       $a3, $fp, $zero
@@ -121,7 +121,7 @@ glabel FX_SoulReaverWinding
 /* 3B5FC 8004ADFC D3FFB536 */  ori        $s5, $s5, (0xFCFFD3 & 0xFFFF)
 .L8004AE00:
 /* 3B600 8004AE00 A400A48F */  lw         $a0, 0xA4($sp)
-/* 3B604 8004AE04 59FD020C */  jal        func_800BF564
+/* 3B604 8004AE04 59FD020C */  jal        CompMatrix
 /* 3B608 8004AE08 3800A627 */   addiu     $a2, $sp, 0x38
 /* 3B60C 8004AE0C 3800A627 */  addiu      $a2, $sp, 0x38
 /* 3B610 8004AE10 2138C003 */  addu       $a3, $fp, $zero

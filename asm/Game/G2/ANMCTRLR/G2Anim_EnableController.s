@@ -27,7 +27,7 @@ glabel G2Anim_EnableController
 /* 80DB0 800905B0 1C000426 */  addiu      $a0, $s0, 0x1C
 /* 80DB4 800905B4 1400428E */  lw         $v0, 0x14($s2)
 /* 80DB8 800905B8 40291100 */  sll        $a1, $s1, 5
-/* 80DBC 800905BC A4E6010C */  jal        func_80079A90
+/* 80DBC 800905BC A4E6010C */  jal        G2Quat_FromMatrix_S
 /* 80DC0 800905C0 21284500 */   addu      $a1, $v0, $a1
 /* 80DC4 800905C4 85410208 */  j          .L80090614
 /* 80DC8 800905C8 21200002 */   addu      $a0, $s0, $zero
@@ -48,7 +48,7 @@ glabel G2Anim_EnableController
 /* 80E00 80090600 180002A6 */   sh        $v0, 0x18($s0)
 .L80090604:
 /* 80E04 80090604 21280000 */  addu       $a1, $zero, $zero
-/* 80E08 80090608 2EF2020C */  jal        func_800BC8B8
+/* 80E08 80090608 2EF2020C */  jal        memset
 /* 80E0C 8009060C 10000624 */   addiu     $a2, $zero, 0x10
 .L80090610:
 /* 80E10 80090610 21200002 */  addu       $a0, $s0, $zero

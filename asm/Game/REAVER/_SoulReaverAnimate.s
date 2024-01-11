@@ -12,7 +12,7 @@ glabel _SoulReaverAnimate
 /* 6B1B8 8007A9B8 2400518E */  lw         $s1, 0x24($s2)
 /* 6B1BC 8007A9BC 0C2A010C */  jal        FX_SetReaverInstance
 /* 6B1C0 8007A9C0 00000000 */   nop
-/* 6B1C4 8007A9C4 3AF2020C */  jal        func_800BC8E8
+/* 6B1C4 8007A9C4 3AF2020C */  jal        rand
 /* 6B1C8 8007A9C8 00000000 */   nop
 /* 6B1CC 8007A9CC 06000396 */  lhu        $v1, 0x6($s0)
 /* 6B1D0 8007A9D0 1F004230 */  andi       $v0, $v0, 0x1F

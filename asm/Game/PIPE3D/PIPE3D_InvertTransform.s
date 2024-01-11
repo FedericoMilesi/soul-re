@@ -20,7 +20,7 @@ glabel PIPE3D_InvertTransform
 .L8003AC10:
 /* 2B410 8003AC10 21202002 */  addu       $a0, $s1, $zero
 .L8003AC14:
-/* 2B414 8003AC14 88F4020C */  jal        func_800BD220
+/* 2B414 8003AC14 88F4020C */  jal        TransposeMatrix
 /* 2B418 8003AC18 21284002 */   addu      $a1, $s2, $zero
 /* 2B41C 8003AC1C 1400228E */  lw         $v0, 0x14($s1)
 /* 2B420 8003AC20 21204002 */  addu       $a0, $s2, $zero
@@ -33,7 +33,7 @@ glabel PIPE3D_InvertTransform
 /* 2B43C 8003AC3C 1C00228E */  lw         $v0, 0x1C($s1)
 /* 2B440 8003AC40 14008624 */  addiu      $a2, $a0, 0x14
 /* 2B444 8003AC44 23100200 */  negu       $v0, $v0
-/* 2B448 8003AC48 30F4020C */  jal        func_800BD0C0
+/* 2B448 8003AC48 30F4020C */  jal        ApplyMatrixLV
 /* 2B44C 8003AC4C 1800A2AF */   sw        $v0, 0x18($sp)
 /* 2B450 8003AC50 4C00BF8F */  lw         $ra, 0x4C($sp)
 /* 2B454 8003AC54 4800B28F */  lw         $s2, 0x48($sp)

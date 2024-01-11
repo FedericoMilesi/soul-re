@@ -57,7 +57,7 @@ glabel PIPE3D_NormalizeMatrix
 /* 2B568 8003AD68 080088AC */  sw         $t0, 0x8($a0)
 /* 2B56C 8003AD6C 0C0089AC */  sw         $t1, 0xC($a0)
 /* 2B570 8003AD70 1000068E */  lw         $a2, 0x10($s0)
-/* 2B574 8003AD74 96E4010C */  jal        func_80079258
+/* 2B574 8003AD74 96E4010C */  jal        ScaleMatrix
 /* 2B578 8003AD78 100086AC */   sw        $a2, 0x10($a0)
 /* 2B57C 8003AD7C 2800BF8F */  lw         $ra, 0x28($sp)
 /* 2B580 8003AD80 2400B18F */  lw         $s1, 0x24($sp)

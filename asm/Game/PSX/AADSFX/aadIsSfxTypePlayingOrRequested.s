@@ -5,7 +5,7 @@ glabel aadIsSfxTypePlayingOrRequested
 /* 47964 80057164 E8FFBD27 */  addiu      $sp, $sp, -0x18
 /* 47968 80057168 1000B0AF */  sw         $s0, 0x10($sp)
 /* 4796C 8005716C 1400BFAF */  sw         $ra, 0x14($sp)
-/* 47970 80057170 A5FC020C */  jal        func_800BF294
+/* 47970 80057170 A5FC020C */  jal        EnterCriticalSection
 /* 47974 80057174 21808000 */   addu      $s0, $a0, $zero
 /* 47978 80057178 D89B828F */  lw         $v0, %gp_rel(aadMem)($gp)
 /* 4797C 8005717C 00000000 */  nop
@@ -29,7 +29,7 @@ glabel aadIsSfxTypePlayingOrRequested
 /* 479C0 800571C0 00000000 */  nop
 /* 479C4 800571C4 06005014 */  bne        $v0, $s0, .L800571E0
 /* 479C8 800571C8 0100A524 */   addiu     $a1, $a1, 0x1
-/* 479CC 800571CC 11FC020C */  jal        func_800BF044
+/* 479CC 800571CC 11FC020C */  jal        ExitCriticalSection
 /* 479D0 800571D0 00000000 */   nop
 /* 479D4 800571D4 835C0108 */  j          .L8005720C
 /* 479D8 800571D8 01000224 */   addiu     $v0, $zero, 0x1
@@ -45,7 +45,7 @@ glabel aadIsSfxTypePlayingOrRequested
 /* 479F4 800571F4 EAFFC014 */  bnez       $a2, .L800571A0
 /* 479F8 800571F8 00000000 */   nop
 .L800571FC:
-/* 479FC 800571FC 11FC020C */  jal        func_800BF044
+/* 479FC 800571FC 11FC020C */  jal        ExitCriticalSection
 /* 47A00 80057200 00000000 */   nop
 /* 47A04 80057204 3C5C010C */  jal        aadIsSfxTypePlaying
 /* 47A08 80057208 21200002 */   addu      $a0, $s0, $zero

@@ -181,17 +181,17 @@ glabel UNDERWORLD_LoadLevel
 /* A5938 800B5138 2C00A3A7 */  sh         $v1, 0x2C($sp)
 /* A593C 800B513C 1F00A2A3 */  sb         $v0, 0x1F($sp)
 .L800B5140:
-/* A5940 800B5140 5EF2020C */  jal        func_800BC978
+/* A5940 800B5140 5EF2020C */  jal        VSync
 /* A5944 800B5144 21200000 */   addu      $a0, $zero, $zero
-/* A5948 800B5148 05EA020C */  jal        func_800BA814
+/* A5948 800B5148 05EA020C */  jal        DrawPrim
 /* A594C 800B514C 3000A427 */   addiu     $a0, $sp, 0x30
-/* A5950 800B5150 05EA020C */  jal        func_800BA814
+/* A5950 800B5150 05EA020C */  jal        DrawPrim
 /* A5954 800B5154 1800A427 */   addiu     $a0, $sp, 0x18
 /* A5958 800B5158 01003126 */  addiu      $s1, $s1, 0x1
 /* A595C 800B515C 1E00222A */  slti       $v0, $s1, 0x1E
 /* A5960 800B5160 F7FF4014 */  bnez       $v0, .L800B5140
 /* A5964 800B5164 00000000 */   nop
-/* A5968 800B5168 0FE9020C */  jal        func_800BA43C
+/* A5968 800B5168 0FE9020C */  jal        DrawSync
 /* A596C 800B516C 21200000 */   addu      $a0, $zero, $zero
 /* A5970 800B5170 21106002 */  addu       $v0, $s3, $zero
 /* A5974 800B5174 5000BF8F */  lw         $ra, 0x50($sp)

@@ -11,11 +11,11 @@ glabel PhysicsSetVelFromRot
 /* 68360 80077B60 4400BFAF */  sw         $ra, 0x44($sp)
 /* 68364 80077B64 3000A0A7 */  sh         $zero, 0x30($sp)
 /* 68368 80077B68 3200A6A7 */  sh         $a2, 0x32($sp)
-/* 6836C 80077B6C 3DE3010C */  jal        func_80078CF4
+/* 6836C 80077B6C 3DE3010C */  jal        RotMatrix
 /* 68370 80077B70 3400A0A7 */   sh        $zero, 0x34($sp)
 /* 68374 80077B74 1000A427 */  addiu      $a0, $sp, 0x10
 /* 68378 80077B78 3000A527 */  addiu      $a1, $sp, 0x30
-/* 6837C 80077B7C 0EF3020C */  jal        func_800BCC38
+/* 6837C 80077B7C 0EF3020C */  jal        ApplyMatrixSV
 /* 68380 80077B80 3800A627 */   addiu     $a2, $sp, 0x38
 /* 68384 80077B84 3800A287 */  lh         $v0, 0x38($sp)
 /* 68388 80077B88 00000000 */  nop

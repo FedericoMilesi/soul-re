@@ -7,7 +7,7 @@ glabel SteerSwim
 /* 9349C 800A2C9C 21808000 */  addu       $s0, $a0, $zero
 /* 934A0 800A2CA0 B0F9848F */  lw         $a0, %gp_rel(Raziel + 0x380)($gp)
 /* 934A4 800A2CA4 1400BFAF */  sw         $ra, 0x14($sp)
-/* 934A8 800A2CA8 D0E4010C */  jal        func_80079340
+/* 934A8 800A2CA8 D0E4010C */  jal        rsin
 /* 934AC 800A2CAC 00000000 */   nop
 /* 934B0 800A2CB0 08C0838F */  lw         $v1, %gp_rel(gameTrackerX + 0x240)($gp)
 /* 934B4 800A2CB4 00000000 */  nop
@@ -24,7 +24,7 @@ glabel SteerSwim
 /* 934DC 800A2CDC 23104300 */  subu       $v0, $v0, $v1
 /* 934E0 800A2CE0 780002A6 */  sh         $v0, 0x78($s0)
 /* 934E4 800A2CE4 B0F9848F */  lw         $a0, %gp_rel(Raziel + 0x380)($gp)
-/* 934E8 800A2CE8 DCE4010C */  jal        func_80079370
+/* 934E8 800A2CE8 DCE4010C */  jal        rcos
 /* 934EC 800A2CEC 00000000 */   nop
 /* 934F0 800A2CF0 08C0838F */  lw         $v1, %gp_rel(gameTrackerX + 0x240)($gp)
 /* 934F4 800A2CF4 30000524 */  addiu      $a1, $zero, 0x30

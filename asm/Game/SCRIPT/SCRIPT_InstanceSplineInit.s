@@ -50,18 +50,18 @@ glabel SCRIPT_InstanceSplineInit
 /* 2D5F0 8003CDF0 15004014 */  bnez       $v0, .L8003CE48
 /* 2D5F4 8003CDF4 1000A527 */   addiu     $a1, $sp, 0x10
 /* 2D5F8 8003CDF8 30001126 */  addiu      $s1, $s0, 0x30
-/* 2D5FC 8003CDFC 27E7010C */  jal        func_80079C9C
+/* 2D5FC 8003CDFC 27E7010C */  jal        G2Quat_ToMatrix_S
 /* 2D600 8003CE00 21282002 */   addu      $a1, $s1, $zero
 /* 2D604 8003CE04 2000448E */  lw         $a0, 0x20($s2)
 /* 2D608 8003CE08 00000000 */  nop
 /* 2D60C 8003CE0C 08008010 */  beqz       $a0, .L8003CE30
 /* 2D610 8003CE10 18008424 */   addiu     $a0, $a0, 0x18
 /* 2D614 8003CE14 1800B027 */  addiu      $s0, $sp, 0x18
-/* 2D618 8003CE18 3DE3010C */  jal        func_80078CF4
+/* 2D618 8003CE18 3DE3010C */  jal        RotMatrix
 /* 2D61C 8003CE1C 21280002 */   addu      $a1, $s0, $zero
 /* 2D620 8003CE20 21202002 */  addu       $a0, $s1, $zero
 /* 2D624 8003CE24 21280002 */  addu       $a1, $s0, $zero
-/* 2D628 8003CE28 BFF7020C */  jal        func_800BDEFC
+/* 2D628 8003CE28 BFF7020C */  jal        MulMatrix0
 /* 2D62C 8003CE2C 21308000 */   addu      $a2, $a0, $zero
 .L8003CE30:
 /* 2D630 8003CE30 1400428E */  lw         $v0, 0x14($s2)

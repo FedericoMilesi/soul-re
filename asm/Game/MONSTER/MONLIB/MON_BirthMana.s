@@ -17,7 +17,7 @@ glabel MON_BirthMana
 /* 74BD4 800843D4 19004228 */  slti       $v0, $v0, 0x19
 /* 74BD8 800843D8 1C004010 */  beqz       $v0, .L8008444C
 /* 74BDC 800843DC 00000000 */   nop
-/* 74BE0 800843E0 3AF2020C */  jal        func_800BC8E8
+/* 74BE0 800843E0 3AF2020C */  jal        rand
 /* 74BE4 800843E4 00000000 */   nop
 /* 74BE8 800843E8 EB51033C */  lui        $v1, (0x51EB851F >> 16)
 /* 74BEC 800843EC 1F856334 */  ori        $v1, $v1, (0x51EB851F & 0xFFFF)

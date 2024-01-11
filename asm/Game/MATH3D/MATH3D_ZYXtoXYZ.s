@@ -6,7 +6,7 @@ glabel MATH3D_ZYXtoXYZ
 /* 2AA58 8003A258 3800B0AF */  sw         $s0, 0x38($sp)
 /* 2AA5C 8003A25C 21808000 */  addu       $s0, $a0, $zero
 /* 2AA60 8003A260 3C00BFAF */  sw         $ra, 0x3C($sp)
-/* 2AA64 8003A264 D8E2010C */  jal        func_80078B60
+/* 2AA64 8003A264 D8E2010C */  jal        RotMatrixZYX
 /* 2AA68 8003A268 1000A527 */   addiu     $a1, $sp, 0x10
 /* 2AA6C 8003A26C 3000A427 */  addiu      $a0, $sp, 0x30
 /* 2AA70 8003A270 1000A527 */  addiu      $a1, $sp, 0x10

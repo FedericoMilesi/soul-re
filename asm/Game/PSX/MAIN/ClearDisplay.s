@@ -11,7 +11,7 @@ glabel ClearDisplay
 /* 28D10 80038510 23208200 */  subu       $a0, $a0, $v0
 /* 28D14 80038514 80200400 */  sll        $a0, $a0, 2
 /* 28D18 80038518 88BC8227 */  addiu      $v0, $gp, %gp_rel(draw)
-/* 28D1C 8003851C 38EA020C */  jal        func_800BA8E0
+/* 28D1C 8003851C 38EA020C */  jal        PutDrawEnv
 /* 28D20 80038520 21208200 */   addu      $a0, $a0, $v0
 /* 28D24 80038524 CCBD828F */  lw         $v0, %gp_rel(gameTrackerX + 0x4)($gp)
 /* 28D28 80038528 A4BD8327 */  addiu      $v1, $gp, %gp_rel(clearRect)
@@ -31,9 +31,9 @@ glabel ClearDisplay
 /* 28D60 80038560 CCBD848F */  lw         $a0, %gp_rel(gameTrackerX + 0x4)($gp)
 /* 28D64 80038564 00000000 */  nop
 /* 28D68 80038568 00210400 */  sll        $a0, $a0, 4
-/* 28D6C 8003856C 05EA020C */  jal        func_800BA814
+/* 28D6C 8003856C 05EA020C */  jal        DrawPrim
 /* 28D70 80038570 21208300 */   addu      $a0, $a0, $v1
-/* 28D74 80038574 0FE9020C */  jal        func_800BA43C
+/* 28D74 80038574 0FE9020C */  jal        DrawSync
 /* 28D78 80038578 21200000 */   addu      $a0, $zero, $zero
 /* 28D7C 8003857C CCBD828F */  lw         $v0, %gp_rel(gameTrackerX + 0x4)($gp)
 /* 28D80 80038580 00000000 */  nop
@@ -41,9 +41,9 @@ glabel ClearDisplay
 /* 28D88 80038588 21208200 */  addu       $a0, $a0, $v0
 /* 28D8C 8003858C 80200400 */  sll        $a0, $a0, 2
 /* 28D90 80038590 5CBC8227 */  addiu      $v0, $gp, %gp_rel(disp)
-/* 28D94 80038594 68EA020C */  jal        func_800BA9A0
+/* 28D94 80038594 68EA020C */  jal        PutDispEnv
 /* 28D98 80038598 21208200 */   addu      $a0, $a0, $v0
-/* 28D9C 8003859C E9E8020C */  jal        func_800BA3A4
+/* 28D9C 8003859C E9E8020C */  jal        SetDispMask
 /* 28DA0 800385A0 01000424 */   addiu     $a0, $zero, 0x1
 /* 28DA4 800385A4 1000BF8F */  lw         $ra, 0x10($sp)
 /* 28DA8 800385A8 00000000 */  nop

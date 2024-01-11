@@ -32,7 +32,7 @@ glabel GAMELOOP_DisplayFrame
 /* 1FFC4 8002F7C4 08BE828F */  lw         $v0, %gp_rel(gameTrackerX + 0x40)($gp)
 /* 1FFC8 8002F7C8 00000000 */  nop
 /* 1FFCC 8002F7CC 0400428C */  lw         $v0, 0x4($v0)
-/* 1FFD0 8002F7D0 0FE9020C */  jal        func_800BA43C
+/* 1FFD0 8002F7D0 0FE9020C */  jal        DrawSync
 /* 1FFD4 8002F7D4 3000A2AF */   sw        $v0, 0x30($sp)
 /* 1FFD8 8002F7D8 4FC0000C */  jal        Switch_For_Redraw
 /* 1FFDC 8002F7DC 00000000 */   nop
@@ -40,7 +40,7 @@ glabel GAMELOOP_DisplayFrame
 /* 1FFE4 8002F7E4 9CBF848F */  lw         $a0, %gp_rel(gameTrackerX + 0x1D4)($gp)
 /* 1FFE8 8002F7E8 D401088D */  lw         $t0, 0x1D4($t0)
 /* 1FFEC 8002F7EC 000C0524 */  addiu      $a1, $zero, 0xC00
-/* 1FFF0 8002F7F0 DAE9020C */  jal        func_800BA768
+/* 1FFF0 8002F7F0 DAE9020C */  jal        ClearOTagR
 /* 1FFF4 8002F7F4 2000A8AF */   sw        $t0, 0x20($sp)
 /* 1FFF8 8002F7F8 40BA838F */  lw         $v1, %gp_rel(pause_redraw_prim)($gp)
 /* 1FFFC 8002F7FC 00000000 */  nop
@@ -294,10 +294,10 @@ glabel GAMELOOP_DisplayFrame
 /* 20394 8002FB94 C053000C */  jal        CAMERA_SetViewVolume
 /* 20398 8002FB98 60FF0425 */   addiu     $a0, $t0, -0xA0
 /* 2039C 8002FB9C F0AC848F */  lw         $a0, %gp_rel(theCamera + 0x60)($gp)
-/* 203A0 8002FBA0 52F2020C */  jal        func_800BC948
+/* 203A0 8002FBA0 52F2020C */  jal        SetRotMatrix
 /* 203A4 8002FBA4 00000000 */   nop
 /* 203A8 8002FBA8 F0AC848F */  lw         $a0, %gp_rel(theCamera + 0x60)($gp)
-/* 203AC 8002FBAC 4AF2020C */  jal        func_800BC928
+/* 203AC 8002FBAC 4AF2020C */  jal        SetTransMatrix
 /* 203B0 8002FBB0 00000000 */   nop
 /* 203B4 8002FBB4 0000E296 */  lhu        $v0, 0x0($s7)
 /* 203B8 8002FBB8 00000000 */  nop
@@ -408,7 +408,7 @@ glabel GAMELOOP_DisplayFrame
 /* 2053C 8002FD3C 72C0000C */  jal        SaveOT
 /* 20540 8002FD40 00000000 */   nop
 /* 20544 8002FD44 9CBF848F */  lw         $a0, %gp_rel(gameTrackerX + 0x1D4)($gp)
-/* 20548 8002FD48 DAE9020C */  jal        func_800BA768
+/* 20548 8002FD48 DAE9020C */  jal        ClearOTagR
 /* 2054C 8002FD4C 000C0524 */   addiu     $a1, $zero, 0xC00
 /* 20550 8002FD50 4FC0000C */  jal        Switch_For_Redraw
 /* 20554 8002FD54 00000000 */   nop
@@ -438,7 +438,7 @@ glabel GAMELOOP_DisplayFrame
 /* 205AC 8002FDAC 2000A48F */  lw         $a0, 0x20($sp)
 /* 205B0 8002FDB0 80BD000C */  jal        GAMELOOP_SwitchTheDrawBuffer
 /* 205B4 8002FDB4 00000000 */   nop
-/* 205B8 8002FDB8 EBF4020C */  jal        func_800BD3AC
+/* 205B8 8002FDB8 EBF4020C */  jal        GetRCnt
 /* 205BC 8002FDBC 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 205C0 8002FDC0 FFFF4230 */  andi       $v0, $v0, 0xFFFF
 /* 205C4 8002FDC4 5890848F */  lw         $a0, %gp_rel(gameTimer)($gp)
@@ -454,7 +454,7 @@ glabel GAMELOOP_DisplayFrame
 /* 205E8 8002FDE8 6000A88F */  lw         $t0, 0x60($sp)
 /* 205EC 8002FDEC 00000000 */  nop
 /* 205F0 8002FDF0 1801048D */  lw         $a0, 0x118($t0)
-/* 205F4 8002FDF4 8494000C */  jal        func_80025210
+/* 205F4 8002FDF4 8494000C */  jal        CheckVolatile
 /* 205F8 8002FDF8 00000000 */   nop
 /* 205FC 8002FDFC 0F004010 */  beqz       $v0, .L8002FE3C
 /* 20600 8002FE00 00000000 */   nop
@@ -467,7 +467,7 @@ glabel GAMELOOP_DisplayFrame
 /* 20618 8002FE18 00000000 */  nop
 /* 2061C 8002FE1C 08008010 */  beqz       $a0, .L8002FE40
 /* 20620 8002FE20 00000000 */   nop
-/* 20624 8002FE24 68EA020C */  jal        func_800BA9A0
+/* 20624 8002FE24 68EA020C */  jal        PutDispEnv
 /* 20628 8002FE28 00000000 */   nop
 /* 2062C 8002FE2C 6000A88F */  lw         $t0, 0x60($sp)
 /* 20630 8002FE30 00000000 */  nop
@@ -495,7 +495,7 @@ glabel GAMELOOP_DisplayFrame
 /* 20680 8002FE80 2000A48F */  lw         $a0, 0x20($sp)
 /* 20684 8002FE84 56B9000C */  jal        GAMELOOP_HandleScreenWipes
 /* 20688 8002FE88 00000000 */   nop
-/* 2068C 8002FE8C EBF4020C */  jal        func_800BD3AC
+/* 2068C 8002FE8C EBF4020C */  jal        GetRCnt
 /* 20690 8002FE90 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 20694 8002FE94 6000A88F */  lw         $t0, 0x60($sp)
 /* 20698 8002FE98 00000000 */  nop
@@ -517,7 +517,7 @@ glabel GAMELOOP_DisplayFrame
 /* 206D8 8002FED8 BABF0008 */  j          .L8002FEE8
 /* 206DC 8002FEDC 00000000 */   nop
 .L8002FEE0:
-/* 206E0 8002FEE0 1CEA020C */  jal        func_800BA870
+/* 206E0 8002FEE0 1CEA020C */  jal        DrawOTag
 /* 206E4 8002FEE4 21200002 */   addu      $a0, $s0, $zero
 .L8002FEE8:
 /* 206E8 8002FEE8 5C00BF8F */  lw         $ra, 0x5C($sp)

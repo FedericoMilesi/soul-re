@@ -219,7 +219,7 @@ glabel sfxCmdSetToneVolPanPitch
 /* 48568 80057D68 82330300 */  srl        $a2, $v1, 14
 /* 4856C 80057D6C 1200A6A7 */  sh         $a2, 0x12($sp)
 /* 48570 80057D70 00340600 */  sll        $a2, $a2, 16
-/* 48574 80057D74 D000030C */  jal        func_800C0340
+/* 48574 80057D74 D000030C */  jal        SpuSetVoiceVolume
 /* 48578 80057D78 03340600 */   sra       $a2, $a2, 16
 /* 4857C 80057D7C 1400068E */  lw         $a2, 0x14($s0)
 /* 48580 80057D80 0A000492 */  lbu        $a0, 0xA($s0)
@@ -277,7 +277,7 @@ glabel sfxCmdSetToneVolPanPitch
 /* 48648 80057E48 08004296 */  lhu        $v0, 0x8($s2)
 /* 4864C 80057E4C FFFF2432 */  andi       $a0, $s1, 0xFFFF
 /* 48650 80057E50 2128A200 */  addu       $a1, $a1, $v0
-/* 48654 80057E54 9DFE020C */  jal        func_800BFA74
+/* 48654 80057E54 9DFE020C */  jal        SpuSetVoicePitch
 /* 48658 80057E58 FFFFA530 */   andi      $a1, $a1, 0xFFFF
 /* 4865C 80057E5C 9E5F0108 */  j          .L80057E78
 /* 48660 80057E60 00000000 */   nop

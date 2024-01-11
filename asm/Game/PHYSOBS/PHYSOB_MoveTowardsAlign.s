@@ -96,7 +96,7 @@ glabel PHYSOB_MoveTowardsAlign
 /* 6079C 8006FF9C 00000000 */   nop
 /* 607A0 8006FFA0 FF0F4224 */  addiu      $v0, $v0, 0xFFF
 .L8006FFA4:
-/* 607A4 8006FFA4 E8E4010C */  jal        func_800793A0
+/* 607A4 8006FFA4 E8E4010C */  jal        MATH3D_racos_S
 /* 607A8 8006FFA8 03230200 */   sra       $a0, $v0, 12
 /* 607AC 8006FFAC 00140200 */  sll        $v0, $v0, 16
 /* 607B0 8006FFB0 031C0200 */  sra        $v1, $v0, 16
@@ -131,7 +131,7 @@ glabel PHYSOB_MoveTowardsAlign
 /* 60818 80070018 21200002 */   addu      $a0, $s0, $zero
 /* 6081C 8007001C 21804000 */  addu       $s0, $v0, $zero
 .L80070020:
-/* 60820 80070020 D0E4010C */  jal        func_80079340
+/* 60820 80070020 D0E4010C */  jal        rsin
 /* 60824 80070024 21202002 */   addu      $a0, $s1, $zero
 /* 60828 80070028 5000A387 */  lh         $v1, 0x50($sp)
 /* 6082C 8007002C 00000000 */  nop
@@ -160,16 +160,16 @@ glabel PHYSOB_MoveTowardsAlign
 /* 60888 80070088 21202002 */  addu       $a0, $s1, $zero
 /* 6088C 8007008C 5000A6A7 */  sh         $a2, 0x50($sp)
 /* 60890 80070090 5200A5A7 */  sh         $a1, 0x52($sp)
-/* 60894 80070094 DCE4010C */  jal        func_80079370
+/* 60894 80070094 DCE4010C */  jal        rcos
 /* 60898 80070098 5400A2A7 */   sh        $v0, 0x54($sp)
 /* 6089C 8007009C 5000A427 */  addiu      $a0, $sp, 0x50
 /* 608A0 800700A0 1000A527 */  addiu      $a1, $sp, 0x10
-/* 608A4 800700A4 27E7010C */  jal        func_80079C9C
+/* 608A4 800700A4 27E7010C */  jal        G2Quat_ToMatrix_S
 /* 608A8 800700A8 5600A2A7 */   sh        $v0, 0x56($sp)
 /* 608AC 800700AC 1000A427 */  addiu      $a0, $sp, 0x10
 /* 608B0 800700B0 21288002 */  addu       $a1, $s4, $zero
 /* 608B4 800700B4 3000B027 */  addiu      $s0, $sp, 0x30
-/* 608B8 800700B8 BFF7020C */  jal        func_800BDEFC
+/* 608B8 800700B8 BFF7020C */  jal        MulMatrix0
 /* 608BC 800700BC 21300002 */   addu      $a2, $s0, $zero
 /* 608C0 800700C0 5800A427 */  addiu      $a0, $sp, 0x58
 /* 608C4 800700C4 21280002 */  addu       $a1, $s0, $zero

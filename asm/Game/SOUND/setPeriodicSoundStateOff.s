@@ -21,7 +21,7 @@ glabel setPeriodicSoundStateOff
 /* 2F938 8003F138 00000000 */  nop
 /* 2F93C 8003F13C 0C004010 */  beqz       $v0, .L8003F170
 /* 2F940 8003F140 00000000 */   nop
-/* 2F944 8003F144 3AF2020C */  jal        func_800BC8E8
+/* 2F944 8003F144 3AF2020C */  jal        rand
 /* 2F948 8003F148 00000000 */   nop
 /* 2F94C 8003F14C 11002492 */  lbu        $a0, 0x11($s1)
 /* 2F950 8003F150 00000000 */  nop

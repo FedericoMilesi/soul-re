@@ -61,15 +61,15 @@ glabel MONSTER_StartVertexBlood
 /* 7CB30 8008C330 0400318E */  lw         $s1, 0x4($s1)
 /* 7CB34 8008C334 40110200 */  sll        $v0, $v0, 5
 /* 7CB38 8008C338 21800202 */  addu       $s0, $s0, $v0
-/* 7CB3C 8008C33C 52F2020C */  jal        func_800BC948
+/* 7CB3C 8008C33C 52F2020C */  jal        SetRotMatrix
 /* 7CB40 8008C340 21200002 */   addu      $a0, $s0, $zero
-/* 7CB44 8008C344 4AF2020C */  jal        func_800BC928
+/* 7CB44 8008C344 4AF2020C */  jal        SetTransMatrix
 /* 7CB48 8008C348 21200002 */   addu      $a0, $s0, $zero
 /* 7CB4C 8008C34C 3000A527 */  addiu      $a1, $sp, 0x30
 /* 7CB50 8008C350 1000A48F */  lw         $a0, 0x10($sp)
 /* 7CB54 8008C354 4000A627 */  addiu      $a2, $sp, 0x40
 /* 7CB58 8008C358 C0200400 */  sll        $a0, $a0, 3
-/* 7CB5C 8008C35C 98F4020C */  jal        func_800BD260
+/* 7CB5C 8008C35C 98F4020C */  jal        RotTrans
 /* 7CB60 8008C360 21202402 */   addu      $a0, $s1, $a0
 /* 7CB64 8008C364 21206002 */  addu       $a0, $s3, $zero
 /* 7CB68 8008C368 3000A397 */  lhu        $v1, 0x30($sp)

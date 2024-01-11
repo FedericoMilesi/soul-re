@@ -12,7 +12,7 @@ glabel ResetDrawPage
 /* 20B84 80030384 23104300 */  subu       $v0, $v0, $v1
 /* 20B88 80030388 9CBF84AF */  sw         $a0, %gp_rel(gameTrackerX + 0x1D4)($gp)
 /* 20B8C 8003038C F8BD82AF */  sw         $v0, %gp_rel(gameTrackerX + 0x30)($gp)
-/* 20B90 80030390 DAE9020C */  jal        func_800BA768
+/* 20B90 80030390 DAE9020C */  jal        ClearOTagR
 /* 20B94 80030394 000C0524 */   addiu     $a1, $zero, 0xC00
 /* 20B98 80030398 1000BF8F */  lw         $ra, 0x10($sp)
 /* 20B9C 8003039C 00000000 */  nop

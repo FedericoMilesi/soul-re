@@ -51,7 +51,7 @@ glabel FadeOutSayingLoading
 /* 29534 80038D34 0A0050A2 */  sb         $s0, 0xA($s2)
 .L80038D38:
 /* 29538 80038D38 1C01248E */  lw         $a0, 0x11C($s1)
-/* 2953C 80038D3C 8494000C */  jal        func_80025210
+/* 2953C 80038D3C 8494000C */  jal        CheckVolatile
 /* 29540 80038D40 00000000 */   nop
 /* 29544 80038D44 FCFF4014 */  bnez       $v0, .L80038D38
 /* 29548 80038D48 00000000 */   nop
@@ -63,11 +63,11 @@ glabel FadeOutSayingLoading
 /* 29560 80038D60 23208200 */  subu       $a0, $a0, $v0
 /* 29564 80038D64 80200400 */  sll        $a0, $a0, 2
 /* 29568 80038D68 88BC8227 */  addiu      $v0, $gp, %gp_rel(draw)
-/* 2956C 80038D6C 38EA020C */  jal        func_800BA8E0
+/* 2956C 80038D6C 38EA020C */  jal        PutDrawEnv
 /* 29570 80038D70 21208200 */   addu      $a0, $a0, $v0
 .L80038D74:
 /* 29574 80038D74 1801248E */  lw         $a0, 0x118($s1)
-/* 29578 80038D78 8494000C */  jal        func_80025210
+/* 29578 80038D78 8494000C */  jal        CheckVolatile
 /* 2957C 80038D7C 00000000 */   nop
 /* 29580 80038D80 FCFF4014 */  bnez       $v0, .L80038D74
 /* 29584 80038D84 21200000 */   addu      $a0, $zero, $zero
@@ -75,9 +75,9 @@ glabel FadeOutSayingLoading
 /* 2958C 80038D8C 28022326 */  addiu      $v1, $s1, 0x228
 /* 29590 80038D90 1C0123AE */  sw         $v1, 0x11C($s1)
 /* 29594 80038D94 23108202 */  subu       $v0, $s4, $v0
-/* 29598 80038D98 5EF2020C */  jal        func_800BC978
+/* 29598 80038D98 5EF2020C */  jal        VSync
 /* 2959C 80038D9C 040022AE */   sw        $v0, 0x4($s1)
-/* 295A0 80038DA0 1CEA020C */  jal        func_800BA870
+/* 295A0 80038DA0 1CEA020C */  jal        DrawOTag
 /* 295A4 80038DA4 FC2F6426 */   addiu     $a0, $s3, 0x2FFC
 /* 295A8 80038DA8 FF000224 */  addiu      $v0, $zero, 0xFF
 /* 295AC 80038DAC D7FF0216 */  bne        $s0, $v0, .L80038D0C

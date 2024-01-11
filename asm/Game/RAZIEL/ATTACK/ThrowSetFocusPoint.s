@@ -31,7 +31,7 @@ glabel ThrowSetFocusPoint
 /* 8EC78 8009E478 1200A0A7 */  sh         $zero, 0x12($sp)
 /* 8EC7C 8009E47C 18004294 */  lhu        $v0, 0x18($v0)
 /* 8EC80 8009E480 21306002 */  addu       $a2, $s3, $zero
-/* 8EC84 8009E484 1AF2020C */  jal        func_800BC868
+/* 8EC84 8009E484 1AF2020C */  jal        ApplyMatrix
 /* 8EC88 8009E488 1400A2A7 */   sh        $v0, 0x14($sp)
 /* 8EC8C 8009E48C C8019026 */  addiu      $s0, $s4, 0x1C8
 /* 8EC90 8009E490 21200002 */  addu       $a0, $s0, $zero

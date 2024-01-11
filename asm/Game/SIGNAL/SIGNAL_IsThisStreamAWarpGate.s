@@ -7,10 +7,10 @@ glabel SIGNAL_IsThisStreamAWarpGate
 /* EC98 8001E498 21800000 */  addu       $s0, $zero, $zero
 /* EC9C 8001E49C 0C008524 */  addiu      $a1, $a0, 0xC
 /* ECA0 8001E4A0 3400BFAF */  sw         $ra, 0x34($sp)
-/* ECA4 8001E4A4 1CF4020C */  jal        func_800BD070
+/* ECA4 8001E4A4 1CF4020C */  jal        strcpy
 /* ECA8 8001E4A8 1000A427 */   addiu     $a0, $sp, 0x10
 /* ECAC 8001E4AC 1000A427 */  addiu      $a0, $sp, 0x10
-/* ECB0 8001E4B0 0CF4020C */  jal        func_800BD030
+/* ECB0 8001E4B0 0CF4020C */  jal        strchr
 /* ECB4 8001E4B4 2C000524 */   addiu     $a1, $zero, 0x2C
 /* ECB8 8001E4B8 02004010 */  beqz       $v0, .L8001E4C4
 /* ECBC 8001E4BC 1000A427 */   addiu     $a0, $sp, 0x10

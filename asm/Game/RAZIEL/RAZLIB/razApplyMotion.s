@@ -10,7 +10,7 @@ glabel razApplyMotion
 /* 972D0 800A6AD0 1000A427 */  addiu      $a0, $sp, 0x10
 /* 972D4 800A6AD4 21280000 */  addu       $a1, $zero, $zero
 /* 972D8 800A6AD8 2000BFAF */  sw         $ra, 0x20($sp)
-/* 972DC 800A6ADC 2EF2020C */  jal        func_800BC8B8
+/* 972DC 800A6ADC 2EF2020C */  jal        memset
 /* 972E0 800A6AE0 06000624 */   addiu     $a2, $zero, 0x6
 /* 972E4 800A6AE4 52000016 */  bnez       $s0, .L800A6C30
 /* 972E8 800A6AE8 02000524 */   addiu     $a1, $zero, 0x2

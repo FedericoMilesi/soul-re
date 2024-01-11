@@ -86,7 +86,7 @@ glabel LOAD_ProcessReadQueue
 /* 280E0 800378E0 00000000 */   nop
 .L800378E4:
 /* 280E4 800378E4 C0BB80AF */  sw         $zero, %gp_rel(loadStatus + 0x2C)($gp)
-/* 280E8 800378E8 0EF8020C */  jal        func_800BE038
+/* 280E8 800378E8 0EF8020C */  jal        CdReset
 /* 280EC 800378EC 00000000 */   nop
 /* 280F0 800378F0 B5E0000C */  jal        LOAD_InitCdStreamMode
 /* 280F4 800378F4 00000000 */   nop
@@ -94,11 +94,11 @@ glabel LOAD_ProcessReadQueue
 /* 280FC 800378FC 28BC848F */  lw         $a0, %gp_rel(loadStatus + 0x94)($gp)
 /* 28100 80037900 01000224 */  addiu      $v0, $zero, 0x1
 /* 28104 80037904 C0BB82AF */  sw         $v0, %gp_rel(loadStatus + 0x2C)($gp)
-/* 28108 80037908 15FC020C */  jal        func_800BF054
+/* 28108 80037908 15FC020C */  jal        CdIntToPos
 /* 2810C 8003790C 00000000 */   nop
 /* 28110 80037910 06000424 */  addiu      $a0, $zero, 0x6
 /* 28114 80037914 2000A527 */  addiu      $a1, $sp, 0x20
-/* 28118 80037918 50F8020C */  jal        func_800BE140
+/* 28118 80037918 50F8020C */  jal        CdControl
 /* 2811C 8003791C 21300000 */   addu      $a2, $zero, $zero
 /* 28120 80037920 6FF7000C */  jal        TIMER_GetTimeMS
 /* 28124 80037924 00000000 */   nop
@@ -110,7 +110,7 @@ glabel LOAD_ProcessReadQueue
 /* 28138 80037938 00000000 */   nop
 /* 2813C 8003793C 03004014 */  bnez       $v0, .L8003794C
 /* 28140 80037940 09000424 */   addiu     $a0, $zero, 0x9
-/* 28144 80037944 9FF8020C */  jal        func_800BE27C
+/* 28144 80037944 9FF8020C */  jal        CdControlF
 /* 28148 80037948 21280000 */   addu      $a1, $zero, $zero
 .L8003794C:
 /* 2814C 8003794C CCBB80AF */  sw         $zero, %gp_rel(loadStatus + 0x38)($gp)

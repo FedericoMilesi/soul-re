@@ -177,7 +177,7 @@ glabel processEventSound
 /* 300AC 8003F8AC 00000000 */  nop
 /* 300B0 8003F8B0 0D004010 */  beqz       $v0, .L8003F8E8
 /* 300B4 8003F8B4 00000000 */   nop
-/* 300B8 8003F8B8 3AF2020C */  jal        func_800BC8E8
+/* 300B8 8003F8B8 3AF2020C */  jal        rand
 /* 300BC 8003F8BC 00000000 */   nop
 /* 300C0 8003F8C0 0B006392 */  lbu        $v1, 0xB($s3)
 /* 300C4 8003F8C4 00000000 */  nop
@@ -197,7 +197,7 @@ glabel processEventSound
 /* 300F8 8003F8F8 00000000 */  nop
 /* 300FC 8003F8FC 0C004010 */  beqz       $v0, .L8003F930
 /* 30100 8003F900 00000000 */   nop
-/* 30104 8003F904 3AF2020C */  jal        func_800BC8E8
+/* 30104 8003F904 3AF2020C */  jal        rand
 /* 30108 8003F908 00000000 */   nop
 /* 3010C 8003F90C 08006496 */  lhu        $a0, 0x8($s3)
 /* 30110 8003F910 00000000 */  nop
@@ -214,7 +214,7 @@ glabel processEventSound
 /* 30138 8003F938 0200422C */  sltiu      $v0, $v0, 0x2
 /* 3013C 8003F93C 09004014 */  bnez       $v0, .L8003F964
 /* 30140 8003F940 21180000 */   addu      $v1, $zero, $zero
-/* 30144 8003F944 3AF2020C */  jal        func_800BC8E8
+/* 30144 8003F944 3AF2020C */  jal        rand
 /* 30148 8003F948 00000000 */   nop
 /* 3014C 8003F94C 01006392 */  lbu        $v1, 0x1($s3)
 /* 30150 8003F950 00000000 */  nop

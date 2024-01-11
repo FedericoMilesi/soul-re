@@ -10,7 +10,7 @@ glabel LOAD_CdSeekCallback
 /* 27B0C 8003730C 02000224 */  addiu      $v0, $zero, 0x2
 /* 27B10 80037310 00F2043C */  lui        $a0, (0xF2000000 >> 16)
 /* 27B14 80037314 C0BB82AF */  sw         $v0, %gp_rel(loadStatus + 0x2C)($gp)
-/* 27B18 80037318 EBF4020C */  jal        func_800BD3AC
+/* 27B18 80037318 EBF4020C */  jal        GetRCnt
 /* 27B1C 8003731C 00000000 */   nop
 /* 27B20 80037320 5890838F */  lw         $v1, %gp_rel(gameTimer)($gp)
 /* 27B24 80037324 FFFF4230 */  andi       $v0, $v0, 0xFFFF

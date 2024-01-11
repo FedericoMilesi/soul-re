@@ -15,7 +15,7 @@ glabel MONAPI_DeleteRegen
 /* 6FB68 8007F368 0E006680 */  lb         $a2, 0xE($v1)
 /* 6FB6C 8007F36C C3100200 */  sra        $v0, $v0, 3
 /* 6FB70 8007F370 2330C200 */  subu       $a2, $a2, $v0
-/* 6FB74 8007F374 02E5010C */  jal        func_80079408
+/* 6FB74 8007F374 02E5010C */  jal        memcpy
 /* 6FB78 8007F378 C0300600 */   sll       $a2, $a2, 3
 /* 6FB7C 8007F37C 1000BF8F */  lw         $ra, 0x10($sp)
 /* 6FB80 8007F380 00000000 */  nop

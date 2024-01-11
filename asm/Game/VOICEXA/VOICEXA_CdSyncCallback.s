@@ -21,7 +21,7 @@ glabel VOICEXA_CdSyncCallback
 /* A746C 800B6C6C A200A290 */  lbu        $v0, 0xA2($a1)
 /* A7470 800B6C70 0C00A48C */  lw         $a0, 0xC($a1)
 /* A7474 800B6C74 FFFF4224 */  addiu      $v0, $v0, -0x1
-/* A7478 800B6C78 46F8020C */  jal        func_800BE118
+/* A7478 800B6C78 46F8020C */  jal        CdSyncCallback
 /* A747C 800B6C7C A200A2A0 */   sb        $v0, 0xA2($a1)
 /* A7480 800B6C80 23DB0208 */  j          .L800B6C8C
 /* A7484 800B6C84 00000000 */   nop

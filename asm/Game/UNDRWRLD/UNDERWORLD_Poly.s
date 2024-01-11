@@ -66,7 +66,7 @@ glabel UNDERWORLD_Poly
 /* A534C 800B4B4C 02000424 */  addiu      $a0, $zero, 0x2
 /* A5350 800B4B50 01000524 */  addiu      $a1, $zero, 0x1
 /* A5354 800B4B54 3800A78F */  lw         $a3, 0x38($sp)
-/* A5358 800B4B58 BDFD020C */  jal        func_800BF6F4
+/* A5358 800B4B58 BDFD020C */  jal        GetTPage
 /* A535C 800B4B5C 21300002 */   addu      $a2, $s0, $zero
 /* A5360 800B4B60 FF00053C */  lui        $a1, (0xFFFFFF >> 16)
 /* A5364 800B4B64 FFFFA534 */  ori        $a1, $a1, (0xFFFFFF & 0xFFFF)

@@ -51,7 +51,7 @@ glabel _FX_BuildSegmentedSplinters
 .L8004308C:
 /* 3388C 8004308C 0003A427 */  addiu      $a0, $sp, 0x300
 /* 33890 80043090 FF000524 */  addiu      $a1, $zero, 0xFF
-/* 33894 80043094 2EF2020C */  jal        func_800BC8B8
+/* 33894 80043094 2EF2020C */  jal        memset
 /* 33898 80043098 80000624 */   addiu     $a2, $zero, 0x80
 /* 3389C 8004309C F003A48F */  lw         $a0, 0x3F0($sp)
 /* 338A0 800430A0 9C0B010C */  jal        _FX_SetupLighting
@@ -179,7 +179,7 @@ glabel _FX_BuildSegmentedSplinters
 /* 33A70 80043270 03940200 */  sra        $s2, $v0, 16
 /* 33A74 80043274 29004012 */  beqz       $s2, .L8004331C
 /* 33A78 80043278 001C1000 */   sll       $v1, $s0, 16
-/* 33A7C 8004327C 3AF2020C */  jal        func_800BC8E8
+/* 33A7C 8004327C 3AF2020C */  jal        rand
 /* 33A80 80043280 00841000 */   sll       $s0, $s0, 16
 /* 33A84 80043284 1A005200 */  div        $zero, $v0, $s2
 /* 33A88 80043288 10180000 */  mfhi       $v1
@@ -192,7 +192,7 @@ glabel _FX_BuildSegmentedSplinters
 /* 33AA4 800432A4 21883101 */  addu       $s1, $t1, $s1
 /* 33AA8 800432A8 12180000 */  mflo       $v1
 /* 33AAC 800432AC 03130300 */  sra        $v0, $v1, 12
-/* 33AB0 800432B0 3AF2020C */  jal        func_800BC8E8
+/* 33AB0 800432B0 3AF2020C */  jal        rand
 /* 33AB4 800432B4 000022A6 */   sh        $v0, 0x0($s1)
 /* 33AB8 800432B8 1A005200 */  div        $zero, $v0, $s2
 /* 33ABC 800432BC 10180000 */  mfhi       $v1
@@ -206,7 +206,7 @@ glabel _FX_BuildSegmentedSplinters
 /* 33ADC 800432DC 00000000 */  nop
 /* 33AE0 800432E0 06003095 */  lhu        $s0, 0x6($t1)
 /* 33AE4 800432E4 08002295 */  lhu        $v0, 0x8($t1)
-/* 33AE8 800432E8 3AF2020C */  jal        func_800BC8E8
+/* 33AE8 800432E8 3AF2020C */  jal        rand
 /* 33AEC 800432EC 23800202 */   subu      $s0, $s0, $v0
 /* 33AF0 800432F0 1A005200 */  div        $zero, $v0, $s2
 /* 33AF4 800432F4 10180000 */  mfhi       $v1
@@ -245,7 +245,7 @@ glabel _FX_BuildSegmentedSplinters
 /* 33B74 80043374 0D0D0108 */  j          .L80043434
 /* 33B78 80043378 040082A4 */   sh        $v0, 0x4($a0)
 .L8004337C:
-/* 33B7C 8004337C 3AF2020C */  jal        func_800BC8E8
+/* 33B7C 8004337C 3AF2020C */  jal        rand
 /* 33B80 80043380 00000000 */   nop
 /* 33B84 80043384 21184000 */  addu       $v1, $v0, $zero
 /* 33B88 80043388 21204000 */  addu       $a0, $v0, $zero
@@ -263,7 +263,7 @@ glabel _FX_BuildSegmentedSplinters
 /* 33BB4 800433B4 1800A200 */  mult       $a1, $v0
 /* 33BB8 800433B8 12480000 */  mflo       $t1
 /* 33BBC 800433BC 03130900 */  sra        $v0, $t1, 12
-/* 33BC0 800433C0 3AF2020C */  jal        func_800BC8E8
+/* 33BC0 800433C0 3AF2020C */  jal        rand
 /* 33BC4 800433C4 000002A6 */   sh        $v0, 0x0($s0)
 /* 33BC8 800433C8 21184000 */  addu       $v1, $v0, $zero
 /* 33BCC 800433CC 9203A487 */  lh         $a0, 0x392($sp)
@@ -278,7 +278,7 @@ glabel _FX_BuildSegmentedSplinters
 /* 33BEC 800433EC 18008200 */  mult       $a0, $v0
 /* 33BF0 800433F0 12480000 */  mflo       $t1
 /* 33BF4 800433F4 03130900 */  sra        $v0, $t1, 12
-/* 33BF8 800433F8 3AF2020C */  jal        func_800BC8E8
+/* 33BF8 800433F8 3AF2020C */  jal        rand
 /* 33BFC 800433FC 020002A6 */   sh        $v0, 0x2($s0)
 /* 33C00 80043400 21184000 */  addu       $v1, $v0, $zero
 /* 33C04 80043404 9403A487 */  lh         $a0, 0x394($sp)
@@ -308,7 +308,7 @@ glabel _FX_BuildSegmentedSplinters
 /* 33C58 80043458 220D0108 */  j          .L80043488
 /* 33C5C 8004345C 0100DE27 */   addiu     $fp, $fp, 0x1
 .L80043460:
-/* 33C60 80043460 3AF2020C */  jal        func_800BC8E8
+/* 33C60 80043460 3AF2020C */  jal        rand
 /* 33C64 80043464 00000000 */   nop
 /* 33C68 80043468 1A005E00 */  div        $zero, $v0, $fp
 /* 33C6C 8004346C 10A00000 */  mfhi       $s4
@@ -557,7 +557,7 @@ glabel _FX_BuildSegmentedSplinters
 /* 34010 80043810 0A003195 */  lhu        $s1, 0xA($t1)
 /* 34014 80043814 19000012 */  beqz       $s0, .L8004387C
 /* 34018 80043818 00000000 */   nop
-/* 3401C 8004381C 3AF2020C */  jal        func_800BC8E8
+/* 3401C 8004381C 3AF2020C */  jal        rand
 /* 34020 80043820 23881100 */   negu      $s1, $s1
 /* 34024 80043824 40841000 */  sll        $s0, $s0, 17
 /* 34028 80043828 03841000 */  sra        $s0, $s0, 16
@@ -566,14 +566,14 @@ glabel _FX_BuildSegmentedSplinters
 /* 34034 80043834 5C004296 */  lhu        $v0, 0x5C($s2)
 /* 34038 80043838 21182302 */  addu       $v1, $s1, $v1
 /* 3403C 8004383C 21104300 */  addu       $v0, $v0, $v1
-/* 34040 80043840 3AF2020C */  jal        func_800BC8E8
+/* 34040 80043840 3AF2020C */  jal        rand
 /* 34044 80043844 5C0042A6 */   sh        $v0, 0x5C($s2)
 /* 34048 80043848 1A005000 */  div        $zero, $v0, $s0
 /* 3404C 8004384C 10180000 */  mfhi       $v1
 /* 34050 80043850 5E004296 */  lhu        $v0, 0x5E($s2)
 /* 34054 80043854 21182302 */  addu       $v1, $s1, $v1
 /* 34058 80043858 21104300 */  addu       $v0, $v0, $v1
-/* 3405C 8004385C 3AF2020C */  jal        func_800BC8E8
+/* 3405C 8004385C 3AF2020C */  jal        rand
 /* 34060 80043860 5E0042A6 */   sh        $v0, 0x5E($s2)
 /* 34064 80043864 1A005000 */  div        $zero, $v0, $s0
 /* 34068 80043868 10180000 */  mfhi       $v1
@@ -619,7 +619,7 @@ glabel _FX_BuildSegmentedSplinters
 /* 34100 80043900 03840200 */  sra        $s0, $v0, 16
 /* 34104 80043904 0B000012 */  beqz       $s0, .L80043934
 /* 34108 80043908 00000000 */   nop
-/* 3410C 8004390C 3AF2020C */  jal        func_800BC8E8
+/* 3410C 8004390C 3AF2020C */  jal        rand
 /* 34110 80043910 00000000 */   nop
 /* 34114 80043914 401C1000 */  sll        $v1, $s0, 17
 /* 34118 80043918 031C0300 */  sra        $v1, $v1, 16
@@ -638,7 +638,7 @@ glabel _FX_BuildSegmentedSplinters
 /* 34144 80043944 5E0E0108 */  j          .L80043978
 /* 34148 80043948 660042A6 */   sh        $v0, 0x66($s2)
 .L8004394C:
-/* 3414C 8004394C 3AF2020C */  jal        func_800BC8E8
+/* 3414C 8004394C 3AF2020C */  jal        rand
 /* 34150 80043950 660042A6 */   sh        $v0, 0x66($s2)
 /* 34154 80043954 21184000 */  addu       $v1, $v0, $zero
 /* 34158 80043958 03006104 */  bgez       $v1, .L80043968

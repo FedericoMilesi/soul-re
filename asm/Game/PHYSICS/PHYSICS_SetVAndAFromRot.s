@@ -15,7 +15,7 @@ glabel PHYSICS_SetVAndAFromRot
 /* 683E0 80077BE0 00000000 */   nop
 .L80077BE4:
 /* 683E4 80077BE4 74000426 */  addiu      $a0, $s0, 0x74
-/* 683E8 80077BE8 3DE3010C */  jal        func_80078CF4
+/* 683E8 80077BE8 3DE3010C */  jal        RotMatrix
 /* 683EC 80077BEC 1800A527 */   addiu     $a1, $sp, 0x18
 /* 683F0 80077BF0 1000A0A7 */  sh         $zero, 0x10($sp)
 /* 683F4 80077BF4 1400A0A7 */  sh         $zero, 0x14($sp)
@@ -25,7 +25,7 @@ glabel PHYSICS_SetVAndAFromRot
 /* 68400 80077C00 1000A527 */  addiu      $a1, $sp, 0x10
 /* 68404 80077C04 3800A627 */  addiu      $a2, $sp, 0x38
 /* 68408 80077C08 23101100 */  negu       $v0, $s1
-/* 6840C 80077C0C 0EF3020C */  jal        func_800BCC38
+/* 6840C 80077C0C 0EF3020C */  jal        ApplyMatrixSV
 /* 68410 80077C10 1200A2A7 */   sh        $v0, 0x12($sp)
 /* 68414 80077C14 3800A287 */  lh         $v0, 0x38($sp)
 /* 68418 80077C18 00000000 */  nop
@@ -46,7 +46,7 @@ glabel PHYSICS_SetVAndAFromRot
 /* 6844C 80077C4C 1000A527 */  addiu      $a1, $sp, 0x10
 /* 68450 80077C50 4000A627 */  addiu      $a2, $sp, 0x40
 /* 68454 80077C54 23101200 */  negu       $v0, $s2
-/* 68458 80077C58 0EF3020C */  jal        func_800BCC38
+/* 68458 80077C58 0EF3020C */  jal        ApplyMatrixSV
 /* 6845C 80077C5C 1200A2A7 */   sh        $v0, 0x12($sp)
 /* 68460 80077C60 4000A287 */  lh         $v0, 0x40($sp)
 /* 68464 80077C64 00000000 */  nop

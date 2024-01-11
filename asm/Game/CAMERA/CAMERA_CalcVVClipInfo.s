@@ -12,24 +12,24 @@ glabel CAMERA_CalcVVClipInfo
 /* 55F8 80014DF8 1C00BFAF */  sw         $ra, 0x1C($sp)
 /* 55FC 80014DFC 1400B1AF */  sw         $s1, 0x14($sp)
 /* 5600 80014E00 7400048E */  lw         $a0, 0x74($s0)
-/* 5604 80014E04 0EF3020C */  jal        func_800BCC38
+/* 5604 80014E04 0EF3020C */  jal        ApplyMatrixSV
 /* 5608 80014E08 21304002 */   addu      $a2, $s2, $zero
 /* 560C 80014E0C 80000526 */  addiu      $a1, $s0, 0x80
 /* 5610 80014E10 7400048E */  lw         $a0, 0x74($s0)
-/* 5614 80014E14 0EF3020C */  jal        func_800BCC38
+/* 5614 80014E14 0EF3020C */  jal        ApplyMatrixSV
 /* 5618 80014E18 0E000626 */   addiu     $a2, $s0, 0xE
 /* 561C 80014E1C 88000526 */  addiu      $a1, $s0, 0x88
 /* 5620 80014E20 7400048E */  lw         $a0, 0x74($s0)
-/* 5624 80014E24 0EF3020C */  jal        func_800BCC38
+/* 5624 80014E24 0EF3020C */  jal        ApplyMatrixSV
 /* 5628 80014E28 14000626 */   addiu     $a2, $s0, 0x14
 /* 562C 80014E2C 90000526 */  addiu      $a1, $s0, 0x90
 /* 5630 80014E30 28001126 */  addiu      $s1, $s0, 0x28
 /* 5634 80014E34 7400048E */  lw         $a0, 0x74($s0)
-/* 5638 80014E38 0EF3020C */  jal        func_800BCC38
+/* 5638 80014E38 0EF3020C */  jal        ApplyMatrixSV
 /* 563C 80014E3C 21302002 */   addu      $a2, $s1, $zero
 /* 5640 80014E40 98000526 */  addiu      $a1, $s0, 0x98
 /* 5644 80014E44 7400048E */  lw         $a0, 0x74($s0)
-/* 5648 80014E48 0EF3020C */  jal        func_800BCC38
+/* 5648 80014E48 0EF3020C */  jal        ApplyMatrixSV
 /* 564C 80014E4C 2E000626 */   addiu     $a2, $s0, 0x2E
 /* 5650 80014E50 00004C8E */  lw         $t4, 0x0($s2)
 /* 5654 80014E54 04004D8E */  lw         $t5, 0x4($s2)

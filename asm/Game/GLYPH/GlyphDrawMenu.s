@@ -110,7 +110,7 @@ glabel GlyphDrawMenu
 /* 6B97C 8007B17C FF0F4224 */  addiu      $v0, $v0, 0xFFF
 /* 6B980 8007B180 03930200 */  sra        $s2, $v0, 12
 .L8007B184:
-/* 6B984 8007B184 DCE4010C */  jal        func_80079370
+/* 6B984 8007B184 DCE4010C */  jal        rcos
 /* 6B988 8007B188 21206002 */   addu      $a0, $s3, $zero
 /* 6B98C 8007B18C 18005600 */  mult       $v0, $s6
 /* 6B990 8007B190 21206002 */  addu       $a0, $s3, $zero
@@ -118,7 +118,7 @@ glabel GlyphDrawMenu
 /* 6B998 8007B198 12500000 */  mflo       $t2
 /* 6B99C 8007B19C 031B0A00 */  sra        $v1, $t2, 12
 /* 6B9A0 8007B1A0 21104300 */  addu       $v0, $v0, $v1
-/* 6B9A4 8007B1A4 D0E4010C */  jal        func_80079340
+/* 6B9A4 8007B1A4 D0E4010C */  jal        rsin
 /* 6B9A8 8007B1A8 2800A2A7 */   sh        $v0, 0x28($sp)
 /* 6B9AC 8007B1AC 18005600 */  mult       $v0, $s6
 /* 6B9B0 8007B1B0 12500000 */  mflo       $t2

@@ -51,10 +51,10 @@ glabel MON_Fall
 /* 792C0 80088AC0 00000000 */  nop
 /* 792C4 80088AC4 0E006214 */  bne        $v1, $v0, .L80088B00
 /* 792C8 80088AC8 00000000 */   nop
-/* 792CC 80088ACC 3AF2020C */  jal        func_800BC8E8
+/* 792CC 80088ACC 3AF2020C */  jal        rand
 /* 792D0 80088AD0 00000000 */   nop
 /* 792D4 80088AD4 7F005030 */  andi       $s0, $v0, 0x7F
-/* 792D8 80088AD8 3AF2020C */  jal        func_800BC8E8
+/* 792D8 80088AD8 3AF2020C */  jal        rand
 /* 792DC 80088ADC C1FF1026 */   addiu     $s0, $s0, -0x3F
 /* 792E0 80088AE0 5C002396 */  lhu        $v1, 0x5C($s1)
 /* 792E4 80088AE4 7F004230 */  andi       $v0, $v0, 0x7F

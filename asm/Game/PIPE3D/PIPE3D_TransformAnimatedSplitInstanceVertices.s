@@ -84,18 +84,18 @@ glabel PIPE3D_TransformAnimatedSplitInstanceVertices
 /* 2C410 8003BC10 7800A48F */  lw         $a0, 0x78($sp)
 /* 2C414 8003BC14 21284002 */  addu       $a1, $s2, $zero
 /* 2C418 8003BC18 4000F026 */  addiu      $s0, $s7, %lo(D_1F800040)
-/* 2C41C 8003BC1C BFF7020C */  jal        func_800BDEFC
+/* 2C41C 8003BC1C BFF7020C */  jal        MulMatrix0
 /* 2C420 8003BC20 21300002 */   addu      $a2, $s0, $zero
-/* 2C424 8003BC24 9FF7020C */  jal        func_800BDE7C
+/* 2C424 8003BC24 9FF7020C */  jal        SetLightMatrix
 /* 2C428 8003BC28 21200002 */   addu      $a0, $s0, $zero
 .L8003BC2C:
 /* 2C42C 8003BC2C 21284002 */  addu       $a1, $s2, $zero
 /* 2C430 8003BC30 6C00A48F */  lw         $a0, 0x6C($sp)
-/* 2C434 8003BC34 59FD020C */  jal        func_800BF564
+/* 2C434 8003BC34 59FD020C */  jal        CompMatrix
 /* 2C438 8003BC38 2130E002 */   addu      $a2, $s7, $zero
-/* 2C43C 8003BC3C 52F2020C */  jal        func_800BC948
+/* 2C43C 8003BC3C 52F2020C */  jal        SetRotMatrix
 /* 2C440 8003BC40 2120E002 */   addu      $a0, $s7, $zero
-/* 2C444 8003BC44 4AF2020C */  jal        func_800BC928
+/* 2C444 8003BC44 4AF2020C */  jal        SetTransMatrix
 /* 2C448 8003BC48 2120E002 */   addu      $a0, $s7, $zero
 /* 2C44C 8003BC4C 2800A68F */  lw         $a2, 0x28($sp)
 /* 2C450 8003BC50 F0FFDE27 */  addiu      $fp, $fp, -0x10

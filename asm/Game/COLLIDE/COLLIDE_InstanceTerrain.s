@@ -88,22 +88,22 @@ glabel COLLIDE_InstanceTerrain
 /* 144C8 80023CC8 4400F18C */  lw         $s1, 0x44($a3)
 /* 144CC 80023CCC 21800202 */  addu       $s0, $s0, $v0
 /* 144D0 80023CD0 21200002 */  addu       $a0, $s0, $zero
-/* 144D4 80023CD4 52F2020C */  jal        func_800BC948
+/* 144D4 80023CD4 52F2020C */  jal        SetRotMatrix
 /* 144D8 80023CD8 21882202 */   addu      $s1, $s1, $v0
-/* 144DC 80023CDC 4AF2020C */  jal        func_800BC928
+/* 144DC 80023CDC 4AF2020C */  jal        SetTransMatrix
 /* 144E0 80023CE0 21200002 */   addu      $a0, $s0, $zero
 /* 144E4 80023CE4 08005026 */  addiu      $s0, $s2, 0x8
 /* 144E8 80023CE8 3400A58F */  lw         $a1, 0x34($sp)
 /* 144EC 80023CEC 4000A68F */  lw         $a2, 0x40($sp)
-/* 144F0 80023CF0 98F4020C */  jal        func_800BD260
+/* 144F0 80023CF0 98F4020C */  jal        RotTrans
 /* 144F4 80023CF4 21200002 */   addu      $a0, $s0, $zero
-/* 144F8 80023CF8 52F2020C */  jal        func_800BC948
+/* 144F8 80023CF8 52F2020C */  jal        SetRotMatrix
 /* 144FC 80023CFC 21202002 */   addu      $a0, $s1, $zero
-/* 14500 80023D00 4AF2020C */  jal        func_800BC928
+/* 14500 80023D00 4AF2020C */  jal        SetTransMatrix
 /* 14504 80023D04 21202002 */   addu      $a0, $s1, $zero
 /* 14508 80023D08 3800A58F */  lw         $a1, 0x38($sp)
 /* 1450C 80023D0C 4000A68F */  lw         $a2, 0x40($sp)
-/* 14510 80023D10 98F4020C */  jal        func_800BD260
+/* 14510 80023D10 98F4020C */  jal        RotTrans
 /* 14514 80023D14 21200002 */   addu      $a0, $s0, $zero
 /* 14518 80023D18 3400A78F */  lw         $a3, 0x34($sp)
 /* 1451C 80023D1C 00000000 */  nop

@@ -20,7 +20,7 @@ glabel CINE_Load
 /* A7D1C 800B751C 9001022A */   slti      $v0, $s0, 0x190
 /* A7D20 800B7520 7580010C */  jal        STREAM_PollLoadQueue
 /* A7D24 800B7524 01001026 */   addiu     $s0, $s0, 0x1
-/* A7D28 800B7528 5EF2020C */  jal        func_800BC978
+/* A7D28 800B7528 5EF2020C */  jal        VSync
 /* A7D2C 800B752C 21200000 */   addu      $a0, $zero, $zero
 /* A7D30 800B7530 9001022A */  slti       $v0, $s0, 0x190
 /* A7D34 800B7534 F6FF4014 */  bnez       $v0, .L800B7510

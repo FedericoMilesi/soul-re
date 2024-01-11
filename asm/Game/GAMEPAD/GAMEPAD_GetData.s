@@ -114,7 +114,7 @@ glabel GAMEPAD_GetData
 /* 22500 80031D00 A1C70008 */  j          .L80031E84
 /* 22504 80031D04 00000000 */   nop
 .L80031D08:
-/* 22508 80031D08 BAF6020C */  jal        func_800BDAE8
+/* 22508 80031D08 BAF6020C */  jal        PadGetState
 /* 2250C 80031D0C 21200000 */   addu      $a0, $zero, $zero
 /* 22510 80031D10 21184000 */  addu       $v1, $v0, $zero
 /* 22514 80031D14 01000224 */  addiu      $v0, $zero, 0x1

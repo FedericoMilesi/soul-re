@@ -14,10 +14,10 @@ glabel UNDERWORLD_RotateScreenStep
 /* A50D0 800B48D0 4C004010 */  beqz       $v0, .L800B4A04
 /* A50D4 800B48D4 21102002 */   addu      $v0, $s1, $zero
 /* A50D8 800B48D8 CCFD848F */  lw         $a0, %gp_rel(UW_angle)($gp)
-/* A50DC 800B48DC D0E4010C */  jal        func_80079340
+/* A50DC 800B48DC D0E4010C */  jal        rsin
 /* A50E0 800B48E0 21886000 */   addu      $s1, $v1, $zero
 /* A50E4 800B48E4 CCFD848F */  lw         $a0, %gp_rel(UW_angle)($gp)
-/* A50E8 800B48E8 DCE4010C */  jal        func_80079370
+/* A50E8 800B48E8 DCE4010C */  jal        rcos
 /* A50EC 800B48EC 21804000 */   addu      $s0, $v0, $zero
 /* A50F0 800B48F0 21584000 */  addu       $t3, $v0, $zero
 /* A50F4 800B48F4 21500000 */  addu       $t2, $zero, $zero

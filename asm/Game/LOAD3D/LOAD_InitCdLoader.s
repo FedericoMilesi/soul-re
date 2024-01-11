@@ -11,11 +11,11 @@ glabel LOAD_InitCdLoader
 /* 282EC 80037AEC C0BB80AF */  sw         $zero, %gp_rel(loadStatus + 0x2C)($gp)
 .L80037AF0:
 /* 282F0 80037AF0 1800A427 */  addiu      $a0, $sp, 0x18
-/* 282F4 80037AF4 B5F9020C */  jal        func_800BE6D4
+/* 282F4 80037AF4 B5F9020C */  jal        CdSearchFile
 /* 282F8 80037AF8 21280002 */   addu      $a1, $s0, $zero
 /* 282FC 80037AFC 07004014 */  bnez       $v0, .L80037B1C
 /* 28300 80037B00 0A000224 */   addiu     $v0, $zero, 0xA
-/* 28304 80037B04 0EF8020C */  jal        func_800BE038
+/* 28304 80037B04 0EF8020C */  jal        CdReset
 /* 28308 80037B08 21200000 */   addu      $a0, $zero, $zero
 /* 2830C 80037B0C 01003126 */  addiu      $s1, $s1, 0x1
 /* 28310 80037B10 0A00222A */  slti       $v0, $s1, 0xA
@@ -26,7 +26,7 @@ glabel LOAD_InitCdLoader
 /* 28320 80037B20 00000000 */   nop
 /* 28324 80037B24 B5E0000C */  jal        LOAD_InitCdStreamMode
 /* 28328 80037B28 00000000 */   nop
-/* 2832C 80037B2C 56FC020C */  jal        func_800BF158
+/* 2832C 80037B2C 56FC020C */  jal        CdPosToInt
 /* 28330 80037B30 1800A427 */   addiu     $a0, $sp, 0x18
 /* 28334 80037B34 21200000 */  addu       $a0, $zero, $zero
 /* 28338 80037B38 0CBC8527 */  addiu      $a1, $gp, %gp_rel(loadStatus + 0x78)
@@ -49,7 +49,7 @@ glabel LOAD_InitCdLoader
 /* 28378 80037B78 00000000 */   nop
 /* 2837C 80037B7C FBFF4014 */  bnez       $v0, .L80037B6C
 /* 28380 80037B80 09000424 */   addiu     $a0, $zero, 0x9
-/* 28384 80037B84 9FF8020C */  jal        func_800BE27C
+/* 28384 80037B84 9FF8020C */  jal        CdControlF
 /* 28388 80037B88 21280000 */   addu      $a1, $zero, $zero
 /* 2838C 80037B8C 0CBC828F */  lw         $v0, %gp_rel(loadStatus + 0x78)($gp)
 /* 28390 80037B90 08000524 */  addiu      $a1, $zero, 0x8
@@ -59,7 +59,7 @@ glabel LOAD_InitCdLoader
 /* 283A0 80037BA0 21202002 */   addu      $a0, $s1, $zero
 /* 283A4 80037BA4 21200000 */  addu       $a0, $zero, $zero
 /* 283A8 80037BA8 21288000 */  addu       $a1, $a0, $zero
-/* 283AC 80037BAC 36F8020C */  jal        func_800BE0D8
+/* 283AC 80037BAC 36F8020C */  jal        CdSync
 /* 283B0 80037BB0 21804000 */   addu      $s0, $v0, $zero
 /* 283B4 80037BB4 21200000 */  addu       $a0, $zero, $zero
 /* 283B8 80037BB8 21280002 */  addu       $a1, $s0, $zero

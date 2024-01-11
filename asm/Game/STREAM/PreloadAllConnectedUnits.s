@@ -27,10 +27,10 @@ glabel PreloadAllConnectedUnits
 /* 4C188 8005B988 0D80123C */  lui        $s2, %hi(WarpRoomArray + 0x2A8)
 /* 4C18C 8005B98C 1000A427 */  addiu      $a0, $sp, 0x10
 .L8005B990:
-/* 4C190 8005B990 1CF4020C */  jal        func_800BD070
+/* 4C190 8005B990 1CF4020C */  jal        strcpy
 /* 4C194 8005B994 21280002 */   addu      $a1, $s0, $zero
 /* 4C198 8005B998 1000A427 */  addiu      $a0, $sp, 0x10
-/* 4C19C 8005B99C 0CF4020C */  jal        func_800BD030
+/* 4C19C 8005B99C 0CF4020C */  jal        strchr
 /* 4C1A0 8005B9A0 2C000524 */   addiu     $a1, $zero, 0x2C
 /* 4C1A4 8005B9A4 02004010 */  beqz       $v0, .L8005B9B0
 /* 4C1A8 8005B9A8 1000A427 */   addiu     $a0, $sp, 0x10
@@ -82,10 +82,10 @@ glabel PreloadAllConnectedUnits
 /* 4C24C 8005BA4C 3000428C */  lw         $v0, 0x30($v0)
 /* 4C250 8005BA50 1000A427 */  addiu      $a0, $sp, 0x10
 /* 4C254 8005BA54 21805200 */  addu       $s0, $v0, $s2
-/* 4C258 8005BA58 1CF4020C */  jal        func_800BD070
+/* 4C258 8005BA58 1CF4020C */  jal        strcpy
 /* 4C25C 8005BA5C 21280002 */   addu      $a1, $s0, $zero
 /* 4C260 8005BA60 1000A427 */  addiu      $a0, $sp, 0x10
-/* 4C264 8005BA64 0CF4020C */  jal        func_800BD030
+/* 4C264 8005BA64 0CF4020C */  jal        strchr
 /* 4C268 8005BA68 2C000524 */   addiu     $a1, $zero, 0x2C
 /* 4C26C 8005BA6C 13004010 */  beqz       $v0, .L8005BABC
 /* 4C270 8005BA70 1000A427 */   addiu     $a0, $sp, 0x10

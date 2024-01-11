@@ -8,7 +8,7 @@ glabel STREAM_StreamLoadLevelReturn
 /* 4AA04 8005A204 1400B1AF */  sw         $s1, 0x14($sp)
 /* 4AA08 8005A208 2188C000 */  addu       $s1, $a2, $zero
 /* 4AA0C 8005A20C 1800BFAF */  sw         $ra, 0x18($sp)
-/* 4AA10 8005A210 EBF4020C */  jal        func_800BD3AC
+/* 4AA10 8005A210 EBF4020C */  jal        GetRCnt
 /* 4AA14 8005A214 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 4AA18 8005A218 5890828F */  lw         $v0, %gp_rel(gameTimer)($gp)
 /* 4AA1C 8005A21C F800028E */  lw         $v0, 0xF8($s0)
@@ -51,7 +51,7 @@ glabel STREAM_StreamLoadLevelReturn
 /* 4AAA4 8005A2A4 00000000 */   nop
 /* 4AAA8 8005A2A8 9800058E */  lw         $a1, 0x98($s0)
 /* 4AAAC 8005A2AC 24BF8427 */  addiu      $a0, $gp, %gp_rel(gameTrackerX + 0x15C)
-/* 4AAB0 8005A2B0 1CF4020C */  jal        func_800BD070
+/* 4AAB0 8005A2B0 1CF4020C */  jal        strcpy
 /* 4AAB4 8005A2B4 00000000 */   nop
 /* 4AAB8 8005A2B8 B766010C */  jal        STREAM_SetMainFog
 /* 4AABC 8005A2BC 21202002 */   addu      $a0, $s1, $zero

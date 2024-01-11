@@ -14,7 +14,7 @@ glabel fx_get_startz
 /* 3ED08 8004E508 000059E8 */  swc2       $25, 0x0($v0)
 /* 3ED0C 8004E50C 04005AE8 */  swc2       $26, 0x4($v0) # handwritten instruction
 /* 3ED10 8004E510 08005BE8 */  swc2       $27, 0x8($v0) # handwritten instruction
-/* 3ED14 8004E514 4AF2020C */  jal        func_800BC928
+/* 3ED14 8004E514 4AF2020C */  jal        SetTransMatrix
 /* 3ED18 8004E518 1000A427 */   addiu     $a0, $sp, 0x10
 /* 3ED1C 8004E51C 2C00A28F */  lw         $v0, 0x2C($sp)
 /* 3ED20 8004E520 00000000 */  nop

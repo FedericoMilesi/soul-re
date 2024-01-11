@@ -60,7 +60,7 @@ glabel SAVE_UpdateSavedIntro
 /* A5F08 800B5708 120002A6 */   sh        $v0, 0x12($s0)
 /* A5F0C 800B570C 0400458E */  lw         $a1, 0x4($s2)
 /* A5F10 800B5710 0000468E */  lw         $a2, 0x0($s2)
-/* A5F14 800B5714 02E5010C */  jal        func_80079408
+/* A5F14 800B5714 02E5010C */  jal        memcpy
 /* A5F18 800B5718 28000426 */   addiu     $a0, $s0, 0x28
 .L800B571C:
 /* A5F1C 800B571C 21100002 */  addu       $v0, $s0, $zero

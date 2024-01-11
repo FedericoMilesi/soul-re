@@ -34,14 +34,14 @@ glabel VOICEXA_Init
 /* A7350 800B6B50 1AD1010C */  jal        sprintf
 /* A7354 800B6B54 21302002 */   addu      $a2, $s1, $zero
 /* A7358 800B6B58 1000A427 */  addiu      $a0, $sp, 0x10
-/* A735C 800B6B5C B5F9020C */  jal        func_800BE6D4
+/* A735C 800B6B5C B5F9020C */  jal        CdSearchFile
 /* A7360 800B6B60 21284002 */   addu      $a1, $s2, $zero
 /* A7364 800B6B64 03004014 */  bnez       $v0, .L800B6B74
 /* A7368 800B6B68 00000000 */   nop
 /* A736C 800B6B6C E0DA0208 */  j          .L800B6B80
 /* A7370 800B6B70 B00000AE */   sw        $zero, 0xB0($s0)
 .L800B6B74:
-/* A7374 800B6B74 56FC020C */  jal        func_800BF158
+/* A7374 800B6B74 56FC020C */  jal        CdPosToInt
 /* A7378 800B6B78 1000A427 */   addiu     $a0, $sp, 0x10
 /* A737C 800B6B7C B00002AE */  sw         $v0, 0xB0($s0)
 .L800B6B80:

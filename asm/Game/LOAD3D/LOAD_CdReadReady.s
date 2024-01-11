@@ -27,9 +27,9 @@ glabel LOAD_CdReadReady
 /* 27CB8 800374B8 04000224 */  addiu      $v0, $zero, 0x4
 /* 27CBC 800374BC C4BB90AF */  sw         $s0, %gp_rel(loadStatus + 0x30)($gp)
 /* 27CC0 800374C0 C0BB82AF */  sw         $v0, %gp_rel(loadStatus + 0x2C)($gp)
-/* 27CC4 800374C4 3FF9020C */  jal        func_800BE4FC
+/* 27CC4 800374C4 3FF9020C */  jal        CdGetSector
 /* 27CC8 800374C8 03000524 */   addiu     $a1, $zero, 0x3
-/* 27CCC 800374CC 56FC020C */  jal        func_800BF158
+/* 27CCC 800374CC 56FC020C */  jal        CdPosToInt
 /* 27CD0 800374D0 1000A427 */   addiu     $a0, $sp, 0x10
 /* 27CD4 800374D4 28BC838F */  lw         $v1, %gp_rel(loadStatus + 0x94)($gp)
 /* 27CD8 800374D8 00000000 */  nop
@@ -37,7 +37,7 @@ glabel LOAD_CdReadReady
 /* 27CE0 800374E0 01006224 */   addiu     $v0, $v1, 0x1
 /* 27CE4 800374E4 A4BB848F */  lw         $a0, %gp_rel(loadStatus + 0x10)($gp)
 /* 27CE8 800374E8 28BC82AF */  sw         $v0, %gp_rel(loadStatus + 0x94)($gp)
-/* 27CEC 800374EC 3FF9020C */  jal        func_800BE4FC
+/* 27CEC 800374EC 3FF9020C */  jal        CdGetSector
 /* 27CF0 800374F0 82281000 */   srl       $a1, $s0, 2
 /* 27CF4 800374F4 D1DC000C */  jal        LOAD_CdDataReady
 /* 27CF8 800374F8 00000000 */   nop
@@ -47,11 +47,11 @@ glabel LOAD_CdReadReady
 /* 27D04 80037504 C0BB91AF */  sw         $s1, %gp_rel(loadStatus + 0x2C)($gp)
 /* 27D08 80037508 21206000 */  addu       $a0, $v1, $zero
 /* 27D0C 8003750C 2000B027 */  addiu      $s0, $sp, 0x20
-/* 27D10 80037510 15FC020C */  jal        func_800BF054
+/* 27D10 80037510 15FC020C */  jal        CdIntToPos
 /* 27D14 80037514 21280002 */   addu      $a1, $s0, $zero
 /* 27D18 80037518 06000424 */  addiu      $a0, $zero, 0x6
 /* 27D1C 8003751C 21280002 */  addu       $a1, $s0, $zero
-/* 27D20 80037520 50F8020C */  jal        func_800BE140
+/* 27D20 80037520 50F8020C */  jal        CdControl
 /* 27D24 80037524 21300000 */   addu      $a2, $zero, $zero
 /* 27D28 80037528 57DD0008 */  j          .L8003755C
 /* 27D2C 8003752C 00000000 */   nop
@@ -83,7 +83,7 @@ glabel LOAD_CdReadReady
 /* 27D84 80037584 00000000 */   nop
 /* 27D88 80037588 00F2043C */  lui        $a0, (0xF2000000 >> 16)
 /* 27D8C 8003758C 2CBC82AF */  sw         $v0, %gp_rel(loadStatus + 0x98)($gp)
-/* 27D90 80037590 EBF4020C */  jal        func_800BD3AC
+/* 27D90 80037590 EBF4020C */  jal        GetRCnt
 /* 27D94 80037594 00000000 */   nop
 /* 27D98 80037598 FFFF4230 */  andi       $v0, $v0, 0xFFFF
 /* 27D9C 8003759C 5890838F */  lw         $v1, %gp_rel(gameTimer)($gp)

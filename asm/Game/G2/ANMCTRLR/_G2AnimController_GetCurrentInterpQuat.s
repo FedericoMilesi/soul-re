@@ -52,7 +52,7 @@ glabel _G2AnimController_GetCurrentInterpQuat
 /* 82734 80091F34 03000592 */  lbu        $a1, 0x3($s0)
 /* 82738 80091F38 1400E28C */  lw         $v0, 0x14($a3)
 /* 8273C 80091F3C 40290500 */  sll        $a1, $a1, 5
-/* 82740 80091F40 A4E6010C */  jal        func_80079A90
+/* 82740 80091F40 A4E6010C */  jal        G2Quat_FromMatrix_S
 /* 82744 80091F44 21284500 */   addu      $a1, $v0, $a1
 /* 82748 80091F48 EA470208 */  j          .L80091FA8
 /* 8274C 80091F4C 00000000 */   nop
@@ -80,7 +80,7 @@ glabel _G2AnimController_GetCurrentInterpQuat
 /* 82798 80091F98 1E00A0A7 */  sh         $zero, 0x1E($sp)
 /* 8279C 80091F9C 21202002 */  addu       $a0, $s1, $zero
 .L80091FA0:
-/* 827A0 80091FA0 63E7010C */  jal        func_80079D8C
+/* 827A0 80091FA0 63E7010C */  jal        G2Quat_FromEuler_S
 /* 827A4 80091FA4 1800A527 */   addiu     $a1, $sp, 0x18
 .L80091FA8:
 /* 827A8 80091FA8 2800BF8F */  lw         $ra, 0x28($sp)

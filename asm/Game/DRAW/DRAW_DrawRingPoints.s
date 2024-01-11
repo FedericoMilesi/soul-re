@@ -35,9 +35,9 @@ glabel DRAW_DrawRingPoints
 /* 1BB84 8002B384 4800A0A7 */  sh         $zero, 0x48($sp)
 /* 1BB88 8002B388 4C00A2A7 */  sh         $v0, 0x4C($sp)
 .L8002B38C:
-/* 1BB8C 8002B38C 52F2020C */  jal        func_800BC948
+/* 1BB8C 8002B38C 52F2020C */  jal        SetRotMatrix
 /* 1BB90 8002B390 21200002 */   addu      $a0, $s0, $zero
-/* 1BB94 8002B394 4AF2020C */  jal        func_800BC928
+/* 1BB94 8002B394 4AF2020C */  jal        SetTransMatrix
 /* 1BB98 8002B398 21200002 */   addu      $a0, $s0, $zero
 /* 1BB9C 8002B39C 2B103402 */  sltu       $v0, $s1, $s4
 /* 1BBA0 8002B3A0 94004010 */  beqz       $v0, .L8002B5F4

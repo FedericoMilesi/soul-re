@@ -11,7 +11,7 @@ glabel EVENT_InitTerrainMovement
 .L80061210:
 /* 51A10 80061210 21200002 */  addu       $a0, $s0, $zero
 /* 51A14 80061214 1C000524 */  addiu      $a1, $zero, 0x1C
-/* 51A18 80061218 2EF2020C */  jal        func_800BC8B8
+/* 51A18 80061218 2EF2020C */  jal        memset
 /* 51A1C 8006121C 21300000 */   addu      $a2, $zero, $zero
 /* 51A20 80061220 01003126 */  addiu      $s1, $s1, 0x1
 /* 51A24 80061224 0500222A */  slti       $v0, $s1, 0x5

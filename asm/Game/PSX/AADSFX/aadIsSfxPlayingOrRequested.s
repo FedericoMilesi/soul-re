@@ -5,7 +5,7 @@ glabel aadIsSfxPlayingOrRequested
 /* 47838 80057038 E8FFBD27 */  addiu      $sp, $sp, -0x18
 /* 4783C 8005703C 1000B0AF */  sw         $s0, 0x10($sp)
 /* 47840 80057040 1400BFAF */  sw         $ra, 0x14($sp)
-/* 47844 80057044 A5FC020C */  jal        func_800BF294
+/* 47844 80057044 A5FC020C */  jal        EnterCriticalSection
 /* 47848 80057048 21808000 */   addu      $s0, $a0, $zero
 /* 4784C 8005704C D89B828F */  lw         $v0, %gp_rel(aadMem)($gp)
 /* 47850 80057050 00000000 */  nop
@@ -29,7 +29,7 @@ glabel aadIsSfxPlayingOrRequested
 /* 47894 80057094 00000000 */  nop
 /* 47898 80057098 06005014 */  bne        $v0, $s0, .L800570B4
 /* 4789C 8005709C 0100A524 */   addiu     $a1, $a1, 0x1
-/* 478A0 800570A0 11FC020C */  jal        func_800BF044
+/* 478A0 800570A0 11FC020C */  jal        ExitCriticalSection
 /* 478A4 800570A4 00000000 */   nop
 /* 478A8 800570A8 385C0108 */  j          .L800570E0
 /* 478AC 800570AC 01000224 */   addiu     $v0, $zero, 0x1
@@ -45,7 +45,7 @@ glabel aadIsSfxPlayingOrRequested
 /* 478C8 800570C8 EAFFC014 */  bnez       $a2, .L80057074
 /* 478CC 800570CC 00000000 */   nop
 .L800570D0:
-/* 478D0 800570D0 11FC020C */  jal        func_800BF044
+/* 478D0 800570D0 11FC020C */  jal        ExitCriticalSection
 /* 478D4 800570D4 00000000 */   nop
 /* 478D8 800570D8 F25B010C */  jal        aadIsSfxPlaying
 /* 478DC 800570DC 21200002 */   addu      $a0, $s0, $zero

@@ -90,7 +90,7 @@ glabel EVENT_DoVMObjectAction
 /* 54194 80063994 00000000 */  nop
 /* 54198 80063998 19008010 */  beqz       $a0, .L80063A00
 /* 5419C 8006399C 00000000 */   nop
-/* 541A0 800639A0 54E2010C */  jal        func_80078950
+/* 541A0 800639A0 54E2010C */  jal        VM_ProcessVMObjectSetColor_S
 /* 541A4 800639A4 00000000 */   nop
 /* 541A8 800639A8 808E0108 */  j          .L80063A00
 /* 541AC 800639AC 21102002 */   addu      $v0, $s1, $zero
@@ -111,7 +111,7 @@ glabel EVENT_DoVMObjectAction
 /* 541E4 800639E4 00000000 */  nop
 /* 541E8 800639E8 05008010 */  beqz       $a0, .L80063A00
 /* 541EC 800639EC 00000000 */   nop
-/* 541F0 800639F0 54E2010C */  jal        func_80078950
+/* 541F0 800639F0 54E2010C */  jal        VM_ProcessVMObjectSetColor_S
 /* 541F4 800639F4 00000000 */   nop
 .L800639F8:
 /* 541F8 800639F8 01001124 */  addiu      $s1, $zero, 0x1

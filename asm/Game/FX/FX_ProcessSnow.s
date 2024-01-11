@@ -48,7 +48,7 @@ glabel FX_ProcessSnow
 /* 39C84 80049484 42250108 */  j          .L80049508
 /* 39C88 80049488 00000000 */   nop
 .L8004948C:
-/* 39C8C 8004948C 3AF2020C */  jal        func_800BC8E8
+/* 39C8C 8004948C 3AF2020C */  jal        rand
 /* 39C90 80049490 00000000 */   nop
 /* 39C94 80049494 A49A8387 */  lh         $v1, %gp_rel(windx)($gp)
 /* 39C98 80049498 FF074230 */  andi       $v0, $v0, 0x7FF
@@ -62,7 +62,7 @@ glabel FX_ProcessSnow
 /* 39CB4 800494B4 2C000296 */  lhu        $v0, 0x2C($s0)
 /* 39CB8 800494B8 031B0300 */  sra        $v1, $v1, 12
 /* 39CBC 800494BC 21104300 */  addu       $v0, $v0, $v1
-/* 39CC0 800494C0 3AF2020C */  jal        func_800BC8E8
+/* 39CC0 800494C0 3AF2020C */  jal        rand
 /* 39CC4 800494C4 2C0002A6 */   sh        $v0, 0x2C($s0)
 /* 39CC8 800494C8 FF074230 */  andi       $v0, $v0, 0x7FF
 /* 39CCC 800494CC A69A8387 */  lh         $v1, %gp_rel(windy)($gp)

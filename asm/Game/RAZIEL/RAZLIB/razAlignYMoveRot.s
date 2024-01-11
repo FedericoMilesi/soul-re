@@ -27,11 +27,11 @@ glabel razAlignYMoveRot
 /* 958B4 800A50B4 4CE8000C */  jal        MATH3D_SetUnityMatrix
 /* 958B8 800A50B8 040042A6 */   sh        $v0, 0x4($s2)
 /* 958BC 800A50BC 04004486 */  lh         $a0, 0x4($s2)
-/* 958C0 800A50C0 32E4010C */  jal        func_800790C8
+/* 958C0 800A50C0 32E4010C */  jal        RotMatrixZ
 /* 958C4 800A50C4 21280002 */   addu      $a1, $s0, $zero
 /* 958C8 800A50C8 21200002 */  addu       $a0, $s0, $zero
 /* 958CC 800A50CC 1000A527 */  addiu      $a1, $sp, 0x10
-/* 958D0 800A50D0 0EF3020C */  jal        func_800BCC38
+/* 958D0 800A50D0 0EF3020C */  jal        ApplyMatrixSV
 /* 958D4 800A50D4 1800A627 */   addiu     $a2, $sp, 0x18
 /* 958D8 800A50D8 5C006296 */  lhu        $v0, 0x5C($s3)
 /* 958DC 800A50DC 1800A397 */  lhu        $v1, 0x18($sp)

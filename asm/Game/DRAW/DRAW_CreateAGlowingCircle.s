@@ -40,10 +40,10 @@ glabel DRAW_CreateAGlowingCircle
 /* 1C118 8002B918 3000A0AF */  sw         $zero, 0x30($sp)
 /* 1C11C 8002B91C 3800A0AF */  sw         $zero, 0x38($sp)
 /* 1C120 8002B920 23100200 */  negu       $v0, $v0
-/* 1C124 8002B924 DCE4010C */  jal        func_80079370
+/* 1C124 8002B924 DCE4010C */  jal        rcos
 /* 1C128 8002B928 3400A2AF */   sw        $v0, 0x34($sp)
 /* 1C12C 8002B92C 21208002 */  addu       $a0, $s4, $zero
-/* 1C130 8002B930 D0E4010C */  jal        func_80079340
+/* 1C130 8002B930 D0E4010C */  jal        rsin
 /* 1C134 8002B934 21804000 */   addu      $s0, $v0, $zero
 /* 1C138 8002B938 3000A38F */  lw         $v1, 0x30($sp)
 /* 1C13C 8002B93C 00000000 */  nop
@@ -55,10 +55,10 @@ glabel DRAW_CreateAGlowingCircle
 /* 1C154 8002B954 21208002 */  addu       $a0, $s4, $zero
 /* 1C158 8002B958 12180000 */  mflo       $v1
 /* 1C15C 8002B95C 2110A300 */  addu       $v0, $a1, $v1
-/* 1C160 8002B960 D0E4010C */  jal        func_80079340
+/* 1C160 8002B960 D0E4010C */  jal        rsin
 /* 1C164 8002B964 039B0200 */   sra       $s3, $v0, 12
 /* 1C168 8002B968 21208002 */  addu       $a0, $s4, $zero
-/* 1C16C 8002B96C DCE4010C */  jal        func_80079370
+/* 1C16C 8002B96C DCE4010C */  jal        rcos
 /* 1C170 8002B970 21804000 */   addu      $s0, $v0, $zero
 /* 1C174 8002B974 3000A38F */  lw         $v1, 0x30($sp)
 /* 1C178 8002B978 23801000 */  negu       $s0, $s0
@@ -85,10 +85,10 @@ glabel DRAW_CreateAGlowingCircle
 /* 1C1CC 8002B9CC 12180000 */  mflo       $v1
 /* 1C1D0 8002B9D0 2110C300 */  addu       $v0, $a2, $v1
 /* 1C1D4 8002B9D4 03130200 */  sra        $v0, $v0, 12
-/* 1C1D8 8002B9D8 DCE4010C */  jal        func_80079370
+/* 1C1D8 8002B9D8 DCE4010C */  jal        rcos
 /* 1C1DC 8002B9DC 3400A2AF */   sw        $v0, 0x34($sp)
 /* 1C1E0 8002B9E0 21208002 */  addu       $a0, $s4, $zero
-/* 1C1E4 8002B9E4 D0E4010C */  jal        func_80079340
+/* 1C1E4 8002B9E4 D0E4010C */  jal        rsin
 /* 1C1E8 8002B9E8 21804000 */   addu      $s0, $v0, $zero
 /* 1C1EC 8002B9EC 2000A38F */  lw         $v1, 0x20($sp)
 /* 1C1F0 8002B9F0 00000000 */  nop
@@ -100,10 +100,10 @@ glabel DRAW_CreateAGlowingCircle
 /* 1C208 8002BA08 21208002 */  addu       $a0, $s4, $zero
 /* 1C20C 8002BA0C 12180000 */  mflo       $v1
 /* 1C210 8002BA10 2110A300 */  addu       $v0, $a1, $v1
-/* 1C214 8002BA14 D0E4010C */  jal        func_80079340
+/* 1C214 8002BA14 D0E4010C */  jal        rsin
 /* 1C218 8002BA18 039B0200 */   sra       $s3, $v0, 12
 /* 1C21C 8002BA1C 21208002 */  addu       $a0, $s4, $zero
-/* 1C220 8002BA20 DCE4010C */  jal        func_80079370
+/* 1C220 8002BA20 DCE4010C */  jal        rcos
 /* 1C224 8002BA24 21804000 */   addu      $s0, $v0, $zero
 /* 1C228 8002BA28 2000A38F */  lw         $v1, 0x20($sp)
 /* 1C22C 8002BA2C 23801000 */  negu       $s0, $s0

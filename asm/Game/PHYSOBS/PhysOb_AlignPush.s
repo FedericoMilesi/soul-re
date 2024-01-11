@@ -54,13 +54,13 @@ glabel PhysOb_AlignPush
 /* 5ACA0 8006A4A0 1800B027 */  addiu      $s0, $sp, 0x18
 /* 5ACA4 8006A4A4 21280002 */  addu       $a1, $s0, $zero
 /* 5ACA8 8006A4A8 23101200 */  negu       $v0, $s2
-/* 5ACAC 8006A4AC D8E2010C */  jal        func_80078B60
+/* 5ACAC 8006A4AC D8E2010C */  jal        RotMatrixZYX
 /* 5ACB0 8006A4B0 1400A2A7 */   sh        $v0, 0x14($sp)
 /* 5ACB4 8006A4B4 21200002 */  addu       $a0, $s0, $zero
 /* 5ACB8 8006A4B8 3000B027 */  addiu      $s0, $sp, 0x30
 /* 5ACBC 8006A4BC 4000858E */  lw         $a1, 0x40($s4)
 /* 5ACC0 8006A4C0 21300002 */  addu       $a2, $s0, $zero
-/* 5ACC4 8006A4C4 BFF7020C */  jal        func_800BDEFC
+/* 5ACC4 8006A4C4 BFF7020C */  jal        MulMatrix0
 /* 5ACC8 8006A4C8 4000A524 */   addiu     $a1, $a1, 0x40
 /* 5ACCC 8006A4CC 4800A427 */  addiu      $a0, $sp, 0x48
 /* 5ACD0 8006A4D0 21280002 */  addu       $a1, $s0, $zero

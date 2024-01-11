@@ -117,14 +117,14 @@ glabel COLLIDE_Instance1SpheresToInstance2
 /* 1214C 8002194C 6400A3AF */  sw         $v1, 0x64($sp)
 /* 12150 80021950 4400108F */  lw         $s0, 0x44($t8)
 /* 12154 80021954 0100F68D */  lw         $s6, 0x1($t7)
-/* 12158 80021958 52F2020C */  jal        func_800BC948
+/* 12158 80021958 52F2020C */  jal        SetRotMatrix
 /* 1215C 8002195C 21800202 */   addu      $s0, $s0, $v0
 /* 12160 80021960 6400A48F */  lw         $a0, 0x64($sp)
-/* 12164 80021964 4AF2020C */  jal        func_800BC928
+/* 12164 80021964 4AF2020C */  jal        SetTransMatrix
 /* 12168 80021968 0800D126 */   addiu     $s1, $s6, 0x8
 /* 1216C 8002196C 3C00A58F */  lw         $a1, 0x3C($sp)
 /* 12170 80021970 8000A68F */  lw         $a2, 0x80($sp)
-/* 12174 80021974 98F4020C */  jal        func_800BD260
+/* 12174 80021974 98F4020C */  jal        RotTrans
 /* 12178 80021978 21202002 */   addu      $a0, $s1, $zero
 /* 1217C 8002197C 3C00AA8F */  lw         $t2, 0x3C($sp)
 /* 12180 80021980 5000AB8F */  lw         $t3, 0x50($sp)
@@ -134,13 +134,13 @@ glabel COLLIDE_Instance1SpheresToInstance2
 /* 12190 80021990 21200002 */  addu       $a0, $s0, $zero
 /* 12194 80021994 000062A5 */  sh         $v0, 0x0($t3)
 /* 12198 80021998 020063A5 */  sh         $v1, 0x2($t3)
-/* 1219C 8002199C 52F2020C */  jal        func_800BC948
+/* 1219C 8002199C 52F2020C */  jal        SetRotMatrix
 /* 121A0 800219A0 040065A5 */   sh        $a1, 0x4($t3)
-/* 121A4 800219A4 4AF2020C */  jal        func_800BC928
+/* 121A4 800219A4 4AF2020C */  jal        SetTransMatrix
 /* 121A8 800219A8 21200002 */   addu      $a0, $s0, $zero
 /* 121AC 800219AC 3C00A58F */  lw         $a1, 0x3C($sp)
 /* 121B0 800219B0 8000A68F */  lw         $a2, 0x80($sp)
-/* 121B4 800219B4 98F4020C */  jal        func_800BD260
+/* 121B4 800219B4 98F4020C */  jal        RotTrans
 /* 121B8 800219B8 21202002 */   addu      $a0, $s1, $zero
 /* 121BC 800219BC 3C00AF8F */  lw         $t7, 0x3C($sp)
 /* 121C0 800219C0 5800B88F */  lw         $t8, 0x58($sp)
@@ -193,14 +193,14 @@ glabel COLLIDE_Instance1SpheresToInstance2
 /* 12278 80021A78 00000000 */   nop
 /* 1227C 80021A7C 6800A48F */  lw         $a0, 0x68($sp)
 /* 12280 80021A80 0100B08E */  lw         $s0, 0x1($s5)
-/* 12284 80021A84 52F2020C */  jal        func_800BC948
+/* 12284 80021A84 52F2020C */  jal        SetRotMatrix
 /* 12288 80021A88 08001126 */   addiu     $s1, $s0, 0x8
 /* 1228C 80021A8C 6800A48F */  lw         $a0, 0x68($sp)
-/* 12290 80021A90 4AF2020C */  jal        func_800BC928
+/* 12290 80021A90 4AF2020C */  jal        SetTransMatrix
 /* 12294 80021A94 00000000 */   nop
 /* 12298 80021A98 3C00A58F */  lw         $a1, 0x3C($sp)
 /* 1229C 80021A9C 8000A68F */  lw         $a2, 0x80($sp)
-/* 122A0 80021AA0 98F4020C */  jal        func_800BD260
+/* 122A0 80021AA0 98F4020C */  jal        RotTrans
 /* 122A4 80021AA4 21202002 */   addu      $a0, $s1, $zero
 /* 122A8 80021AA8 3C00AB8F */  lw         $t3, 0x3C($sp)
 /* 122AC 80021AAC 5400AF8F */  lw         $t7, 0x54($sp)
@@ -210,13 +210,13 @@ glabel COLLIDE_Instance1SpheresToInstance2
 /* 122BC 80021ABC 21208002 */  addu       $a0, $s4, $zero
 /* 122C0 80021AC0 0000E2A5 */  sh         $v0, 0x0($t7)
 /* 122C4 80021AC4 0200E3A5 */  sh         $v1, 0x2($t7)
-/* 122C8 80021AC8 52F2020C */  jal        func_800BC948
+/* 122C8 80021AC8 52F2020C */  jal        SetRotMatrix
 /* 122CC 80021ACC 0400E5A5 */   sh        $a1, 0x4($t7)
-/* 122D0 80021AD0 4AF2020C */  jal        func_800BC928
+/* 122D0 80021AD0 4AF2020C */  jal        SetTransMatrix
 /* 122D4 80021AD4 21208002 */   addu      $a0, $s4, $zero
 /* 122D8 80021AD8 3C00A58F */  lw         $a1, 0x3C($sp)
 /* 122DC 80021ADC 8000A68F */  lw         $a2, 0x80($sp)
-/* 122E0 80021AE0 98F4020C */  jal        func_800BD260
+/* 122E0 80021AE0 98F4020C */  jal        RotTrans
 /* 122E4 80021AE4 21202002 */   addu      $a0, $s1, $zero
 /* 122E8 80021AE8 5000B88F */  lw         $t8, 0x50($sp)
 /* 122EC 80021AEC 5400AA8F */  lw         $t2, 0x54($sp)
@@ -440,15 +440,15 @@ glabel COLLIDE_Instance1SpheresToInstance2
 /* 12634 80021E34 F5EA000C */  jal        PIPE3D_InvertTransform
 /* 12638 80021E38 0000E0AD */   sw        $zero, 0x0($t7)
 /* 1263C 80021E3C 2C00A48F */  lw         $a0, 0x2C($sp)
-/* 12640 80021E40 52F2020C */  jal        func_800BC948
+/* 12640 80021E40 52F2020C */  jal        SetRotMatrix
 /* 12644 80021E44 00000000 */   nop
 /* 12648 80021E48 2C00A48F */  lw         $a0, 0x2C($sp)
-/* 1264C 80021E4C 4AF2020C */  jal        func_800BC928
+/* 1264C 80021E4C 4AF2020C */  jal        SetTransMatrix
 /* 12650 80021E50 00000000 */   nop
 /* 12654 80021E54 5000A48F */  lw         $a0, 0x50($sp)
 /* 12658 80021E58 4000A58F */  lw         $a1, 0x40($sp)
 /* 1265C 80021E5C 8000A68F */  lw         $a2, 0x80($sp)
-/* 12660 80021E60 98F4020C */  jal        func_800BD260
+/* 12660 80021E60 98F4020C */  jal        RotTrans
 /* 12664 80021E64 00000000 */   nop
 /* 12668 80021E68 4000B88F */  lw         $t8, 0x40($sp)
 /* 1266C 80021E6C 00000000 */  nop
@@ -466,15 +466,15 @@ glabel COLLIDE_Instance1SpheresToInstance2
 /* 1269C 80021E9C F5EA000C */  jal        PIPE3D_InvertTransform
 /* 126A0 80021EA0 080062AE */   sw        $v0, 0x8($s3)
 /* 126A4 80021EA4 3000A48F */  lw         $a0, 0x30($sp)
-/* 126A8 80021EA8 52F2020C */  jal        func_800BC948
+/* 126A8 80021EA8 52F2020C */  jal        SetRotMatrix
 /* 126AC 80021EAC 00000000 */   nop
 /* 126B0 80021EB0 3000A48F */  lw         $a0, 0x30($sp)
-/* 126B4 80021EB4 4AF2020C */  jal        func_800BC928
+/* 126B4 80021EB4 4AF2020C */  jal        SetTransMatrix
 /* 126B8 80021EB8 00000000 */   nop
 /* 126BC 80021EBC 5800A48F */  lw         $a0, 0x58($sp)
 /* 126C0 80021EC0 4400A58F */  lw         $a1, 0x44($sp)
 /* 126C4 80021EC4 8000A68F */  lw         $a2, 0x80($sp)
-/* 126C8 80021EC8 98F4020C */  jal        func_800BD260
+/* 126C8 80021EC8 98F4020C */  jal        RotTrans
 /* 126CC 80021ECC 00000000 */   nop
 /* 126D0 80021ED0 4400AA8F */  lw         $t2, 0x44($sp)
 /* 126D4 80021ED4 4C00AB8F */  lw         $t3, 0x4C($sp)

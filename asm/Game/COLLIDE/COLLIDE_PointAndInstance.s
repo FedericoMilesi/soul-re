@@ -93,22 +93,22 @@ glabel COLLIDE_PointAndInstance
 /* 10BC0 800203C0 1400CDAF */  sw         $t5, 0x14($fp)
 /* 10BC4 800203C4 1800C9AF */  sw         $t1, 0x18($fp)
 /* 10BC8 800203C8 1C00CAAF */  sw         $t2, 0x1C($fp)
-/* 10BCC 800203CC 88F4020C */  jal        func_800BD220
+/* 10BCC 800203CC 88F4020C */  jal        TransposeMatrix
 /* 10BD0 800203D0 2128C003 */   addu      $a1, $fp, $zero
 /* 10BD4 800203D4 5000A48F */  lw         $a0, 0x50($sp)
-/* 10BD8 800203D8 52F2020C */  jal        func_800BC948
+/* 10BD8 800203D8 52F2020C */  jal        SetRotMatrix
 /* 10BDC 800203DC 00000000 */   nop
 /* 10BE0 800203E0 5000A48F */  lw         $a0, 0x50($sp)
-/* 10BE4 800203E4 4AF2020C */  jal        func_800BC928
+/* 10BE4 800203E4 4AF2020C */  jal        SetTransMatrix
 /* 10BE8 800203E8 00000000 */   nop
 /* 10BEC 800203EC 1400848E */  lw         $a0, 0x14($s4)
 /* 10BF0 800203F0 6800A68F */  lw         $a2, 0x68($sp)
-/* 10BF4 800203F4 98F4020C */  jal        func_800BD260
+/* 10BF4 800203F4 98F4020C */  jal        RotTrans
 /* 10BF8 800203F8 2128A002 */   addu      $a1, $s5, $zero
 /* 10BFC 800203FC 5400A58F */  lw         $a1, 0x54($sp)
 /* 10C00 80020400 1800848E */  lw         $a0, 0x18($s4)
 /* 10C04 80020404 6800A68F */  lw         $a2, 0x68($sp)
-/* 10C08 80020408 98F4020C */  jal        func_800BD260
+/* 10C08 80020408 98F4020C */  jal        RotTrans
 /* 10C0C 8002040C 00000000 */   nop
 /* 10C10 80020410 5400AC8F */  lw         $t4, 0x54($sp)
 /* 10C14 80020414 6000AD8F */  lw         $t5, 0x60($sp)
@@ -155,7 +155,7 @@ glabel COLLIDE_PointAndInstance
 /* 10CB0 800204B0 21306002 */   addu      $a2, $s3, $zero
 /* 10CB4 800204B4 6400A48F */  lw         $a0, 0x64($sp)
 /* 10CB8 800204B8 6000A58F */  lw         $a1, 0x60($sp)
-/* 10CBC 800204BC 79E0010C */  jal        func_800781E4
+/* 10CBC 800204BC 79E0010C */  jal        COLLIDE_NearestPointOnLine_S
 /* 10CC0 800204C0 08000726 */   addiu     $a3, $s0, 0x8
 /* 10CC4 800204C4 6400AA8F */  lw         $t2, 0x64($sp)
 /* 10CC8 800204C8 08000386 */  lh         $v1, 0x8($s0)
@@ -304,18 +304,18 @@ glabel COLLIDE_PointAndInstance
 /* 10EF8 800206F8 21104500 */  addu       $v0, $v0, $a1
 /* 10EFC 800206FC 21186600 */  addu       $v1, $v1, $a2
 /* 10F00 80020700 020062A6 */  sh         $v0, 0x2($s3)
-/* 10F04 80020704 52F2020C */  jal        func_800BC948
+/* 10F04 80020704 52F2020C */  jal        SetRotMatrix
 /* 10F08 80020708 040063A6 */   sh        $v1, 0x4($s3)
 /* 10F0C 8002070C 4C00A48F */  lw         $a0, 0x4C($sp)
-/* 10F10 80020710 4AF2020C */  jal        func_800BC928
+/* 10F10 80020710 4AF2020C */  jal        SetTransMatrix
 /* 10F14 80020714 00000000 */   nop
 /* 10F18 80020718 21206002 */  addu       $a0, $s3, $zero
 /* 10F1C 8002071C 6800A68F */  lw         $a2, 0x68($sp)
-/* 10F20 80020720 98F4020C */  jal        func_800BD260
+/* 10F20 80020720 98F4020C */  jal        RotTrans
 /* 10F24 80020724 2128A002 */   addu      $a1, $s5, $zero
 /* 10F28 80020728 5800A58F */  lw         $a1, 0x58($sp)
 /* 10F2C 8002072C 5C00A68F */  lw         $a2, 0x5C($sp)
-/* 10F30 80020730 30F4020C */  jal        func_800BD0C0
+/* 10F30 80020730 30F4020C */  jal        ApplyMatrixLV
 /* 10F34 80020734 2120C003 */   addu      $a0, $fp, $zero
 /* 10F38 80020738 1400838E */  lw         $v1, 0x14($s4)
 /* 10F3C 8002073C 0000A296 */  lhu        $v0, 0x0($s5)
@@ -357,7 +357,7 @@ glabel COLLIDE_PointAndInstance
 /* 10FC8 800207C8 71004010 */  beqz       $v0, .L80020990
 /* 10FCC 800207CC 2120C003 */   addu      $a0, $fp, $zero
 /* 10FD0 800207D0 21280002 */  addu       $a1, $s0, $zero
-/* 10FD4 800207D4 0EF3020C */  jal        func_800BCC38
+/* 10FD4 800207D4 0EF3020C */  jal        ApplyMatrixSV
 /* 10FD8 800207D8 0C008626 */   addiu     $a2, $s4, 0xC
 /* 10FDC 800207DC 000097A6 */  sh         $s7, 0x0($s4)
 /* 10FE0 800207E0 0000C292 */  lbu        $v0, 0x0($s6)
@@ -465,7 +465,7 @@ glabel COLLIDE_PointAndInstance
 /* 1115C 8002095C 0C008626 */  addiu      $a2, $s4, 0xC
 /* 11160 80020960 000062A6 */  sh         $v0, 0x0($s3)
 /* 11164 80020964 020063A6 */  sh         $v1, 0x2($s3)
-/* 11168 80020968 0EF3020C */  jal        func_800BCC38
+/* 11168 80020968 0EF3020C */  jal        ApplyMatrixSV
 /* 1116C 8002096C 040067A6 */   sh        $a3, 0x4($s3)
 /* 11170 80020970 05000224 */  addiu      $v0, $zero, 0x5
 /* 11174 80020974 000082A6 */  sh         $v0, 0x0($s4)
@@ -504,14 +504,14 @@ glabel COLLIDE_PointAndInstance
 /* 111E8 800209E8 1E0082A6 */  sh         $v0, 0x1E($s4)
 /* 111EC 800209EC 04006296 */  lhu        $v0, 0x4($s3)
 /* 111F0 800209F0 2120C003 */  addu       $a0, $fp, $zero
-/* 111F4 800209F4 52F2020C */  jal        func_800BC948
+/* 111F4 800209F4 52F2020C */  jal        SetRotMatrix
 /* 111F8 800209F8 200082A6 */   sh        $v0, 0x20($s4)
 /* 111FC 800209FC 4C00A48F */  lw         $a0, 0x4C($sp)
-/* 11200 80020A00 4AF2020C */  jal        func_800BC928
+/* 11200 80020A00 4AF2020C */  jal        SetTransMatrix
 /* 11204 80020A04 00000000 */   nop
 /* 11208 80020A08 21206002 */  addu       $a0, $s3, $zero
 /* 1120C 80020A0C 6800A68F */  lw         $a2, 0x68($sp)
-/* 11210 80020A10 98F4020C */  jal        func_800BD260
+/* 11210 80020A10 98F4020C */  jal        RotTrans
 /* 11214 80020A14 2128A002 */   addu      $a1, $s5, $zero
 /* 11218 80020A18 1400838E */  lw         $v1, 0x14($s4)
 /* 1121C 80020A1C 0000A296 */  lhu        $v0, 0x0($s5)

@@ -77,7 +77,7 @@ glabel COLLIDE_PointAndHFace
 /* 10938 80020138 21888A01 */  addu       $s1, $t4, $t2
 /* 1093C 8002013C 000062A5 */  sh         $v0, 0x0($t3)
 /* 10940 80020140 020063A5 */  sh         $v1, 0x2($t3)
-/* 10944 80020144 52F2020C */  jal        func_800BC948
+/* 10944 80020144 52F2020C */  jal        SetRotMatrix
 /* 10948 80020148 040065A5 */   sh        $a1, 0x4($t3)
 /* 1094C 8002014C 000060CA */  lwc2       $0, 0x0($s3)
 /* 10950 80020150 040061CA */  lwc2       $1, 0x4($s3)
@@ -104,7 +104,7 @@ glabel COLLIDE_PointAndHFace
 /* 109A4 800201A4 801F073C */  lui        $a3, (0x1F800074 >> 16)
 /* 109A8 800201A8 0800428E */  lw         $v0, 0x8($s2)
 /* 109AC 800201AC 7400E734 */  ori        $a3, $a3, (0x1F800074 & 0xFFFF)
-/* 109B0 800201B0 BDE0010C */  jal        func_800782F4
+/* 109B0 800201B0 BDE0010C */  jal        COLLIDE_IntersectLineAndPlane_S
 /* 109B4 800201B4 1000A2AF */   sw        $v0, 0x10($sp)
 /* 109B8 800201B8 21200002 */  addu       $a0, $s0, $zero
 /* 109BC 800201BC 21282002 */  addu       $a1, $s1, $zero

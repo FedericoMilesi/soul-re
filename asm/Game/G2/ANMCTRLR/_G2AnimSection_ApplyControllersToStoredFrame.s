@@ -101,17 +101,17 @@ glabel _G2AnimSection_ApplyControllersToStoredFrame
 /* 82070 80091870 02004230 */  andi       $v0, $v0, 0x2
 /* 82074 80091874 06004014 */  bnez       $v0, .L80091890
 /* 82078 80091878 2120A002 */   addu      $a0, $s5, $zero
-/* 8207C 8009187C 88F4020C */  jal        func_800BD220
+/* 8207C 8009187C 88F4020C */  jal        TransposeMatrix
 /* 82080 80091880 21288002 */   addu      $a1, $s4, $zero
 /* 82084 80091884 21208002 */  addu       $a0, $s4, $zero
-/* 82088 80091888 15FD020C */  jal        func_800BF454
+/* 82088 80091888 15FD020C */  jal        MulMatrix2
 /* 8208C 8009188C 1000A527 */   addiu     $a1, $sp, 0x10
 .L80091890:
 /* 82090 80091890 12006296 */  lhu        $v0, 0x12($s3)
 /* 82094 80091894 00000000 */  nop
 /* 82098 80091898 08004010 */  beqz       $v0, .L800918BC
 /* 8209C 8009189C 7800A427 */   addiu     $a0, $sp, 0x78
-/* 820A0 800918A0 A4E6010C */  jal        func_80079A90
+/* 820A0 800918A0 A4E6010C */  jal        G2Quat_FromMatrix_S
 /* 820A4 800918A4 1000A527 */   addiu     $a1, $sp, 0x10
 /* 820A8 800918A8 7800A28F */  lw         $v0, 0x78($sp)
 /* 820AC 800918AC 7C00A38F */  lw         $v1, 0x7C($sp)

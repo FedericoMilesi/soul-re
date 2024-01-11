@@ -43,7 +43,7 @@ glabel HUD_Draw
 /* 6CF7C 8007C77C DCEB010C */  jal        HUD_GetPlayerScreenPt
 /* 6CF80 8007C780 3000A427 */   addiu     $a0, $sp, 0x30
 /* 6CF84 8007C784 14ED848F */  lw         $a0, %gp_rel(glowdeg)($gp)
-/* 6CF88 8007C788 DCE4010C */  jal        func_80079370
+/* 6CF88 8007C788 DCE4010C */  jal        rcos
 /* 6CF8C 8007C78C 00000000 */   nop
 /* 6CF90 8007C790 6666033C */  lui        $v1, (0x66666667 >> 16)
 /* 6CF94 8007C794 10ED848F */  lw         $a0, %gp_rel(warpDraw)($gp)

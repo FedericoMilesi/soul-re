@@ -22,13 +22,13 @@ glabel sfxCmdSetVoiceAttr
 .L80057F1C:
 /* 4871C 80057F1C 08002586 */  lh         $a1, 0x8($s1)
 /* 48720 80057F20 0A002686 */  lh         $a2, 0xA($s1)
-/* 48724 80057F24 D000030C */  jal        func_800C0340
+/* 48724 80057F24 D000030C */  jal        SpuSetVoiceVolume
 /* 48728 80057F28 21200002 */   addu      $a0, $s0, $zero
 /* 4872C 80057F2C 14002596 */  lhu        $a1, 0x14($s1)
-/* 48730 80057F30 9DFE020C */  jal        func_800BFA74
+/* 48730 80057F30 9DFE020C */  jal        SpuSetVoicePitch
 /* 48734 80057F34 21200002 */   addu      $a0, $s0, $zero
 /* 48738 80057F38 1C00258E */  lw         $a1, 0x1C($s1)
-/* 4873C 80057F3C F000030C */  jal        func_800C03C0
+/* 4873C 80057F3C F000030C */  jal        SpuSetVoiceStartAddr
 /* 48740 80057F40 21200002 */   addu      $a0, $s0, $zero
 /* 48744 80057F44 3A002596 */  lhu        $a1, 0x3A($s1)
 /* 48748 80057F48 3C002696 */  lhu        $a2, 0x3C($s1)

@@ -86,7 +86,7 @@ glabel PIPE3D_HalvePlaneGetRingPoints
 /* 2CF90 8003C790 00000000 */   nop
 .L8003C794:
 /* 2CF94 8003C794 21280002 */  addu       $a1, $s0, $zero
-/* 2CF98 8003C798 59FD020C */  jal        func_800BF564
+/* 2CF98 8003C798 59FD020C */  jal        CompMatrix
 /* 2CF9C 8003C79C 6000A627 */   addiu     $a2, $sp, 0x60
 .L8003C7A0:
 /* 2CFA0 8003C7A0 14006012 */  beqz       $s3, .L8003C7F4

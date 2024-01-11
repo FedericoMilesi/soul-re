@@ -6,7 +6,7 @@ glabel SOUND_ShutdownMusic
 /* 31828 80041028 1000BFAF */  sw         $ra, 0x10($sp)
 /* 3182C 8004102C 2E52010C */  jal        aadStopAllSlots
 /* 31830 80041030 00000000 */   nop
-/* 31834 80041034 A5FC020C */  jal        func_800BF294
+/* 31834 80041034 A5FC020C */  jal        EnterCriticalSection
 /* 31838 80041038 00000000 */   nop
 /* 3183C 8004103C 2CC3838F */  lw         $v1, %gp_rel(musicInfo)($gp)
 /* 31840 80041040 01000224 */  addiu      $v0, $zero, 0x1
@@ -18,7 +18,7 @@ glabel SOUND_ShutdownMusic
 /* 31858 80041058 00000000 */   nop
 .L8004105C:
 /* 3185C 8004105C 30C380AF */  sw         $zero, %gp_rel(musicInfo + 0x4)($gp)
-/* 31860 80041060 11FC020C */  jal        func_800BF044
+/* 31860 80041060 11FC020C */  jal        ExitCriticalSection
 /* 31864 80041064 00000000 */   nop
 /* 31868 80041068 2CC3828F */  lw         $v0, %gp_rel(musicInfo)($gp)
 /* 3186C 8004106C 00000000 */  nop
@@ -34,7 +34,7 @@ glabel SOUND_ShutdownMusic
 /* 31890 80041090 1E040108 */  j          .L80041078
 /* 31894 80041094 00000000 */   nop
 .L80041098:
-/* 31898 80041098 11FC020C */  jal        func_800BF044
+/* 31898 80041098 11FC020C */  jal        ExitCriticalSection
 /* 3189C 8004109C 00000000 */   nop
 .L800410A0:
 /* 318A0 800410A0 44C380A3 */  sb         $zero, %gp_rel(musicInfo + 0x18)($gp)

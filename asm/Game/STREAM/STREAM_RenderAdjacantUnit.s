@@ -29,14 +29,14 @@ glabel STREAM_RenderAdjacantUnit
 /* 4FC28 8005F428 21804000 */  addu       $s0, $v0, $zero
 /* 4FC2C 8005F42C B77C010C */  jal        DrawFogRectangle
 /* 4FC30 8005F430 1000B0AF */   sw        $s0, 0x10($sp)
-/* 4FC34 8005F434 CDFD020C */  jal        func_800BF734
+/* 4FC34 8005F434 CDFD020C */  jal        PushMatrix
 /* 4FC38 8005F438 00000000 */   nop
 /* 4FC3C 8005F43C 21202002 */  addu       $a0, $s1, $zero
 /* 4FC40 8005F440 21306002 */  addu       $a2, $s3, $zero
 /* 4FC44 8005F444 0800458E */  lw         $a1, 0x8($s2)
 /* 4FC48 8005F448 57BC000C */  jal        StreamRenderLevel
 /* 4FC4C 8005F44C 21380002 */   addu      $a3, $s0, $zero
-/* 4FC50 8005F450 F6FD020C */  jal        func_800BF7D8
+/* 4FC50 8005F450 F6FD020C */  jal        PopMatrix
 /* 4FC54 8005F454 00000000 */   nop
 .L8005F458:
 /* 4FC58 8005F458 2800BF8F */  lw         $ra, 0x28($sp)

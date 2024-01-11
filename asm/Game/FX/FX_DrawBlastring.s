@@ -28,7 +28,7 @@ glabel FX_DrawBlastring
 /* 3C964 8004C164 40110300 */  sll        $v0, $v1, 5
 /* 3C968 8004C168 2180A200 */  addu       $s0, $a1, $v0
 /* 3C96C 8004C16C 21280002 */  addu       $a1, $s0, $zero
-/* 3C970 8004C170 59FD020C */  jal        func_800BF564
+/* 3C970 8004C170 59FD020C */  jal        CompMatrix
 /* 3C974 8004C174 3800A627 */   addiu     $a2, $sp, 0x38
 /* 3C978 8004C178 6A002282 */  lb         $v0, 0x6A($s1)
 /* 3C97C 8004C17C 00000000 */  nop
@@ -46,7 +46,7 @@ glabel FX_DrawBlastring
 .L8004C1AC:
 /* 3C9AC 8004C1AC 21206002 */  addu       $a0, $s3, $zero
 /* 3C9B0 8004C1B0 18002526 */  addiu      $a1, $s1, 0x18
-/* 3C9B4 8004C1B4 59FD020C */  jal        func_800BF564
+/* 3C9B4 8004C1B4 59FD020C */  jal        CompMatrix
 /* 3C9B8 8004C1B8 3800A627 */   addiu     $a2, $sp, 0x38
 .L8004C1BC:
 /* 3C9BC 8004C1BC 1300288A */  lwl        $t0, 0x13($s1)

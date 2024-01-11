@@ -6,23 +6,23 @@ glabel GAMEPAD_Init
 /* 2212C 8003192C F4BA8427 */  addiu      $a0, $gp, %gp_rel(readGPBuffer1)
 /* 22130 80031930 3CBB8527 */  addiu      $a1, $gp, %gp_rel(readGPBuffer2)
 /* 22134 80031934 1000BFAF */  sw         $ra, 0x10($sp)
-/* 22138 80031938 12F5020C */  jal        func_800BD448
+/* 22138 80031938 12F5020C */  jal        PadInitDirect
 /* 2213C 8003193C 00000000 */   nop
-/* 22140 80031940 AAF6020C */  jal        func_800BDAA8
+/* 22140 80031940 AAF6020C */  jal        PadStartCom
 /* 22144 80031944 00000000 */   nop
 /* 22148 80031948 08C6000C */  jal        GAMEPAD_Detect
 /* 2214C 8003194C 00000000 */   nop
 /* 22150 80031950 60BB8427 */  addiu      $a0, $gp, %gp_rel(gDummyCommand)
 /* 22154 80031954 21280000 */  addu       $a1, $zero, $zero
-/* 22158 80031958 2EF2020C */  jal        func_800BC8B8
+/* 22158 80031958 2EF2020C */  jal        memset
 /* 2215C 8003195C 10000624 */   addiu     $a2, $zero, 0x10
 /* 22160 80031960 F4BA8427 */  addiu      $a0, $gp, %gp_rel(readGPBuffer1)
 /* 22164 80031964 21280000 */  addu       $a1, $zero, $zero
-/* 22168 80031968 2EF2020C */  jal        func_800BC8B8
+/* 22168 80031968 2EF2020C */  jal        memset
 /* 2216C 8003196C 22000624 */   addiu     $a2, $zero, 0x22
 /* 22170 80031970 3CBB8427 */  addiu      $a0, $gp, %gp_rel(readGPBuffer2)
 /* 22174 80031974 21280000 */  addu       $a1, $zero, $zero
-/* 22178 80031978 2EF2020C */  jal        func_800BC8B8
+/* 22178 80031978 2EF2020C */  jal        memset
 /* 2217C 8003197C 22000624 */   addiu     $a2, $zero, 0x22
 /* 22180 80031980 1000BF8F */  lw         $ra, 0x10($sp)
 /* 22184 80031984 FFFF0234 */  ori        $v0, $zero, 0xFFFF

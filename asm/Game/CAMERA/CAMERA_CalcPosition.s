@@ -20,13 +20,13 @@ glabel CAMERA_CalcPosition
 /* 71F4 800169F4 4CE8000C */  jal        MATH3D_SetUnityMatrix
 /* 71F8 800169F8 1400A0A7 */   sh        $zero, 0x14($sp)
 /* 71FC 800169FC 00002486 */  lh         $a0, 0x0($s1)
-/* 7200 80016A00 98E3010C */  jal        func_80078E60
+/* 7200 80016A00 98E3010C */  jal        RotMatrixX
 /* 7204 80016A04 21280002 */   addu      $a1, $s0, $zero
 /* 7208 80016A08 02002486 */  lh         $a0, 0x2($s1)
-/* 720C 80016A0C E5E3010C */  jal        func_80078F94
+/* 720C 80016A0C E5E3010C */  jal        RotMatrixY
 /* 7210 80016A10 21280002 */   addu      $a1, $s0, $zero
 /* 7214 80016A14 04002486 */  lh         $a0, 0x4($s1)
-/* 7218 80016A18 32E4010C */  jal        func_800790C8
+/* 7218 80016A18 32E4010C */  jal        RotMatrixZ
 /* 721C 80016A1C 21280002 */   addu      $a1, $s0, $zero
 /* 7220 80016A20 00000C8E */  lw         $t4, 0x0($s0)
 /* 7224 80016A24 04000D8E */  lw         $t5, 0x4($s0)

@@ -19,7 +19,7 @@ glabel G2Anim_AddSection
 /* 83470 80092C70 00811000 */  sll        $s0, $s0, 4
 /* 83474 80092C74 24001026 */  addiu      $s0, $s0, 0x24
 /* 83478 80092C78 21803002 */  addu       $s0, $s1, $s0
-/* 8347C 80092C7C 2EF2020C */  jal        func_800BC8B8
+/* 8347C 80092C7C 2EF2020C */  jal        memset
 /* 83480 80092C80 21200002 */   addu      $a0, $s0, $zero
 /* 83484 80092C84 00002392 */  lbu        $v1, 0x0($s1)
 /* 83488 80092C88 FFFF0224 */  addiu      $v0, $zero, -0x1

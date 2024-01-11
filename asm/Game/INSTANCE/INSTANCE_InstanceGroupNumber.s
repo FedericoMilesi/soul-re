@@ -66,7 +66,7 @@ glabel INSTANCE_InstanceGroupNumber
 /* 22FD0 800327D0 08001036 */   ori       $s0, $s0, 0x8
 .L800327D4:
 /* 22FD4 800327D4 2400848C */  lw         $a0, 0x24($a0)
-/* 22FD8 800327D8 83F7020C */  jal        func_800BDE0C
+/* 22FD8 800327D8 83F7020C */  jal        strcmp
 /* 22FDC 800327DC 1408A524 */   addiu     $a1, $a1, %lo(gpSaved + 0x8)
 /* 22FE0 800327E0 04004010 */  beqz       $v0, .L800327F4
 /* 22FE4 800327E4 FDFF0224 */   addiu     $v0, $zero, -0x3

@@ -8,7 +8,7 @@ glabel STREAM_LoadLevelReturn
 /* 4A9A4 8005A1A4 1400B1AF */  sw         $s1, 0x14($sp)
 /* 4A9A8 8005A1A8 2188C000 */  addu       $s1, $a2, $zero
 /* 4A9AC 8005A1AC 1800BFAF */  sw         $ra, 0x18($sp)
-/* 4A9B0 8005A1B0 EBF4020C */  jal        func_800BD3AC
+/* 4A9B0 8005A1B0 EBF4020C */  jal        GetRCnt
 /* 4A9B4 8005A1B4 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 4A9B8 8005A1B8 5890828F */  lw         $v0, %gp_rel(gameTimer)($gp)
 /* 4A9BC 8005A1BC F800028E */  lw         $v0, 0xF8($s0)

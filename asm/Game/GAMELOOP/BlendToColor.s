@@ -10,7 +10,7 @@ glabel BlendToColor
 /* 1F33C 8002EB3C 00020624 */  addiu      $a2, $zero, 0x200
 /* 1F340 8002EB40 000E0724 */  addiu      $a3, $zero, 0xE00
 /* 1F344 8002EB44 2000BFAF */  sw         $ra, 0x20($sp)
-/* 1F348 8002EB48 A8F3020C */  jal        func_800BCEA0
+/* 1F348 8002EB48 A8F3020C */  jal        LoadAverageCol
 /* 1F34C 8002EB4C 1000B0AF */   sw        $s0, 0x10($sp)
 /* 1F350 8002EB50 00002492 */  lbu        $a0, 0x0($s1)
 /* 1F354 8002EB54 00000392 */  lbu        $v1, 0x0($s0)

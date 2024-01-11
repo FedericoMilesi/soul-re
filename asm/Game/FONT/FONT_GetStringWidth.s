@@ -8,7 +8,7 @@ glabel FONT_GetStringWidth
 /* 1DFF8 8002D7F8 2000BFAF */  sw         $ra, 0x20($sp)
 /* 1DFFC 8002D7FC 1800B2AF */  sw         $s2, 0x18($sp)
 /* 1E000 8002D800 1400B1AF */  sw         $s1, 0x14($sp)
-/* 1E004 8002D804 ACF4020C */  jal        func_800BD2B0
+/* 1E004 8002D804 ACF4020C */  jal        strlen
 /* 1E008 8002D808 1000B0AF */   sw        $s0, 0x10($sp)
 /* 1E00C 8002D80C 21800000 */  addu       $s0, $zero, $zero
 /* 1E010 8002D810 21904000 */  addu       $s2, $v0, $zero

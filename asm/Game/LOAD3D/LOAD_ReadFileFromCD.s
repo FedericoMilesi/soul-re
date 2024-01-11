@@ -12,11 +12,11 @@ glabel LOAD_ReadFileFromCD
 /* 2817C 8003797C 3400BFAF */  sw         $ra, 0x34($sp)
 .L80037980:
 /* 28180 80037980 1000A427 */  addiu      $a0, $sp, 0x10
-/* 28184 80037984 B5F9020C */  jal        func_800BE6D4
+/* 28184 80037984 B5F9020C */  jal        CdSearchFile
 /* 28188 80037988 21282002 */   addu      $a1, $s1, $zero
 /* 2818C 8003798C 07004014 */  bnez       $v0, .L800379AC
 /* 28190 80037990 0A000224 */   addiu     $v0, $zero, 0xA
-/* 28194 80037994 0EF8020C */  jal        func_800BE038
+/* 28194 80037994 0EF8020C */  jal        CdReset
 /* 28198 80037998 21200000 */   addu      $a0, $zero, $zero
 /* 2819C 8003799C 01001026 */  addiu      $s0, $s0, 0x1
 /* 281A0 800379A0 0A00022A */  slti       $v0, $s0, 0xA
@@ -31,7 +31,7 @@ glabel LOAD_ReadFileFromCD
 /* 281C0 800379C0 21804000 */  addu       $s0, $v0, $zero
 /* 281C4 800379C4 18000012 */  beqz       $s0, .L80037A28
 /* 281C8 800379C8 21100000 */   addu      $v0, $zero, $zero
-/* 281CC 800379CC 56FC020C */  jal        func_800BF158
+/* 281CC 800379CC 56FC020C */  jal        CdPosToInt
 /* 281D0 800379D0 1000A427 */   addiu     $a0, $sp, 0x10
 /* 281D4 800379D4 1400A48F */  lw         $a0, 0x14($sp)
 /* 281D8 800379D8 F0BB858F */  lw         $a1, %gp_rel(loadStatus + 0x5C)($gp)
@@ -52,7 +52,7 @@ glabel LOAD_ReadFileFromCD
 /* 28210 80037A10 00000000 */   nop
 /* 28214 80037A14 FBFF4014 */  bnez       $v0, .L80037A04
 /* 28218 80037A18 09000424 */   addiu     $a0, $zero, 0x9
-/* 2821C 80037A1C 9FF8020C */  jal        func_800BE27C
+/* 2821C 80037A1C 9FF8020C */  jal        CdControlF
 /* 28220 80037A20 21280000 */   addu      $a1, $zero, $zero
 /* 28224 80037A24 21100002 */  addu       $v0, $s0, $zero
 .L80037A28:

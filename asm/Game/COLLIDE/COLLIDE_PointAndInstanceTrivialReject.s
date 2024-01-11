@@ -40,7 +40,7 @@ glabel COLLIDE_PointAndInstanceTrivialReject
 /* 11320 80020B20 5C003026 */  addiu      $s0, $s1, 0x5C
 /* 11324 80020B24 1800658E */  lw         $a1, 0x18($s3)
 /* 11328 80020B28 1400668E */  lw         $a2, 0x14($s3)
-/* 1132C 80020B2C 79E0010C */  jal        func_800781E4
+/* 1132C 80020B2C 79E0010C */  jal        COLLIDE_NearestPointOnLine_S
 /* 11330 80020B30 21380002 */   addu      $a3, $s0, $zero
 /* 11334 80020B34 1000A687 */  lh         $a2, 0x10($sp)
 /* 11338 80020B38 5C002286 */  lh         $v0, 0x5C($s1)

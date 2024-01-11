@@ -17,7 +17,7 @@ glabel AlgorithmicNeck
 /* 9261C 800A1E1C 2190A000 */   addu      $s2, $a1, $zero
 /* 92620 800A1E20 3000B027 */  addiu      $s0, $sp, 0x30
 /* 92624 800A1E24 4400248E */  lw         $a0, 0x44($s1)
-/* 92628 800A1E28 88F4020C */  jal        func_800BD220
+/* 92628 800A1E28 88F4020C */  jal        TransposeMatrix
 /* 9262C 800A1E2C 21280002 */   addu      $a1, $s0, $zero
 /* 92630 800A1E30 21202002 */  addu       $a0, $s1, $zero
 /* 92634 800A1E34 21280000 */  addu       $a1, $zero, $zero

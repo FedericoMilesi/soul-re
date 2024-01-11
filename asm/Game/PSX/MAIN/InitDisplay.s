@@ -15,34 +15,34 @@ glabel InitDisplay
 /* 29200 80038A00 1800AABB */  swr        $t2, 0x18($sp)
 /* 29204 80038A04 1F00ABAB */  swl        $t3, 0x1F($sp)
 /* 29208 80038A08 1C00ABBB */  swr        $t3, 0x1C($sp)
-/* 2920C 80038A0C 5DE8020C */  jal        func_800BA174
+/* 2920C 80038A0C 5DE8020C */  jal        ResetGraph
 /* 29210 80038A10 03000424 */   addiu     $a0, $zero, 0x3
-/* 29214 80038A14 BAE8020C */  jal        func_800BA2E8
+/* 29214 80038A14 BAE8020C */  jal        SetGraphDebug
 /* 29218 80038A18 21200000 */   addu      $a0, $zero, $zero
 /* 2921C 80038A1C 88BC8427 */  addiu      $a0, $gp, %gp_rel(draw)
 /* 29220 80038A20 21280000 */  addu       $a1, $zero, $zero
 /* 29224 80038A24 2130A000 */  addu       $a2, $a1, $zero
 /* 29228 80038A28 00020724 */  addiu      $a3, $zero, 0x200
 /* 2922C 80038A2C F0001024 */  addiu      $s0, $zero, 0xF0
-/* 29230 80038A30 E1FC020C */  jal        func_800BF384
+/* 29230 80038A30 E1FC020C */  jal        SetDefDrawEnv
 /* 29234 80038A34 1000B0AF */   sw        $s0, 0x10($sp)
 /* 29238 80038A38 5CBC8427 */  addiu      $a0, $gp, %gp_rel(disp)
 /* 2923C 80038A3C 21280000 */  addu       $a1, $zero, $zero
 /* 29240 80038A40 2130A000 */  addu       $a2, $a1, $zero
 /* 29244 80038A44 00020724 */  addiu      $a3, $zero, 0x200
-/* 29248 80038A48 E2F2020C */  jal        func_800BCB88
+/* 29248 80038A48 E2F2020C */  jal        SetDefDispEnv
 /* 2924C 80038A4C 1000B0AF */   sw        $s0, 0x10($sp)
 /* 29250 80038A50 E4BC8427 */  addiu      $a0, $gp, %gp_rel(draw + 0x5C)
 /* 29254 80038A54 21280000 */  addu       $a1, $zero, $zero
 /* 29258 80038A58 00010624 */  addiu      $a2, $zero, 0x100
 /* 2925C 80038A5C 00020724 */  addiu      $a3, $zero, 0x200
-/* 29260 80038A60 E1FC020C */  jal        func_800BF384
+/* 29260 80038A60 E1FC020C */  jal        SetDefDrawEnv
 /* 29264 80038A64 1000B0AF */   sw        $s0, 0x10($sp)
 /* 29268 80038A68 70BC8427 */  addiu      $a0, $gp, %gp_rel(disp + 0x14)
 /* 2926C 80038A6C 21280000 */  addu       $a1, $zero, $zero
 /* 29270 80038A70 00010624 */  addiu      $a2, $zero, 0x100
 /* 29274 80038A74 00020724 */  addiu      $a3, $zero, 0x200
-/* 29278 80038A78 E2F2020C */  jal        func_800BCB88
+/* 29278 80038A78 E2F2020C */  jal        SetDefDispEnv
 /* 2927C 80038A7C 1000B0AF */   sw        $s0, 0x10($sp)
 /* 29280 80038A80 21280000 */  addu       $a1, $zero, $zero
 /* 29284 80038A84 03000924 */  addiu      $t1, $zero, 0x3
@@ -84,15 +84,15 @@ glabel InitDisplay
 /* 29310 80038B10 3EE1000C */  jal        ClearDisplay
 /* 29314 80038B14 00000000 */   nop
 /* 29318 80038B18 9CBF848F */  lw         $a0, %gp_rel(gameTrackerX + 0x1D4)($gp)
-/* 2931C 80038B1C DAE9020C */  jal        func_800BA768
+/* 2931C 80038B1C DAE9020C */  jal        ClearOTagR
 /* 29320 80038B20 000C0524 */   addiu     $a1, $zero, 0xC00
 /* 29324 80038B24 A0BF848F */  lw         $a0, %gp_rel(gameTrackerX + 0x1D8)($gp)
-/* 29328 80038B28 DAE9020C */  jal        func_800BA768
+/* 29328 80038B28 DAE9020C */  jal        ClearOTagR
 /* 2932C 80038B2C 000C0524 */   addiu     $a1, $zero, 0xC00
 /* 29330 80038B30 1800A427 */  addiu      $a0, $sp, 0x18
 /* 29334 80038B34 21280000 */  addu       $a1, $zero, $zero
 /* 29338 80038B38 FF000624 */  addiu      $a2, $zero, 0xFF
-/* 2933C 80038B3C 70E9020C */  jal        func_800BA5C0
+/* 2933C 80038B3C 70E9020C */  jal        ClearImage
 /* 29340 80038B40 2138A000 */   addu      $a3, $a1, $zero
 /* 29344 80038B44 2400BF8F */  lw         $ra, 0x24($sp)
 /* 29348 80038B48 2000B08F */  lw         $s0, 0x20($sp)

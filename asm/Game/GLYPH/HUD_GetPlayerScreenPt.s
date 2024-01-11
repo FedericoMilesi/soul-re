@@ -5,13 +5,13 @@ glabel HUD_GetPlayerScreenPt
 /* 6B770 8007AF70 E0FFBD27 */  addiu      $sp, $sp, -0x20
 /* 6B774 8007AF74 1800B0AF */  sw         $s0, 0x18($sp)
 /* 6B778 8007AF78 1C00BFAF */  sw         $ra, 0x1C($sp)
-/* 6B77C 8007AF7C CDFD020C */  jal        func_800BF734
+/* 6B77C 8007AF7C CDFD020C */  jal        PushMatrix
 /* 6B780 8007AF80 21808000 */   addu      $s0, $a0, $zero
 /* 6B784 8007AF84 F0AC848F */  lw         $a0, %gp_rel(theCamera + 0x60)($gp)
-/* 6B788 8007AF88 52F2020C */  jal        func_800BC948
+/* 6B788 8007AF88 52F2020C */  jal        SetRotMatrix
 /* 6B78C 8007AF8C 00000000 */   nop
 /* 6B790 8007AF90 F0AC848F */  lw         $a0, %gp_rel(theCamera + 0x60)($gp)
-/* 6B794 8007AF94 4AF2020C */  jal        func_800BC928
+/* 6B794 8007AF94 4AF2020C */  jal        SetTransMatrix
 /* 6B798 8007AF98 00000000 */   nop
 /* 6B79C 8007AF9C F4BD828F */  lw         $v0, %gp_rel(gameTrackerX + 0x2C)($gp)
 /* 6B7A0 8007AFA0 00000000 */  nop
@@ -32,7 +32,7 @@ glabel HUD_GetPlayerScreenPt
 /* 6B7DC 8007AFDC 00000000 */  nop
 /* 6B7E0 8007AFE0 0100184A */  RTPS
 /* 6B7E4 8007AFE4 00000EEA */  swc2       $14, 0x0($s0)
-/* 6B7E8 8007AFE8 F6FD020C */  jal        func_800BF7D8
+/* 6B7E8 8007AFE8 F6FD020C */  jal        PopMatrix
 /* 6B7EC 8007AFEC 00000000 */   nop
 /* 6B7F0 8007AFF0 1C00BF8F */  lw         $ra, 0x1C($sp)
 /* 6B7F4 8007AFF4 1800B08F */  lw         $s0, 0x18($sp)

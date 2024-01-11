@@ -9,10 +9,10 @@ glabel FX_ConvertCamPersToWorld
 /* 39A50 80049250 04AD848F */  lw         $a0, %gp_rel(theCamera + 0x74)($gp)
 /* 39A54 80049254 1400B1AF */  sw         $s1, 0x14($sp)
 /* 39A58 80049258 1800BFAF */  sw         $ra, 0x18($sp)
-/* 39A5C 8004925C 52F2020C */  jal        func_800BC948
+/* 39A5C 8004925C 52F2020C */  jal        SetRotMatrix
 /* 39A60 80049260 2188A000 */   addu      $s1, $a1, $zero
 /* 39A64 80049264 04AD848F */  lw         $a0, %gp_rel(theCamera + 0x74)($gp)
-/* 39A68 80049268 4AF2020C */  jal        func_800BC928
+/* 39A68 80049268 4AF2020C */  jal        SetTransMatrix
 /* 39A6C 8004926C 00000000 */   nop
 /* 39A70 80049270 00000496 */  lhu        $a0, 0x0($s0)
 /* 39A74 80049274 00000000 */  nop

@@ -32,7 +32,7 @@ glabel GAMELOOP_AllocStaticMemory
 /* 1E394 8002DB94 21204000 */  addu       $a0, $v0, $zero
 /* 1E398 8002DB98 21280000 */  addu       $a1, $zero, $zero
 /* 1E39C 8002DB9C 2CBA84AF */  sw         $a0, %gp_rel(gLightInfo)($gp)
-/* 1E3A0 8002DBA0 2EF2020C */  jal        func_800BC8B8
+/* 1E3A0 8002DBA0 2EF2020C */  jal        memset
 /* 1E3A4 8002DBA4 7C040624 */   addiu     $a2, $zero, 0x47C
 /* 1E3A8 8002DBA8 C0180424 */  addiu      $a0, $zero, 0x18C0
 /* 1E3AC 8002DBAC 8140010C */  jal        MEMPACK_Malloc

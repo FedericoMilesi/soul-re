@@ -8,7 +8,7 @@ glabel MON_SphereWorldPos
 /* 73DB0 800835B0 1000B0AF */  sw         $s0, 0x10($sp)
 /* 73DB4 800835B4 2180C000 */  addu       $s0, $a2, $zero
 /* 73DB8 800835B8 1800BFAF */  sw         $ra, 0x18($sp)
-/* 73DBC 800835BC 0EF3020C */  jal        func_800BCC38
+/* 73DBC 800835BC 0EF3020C */  jal        ApplyMatrixSV
 /* 73DC0 800835C0 0800A524 */   addiu     $a1, $a1, 0x8
 /* 73DC4 800835C4 00000296 */  lhu        $v0, 0x0($s0)
 /* 73DC8 800835C8 14002396 */  lhu        $v1, 0x14($s1)

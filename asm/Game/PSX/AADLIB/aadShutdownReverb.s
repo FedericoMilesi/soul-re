@@ -10,7 +10,7 @@ glabel aadShutdownReverb
 /* 44D5C 8005455C 00000000 */   nop
 /* 44D60 80054560 6051010C */  jal        aadGetReverbMode
 /* 44D64 80054564 00000000 */   nop
-/* 44D68 80054568 5CFF020C */  jal        func_800BFD70
+/* 44D68 80054568 5CFF020C */  jal        SpuClearReverbWorkArea
 /* 44D6C 8005456C 21204000 */   addu      $a0, $v0, $zero
 .L80054570:
 /* 44D70 80054570 1000BF8F */  lw         $ra, 0x10($sp)

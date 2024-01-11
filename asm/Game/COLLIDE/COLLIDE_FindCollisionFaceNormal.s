@@ -75,7 +75,7 @@ glabel COLLIDE_FindCollisionFaceNormal
 /* 155D0 80024DD0 00000000 */  nop
 /* 155D4 80024DD4 4000448C */  lw         $a0, 0x40($v0)
 .L80024DD8:
-/* 155D8 80024DD8 0EF3020C */  jal        func_800BCC38
+/* 155D8 80024DD8 0EF3020C */  jal        ApplyMatrixSV
 /* 155DC 80024DDC 21304002 */   addu      $a2, $s2, $zero
 /* 155E0 80024DE0 01000624 */  addiu      $a2, $zero, 0x1
 .L80024DE4:

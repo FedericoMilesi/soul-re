@@ -78,7 +78,7 @@ glabel FX_ContinueBlastRing
 /* 3C628 8004BE28 74000426 */  addiu      $a0, $s0, 0x74
 /* 3C62C 8004BE2C 70000526 */  addiu      $a1, $s0, 0x70
 /* 3C630 8004BE30 00100724 */  addiu      $a3, $zero, 0x1000
-/* 3C634 8004BE34 A8F3020C */  jal        func_800BCEA0
+/* 3C634 8004BE34 A8F3020C */  jal        LoadAverageCol
 /* 3C638 8004BE38 2338E600 */   subu      $a3, $a3, $a2
 .L8004BE3C:
 /* 3C63C 8004BE3C D0BD8387 */  lh         $v1, %gp_rel(gameTrackerX + 0x8)($gp)
@@ -103,7 +103,7 @@ glabel FX_ContinueBlastRing
 /* 3C680 8004BE80 1000A2AF */  sw         $v0, 0x10($sp)
 /* 3C684 8004BE84 1800A527 */  addiu      $a1, $sp, 0x18
 /* 3C688 8004BE88 00100624 */  addiu      $a2, $zero, 0x1000
-/* 3C68C 8004BE8C A8F3020C */  jal        func_800BCEA0
+/* 3C68C 8004BE8C A8F3020C */  jal        LoadAverageCol
 /* 3C690 8004BE90 2330C700 */   subu      $a2, $a2, $a3
 /* 3C694 8004BE94 FF00033C */  lui        $v1, (0xFFFFFF >> 16)
 .L8004BE98:

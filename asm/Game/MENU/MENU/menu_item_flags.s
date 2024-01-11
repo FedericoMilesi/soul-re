@@ -28,7 +28,7 @@ glabel menu_item_flags
 /* A8098 800B7898 21204000 */   addu      $a0, $v0, $zero
 /* A809C 800B789C 0800508E */  lw         $s0, 0x8($s2)
 /* A80A0 800B78A0 0000248E */  lw         $a0, 0x0($s1)
-/* A80A4 800B78A4 ACF4020C */  jal        func_800BD2B0
+/* A80A4 800B78A4 ACF4020C */  jal        strlen
 /* A80A8 800B78A8 01001026 */   addiu     $s0, $s0, 0x1
 /* A80AC 800B78AC 21800202 */  addu       $s0, $s0, $v0
 /* A80B0 800B78B0 080050AE */  sw         $s0, 0x8($s2)

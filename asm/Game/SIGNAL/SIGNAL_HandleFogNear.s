@@ -14,7 +14,7 @@ glabel SIGNAL_HandleFogNear
 /* E848 8001E048 44000596 */  lhu        $a1, 0x44($s0)
 /* E84C 8001E04C 460003A6 */  sh         $v1, 0x46($s0)
 /* E850 8001E050 F8AC868F */  lw         $a2, %gp_rel(theCamera + 0x68)($gp)
-/* E854 8001E054 C8F3020C */  jal        func_800BCF20
+/* E854 8001E054 C8F3020C */  jal        SetFogNearFar
 /* E858 8001E058 FFFF6430 */   andi      $a0, $v1, 0xFFFF
 /* E85C 8001E05C 6DDC000C */  jal        LIGHT_CalcDQPTable
 /* E860 8001E060 21200002 */   addu      $a0, $s0, $zero

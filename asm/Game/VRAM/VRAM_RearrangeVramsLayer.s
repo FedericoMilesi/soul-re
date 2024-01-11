@@ -89,12 +89,12 @@ glabel VRAM_RearrangeVramsLayer
 /* 645E8 80073DE8 1E06A2A7 */  sh         $v0, 0x61E($sp)
 .L80073DEC:
 /* 645EC 80073DEC E4BE848F */  lw         $a0, %gp_rel(gameTrackerX + 0x11C)($gp)
-/* 645F0 80073DF0 8494000C */  jal        func_80025210
+/* 645F0 80073DF0 8494000C */  jal        CheckVolatile
 /* 645F4 80073DF4 00000000 */   nop
 /* 645F8 80073DF8 FCFF4014 */  bnez       $v0, .L80073DEC
 /* 645FC 80073DFC 00000000 */   nop
 /* 64600 80073E00 E0BE848F */  lw         $a0, %gp_rel(gameTrackerX + 0x118)($gp)
-/* 64604 80073E04 8494000C */  jal        func_80025210
+/* 64604 80073E04 8494000C */  jal        CheckVolatile
 /* 64608 80073E08 00000000 */   nop
 /* 6460C 80073E0C F7FF4014 */  bnez       $v0, .L80073DEC
 /* 64610 80073E10 21280000 */   addu      $a1, $zero, $zero
@@ -105,9 +105,9 @@ glabel VRAM_RearrangeVramsLayer
 /* 64624 80073E24 00AA0600 */  sll        $s5, $a2, 8
 /* 64628 80073E28 1806A427 */  addiu      $a0, $sp, 0x618
 /* 6462C 80073E2C 00360600 */  sll        $a2, $a2, 24
-/* 64630 80073E30 ACE9020C */  jal        func_800BA6B0
+/* 64630 80073E30 ACE9020C */  jal        MoveImage
 /* 64634 80073E34 03340600 */   sra       $a2, $a2, 16
-/* 64638 80073E38 0FE9020C */  jal        func_800BA43C
+/* 64638 80073E38 0FE9020C */  jal        DrawSync
 /* 6463C 80073E3C 21200000 */   addu      $a0, $zero, $zero
 /* 64640 80073E40 1400801A */  blez       $s4, .L80073E94
 /* 64644 80073E44 1800B127 */   addiu     $s1, $sp, 0x18
@@ -181,9 +181,9 @@ glabel VRAM_RearrangeVramsLayer
 .L80073F40:
 /* 64740 80073F40 2006A587 */  lh         $a1, 0x620($sp)
 /* 64744 80073F44 2206A687 */  lh         $a2, 0x622($sp)
-/* 64748 80073F48 ACE9020C */  jal        func_800BA6B0
+/* 64748 80073F48 ACE9020C */  jal        MoveImage
 /* 6474C 80073F4C 1806A427 */   addiu     $a0, $sp, 0x618
-/* 64750 80073F50 0FE9020C */  jal        func_800BA43C
+/* 64750 80073F50 0FE9020C */  jal        DrawSync
 /* 64754 80073F54 21200000 */   addu      $a0, $zero, $zero
 /* 64758 80073F58 04002392 */  lbu        $v1, 0x4($s1)
 /* 6475C 80073F5C 02000224 */  addiu      $v0, $zero, 0x2
@@ -246,7 +246,7 @@ glabel VRAM_RearrangeVramsLayer
 /* 64834 80074034 9AFF2016 */  bnez       $s1, .L80073EA0
 /* 64838 80074038 00000000 */   nop
 .L8007403C:
-/* 6483C 8007403C 0FE9020C */  jal        func_800BA43C
+/* 6483C 8007403C 0FE9020C */  jal        DrawSync
 /* 64840 80074040 21200000 */   addu      $a0, $zero, $zero
 /* 64844 80074044 4806BF8F */  lw         $ra, 0x648($sp)
 /* 64848 80074048 4406B78F */  lw         $s7, 0x644($sp)

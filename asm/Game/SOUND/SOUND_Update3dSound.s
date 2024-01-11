@@ -71,7 +71,7 @@ glabel SOUND_Update3dSound
 /* 30B84 80040384 43004014 */  bnez       $v0, .L80040494
 /* 30B88 80040388 21100000 */   addu      $v0, $zero, $zero
 /* 30B8C 8004038C 21200002 */  addu       $a0, $s0, $zero
-/* 30B90 80040390 26F3020C */  jal        func_800BCC98
+/* 30B90 80040390 26F3020C */  jal        ratan2
 /* 30B94 80040394 21282002 */   addu      $a1, $s1, $zero
 /* 30B98 80040398 1A005402 */  div        $zero, $s2, $s4
 /* 30B9C 8004039C 12200000 */  mflo       $a0

@@ -46,11 +46,11 @@ glabel PIPE3D_TransformSplitInstanceVertices
 /* 2C950 8003C150 C0801000 */  sll        $s0, $s0, 3
 /* 2C954 8003C154 21801001 */  addu       $s0, $t0, $s0
 /* 2C958 8003C158 C0100200 */  sll        $v0, $v0, 3
-/* 2C95C 8003C15C 59FD020C */  jal        func_800BF564
+/* 2C95C 8003C15C 59FD020C */  jal        CompMatrix
 /* 2C960 8003C160 21A00201 */   addu      $s4, $t0, $v0
-/* 2C964 8003C164 52F2020C */  jal        func_800BC948
+/* 2C964 8003C164 52F2020C */  jal        SetRotMatrix
 /* 2C968 8003C168 2120C003 */   addu      $a0, $fp, $zero
-/* 2C96C 8003C16C 4AF2020C */  jal        func_800BC928
+/* 2C96C 8003C16C 4AF2020C */  jal        SetTransMatrix
 /* 2C970 8003C170 2120C003 */   addu      $a0, $fp, $zero
 /* 2C974 8003C174 2B109002 */  sltu       $v0, $s4, $s0
 /* 2C978 8003C178 16004014 */  bnez       $v0, .L8003C1D4

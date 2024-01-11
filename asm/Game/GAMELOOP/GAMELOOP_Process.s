@@ -80,7 +80,7 @@ glabel GAMELOOP_Process
 /* 20EE0 800306E0 00000000 */   nop
 /* 20EE4 800306E4 9800A426 */  addiu      $a0, $s5, 0x98
 /* 20EE8 800306E8 21280000 */  addu       $a1, $zero, $zero
-/* 20EEC 800306EC 2EF2020C */  jal        func_800BC8B8
+/* 20EEC 800306EC 2EF2020C */  jal        memset
 /* 20EF0 800306F0 28000624 */   addiu     $a2, $zero, 0x28
 /* 20EF4 800306F4 3ABF8387 */  lh         $v1, %gp_rel(gameTrackerX + 0x172)($gp)
 /* 20EF8 800306F8 06000224 */  addiu      $v0, $zero, 0x6
@@ -309,7 +309,7 @@ glabel GAMELOOP_Process
 /* 21234 80030A34 00000000 */   nop
 /* 21238 80030A38 0800048E */  lw         $a0, 0x8($s0)
 /* 2123C 80030A3C 90AC8527 */  addiu      $a1, $gp, %gp_rel(theCamera)
-/* 21240 80030A40 71E2010C */  jal        func_800789C4
+/* 21240 80030A40 71E2010C */  jal        VM_ProcessVMObjectList_S
 /* 21244 80030A44 00000000 */   nop
 .L80030A48:
 /* 21248 80030A48 01005226 */  addiu      $s2, $s2, 0x1

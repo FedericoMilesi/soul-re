@@ -100,7 +100,7 @@ glabel GAMELOOP_DrawSavedOT
 /* 2086C 8003006C 25186200 */  or         $v1, $v1, $v0
 /* 20870 80030070 0000A3AC */  sw         $v1, 0x0($a1)
 /* 20874 80030074 A4BF848F */  lw         $a0, %gp_rel(gameTrackerX + 0x1DC)($gp)
-/* 20878 80030078 1CEA020C */  jal        func_800BA870
+/* 20878 80030078 1CEA020C */  jal        DrawOTag
 /* 2087C 8003007C 00000000 */   nop
 /* 20880 80030080 1000BF8F */  lw         $ra, 0x10($sp)
 /* 20884 80030084 00000000 */  nop

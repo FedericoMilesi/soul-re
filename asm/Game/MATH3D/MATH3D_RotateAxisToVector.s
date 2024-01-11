@@ -93,7 +93,7 @@ glabel MATH3D_RotateAxisToVector
 /* 2AD34 8003A534 00000000 */   nop
 /* 2AD38 8003A538 FF0F4224 */  addiu      $v0, $v0, 0xFFF
 .L8003A53C:
-/* 2AD3C 8003A53C E8E4010C */  jal        func_800793A0
+/* 2AD3C 8003A53C E8E4010C */  jal        MATH3D_racos_S
 /* 2AD40 8003A540 03230200 */   sra       $a0, $v0, 12
 /* 2AD44 8003A544 00140200 */  sll        $v0, $v0, 16
 /* 2AD48 8003A548 031C0200 */  sra        $v1, $v0, 16
@@ -114,7 +114,7 @@ glabel MATH3D_RotateAxisToVector
 /* 2AD80 8003A580 21200002 */   addu      $a0, $s0, $zero
 /* 2AD84 8003A584 21804000 */  addu       $s0, $v0, $zero
 .L8003A588:
-/* 2AD88 8003A588 D0E4010C */  jal        func_80079340
+/* 2AD88 8003A588 D0E4010C */  jal        rsin
 /* 2AD8C 8003A58C 21202002 */   addu      $a0, $s1, $zero
 /* 2AD90 8003A590 3000A387 */  lh         $v1, 0x30($sp)
 /* 2AD94 8003A594 00000000 */  nop
@@ -143,15 +143,15 @@ glabel MATH3D_RotateAxisToVector
 /* 2ADF0 8003A5F0 21202002 */  addu       $a0, $s1, $zero
 /* 2ADF4 8003A5F4 3000A6A7 */  sh         $a2, 0x30($sp)
 /* 2ADF8 8003A5F8 3200A5A7 */  sh         $a1, 0x32($sp)
-/* 2ADFC 8003A5FC DCE4010C */  jal        func_80079370
+/* 2ADFC 8003A5FC DCE4010C */  jal        rcos
 /* 2AE00 8003A600 3400A2A7 */   sh        $v0, 0x34($sp)
 /* 2AE04 8003A604 3000A427 */  addiu      $a0, $sp, 0x30
 /* 2AE08 8003A608 1000A527 */  addiu      $a1, $sp, 0x10
-/* 2AE0C 8003A60C 27E7010C */  jal        func_80079C9C
+/* 2AE0C 8003A60C 27E7010C */  jal        G2Quat_ToMatrix_S
 /* 2AE10 8003A610 3600A2A7 */   sh        $v0, 0x36($sp)
 /* 2AE14 8003A614 21204002 */  addu       $a0, $s2, $zero
 /* 2AE18 8003A618 1000A527 */  addiu      $a1, $sp, 0x10
-/* 2AE1C 8003A61C BFF7020C */  jal        func_800BDEFC
+/* 2AE1C 8003A61C BFF7020C */  jal        MulMatrix0
 /* 2AE20 8003A620 21306002 */   addu      $a2, $s3, $zero
 /* 2AE24 8003A624 4800BF8F */  lw         $ra, 0x48($sp)
 /* 2AE28 8003A628 4400B38F */  lw         $s3, 0x44($sp)

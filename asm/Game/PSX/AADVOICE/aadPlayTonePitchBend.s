@@ -186,7 +186,7 @@ glabel aadPlayTonePitchBend
 /* 49044 80058844 1200A6A7 */  sh         $a2, 0x12($sp)
 /* 49048 80058848 00340600 */  sll        $a2, $a2, 16
 /* 4904C 8005884C 11004492 */  lbu        $a0, 0x11($s2)
-/* 49050 80058850 D000030C */  jal        func_800C0340
+/* 49050 80058850 D000030C */  jal        SpuSetVoiceVolume
 /* 49054 80058854 03340600 */   sra       $a2, $a2, 16
 /* 49058 80058858 09000292 */  lbu        $v0, 0x9($s0)
 /* 4905C 8005885C 00200324 */  addiu      $v1, $zero, 0x2000
@@ -255,10 +255,10 @@ glabel aadPlayTonePitchBend
 .L80058954:
 /* 49154 80058954 2128A800 */  addu       $a1, $a1, $t0
 /* 49158 80058958 11004492 */  lbu        $a0, 0x11($s2)
-/* 4915C 8005895C 9DFE020C */  jal        func_800BFA74
+/* 4915C 8005895C 9DFE020C */  jal        SpuSetVoicePitch
 /* 49160 80058960 FFFFA530 */   andi      $a1, $a1, 0xFFFF
 /* 49164 80058964 11004492 */  lbu        $a0, 0x11($s2)
-/* 49168 80058968 F000030C */  jal        func_800C03C0
+/* 49168 80058968 F000030C */  jal        SpuSetVoiceStartAddr
 /* 4916C 8005896C 21288002 */   addu      $a1, $s4, $zero
 /* 49170 80058970 11004492 */  lbu        $a0, 0x11($s2)
 /* 49174 80058974 0A000596 */  lhu        $a1, 0xA($s0)

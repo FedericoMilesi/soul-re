@@ -33,7 +33,7 @@ glabel _G2Anim_BuildSegTransformNoControllers
 /* 849AC 800941AC 1800A3AF */   sw        $v1, 0x18($sp)
 /* 849B0 800941B0 04004012 */  beqz       $s2, .L800941C4
 /* 849B4 800941B4 21200002 */   addu      $a0, $s0, $zero
-/* 849B8 800941B8 96E4010C */  jal        func_80079258
+/* 849B8 800941B8 96E4010C */  jal        ScaleMatrix
 /* 849BC 800941BC 1000A527 */   addiu     $a1, $sp, 0x10
 /* 849C0 800941C0 120012A6 */  sh         $s2, 0x12($s0)
 .L800941C4:

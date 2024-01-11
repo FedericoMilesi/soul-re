@@ -45,13 +45,13 @@ glabel MONSTER_ProcessClosestVerts
 /* 7C7B4 8008BFB4 C0100300 */  sll        $v0, $v1, 3
 /* 7C7B8 8008BFB8 F5EA000C */  jal        PIPE3D_InvertTransform
 /* 7C7BC 8008BFBC 21A88202 */   addu      $s5, $s4, $v0
-/* 7C7C0 8008BFC0 52F2020C */  jal        func_800BC948
+/* 7C7C0 8008BFC0 52F2020C */  jal        SetRotMatrix
 /* 7C7C4 8008BFC4 2120C002 */   addu      $a0, $s6, $zero
-/* 7C7C8 8008BFC8 4AF2020C */  jal        func_800BC928
+/* 7C7C8 8008BFC8 4AF2020C */  jal        SetTransMatrix
 /* 7C7CC 8008BFCC 2120C002 */   addu      $a0, $s6, $zero
 /* 7C7D0 8008BFD0 1800A527 */  addiu      $a1, $sp, 0x18
 /* 7C7D4 8008BFD4 7C00A48F */  lw         $a0, 0x7C($sp)
-/* 7C7D8 8008BFD8 98F4020C */  jal        func_800BD260
+/* 7C7D8 8008BFD8 98F4020C */  jal        RotTrans
 /* 7C7DC 8008BFDC 4800A627 */   addiu     $a2, $sp, 0x48
 /* 7C7E0 8008BFE0 2B10B002 */  sltu       $v0, $s5, $s0
 /* 7C7E4 8008BFE4 2C004014 */  bnez       $v0, .L8008C098

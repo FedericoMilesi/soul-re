@@ -6,11 +6,11 @@ glabel GAMELOOP_FlipScreenAndDraw
 /* 1FCA8 8002F4A8 1000B0AF */  sw         $s0, 0x10($sp)
 /* 1FCAC 8002F4AC 21808000 */  addu       $s0, $a0, $zero
 /* 1FCB0 8002F4B0 1400BFAF */  sw         $ra, 0x14($sp)
-/* 1FCB4 8002F4B4 1CEA020C */  jal        func_800BA870
+/* 1FCB4 8002F4B4 1CEA020C */  jal        DrawOTag
 /* 1FCB8 8002F4B8 FC2FA424 */   addiu     $a0, $a1, 0x2FFC
 .L8002F4BC:
 /* 1FCBC 8002F4BC 1C01048E */  lw         $a0, 0x11C($s0)
-/* 1FCC0 8002F4C0 8494000C */  jal        func_80025210
+/* 1FCC0 8002F4C0 8494000C */  jal        CheckVolatile
 /* 1FCC4 8002F4C4 00000000 */   nop
 /* 1FCC8 8002F4C8 FCFF4014 */  bnez       $v0, .L8002F4BC
 /* 1FCCC 8002F4CC 00000000 */   nop
@@ -24,15 +24,15 @@ glabel GAMELOOP_FlipScreenAndDraw
 /* 1FCEC 8002F4EC 23208200 */  subu       $a0, $a0, $v0
 /* 1FCF0 8002F4F0 80200400 */  sll        $a0, $a0, 2
 /* 1FCF4 8002F4F4 88BC8227 */  addiu      $v0, $gp, %gp_rel(draw)
-/* 1FCF8 8002F4F8 38EA020C */  jal        func_800BA8E0
+/* 1FCF8 8002F4F8 38EA020C */  jal        PutDrawEnv
 /* 1FCFC 8002F4FC 21208200 */   addu      $a0, $a0, $v0
 .L8002F500:
 /* 1FD00 8002F500 1801048E */  lw         $a0, 0x118($s0)
-/* 1FD04 8002F504 8494000C */  jal        func_80025210
+/* 1FD04 8002F504 8494000C */  jal        CheckVolatile
 /* 1FD08 8002F508 00000000 */   nop
 /* 1FD0C 8002F50C FCFF4014 */  bnez       $v0, .L8002F500
 /* 1FD10 8002F510 00000000 */   nop
-/* 1FD14 8002F514 EBF4020C */  jal        func_800BD3AC
+/* 1FD14 8002F514 EBF4020C */  jal        GetRCnt
 /* 1FD18 8002F518 00F2043C */   lui       $a0, (0xF2000000 >> 16)
 /* 1FD1C 8002F51C 28020326 */  addiu      $v1, $s0, 0x228
 /* 1FD20 8002F520 1C0103AE */  sw         $v1, 0x11C($s0)

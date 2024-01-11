@@ -99,7 +99,7 @@ glabel PhysicsFollowWall
 /* 67CC0 800774C0 6400A2A7 */   sh        $v0, 0x64($sp)
 /* 67CC4 800774C4 21200002 */  addu       $a0, $s0, $zero
 /* 67CC8 800774C8 7000B027 */  addiu      $s0, $sp, 0x70
-/* 67CCC 800774CC 3DE3010C */  jal        func_80078CF4
+/* 67CCC 800774CC 3DE3010C */  jal        RotMatrix
 /* 67CD0 800774D0 21280002 */   addu      $a1, $s0, $zero
 /* 67CD4 800774D4 5000A297 */  lhu        $v0, 0x50($sp)
 /* 67CD8 800774D8 00000000 */  nop
@@ -115,7 +115,7 @@ glabel PhysicsFollowWall
 /* 67D00 80077500 1000A627 */  addiu      $a2, $sp, 0x10
 /* 67D04 80077504 5400A0A7 */  sh         $zero, 0x54($sp)
 /* 67D08 80077508 23100200 */  negu       $v0, $v0
-/* 67D0C 8007750C 1AF2020C */  jal        func_800BC868
+/* 67D0C 8007750C 1AF2020C */  jal        ApplyMatrix
 /* 67D10 80077510 5200A2A7 */   sh        $v0, 0x52($sp)
 /* 67D14 80077514 18002296 */  lhu        $v0, 0x18($s1)
 /* 67D18 80077518 1000A397 */  lhu        $v1, 0x10($sp)
@@ -231,7 +231,7 @@ glabel PhysicsFollowWall
 /* 67EBC 800776BC E0FF0224 */  addiu      $v0, $zero, -0x20
 /* 67EC0 800776C0 5800A0A7 */  sh         $zero, 0x58($sp)
 /* 67EC4 800776C4 5A00A2A7 */  sh         $v0, 0x5A($sp)
-/* 67EC8 800776C8 1AF2020C */  jal        func_800BC868
+/* 67EC8 800776C8 1AF2020C */  jal        ApplyMatrix
 /* 67ECC 800776CC 5C00A0A7 */   sh        $zero, 0x5C($sp)
 /* 67ED0 800776D0 21280002 */  addu       $a1, $s0, $zero
 /* 67ED4 800776D4 1000A627 */  addiu      $a2, $sp, 0x10
@@ -251,7 +251,7 @@ glabel PhysicsFollowWall
 /* 67F0C 8007770C 21104700 */  addu       $v0, $v0, $a3
 /* 67F10 80077710 21186800 */  addu       $v1, $v1, $t0
 /* 67F14 80077714 5200A2A7 */  sh         $v0, 0x52($sp)
-/* 67F18 80077718 1AF2020C */  jal        func_800BC868
+/* 67F18 80077718 1AF2020C */  jal        ApplyMatrix
 /* 67F1C 8007771C 5400A3A7 */   sh        $v1, 0x54($sp)
 /* 67F20 80077720 21204002 */  addu       $a0, $s2, $zero
 /* 67F24 80077724 21286002 */  addu       $a1, $s3, $zero
@@ -280,7 +280,7 @@ glabel PhysicsFollowWall
 /* 67F7C 8007777C 1000A627 */  addiu      $a2, $sp, 0x10
 /* 67F80 80077780 5800A0A7 */  sh         $zero, 0x58($sp)
 /* 67F84 80077784 5A00A0A7 */  sh         $zero, 0x5A($sp)
-/* 67F88 80077788 1AF2020C */  jal        func_800BC868
+/* 67F88 80077788 1AF2020C */  jal        ApplyMatrix
 /* 67F8C 8007778C 5C00B4A7 */   sh        $s4, 0x5C($sp)
 /* 67F90 80077790 5000A297 */  lhu        $v0, 0x50($sp)
 /* 67F94 80077794 1000A497 */  lhu        $a0, 0x10($sp)

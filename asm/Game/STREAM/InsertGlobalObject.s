@@ -89,7 +89,7 @@ glabel InsertGlobalObject
 /* 49904 80059104 1AD1010C */  jal        sprintf
 /* 49908 80059108 21384002 */   addu      $a3, $s2, $zero
 /* 4990C 8005910C 21200002 */  addu       $a0, $s0, $zero
-/* 49910 80059110 1CF4020C */  jal        func_800BD070
+/* 49910 80059110 1CF4020C */  jal        strcpy
 /* 49914 80059114 21284002 */   addu      $a1, $s2, $zero
 /* 49918 80059118 1800A427 */  addiu      $a0, $sp, 0x18
 /* 4991C 8005911C 0680053C */  lui        $a1, %hi(STREAM_LoadObjectReturn)

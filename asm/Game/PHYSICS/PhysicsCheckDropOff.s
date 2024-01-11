@@ -25,11 +25,11 @@ glabel PhysicsCheckDropOff
 /* 67984 80077184 00000000 */   nop
 /* 67988 80077188 ACEC8527 */  addiu      $a1, $gp, %gp_rel(TempMat.66)
 /* 6798C 8007718C CCEC85AF */  sw         $a1, %gp_rel(pTempMat.67)($gp)
-/* 67990 80077190 3DE3010C */  jal        func_80078CF4
+/* 67990 80077190 3DE3010C */  jal        RotMatrix
 /* 67994 80077194 21204000 */   addu      $a0, $v0, $zero
 /* 67998 80077198 4000048E */  lw         $a0, 0x40($s0)
 /* 6799C 8007719C CCEC858F */  lw         $a1, %gp_rel(pTempMat.67)($gp)
-/* 679A0 800771A0 15FD020C */  jal        func_800BF454
+/* 679A0 800771A0 15FD020C */  jal        MulMatrix2
 /* 679A4 800771A4 00000000 */   nop
 /* 679A8 800771A8 6DDC0108 */  j          .L800771B4
 /* 679AC 800771AC 00000000 */   nop
@@ -43,7 +43,7 @@ glabel PhysicsCheckDropOff
 /* 679C4 800771C4 02002296 */  lhu        $v0, 0x2($s1)
 /* 679C8 800771C8 1000A627 */  addiu      $a2, $sp, 0x10
 /* 679CC 800771CC 5400A0A7 */  sh         $zero, 0x54($sp)
-/* 679D0 800771D0 1AF2020C */  jal        func_800BC868
+/* 679D0 800771D0 1AF2020C */  jal        ApplyMatrix
 /* 679D4 800771D4 5200A2A7 */   sh        $v0, 0x52($sp)
 /* 679D8 800771D8 5C000596 */  lhu        $a1, 0x5C($s0)
 /* 679DC 800771DC 1000A297 */  lhu        $v0, 0x10($sp)

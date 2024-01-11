@@ -8,7 +8,7 @@ glabel HEALTHU_Pickup
 /* 6CB84 8007C384 00AD848F */  lw         $a0, %gp_rel(theCamera + 0x70)($gp)
 /* 6CB88 8007C388 00ED8627 */  addiu      $a2, $gp, %gp_rel(HUD_Cap_Pos)
 /* 6CB8C 8007C38C 1400BFAF */  sw         $ra, 0x14($sp)
-/* 6CB90 8007C390 0EF3020C */  jal        func_800BCC38
+/* 6CB90 8007C390 0EF3020C */  jal        ApplyMatrixSV
 /* 6CB94 8007C394 5C000526 */   addiu     $a1, $s0, 0x5C
 /* 6CB98 8007C398 00AD848F */  lw         $a0, %gp_rel(theCamera + 0x70)($gp)
 /* 6CB9C 8007C39C 00ED8297 */  lhu        $v0, %gp_rel(HUD_Cap_Pos)($gp)
