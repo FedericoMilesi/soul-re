@@ -1,0 +1,180 @@
+.set noat      /* allow manual use of $at */
+.set noreorder /* don't insert nops after branches */
+
+glabel MonsterQuery
+/* 6EDF8 8007E5F8 E0FFBD27 */  addiu      $sp, $sp, -0x20
+/* 6EDFC 8007E5FC 1400B1AF */  sw         $s1, 0x14($sp)
+/* 6EE00 8007E600 21888000 */  addu       $s1, $a0, $zero
+/* 6EE04 8007E604 1800BFAF */  sw         $ra, 0x18($sp)
+/* 6EE08 8007E608 1000B0AF */  sw         $s0, 0x10($sp)
+/* 6EE0C 8007E60C 2400308E */  lw         $s0, 0x24($s1)
+/* 6EE10 8007E610 6C01268E */  lw         $a2, 0x16C($s1)
+/* 6EE14 8007E614 8B000012 */  beqz       $s0, .L8007E844
+/* 6EE18 8007E618 21100000 */   addu      $v0, $zero, $zero
+/* 6EE1C 8007E61C 3000A22C */  sltiu      $v0, $a1, 0x30
+/* 6EE20 8007E620 84004010 */  beqz       $v0, .L8007E834
+/* 6EE24 8007E624 0180023C */   lui       $v0, %hi(jtbl_80011E9C)
+/* 6EE28 8007E628 9C1E4224 */  addiu      $v0, $v0, %lo(jtbl_80011E9C)
+/* 6EE2C 8007E62C 80180500 */  sll        $v1, $a1, 2
+/* 6EE30 8007E630 21186200 */  addu       $v1, $v1, $v0
+/* 6EE34 8007E634 0000628C */  lw         $v0, 0x0($v1)
+/* 6EE38 8007E638 00000000 */  nop
+/* 6EE3C 8007E63C 08004000 */  jr         $v0
+/* 6EE40 8007E640 00000000 */   nop
+jlabel .L8007E644
+/* 6EE44 8007E644 E1C6010C */  jal        SetShadowSegmentData
+/* 6EE48 8007E648 02000424 */   addiu     $a0, $zero, 0x2
+/* 6EE4C 8007E64C 20000392 */  lbu        $v1, 0x20($s0)
+/* 6EE50 8007E650 00000000 */  nop
+/* 6EE54 8007E654 040043A4 */  sh         $v1, 0x4($v0)
+/* 6EE58 8007E658 21000392 */  lbu        $v1, 0x21($s0)
+/* 6EE5C 8007E65C 21204000 */  addu       $a0, $v0, $zero
+/* 6EE60 8007E660 10FA0108 */  j          .L8007E840
+/* 6EE64 8007E664 060083A4 */   sh        $v1, 0x6($a0)
+jlabel .L8007E668
+/* 6EE68 8007E668 0000C38C */  lw         $v1, 0x0($a2)
+/* 6EE6C 8007E66C 00000000 */  nop
+/* 6EE70 8007E670 00026230 */  andi       $v0, $v1, 0x200
+/* 6EE74 8007E674 72004014 */  bnez       $v0, .L8007E840
+/* 6EE78 8007E678 0040043C */   lui       $a0, (0x40000000 >> 16)
+/* 6EE7C 8007E67C 9801258E */  lw         $a1, 0x198($s1)
+/* 6EE80 8007E680 1E000224 */  addiu      $v0, $zero, 0x1E
+/* 6EE84 8007E684 6E00A210 */  beq        $a1, $v0, .L8007E840
+/* 6EE88 8007E688 0012043C */   lui       $a0, (0x12000000 >> 16)
+/* 6EE8C 8007E68C 2000023C */  lui        $v0, (0x200000 >> 16)
+/* 6EE90 8007E690 24106200 */  and        $v0, $v1, $v0
+/* 6EE94 8007E694 15004014 */  bnez       $v0, .L8007E6EC
+/* 6EE98 8007E698 21200000 */   addu      $a0, $zero, $zero
+/* 6EE9C 8007E69C 10006230 */  andi       $v0, $v1, 0x10
+/* 6EEA0 8007E6A0 07004014 */  bnez       $v0, .L8007E6C0
+/* 6EEA4 8007E6A4 00000000 */   nop
+/* 6EEA8 8007E6A8 C400C28C */  lw         $v0, 0xC4($a2)
+/* 6EEAC 8007E6AC 00000000 */  nop
+/* 6EEB0 8007E6B0 03004010 */  beqz       $v0, .L8007E6C0
+/* 6EEB4 8007E6B4 18000224 */   addiu     $v0, $zero, 0x18
+/* 6EEB8 8007E6B8 0D00A214 */  bne        $a1, $v0, .L8007E6F0
+/* 6EEBC 8007E6BC 00000000 */   nop
+.L8007E6C0:
+/* 6EEC0 8007E6C0 6801C28C */  lw         $v0, 0x168($a2)
+/* 6EEC4 8007E6C4 00000000 */  nop
+/* 6EEC8 8007E6C8 29004290 */  lbu        $v0, 0x29($v0)
+/* 6EECC 8007E6CC 00000000 */  nop
+/* 6EED0 8007E6D0 03004010 */  beqz       $v0, .L8007E6E0
+/* 6EED4 8007E6D4 0090023C */   lui       $v0, (0x90000000 >> 16)
+/* 6EED8 8007E6D8 BCF90108 */  j          .L8007E6F0
+/* 6EEDC 8007E6DC 25208200 */   or        $a0, $a0, $v0
+.L8007E6E0:
+/* 6EEE0 8007E6E0 0010023C */  lui        $v0, (0x10000000 >> 16)
+/* 6EEE4 8007E6E4 BCF90108 */  j          .L8007E6F0
+/* 6EEE8 8007E6E8 25208200 */   or        $a0, $a0, $v0
+.L8007E6EC:
+/* 6EEEC 8007E6EC 0004043C */  lui        $a0, (0x4000000 >> 16)
+.L8007E6F0:
+/* 6EEF0 8007E6F0 0000C28C */  lw         $v0, 0x0($a2)
+/* 6EEF4 8007E6F4 00000000 */  nop
+/* 6EEF8 8007E6F8 00014230 */  andi       $v0, $v0, 0x100
+/* 6EEFC 8007E6FC 50004010 */  beqz       $v0, .L8007E840
+/* 6EF00 8007E700 0020023C */   lui       $v0, (0x20000000 >> 16)
+/* 6EF04 8007E704 10FA0108 */  j          .L8007E840
+/* 6EF08 8007E708 25208200 */   or        $a0, $a0, $v0
+jlabel .L8007E70C
+/* 6EF0C 8007E70C 1000048E */  lw         $a0, 0x10($s0)
+/* 6EF10 8007E710 11FA0108 */  j          .L8007E844
+/* 6EF14 8007E714 21108000 */   addu      $v0, $a0, $zero
+jlabel .L8007E718
+/* 6EF18 8007E718 6801C28C */  lw         $v0, 0x168($a2)
+/* 6EF1C 8007E71C 00000000 */  nop
+/* 6EF20 8007E720 27004490 */  lbu        $a0, 0x27($v0)
+/* 6EF24 8007E724 11FA0108 */  j          .L8007E844
+/* 6EF28 8007E728 21108000 */   addu      $v0, $a0, $zero
+jlabel .L8007E72C
+/* 6EF2C 8007E72C 0000C28C */  lw         $v0, 0x0($a2)
+/* 6EF30 8007E730 00000000 */  nop
+/* 6EF34 8007E734 00044230 */  andi       $v0, $v0, 0x400
+/* 6EF38 8007E738 41004010 */  beqz       $v0, .L8007E840
+/* 6EF3C 8007E73C 20000424 */   addiu     $a0, $zero, 0x20
+/* 6EF40 8007E740 10FA0108 */  j          .L8007E840
+/* 6EF44 8007E744 10000424 */   addiu     $a0, $zero, 0x10
+jlabel .L8007E748
+/* 6EF48 8007E748 0801C48C */  lw         $a0, 0x108($a2)
+/* 6EF4C 8007E74C 11FA0108 */  j          .L8007E844
+/* 6EF50 8007E750 21108000 */   addu      $v0, $a0, $zero
+jlabel .L8007E754
+/* 6EF54 8007E754 4000228E */  lw         $v0, 0x40($s1)
+/* 6EF58 8007E758 00000000 */  nop
+/* 6EF5C 8007E75C 38004010 */  beqz       $v0, .L8007E840
+/* 6EF60 8007E760 21200000 */   addu      $a0, $zero, $zero
+/* 6EF64 8007E764 10FA0108 */  j          .L8007E840
+/* 6EF68 8007E768 20004424 */   addiu     $a0, $v0, 0x20
+jlabel .L8007E76C
+/* 6EF6C 8007E76C 4000248E */  lw         $a0, 0x40($s1)
+/* 6EF70 8007E770 00000000 */  nop
+/* 6EF74 8007E774 06008010 */  beqz       $a0, .L8007E790
+/* 6EF78 8007E778 00000000 */   nop
+/* 6EF7C 8007E77C 19000292 */  lbu        $v0, 0x19($s0)
+/* 6EF80 8007E780 00000000 */  nop
+/* 6EF84 8007E784 40110200 */  sll        $v0, $v0, 5
+/* 6EF88 8007E788 10FA0108 */  j          .L8007E840
+/* 6EF8C 8007E78C 21208200 */   addu      $a0, $a0, $v0
+.L8007E790:
+/* 6EF90 8007E790 10FA0108 */  j          .L8007E840
+/* 6EF94 8007E794 21200000 */   addu      $a0, $zero, $zero
+jlabel .L8007E798
+/* 6EF98 8007E798 1A000492 */  lbu        $a0, 0x1A($s0)
+/* 6EF9C 8007E79C 11FA0108 */  j          .L8007E844
+/* 6EFA0 8007E7A0 21108000 */   addu      $v0, $a0, $zero
+jlabel .L8007E7A4
+/* 6EFA4 8007E7A4 4801C484 */  lh         $a0, 0x148($a2)
+/* 6EFA8 8007E7A8 11FA0108 */  j          .L8007E844
+/* 6EFAC 8007E7AC 21108000 */   addu      $v0, $a0, $zero
+jlabel .L8007E7B0
+/* 6EFB0 8007E7B0 6DC3010C */  jal        CIRC_Alloc
+/* 6EFB4 8007E7B4 10000424 */   addiu     $a0, $zero, 0x10
+/* 6EFB8 8007E7B8 21202002 */  addu       $a0, $s1, $zero
+/* 6EFBC 8007E7BC 21804000 */  addu       $s0, $v0, $zero
+/* 6EFC0 8007E7C0 E70A020C */  jal        MON_SetUpSaveInfo
+/* 6EFC4 8007E7C4 21280002 */   addu      $a1, $s0, $zero
+/* 6EFC8 8007E7C8 10000424 */  addiu      $a0, $zero, 0x10
+/* 6EFCC 8007E7CC 90C6010C */  jal        SetControlSaveDataData
+/* 6EFD0 8007E7D0 21280002 */   addu      $a1, $s0, $zero
+/* 6EFD4 8007E7D4 10FA0108 */  j          .L8007E840
+/* 6EFD8 8007E7D8 21204000 */   addu      $a0, $v0, $zero
+jlabel .L8007E7DC
+/* 6EFDC 8007E7DC 0000C28C */  lw         $v0, 0x0($a2)
+/* 6EFE0 8007E7E0 00000000 */  nop
+/* 6EFE4 8007E7E4 42270200 */  srl        $a0, $v0, 29
+/* 6EFE8 8007E7E8 10FA0108 */  j          .L8007E840
+/* 6EFEC 8007E7EC 01008430 */   andi      $a0, $a0, 0x1
+jlabel .L8007E7F0
+/* 6EFF0 8007E7F0 39C3010C */  jal        PeekMessageQueue
+/* 6EFF4 8007E7F4 0800C424 */   addiu     $a0, $a2, 0x8
+/* 6EFF8 8007E7F8 10FA0108 */  j          .L8007E840
+/* 6EFFC 8007E7FC 21204000 */   addu      $a0, $v0, $zero
+jlabel .L8007E800
+/* 6F000 8007E800 9801238E */  lw         $v1, 0x198($s1)
+/* 6F004 8007E804 00000000 */  nop
+/* 6F008 8007E808 F5FF6224 */  addiu      $v0, $v1, -0xB
+/* 6F00C 8007E80C 0200422C */  sltiu      $v0, $v0, 0x2
+/* 6F010 8007E810 06004014 */  bnez       $v0, .L8007E82C
+/* 6F014 8007E814 21200000 */   addu      $a0, $zero, $zero
+/* 6F018 8007E818 04000224 */  addiu      $v0, $zero, 0x4
+/* 6F01C 8007E81C 03006210 */  beq        $v1, $v0, .L8007E82C
+/* 6F020 8007E820 0A000224 */   addiu     $v0, $zero, 0xA
+/* 6F024 8007E824 07006214 */  bne        $v1, $v0, .L8007E844
+/* 6F028 8007E828 21108000 */   addu      $v0, $a0, $zero
+jlabel .L8007E82C
+/* 6F02C 8007E82C 10FA0108 */  j          .L8007E840
+/* 6F030 8007E830 01000424 */   addiu     $a0, $zero, 0x1
+jlabel .L8007E834
+/* 6F034 8007E834 4EFA000C */  jal        GenericQuery
+/* 6F038 8007E838 21202002 */   addu      $a0, $s1, $zero
+/* 6F03C 8007E83C 21204000 */  addu       $a0, $v0, $zero
+.L8007E840:
+/* 6F040 8007E840 21108000 */  addu       $v0, $a0, $zero
+.L8007E844:
+/* 6F044 8007E844 1800BF8F */  lw         $ra, 0x18($sp)
+/* 6F048 8007E848 1400B18F */  lw         $s1, 0x14($sp)
+/* 6F04C 8007E84C 1000B08F */  lw         $s0, 0x10($sp)
+/* 6F050 8007E850 0800E003 */  jr         $ra
+/* 6F054 8007E854 2000BD27 */   addiu     $sp, $sp, 0x20
+.size MonsterQuery, . - MonsterQuery

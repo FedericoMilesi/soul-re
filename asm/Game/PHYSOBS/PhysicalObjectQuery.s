@@ -1,0 +1,360 @@
+.set noat      /* allow manual use of $at */
+.set noreorder /* don't insert nops after branches */
+
+glabel PhysicalObjectQuery
+/* 5CC58 8006C458 D0FFBD27 */  addiu      $sp, $sp, -0x30
+/* 5CC5C 8006C45C 2000B0AF */  sw         $s0, 0x20($sp)
+/* 5CC60 8006C460 21808000 */  addu       $s0, $a0, $zero
+/* 5CC64 8006C464 2400B1AF */  sw         $s1, 0x24($sp)
+/* 5CC68 8006C468 FFFFA324 */  addiu      $v1, $a1, -0x1
+/* 5CC6C 8006C46C 2F00622C */  sltiu      $v0, $v1, 0x2F
+/* 5CC70 8006C470 2C00BFAF */  sw         $ra, 0x2C($sp)
+/* 5CC74 8006C474 2800B2AF */  sw         $s2, 0x28($sp)
+/* 5CC78 8006C478 6C01128E */  lw         $s2, 0x16C($s0)
+/* 5CC7C 8006C47C 2B014010 */  beqz       $v0, .L8006C92C
+/* 5CC80 8006C480 01001124 */   addiu     $s1, $zero, 0x1
+/* 5CC84 8006C484 0180023C */  lui        $v0, %hi(jtbl_80011CE8)
+/* 5CC88 8006C488 E81C4224 */  addiu      $v0, $v0, %lo(jtbl_80011CE8)
+/* 5CC8C 8006C48C 80180300 */  sll        $v1, $v1, 2
+/* 5CC90 8006C490 21186200 */  addu       $v1, $v1, $v0
+/* 5CC94 8006C494 0000628C */  lw         $v0, 0x0($v1)
+/* 5CC98 8006C498 00000000 */  nop
+/* 5CC9C 8006C49C 08004000 */  jr         $v0
+/* 5CCA0 8006C4A0 00000000 */   nop
+jlabel .L8006C4A4
+/* 5CCA4 8006C4A4 A5A3010C */  jal        CheckPhysOb
+/* 5CCA8 8006C4A8 21200002 */   addu      $a0, $s0, $zero
+/* 5CCAC 8006C4AC 1F014010 */  beqz       $v0, .L8006C92C
+/* 5CCB0 8006C4B0 21200002 */   addu      $a0, $s0, $zero
+/* 5CCB4 8006C4B4 CFA3010C */  jal        CheckPhysObFamily
+/* 5CCB8 8006C4B8 06000524 */   addiu     $a1, $zero, 0x6
+/* 5CCBC 8006C4BC 1C014010 */  beqz       $v0, .L8006C930
+/* 5CCC0 8006C4C0 20000224 */   addiu     $v0, $zero, 0x20
+/* 5CCC4 8006C4C4 2400028E */  lw         $v0, 0x24($s0)
+/* 5CCC8 8006C4C8 00000000 */  nop
+/* 5CCCC 8006C4CC 08004294 */  lhu        $v0, 0x8($v0)
+/* 5CCD0 8006C4D0 00000000 */  nop
+/* 5CCD4 8006C4D4 01004230 */  andi       $v0, $v0, 0x1
+/* 5CCD8 8006C4D8 15014010 */  beqz       $v0, .L8006C930
+/* 5CCDC 8006C4DC 20000224 */   addiu     $v0, $zero, 0x20
+/* 5CCE0 8006C4E0 1400028E */  lw         $v0, 0x14($s0)
+/* 5CCE4 8006C4E4 00000000 */  nop
+/* 5CCE8 8006C4E8 00084230 */  andi       $v0, $v0, 0x800
+/* 5CCEC 8006C4EC 10014014 */  bnez       $v0, .L8006C930
+/* 5CCF0 8006C4F0 21100000 */   addu      $v0, $zero, $zero
+/* 5CCF4 8006C4F4 4CB20108 */  j          .L8006C930
+/* 5CCF8 8006C4F8 20000224 */   addiu     $v0, $zero, 0x20
+jlabel .L8006C4FC
+/* 5CCFC 8006C4FC E0A3010C */  jal        GetPhysicalAbility
+/* 5CD00 8006C500 21200002 */   addu      $a0, $s0, $zero
+/* 5CD04 8006C504 4CB20108 */  j          .L8006C930
+/* 5CD08 8006C508 00000000 */   nop
+jlabel .L8006C50C
+/* 5CD0C 8006C50C 0000428E */  lw         $v0, 0x0($s2)
+/* 5CD10 8006C510 4CB20108 */  j          .L8006C930
+/* 5CD14 8006C514 00000000 */   nop
+jlabel .L8006C518
+/* 5CD18 8006C518 21200002 */  addu       $a0, $s0, $zero
+/* 5CD1C 8006C51C 6C01908C */  lw         $s0, 0x16C($a0)
+/* 5CD20 8006C520 B0A3010C */  jal        CheckPhysObAbility
+/* 5CD24 8006C524 40000524 */   addiu     $a1, $zero, 0x40
+/* 5CD28 8006C528 01014010 */  beqz       $v0, .L8006C930
+/* 5CD2C 8006C52C 21100000 */   addu      $v0, $zero, $zero
+/* 5CD30 8006C530 04000286 */  lh         $v0, 0x4($s0)
+/* 5CD34 8006C534 4CB20108 */  j          .L8006C930
+/* 5CD38 8006C538 00000000 */   nop
+jlabel .L8006C53C
+/* 5CD3C 8006C53C 5C000486 */  lh         $a0, 0x5C($s0)
+/* 5CD40 8006C540 5E000586 */  lh         $a1, 0x5E($s0)
+/* 5CD44 8006C544 60000686 */  lh         $a2, 0x60($s0)
+/* 5CD48 8006C548 3CC4010C */  jal        SetPositionData
+/* 5CD4C 8006C54C 00000000 */   nop
+/* 5CD50 8006C550 4CB20108 */  j          .L8006C930
+/* 5CD54 8006C554 00000000 */   nop
+jlabel .L8006C558
+/* 5CD58 8006C558 21200002 */  addu       $a0, $s0, $zero
+/* 5CD5C 8006C55C B0A3010C */  jal        CheckPhysObAbility
+/* 5CD60 8006C560 40000524 */   addiu     $a1, $zero, 0x40
+/* 5CD64 8006C564 0B004010 */  beqz       $v0, .L8006C594
+/* 5CD68 8006C568 21200000 */   addu      $a0, $zero, $zero
+/* 5CD6C 8006C56C 6C01028E */  lw         $v0, 0x16C($s0)
+/* 5CD70 8006C570 78000696 */  lhu        $a2, 0x78($s0)
+/* 5CD74 8006C574 06004294 */  lhu        $v0, 0x6($v0)
+/* 5CD78 8006C578 21288000 */  addu       $a1, $a0, $zero
+/* 5CD7C 8006C57C 2130C200 */  addu       $a2, $a2, $v0
+/* 5CD80 8006C580 00340600 */  sll        $a2, $a2, 16
+/* 5CD84 8006C584 3CC4010C */  jal        SetPositionData
+/* 5CD88 8006C588 03340600 */   sra       $a2, $a2, 16
+/* 5CD8C 8006C58C 4CB20108 */  j          .L8006C930
+/* 5CD90 8006C590 00000000 */   nop
+.L8006C594:
+/* 5CD94 8006C594 21200002 */  addu       $a0, $s0, $zero
+/* 5CD98 8006C598 CFA3010C */  jal        CheckPhysObFamily
+/* 5CD9C 8006C59C 01000524 */   addiu     $a1, $zero, 0x1
+/* 5CDA0 8006C5A0 14004010 */  beqz       $v0, .L8006C5F4
+/* 5CDA4 8006C5A4 00000000 */   nop
+/* 5CDA8 8006C5A8 4000058E */  lw         $a1, 0x40($s0)
+/* 5CDAC 8006C5AC 00000000 */  nop
+/* 5CDB0 8006C5B0 0600A010 */  beqz       $a1, .L8006C5CC
+/* 5CDB4 8006C5B4 1800A427 */   addiu     $a0, $sp, 0x18
+/* 5CDB8 8006C5B8 4000A524 */  addiu      $a1, $a1, 0x40
+/* 5CDBC 8006C5BC 1758020C */  jal        G2EulerAngles_FromMatrix
+/* 5CDC0 8006C5C0 21300000 */   addu      $a2, $zero, $zero
+/* 5CDC4 8006C5C4 76B10108 */  j          .L8006C5D8
+/* 5CDC8 8006C5C8 00000000 */   nop
+.L8006C5CC:
+/* 5CDCC 8006C5CC 1800A0A7 */  sh         $zero, 0x18($sp)
+/* 5CDD0 8006C5D0 1A00A0A7 */  sh         $zero, 0x1A($sp)
+/* 5CDD4 8006C5D4 1C00A0A7 */  sh         $zero, 0x1C($sp)
+.L8006C5D8:
+/* 5CDD8 8006C5D8 1800A487 */  lh         $a0, 0x18($sp)
+/* 5CDDC 8006C5DC 1A00A587 */  lh         $a1, 0x1A($sp)
+/* 5CDE0 8006C5E0 1C00A687 */  lh         $a2, 0x1C($sp)
+/* 5CDE4 8006C5E4 3CC4010C */  jal        SetPositionData
+/* 5CDE8 8006C5E8 00000000 */   nop
+/* 5CDEC 8006C5EC 4CB20108 */  j          .L8006C930
+/* 5CDF0 8006C5F0 00000000 */   nop
+.L8006C5F4:
+/* 5CDF4 8006C5F4 74000486 */  lh         $a0, 0x74($s0)
+/* 5CDF8 8006C5F8 76000586 */  lh         $a1, 0x76($s0)
+/* 5CDFC 8006C5FC 78000686 */  lh         $a2, 0x78($s0)
+/* 5CE00 8006C600 3CC4010C */  jal        SetPositionData
+/* 5CE04 8006C604 00000000 */   nop
+/* 5CE08 8006C608 4CB20108 */  j          .L8006C930
+/* 5CE0C 8006C60C 00000000 */   nop
+jlabel .L8006C610
+/* 5CE10 8006C610 2400048E */  lw         $a0, 0x24($s0)
+/* 5CE14 8006C614 00000000 */  nop
+/* 5CE18 8006C618 02008394 */  lhu        $v1, 0x2($a0)
+/* 5CE1C 8006C61C 03000224 */  addiu      $v0, $zero, 0x3
+/* 5CE20 8006C620 06006214 */  bne        $v1, $v0, .L8006C63C
+/* 5CE24 8006C624 00000000 */   nop
+/* 5CE28 8006C628 6C01028E */  lw         $v0, 0x16C($s0)
+/* 5CE2C 8006C62C 00000000 */  nop
+/* 5CE30 8006C630 06004284 */  lh         $v0, 0x6($v0)
+/* 5CE34 8006C634 4CB20108 */  j          .L8006C930
+/* 5CE38 8006C638 00000000 */   nop
+.L8006C63C:
+/* 5CE3C 8006C63C 04006014 */  bnez       $v1, .L8006C650
+/* 5CE40 8006C640 02000224 */   addiu     $v0, $zero, 0x2
+/* 5CE44 8006C644 14008280 */  lb         $v0, 0x14($a0)
+/* 5CE48 8006C648 4CB20108 */  j          .L8006C930
+/* 5CE4C 8006C64C 00000000 */   nop
+.L8006C650:
+/* 5CE50 8006C650 04006214 */  bne        $v1, $v0, .L8006C664
+/* 5CE54 8006C654 07006238 */   xori      $v0, $v1, 0x7
+/* 5CE58 8006C658 0A008284 */  lh         $v0, 0xA($a0)
+/* 5CE5C 8006C65C 4CB20108 */  j          .L8006C930
+/* 5CE60 8006C660 00000000 */   nop
+.L8006C664:
+/* 5CE64 8006C664 0100422C */  sltiu      $v0, $v0, 0x1
+/* 5CE68 8006C668 4CB20108 */  j          .L8006C930
+/* 5CE6C 8006C66C C0100200 */   sll       $v0, $v0, 3
+jlabel .L8006C670
+/* 5CE70 8006C670 4CB20108 */  j          .L8006C930
+/* 5CE74 8006C674 03000224 */   addiu     $v0, $zero, 0x3
+jlabel .L8006C678
+/* 5CE78 8006C678 4000028E */  lw         $v0, 0x40($s0)
+/* 5CE7C 8006C67C 4CB20108 */  j          .L8006C930
+/* 5CE80 8006C680 00000000 */   nop
+jlabel .L8006C684
+/* 5CE84 8006C684 4000028E */  lw         $v0, 0x40($s0)
+/* 5CE88 8006C688 00000000 */  nop
+/* 5CE8C 8006C68C A7004010 */  beqz       $v0, .L8006C92C
+/* 5CE90 8006C690 21200002 */   addu      $a0, $s0, $zero
+/* 5CE94 8006C694 CFA3010C */  jal        CheckPhysObFamily
+/* 5CE98 8006C698 05000524 */   addiu     $a1, $zero, 0x5
+/* 5CE9C 8006C69C A3004010 */  beqz       $v0, .L8006C92C
+/* 5CEA0 8006C6A0 00000000 */   nop
+/* 5CEA4 8006C6A4 2400028E */  lw         $v0, 0x24($s0)
+/* 5CEA8 8006C6A8 00000000 */  nop
+/* 5CEAC 8006C6AC 12004294 */  lhu        $v0, 0x12($v0)
+/* 5CEB0 8006C6B0 4000038E */  lw         $v1, 0x40($s0)
+/* 5CEB4 8006C6B4 40110200 */  sll        $v0, $v0, 5
+/* 5CEB8 8006C6B8 4CB20108 */  j          .L8006C930
+/* 5CEBC 8006C6BC 21106200 */   addu      $v0, $v1, $v0
+jlabel .L8006C6C0
+/* 5CEC0 8006C6C0 21200002 */  addu       $a0, $s0, $zero
+/* 5CEC4 8006C6C4 03000524 */  addiu      $a1, $zero, 0x3
+.L8006C6C8:
+/* 5CEC8 8006C6C8 CFA3010C */  jal        CheckPhysObFamily
+/* 5CECC 8006C6CC 00000000 */   nop
+/* 5CED0 8006C6D0 80004014 */  bnez       $v0, .L8006C8D4
+/* 5CED4 8006C6D4 21100000 */   addu      $v0, $zero, $zero
+/* 5CED8 8006C6D8 4CB20108 */  j          .L8006C930
+/* 5CEDC 8006C6DC 00000000 */   nop
+jlabel .L8006C6E0
+/* 5CEE0 8006C6E0 21200002 */  addu       $a0, $s0, $zero
+/* 5CEE4 8006C6E4 B2B10108 */  j          .L8006C6C8
+/* 5CEE8 8006C6E8 05000524 */   addiu     $a1, $zero, 0x5
+jlabel .L8006C6EC
+/* 5CEEC 8006C6EC 21200002 */  addu       $a0, $s0, $zero
+/* 5CEF0 8006C6F0 B0A3010C */  jal        CheckPhysObAbility
+/* 5CEF4 8006C6F4 40000524 */   addiu     $a1, $zero, 0x40
+/* 5CEF8 8006C6F8 76004014 */  bnez       $v0, .L8006C8D4
+/* 5CEFC 8006C6FC 21100000 */   addu      $v0, $zero, $zero
+/* 5CF00 8006C700 4CB20108 */  j          .L8006C930
+/* 5CF04 8006C704 00000000 */   nop
+jlabel .L8006C708
+/* 5CF08 8006C708 21200002 */  addu       $a0, $s0, $zero
+/* 5CF0C 8006C70C B0A3010C */  jal        CheckPhysObAbility
+/* 5CF10 8006C710 00010524 */   addiu     $a1, $zero, 0x100
+/* 5CF14 8006C714 85004010 */  beqz       $v0, .L8006C92C
+/* 5CF18 8006C718 21200002 */   addu      $a0, $s0, $zero
+/* 5CF1C 8006C71C 20CB000C */  jal        INSTANCE_FindIntroCommand
+/* 5CF20 8006C720 13000524 */   addiu     $a1, $zero, 0x13
+/* 5CF24 8006C724 08004010 */  beqz       $v0, .L8006C748
+/* 5CF28 8006C728 00000000 */   nop
+/* 5CF2C 8006C72C 0400438C */  lw         $v1, 0x4($v0)
+/* 5CF30 8006C730 2400088E */  lw         $t0, 0x24($s0)
+/* 5CF34 8006C734 80100300 */  sll        $v0, $v1, 2
+/* 5CF38 8006C738 21104300 */  addu       $v0, $v0, $v1
+/* 5CF3C 8006C73C 80100200 */  sll        $v0, $v0, 2
+/* 5CF40 8006C740 D3B10108 */  j          .L8006C74C
+/* 5CF44 8006C744 21400201 */   addu      $t0, $t0, $v0
+.L8006C748:
+/* 5CF48 8006C748 2400088E */  lw         $t0, 0x24($s0)
+.L8006C74C:
+/* 5CF4C 8006C74C 00000000 */  nop
+/* 5CF50 8006C750 0E000285 */  lh         $v0, 0xE($t0)
+/* 5CF54 8006C754 08000485 */  lh         $a0, 0x8($t0)
+/* 5CF58 8006C758 0A000595 */  lhu        $a1, 0xA($t0)
+/* 5CF5C 8006C75C 0C000695 */  lhu        $a2, 0xC($t0)
+/* 5CF60 8006C760 10000795 */  lhu        $a3, 0x10($t0)
+/* 5CF64 8006C764 62C6010C */  jal        SetObjectDraftData
+/* 5CF68 8006C768 1000A2AF */   sw        $v0, 0x10($sp)
+/* 5CF6C 8006C76C 4CB20108 */  j          .L8006C930
+/* 5CF70 8006C770 00000000 */   nop
+jlabel .L8006C774
+/* 5CF74 8006C774 6DC3010C */  jal        CIRC_Alloc
+/* 5CF78 8006C778 10000424 */   addiu     $a0, $zero, 0x10
+/* 5CF7C 8006C77C 21284000 */  addu       $a1, $v0, $zero
+/* 5CF80 8006C780 08000224 */  addiu      $v0, $zero, 0x8
+/* 5CF84 8006C784 2118A200 */  addu       $v1, $a1, $v0
+/* 5CF88 8006C788 0000A2AC */  sw         $v0, 0x0($a1)
+/* 5CF8C 8006C78C 0400A3AC */  sw         $v1, 0x4($a1)
+/* 5CF90 8006C790 6C01028E */  lw         $v0, 0x16C($s0)
+/* 5CF94 8006C794 00000000 */  nop
+/* 5CF98 8006C798 07004988 */  lwl        $t1, 0x7($v0)
+/* 5CF9C 8006C79C 04004998 */  lwr        $t1, 0x4($v0)
+/* 5CFA0 8006C7A0 00000000 */  nop
+/* 5CFA4 8006C7A4 0B00A9A8 */  swl        $t1, 0xB($a1)
+/* 5CFA8 8006C7A8 0800A9B8 */  swr        $t1, 0x8($a1)
+/* 5CFAC 8006C7AC 4801028E */  lw         $v0, 0x148($s0)
+/* 5CFB0 8006C7B0 00000000 */  nop
+/* 5CFB4 8006C7B4 1F004010 */  beqz       $v0, .L8006C834
+/* 5CFB8 8006C7B8 21306000 */   addu      $a2, $v1, $zero
+/* 5CFBC 8006C7BC 1C00428C */  lw         $v0, 0x1C($v0)
+/* 5CFC0 8006C7C0 00000000 */  nop
+/* 5CFC4 8006C7C4 2C00428C */  lw         $v0, 0x2C($v0)
+/* 5CFC8 8006C7C8 0800033C */  lui        $v1, (0x80000 >> 16)
+/* 5CFCC 8006C7CC 24104300 */  and        $v0, $v0, $v1
+/* 5CFD0 8006C7D0 08004010 */  beqz       $v0, .L8006C7F4
+/* 5CFD4 8006C7D4 03000224 */   addiu     $v0, $zero, 0x3
+/* 5CFD8 8006C7D8 5401038E */  lw         $v1, 0x154($s0)
+/* 5CFDC 8006C7DC 00000000 */  nop
+/* 5CFE0 8006C7E0 04006210 */  beq        $v1, $v0, .L8006C7F4
+/* 5CFE4 8006C7E4 0002033C */   lui       $v1, (0x2000000 >> 16)
+/* 5CFE8 8006C7E8 0000428E */  lw         $v0, 0x0($s2)
+/* 5CFEC 8006C7EC 0EB20108 */  j          .L8006C838
+/* 5CFF0 8006C7F0 25104300 */   or        $v0, $v0, $v1
+.L8006C7F4:
+/* 5CFF4 8006C7F4 4801048E */  lw         $a0, 0x148($s0)
+/* 5CFF8 8006C7F8 00000000 */  nop
+/* 5CFFC 8006C7FC 0D008010 */  beqz       $a0, .L8006C834
+/* 5D000 8006C800 00000000 */   nop
+/* 5D004 8006C804 F4BD828F */  lw         $v0, %gp_rel(gameTrackerX + 0x2C)($gp)
+/* 5D008 8006C808 00000000 */  nop
+/* 5D00C 8006C80C 09008214 */  bne        $a0, $v0, .L8006C834
+/* 5D010 8006C810 6FEF0424 */   addiu     $a0, $zero, -0x1091
+/* 5D014 8006C814 4000023C */  lui        $v0, (0x400004 >> 16)
+/* 5D018 8006C818 04004234 */  ori        $v0, $v0, (0x400004 & 0xFFFF)
+/* 5D01C 8006C81C 0000438E */  lw         $v1, 0x0($s2)
+/* 5D020 8006C820 00000000 */  nop
+/* 5D024 8006C824 24186400 */  and        $v1, $v1, $a0
+/* 5D028 8006C828 25186200 */  or         $v1, $v1, $v0
+/* 5D02C 8006C82C 10B20108 */  j          .L8006C840
+/* 5D030 8006C830 0400C3AC */   sw        $v1, 0x4($a2)
+.L8006C834:
+/* 5D034 8006C834 0000428E */  lw         $v0, 0x0($s2)
+.L8006C838:
+/* 5D038 8006C838 00000000 */  nop
+/* 5D03C 8006C83C 0400C2AC */  sw         $v0, 0x4($a2)
+.L8006C840:
+/* 5D040 8006C840 4CB20108 */  j          .L8006C930
+/* 5D044 8006C844 2110A000 */   addu      $v0, $a1, $zero
+jlabel .L8006C848
+/* 5D048 8006C848 21880000 */  addu       $s1, $zero, $zero
+jlabel .L8006C84C
+/* 5D04C 8006C84C 21200002 */  addu       $a0, $s0, $zero
+/* 5D050 8006C850 CFA3010C */  jal        CheckPhysObFamily
+/* 5D054 8006C854 02000524 */   addiu     $a1, $zero, 0x2
+/* 5D058 8006C858 0A004010 */  beqz       $v0, .L8006C884
+/* 5D05C 8006C85C 00000000 */   nop
+/* 5D060 8006C860 6C01028E */  lw         $v0, 0x16C($s0)
+/* 5D064 8006C864 00000000 */  nop
+/* 5D068 8006C868 04004294 */  lhu        $v0, 0x4($v0)
+/* 5D06C 8006C86C 00000000 */  nop
+/* 5D070 8006C870 02004230 */  andi       $v0, $v0, 0x2
+/* 5D074 8006C874 2E004010 */  beqz       $v0, .L8006C930
+/* 5D078 8006C878 0100223A */   xori      $v0, $s1, 0x1
+.L8006C87C:
+/* 5D07C 8006C87C 4CB20108 */  j          .L8006C930
+/* 5D080 8006C880 21102002 */   addu      $v0, $s1, $zero
+.L8006C884:
+/* 5D084 8006C884 2400028E */  lw         $v0, 0x24($s0)
+/* 5D088 8006C888 00000000 */  nop
+/* 5D08C 8006C88C 0A004284 */  lh         $v0, 0xA($v0)
+/* 5D090 8006C890 00000000 */  nop
+/* 5D094 8006C894 26004014 */  bnez       $v0, .L8006C930
+/* 5D098 8006C898 21102002 */   addu      $v0, $s1, $zero
+/* 5D09C 8006C89C 6C01028E */  lw         $v0, 0x16C($s0)
+/* 5D0A0 8006C8A0 00000000 */  nop
+/* 5D0A4 8006C8A4 0000428C */  lw         $v0, 0x0($v0)
+/* 5D0A8 8006C8A8 00000000 */  nop
+/* 5D0AC 8006C8AC 00204230 */  andi       $v0, $v0, 0x2000
+/* 5D0B0 8006C8B0 F2FF4010 */  beqz       $v0, .L8006C87C
+/* 5D0B4 8006C8B4 0100223A */   xori      $v0, $s1, 0x1
+/* 5D0B8 8006C8B8 4CB20108 */  j          .L8006C930
+/* 5D0BC 8006C8BC 00000000 */   nop
+jlabel .L8006C8C0
+/* 5D0C0 8006C8C0 21200002 */  addu       $a0, $s0, $zero
+/* 5D0C4 8006C8C4 B0A3010C */  jal        CheckPhysObAbility
+/* 5D0C8 8006C8C8 40000524 */   addiu     $a1, $zero, 0x40
+/* 5D0CC 8006C8CC 18004010 */  beqz       $v0, .L8006C930
+/* 5D0D0 8006C8D0 21100000 */   addu      $v0, $zero, $zero
+.L8006C8D4:
+/* 5D0D4 8006C8D4 2400028E */  lw         $v0, 0x24($s0)
+/* 5D0D8 8006C8D8 4CB20108 */  j          .L8006C930
+/* 5D0DC 8006C8DC 00000000 */   nop
+jlabel .L8006C8E0
+/* 5D0E0 8006C8E0 6C01028E */  lw         $v0, 0x16C($s0)
+/* 5D0E4 8006C8E4 00000000 */  nop
+/* 5D0E8 8006C8E8 11004010 */  beqz       $v0, .L8006C930
+/* 5D0EC 8006C8EC 21100000 */   addu      $v0, $zero, $zero
+/* 5D0F0 8006C8F0 0000438E */  lw         $v1, 0x0($s2)
+/* 5D0F4 8006C8F4 00000000 */  nop
+/* 5D0F8 8006C8F8 00086230 */  andi       $v0, $v1, 0x800
+/* 5D0FC 8006C8FC 0C004014 */  bnez       $v0, .L8006C930
+/* 5D100 8006C900 01000224 */   addiu     $v0, $zero, 0x1
+/* 5D104 8006C904 4E016230 */  andi       $v0, $v1, 0x14E
+/* 5D108 8006C908 08004010 */  beqz       $v0, .L8006C92C
+/* 5D10C 8006C90C 01000224 */   addiu     $v0, $zero, 0x1
+/* 5D110 8006C910 4CB20108 */  j          .L8006C930
+/* 5D114 8006C914 00000000 */   nop
+jlabel .L8006C918
+/* 5D118 8006C918 21200002 */  addu       $a0, $s0, $zero
+/* 5D11C 8006C91C A1C9010C */  jal        G2EmulationInstanceQueryAnimation
+/* 5D120 8006C920 21280000 */   addu      $a1, $zero, $zero
+/* 5D124 8006C924 4CB20108 */  j          .L8006C930
+/* 5D128 8006C928 00000000 */   nop
+jlabel .L8006C92C
+/* 5D12C 8006C92C 21100000 */  addu       $v0, $zero, $zero
+.L8006C930:
+/* 5D130 8006C930 2C00BF8F */  lw         $ra, 0x2C($sp)
+/* 5D134 8006C934 2800B28F */  lw         $s2, 0x28($sp)
+/* 5D138 8006C938 2400B18F */  lw         $s1, 0x24($sp)
+/* 5D13C 8006C93C 2000B08F */  lw         $s0, 0x20($sp)
+/* 5D140 8006C940 0800E003 */  jr         $ra
+/* 5D144 8006C944 3000BD27 */   addiu     $sp, $sp, 0x30
+.size PhysicalObjectQuery, . - PhysicalObjectQuery

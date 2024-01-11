@@ -1,0 +1,426 @@
+.set noat      /* allow manual use of $at */
+.set noreorder /* don't insert nops after branches */
+
+glabel RazielAnimCallback
+/* A107C 800B087C B8FFBD27 */  addiu      $sp, $sp, -0x48
+/* A1080 800B0880 3400B3AF */  sw         $s3, 0x34($sp)
+/* A1084 800B0884 21988000 */  addu       $s3, $a0, $zero
+/* A1088 800B0888 2C00B1AF */  sw         $s1, 0x2C($sp)
+/* A108C 800B088C 2188A000 */  addu       $s1, $a1, $zero
+/* A1090 800B0890 3800B4AF */  sw         $s4, 0x38($sp)
+/* A1094 800B0894 21A0C000 */  addu       $s4, $a2, $zero
+/* A1098 800B0898 3C00B5AF */  sw         $s5, 0x3C($sp)
+/* A109C 800B089C 21A8E000 */  addu       $s5, $a3, $zero
+/* A10A0 800B08A0 C0101100 */  sll        $v0, $s1, 3
+/* A10A4 800B08A4 21105100 */  addu       $v0, $v0, $s1
+/* A10A8 800B08A8 C0100200 */  sll        $v0, $v0, 3
+/* A10AC 800B08AC 23105100 */  subu       $v0, $v0, $s1
+/* A10B0 800B08B0 80100200 */  sll        $v0, $v0, 2
+/* A10B4 800B08B4 3CF68327 */  addiu      $v1, $gp, %gp_rel(Raziel + 0xC)
+/* A10B8 800B08B8 21204300 */  addu       $a0, $v0, $v1
+/* A10BC 800B08BC 40101100 */  sll        $v0, $s1, 1
+/* A10C0 800B08C0 21105100 */  addu       $v0, $v0, $s1
+/* A10C4 800B08C4 00110200 */  sll        $v0, $v0, 4
+/* A10C8 800B08C8 24004224 */  addiu      $v0, $v0, 0x24
+/* A10CC 800B08CC 21306202 */  addu       $a2, $s3, $v0
+/* A10D0 800B08D0 FFFF8326 */  addiu      $v1, $s4, -0x1
+/* A10D4 800B08D4 3000B2AF */  sw         $s2, 0x30($sp)
+/* A10D8 800B08D8 5800B28F */  lw         $s2, 0x58($sp)
+/* A10DC 800B08DC 0600622C */  sltiu      $v0, $v1, 0x6
+/* A10E0 800B08E0 4000BFAF */  sw         $ra, 0x40($sp)
+/* A10E4 800B08E4 5C014010 */  beqz       $v0, .L800B0E58
+/* A10E8 800B08E8 2800B0AF */   sw        $s0, 0x28($sp)
+/* A10EC 800B08EC 0180023C */  lui        $v0, %hi(jtbl_800122FC)
+/* A10F0 800B08F0 FC224224 */  addiu      $v0, $v0, %lo(jtbl_800122FC)
+/* A10F4 800B08F4 80180300 */  sll        $v1, $v1, 2
+/* A10F8 800B08F8 21186200 */  addu       $v1, $v1, $v0
+/* A10FC 800B08FC 0000628C */  lw         $v0, 0x0($v1)
+/* A1100 800B0900 00000000 */  nop
+/* A1104 800B0904 08004000 */  jr         $v0
+/* A1108 800B0908 00000000 */   nop
+jlabel .L800B090C
+/* A110C 800B090C 04008424 */  addiu      $a0, $a0, 0x4
+/* A1110 800B0910 1400C694 */  lhu        $a2, 0x14($a2)
+/* A1114 800B0914 4EC3010C */  jal        EnMessageQueueData
+/* A1118 800B0918 0008053C */   lui       $a1, (0x8000000 >> 16)
+/* A111C 800B091C 97C30208 */  j          .L800B0E5C
+/* A1120 800B0920 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0924
+/* A1124 800B0924 04008424 */  addiu      $a0, $a0, 0x4
+/* A1128 800B0928 0008053C */  lui        $a1, (0x8000001 >> 16)
+/* A112C 800B092C 1400C694 */  lhu        $a2, 0x14($a2)
+/* A1130 800B0930 4EC3010C */  jal        EnMessageQueueData
+/* A1134 800B0934 0100A534 */   ori       $a1, $a1, (0x8000001 & 0xFFFF)
+/* A1138 800B0938 97C30208 */  j          .L800B0E5C
+/* A113C 800B093C 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0940
+/* A1140 800B0940 21284002 */  addu       $a1, $s2, $zero
+/* A1144 800B0944 34F6848F */  lw         $a0, %gp_rel(Raziel + 0x4)($gp)
+/* A1148 800B0948 5C00A78F */  lw         $a3, 0x5C($sp)
+/* A114C 800B094C 4DC5010C */  jal        SetAnimationControllerDoneData
+/* A1150 800B0950 2130A002 */   addu      $a2, $s5, $zero
+/* A1154 800B0954 21184000 */  addu       $v1, $v0, $zero
+/* A1158 800B0958 0C00648C */  lw         $a0, 0xC($v1)
+/* A115C 800B095C 02000224 */  addiu      $v0, $zero, 0x2
+/* A1160 800B0960 06008214 */  bne        $a0, $v0, .L800B097C
+/* A1164 800B0964 00000000 */   nop
+/* A1168 800B0968 34F6848F */  lw         $a0, %gp_rel(Raziel + 0x4)($gp)
+/* A116C 800B096C 5F87020C */  jal        AlgorithmicWings
+/* A1170 800B0970 21286000 */   addu      $a1, $v1, $zero
+/* A1174 800B0974 97C30208 */  j          .L800B0E5C
+/* A1178 800B0978 2110A002 */   addu      $v0, $s5, $zero
+.L800B097C:
+/* A117C 800B097C 09008014 */  bnez       $a0, .L800B09A4
+/* A1180 800B0980 04000224 */   addiu     $v0, $zero, 0x4
+/* A1184 800B0984 2C010724 */  addiu      $a3, $zero, 0x12C
+/* A1188 800B0988 0400658C */  lw         $a1, 0x4($v1)
+/* A118C 800B098C 0000648C */  lw         $a0, 0x0($v1)
+/* A1190 800B0990 0800668C */  lw         $a2, 0x8($v1)
+/* A1194 800B0994 9D41020C */  jal        G2Anim_InterpDisableController
+/* A1198 800B0998 C8018424 */   addiu     $a0, $a0, 0x1C8
+/* A119C 800B099C 97C30208 */  j          .L800B0E5C
+/* A11A0 800B09A0 2110A002 */   addu      $v0, $s5, $zero
+.L800B09A4:
+/* A11A4 800B09A4 2D018214 */  bne        $a0, $v0, .L800B0E5C
+/* A11A8 800B09A8 2110A002 */   addu      $v0, $s5, $zero
+/* A11AC 800B09AC 0400658C */  lw         $a1, 0x4($v1)
+/* A11B0 800B09B0 0000648C */  lw         $a0, 0x0($v1)
+/* A11B4 800B09B4 0800668C */  lw         $a2, 0x8($v1)
+/* A11B8 800B09B8 8D41020C */  jal        G2Anim_DisableController
+/* A11BC 800B09BC C8018424 */   addiu     $a0, $a0, 0x1C8
+/* A11C0 800B09C0 97C30208 */  j          .L800B0E5C
+/* A11C4 800B09C4 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B09C8
+/* A11C8 800B09C8 04008424 */  addiu      $a0, $a0, 0x4
+/* A11CC 800B09CC 0008053C */  lui        $a1, (0x8000003 >> 16)
+/* A11D0 800B09D0 1400C694 */  lhu        $a2, 0x14($a2)
+/* A11D4 800B09D4 4EC3010C */  jal        EnMessageQueueData
+/* A11D8 800B09D8 0300A534 */   ori       $a1, $a1, (0x8000003 & 0xFFFF)
+/* A11DC 800B09DC 97C30208 */  j          .L800B0E5C
+/* A11E0 800B09E0 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B09E4
+/* A11E4 800B09E4 0C00C0AC */  sw         $zero, 0xC($a2)
+/* A11E8 800B09E8 04008424 */  addiu      $a0, $a0, 0x4
+/* A11EC 800B09EC 0008053C */  lui        $a1, (0x8000004 >> 16)
+/* A11F0 800B09F0 0400A534 */  ori        $a1, $a1, (0x8000004 & 0xFFFF)
+/* A11F4 800B09F4 4EC3010C */  jal        EnMessageQueueData
+/* A11F8 800B09F8 21300000 */   addu      $a2, $zero, $zero
+/* A11FC 800B09FC 97C30208 */  j          .L800B0E5C
+/* A1200 800B0A00 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0A04
+/* A1204 800B0A04 02000224 */  addiu      $v0, $zero, 0x2
+/* A1208 800B0A08 E800A216 */  bne        $s5, $v0, .L800B0DAC
+/* A120C 800B0A0C 00000000 */   nop
+/* A1210 800B0A10 2F97020C */  jal        razGetHeldWeapon
+/* A1214 800B0A14 21804002 */   addu      $s0, $s2, $zero
+/* A1218 800B0A18 00000396 */  lhu        $v1, 0x0($s0)
+/* A121C 800B0A1C 21204000 */  addu       $a0, $v0, $zero
+/* A1220 800B0A20 FFFF6324 */  addiu      $v1, $v1, -0x1
+/* A1224 800B0A24 001C0300 */  sll        $v1, $v1, 16
+/* A1228 800B0A28 031C0300 */  sra        $v1, $v1, 16
+/* A122C 800B0A2C 0B00622C */  sltiu      $v0, $v1, 0xB
+/* A1230 800B0A30 09014010 */  beqz       $v0, .L800B0E58
+/* A1234 800B0A34 0180023C */   lui       $v0, %hi(jtbl_80012314)
+/* A1238 800B0A38 14234224 */  addiu      $v0, $v0, %lo(jtbl_80012314)
+/* A123C 800B0A3C 80180300 */  sll        $v1, $v1, 2
+/* A1240 800B0A40 21186200 */  addu       $v1, $v1, $v0
+/* A1244 800B0A44 0000628C */  lw         $v0, 0x0($v1)
+/* A1248 800B0A48 00000000 */  nop
+/* A124C 800B0A4C 08004000 */  jr         $v0
+/* A1250 800B0A50 00000000 */   nop
+jlabel .L800B0A54
+/* A1254 800B0A54 06008010 */  beqz       $a0, .L800B0A70
+/* A1258 800B0A58 2000053C */   lui       $a1, (0x200002 >> 16)
+/* A125C 800B0A5C 02000686 */  lh         $a2, 0x2($s0)
+/* A1260 800B0A60 A1D1000C */  jal        INSTANCE_Post
+/* A1264 800B0A64 0200A534 */   ori       $a1, $a1, (0x200002 & 0xFFFF)
+/* A1268 800B0A68 97C30208 */  j          .L800B0E5C
+/* A126C 800B0A6C 2110A002 */   addu      $v0, $s5, $zero
+.L800B0A70:
+/* A1270 800B0A70 F4BD848F */  lw         $a0, %gp_rel(gameTrackerX + 0x2C)($gp)
+/* A1274 800B0A74 02000586 */  lh         $a1, 0x2($s0)
+/* A1278 800B0A78 BACE020C */  jal        EnableWristCollision
+/* A127C 800B0A7C 00000000 */   nop
+/* A1280 800B0A80 97C30208 */  j          .L800B0E5C
+/* A1284 800B0A84 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0A88
+/* A1288 800B0A88 06008010 */  beqz       $a0, .L800B0AA4
+/* A128C 800B0A8C 2000053C */   lui       $a1, (0x200003 >> 16)
+/* A1290 800B0A90 02000686 */  lh         $a2, 0x2($s0)
+/* A1294 800B0A94 A1D1000C */  jal        INSTANCE_Post
+/* A1298 800B0A98 0300A534 */   ori       $a1, $a1, (0x200003 & 0xFFFF)
+/* A129C 800B0A9C ADC20208 */  j          .L800B0AB4
+/* A12A0 800B0AA0 00000000 */   nop
+.L800B0AA4:
+/* A12A4 800B0AA4 F4BD848F */  lw         $a0, %gp_rel(gameTrackerX + 0x2C)($gp)
+/* A12A8 800B0AA8 02000586 */  lh         $a1, 0x2($s0)
+/* A12AC 800B0AAC A6CE020C */  jal        DisableWristCollision
+/* A12B0 800B0AB0 00000000 */   nop
+.L800B0AB4:
+/* A12B4 800B0AB4 C8FD828F */  lw         $v0, %gp_rel(ControlFlag)($gp)
+/* A12B8 800B0AB8 0010033C */  lui        $v1, (0x10000000 >> 16)
+/* A12BC 800B0ABC 25104300 */  or         $v0, $v0, $v1
+/* A12C0 800B0AC0 C8FD82AF */  sw         $v0, %gp_rel(ControlFlag)($gp)
+/* A12C4 800B0AC4 97C30208 */  j          .L800B0E5C
+/* A12C8 800B0AC8 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0ACC
+/* A12CC 800B0ACC B19D020C */  jal        razSetCowlNoDraw
+/* A12D0 800B0AD0 21200000 */   addu      $a0, $zero, $zero
+/* A12D4 800B0AD4 C8FD828F */  lw         $v0, %gp_rel(ControlFlag)($gp)
+/* A12D8 800B0AD8 00000000 */  nop
+/* A12DC 800B0ADC 40004234 */  ori        $v0, $v0, 0x40
+/* A12E0 800B0AE0 C8FD82AF */  sw         $v0, %gp_rel(ControlFlag)($gp)
+/* A12E4 800B0AE4 97C30208 */  j          .L800B0E5C
+/* A12E8 800B0AE8 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0AEC
+/* A12EC 800B0AEC B19D020C */  jal        razSetCowlNoDraw
+/* A12F0 800B0AF0 01000424 */   addiu     $a0, $zero, 0x1
+/* A12F4 800B0AF4 C8FD828F */  lw         $v0, %gp_rel(ControlFlag)($gp)
+/* A12F8 800B0AF8 BFFF0324 */  addiu      $v1, $zero, -0x41
+/* A12FC 800B0AFC 24104300 */  and        $v0, $v0, $v1
+/* A1300 800B0B00 C8FD82AF */  sw         $v0, %gp_rel(ControlFlag)($gp)
+/* A1304 800B0B04 97C30208 */  j          .L800B0E5C
+/* A1308 800B0B08 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0B0C
+/* A130C 800B0B0C 02000586 */  lh         $a1, 0x2($s0)
+/* A1310 800B0B10 00000000 */  nop
+/* A1314 800B0B14 2000A228 */  slti       $v0, $a1, 0x20
+/* A1318 800B0B18 05004014 */  bnez       $v0, .L800B0B30
+/* A131C 800B0B1C 01000224 */   addiu     $v0, $zero, 0x1
+/* A1320 800B0B20 FFFF0224 */  addiu      $v0, $zero, -0x1
+/* A1324 800B0B24 3CFB82AF */  sw         $v0, %gp_rel(Raziel + 0x50C)($gp)
+/* A1328 800B0B28 97C30208 */  j          .L800B0E5C
+/* A132C 800B0B2C 2110A002 */   addu      $v0, $s5, $zero
+.L800B0B30:
+/* A1330 800B0B30 3CFB838F */  lw         $v1, %gp_rel(Raziel + 0x50C)($gp)
+/* A1334 800B0B34 0410A200 */  sllv       $v0, $v0, $a1
+/* A1338 800B0B38 25186200 */  or         $v1, $v1, $v0
+/* A133C 800B0B3C 3CFB83AF */  sw         $v1, %gp_rel(Raziel + 0x50C)($gp)
+/* A1340 800B0B40 97C30208 */  j          .L800B0E5C
+/* A1344 800B0B44 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0B48
+/* A1348 800B0B48 02000386 */  lh         $v1, 0x2($s0)
+/* A134C 800B0B4C 00000000 */  nop
+/* A1350 800B0B50 20006228 */  slti       $v0, $v1, 0x20
+/* A1354 800B0B54 04004014 */  bnez       $v0, .L800B0B68
+/* A1358 800B0B58 01000224 */   addiu     $v0, $zero, 0x1
+/* A135C 800B0B5C 3CFB80AF */  sw         $zero, %gp_rel(Raziel + 0x50C)($gp)
+/* A1360 800B0B60 97C30208 */  j          .L800B0E5C
+/* A1364 800B0B64 2110A002 */   addu      $v0, $s5, $zero
+.L800B0B68:
+/* A1368 800B0B68 04106200 */  sllv       $v0, $v0, $v1
+/* A136C 800B0B6C 3CFB838F */  lw         $v1, %gp_rel(Raziel + 0x50C)($gp)
+/* A1370 800B0B70 27100200 */  nor        $v0, $zero, $v0
+/* A1374 800B0B74 24186200 */  and        $v1, $v1, $v0
+/* A1378 800B0B78 3CFB83AF */  sw         $v1, %gp_rel(Raziel + 0x50C)($gp)
+/* A137C 800B0B7C 97C30208 */  j          .L800B0E5C
+/* A1380 800B0B80 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0B84
+/* A1384 800B0B84 F4BD828F */  lw         $v0, %gp_rel(gameTrackerX + 0x2C)($gp)
+/* A1388 800B0B88 00000000 */  nop
+/* A138C 800B0B8C 04014294 */  lhu        $v0, 0x104($v0)
+/* A1390 800B0B90 00000000 */  nop
+/* A1394 800B0B94 50FB82A7 */  sh         $v0, %gp_rel(Raziel + 0x520)($gp)
+/* A1398 800B0B98 4CFB828F */  lw         $v0, %gp_rel(Raziel + 0x51C)($gp)
+/* A139C 800B0B9C 02000396 */  lhu        $v1, 0x2($s0)
+/* A13A0 800B0BA0 01004234 */  ori        $v0, $v0, 0x1
+/* A13A4 800B0BA4 4CFB82AF */  sw         $v0, %gp_rel(Raziel + 0x51C)($gp)
+/* A13A8 800B0BA8 52FB83A7 */  sh         $v1, %gp_rel(Raziel + 0x522)($gp)
+/* A13AC 800B0BAC 97C30208 */  j          .L800B0E5C
+/* A13B0 800B0BB0 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0BB4
+/* A13B4 800B0BB4 4CFB828F */  lw         $v0, %gp_rel(Raziel + 0x51C)($gp)
+/* A13B8 800B0BB8 58FB80AF */  sw         $zero, %gp_rel(Raziel + 0x528)($gp)
+/* A13BC 800B0BBC 01004234 */  ori        $v0, $v0, 0x1
+/* A13C0 800B0BC0 4CFB82AF */  sw         $v0, %gp_rel(Raziel + 0x51C)($gp)
+/* A13C4 800B0BC4 02000286 */  lh         $v0, 0x2($s0)
+/* A13C8 800B0BC8 00000000 */  nop
+/* A13CC 800B0BCC 54FB82AF */  sw         $v0, %gp_rel(Raziel + 0x524)($gp)
+/* A13D0 800B0BD0 97C30208 */  j          .L800B0E5C
+/* A13D4 800B0BD4 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0BD8
+/* A13D8 800B0BD8 9F008010 */  beqz       $a0, .L800B0E58
+/* A13DC 800B0BDC 2000053C */   lui       $a1, (0x200005 >> 16)
+/* A13E0 800B0BE0 02000686 */  lh         $a2, 0x2($s0)
+/* A13E4 800B0BE4 A1D1000C */  jal        INSTANCE_Post
+/* A13E8 800B0BE8 0500A534 */   ori       $a1, $a1, (0x200005 & 0xFFFF)
+/* A13EC 800B0BEC 97C30208 */  j          .L800B0E5C
+/* A13F0 800B0BF0 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0BF4
+/* A13F4 800B0BF4 98008010 */  beqz       $a0, .L800B0E58
+/* A13F8 800B0BF8 2000053C */   lui       $a1, (0x200006 >> 16)
+/* A13FC 800B0BFC 02000686 */  lh         $a2, 0x2($s0)
+/* A1400 800B0C00 A1D1000C */  jal        INSTANCE_Post
+/* A1404 800B0C04 0600A534 */   ori       $a1, $a1, (0x200006 & 0xFFFF)
+/* A1408 800B0C08 97C30208 */  j          .L800B0E5C
+/* A140C 800B0C0C 2110A002 */   addu      $v0, $s5, $zero
+jlabel .L800B0C10
+/* A1410 800B0C10 02000386 */  lh         $v1, 0x2($s0)
+/* A1414 800B0C14 02000224 */  addiu      $v0, $zero, 0x2
+/* A1418 800B0C18 0C006210 */  beq        $v1, $v0, .L800B0C4C
+/* A141C 800B0C1C 21200000 */   addu      $a0, $zero, $zero
+/* A1420 800B0C20 03006228 */  slti       $v0, $v1, 0x3
+/* A1424 800B0C24 05004014 */  bnez       $v0, .L800B0C3C
+/* A1428 800B0C28 03000224 */   addiu     $v0, $zero, 0x3
+/* A142C 800B0C2C 0A006210 */  beq        $v1, $v0, .L800B0C58
+/* A1430 800B0C30 06000224 */   addiu     $v0, $zero, 0x6
+/* A1434 800B0C34 1BC30208 */  j          .L800B0C6C
+/* A1438 800B0C38 00000000 */   nop
+.L800B0C3C:
+/* A143C 800B0C3C 0B006004 */  bltz       $v1, .L800B0C6C
+/* A1440 800B0C40 00000000 */   nop
+/* A1444 800B0C44 1BC30208 */  j          .L800B0C6C
+/* A1448 800B0C48 01000424 */   addiu     $a0, $zero, 0x1
+.L800B0C4C:
+/* A144C 800B0C4C 64FA838F */  lw         $v1, %gp_rel(Raziel + 0x434)($gp)
+/* A1450 800B0C50 17C30208 */  j          .L800B0C5C
+/* A1454 800B0C54 01000224 */   addiu     $v0, $zero, 0x1
+.L800B0C58:
+/* A1458 800B0C58 64FA838F */  lw         $v1, %gp_rel(Raziel + 0x434)($gp)
+.L800B0C5C:
+/* A145C 800B0C5C 00000000 */  nop
+/* A1460 800B0C60 02006214 */  bne        $v1, $v0, .L800B0C6C
+/* A1464 800B0C64 00000000 */   nop
+/* A1468 800B0C68 01000424 */  addiu      $a0, $zero, 0x1
+.L800B0C6C:
+/* A146C 800B0C6C 7B008010 */  beqz       $a0, .L800B0E5C
+/* A1470 800B0C70 2110A002 */   addu      $v0, $s5, $zero
+/* A1474 800B0C74 02000386 */  lh         $v1, 0x2($s0)
+/* A1478 800B0C78 2CA79127 */  addiu      $s1, $gp, %gp_rel(cannedSound)
+/* A147C 800B0C7C 80100300 */  sll        $v0, $v1, 2
+/* A1480 800B0C80 21104300 */  addu       $v0, $v0, $v1
+/* A1484 800B0C84 80100200 */  sll        $v0, $v0, 2
+/* A1488 800B0C88 21105100 */  addu       $v0, $v0, $s1
+/* A148C 800B0C8C 06004384 */  lh         $v1, 0x6($v0)
+/* A1490 800B0C90 00004984 */  lh         $t1, 0x0($v0)
+/* A1494 800B0C94 02004684 */  lh         $a2, 0x2($v0)
+/* A1498 800B0C98 04004784 */  lh         $a3, 0x4($v0)
+/* A149C 800B0C9C 1000A3AF */  sw         $v1, 0x10($sp)
+/* A14A0 800B0CA0 02000386 */  lh         $v1, 0x2($s0)
+/* A14A4 800B0CA4 00000000 */  nop
+/* A14A8 800B0CA8 80100300 */  sll        $v0, $v1, 2
+/* A14AC 800B0CAC 21104300 */  addu       $v0, $v0, $v1
+/* A14B0 800B0CB0 80100200 */  sll        $v0, $v0, 2
+/* A14B4 800B0CB4 21105100 */  addu       $v0, $v0, $s1
+/* A14B8 800B0CB8 08004284 */  lh         $v0, 0x8($v0)
+/* A14BC 800B0CBC 00000000 */  nop
+/* A14C0 800B0CC0 1400A2AF */  sw         $v0, 0x14($sp)
+/* A14C4 800B0CC4 02000386 */  lh         $v1, 0x2($s0)
+/* A14C8 800B0CC8 F4BD848F */  lw         $a0, %gp_rel(gameTrackerX + 0x2C)($gp)
+/* A14CC 800B0CCC 80100300 */  sll        $v0, $v1, 2
+/* A14D0 800B0CD0 21104300 */  addu       $v0, $v0, $v1
+/* A14D4 800B0CD4 80100200 */  sll        $v0, $v0, 2
+/* A14D8 800B0CD8 21105100 */  addu       $v0, $v0, $s1
+/* A14DC 800B0CDC 0A004284 */  lh         $v0, 0xA($v0)
+/* A14E0 800B0CE0 94FB8827 */  addiu      $t0, $gp, %gp_rel(Raziel + 0x564)
+/* A14E4 800B0CE4 1800A2AF */  sw         $v0, 0x18($sp)
+/* A14E8 800B0CE8 02000386 */  lh         $v1, 0x2($s0)
+/* A14EC 800B0CEC 40280900 */  sll        $a1, $t1, 1
+/* A14F0 800B0CF0 80100300 */  sll        $v0, $v1, 2
+/* A14F4 800B0CF4 21104300 */  addu       $v0, $v0, $v1
+/* A14F8 800B0CF8 80100200 */  sll        $v0, $v0, 2
+/* A14FC 800B0CFC 21105100 */  addu       $v0, $v0, $s1
+/* A1500 800B0D00 0C00428C */  lw         $v0, 0xC($v0)
+/* A1504 800B0D04 2128A900 */  addu       $a1, $a1, $t1
+/* A1508 800B0D08 1C00A2AF */  sw         $v0, 0x1C($sp)
+/* A150C 800B0D0C 02000386 */  lh         $v1, 0x2($s0)
+/* A1510 800B0D10 C0280500 */  sll        $a1, $a1, 3
+/* A1514 800B0D14 80100300 */  sll        $v0, $v1, 2
+/* A1518 800B0D18 21104300 */  addu       $v0, $v0, $v1
+/* A151C 800B0D1C 80100200 */  sll        $v0, $v0, 2
+/* A1520 800B0D20 21105100 */  addu       $v0, $v0, $s1
+/* A1524 800B0D24 1000428C */  lw         $v0, 0x10($v0)
+/* A1528 800B0D28 2128A800 */  addu       $a1, $a1, $t0
+/* A152C 800B0D2C 509F020C */  jal        razSetupSoundRamp
+/* A1530 800B0D30 2000A2AF */   sw        $v0, 0x20($sp)
+/* A1534 800B0D34 02000386 */  lh         $v1, 0x2($s0)
+/* A1538 800B0D38 00000000 */  nop
+/* A153C 800B0D3C 80100300 */  sll        $v0, $v1, 2
+/* A1540 800B0D40 21104300 */  addu       $v0, $v0, $v1
+/* A1544 800B0D44 80100200 */  sll        $v0, $v0, 2
+/* A1548 800B0D48 21105100 */  addu       $v0, $v0, $s1
+/* A154C 800B0D4C 00004284 */  lh         $v0, 0x0($v0)
+/* A1550 800B0D50 00000000 */  nop
+/* A1554 800B0D54 08004014 */  bnez       $v0, .L800B0D78
+/* A1558 800B0D58 80100300 */   sll       $v0, $v1, 2
+/* A155C 800B0D5C 4CFB828F */  lw         $v0, %gp_rel(Raziel + 0x51C)($gp)
+/* A1560 800B0D60 00000000 */  nop
+/* A1564 800B0D64 04004234 */  ori        $v0, $v0, 0x4
+/* A1568 800B0D68 4CFB82AF */  sw         $v0, %gp_rel(Raziel + 0x51C)($gp)
+/* A156C 800B0D6C 02000386 */  lh         $v1, 0x2($s0)
+/* A1570 800B0D70 00000000 */  nop
+/* A1574 800B0D74 80100300 */  sll        $v0, $v1, 2
+.L800B0D78:
+/* A1578 800B0D78 21104300 */  addu       $v0, $v0, $v1
+/* A157C 800B0D7C 80100200 */  sll        $v0, $v0, 2
+/* A1580 800B0D80 21105100 */  addu       $v0, $v0, $s1
+/* A1584 800B0D84 00004384 */  lh         $v1, 0x0($v0)
+/* A1588 800B0D88 01000224 */  addiu      $v0, $zero, 0x1
+/* A158C 800B0D8C 33006214 */  bne        $v1, $v0, .L800B0E5C
+/* A1590 800B0D90 2110A002 */   addu      $v0, $s5, $zero
+/* A1594 800B0D94 4CFB828F */  lw         $v0, %gp_rel(Raziel + 0x51C)($gp)
+/* A1598 800B0D98 00000000 */  nop
+/* A159C 800B0D9C 08004234 */  ori        $v0, $v0, 0x8
+/* A15A0 800B0DA0 4CFB82AF */  sw         $v0, %gp_rel(Raziel + 0x51C)($gp)
+/* A15A4 800B0DA4 97C30208 */  j          .L800B0E5C
+/* A15A8 800B0DA8 2110A002 */   addu      $v0, $s5, $zero
+.L800B0DAC:
+/* A15AC 800B0DAC 2300A016 */  bnez       $s5, .L800B0E3C
+/* A15B0 800B0DB0 21206002 */   addu      $a0, $s3, $zero
+/* A15B4 800B0DB4 00004386 */  lh         $v1, 0x0($s2)
+/* A15B8 800B0DB8 2D000224 */  addiu      $v0, $zero, 0x2D
+/* A15BC 800B0DBC 1B006214 */  bne        $v1, $v0, .L800B0E2C
+/* A15C0 800B0DC0 21282002 */   addu      $a1, $s1, $zero
+/* A15C4 800B0DC4 C8FD828F */  lw         $v0, %gp_rel(ControlFlag)($gp)
+/* A15C8 800B0DC8 1000033C */  lui        $v1, (0x100000 >> 16)
+/* A15CC 800B0DCC 24104300 */  and        $v0, $v0, $v1
+/* A15D0 800B0DD0 22004014 */  bnez       $v0, .L800B0E5C
+/* A15D4 800B0DD4 2110A002 */   addu      $v0, $s5, $zero
+/* A15D8 800B0DD8 2F97020C */  jal        razGetHeldWeapon
+/* A15DC 800B0DDC 00000000 */   nop
+/* A15E0 800B0DE0 21804000 */  addu       $s0, $v0, $zero
+/* A15E4 800B0DE4 1C000012 */  beqz       $s0, .L800B0E58
+/* A15E8 800B0DE8 21200002 */   addu      $a0, $s0, $zero
+/* A15EC 800B0DEC 92D1000C */  jal        INSTANCE_Query
+/* A15F0 800B0DF0 02000524 */   addiu     $a1, $zero, 0x2
+/* A15F4 800B0DF4 20004230 */  andi       $v0, $v0, 0x20
+/* A15F8 800B0DF8 17004010 */  beqz       $v0, .L800B0E58
+/* A15FC 800B0DFC 21200002 */   addu      $a0, $s0, $zero
+/* A1600 800B0E00 92D1000C */  jal        INSTANCE_Query
+/* A1604 800B0E04 03000524 */   addiu     $a1, $zero, 0x3
+/* A1608 800B0E08 0100033C */  lui        $v1, (0x10000 >> 16)
+/* A160C 800B0E0C 24104300 */  and        $v0, $v0, $v1
+/* A1610 800B0E10 11004010 */  beqz       $v0, .L800B0E58
+/* A1614 800B0E14 21206002 */   addu      $a0, $s3, $zero
+/* A1618 800B0E18 21282002 */  addu       $a1, $s1, $zero
+/* A161C 800B0E1C 21308002 */  addu       $a2, $s4, $zero
+/* A1620 800B0E20 34F6828F */  lw         $v0, %gp_rel(Raziel + 0x4)($gp)
+/* A1624 800B0E24 93C30208 */  j          .L800B0E4C
+/* A1628 800B0E28 21380000 */   addu      $a3, $zero, $zero
+.L800B0E2C:
+/* A162C 800B0E2C 21308002 */  addu       $a2, $s4, $zero
+/* A1630 800B0E30 34F6828F */  lw         $v0, %gp_rel(Raziel + 0x4)($gp)
+/* A1634 800B0E34 93C30208 */  j          .L800B0E4C
+/* A1638 800B0E38 21380000 */   addu      $a3, $zero, $zero
+.L800B0E3C:
+/* A163C 800B0E3C 21282002 */  addu       $a1, $s1, $zero
+/* A1640 800B0E40 21308002 */  addu       $a2, $s4, $zero
+/* A1644 800B0E44 34F6828F */  lw         $v0, %gp_rel(Raziel + 0x4)($gp)
+/* A1648 800B0E48 2138A002 */  addu       $a3, $s5, $zero
+.L800B0E4C:
+/* A164C 800B0E4C 1000B2AF */  sw         $s2, 0x10($sp)
+/* A1650 800B0E50 72D6000C */  jal        INSTANCE_DefaultAnimCallback
+/* A1654 800B0E54 1400A2AF */   sw        $v0, 0x14($sp)
+.L800B0E58:
+/* A1658 800B0E58 2110A002 */  addu       $v0, $s5, $zero
+.L800B0E5C:
+/* A165C 800B0E5C 4000BF8F */  lw         $ra, 0x40($sp)
+/* A1660 800B0E60 3C00B58F */  lw         $s5, 0x3C($sp)
+/* A1664 800B0E64 3800B48F */  lw         $s4, 0x38($sp)
+/* A1668 800B0E68 3400B38F */  lw         $s3, 0x34($sp)
+/* A166C 800B0E6C 3000B28F */  lw         $s2, 0x30($sp)
+/* A1670 800B0E70 2C00B18F */  lw         $s1, 0x2C($sp)
+/* A1674 800B0E74 2800B08F */  lw         $s0, 0x28($sp)
+/* A1678 800B0E78 0800E003 */  jr         $ra
+/* A167C 800B0E7C 4800BD27 */   addiu     $sp, $sp, 0x48
+.size RazielAnimCallback, . - RazielAnimCallback

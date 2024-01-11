@@ -1,0 +1,150 @@
+.set noat      /* allow manual use of $at */
+.set noreorder /* don't insert nops after branches */
+
+glabel ProcessArgs
+/* 28FC0 800387C0 98FFBD27 */  addiu      $sp, $sp, -0x68
+/* 28FC4 800387C4 5C00B3AF */  sw         $s3, 0x5C($sp)
+/* 28FC8 800387C8 21988000 */  addu       $s3, $a0, $zero
+/* 28FCC 800387CC 5800B2AF */  sw         $s2, 0x58($sp)
+/* 28FD0 800387D0 2190A000 */  addu       $s2, $a1, $zero
+/* 28FD4 800387D4 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x2)
+/* 28FD8 800387D8 600B8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x2)
+/* 28FDC 800387DC 0A000524 */  addiu      $a1, $zero, 0xA
+/* 28FE0 800387E0 6000BFAF */  sw         $ra, 0x60($sp)
+/* 28FE4 800387E4 5400B1AF */  sw         $s1, 0x54($sp)
+/* 28FE8 800387E8 3E82010C */  jal        LOAD_ReadFile
+/* 28FEC 800387EC 5000B0AF */   sw        $s0, 0x50($sp)
+/* 28FF0 800387F0 21884000 */  addu       $s1, $v0, $zero
+/* 28FF4 800387F4 64002012 */  beqz       $s1, .L80038988
+/* 28FF8 800387F8 3000B027 */   addiu     $s0, $sp, 0x30
+/* 28FFC 800387FC 21200002 */  addu       $a0, $s0, $zero
+/* 29000 80038800 C2E1000C */  jal        ExtractWorldName
+/* 29004 80038804 21282002 */   addu      $a1, $s1, $zero
+/* 29008 80038808 1000A427 */  addiu      $a0, $sp, 0x10
+/* 2900C 8003880C D5E1000C */  jal        ExtractLevelNum
+/* 29010 80038810 21282002 */   addu      $a1, $s1, $zero
+/* 29014 80038814 21206002 */  addu       $a0, $s3, $zero
+/* 29018 80038818 0D80053C */  lui        $a1, %hi(mainMenuFading + 0x1E)
+/* 2901C 8003881C 7C0BA524 */  addiu      $a1, $a1, %lo(mainMenuFading + 0x1E)
+/* 29020 80038820 21300002 */  addu       $a2, $s0, $zero
+/* 29024 80038824 1AD1010C */  jal        sprintf
+/* 29028 80038828 1000A727 */   addiu     $a3, $sp, 0x10
+/* 2902C 8003882C 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x26)
+/* 29030 80038830 840B8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x26)
+/* 29034 80038834 A0E1000C */  jal        FindTextInLine
+/* 29038 80038838 21282002 */   addu      $a1, $s1, $zero
+/* 2903C 8003883C 03004010 */  beqz       $v0, .L8003884C
+/* 29040 80038840 01000224 */   addiu     $v0, $zero, 0x1
+/* 29044 80038844 5C9482AF */  sw         $v0, %gp_rel(nosound)($gp)
+/* 29048 80038848 609482AF */  sw         $v0, %gp_rel(nomusic)($gp)
+.L8003884C:
+/* 2904C 8003884C 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x32)
+/* 29050 80038850 900B8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x32)
+/* 29054 80038854 A0E1000C */  jal        FindTextInLine
+/* 29058 80038858 21282002 */   addu      $a1, $s1, $zero
+/* 2905C 8003885C 02004010 */  beqz       $v0, .L80038868
+/* 29060 80038860 01000224 */   addiu     $v0, $zero, 0x1
+/* 29064 80038864 609482AF */  sw         $v0, %gp_rel(nomusic)($gp)
+.L80038868:
+/* 29068 80038868 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x3E)
+/* 2906C 8003886C 9C0B8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x3E)
+/* 29070 80038870 A0E1000C */  jal        FindTextInLine
+/* 29074 80038874 21282002 */   addu      $a1, $s1, $zero
+/* 29078 80038878 05004010 */  beqz       $v0, .L80038890
+/* 2907C 8003887C 0200033C */   lui       $v1, (0x20000 >> 16)
+/* 29080 80038880 C000428E */  lw         $v0, 0xC0($s2)
+/* 29084 80038884 00000000 */  nop
+/* 29088 80038888 25104300 */  or         $v0, $v0, $v1
+/* 2908C 8003888C C00042AE */  sw         $v0, 0xC0($s2)
+.L80038890:
+/* 29090 80038890 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x4A)
+/* 29094 80038894 A80B8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x4A)
+/* 29098 80038898 A0E1000C */  jal        FindTextInLine
+/* 2909C 8003889C 21282002 */   addu      $a1, $s1, $zero
+/* 290A0 800388A0 02004010 */  beqz       $v0, .L800388AC
+/* 290A4 800388A4 01000224 */   addiu     $v0, $zero, 0x1
+/* 290A8 800388A8 B49582AF */  sw         $v0, %gp_rel(DoMainMenu)($gp)
+.L800388AC:
+/* 290AC 800388AC 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x56)
+/* 290B0 800388B0 B40B8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x56)
+/* 290B4 800388B4 A0E1000C */  jal        FindTextInLine
+/* 290B8 800388B8 21282002 */   addu      $a1, $s1, $zero
+/* 290BC 800388BC 02004010 */  beqz       $v0, .L800388C8
+/* 290C0 800388C0 01000224 */   addiu     $v0, $zero, 0x1
+/* 290C4 800388C4 D2BD82A7 */  sh         $v0, %gp_rel(gameTrackerX + 0xA)($gp)
+.L800388C8:
+/* 290C8 800388C8 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x62)
+/* 290CC 800388CC C00B8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x62)
+/* 290D0 800388D0 A0E1000C */  jal        FindTextInLine
+/* 290D4 800388D4 21282002 */   addu      $a1, $s1, $zero
+/* 290D8 800388D8 05004010 */  beqz       $v0, .L800388F0
+/* 290DC 800388DC 0800033C */   lui       $v1, (0x80000 >> 16)
+/* 290E0 800388E0 C000428E */  lw         $v0, 0xC0($s2)
+/* 290E4 800388E4 00000000 */  nop
+/* 290E8 800388E8 25104300 */  or         $v0, $v0, $v1
+/* 290EC 800388EC C00042AE */  sw         $v0, 0xC0($s2)
+.L800388F0:
+/* 290F0 800388F0 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x6A)
+/* 290F4 800388F4 C80B8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x6A)
+/* 290F8 800388F8 A0E1000C */  jal        FindTextInLine
+/* 290FC 800388FC 21282002 */   addu      $a1, $s1, $zero
+/* 29100 80038900 05004010 */  beqz       $v0, .L80038918
+/* 29104 80038904 0080033C */   lui       $v1, (0x80000000 >> 16)
+/* 29108 80038908 C000428E */  lw         $v0, 0xC0($s2)
+/* 2910C 8003890C 00000000 */  nop
+/* 29110 80038910 25104300 */  or         $v0, $v0, $v1
+/* 29114 80038914 C00042AE */  sw         $v0, 0xC0($s2)
+.L80038918:
+/* 29118 80038918 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x76)
+/* 2911C 8003891C D40B8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x76)
+/* 29120 80038920 A0E1000C */  jal        FindTextInLine
+/* 29124 80038924 21282002 */   addu      $a1, $s1, $zero
+/* 29128 80038928 05004010 */  beqz       $v0, .L80038940
+/* 2912C 8003892C 2000033C */   lui       $v1, (0x200000 >> 16)
+/* 29130 80038930 0CBF828F */  lw         $v0, %gp_rel(gameTrackerX + 0x144)($gp)
+/* 29134 80038934 00000000 */  nop
+/* 29138 80038938 25104300 */  or         $v0, $v0, $v1
+/* 2913C 8003893C 0CBF82AF */  sw         $v0, %gp_rel(gameTrackerX + 0x144)($gp)
+.L80038940:
+/* 29140 80038940 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x82)
+/* 29144 80038944 E00B8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x82)
+/* 29148 80038948 A0E1000C */  jal        FindTextInLine
+/* 2914C 8003894C 21282002 */   addu      $a1, $s1, $zero
+/* 29150 80038950 05004010 */  beqz       $v0, .L80038968
+/* 29154 80038954 4000033C */   lui       $v1, (0x400000 >> 16)
+/* 29158 80038958 0CBF828F */  lw         $v0, %gp_rel(gameTrackerX + 0x144)($gp)
+/* 2915C 8003895C 00000000 */  nop
+/* 29160 80038960 25104300 */  or         $v0, $v0, $v1
+/* 29164 80038964 0CBF82AF */  sw         $v0, %gp_rel(gameTrackerX + 0x144)($gp)
+.L80038968:
+/* 29168 80038968 21202002 */  addu       $a0, $s1, $zero
+/* 2916C 8003896C C000428E */  lw         $v0, 0xC0($s2)
+/* 29170 80038970 0800033C */  lui        $v1, (0x80000 >> 16)
+/* 29174 80038974 25104300 */  or         $v0, $v0, $v1
+/* 29178 80038978 2641010C */  jal        MEMPACK_Free
+/* 2917C 8003897C C00042AE */   sw        $v0, 0xC0($s2)
+/* 29180 80038980 6FE20008 */  j          .L800389BC
+/* 29184 80038984 00000000 */   nop
+.L80038988:
+/* 29188 80038988 0D80023C */  lui        $v0, %hi(mainMenuFading + 0x8E)
+/* 2918C 8003898C EC0B4B24 */  addiu      $t3, $v0, %lo(mainMenuFading + 0x8E)
+/* 29190 80038990 03006889 */  lwl        $t0, 0x3($t3)
+/* 29194 80038994 00006899 */  lwr        $t0, 0x0($t3)
+/* 29198 80038998 04006981 */  lb         $t1, 0x4($t3)
+/* 2919C 8003899C 05006A81 */  lb         $t2, 0x5($t3)
+/* 291A0 800389A0 030068AA */  swl        $t0, 0x3($s3)
+/* 291A4 800389A4 000068BA */  swr        $t0, 0x0($s3)
+/* 291A8 800389A8 040069A2 */  sb         $t1, 0x4($s3)
+/* 291AC 800389AC 05006AA2 */  sb         $t2, 0x5($s3)
+/* 291B0 800389B0 06006881 */  lb         $t0, 0x6($t3)
+/* 291B4 800389B4 00000000 */  nop
+/* 291B8 800389B8 060068A2 */  sb         $t0, 0x6($s3)
+.L800389BC:
+/* 291BC 800389BC 6000BF8F */  lw         $ra, 0x60($sp)
+/* 291C0 800389C0 5C00B38F */  lw         $s3, 0x5C($sp)
+/* 291C4 800389C4 5800B28F */  lw         $s2, 0x58($sp)
+/* 291C8 800389C8 5400B18F */  lw         $s1, 0x54($sp)
+/* 291CC 800389CC 5000B08F */  lw         $s0, 0x50($sp)
+/* 291D0 800389D0 0800E003 */  jr         $ra
+/* 291D4 800389D4 6800BD27 */   addiu     $sp, $sp, 0x68
+.size ProcessArgs, . - ProcessArgs

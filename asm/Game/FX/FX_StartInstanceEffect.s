@@ -1,0 +1,298 @@
+.set noat      /* allow manual use of $at */
+.set noreorder /* don't insert nops after branches */
+
+glabel FX_StartInstanceEffect
+/* 3DA38 8004D238 B8FFBD27 */  addiu      $sp, $sp, -0x48
+/* 3DA3C 8004D23C 3800B2AF */  sw         $s2, 0x38($sp)
+/* 3DA40 8004D240 21908000 */  addu       $s2, $a0, $zero
+/* 3DA44 8004D244 3000B0AF */  sw         $s0, 0x30($sp)
+/* 3DA48 8004D248 2180A000 */  addu       $s0, $a1, $zero
+/* 3DA4C 8004D24C 80400224 */  addiu      $v0, $zero, 0x4080
+/* 3DA50 8004D250 4000BFAF */  sw         $ra, 0x40($sp)
+/* 3DA54 8004D254 3C00B3AF */  sw         $s3, 0x3C($sp)
+/* 3DA58 8004D258 3400B1AF */  sw         $s1, 0x34($sp)
+/* 3DA5C 8004D25C 2800A2AF */  sw         $v0, 0x28($sp)
+/* 3DA60 8004D260 00000392 */  lbu        $v1, 0x0($s0)
+/* 3DA64 8004D264 00000000 */  nop
+/* 3DA68 8004D268 1600622C */  sltiu      $v0, $v1, 0x16
+/* 3DA6C 8004D26C F3004010 */  beqz       $v0, .L8004D63C
+/* 3DA70 8004D270 2198C000 */   addu      $s3, $a2, $zero
+/* 3DA74 8004D274 0180023C */  lui        $v0, %hi(jtbl_80010318)
+/* 3DA78 8004D278 18034224 */  addiu      $v0, $v0, %lo(jtbl_80010318)
+/* 3DA7C 8004D27C 80180300 */  sll        $v1, $v1, 2
+/* 3DA80 8004D280 21186200 */  addu       $v1, $v1, $v0
+/* 3DA84 8004D284 0000628C */  lw         $v0, 0x0($v1)
+/* 3DA88 8004D288 00000000 */  nop
+/* 3DA8C 8004D28C 08004000 */  jr         $v0
+/* 3DA90 8004D290 00000000 */   nop
+jlabel .L8004D294
+/* 3DA94 8004D294 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DA98 8004D298 2A24010C */  jal        FX_TorchFlame
+/* 3DA9C 8004D29C 21204002 */   addu      $a0, $s2, $zero
+/* 3DAA0 8004D2A0 8F350108 */  j          .L8004D63C
+/* 3DAA4 8004D2A4 00000000 */   nop
+jlabel .L8004D2A8
+/* 3DAA8 8004D2A8 02000292 */  lbu        $v0, 0x2($s0)
+/* 3DAAC 8004D2AC 00000000 */  nop
+/* 3DAB0 8004D2B0 FFFF4224 */  addiu      $v0, $v0, -0x1
+/* 3DAB4 8004D2B4 0500422C */  sltiu      $v0, $v0, 0x5
+/* 3DAB8 8004D2B8 08004010 */  beqz       $v0, .L8004D2DC
+/* 3DABC 8004D2BC 21204002 */   addu      $a0, $s2, $zero
+/* 3DAC0 8004D2C0 02000292 */  lbu        $v0, 0x2($s0)
+/* 3DAC4 8004D2C4 AC9A8327 */  addiu      $v1, $gp, %gp_rel(FX_ColorArray)
+/* 3DAC8 8004D2C8 80100200 */  sll        $v0, $v0, 2
+/* 3DACC 8004D2CC 21104300 */  addu       $v0, $v0, $v1
+/* 3DAD0 8004D2D0 0000428C */  lw         $v0, 0x0($v0)
+/* 3DAD4 8004D2D4 00000000 */  nop
+/* 3DAD8 8004D2D8 2800A2AF */  sw         $v0, 0x28($sp)
+.L8004D2DC:
+/* 3DADC 8004D2DC 2800A627 */  addiu      $a2, $sp, 0x28
+/* 3DAE0 8004D2E0 01000724 */  addiu      $a3, $zero, 0x1
+/* 3DAE4 8004D2E4 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DAE8 8004D2E8 00040224 */  addiu      $v0, $zero, 0x400
+/* 3DAEC 8004D2EC 1000A2AF */  sw         $v0, 0x10($sp)
+/* 3DAF0 8004D2F0 32000224 */  addiu      $v0, $zero, 0x32
+/* 3DAF4 8004D2F4 1400A2AF */  sw         $v0, 0x14($sp)
+/* 3DAF8 8004D2F8 64000224 */  addiu      $v0, $zero, 0x64
+/* 3DAFC 8004D2FC 462D010C */  jal        FX_DoInstanceOneSegmentGlow
+/* 3DB00 8004D300 1800A2AF */   sw        $v0, 0x18($sp)
+/* 3DB04 8004D304 8F350108 */  j          .L8004D63C
+/* 3DB08 8004D308 00000000 */   nop
+jlabel .L8004D30C
+/* 3DB0C 8004D30C 02000692 */  lbu        $a2, 0x2($s0)
+/* 3DB10 8004D310 00000000 */  nop
+/* 3DB14 8004D314 0200C01C */  bgtz       $a2, .L8004D320
+/* 3DB18 8004D318 00000000 */   nop
+/* 3DB1C 8004D31C 01000624 */  addiu      $a2, $zero, 0x1
+.L8004D320:
+/* 3DB20 8004D320 03000292 */  lbu        $v0, 0x3($s0)
+/* 3DB24 8004D324 00000000 */  nop
+/* 3DB28 8004D328 FFFF4224 */  addiu      $v0, $v0, -0x1
+/* 3DB2C 8004D32C 0500422C */  sltiu      $v0, $v0, 0x5
+/* 3DB30 8004D330 08004010 */  beqz       $v0, .L8004D354
+/* 3DB34 8004D334 21204002 */   addu      $a0, $s2, $zero
+/* 3DB38 8004D338 03000292 */  lbu        $v0, 0x3($s0)
+/* 3DB3C 8004D33C AC9A8327 */  addiu      $v1, $gp, %gp_rel(FX_ColorArray)
+/* 3DB40 8004D340 80100200 */  sll        $v0, $v0, 2
+/* 3DB44 8004D344 21104300 */  addu       $v0, $v0, $v1
+/* 3DB48 8004D348 0000428C */  lw         $v0, 0x0($v0)
+/* 3DB4C 8004D34C 00000000 */  nop
+/* 3DB50 8004D350 2800A2AF */  sw         $v0, 0x28($sp)
+.L8004D354:
+/* 3DB54 8004D354 2800A727 */  addiu      $a3, $sp, 0x28
+/* 3DB58 8004D358 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DB5C 8004D35C 01000224 */  addiu      $v0, $zero, 0x1
+/* 3DB60 8004D360 1000A2AF */  sw         $v0, 0x10($sp)
+/* 3DB64 8004D364 00040224 */  addiu      $v0, $zero, 0x400
+/* 3DB68 8004D368 1400A2AF */  sw         $v0, 0x14($sp)
+/* 3DB6C 8004D36C 41000224 */  addiu      $v0, $zero, 0x41
+/* 3DB70 8004D370 BB2D010C */  jal        FX_DoInstanceManySegmentGlow
+/* 3DB74 8004D374 1800A2AF */   sw        $v0, 0x18($sp)
+/* 3DB78 8004D378 8F350108 */  j          .L8004D63C
+/* 3DB7C 8004D37C 00000000 */   nop
+jlabel .L8004D380
+/* 3DB80 8004D380 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DB84 8004D384 02000692 */  lbu        $a2, 0x2($s0)
+/* 3DB88 8004D388 03000792 */  lbu        $a3, 0x3($s0)
+/* 3DB8C 8004D38C 21204002 */  addu       $a0, $s2, $zero
+/* 3DB90 8004D390 3631010C */  jal        FX_StartGenericParticle
+/* 3DB94 8004D394 1000B3AF */   sw        $s3, 0x10($sp)
+/* 3DB98 8004D398 8F350108 */  j          .L8004D63C
+/* 3DB9C 8004D39C 00000000 */   nop
+jlabel .L8004D3A0
+/* 3DBA0 8004D3A0 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DBA4 8004D3A4 02000692 */  lbu        $a2, 0x2($s0)
+/* 3DBA8 8004D3A8 03000792 */  lbu        $a3, 0x3($s0)
+/* 3DBAC 8004D3AC 21204002 */  addu       $a0, $s2, $zero
+/* 3DBB0 8004D3B0 0A32010C */  jal        FX_StartGenericRibbon
+/* 3DBB4 8004D3B4 1000B3AF */   sw        $s3, 0x10($sp)
+/* 3DBB8 8004D3B8 8F350108 */  j          .L8004D63C
+/* 3DBBC 8004D3BC 00000000 */   nop
+jlabel .L8004D3C0
+/* 3DBC0 8004D3C0 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DBC4 8004D3C4 02000692 */  lbu        $a2, 0x2($s0)
+/* 3DBC8 8004D3C8 03000792 */  lbu        $a3, 0x3($s0)
+/* 3DBCC 8004D3CC 21204002 */  addu       $a0, $s2, $zero
+/* 3DBD0 8004D3D0 3932010C */  jal        FX_StartGenericGlow
+/* 3DBD4 8004D3D4 1000B3AF */   sw        $s3, 0x10($sp)
+/* 3DBD8 8004D3D8 8F350108 */  j          .L8004D63C
+/* 3DBDC 8004D3DC 00000000 */   nop
+jlabel .L8004D3E0
+/* 3DBE0 8004D3E0 D0F0010C */  jal        GlyphTrigger
+/* 3DBE4 8004D3E4 00000000 */   nop
+/* 3DBE8 8004D3E8 8F350108 */  j          .L8004D63C
+/* 3DBEC 8004D3EC 00000000 */   nop
+jlabel .L8004D3F0
+/* 3DBF0 8004D3F0 01000492 */  lbu        $a0, 0x1($s0)
+/* 3DBF4 8004D3F4 4934010C */  jal        FX_Start_Snow
+/* 3DBF8 8004D3F8 00000000 */   nop
+/* 3DBFC 8004D3FC 8F350108 */  j          .L8004D63C
+/* 3DC00 8004D400 00000000 */   nop
+jlabel .L8004D404
+/* 3DC04 8004D404 01000492 */  lbu        $a0, 0x1($s0)
+/* 3DC08 8004D408 5634010C */  jal        FX_Start_Rain
+/* 3DC0C 8004D40C 00000000 */   nop
+/* 3DC10 8004D410 8F350108 */  j          .L8004D63C
+/* 3DC14 8004D414 00000000 */   nop
+jlabel .L8004D418
+/* 3DC18 8004D418 21204002 */  addu       $a0, $s2, $zero
+/* 3DC1C 8004D41C 92D1000C */  jal        INSTANCE_Query
+/* 3DC20 8004D420 16000524 */   addiu     $a1, $zero, 0x16
+/* 3DC24 8004D424 21884000 */  addu       $s1, $v0, $zero
+/* 3DC28 8004D428 84002012 */  beqz       $s1, .L8004D63C
+/* 3DC2C 8004D42C 21204002 */   addu      $a0, $s2, $zero
+/* 3DC30 8004D430 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DC34 8004D434 02000692 */  lbu        $a2, 0x2($s0)
+/* 3DC38 8004D438 03000792 */  lbu        $a3, 0x3($s0)
+/* 3DC3C 8004D43C 3631010C */  jal        FX_StartGenericParticle
+/* 3DC40 8004D440 1000B3AF */   sw        $s3, 0x10($sp)
+/* 3DC44 8004D444 21204000 */  addu       $a0, $v0, $zero
+/* 3DC48 8004D448 7C008010 */  beqz       $a0, .L8004D63C
+/* 3DC4C 8004D44C 00000000 */   nop
+/* 3DC50 8004D450 02002296 */  lhu        $v0, 0x2($s1)
+/* 3DC54 8004D454 00000000 */  nop
+/* 3DC58 8004D458 240082A4 */  sh         $v0, 0x24($a0)
+/* 3DC5C 8004D45C 04002296 */  lhu        $v0, 0x4($s1)
+/* 3DC60 8004D460 00000000 */  nop
+/* 3DC64 8004D464 260082A4 */  sh         $v0, 0x26($a0)
+/* 3DC68 8004D468 06002296 */  lhu        $v0, 0x6($s1)
+/* 3DC6C 8004D46C 00000000 */  nop
+/* 3DC70 8004D470 280082A4 */  sh         $v0, 0x28($a0)
+/* 3DC74 8004D474 0580023C */  lui        $v0, %hi(FX_UpdraftPrimModify)
+/* 3DC78 8004D478 08002396 */  lhu        $v1, 0x8($s1)
+/* 3DC7C 8004D47C F0A44224 */  addiu      $v0, $v0, %lo(FX_UpdraftPrimModify)
+/* 3DC80 8004D480 200080A4 */  sh         $zero, 0x20($a0)
+/* 3DC84 8004D484 140082AC */  sw         $v0, 0x14($a0)
+/* 3DC88 8004D488 C2180300 */  srl        $v1, $v1, 3
+/* 3DC8C 8004D48C 8F350108 */  j          .L8004D63C
+/* 3DC90 8004D490 1E0083A4 */   sh        $v1, 0x1E($a0)
+jlabel .L8004D494
+/* 3DC94 8004D494 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DC98 8004D498 02000692 */  lbu        $a2, 0x2($s0)
+/* 3DC9C 8004D49C 03000792 */  lbu        $a3, 0x3($s0)
+/* 3DCA0 8004D4A0 6534010C */  jal        FX_StartLightbeam
+/* 3DCA4 8004D4A4 21204002 */   addu      $a0, $s2, $zero
+/* 3DCA8 8004D4A8 8F350108 */  j          .L8004D63C
+/* 3DCAC 8004D4AC 00000000 */   nop
+jlabel .L8004D4B0
+/* 3DCB0 8004D4B0 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DCB4 8004D4B4 02000692 */  lbu        $a2, 0x2($s0)
+/* 3DCB8 8004D4B8 03000792 */  lbu        $a3, 0x3($s0)
+/* 3DCBC 8004D4BC 1133010C */  jal        FX_StartGenericLightning
+/* 3DCC0 8004D4C0 21204002 */   addu      $a0, $s2, $zero
+/* 3DCC4 8004D4C4 8F350108 */  j          .L8004D63C
+/* 3DCC8 8004D4C8 00000000 */   nop
+jlabel .L8004D4CC
+/* 3DCCC 8004D4CC 32006012 */  beqz       $s3, .L8004D598
+/* 3DCD0 8004D4D0 00000000 */   nop
+/* 3DCD4 8004D4D4 8F350108 */  j          .L8004D63C
+/* 3DCD8 8004D4D8 00000000 */   nop
+jlabel .L8004D4DC
+/* 3DCDC 8004D4DC 57006016 */  bnez       $s3, .L8004D63C
+/* 3DCE0 8004D4E0 00000000 */   nop
+/* 3DCE4 8004D4E4 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DCE8 8004D4E8 FC33010C */  jal        FX_StartGenericFlash
+/* 3DCEC 8004D4EC 21204002 */   addu      $a0, $s2, $zero
+/* 3DCF0 8004D4F0 8F350108 */  j          .L8004D63C
+/* 3DCF4 8004D4F4 00000000 */   nop
+jlabel .L8004D4F8
+/* 3DCF8 8004D4F8 50006016 */  bnez       $s3, .L8004D63C
+/* 3DCFC 8004D4FC 21800000 */   addu      $s0, $zero, $zero
+/* 3DD00 8004D500 1C00428E */  lw         $v0, 0x1C($s2)
+/* 3DD04 8004D504 00000000 */  nop
+/* 3DD08 8004D508 2C00438C */  lw         $v1, 0x2C($v0)
+/* 3DD0C 8004D50C 0400043C */  lui        $a0, (0x40000 >> 16)
+/* 3DD10 8004D510 24186400 */  and        $v1, $v1, $a0
+/* 3DD14 8004D514 1C00448C */  lw         $a0, 0x1C($v0)
+/* 3DD18 8004D518 08006010 */  beqz       $v1, .L8004D53C
+/* 3DD1C 8004D51C 21880002 */   addu      $s1, $s0, $zero
+/* 3DD20 8004D520 B5B7010C */  jal        PhysObGetSplinter
+/* 3DD24 8004D524 21204002 */   addu      $a0, $s2, $zero
+/* 3DD28 8004D528 0C004010 */  beqz       $v0, .L8004D55C
+/* 3DD2C 8004D52C 21204002 */   addu      $a0, $s2, $zero
+/* 3DD30 8004D530 0400508C */  lw         $s0, 0x4($v0)
+/* 3DD34 8004D534 59350108 */  j          .L8004D564
+/* 3DD38 8004D538 21280000 */   addu      $a1, $zero, $zero
+.L8004D53C:
+/* 3DD3C 8004D53C 07008010 */  beqz       $a0, .L8004D55C
+/* 3DD40 8004D540 00000000 */   nop
+/* 3DD44 8004D544 0000828C */  lw         $v0, 0x0($a0)
+/* 3DD48 8004D548 0400908C */  lw         $s0, 0x4($a0)
+/* 3DD4C 8004D54C 02004230 */  andi       $v0, $v0, 0x2
+/* 3DD50 8004D550 03004010 */  beqz       $v0, .L8004D560
+/* 3DD54 8004D554 21204002 */   addu      $a0, $s2, $zero
+/* 3DD58 8004D558 10001124 */  addiu      $s1, $zero, 0x10
+.L8004D55C:
+/* 3DD5C 8004D55C 21204002 */  addu       $a0, $s2, $zero
+.L8004D560:
+/* 3DD60 8004D560 21280000 */  addu       $a1, $zero, $zero
+.L8004D564:
+/* 3DD64 8004D564 2130A000 */  addu       $a2, $a1, $zero
+/* 3DD68 8004D568 2138A000 */  addu       $a3, $a1, $zero
+/* 3DD6C 8004D56C 00141100 */  sll        $v0, $s1, 16
+/* 3DD70 8004D570 44BA838F */  lw         $v1, %gp_rel(gFXT)($gp)
+/* 3DD74 8004D574 03140200 */  sra        $v0, $v0, 16
+/* 3DD78 8004D578 1000B0AF */  sw         $s0, 0x10($sp)
+/* 3DD7C 8004D57C 1800A0AF */  sw         $zero, 0x18($sp)
+/* 3DD80 8004D580 1C00A0AF */  sw         $zero, 0x1C($sp)
+/* 3DD84 8004D584 2000A2AF */  sw         $v0, 0x20($sp)
+/* 3DD88 8004D588 9211010C */  jal        _FX_BuildSplinters
+/* 3DD8C 8004D58C 1400A3AF */   sw        $v1, 0x14($sp)
+/* 3DD90 8004D590 8F350108 */  j          .L8004D63C
+/* 3DD94 8004D594 00000000 */   nop
+jlabel .L8004D598
+/* 3DD98 8004D598 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DD9C 8004D59C 02000692 */  lbu        $a2, 0x2($s0)
+/* 3DDA0 8004D5A0 03000792 */  lbu        $a3, 0x3($s0)
+/* 3DDA4 8004D5A4 7A33010C */  jal        FX_StartGenericBlastring
+/* 3DDA8 8004D5A8 21204002 */   addu      $a0, $s2, $zero
+/* 3DDAC 8004D5AC 8F350108 */  j          .L8004D63C
+/* 3DDB0 8004D5B0 00000000 */   nop
+jlabel .L8004D5B4
+/* 3DDB4 8004D5B4 02000592 */  lbu        $a1, 0x2($s0)
+/* 3DDB8 8004D5B8 01000492 */  lbu        $a0, 0x1($s0)
+/* 3DDBC 8004D5BC EAC5000C */  jal        GAMEPAD_Shock0
+/* 3DDC0 8004D5C0 002B0500 */   sll       $a1, $a1, 12
+/* 3DDC4 8004D5C4 8F350108 */  j          .L8004D63C
+/* 3DDC8 8004D5C8 00000000 */   nop
+jlabel .L8004D5CC
+/* 3DDCC 8004D5CC 02000592 */  lbu        $a1, 0x2($s0)
+/* 3DDD0 8004D5D0 01000492 */  lbu        $a0, 0x1($s0)
+/* 3DDD4 8004D5D4 8D350108 */  j          .L8004D634
+/* 3DDD8 8004D5D8 00000000 */   nop
+jlabel .L8004D5DC
+/* 3DDDC 8004D5DC 90AC8527 */  addiu      $a1, $gp, %gp_rel(theCamera)
+/* 3DDE0 8004D5E0 CAE7000C */  jal        MATH3D_DistanceBetweenPositions
+/* 3DDE4 8004D5E4 5C004426 */   addiu     $a0, $s2, 0x5C
+/* 3DDE8 8004D5E8 01000592 */  lbu        $a1, 0x1($s0)
+/* 3DDEC 8004D5EC 401F0324 */  addiu      $v1, $zero, 0x1F40
+/* 3DDF0 8004D5F0 23186200 */  subu       $v1, $v1, $v0
+/* 3DDF4 8004D5F4 18006500 */  mult       $v1, $a1
+/* 3DDF8 8004D5F8 12180000 */  mflo       $v1
+/* 3DDFC 8004D5FC 6210023C */  lui        $v0, (0x10624DD3 >> 16)
+/* 3DE00 8004D600 D34D4234 */  ori        $v0, $v0, (0x10624DD3 & 0xFFFF)
+/* 3DE04 8004D604 18006200 */  mult       $v1, $v0
+/* 3DE08 8004D608 C31F0300 */  sra        $v1, $v1, 31
+/* 3DE0C 8004D60C 10480000 */  mfhi       $t1
+/* 3DE10 8004D610 43120900 */  sra        $v0, $t1, 9
+/* 3DE14 8004D614 23204300 */  subu       $a0, $v0, $v1
+/* 3DE18 8004D618 08008018 */  blez       $a0, .L8004D63C
+/* 3DE1C 8004D61C 32008424 */   addiu     $a0, $a0, 0x32
+/* 3DE20 8004D620 2A10A400 */  slt        $v0, $a1, $a0
+/* 3DE24 8004D624 02004010 */  beqz       $v0, .L8004D630
+/* 3DE28 8004D628 00000000 */   nop
+/* 3DE2C 8004D62C 2120A000 */  addu       $a0, $a1, $zero
+.L8004D630:
+/* 3DE30 8004D630 02000592 */  lbu        $a1, 0x2($s0)
+.L8004D634:
+/* 3DE34 8004D634 F9C5000C */  jal        GAMEPAD_Shock1
+/* 3DE38 8004D638 002B0500 */   sll       $a1, $a1, 12
+jlabel .L8004D63C
+/* 3DE3C 8004D63C 4000BF8F */  lw         $ra, 0x40($sp)
+/* 3DE40 8004D640 3C00B38F */  lw         $s3, 0x3C($sp)
+/* 3DE44 8004D644 3800B28F */  lw         $s2, 0x38($sp)
+/* 3DE48 8004D648 3400B18F */  lw         $s1, 0x34($sp)
+/* 3DE4C 8004D64C 3000B08F */  lw         $s0, 0x30($sp)
+/* 3DE50 8004D650 0800E003 */  jr         $ra
+/* 3DE54 8004D654 4800BD27 */   addiu     $sp, $sp, 0x48
+.size FX_StartInstanceEffect, . - FX_StartInstanceEffect

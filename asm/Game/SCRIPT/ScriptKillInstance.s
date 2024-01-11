@@ -1,0 +1,138 @@
+.set noat      /* allow manual use of $at */
+.set noreorder /* don't insert nops after branches */
+
+glabel ScriptKillInstance
+/* 2E3DC 8003DBDC C0FFBD27 */  addiu      $sp, $sp, -0x40
+/* 2E3E0 8003DBE0 3800B2AF */  sw         $s2, 0x38($sp)
+/* 2E3E4 8003DBE4 21908000 */  addu       $s2, $a0, $zero
+/* 2E3E8 8003DBE8 3C00BFAF */  sw         $ra, 0x3C($sp)
+/* 2E3EC 8003DBEC 3400B1AF */  sw         $s1, 0x34($sp)
+/* 2E3F0 8003DBF0 3000B0AF */  sw         $s0, 0x30($sp)
+/* 2E3F4 8003DBF4 1C00518E */  lw         $s1, 0x1C($s2)
+/* 2E3F8 8003DBF8 00000000 */  nop
+/* 2E3FC 8003DBFC 2C00228E */  lw         $v0, 0x2C($s1)
+/* 2E400 8003DC00 00000000 */  nop
+/* 2E404 8003DC04 04004230 */  andi       $v0, $v0, 0x4
+/* 2E408 8003DC08 04004010 */  beqz       $v0, .L8003DC1C
+/* 2E40C 8003DC0C 2180A000 */   addu      $s0, $a1, $zero
+/* 2E410 8003DC10 2800248E */  lw         $a0, 0x28($s1)
+/* 2E414 8003DC14 9EFB000C */  jal        SOUND_EndInstanceSounds
+/* 2E418 8003DC18 48004526 */   addiu     $a1, $s2, 0x48
+.L8003DC1C:
+/* 2E41C 8003DC1C 0000228E */  lw         $v0, 0x0($s1)
+/* 2E420 8003DC20 0040033C */  lui        $v1, (0x40000000 >> 16)
+/* 2E424 8003DC24 24104300 */  and        $v0, $v0, $v1
+/* 2E428 8003DC28 0C004010 */  beqz       $v0, .L8003DC5C
+/* 2E42C 8003DC2C 00000000 */   nop
+/* 2E430 8003DC30 2800458E */  lw         $a1, 0x28($s2)
+/* 2E434 8003DC34 00000000 */  nop
+/* 2E438 8003DC38 0900A010 */  beqz       $a1, .L8003DC60
+/* 2E43C 8003DC3C 01000224 */   addiu     $v0, $zero, 0x1
+/* 2E440 8003DC40 0000A58C */  lw         $a1, 0x0($a1)
+/* 2E444 8003DC44 00000000 */  nop
+/* 2E448 8003DC48 0500A010 */  beqz       $a1, .L8003DC60
+/* 2E44C 8003DC4C 21204002 */   addu      $a0, $s2, $zero
+/* 2E450 8003DC50 0800A524 */  addiu      $a1, $a1, 0x8
+/* 2E454 8003DC54 7279000C */  jal        SIGNAL_HandleSignal
+/* 2E458 8003DC58 21300000 */   addu      $a2, $zero, $zero
+.L8003DC5C:
+/* 2E45C 8003DC5C 01000224 */  addiu      $v0, $zero, 0x1
+.L8003DC60:
+/* 2E460 8003DC60 0A000216 */  bne        $s0, $v0, .L8003DC8C
+/* 2E464 8003DC64 0800022E */   sltiu     $v0, $s0, 0x8
+/* 2E468 8003DC68 1C00428E */  lw         $v0, 0x1C($s2)
+/* 2E46C 8003DC6C 00000000 */  nop
+/* 2E470 8003DC70 0000428C */  lw         $v0, 0x0($v0)
+/* 2E474 8003DC74 00000000 */  nop
+/* 2E478 8003DC78 00804230 */  andi       $v0, $v0, 0x8000
+/* 2E47C 8003DC7C 03004010 */  beqz       $v0, .L8003DC8C
+/* 2E480 8003DC80 0800022E */   sltiu     $v0, $s0, 0x8
+/* 2E484 8003DC84 05001024 */  addiu      $s0, $zero, 0x5
+/* 2E488 8003DC88 0800022E */  sltiu      $v0, $s0, 0x8
+.L8003DC8C:
+/* 2E48C 8003DC8C 43004010 */  beqz       $v0, .L8003DD9C
+/* 2E490 8003DC90 0180023C */   lui       $v0, %hi(jtbl_800101B0)
+/* 2E494 8003DC94 B0014224 */  addiu      $v0, $v0, %lo(jtbl_800101B0)
+/* 2E498 8003DC98 80181000 */  sll        $v1, $s0, 2
+/* 2E49C 8003DC9C 21186200 */  addu       $v1, $v1, $v0
+/* 2E4A0 8003DCA0 0000628C */  lw         $v0, 0x0($v1)
+/* 2E4A4 8003DCA4 00000000 */  nop
+/* 2E4A8 8003DCA8 08004000 */  jr         $v0
+/* 2E4AC 8003DCAC 00000000 */   nop
+jlabel .L8003DCB0
+/* 2E4B0 8003DCB0 21204002 */  addu       $a0, $s2, $zero
+/* 2E4B4 8003DCB4 21280000 */  addu       $a1, $zero, $zero
+/* 2E4B8 8003DCB8 2800A627 */  addiu      $a2, $sp, 0x28
+/* 2E4BC 8003DCBC 2138A000 */  addu       $a3, $a1, $zero
+/* 2E4C0 8003DCC0 44BA838F */  lw         $v1, %gp_rel(gFXT)($gp)
+/* 2E4C4 8003DCC4 FEFF0224 */  addiu      $v0, $zero, -0x2
+/* 2E4C8 8003DCC8 2800A2A7 */  sh         $v0, 0x28($sp)
+/* 2E4CC 8003DCCC 2C00A2A7 */  sh         $v0, 0x2C($sp)
+/* 2E4D0 8003DCD0 2A00A2A7 */  sh         $v0, 0x2A($sp)
+/* 2E4D4 8003DCD4 1400A0AF */  sw         $zero, 0x14($sp)
+/* 2E4D8 8003DCD8 1800A0AF */  sw         $zero, 0x18($sp)
+/* 2E4DC 8003DCDC 2C12010C */  jal        FX_Build
+/* 2E4E0 8003DCE0 1000A3AF */   sw        $v1, 0x10($sp)
+/* 2E4E4 8003DCE4 67F70008 */  j          .L8003DD9C
+/* 2E4E8 8003DCE8 00000000 */   nop
+jlabel .L8003DCEC
+/* 2E4EC 8003DCEC 21200000 */  addu       $a0, $zero, $zero
+/* 2E4F0 8003DCF0 21288000 */  addu       $a1, $a0, $zero
+/* 2E4F4 8003DCF4 0801438E */  lw         $v1, 0x108($s2)
+/* 2E4F8 8003DCF8 0480023C */  lui        $v0, %hi(GenericProcess)
+/* 2E4FC 8003DCFC E4E84224 */  addiu      $v0, $v0, %lo(GenericProcess)
+/* 2E500 8003DD00 03006210 */  beq        $v1, $v0, .L8003DD10
+/* 2E504 8003DD04 21308000 */   addu      $a2, $a0, $zero
+/* 2E508 8003DD08 0C006014 */  bnez       $v1, .L8003DD3C
+/* 2E50C 8003DD0C 00000000 */   nop
+.L8003DD10:
+/* 2E510 8003DD10 1C00238E */  lw         $v1, 0x1C($s1)
+/* 2E514 8003DD14 00000000 */  nop
+/* 2E518 8003DD18 08006010 */  beqz       $v1, .L8003DD3C
+/* 2E51C 8003DD1C 00000000 */   nop
+/* 2E520 8003DD20 0000628C */  lw         $v0, 0x0($v1)
+/* 2E524 8003DD24 0400648C */  lw         $a0, 0x4($v1)
+/* 2E528 8003DD28 01004530 */  andi       $a1, $v0, 0x1
+/* 2E52C 8003DD2C 02004230 */  andi       $v0, $v0, 0x2
+/* 2E530 8003DD30 02004010 */  beqz       $v0, .L8003DD3C
+/* 2E534 8003DD34 00000000 */   nop
+/* 2E538 8003DD38 10000624 */  addiu      $a2, $zero, 0x10
+.L8003DD3C:
+/* 2E53C 8003DD3C 44BA828F */  lw         $v0, %gp_rel(gFXT)($gp)
+/* 2E540 8003DD40 1000A4AF */  sw         $a0, 0x10($sp)
+/* 2E544 8003DD44 1800A0AF */  sw         $zero, 0x18($sp)
+/* 2E548 8003DD48 0500A010 */  beqz       $a1, .L8003DD60
+/* 2E54C 8003DD4C 1400A2AF */   sw        $v0, 0x14($sp)
+/* 2E550 8003DD50 0480023C */  lui        $v0, %hi(FX_DFacadeProcess)
+/* 2E554 8003DD54 502B4224 */  addiu      $v0, $v0, %lo(FX_DFacadeProcess)
+/* 2E558 8003DD58 59F70008 */  j          .L8003DD64
+/* 2E55C 8003DD5C 1C00A2AF */   sw        $v0, 0x1C($sp)
+.L8003DD60:
+/* 2E560 8003DD60 1C00A0AF */  sw         $zero, 0x1C($sp)
+.L8003DD64:
+/* 2E564 8003DD64 00140600 */  sll        $v0, $a2, 16
+/* 2E568 8003DD68 03140200 */  sra        $v0, $v0, 16
+/* 2E56C 8003DD6C 2000A2AF */  sw         $v0, 0x20($sp)
+/* 2E570 8003DD70 21204002 */  addu       $a0, $s2, $zero
+/* 2E574 8003DD74 21280000 */  addu       $a1, $zero, $zero
+/* 2E578 8003DD78 2130A000 */  addu       $a2, $a1, $zero
+/* 2E57C 8003DD7C 9211010C */  jal        _FX_BuildSplinters
+/* 2E580 8003DD80 2138A000 */   addu      $a3, $a1, $zero
+/* 2E584 8003DD84 67F70008 */  j          .L8003DD9C
+/* 2E588 8003DD88 00000000 */   nop
+jlabel .L8003DD8C
+/* 2E58C 8003DD8C 0480023C */  lui        $v0, %hi(SCRIPT_FadeOutProcess)
+/* 2E590 8003DD90 94DB4224 */  addiu      $v0, $v0, %lo(SCRIPT_FadeOutProcess)
+/* 2E594 8003DD94 69F70008 */  j          .L8003DDA4
+/* 2E598 8003DD98 080142AE */   sw        $v0, 0x108($s2)
+jlabel .L8003DD9C
+/* 2E59C 8003DD9C 39D1000C */  jal        INSTANCE_PlainDeath
+/* 2E5A0 8003DDA0 21204002 */   addu      $a0, $s2, $zero
+.L8003DDA4:
+/* 2E5A4 8003DDA4 3C00BF8F */  lw         $ra, 0x3C($sp)
+/* 2E5A8 8003DDA8 3800B28F */  lw         $s2, 0x38($sp)
+/* 2E5AC 8003DDAC 3400B18F */  lw         $s1, 0x34($sp)
+/* 2E5B0 8003DDB0 3000B08F */  lw         $s0, 0x30($sp)
+/* 2E5B4 8003DDB4 0800E003 */  jr         $ra
+/* 2E5B8 8003DDB8 4000BD27 */   addiu     $sp, $sp, 0x40
+.size ScriptKillInstance, . - ScriptKillInstance

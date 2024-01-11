@@ -1,0 +1,45 @@
+.set noat      /* allow manual use of $at */
+.set noreorder /* don't insert nops after branches */
+
+glabel MON_ChangeBehavior
+/* 71B60 80081360 E0FFBD27 */  addiu      $sp, $sp, -0x20
+/* 71B64 80081364 1000B0AF */  sw         $s0, 0x10($sp)
+/* 71B68 80081368 2180A000 */  addu       $s0, $a1, $zero
+/* 71B6C 8008136C FFFF0224 */  addiu      $v0, $zero, -0x1
+/* 71B70 80081370 1800BFAF */  sw         $ra, 0x18($sp)
+/* 71B74 80081374 17000212 */  beq        $s0, $v0, .L800813D4
+/* 71B78 80081378 1400B1AF */   sw        $s1, 0x14($sp)
+/* 71B7C 8008137C 6C01918C */  lw         $s1, 0x16C($a0)
+/* 71B80 80081380 FEFF0326 */  addiu      $v1, $s0, -0x2
+/* 71B84 80081384 0A00622C */  sltiu      $v0, $v1, 0xA
+/* 71B88 80081388 0E004010 */  beqz       $v0, .L800813C4
+/* 71B8C 8008138C 0180023C */   lui       $v0, %hi(jtbl_80011F5C)
+/* 71B90 80081390 5C1F4224 */  addiu      $v0, $v0, %lo(jtbl_80011F5C)
+/* 71B94 80081394 80180300 */  sll        $v1, $v1, 2
+/* 71B98 80081398 21186200 */  addu       $v1, $v1, $v0
+/* 71B9C 8008139C 0000628C */  lw         $v0, 0x0($v1)
+/* 71BA0 800813A0 00000000 */  nop
+/* 71BA4 800813A4 08004000 */  jr         $v0
+/* 71BA8 800813A8 00000000 */   nop
+jlabel .L800813AC
+/* 71BAC 800813AC F2040208 */  j          .L800813C8
+/* 71BB0 800813B0 13000524 */   addiu     $a1, $zero, 0x13
+jlabel .L800813B4
+/* 71BB4 800813B4 F2040208 */  j          .L800813C8
+/* 71BB8 800813B8 05000524 */   addiu     $a1, $zero, 0x5
+jlabel .L800813BC
+/* 71BBC 800813BC F2040208 */  j          .L800813C8
+/* 71BC0 800813C0 14000524 */   addiu     $a1, $zero, 0x14
+jlabel .L800813C4
+/* 71BC4 800813C4 01000524 */  addiu      $a1, $zero, 0x1
+.L800813C8:
+/* 71BC8 800813C8 91FE010C */  jal        MON_SwitchState
+/* 71BCC 800813CC 00000000 */   nop
+/* 71BD0 800813D0 5A0130A2 */  sb         $s0, 0x15A($s1)
+.L800813D4:
+/* 71BD4 800813D4 1800BF8F */  lw         $ra, 0x18($sp)
+/* 71BD8 800813D8 1400B18F */  lw         $s1, 0x14($sp)
+/* 71BDC 800813DC 1000B08F */  lw         $s0, 0x10($sp)
+/* 71BE0 800813E0 0800E003 */  jr         $ra
+/* 71BE4 800813E4 2000BD27 */   addiu     $sp, $sp, 0x20
+.size MON_ChangeBehavior, . - MON_ChangeBehavior

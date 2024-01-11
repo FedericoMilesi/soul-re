@@ -1,0 +1,133 @@
+.set noat      /* allow manual use of $at */
+.set noreorder /* don't insert nops after branches */
+
+glabel EVENT_TransformOperand
+/* 592FC 80068AFC E8FFBD27 */  addiu      $sp, $sp, -0x18
+/* 59300 80068B00 21408000 */  addu       $t0, $a0, $zero
+/* 59304 80068B04 1000BFAF */  sw         $ra, 0x10($sp)
+/* 59308 80068B08 0000028D */  lw         $v0, 0x0($t0)
+/* 5930C 80068B0C 00000000 */  nop
+/* 59310 80068B10 FFFF4324 */  addiu      $v1, $v0, -0x1
+/* 59314 80068B14 1C00622C */  sltiu      $v0, $v1, 0x1C
+/* 59318 80068B18 5D004010 */  beqz       $v0, .L80068C90
+/* 5931C 80068B1C 2120A000 */   addu      $a0, $a1, $zero
+/* 59320 80068B20 0180023C */  lui        $v0, %hi(jtbl_80011C60)
+/* 59324 80068B24 601C4224 */  addiu      $v0, $v0, %lo(jtbl_80011C60)
+/* 59328 80068B28 80180300 */  sll        $v1, $v1, 2
+/* 5932C 80068B2C 21186200 */  addu       $v1, $v1, $v0
+/* 59330 80068B30 0000628C */  lw         $v0, 0x0($v1)
+/* 59334 80068B34 00000000 */  nop
+/* 59338 80068B38 08004000 */  jr         $v0
+/* 5933C 80068B3C 00000000 */   nop
+jlabel .L80068B40
+/* 59340 80068B40 6389010C */  jal        EVENT_TransformInstanceAttribute
+/* 59344 80068B44 21280001 */   addu      $a1, $t0, $zero
+/* 59348 80068B48 25A30108 */  j          .L80068C94
+/* 5934C 80068B4C 00000000 */   nop
+jlabel .L80068B50
+/* 59350 80068B50 4889010C */  jal        EVENT_TransformConstrictAttribute
+/* 59354 80068B54 21280001 */   addu      $a1, $t0, $zero
+/* 59358 80068B58 25A30108 */  j          .L80068C94
+/* 5935C 80068B5C 00000000 */   nop
+jlabel .L80068B60
+/* 59360 80068B60 788D010C */  jal        EVENT_TransformSplineAttribute
+/* 59364 80068B64 21280001 */   addu      $a1, $t0, $zero
+/* 59368 80068B68 25A30108 */  j          .L80068C94
+/* 5936C 80068B6C 00000000 */   nop
+jlabel .L80068B70
+/* 59370 80068B70 B98D010C */  jal        EVENT_TransformIntroAttribute
+/* 59374 80068B74 21280001 */   addu      $a1, $t0, $zero
+/* 59378 80068B78 25A30108 */  j          .L80068C94
+/* 5937C 80068B7C 00000000 */   nop
+jlabel .L80068B80
+/* 59380 80068B80 B88F010C */  jal        EVENT_TransformVector3dAttribute
+/* 59384 80068B84 21280001 */   addu      $a1, $t0, $zero
+/* 59388 80068B88 25A30108 */  j          .L80068C94
+/* 5938C 80068B8C 00000000 */   nop
+jlabel .L80068B90
+/* 59390 80068B90 AA8F010C */  jal        EVENT_TransformRotation3dAttribute
+/* 59394 80068B94 21280001 */   addu      $a1, $t0, $zero
+/* 59398 80068B98 25A30108 */  j          .L80068C94
+/* 5939C 80068B9C 00000000 */   nop
+jlabel .L80068BA0
+/* 593A0 80068BA0 C08C010C */  jal        EVENT_TransformEventAttribute
+/* 593A4 80068BA4 21280001 */   addu      $a1, $t0, $zero
+/* 593A8 80068BA8 25A30108 */  j          .L80068C94
+/* 593AC 80068BAC 00000000 */   nop
+jlabel .L80068BB0
+/* 593B0 80068BB0 948F010C */  jal        EVENT_TransformSignalAttribute
+/* 593B4 80068BB4 21280001 */   addu      $a1, $t0, $zero
+/* 593B8 80068BB8 25A30108 */  j          .L80068C94
+/* 593BC 80068BBC 00000000 */   nop
+jlabel .L80068BC0
+/* 593C0 80068BC0 898C010C */  jal        EVENT_TransformAreaAttribute
+/* 593C4 80068BC4 21280001 */   addu      $a1, $t0, $zero
+/* 593C8 80068BC8 25A30108 */  j          .L80068C94
+/* 593CC 80068BCC 00000000 */   nop
+jlabel .L80068BD0
+/* 593D0 80068BD0 01000224 */  addiu      $v0, $zero, 0x1
+/* 593D4 80068BD4 58A482A7 */  sh         $v0, %gp_rel(EventAbortLine)($gp)
+/* 593D8 80068BD8 25A30108 */  j          .L80068C94
+/* 593DC 80068BDC 01000224 */   addiu     $v0, $zero, 0x1
+jlabel .L80068BE0
+/* 593E0 80068BE0 698B010C */  jal        EVENT_TransformGameAttribute
+/* 593E4 80068BE4 21280001 */   addu      $a1, $t0, $zero
+/* 593E8 80068BE8 25A30108 */  j          .L80068C94
+/* 593EC 80068BEC 00000000 */   nop
+jlabel .L80068BF0
+/* 593F0 80068BF0 208D010C */  jal        EVENT_TransformListObjectAttribute
+/* 593F4 80068BF4 21280001 */   addu      $a1, $t0, $zero
+/* 593F8 80068BF8 25A30108 */  j          .L80068C94
+/* 593FC 80068BFC 00000000 */   nop
+jlabel .L80068C00
+/* 59400 80068C00 0800038D */  lw         $v1, 0x8($t0)
+/* 59404 80068C04 FFFF0224 */  addiu      $v0, $zero, -0x1
+/* 59408 80068C08 22006214 */  bne        $v1, $v0, .L80068C94
+/* 5940C 80068C0C 21100000 */   addu      $v0, $zero, $zero
+/* 59410 80068C10 080006AD */  sw         $a2, 0x8($t0)
+/* 59414 80068C14 25A30108 */  j          .L80068C94
+/* 59418 80068C18 01000224 */   addiu     $v0, $zero, 0x1
+jlabel .L80068C1C
+/* 5941C 80068C1C FC8A010C */  jal        EVENT_TransformSoundObjectAttribute
+/* 59420 80068C20 04000525 */   addiu     $a1, $t0, 0x4
+/* 59424 80068C24 25A30108 */  j          .L80068C94
+/* 59428 80068C28 00000000 */   nop
+jlabel .L80068C2C
+/* 5942C 80068C2C 0C00038D */  lw         $v1, 0xC($t0)
+/* 59430 80068C30 FFFF0224 */  addiu      $v0, $zero, -0x1
+/* 59434 80068C34 13006210 */  beq        $v1, $v0, .L80068C84
+/* 59438 80068C38 21100000 */   addu      $v0, $zero, $zero
+/* 5943C 80068C3C 25A30108 */  j          .L80068C94
+/* 59440 80068C40 00000000 */   nop
+jlabel .L80068C44
+/* 59444 80068C44 E48C010C */  jal        EVENT_TransformSavedEventAttribute
+/* 59448 80068C48 21280001 */   addu      $a1, $t0, $zero
+/* 5944C 80068C4C 25A30108 */  j          .L80068C94
+/* 59450 80068C50 00000000 */   nop
+jlabel .L80068C54
+/* 59454 80068C54 138D010C */  jal        EVENT_TransformSubListObjectAttribute
+/* 59458 80068C58 21280001 */   addu      $a1, $t0, $zero
+/* 5945C 80068C5C 25A30108 */  j          .L80068C94
+/* 59460 80068C60 00000000 */   nop
+jlabel .L80068C64
+/* 59464 80068C64 2489010C */  jal        EVENT_TransformTGroupAttribute
+/* 59468 80068C68 21280001 */   addu      $a1, $t0, $zero
+/* 5946C 80068C6C 25A30108 */  j          .L80068C94
+/* 59470 80068C70 00000000 */   nop
+jlabel .L80068C74
+/* 59474 80068C74 2D8D010C */  jal        EVENT_TransformCameraObjectAttribute
+/* 59478 80068C78 21280001 */   addu      $a1, $t0, $zero
+/* 5947C 80068C7C 25A30108 */  j          .L80068C94
+/* 59480 80068C80 00000000 */   nop
+jlabel .L80068C84
+/* 59484 80068C84 0C0006AD */  sw         $a2, 0xC($t0)
+/* 59488 80068C88 25A30108 */  j          .L80068C94
+/* 5948C 80068C8C 01000224 */   addiu     $v0, $zero, 0x1
+jlabel .L80068C90
+/* 59490 80068C90 21100000 */  addu       $v0, $zero, $zero
+.L80068C94:
+/* 59494 80068C94 1000BF8F */  lw         $ra, 0x10($sp)
+/* 59498 80068C98 00000000 */  nop
+/* 5949C 80068C9C 0800E003 */  jr         $ra
+/* 594A0 80068CA0 1800BD27 */   addiu     $sp, $sp, 0x18
+.size EVENT_TransformOperand, . - EVENT_TransformOperand
