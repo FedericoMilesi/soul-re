@@ -4,8 +4,8 @@
 glabel SAVE_LoadSaveGame
 /* A71AC 800B69AC E8FFBD27 */  addiu      $sp, $sp, -0x18
 /* A71B0 800B69B0 2000033C */  lui        $v1, (0x200000 >> 16)
-/* A71B4 800B69B4 0D80043C */  lui        $a0, %hi(SaveArraySize + 0xB8)
-/* A71B8 800B69B8 9C1E8424 */  addiu      $a0, $a0, %lo(SaveArraySize + 0xB8)
+/* A71B4 800B69B4 0D80043C */  lui        $a0, %hi(D_800D1E9C)
+/* A71B8 800B69B8 9C1E8424 */  addiu      $a0, $a0, %lo(D_800D1E9C)
 /* A71BC 800B69BC 0CBF828F */  lw         $v0, %gp_rel(gameTrackerX + 0x144)($gp)
 /* A71C0 800B69C0 C8BD8627 */  addiu      $a2, $gp, %gp_rel(gameTrackerX)
 /* A71C4 800B69C4 1000BFAF */  sw         $ra, 0x10($sp)

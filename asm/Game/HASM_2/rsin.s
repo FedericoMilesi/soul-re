@@ -12,7 +12,7 @@ glabel rsin
 /* 69B58 80079358 00088430 */  andi       $a0, $a0, 0x800
 /* 69B5C 8007935C 02008010 */  beqz       $a0, .L80079368
 /* 69B60 80079360 00000000 */   nop
-/* 69B64 80079364 22100200 */  sub        $v0, $zero, $v0 # handwritten instruction
+/* 69B64 80079364 22100200 */  neg        $v0, $v0 # handwritten instruction
 .L80079368:
 /* 69B68 80079368 0800E003 */  jr         $ra
 /* 69B6C 8007936C 00000000 */   nop

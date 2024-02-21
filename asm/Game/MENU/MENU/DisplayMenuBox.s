@@ -21,7 +21,7 @@ glabel DisplayMenuBox
 /* A8334 800B7B34 4000A2AF */  sw         $v0, 0x40($sp)
 /* A8338 800B7B38 0500E224 */  addiu      $v0, $a3, 0x5
 /* A833C 800B7B3C 4400A2AF */  sw         $v0, 0x44($sp)
-/* A8340 800B7B40 64A9828F */  lw         $v0, %gp_rel(voiceList + 0x18)($gp)
+/* A8340 800B7B40 64A9828F */  lw         $v0, %gp_rel(D_800D1EFC)($gp)
 /* A8344 800B7B44 08BE948F */  lw         $s4, %gp_rel(gameTrackerX + 0x40)($gp)
 /* A8348 800B7B48 2338E600 */  subu       $a3, $a3, $a2
 /* A834C 800B7B4C 3800A4AF */  sw         $a0, 0x38($sp)
@@ -30,7 +30,7 @@ glabel DisplayMenuBox
 /* A8358 800B7B58 2A10E200 */  slt        $v0, $a3, $v0
 /* A835C 800B7B5C 09004010 */  beqz       $v0, .L800B7B84
 /* A8360 800B7B60 04007524 */   addiu     $s5, $v1, 0x4
-/* A8364 800B7B64 64A98327 */  addiu      $v1, $gp, %gp_rel(voiceList + 0x18)
+/* A8364 800B7B64 64A98327 */  addiu      $v1, $gp, %gp_rel(D_800D1EFC)
 .L800B7B68:
 /* A8368 800B7B68 04006324 */  addiu      $v1, $v1, 0x4
 /* A836C 800B7B6C 0000628C */  lw         $v0, 0x0($v1)
@@ -41,7 +41,7 @@ glabel DisplayMenuBox
 /* A8380 800B7B80 0100F726 */   addiu     $s7, $s7, 0x1
 .L800B7B84:
 /* A8384 800B7B84 21B00000 */  addu       $s6, $zero, $zero
-/* A8388 800B7B88 64A99E27 */  addiu      $fp, $gp, %gp_rel(voiceList + 0x18)
+/* A8388 800B7B88 64A99E27 */  addiu      $fp, $gp, %gp_rel(D_800D1EFC)
 /* A838C 800B7B8C 2198E002 */  addu       $s3, $s7, $zero
 .L800B7B90:
 /* A8390 800B7B90 0F00622A */  slti       $v0, $s3, 0xF

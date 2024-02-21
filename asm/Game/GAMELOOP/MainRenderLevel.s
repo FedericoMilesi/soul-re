@@ -269,7 +269,7 @@ glabel MainRenderLevel
 /* 1F80C 8002F00C 24007326 */   addiu     $s3, $s3, 0x24
 .L8002F010:
 /* 1F810 8002F010 2CBA868F */  lw         $a2, %gp_rel(gLightInfo)($gp)
-/* 1F814 8002F014 4CBA8787 */  lh         $a3, %gp_rel(D_800D2FE4)($gp)
+/* 1F814 8002F014 4CBA8787 */  lh         $a3, %gp_rel(RENDER_currentStreamUnitID)($gp)
 /* 1F818 8002F018 90AC8927 */  addiu      $t1, $gp, %gp_rel(theCamera)
 /* 1F81C 8002F01C 1B00AA8B */  lwl        $t2, 0x1B($sp)
 /* 1F820 8002F020 1800AA9B */  lwr        $t2, 0x18($sp)

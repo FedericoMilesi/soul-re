@@ -101,15 +101,15 @@ glabel DRAW_DisplayPolytopeList_S
 /* 178AC 800270AC 2228A501 */  sub        $a1, $t5, $a1 # handwritten instruction
 /* 178B0 800270B0 0200A104 */  bgez       $a1, .L800270BC
 /* 178B4 800270B4 22308600 */   sub       $a2, $a0, $a2 # handwritten instruction
-/* 178B8 800270B8 22280500 */  sub        $a1, $zero, $a1 # handwritten instruction
+/* 178B8 800270B8 22280500 */  neg        $a1, $a1 # handwritten instruction
 .L800270BC:
 /* 178BC 800270BC 0200C104 */  bgez       $a2, .L800270C8
 /* 178C0 800270C0 22384700 */   sub       $a3, $v0, $a3 # handwritten instruction
-/* 178C4 800270C4 22300600 */  sub        $a2, $zero, $a2 # handwritten instruction
+/* 178C4 800270C4 22300600 */  neg        $a2, $a2 # handwritten instruction
 .L800270C8:
 /* 178C8 800270C8 0200E104 */  bgez       $a3, .L800270D4
 /* 178CC 800270CC 06006284 */   lh        $v0, 0x6($v1)
-/* 178D0 800270D0 22380700 */  sub        $a3, $zero, $a3 # handwritten instruction
+/* 178D0 800270D0 22380700 */  neg        $a3, $a3 # handwritten instruction
 .L800270D4:
 /* 178D4 800270D4 2A08C500 */  slt        $at, $a2, $a1
 /* 178D8 800270D8 02002014 */  bnez       $at, .L800270E4

@@ -3,11 +3,11 @@
 
 glabel MAIN_ShowLoadingScreen
 /* 29634 80038E34 98FFBD27 */  addiu      $sp, $sp, -0x68
-/* 29638 80038E38 0D80023C */  lui        $v0, %hi(mainMenuFading + 0x9E)
+/* 29638 80038E38 0D80023C */  lui        $v0, %hi(D_800D0BFC)
 /* 2963C 80038E3C 6000BFAF */  sw         $ra, 0x60($sp)
 /* 29640 80038E40 5C00B1AF */  sw         $s1, 0x5C($sp)
 /* 29644 80038E44 5800B0AF */  sw         $s0, 0x58($sp)
-/* 29648 80038E48 FC0B4924 */  addiu      $t1, $v0, %lo(mainMenuFading + 0x9E)
+/* 29648 80038E48 FC0B4924 */  addiu      $t1, $v0, %lo(D_800D0BFC)
 /* 2964C 80038E4C 03002389 */  lwl        $v1, 0x3($t1)
 /* 29650 80038E50 00002399 */  lwr        $v1, 0x0($t1)
 /* 29654 80038E54 04002781 */  lb         $a3, 0x4($t1)
@@ -22,16 +22,16 @@ glabel MAIN_ShowLoadingScreen
 /* 29678 80038E78 1000B127 */   addiu     $s1, $sp, 0x10
 /* 2967C 80038E7C 1800B027 */  addiu      $s0, $sp, 0x18
 /* 29680 80038E80 21200002 */  addu       $a0, $s0, $zero
-/* 29684 80038E84 0D80053C */  lui        $a1, %hi(mainMenuFading + 0xA6)
+/* 29684 80038E84 0D80053C */  lui        $a1, %hi(D_800D0C04)
 /* 29688 80038E88 21105100 */  addu       $v0, $v0, $s1
 /* 2968C 80038E8C FFFF4690 */  lbu        $a2, -0x1($v0)
 /* 29690 80038E90 1AD1010C */  jal        sprintf
-/* 29694 80038E94 040CA524 */   addiu     $a1, $a1, %lo(mainMenuFading + 0xA6)
+/* 29694 80038E94 040CA524 */   addiu     $a1, $a1, %lo(D_800D0C04)
 /* 29698 80038E98 AAE30008 */  j          .L80038EA8
 /* 2969C 80038E9C 21200002 */   addu      $a0, $s0, $zero
 .L80038EA0:
-/* 296A0 80038EA0 0D80043C */  lui        $a0, %hi(mainMenuFading + 0xC6)
-/* 296A4 80038EA4 240C8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0xC6)
+/* 296A0 80038EA0 0D80043C */  lui        $a0, %hi(D_800D0C24)
+/* 296A4 80038EA4 240C8424 */  addiu      $a0, $a0, %lo(D_800D0C24)
 .L80038EA8:
 /* 296A8 80038EA8 3E82010C */  jal        LOAD_ReadFile
 /* 296AC 80038EAC 0B000524 */   addiu     $a1, $zero, 0xB

@@ -3,9 +3,9 @@
 
 glabel WARPGATE_IsWarpgateSpectral
 /* 4BC9C 8005B49C E8FFBD27 */  addiu      $sp, $sp, -0x18
-/* 4BCA0 8005B4A0 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x2BC)
+/* 4BCA0 8005B4A0 0D80053C */  lui        $a1, %hi(D_800D1954)
 /* 4BCA4 8005B4A4 FCA0828F */  lw         $v0, %gp_rel(CurrentWarpNumber)($gp)
-/* 4BCA8 8005B4A8 5419A524 */  addiu      $a1, $a1, %lo(WarpRoomArray + 0x2BC)
+/* 4BCA8 8005B4A8 5419A524 */  addiu      $a1, $a1, %lo(D_800D1954)
 /* 4BCAC 8005B4AC 1000BFAF */  sw         $ra, 0x10($sp)
 /* 4BCB0 8005B4B0 80200200 */  sll        $a0, $v0, 2
 /* 4BCB4 8005B4B4 21208200 */  addu       $a0, $a0, $v0

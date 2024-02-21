@@ -152,7 +152,7 @@ glabel StreamRenderLevel
 /* 1FB9C 8002F39C 24007326 */   addiu     $s3, $s3, 0x24
 .L8002F3A0:
 /* 1FBA0 8002F3A0 2CBA868F */  lw         $a2, %gp_rel(gLightInfo)($gp)
-/* 1FBA4 8002F3A4 4CBA8787 */  lh         $a3, %gp_rel(D_800D2FE4)($gp)
+/* 1FBA4 8002F3A4 4CBA8787 */  lh         $a3, %gp_rel(RENDER_currentStreamUnitID)($gp)
 /* 1FBA8 8002F3A8 90AC8527 */  addiu      $a1, $gp, %gp_rel(theCamera)
 /* 1FBAC 8002F3AC 90AC8C27 */  addiu      $t4, $gp, %gp_rel(theCamera)
 /* 1FBB0 8002F3B0 1B00A98B */  lwl        $t1, 0x1B($sp)

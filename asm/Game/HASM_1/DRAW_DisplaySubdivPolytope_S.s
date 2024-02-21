@@ -143,11 +143,11 @@ glabel DRAW_DisplaySubdivPolytope_S
 /* 17018 80026818 037C0F00 */  sra        $t7, $t7, 16
 /* 1701C 8002681C 0200A105 */  bgez       $t5, .L80026828
 /* 17020 80026820 2278F901 */   sub       $t7, $t7, $t9 # handwritten instruction
-/* 17024 80026824 22680D00 */  sub        $t5, $zero, $t5 # handwritten instruction
+/* 17024 80026824 22680D00 */  neg        $t5, $t5 # handwritten instruction
 .L80026828:
 /* 17028 80026828 0200E105 */  bgez       $t7, .L80026834
 /* 1702C 8002682C 2400998D */   lw        $t9, (0x1F800024 & 0xFFFF)($t4)
-/* 17030 80026830 22780F00 */  sub        $t7, $zero, $t7 # handwritten instruction
+/* 17030 80026830 22780F00 */  neg        $t7, $t7 # handwritten instruction
 .L80026834:
 /* 17034 80026834 2A08AF01 */  slt        $at, $t5, $t7
 /* 17038 80026838 02002014 */  bnez       $at, .L80026844
@@ -159,7 +159,7 @@ glabel DRAW_DisplaySubdivPolytope_S
 /* 1704C 8002684C 22C8B901 */  sub        $t9, $t5, $t9 # handwritten instruction
 /* 17050 80026850 02002107 */  bgez       $t9, .L8002685C
 /* 17054 80026854 10004D84 */   lh        $t5, 0x10($v0)
-/* 17058 80026858 22C81900 */  sub        $t9, $zero, $t9 # handwritten instruction
+/* 17058 80026858 22C81900 */  neg        $t9, $t9 # handwritten instruction
 .L8002685C:
 /* 1705C 8002685C 2A082F03 */  slt        $at, $t9, $t7
 /* 17060 80026860 02002014 */  bnez       $at, .L8002686C
@@ -200,11 +200,11 @@ glabel DRAW_DisplaySubdivPolytope_S
 /* 170E4 800268E4 037C0F00 */  sra        $t7, $t7, 16
 /* 170E8 800268E8 0200A105 */  bgez       $t5, .L800268F4
 /* 170EC 800268EC 2278F901 */   sub       $t7, $t7, $t9 # handwritten instruction
-/* 170F0 800268F0 22680D00 */  sub        $t5, $zero, $t5 # handwritten instruction
+/* 170F0 800268F0 22680D00 */  neg        $t5, $t5 # handwritten instruction
 .L800268F4:
 /* 170F4 800268F4 0200E105 */  bgez       $t7, .L80026900
 /* 170F8 800268F8 2400998D */   lw        $t9, (0x1F800024 & 0xFFFF)($t4)
-/* 170FC 800268FC 22780F00 */  sub        $t7, $zero, $t7 # handwritten instruction
+/* 170FC 800268FC 22780F00 */  neg        $t7, $t7 # handwritten instruction
 .L80026900:
 /* 17100 80026900 2A08AF01 */  slt        $at, $t5, $t7
 /* 17104 80026904 02002014 */  bnez       $at, .L80026910
@@ -216,7 +216,7 @@ glabel DRAW_DisplaySubdivPolytope_S
 /* 17118 80026918 22C8B901 */  sub        $t9, $t5, $t9 # handwritten instruction
 /* 1711C 8002691C 02002107 */  bgez       $t9, .L80026928
 /* 17120 80026920 10004D84 */   lh        $t5, 0x10($v0)
-/* 17124 80026924 22C81900 */  sub        $t9, $zero, $t9 # handwritten instruction
+/* 17124 80026924 22C81900 */  neg        $t9, $t9 # handwritten instruction
 .L80026928:
 /* 17128 80026928 2A082F03 */  slt        $at, $t9, $t7
 /* 1712C 8002692C 02002014 */  bnez       $at, .L80026938
@@ -257,11 +257,11 @@ glabel DRAW_DisplaySubdivPolytope_S
 /* 171B0 800269B0 037C0F00 */  sra        $t7, $t7, 16
 /* 171B4 800269B4 0200A105 */  bgez       $t5, .L800269C0
 /* 171B8 800269B8 2278F901 */   sub       $t7, $t7, $t9 # handwritten instruction
-/* 171BC 800269BC 22680D00 */  sub        $t5, $zero, $t5 # handwritten instruction
+/* 171BC 800269BC 22680D00 */  neg        $t5, $t5 # handwritten instruction
 .L800269C0:
 /* 171C0 800269C0 0200E105 */  bgez       $t7, .L800269CC
 /* 171C4 800269C4 2400998D */   lw        $t9, (0x1F800024 & 0xFFFF)($t4)
-/* 171C8 800269C8 22780F00 */  sub        $t7, $zero, $t7 # handwritten instruction
+/* 171C8 800269C8 22780F00 */  neg        $t7, $t7 # handwritten instruction
 .L800269CC:
 /* 171CC 800269CC 2A08AF01 */  slt        $at, $t5, $t7
 /* 171D0 800269D0 02002014 */  bnez       $at, .L800269DC
@@ -273,7 +273,7 @@ glabel DRAW_DisplaySubdivPolytope_S
 /* 171E4 800269E4 22C8B901 */  sub        $t9, $t5, $t9 # handwritten instruction
 /* 171E8 800269E8 02002107 */  bgez       $t9, .L800269F4
 /* 171EC 800269EC 10004D84 */   lh        $t5, 0x10($v0)
-/* 171F0 800269F0 22C81900 */  sub        $t9, $zero, $t9 # handwritten instruction
+/* 171F0 800269F0 22C81900 */  neg        $t9, $t9 # handwritten instruction
 .L800269F4:
 /* 171F4 800269F4 2A082F03 */  slt        $at, $t9, $t7
 /* 171F8 800269F8 02002014 */  bnez       $at, .L80026A04

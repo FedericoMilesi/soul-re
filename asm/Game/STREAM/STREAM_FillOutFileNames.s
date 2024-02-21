@@ -16,33 +16,33 @@ glabel STREAM_FillOutFileNames
 /* 4922C 80058A2C 1CF4020C */  jal        strcpy
 /* 49230 80058A30 21280002 */   addu      $a1, $s0, $zero
 /* 49234 80058A34 1000A427 */  addiu      $a0, $sp, 0x10
-/* 49238 80058A38 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x118)
+/* 49238 80058A38 0D80053C */  lui        $a1, %hi(D_800D17B0)
 /* 4923C 80058A3C 21FE020C */  jal        strpbrk
-/* 49240 80058A40 B017A524 */   addiu     $a1, $a1, %lo(WarpRoomArray + 0x118)
+/* 49240 80058A40 B017A524 */   addiu     $a1, $a1, %lo(D_800D17B0)
 /* 49244 80058A44 02004010 */  beqz       $v0, .L80058A50
 /* 49248 80058A48 00000000 */   nop
 /* 4924C 80058A4C 000040A0 */  sb         $zero, 0x0($v0)
 .L80058A50:
 /* 49250 80058A50 06002012 */  beqz       $s1, .L80058A6C
 /* 49254 80058A54 21202002 */   addu      $a0, $s1, $zero
-/* 49258 80058A58 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x124)
-/* 4925C 80058A5C BC17A524 */  addiu      $a1, $a1, %lo(WarpRoomArray + 0x124)
+/* 49258 80058A58 0D80053C */  lui        $a1, %hi(D_800D17BC)
+/* 4925C 80058A5C BC17A524 */  addiu      $a1, $a1, %lo(D_800D17BC)
 /* 49260 80058A60 1000A627 */  addiu      $a2, $sp, 0x10
 /* 49264 80058A64 1AD1010C */  jal        sprintf
 /* 49268 80058A68 21380002 */   addu      $a3, $s0, $zero
 .L80058A6C:
 /* 4926C 80058A6C 06004012 */  beqz       $s2, .L80058A88
 /* 49270 80058A70 21204002 */   addu      $a0, $s2, $zero
-/* 49274 80058A74 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x140)
-/* 49278 80058A78 D817A524 */  addiu      $a1, $a1, %lo(WarpRoomArray + 0x140)
+/* 49274 80058A74 0D80053C */  lui        $a1, %hi(D_800D17D8)
+/* 49278 80058A78 D817A524 */  addiu      $a1, $a1, %lo(D_800D17D8)
 /* 4927C 80058A7C 1000A627 */  addiu      $a2, $sp, 0x10
 /* 49280 80058A80 1AD1010C */  jal        sprintf
 /* 49284 80058A84 21380002 */   addu      $a3, $s0, $zero
 .L80058A88:
 /* 49288 80058A88 06006012 */  beqz       $s3, .L80058AA4
 /* 4928C 80058A8C 21206002 */   addu      $a0, $s3, $zero
-/* 49290 80058A90 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x15C)
-/* 49294 80058A94 F417A524 */  addiu      $a1, $a1, %lo(WarpRoomArray + 0x15C)
+/* 49290 80058A90 0D80053C */  lui        $a1, %hi(D_800D17F4)
+/* 49294 80058A94 F417A524 */  addiu      $a1, $a1, %lo(D_800D17F4)
 /* 49298 80058A98 1000A627 */  addiu      $a2, $sp, 0x10
 /* 4929C 80058A9C 1AD1010C */  jal        sprintf
 /* 492A0 80058AA0 21380002 */   addu      $a3, $s0, $zero

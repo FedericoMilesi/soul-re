@@ -16,10 +16,10 @@ glabel UNDERWORLD_StartProcess
 /* A5064 800B4864 01000524 */   addiu     $a1, $zero, 0x1
 /* A5068 800B4868 78D3020C */  jal        UNDERWORLD_InitDisplayProcess
 /* A506C 800B486C 00000000 */   nop
-/* A5070 800B4870 0D80043C */  lui        $a0, %hi(ScreenMorphArray + 0x4)
+/* A5070 800B4870 0D80043C */  lui        $a0, %hi(D_800D1DC8)
 /* A5074 800B4874 C8BD8527 */  addiu      $a1, $gp, %gp_rel(gameTrackerX)
 /* A5078 800B4878 A8D3020C */  jal        UNDERWORLD_LoadLevel
-/* A507C 800B487C C81D8424 */   addiu     $a0, $a0, %lo(ScreenMorphArray + 0x4)
+/* A507C 800B487C C81D8424 */   addiu     $a0, $a0, %lo(D_800D1DC8)
 /* A5080 800B4880 2CA8848F */  lw         $a0, %gp_rel(ScreenMorphArray)($gp)
 /* A5084 800B4884 00000000 */  nop
 /* A5088 800B4888 04008010 */  beqz       $a0, .L800B489C

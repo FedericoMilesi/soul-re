@@ -63,13 +63,13 @@ glabel GenericInit
 /* 2F080 8003E880 21280000 */  addu       $a1, $zero, $zero
 /* 2F084 8003E884 71C9010C */  jal        G2EmulationInstanceSetMode
 /* 2F088 8003E888 2130A000 */   addu      $a2, $a1, $zero
-/* 2F08C 8003E88C 0D80023C */  lui        $v0, %hi(gTimerEnabled + 0x1B4)
+/* 2F08C 8003E88C 0D80023C */  lui        $v0, %hi(D_800D0F14)
 /* 2F090 8003E890 2400258E */  lw         $a1, 0x24($s1)
-/* 2F094 8003E894 140F438C */  lw         $v1, %lo(gTimerEnabled + 0x1B4)($v0)
+/* 2F094 8003E894 140F438C */  lw         $v1, %lo(D_800D0F14)($v0)
 /* 2F098 8003E898 0000A48C */  lw         $a0, 0x0($a1)
 /* 2F09C 8003E89C 00000000 */  nop
 /* 2F0A0 8003E8A0 09008314 */  bne        $a0, $v1, .L8003E8C8
-/* 2F0A4 8003E8A4 140F4224 */   addiu     $v0, $v0, %lo(gTimerEnabled + 0x1B4)
+/* 2F0A4 8003E8A4 140F4224 */   addiu     $v0, $v0, %lo(D_800D0F14)
 /* 2F0A8 8003E8A8 0400A38C */  lw         $v1, 0x4($a1)
 /* 2F0AC 8003E8AC 0400428C */  lw         $v0, 0x4($v0)
 /* 2F0B0 8003E8B0 00000000 */  nop

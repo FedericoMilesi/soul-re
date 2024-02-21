@@ -31,8 +31,8 @@ glabel MON_Pupate
 /* 7C100 8008B900 FCBD828F */  lw         $v0, %gp_rel(gameTrackerX + 0x34)($gp)
 /* 7C104 8008B904 00000000 */  nop
 /* 7C108 8008B908 0400518C */  lw         $s1, 0x4($v0)
-/* 7C10C 8008B90C 0D80023C */  lui        $v0, %hi(MISSILE_objectTable + 0x2C)
-/* 7C110 8008B910 D0C44224 */  addiu      $v0, $v0, %lo(MISSILE_objectTable + 0x2C)
+/* 7C10C 8008B90C 0D80023C */  lui        $v0, %hi(D_800CC4D0)
+/* 7C110 8008B910 D0C44224 */  addiu      $v0, $v0, %lo(D_800CC4D0)
 /* 7C114 8008B914 21108200 */  addu       $v0, $a0, $v0
 /* 7C118 8008B918 00004290 */  lbu        $v0, 0x0($v0)
 /* 7C11C 8008B91C 3CA26324 */  addiu      $v1, $v1, %lo(objectAccess)

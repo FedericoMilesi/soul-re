@@ -904,9 +904,9 @@ glabel MON_DefaultMessageHandler
 /* 76280 80085A80 DA160208 */  j          .L80085B68
 /* 76284 80085A84 000022AE */   sw        $v0, 0x0($s1)
 .L80085A88:
-/* 76288 80085A88 0D80023C */  lui        $v0, %hi(MISSILE_objectTable + 0x8)
+/* 76288 80085A88 0D80023C */  lui        $v0, %hi(D_800CC4AC)
 /* 7628C 80085A8C 0400638E */  lw         $v1, 0x4($s3)
-/* 76290 80085A90 ACC44224 */  addiu      $v0, $v0, %lo(MISSILE_objectTable + 0x8)
+/* 76290 80085A90 ACC44224 */  addiu      $v0, $v0, %lo(D_800CC4AC)
 /* 76294 80085A94 80180300 */  sll        $v1, $v1, 2
 /* 76298 80085A98 21186200 */  addu       $v1, $v1, $v0
 /* 7629C 80085A9C 00006294 */  lhu        $v0, 0x0($v1)

@@ -19,8 +19,8 @@ glabel DrawOTag
 /* AB0A8 800BA8A8 21280002 */   addu      $a1, $s0, $zero
 .L800BA8AC:
 /* AB0AC 800BA8AC 21280002 */  addu       $a1, $s0, $zero
-/* AB0B0 800BA8B0 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x1158)
-/* AB0B4 800BA8B4 04DA428C */  lw         $v0, %lo(the_attract_movies + 0x1158)($v0)
+/* AB0B0 800BA8B0 0D80023C */  lui        $v0, %hi(D_800CDA04)
+/* AB0B4 800BA8B4 04DA428C */  lw         $v0, %lo(D_800CDA04)($v0)
 /* AB0B8 800BA8B8 21300000 */  addu       $a2, $zero, $zero
 /* AB0BC 800BA8BC 1800448C */  lw         $a0, 0x18($v0)
 /* AB0C0 800BA8C0 0800428C */  lw         $v0, 0x8($v0)

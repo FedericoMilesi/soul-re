@@ -6,14 +6,14 @@ glabel LOAD_ProcessReadQueue
 /* 27FC0 800377C0 D0FFBD27 */  addiu      $sp, $sp, -0x30
 /* 27FC4 800377C4 0D004104 */  bgez       $v0, .L800377FC
 /* 27FC8 800377C8 2800BFAF */   sw        $ra, 0x28($sp)
-/* 27FCC 800377CC 0D80043C */  lui        $a0, %hi(default_lightgroup + 0x6C)
+/* 27FCC 800377CC 0D80043C */  lui        $a0, %hi(D_800D0934)
 /* 27FD0 800377D0 2CBC888F */  lw         $t0, %gp_rel(loadStatus + 0x98)($gp)
 /* 27FD4 800377D4 A8BB858F */  lw         $a1, %gp_rel(loadStatus + 0x14)($gp)
 /* 27FD8 800377D8 C0BB868F */  lw         $a2, %gp_rel(loadStatus + 0x2C)($gp)
 /* 27FDC 800377DC 9CBB828F */  lw         $v0, %gp_rel(loadStatus + 0x8)($gp)
 /* 27FE0 800377E0 28BC838F */  lw         $v1, %gp_rel(loadStatus + 0x94)($gp)
 /* 27FE4 800377E4 30BC878F */  lw         $a3, %gp_rel(loadStatus + 0x9C)($gp)
-/* 27FE8 800377E8 34098424 */  addiu      $a0, $a0, %lo(default_lightgroup + 0x6C)
+/* 27FE8 800377E8 34098424 */  addiu      $a0, $a0, %lo(D_800D0934)
 /* 27FEC 800377EC 1000A8AF */  sw         $t0, 0x10($sp)
 /* 27FF0 800377F0 1400A2AF */  sw         $v0, 0x14($sp)
 /* 27FF4 800377F4 C3B5000C */  jal        FONT_Print

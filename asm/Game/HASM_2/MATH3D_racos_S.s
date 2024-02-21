@@ -9,7 +9,7 @@ glabel MATH3D_racos_S
 /* 69BAC 800793AC F4AB6334 */  ori        $v1, $v1, (0x800CABF4 & 0xFFFF)
 /* 69BB0 800793B0 02008104 */  bgez       $a0, .L800793BC
 /* 69BB4 800793B4 21588000 */   addu      $t3, $a0, $zero
-/* 69BB8 800793B8 22580400 */  sub        $t3, $zero, $a0 # handwritten instruction
+/* 69BB8 800793B8 22580400 */  neg        $t3, $a0 # handwritten instruction
 .L800793BC:
 /* 69BBC 800793BC 40400200 */  sll        $t0, $v0, 1
 /* 69BC0 800793C0 20400301 */  add        $t0, $t0, $v1 # handwritten instruction
@@ -20,7 +20,7 @@ glabel MATH3D_racos_S
 /* 69BD4 800793D4 00000000 */   nop
 /* 69BD8 800793D8 0200A105 */  bgez       $t5, .L800793E4
 /* 69BDC 800793DC 43500A00 */   sra       $t2, $t2, 1
-/* 69BE0 800793E0 22600C00 */  sub        $t4, $zero, $t4 # handwritten instruction
+/* 69BE0 800793E0 22600C00 */  neg        $t4, $t4 # handwritten instruction
 .L800793E4:
 /* 69BE4 800793E4 F5FF4015 */  bnez       $t2, .L800793BC
 /* 69BE8 800793E8 20104C00 */   add       $v0, $v0, $t4 # handwritten instruction

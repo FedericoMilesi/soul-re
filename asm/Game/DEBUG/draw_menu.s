@@ -73,9 +73,9 @@ glabel draw_menu
 /* 47D4 80013FD4 00240400 */  sll        $a0, $a0, 16
 /* 47D8 80013FD8 3CB6000C */  jal        FONT_SetCursor
 /* 47DC 80013FDC 03240400 */   sra       $a0, $a0, 16
-/* 47E0 80013FE0 0D80043C */  lui        $a0, %hi(cem_item_leading + 0x38)
+/* 47E0 80013FE0 0D80043C */  lui        $a0, %hi(D_800D0198)
 /* 47E4 80013FE4 C3B5000C */  jal        FONT_Print
-/* 47E8 80013FE8 98018424 */   addiu     $a0, $a0, %lo(cem_item_leading + 0x38)
+/* 47E8 80013FE8 98018424 */   addiu     $a0, $a0, %lo(D_800D0198)
 /* 47EC 80013FEC 21208002 */  addu       $a0, $s4, $zero
 .L80013FF0:
 /* 47F0 80013FF0 0C00068E */  lw         $a2, 0xC($s0)
@@ -113,23 +113,23 @@ glabel draw_menu
 /* 4864 80014064 24104300 */  and        $v0, $v0, $v1
 /* 4868 80014068 06004314 */  bne        $v0, $v1, .L80014084
 /* 486C 8001406C 00000000 */   nop
-/* 4870 80014070 0D80043C */  lui        $a0, %hi(cem_item_leading + 0x3C)
+/* 4870 80014070 0D80043C */  lui        $a0, %hi(D_800D019C)
 /* 4874 80014074 C3B5000C */  jal        FONT_Print
-/* 4878 80014078 9C018424 */   addiu     $a0, $a0, %lo(cem_item_leading + 0x3C)
+/* 4878 80014078 9C018424 */   addiu     $a0, $a0, %lo(D_800D019C)
 /* 487C 8001407C 2C500008 */  j          .L800140B0
 /* 4880 80014080 18001026 */   addiu     $s0, $s0, 0x18
 .L80014084:
-/* 4884 80014084 0D80043C */  lui        $a0, %hi(cem_item_leading + 0x40)
+/* 4884 80014084 0D80043C */  lui        $a0, %hi(D_800D01A0)
 /* 4888 80014088 C3B5000C */  jal        FONT_Print
-/* 488C 8001408C A0018424 */   addiu     $a0, $a0, %lo(cem_item_leading + 0x40)
+/* 488C 8001408C A0018424 */   addiu     $a0, $a0, %lo(D_800D01A0)
 /* 4890 80014090 2C500008 */  j          .L800140B0
 /* 4894 80014094 18001026 */   addiu     $s0, $s0, 0x18
 .L80014098:
 /* 4898 80014098 1000028E */  lw         $v0, 0x10($s0)
-/* 489C 8001409C 0D80043C */  lui        $a0, %hi(cem_item_leading + 0x44)
+/* 489C 8001409C 0D80043C */  lui        $a0, %hi(D_800D01A4)
 /* 48A0 800140A0 0000458C */  lw         $a1, 0x0($v0)
 /* 48A4 800140A4 C3B5000C */  jal        FONT_Print
-/* 48A8 800140A8 A4018424 */   addiu     $a0, $a0, %lo(cem_item_leading + 0x44)
+/* 48A8 800140A8 A4018424 */   addiu     $a0, $a0, %lo(D_800D01A4)
 /* 48AC 800140AC 18001026 */  addiu      $s0, $s0, 0x18
 .L800140B0:
 /* 48B0 800140B0 01007326 */  addiu      $s3, $s3, 0x1

@@ -9,9 +9,9 @@ glabel LOAD_PlayXA
 /* 510C0 800608C0 21808000 */   addu      $s0, $a0, $zero
 /* 510C4 800608C4 08000324 */  addiu      $v1, $zero, 0x8
 /* 510C8 800608C8 040043A4 */  sh         $v1, 0x4($v0)
-/* 510CC 800608CC 0D80033C */  lui        $v1, %hi(gCurDir + 0x64)
+/* 510CC 800608CC 0D80033C */  lui        $v1, %hi(D_800D19E0)
 /* 510D0 800608D0 080050AC */  sw         $s0, 0x8($v0)
-/* 510D4 800608D4 E0196824 */  addiu      $t0, $v1, %lo(gCurDir + 0x64)
+/* 510D4 800608D4 E0196824 */  addiu      $t0, $v1, %lo(D_800D19E0)
 /* 510D8 800608D8 0000058D */  lw         $a1, 0x0($t0)
 /* 510DC 800608DC 04000685 */  lh         $a2, 0x4($t0)
 /* 510E0 800608E0 3C0045AC */  sw         $a1, 0x3C($v0)

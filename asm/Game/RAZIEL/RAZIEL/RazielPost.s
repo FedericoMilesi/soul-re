@@ -203,9 +203,9 @@ glabel RazielPost
 /* A1D6C 800B156C FDC60208 */  j          .L800B1BF4
 /* A1D70 800B1570 00000000 */   nop
 .L800B1574:
-/* A1D74 800B1574 0D80043C */  lui        $a0, %hi(ZoneDelta + 0x4)
+/* A1D74 800B1574 0D80043C */  lui        $a0, %hi(D_800D1D1C)
 /* A1D78 800B1578 0400708E */  lw         $s0, 0x4($s3)
-/* A1D7C 800B157C 1C1D8424 */  addiu      $a0, $a0, %lo(ZoneDelta + 0x4)
+/* A1D7C 800B157C 1C1D8424 */  addiu      $a0, $a0, %lo(D_800D1D1C)
 /* A1D80 800B1580 0000028E */  lw         $v0, 0x0($s0)
 /* A1D84 800B1584 00000000 */  nop
 /* A1D88 800B1588 38FA82AF */  sw         $v0, %gp_rel(Raziel + 0x408)($gp)

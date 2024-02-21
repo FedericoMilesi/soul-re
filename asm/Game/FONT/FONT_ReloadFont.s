@@ -3,8 +3,8 @@
 
 glabel FONT_ReloadFont
 /* 1D878 8002D078 E0FFBD27 */  addiu      $sp, $sp, -0x20
-/* 1D87C 8002D07C 0D80043C */  lui        $a0, %hi(the_font_color_table + 0x3C)
-/* 1D880 8002D080 74068424 */  addiu      $a0, $a0, %lo(the_font_color_table + 0x3C)
+/* 1D87C 8002D07C 0D80043C */  lui        $a0, %hi(D_800D0674)
+/* 1D880 8002D080 74068424 */  addiu      $a0, $a0, %lo(D_800D0674)
 /* 1D884 8002D084 05000524 */  addiu      $a1, $zero, 0x5
 /* 1D888 8002D088 1C00BFAF */  sw         $ra, 0x1C($sp)
 /* 1D88C 8002D08C 3E82010C */  jal        LOAD_ReadFile

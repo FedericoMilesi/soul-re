@@ -16,8 +16,8 @@ glabel RotMatrix
 /* 6951C 80078D1C 00082B33 */  andi       $t3, $t9, 0x800
 /* 69520 80078D20 03006011 */  beqz       $t3, .L80078D30
 /* 69524 80078D24 00000000 */   nop
-/* 69528 80078D28 22680D00 */  sub        $t5, $zero, $t5 # handwritten instruction
-/* 6952C 80078D2C 22500A00 */  sub        $t2, $zero, $t2 # handwritten instruction
+/* 69528 80078D28 22680D00 */  neg        $t5, $t5 # handwritten instruction
+/* 6952C 80078D2C 22500A00 */  neg        $t2, $t2 # handwritten instruction
 .L80078D30:
 /* 69530 80078D30 25600F03 */  or         $t4, $t8, $t7
 /* 69534 80078D34 E4FF8011 */  beqz       $t4, .L80078CC8
@@ -30,8 +30,8 @@ glabel RotMatrix
 /* 69550 80078D50 00080B33 */  andi       $t3, $t8, 0x800
 /* 69554 80078D54 03006011 */  beqz       $t3, .L80078D64
 /* 69558 80078D58 00000000 */   nop
-/* 6955C 80078D5C 22480900 */  sub        $t1, $zero, $t1 # handwritten instruction
-/* 69560 80078D60 22600C00 */  sub        $t4, $zero, $t4 # handwritten instruction
+/* 6955C 80078D5C 22480900 */  neg        $t1, $t1 # handwritten instruction
+/* 69560 80078D60 22600C00 */  neg        $t4, $t4 # handwritten instruction
 .L80078D64:
 /* 69564 80078D64 FF07E831 */  andi       $t0, $t7, 0x7FF
 /* 69568 80078D68 40400800 */  sll        $t0, $t0, 1
@@ -41,8 +41,8 @@ glabel RotMatrix
 /* 69578 80078D78 0008EE31 */  andi       $t6, $t7, 0x800
 /* 6957C 80078D7C 0300C011 */  beqz       $t6, .L80078D8C
 /* 69580 80078D80 00000000 */   nop
-/* 69584 80078D84 22580B00 */  sub        $t3, $zero, $t3 # handwritten instruction
-/* 69588 80078D88 22400800 */  sub        $t0, $zero, $t0 # handwritten instruction
+/* 69584 80078D84 22580B00 */  neg        $t3, $t3 # handwritten instruction
+/* 69588 80078D88 22400800 */  neg        $t0, $t0 # handwritten instruction
 .L80078D8C:
 /* 6958C 80078D8C 00488948 */  mtc2       $t1, $9 # handwritten instruction
 /* 69590 80078D90 00508A48 */  mtc2       $t2, $10 # handwritten instruction
@@ -69,7 +69,7 @@ glabel RotMatrix
 /* 695E4 80078DE4 00480448 */  mfc2       $a0, $9 # handwritten instruction
 /* 695E8 80078DE8 00501848 */  mfc2       $t8, $10 # handwritten instruction
 /* 695EC 80078DEC 00581948 */  mfc2       $t9, $11 # handwritten instruction
-/* 695F0 80078DF0 22200400 */  sub        $a0, $zero, $a0 # handwritten instruction
+/* 695F0 80078DF0 22200400 */  neg        $a0, $a0 # handwritten instruction
 /* 695F4 80078DF4 0A00A4A4 */  sh         $a0, 0xA($a1)
 /* 695F8 80078DF8 12100000 */  mflo       $v0
 /* 695FC 80078DFC 00488E48 */  mtc2       $t6, $9 # handwritten instruction
@@ -80,7 +80,7 @@ glabel RotMatrix
 /* 69610 80078E10 00000000 */  nop
 /* 69614 80078E14 3D00984B */  GPF        1
 /* 69618 80078E18 03130200 */  sra        $v0, $v0, 12
-/* 6961C 80078E1C 22100200 */  sub        $v0, $zero, $v0 # handwritten instruction
+/* 6961C 80078E1C 22100200 */  neg        $v0, $v0 # handwritten instruction
 /* 69620 80078E20 0200A2A4 */  sh         $v0, 0x2($a1)
 /* 69624 80078E24 00480448 */  mfc2       $a0, $9 # handwritten instruction
 /* 69628 80078E28 00500848 */  mfc2       $t0, $10 # handwritten instruction

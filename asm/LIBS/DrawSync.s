@@ -18,8 +18,8 @@ glabel DrawSync
 /* AAC70 800BA470 09F84000 */  jalr       $v0
 /* AAC74 800BA474 21280002 */   addu      $a1, $s0, $zero
 .L800BA478:
-/* AAC78 800BA478 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x1158)
-/* AAC7C 800BA47C 04DA428C */  lw         $v0, %lo(the_attract_movies + 0x1158)($v0)
+/* AAC78 800BA478 0D80023C */  lui        $v0, %hi(D_800CDA04)
+/* AAC7C 800BA47C 04DA428C */  lw         $v0, %lo(D_800CDA04)($v0)
 /* AAC80 800BA480 00000000 */  nop
 /* AAC84 800BA484 3C00428C */  lw         $v0, 0x3C($v0)
 /* AAC88 800BA488 00000000 */  nop

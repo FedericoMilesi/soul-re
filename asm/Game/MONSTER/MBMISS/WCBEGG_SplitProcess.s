@@ -12,8 +12,8 @@ glabel WCBEGG_SplitProcess
 /* 7FDD4 8008F5D4 6C01118E */  lw         $s1, 0x16C($s0)
 /* 7FDD8 8008F5D8 9006020C */  jal        MON_GetTime
 /* 7FDDC 8008F5DC 2198A000 */   addu      $s3, $a1, $zero
-/* 7FDE0 8008F5E0 0D80043C */  lui        $a0, %hi(WORSHIP_FunctionTable + 0x2C)
-/* 7FDE4 8008F5E4 FC1B8424 */  addiu      $a0, $a0, %lo(WORSHIP_FunctionTable + 0x2C)
+/* 7FDE0 8008F5E0 0D80043C */  lui        $a0, %hi(D_800D1BFC)
+/* 7FDE4 8008F5E4 FC1B8424 */  addiu      $a0, $a0, %lo(D_800D1BFC)
 /* 7FDE8 8008F5E8 14F9000C */  jal        OBTABLE_FindObject
 /* 7FDEC 8008F5EC 21904000 */   addu      $s2, $v0, $zero
 /* 7FDF0 8008F5F0 21184000 */  addu       $v1, $v0, $zero

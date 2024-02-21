@@ -13,8 +13,8 @@ glabel LoadImage
 /* AAE70 800BA670 29E9020C */  jal        func_800BA4A4
 /* AAE74 800BA674 21280002 */   addu      $a1, $s0, $zero
 /* AAE78 800BA678 21280002 */  addu       $a1, $s0, $zero
-/* AAE7C 800BA67C 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x1158)
-/* AAE80 800BA680 04DA428C */  lw         $v0, %lo(the_attract_movies + 0x1158)($v0)
+/* AAE7C 800BA67C 0D80023C */  lui        $v0, %hi(D_800CDA04)
+/* AAE80 800BA680 04DA428C */  lw         $v0, %lo(D_800CDA04)($v0)
 /* AAE84 800BA684 08000624 */  addiu      $a2, $zero, 0x8
 /* AAE88 800BA688 2000448C */  lw         $a0, 0x20($v0)
 /* AAE8C 800BA68C 0800428C */  lw         $v0, 0x8($v0)

@@ -2,8 +2,8 @@
 .set noreorder /* don't insert nops after branches */
 
 glabel VSyncCallbacks
-/* AA340 800B9B40 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x10F0)
-/* AA344 800B9B44 9CD9428C */  lw         $v0, %lo(the_attract_movies + 0x10F0)($v0)
+/* AA340 800B9B40 0D80023C */  lui        $v0, %hi(D_800CD99C)
+/* AA344 800B9B44 9CD9428C */  lw         $v0, %lo(D_800CD99C)($v0)
 /* AA348 800B9B48 E8FFBD27 */  addiu      $sp, $sp, -0x18
 /* AA34C 800B9B4C 1000BFAF */  sw         $ra, 0x10($sp)
 /* AA350 800B9B50 1400428C */  lw         $v0, 0x14($v0)

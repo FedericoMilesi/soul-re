@@ -18,7 +18,7 @@ glabel G2Quat_FromEuler_S
 /* 6A5B8 80079DB8 0400A230 */  andi       $v0, $a1, 0x4
 /* 6A5BC 80079DBC 02004010 */  beqz       $v0, .L80079DC8
 /* 6A5C0 80079DC0 43400800 */   sra       $t0, $t0, 1
-/* 6A5C4 80079DC4 22500A00 */  sub        $t2, $zero, $t2 # handwritten instruction
+/* 6A5C4 80079DC4 22500A00 */  neg        $t2, $t2 # handwritten instruction
 .L80079DC8:
 /* 6A5C8 80079DC8 43500A00 */  sra        $t2, $t2, 1
 /* 6A5CC 80079DCC 43600C00 */  sra        $t4, $t4, 1
@@ -30,8 +30,8 @@ glabel G2Quat_FromEuler_S
 /* 6A5E4 80079DE4 00082985 */  lh         $t1, 0x800($t1)
 /* 6A5E8 80079DE8 03006011 */  beqz       $t3, .L80079DF8
 /* 6A5EC 80079DEC 00000000 */   nop
-/* 6A5F0 80079DF0 22400800 */  sub        $t0, $zero, $t0 # handwritten instruction
-/* 6A5F4 80079DF4 22480900 */  sub        $t1, $zero, $t1 # handwritten instruction
+/* 6A5F0 80079DF0 22400800 */  neg        $t0, $t0 # handwritten instruction
+/* 6A5F4 80079DF4 22480900 */  neg        $t1, $t1 # handwritten instruction
 .L80079DF8:
 /* 6A5F8 80079DF8 FF074B31 */  andi       $t3, $t2, 0x7FF
 /* 6A5FC 80079DFC 40580B00 */  sll        $t3, $t3, 1
@@ -41,8 +41,8 @@ glabel G2Quat_FromEuler_S
 /* 6A60C 80079E0C 00086B85 */  lh         $t3, 0x800($t3)
 /* 6A610 80079E10 0300A011 */  beqz       $t5, .L80079E20
 /* 6A614 80079E14 00000000 */   nop
-/* 6A618 80079E18 22500A00 */  sub        $t2, $zero, $t2 # handwritten instruction
-/* 6A61C 80079E1C 22580B00 */  sub        $t3, $zero, $t3 # handwritten instruction
+/* 6A618 80079E18 22500A00 */  neg        $t2, $t2 # handwritten instruction
+/* 6A61C 80079E1C 22580B00 */  neg        $t3, $t3 # handwritten instruction
 .L80079E20:
 /* 6A620 80079E20 FF078D31 */  andi       $t5, $t4, 0x7FF
 /* 6A624 80079E24 40680D00 */  sll        $t5, $t5, 1
@@ -52,8 +52,8 @@ glabel G2Quat_FromEuler_S
 /* 6A634 80079E34 0008AD85 */  lh         $t5, 0x800($t5)
 /* 6A638 80079E38 03000013 */  beqz       $t8, .L80079E48
 /* 6A63C 80079E3C 00000000 */   nop
-/* 6A640 80079E40 22600C00 */  sub        $t4, $zero, $t4 # handwritten instruction
-/* 6A644 80079E44 22680D00 */  sub        $t5, $zero, $t5 # handwritten instruction
+/* 6A640 80079E40 22600C00 */  neg        $t4, $t4 # handwritten instruction
+/* 6A644 80079E44 22680D00 */  neg        $t5, $t5 # handwritten instruction
 .L80079E48:
 /* 6A648 80079E48 00408948 */  mtc2       $t1, $8 # handwritten instruction
 /* 6A64C 80079E4C 00488D48 */  mtc2       $t5, $9 # handwritten instruction
@@ -161,7 +161,7 @@ glabel G2Quat_FromEuler_S
 /* 6A7CC 80079FCC 20C00403 */  add        $t8, $t8, $a0 # handwritten instruction
 /* 6A7D0 80079FD0 0200A010 */  beqz       $a1, .L80079FDC
 /* 6A7D4 80079FD4 20C82403 */   add       $t9, $t9, $a0 # handwritten instruction
-/* 6A7D8 80079FD8 22480900 */  sub        $t1, $zero, $t1 # handwritten instruction
+/* 6A7D8 80079FD8 22480900 */  neg        $t1, $t1 # handwritten instruction
 .L80079FDC:
 /* 6A7DC 80079FDC 000068A4 */  sh         $t0, 0x0($v1)
 /* 6A7E0 80079FE0 000009A7 */  sh         $t1, 0x0($t8)

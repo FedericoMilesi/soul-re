@@ -5,7 +5,7 @@ glabel PhysicsCheckGravity
 /* 656E0 80074EE0 68FFBD27 */  addiu      $sp, $sp, -0x98
 /* 656E4 80074EE4 7000B0AF */  sw         $s0, 0x70($sp)
 /* 656E8 80074EE8 21808000 */  addu       $s0, $a0, $zero
-/* 656EC 80074EEC 0D80023C */  lui        $v0, %hi(VRAM_NeedToUpdateMorph + 0x8)
+/* 656EC 80074EEC 0D80023C */  lui        $v0, %hi(D_800D1A78)
 /* 656F0 80074EF0 8800B6AF */  sw         $s6, 0x88($sp)
 /* 656F4 80074EF4 6000B627 */  addiu      $s6, $sp, 0x60
 /* 656F8 80074EF8 8400B5AF */  sw         $s5, 0x84($sp)
@@ -18,7 +18,7 @@ glabel PhysicsCheckGravity
 /* 65714 80074F14 7800B2AF */  sw         $s2, 0x78($sp)
 /* 65718 80074F18 7400B1AF */  sw         $s1, 0x74($sp)
 /* 6571C 80074F1C 9C00A5AF */  sw         $a1, 0x9C($sp)
-/* 65720 80074F20 781A4D24 */  addiu      $t5, $v0, %lo(VRAM_NeedToUpdateMorph + 0x8)
+/* 65720 80074F20 781A4D24 */  addiu      $t5, $v0, %lo(D_800D1A78)
 /* 65724 80074F24 0300AA89 */  lwl        $t2, 0x3($t5)
 /* 65728 80074F28 0000AA99 */  lwr        $t2, 0x0($t5)
 /* 6572C 80074F2C 0700AB89 */  lwl        $t3, 0x7($t5)

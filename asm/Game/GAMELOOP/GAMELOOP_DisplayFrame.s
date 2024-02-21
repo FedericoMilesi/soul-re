@@ -114,9 +114,9 @@ glabel GAMELOOP_DisplayFrame
 /* 200F4 8002F8F4 05006010 */  beqz       $v1, .L8002F90C
 /* 200F8 8002F8F8 2400A8AF */   sw        $t0, 0x24($sp)
 /* 200FC 8002F8FC 9800058D */  lw         $a1, 0x98($t0)
-/* 20100 8002F900 0D80043C */  lui        $a0, %hi(fontsObject + 0x6C)
+/* 20100 8002F900 0D80043C */  lui        $a0, %hi(D_800D0780)
 /* 20104 8002F904 C3B5000C */  jal        FONT_Print
-/* 20108 8002F908 80078424 */   addiu     $a0, $a0, %lo(fontsObject + 0x6C)
+/* 20108 8002F908 80078424 */   addiu     $a0, $a0, %lo(D_800D0780)
 .L8002F90C:
 /* 2010C 8002F90C 90AC8427 */  addiu      $a0, $gp, %gp_rel(theCamera)
 /* 20110 8002F910 0000C297 */  lhu        $v0, 0x0($fp)
@@ -126,7 +126,7 @@ glabel GAMELOOP_DisplayFrame
 /* 20120 8002F920 30AD80AF */  sw         $zero, %gp_rel(theCamera + 0xA0)($gp)
 /* 20124 8002F924 38AD80AF */  sw         $zero, %gp_rel(theCamera + 0xA8)($gp)
 /* 20128 8002F928 3CAD83AF */  sw         $v1, %gp_rel(theCamera + 0xAC)($gp)
-/* 2012C 8002F92C 4CBA82A7 */  sh         $v0, %gp_rel(D_800D2FE4)($gp)
+/* 2012C 8002F92C 4CBA82A7 */  sh         $v0, %gp_rel(RENDER_currentStreamUnitID)($gp)
 /* 20130 8002F930 C053000C */  jal        CAMERA_SetViewVolume
 /* 20134 8002F934 00000000 */   nop
 /* 20138 8002F938 2400A48F */  lw         $a0, 0x24($sp)

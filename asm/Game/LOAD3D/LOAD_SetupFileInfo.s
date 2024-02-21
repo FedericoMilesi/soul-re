@@ -17,8 +17,8 @@ glabel LOAD_SetupFileInfo
 /* 28458 80037C58 00000000 */  nop
 /* 2845C 80037C5C 10006214 */  bne        $v1, $v0, .L80037CA0
 /* 28460 80037C60 21100000 */   addu      $v0, $zero, $zero
-/* 28464 80037C64 0D80043C */  lui        $a0, %hi(default_lightgroup + 0x94)
-/* 28468 80037C68 5C098424 */  addiu      $a0, $a0, %lo(default_lightgroup + 0x94)
+/* 28464 80037C64 0D80043C */  lui        $a0, %hi(D_800D095C)
+/* 28468 80037C68 5C098424 */  addiu      $a0, $a0, %lo(D_800D095C)
 /* 2846C 80037C6C 2B52000C */  jal        DEBUG_FatalError
 /* 28470 80037C70 34000526 */   addiu     $a1, $s0, 0x34
 /* 28474 80037C74 28DF0008 */  j          .L80037CA0

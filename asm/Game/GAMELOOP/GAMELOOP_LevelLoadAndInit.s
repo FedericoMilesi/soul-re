@@ -52,14 +52,14 @@ glabel GAMELOOP_LevelLoadAndInit
 /* 1EACC 8002E2CC 78016296 */  lhu        $v0, 0x178($s3)
 /* 1EAD0 8002E2D0 7800A38C */  lw         $v1, 0x78($a1)
 /* 1EAD4 8002E2D4 7C9184AF */  sw         $a0, %gp_rel(fontsObject)($gp)
-/* 1EAD8 8002E2D8 4CBA82A7 */  sh         $v0, %gp_rel(D_800D2FE4)($gp)
+/* 1EAD8 8002E2D8 4CBA82A7 */  sh         $v0, %gp_rel(RENDER_currentStreamUnitID)($gp)
 /* 1EADC 8002E2DC 18006018 */  blez       $v1, .L8002E340
 /* 1EAE0 8002E2E0 21880000 */   addu      $s1, $zero, $zero
 /* 1EAE4 8002E2E4 21802002 */  addu       $s0, $s1, $zero
 .L8002E2E8:
 /* 1EAE8 8002E2E8 7C00A48C */  lw         $a0, 0x7C($a1)
-/* 1EAEC 8002E2EC 0D80053C */  lui        $a1, %hi(fontsObject + 0x64)
-/* 1EAF0 8002E2F0 7807A524 */  addiu      $a1, $a1, %lo(fontsObject + 0x64)
+/* 1EAEC 8002E2EC 0D80053C */  lui        $a1, %hi(D_800D0778)
+/* 1EAF0 8002E2F0 7807A524 */  addiu      $a1, $a1, %lo(D_800D0778)
 /* 1EAF4 8002E2F4 1CD2010C */  jal        strcmpi
 /* 1EAF8 8002E2F8 21209000 */   addu      $a0, $a0, $s0
 /* 1EAFC 8002E2FC 09004014 */  bnez       $v0, .L8002E324

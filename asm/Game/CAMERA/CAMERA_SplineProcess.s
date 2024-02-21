@@ -62,7 +62,7 @@ glabel CAMERA_SplineProcess
 /* BD0C 8001B50C 01001024 */  addiu      $s0, $zero, 0x1
 /* BD10 8001B510 04005014 */  bne        $v0, $s0, .L8001B524
 /* BD14 8001B514 00000000 */   nop
-/* BD18 8001B518 648E90A7 */  sh         $s0, %gp_rel(roll_inc + 0x10)($gp)
+/* BD18 8001B518 648E90A7 */  sh         $s0, %gp_rel(D_800D03FC)($gp)
 /* BD1C 8001B51C 536D0008 */  j          .L8001B54C
 /* BD20 8001B520 00000000 */   nop
 .L8001B524:
@@ -70,19 +70,19 @@ glabel CAMERA_SplineProcess
 /* BD28 8001B528 21202002 */   addu      $a0, $s1, $zero
 /* BD2C 8001B52C 07004010 */  beqz       $v0, .L8001B54C
 /* BD30 8001B530 00000000 */   nop
-/* BD34 8001B534 648E8287 */  lh         $v0, %gp_rel(roll_inc + 0x10)($gp)
+/* BD34 8001B534 648E8287 */  lh         $v0, %gp_rel(D_800D03FC)($gp)
 /* BD38 8001B538 00000000 */  nop
 /* BD3C 8001B53C 02004010 */  beqz       $v0, .L8001B548
 /* BD40 8001B540 00000000 */   nop
 /* BD44 8001B544 AE0430A6 */  sh         $s0, 0x4AE($s1)
 .L8001B548:
-/* BD48 8001B548 648E80A7 */  sh         $zero, %gp_rel(roll_inc + 0x10)($gp)
+/* BD48 8001B548 648E80A7 */  sh         $zero, %gp_rel(D_800D03FC)($gp)
 .L8001B54C:
 /* BD4C 8001B54C 08042386 */  lh         $v1, 0x408($s1)
 /* BD50 8001B550 01000224 */  addiu      $v0, $zero, 0x1
 /* BD54 8001B554 1F006210 */  beq        $v1, $v0, .L8001B5D4
 /* BD58 8001B558 00000000 */   nop
-/* BD5C 8001B55C 648E8287 */  lh         $v0, %gp_rel(roll_inc + 0x10)($gp)
+/* BD5C 8001B55C 648E8287 */  lh         $v0, %gp_rel(D_800D03FC)($gp)
 /* BD60 8001B560 00000000 */  nop
 /* BD64 8001B564 1B004014 */  bnez       $v0, .L8001B5D4
 /* BD68 8001B568 03000224 */   addiu     $v0, $zero, 0x3
@@ -164,7 +164,7 @@ glabel CAMERA_SplineProcess
 /* BE88 8001B688 00000000 */  nop
 /* BE8C 8001B68C 05004014 */  bnez       $v0, .L8001B6A4
 /* BE90 8001B690 00000000 */   nop
-/* BE94 8001B694 648E8287 */  lh         $v0, %gp_rel(roll_inc + 0x10)($gp)
+/* BE94 8001B694 648E8287 */  lh         $v0, %gp_rel(D_800D03FC)($gp)
 /* BE98 8001B698 00000000 */  nop
 /* BE9C 8001B69C 0F004010 */  beqz       $v0, .L8001B6DC
 /* BEA0 8001B6A0 05000424 */   addiu     $a0, $zero, 0x5

@@ -7,13 +7,13 @@ glabel MON_DamageEffect
 /* 7D088 8008C888 21908000 */  addu       $s2, $a0, $zero
 /* 7D08C 8008C88C 6800B0AF */  sw         $s0, 0x68($sp)
 /* 7D090 8008C890 2180A000 */  addu       $s0, $a1, $zero
-/* 7D094 8008C894 0D80023C */  lui        $v0, %hi(burntTest + 0x8)
+/* 7D094 8008C894 0D80023C */  lui        $v0, %hi(D_800D1B38)
 /* 7D098 8008C898 7C00B5AF */  sw         $s5, 0x7C($sp)
 /* 7D09C 8008C89C 8000BFAF */  sw         $ra, 0x80($sp)
 /* 7D0A0 8008C8A0 7800B4AF */  sw         $s4, 0x78($sp)
 /* 7D0A4 8008C8A4 7400B3AF */  sw         $s3, 0x74($sp)
 /* 7D0A8 8008C8A8 6C00B1AF */  sw         $s1, 0x6C($sp)
-/* 7D0AC 8008C8AC 381B4B24 */  addiu      $t3, $v0, %lo(burntTest + 0x8)
+/* 7D0AC 8008C8AC 381B4B24 */  addiu      $t3, $v0, %lo(D_800D1B38)
 /* 7D0B0 8008C8B0 03006889 */  lwl        $t0, 0x3($t3)
 /* 7D0B4 8008C8B4 00006899 */  lwr        $t0, 0x0($t3)
 /* 7D0B8 8008C8B8 07006989 */  lwl        $t1, 0x7($t3)
@@ -47,8 +47,8 @@ glabel MON_DamageEffect
 /* 7D128 8008C928 1A004300 */  div        $zero, $v0, $v1
 /* 7D12C 8008C92C 10180000 */  mfhi       $v1
 /* 7D130 8008C930 4000518E */  lw         $s1, 0x40($s2)
-/* 7D134 8008C934 0D80023C */  lui        $v0, %hi(burntTest + 0x10)
-/* 7D138 8008C938 401B4B24 */  addiu      $t3, $v0, %lo(burntTest + 0x10)
+/* 7D134 8008C934 0D80023C */  lui        $v0, %hi(D_800D1B40)
+/* 7D138 8008C938 401B4B24 */  addiu      $t3, $v0, %lo(D_800D1B40)
 /* 7D13C 8008C93C 03006889 */  lwl        $t0, 0x3($t3)
 /* 7D140 8008C940 00006899 */  lwr        $t0, 0x0($t3)
 /* 7D144 8008C944 07006989 */  lwl        $t1, 0x7($t3)

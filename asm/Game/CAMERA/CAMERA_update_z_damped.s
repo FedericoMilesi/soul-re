@@ -94,8 +94,8 @@ glabel CAMERA_update_z_damped
 .L80019B78:
 /* A378 80019B78 10480000 */  mfhi       $t1
 /* A37C 80019B7C 23102201 */  subu       $v0, $t1, $v0
-/* A380 80019B80 628E82A7 */  sh         $v0, %gp_rel(roll_inc + 0xE)($gp)
-/* A384 80019B84 628E8287 */  lh         $v0, %gp_rel(roll_inc + 0xE)($gp)
+/* A380 80019B80 628E82A7 */  sh         $v0, %gp_rel(D_800D03FA)($gp)
+/* A384 80019B84 628E8287 */  lh         $v0, %gp_rel(D_800D03FA)($gp)
 /* A388 80019B88 00000000 */  nop
 /* A38C 80019B8C 32004228 */  slti       $v0, $v0, 0x32
 /* A390 80019B90 16004010 */  beqz       $v0, .L80019BEC
@@ -124,9 +124,9 @@ glabel CAMERA_update_z_damped
 /* A3E0 80019BE0 10480000 */  mfhi       $t1
 /* A3E4 80019BE4 23102201 */  subu       $v0, $t1, $v0
 .L80019BE8:
-/* A3E8 80019BE8 628E82A7 */  sh         $v0, %gp_rel(roll_inc + 0xE)($gp)
+/* A3E8 80019BE8 628E82A7 */  sh         $v0, %gp_rel(D_800D03FA)($gp)
 .L80019BEC:
-/* A3EC 80019BEC 628E8587 */  lh         $a1, %gp_rel(roll_inc + 0xE)($gp)
+/* A3EC 80019BEC 628E8587 */  lh         $a1, %gp_rel(D_800D03FA)($gp)
 /* A3F0 80019BF0 00140700 */  sll        $v0, $a3, 16
 /* A3F4 80019BF4 03240200 */  sra        $a0, $v0, 16
 /* A3F8 80019BF8 00140800 */  sll        $v0, $t0, 16
@@ -152,25 +152,25 @@ glabel CAMERA_update_z_damped
 /* A440 80019C40 2310E800 */   subu      $v0, $a3, $t0
 /* A444 80019C44 23100701 */  subu       $v0, $t0, $a3
 .L80019C48:
-/* A448 80019C48 628E82A7 */  sh         $v0, %gp_rel(roll_inc + 0xE)($gp)
+/* A448 80019C48 628E82A7 */  sh         $v0, %gp_rel(D_800D03FA)($gp)
 .L80019C4C:
 /* A44C 80019C4C 01000424 */  addiu      $a0, $zero, 0x1
 .L80019C50:
 /* A450 80019C50 1800A527 */  addiu      $a1, $sp, 0x18
 /* A454 80019C54 00340800 */  sll        $a2, $t0, 16
 /* A458 80019C58 03340600 */  sra        $a2, $a2, 16
-/* A45C 80019C5C 5E8E8727 */  addiu      $a3, $gp, %gp_rel(roll_inc + 0xA)
-/* A460 80019C60 628E8387 */  lh         $v1, %gp_rel(roll_inc + 0xE)($gp)
-/* A464 80019C64 608E8227 */  addiu      $v0, $gp, %gp_rel(roll_inc + 0xC)
+/* A45C 80019C5C 5E8E8727 */  addiu      $a3, $gp, %gp_rel(D_800D03F6)
+/* A460 80019C60 628E8387 */  lh         $v1, %gp_rel(D_800D03FA)($gp)
+/* A464 80019C64 608E8227 */  addiu      $v0, $gp, %gp_rel(D_800D03F8)
 /* A468 80019C68 1000A2AF */  sw         $v0, 0x10($sp)
 /* A46C 80019C6C 605C000C */  jal        CriticalDampValue
 /* A470 80019C70 1400A3AF */   sw        $v1, 0x14($sp)
 /* A474 80019C74 24670008 */  j          .L80019C90
 /* A478 80019C78 00000000 */   nop
 .L80019C7C:
-/* A47C 80019C7C 5E8E80A7 */  sh         $zero, %gp_rel(roll_inc + 0xA)($gp)
-/* A480 80019C80 608E80A7 */  sh         $zero, %gp_rel(roll_inc + 0xC)($gp)
-/* A484 80019C84 628E80A7 */  sh         $zero, %gp_rel(roll_inc + 0xE)($gp)
+/* A47C 80019C7C 5E8E80A7 */  sh         $zero, %gp_rel(D_800D03F6)($gp)
+/* A480 80019C80 608E80A7 */  sh         $zero, %gp_rel(D_800D03F8)($gp)
+/* A484 80019C84 628E80A7 */  sh         $zero, %gp_rel(D_800D03FA)($gp)
 /* A488 80019C88 25670008 */  j          .L80019C94
 /* A48C 80019C8C 03140200 */   sra       $v0, $v0, 16
 .L80019C90:

@@ -61,9 +61,9 @@ glabel aadProcessLoadQueue
 /* 437C4 80052FC4 1CF4020C */  jal        strcpy
 /* 437C8 80052FC8 21282002 */   addu      $a1, $s1, $zero
 /* 437CC 80052FCC 1800A427 */  addiu      $a0, $sp, 0x18
-/* 437D0 80052FD0 0D80053C */  lui        $a1, %hi(gDefragRequest + 0x4)
+/* 437D0 80052FD0 0D80053C */  lui        $a1, %hi(D_800D1178)
 /* 437D4 80052FD4 21FE020C */  jal        strpbrk
-/* 437D8 80052FD8 7811A524 */   addiu     $a1, $a1, %lo(gDefragRequest + 0x4)
+/* 437D8 80052FD8 7811A524 */   addiu     $a1, $a1, %lo(D_800D1178)
 /* 437DC 80052FDC 02004010 */  beqz       $v0, .L80052FE8
 /* 437E0 80052FE0 00000000 */   nop
 /* 437E4 80052FE4 000040A0 */  sb         $zero, 0x0($v0)
@@ -73,26 +73,26 @@ glabel aadProcessLoadQueue
 /* 437F0 80052FF0 01004230 */  andi       $v0, $v0, 0x1
 /* 437F4 80052FF4 0C004010 */  beqz       $v0, .L80053028
 /* 437F8 80052FF8 21200002 */   addu      $a0, $s0, $zero
-/* 437FC 80052FFC 0D80053C */  lui        $a1, %hi(gDefragRequest + 0x10)
-/* 43800 80053000 8411A524 */  addiu      $a1, $a1, %lo(gDefragRequest + 0x10)
+/* 437FC 80052FFC 0D80053C */  lui        $a1, %hi(D_800D1184)
+/* 43800 80053000 8411A524 */  addiu      $a1, $a1, %lo(D_800D1184)
 /* 43804 80053004 1800A627 */  addiu      $a2, $sp, 0x18
 /* 43808 80053008 1AD1010C */  jal        sprintf
 /* 4380C 8005300C 21382002 */   addu      $a3, $s1, $zero
 /* 43810 80053010 28000426 */  addiu      $a0, $s0, 0x28
-/* 43814 80053014 0D80053C */  lui        $a1, %hi(gDefragRequest + 0x2C)
-/* 43818 80053018 A011A524 */  addiu      $a1, $a1, %lo(gDefragRequest + 0x2C)
+/* 43814 80053014 0D80053C */  lui        $a1, %hi(D_800D11A0)
+/* 43818 80053018 A011A524 */  addiu      $a1, $a1, %lo(D_800D11A0)
 /* 4381C 8005301C 1800A627 */  addiu      $a2, $sp, 0x18
 /* 43820 80053020 144C0108 */  j          .L80053050
 /* 43824 80053024 21382002 */   addu      $a3, $s1, $zero
 .L80053028:
-/* 43828 80053028 0D80053C */  lui        $a1, %hi(gDefragRequest + 0x48)
-/* 4382C 8005302C BC11A524 */  addiu      $a1, $a1, %lo(gDefragRequest + 0x48)
+/* 43828 80053028 0D80053C */  lui        $a1, %hi(D_800D11BC)
+/* 4382C 8005302C BC11A524 */  addiu      $a1, $a1, %lo(D_800D11BC)
 /* 43830 80053030 21302002 */  addu       $a2, $s1, $zero
 /* 43834 80053034 1AD1010C */  jal        sprintf
 /* 43838 80053038 21382002 */   addu      $a3, $s1, $zero
 /* 4383C 8005303C 28000426 */  addiu      $a0, $s0, 0x28
-/* 43840 80053040 0D80053C */  lui        $a1, %hi(gDefragRequest + 0x64)
-/* 43844 80053044 D811A524 */  addiu      $a1, $a1, %lo(gDefragRequest + 0x64)
+/* 43840 80053040 0D80053C */  lui        $a1, %hi(D_800D11D8)
+/* 43844 80053044 D811A524 */  addiu      $a1, $a1, %lo(D_800D11D8)
 /* 43848 80053048 21302002 */  addu       $a2, $s1, $zero
 /* 4384C 8005304C 2138C000 */  addu       $a3, $a2, $zero
 .L80053050:

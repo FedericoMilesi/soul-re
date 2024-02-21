@@ -12,7 +12,7 @@ glabel rcos
 /* 69B88 80079388 00088430 */  andi       $a0, $a0, 0x800
 /* 69B8C 8007938C 02008010 */  beqz       $a0, .L80079398
 /* 69B90 80079390 00000000 */   nop
-/* 69B94 80079394 22100200 */  sub        $v0, $zero, $v0 # handwritten instruction
+/* 69B94 80079394 22100200 */  neg        $v0, $v0 # handwritten instruction
 .L80079398:
 /* 69B98 80079398 0800E003 */  jr         $ra
 /* 69B9C 8007939C 00000000 */   nop

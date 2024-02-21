@@ -13,8 +13,8 @@ glabel menuface_initialize
 /* A9A18 800B9218 1400B1AF */  sw         $s1, 0x14($sp)
 /* A9A1C 800B921C 37004014 */  bnez       $v0, .L800B92FC
 /* A9A20 800B9220 1000B0AF */   sw        $s0, 0x10($sp)
-/* A9A24 800B9224 0D80043C */  lui        $a0, %hi(hack_initialized + 0x4)
-/* A9A28 800B9228 88208424 */  addiu      $a0, $a0, %lo(hack_initialized + 0x4)
+/* A9A24 800B9224 0D80043C */  lui        $a0, %hi(D_800D2088)
+/* A9A28 800B9228 88208424 */  addiu      $a0, $a0, %lo(D_800D2088)
 /* A9A2C 800B922C 3E82010C */  jal        LOAD_ReadFile
 /* A9A30 800B9230 0B000524 */   addiu     $a1, $zero, 0xB
 /* A9A34 800B9234 21B04000 */  addu       $s6, $v0, $zero

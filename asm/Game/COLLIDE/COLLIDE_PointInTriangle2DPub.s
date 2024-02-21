@@ -3,9 +3,9 @@
 
 glabel COLLIDE_PointInTriangle2DPub
 /* F2BC 8001EABC D8FFBD27 */  addiu      $sp, $sp, -0x28
-/* F2C0 8001EAC0 0D80023C */  lui        $v0, %hi(collide_acceptAttr + 0x4)
+/* F2C0 8001EAC0 0D80023C */  lui        $v0, %hi(D_800D05D4)
 /* F2C4 8001EAC4 2000BFAF */  sw         $ra, 0x20($sp)
-/* F2C8 8001EAC8 D4054A24 */  addiu      $t2, $v0, %lo(collide_acceptAttr + 0x4)
+/* F2C8 8001EAC8 D4054A24 */  addiu      $t2, $v0, %lo(D_800D05D4)
 /* F2CC 8001EACC 03004389 */  lwl        $v1, 0x3($t2)
 /* F2D0 8001EAD0 00004399 */  lwr        $v1, 0x0($t2)
 /* F2D4 8001EAD4 07004889 */  lwl        $t0, 0x7($t2)

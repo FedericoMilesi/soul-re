@@ -21,12 +21,12 @@ glabel RAZIEL_OkToShift
 /* 96094 800A5894 10006230 */  andi       $v0, $v1, 0x10
 /* 96098 800A5898 0F004014 */  bnez       $v0, .L800A58D8
 /* 9609C 800A589C 01000224 */   addiu     $v0, $zero, 0x1
-/* 960A0 800A58A0 0D80043C */  lui        $a0, %hi(ZoneDelta + 0xC)
+/* 960A0 800A58A0 0D80043C */  lui        $a0, %hi(D_800D1D24)
 /* 960A4 800A58A4 C3B5000C */  jal        FONT_Print
-/* 960A8 800A58A8 241D8424 */   addiu     $a0, $a0, %lo(ZoneDelta + 0xC)
-/* 960AC 800A58AC 0D80043C */  lui        $a0, %hi(ZoneDelta + 0x48)
+/* 960A8 800A58A8 241D8424 */   addiu     $a0, $a0, %lo(D_800D1D24)
+/* 960AC 800A58AC 0D80043C */  lui        $a0, %hi(D_800D1D60)
 /* 960B0 800A58B0 C3B5000C */  jal        FONT_Print
-/* 960B4 800A58B4 601D8424 */   addiu     $a0, $a0, %lo(ZoneDelta + 0x48)
+/* 960B4 800A58B4 601D8424 */   addiu     $a0, $a0, %lo(D_800D1D60)
 /* 960B8 800A58B8 36960208 */  j          .L800A58D8
 /* 960BC 800A58BC 21100000 */   addu      $v0, $zero, $zero
 .L800A58C0:

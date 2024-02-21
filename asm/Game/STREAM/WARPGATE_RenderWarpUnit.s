@@ -22,8 +22,8 @@ glabel WARPGATE_RenderWarpUnit
 /* 501F0 8005F9F0 24104300 */  and        $v0, $v0, $v1
 /* 501F4 8005F9F4 05004010 */  beqz       $v0, .L8005FA0C
 /* 501F8 8005F9F8 2190E000 */   addu      $s2, $a3, $zero
-/* 501FC 8005F9FC 0D80043C */  lui        $a0, %hi(WarpRoomArray + 0x2C4)
-/* 50200 8005FA00 5C198424 */  addiu      $a0, $a0, %lo(WarpRoomArray + 0x2C4)
+/* 501FC 8005F9FC 0D80043C */  lui        $a0, %hi(D_800D195C)
+/* 50200 8005FA00 5C198424 */  addiu      $a0, $a0, %lo(D_800D195C)
 /* 50204 8005FA04 C3B5000C */  jal        FONT_Print
 /* 50208 8005FA08 0C002526 */   addiu     $a1, $s1, 0xC
 .L8005FA0C:
@@ -63,7 +63,7 @@ glabel WARPGATE_RenderWarpUnit
 /* 50288 8005FA88 21200002 */  addu       $a0, $s0, $zero
 /* 5028C 8005FA8C 280091AC */  sw         $s1, 0x28($a0)
 /* 50290 8005FA90 0800868E */  lw         $a2, 0x8($s4)
-/* 50294 8005FA94 4CBA82A7 */  sh         $v0, %gp_rel(D_800D2FE4)($gp)
+/* 50294 8005FA94 4CBA82A7 */  sh         $v0, %gp_rel(RENDER_currentStreamUnitID)($gp)
 /* 50298 8005FA98 EE7B010C */  jal        GetFogColor
 /* 5029C 8005FA9C 21288002 */   addu      $a1, $s4, $zero
 /* 502A0 8005FAA0 21204002 */  addu       $a0, $s2, $zero

@@ -48,10 +48,10 @@ glabel WCBEGG_ShouldIgniteEgg
 /* 7FA34 8008F234 0D004014 */  bnez       $v0, .L8008F26C
 /* 7FA38 8008F238 01000224 */   addiu     $v0, $zero, 0x1
 /* 7FA3C 8008F23C 1C00028E */  lw         $v0, 0x1C($s0)
-/* 7FA40 8008F240 0D80053C */  lui        $a1, %hi(WORSHIP_FunctionTable + 0x20)
+/* 7FA40 8008F240 0D80053C */  lui        $a1, %hi(D_800D1BF0)
 /* 7FA44 8008F244 2400448C */  lw         $a0, 0x24($v0)
 /* 7FA48 8008F248 1CD2010C */  jal        strcmpi
-/* 7FA4C 8008F24C F01BA524 */   addiu     $a1, $a1, %lo(WORSHIP_FunctionTable + 0x20)
+/* 7FA4C 8008F24C F01BA524 */   addiu     $a1, $a1, %lo(D_800D1BF0)
 /* 7FA50 8008F250 06004010 */  beqz       $v0, .L8008F26C
 /* 7FA54 8008F254 01000224 */   addiu     $v0, $zero, 0x1
 .L8008F258:

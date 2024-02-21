@@ -15,21 +15,21 @@ glabel INSTANCE_DeactivateFarInstances
 /* 22B6C 8003236C 0400508C */  lw         $s0, 0x4($v0)
 /* 22B70 80032370 C3100400 */  sra        $v0, $a0, 3
 /* 22B74 80032374 01005124 */  addiu      $s1, $v0, 0x1
-/* 22B78 80032378 7892828F */  lw         $v0, %gp_rel(gpSaved + 0x4)($gp)
+/* 22B78 80032378 7892828F */  lw         $v0, %gp_rel(D_800D0810)($gp)
 /* 22B7C 8003237C 00000000 */  nop
 /* 22B80 80032380 2A104400 */  slt        $v0, $v0, $a0
 /* 22B84 80032384 02004014 */  bnez       $v0, .L80032390
 /* 22B88 80032388 801F123C */   lui       $s2, (0x1F800004 >> 16)
-/* 22B8C 8003238C 789280AF */  sw         $zero, %gp_rel(gpSaved + 0x4)($gp)
+/* 22B8C 8003238C 789280AF */  sw         $zero, %gp_rel(D_800D0810)($gp)
 .L80032390:
-/* 22B90 80032390 7892838F */  lw         $v1, %gp_rel(gpSaved + 0x4)($gp)
+/* 22B90 80032390 7892838F */  lw         $v1, %gp_rel(D_800D0810)($gp)
 /* 22B94 80032394 00000000 */  nop
 /* 22B98 80032398 21107100 */  addu       $v0, $v1, $s1
-/* 22B9C 8003239C 789282AF */  sw         $v0, %gp_rel(gpSaved + 0x4)($gp)
+/* 22B9C 8003239C 789282AF */  sw         $v0, %gp_rel(D_800D0810)($gp)
 /* 22BA0 800323A0 2A104400 */  slt        $v0, $v0, $a0
 /* 22BA4 800323A4 02004014 */  bnez       $v0, .L800323B0
 /* 22BA8 800323A8 00000000 */   nop
-/* 22BAC 800323AC 789280AF */  sw         $zero, %gp_rel(gpSaved + 0x4)($gp)
+/* 22BAC 800323AC 789280AF */  sw         $zero, %gp_rel(D_800D0810)($gp)
 .L800323B0:
 /* 22BB0 800323B0 05006010 */  beqz       $v1, .L800323C8
 /* 22BB4 800323B4 00000000 */   nop

@@ -16,10 +16,10 @@ glabel WCBEGG_Collide
 /* 80168 8008F968 1400828C */  lw         $v0, 0x14($a0)
 /* 8016C 8008F96C 00000000 */  nop
 /* 80170 8008F970 1C00428C */  lw         $v0, 0x1C($v0)
-/* 80174 8008F974 0D80053C */  lui        $a1, %hi(WORSHIP_FunctionTable + 0x2C)
+/* 80174 8008F974 0D80053C */  lui        $a1, %hi(D_800D1BFC)
 /* 80178 8008F978 2400448C */  lw         $a0, 0x24($v0)
 /* 8017C 8008F97C 1CD2010C */  jal        strcmpi
-/* 80180 8008F980 FC1BA524 */   addiu     $a1, $a1, %lo(WORSHIP_FunctionTable + 0x2C)
+/* 80180 8008F980 FC1BA524 */   addiu     $a1, $a1, %lo(D_800D1BFC)
 /* 80184 8008F984 08004010 */  beqz       $v0, .L8008F9A8
 /* 80188 8008F988 21200002 */   addu      $a0, $s0, $zero
 .L8008F98C:

@@ -2,8 +2,8 @@
 .set noreorder /* don't insert nops after branches */
 
 glabel StopCallback
-/* AA370 800B9B70 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x10F0)
-/* AA374 800B9B74 9CD9428C */  lw         $v0, %lo(the_attract_movies + 0x10F0)($v0)
+/* AA370 800B9B70 0D80023C */  lui        $v0, %hi(D_800CD99C)
+/* AA374 800B9B74 9CD9428C */  lw         $v0, %lo(D_800CD99C)($v0)
 /* AA378 800B9B78 E8FFBD27 */  addiu      $sp, $sp, -0x18
 /* AA37C 800B9B7C 1000BFAF */  sw         $ra, 0x10($sp)
 /* AA380 800B9B80 1000428C */  lw         $v0, 0x10($v0)

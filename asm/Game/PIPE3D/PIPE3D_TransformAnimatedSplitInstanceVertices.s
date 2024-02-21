@@ -8,7 +8,7 @@ glabel PIPE3D_TransformAnimatedSplitInstanceVertices
 /* 2C2F0 8003BAF0 21A0A000 */  addu       $s4, $a1, $zero
 /* 2C2F4 8003BAF4 4400B3AF */  sw         $s3, 0x44($sp)
 /* 2C2F8 8003BAF8 7C00B38F */  lw         $s3, 0x7C($sp)
-/* 2C2FC 8003BAFC 0D80023C */  lui        $v0, %hi(identityMatrix + 0x14)
+/* 2C2FC 8003BAFC 0D80023C */  lui        $v0, %hi(D_800D0D10)
 /* 2C300 8003BB00 5C00BFAF */  sw         $ra, 0x5C($sp)
 /* 2C304 8003BB04 5800BEAF */  sw         $fp, 0x58($sp)
 /* 2C308 8003BB08 5400B7AF */  sw         $s7, 0x54($sp)
@@ -23,7 +23,7 @@ glabel PIPE3D_TransformAnimatedSplitInstanceVertices
 /* 2C32C 8003BB2C 1C00CC8C */  lw         $t4, 0x1C($a2)
 /* 2C330 8003BB30 801F173C */  lui        $s7, (0x1F800068 >> 16)
 /* 2C334 8003BB34 2400ACAF */  sw         $t4, 0x24($sp)
-/* 2C338 8003BB38 100D4C24 */  addiu      $t4, $v0, %lo(identityMatrix + 0x14)
+/* 2C338 8003BB38 100D4C24 */  addiu      $t4, $v0, %lo(D_800D0D10)
 /* 2C33C 8003BB3C 03008D89 */  lwl        $t5, 0x3($t4)
 /* 2C340 8003BB40 00008D99 */  lwr        $t5, 0x0($t4)
 /* 2C344 8003BB44 00000000 */  nop
@@ -65,9 +65,9 @@ glabel PIPE3D_TransformAnimatedSplitInstanceVertices
 /* 2C3C4 8003BBC4 2C00A0AF */  sw         $zero, 0x2C($sp)
 /* 2C3C8 8003BBC8 08008385 */  lh         $v1, 0x8($t4)
 /* 2C3CC 8003BBCC 21F0A201 */  addu       $fp, $t5, $v0
-/* 2C3D0 8003BBD0 0D80023C */  lui        $v0, %hi(identityMatrix + 0x14)
+/* 2C3D0 8003BBD0 0D80023C */  lui        $v0, %hi(D_800D0D10)
 /* 2C3D4 8003BBD4 C0180300 */  sll        $v1, $v1, 3
-/* 2C3D8 8003BBD8 100D4D24 */  addiu      $t5, $v0, %lo(identityMatrix + 0x14)
+/* 2C3D8 8003BBD8 100D4D24 */  addiu      $t5, $v0, %lo(D_800D0D10)
 /* 2C3DC 8003BBDC 0300AE89 */  lwl        $t6, 0x3($t5)
 /* 2C3E0 8003BBE0 0000AE99 */  lwr        $t6, 0x0($t5)
 /* 2C3E4 8003BBE4 00000000 */  nop

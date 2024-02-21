@@ -27,9 +27,9 @@ glabel MONSENSE_DoSenses
 /* 77934 80087134 FFFF4224 */  addiu      $v0, $v0, -0x1
 /* 77938 80087138 E4ED82AF */  sw         $v0, %gp_rel(lastSenseFrame)($gp)
 .L8008713C:
-/* 7793C 8008713C 94A580AF */  sw         $zero, %gp_rel(radarDirIndex + 0x8)($gp)
+/* 7793C 8008713C 94A580AF */  sw         $zero, %gp_rel(D_800D1B2C)($gp)
 .L80087140:
-/* 77940 80087140 94A5828F */  lw         $v0, %gp_rel(radarDirIndex + 0x8)($gp)
+/* 77940 80087140 94A5828F */  lw         $v0, %gp_rel(D_800D1B2C)($gp)
 /* 77944 80087144 00000000 */  nop
 /* 77948 80087148 1C004014 */  bnez       $v0, .L800871BC
 /* 7794C 8008714C 00000000 */   nop
@@ -49,7 +49,7 @@ glabel MONSENSE_DoSenses
 /* 77984 80087184 01000324 */  addiu      $v1, $zero, 0x1
 /* 77988 80087188 000043A0 */  sb         $v1, 0x0($v0)
 /* 7798C 8008718C 01000224 */  addiu      $v0, $zero, 0x1
-/* 77990 80087190 94A582AF */  sw         $v0, %gp_rel(radarDirIndex + 0x8)($gp)
+/* 77990 80087190 94A582AF */  sw         $v0, %gp_rel(D_800D1B2C)($gp)
 /* 77994 80087194 620102A2 */  sb         $v0, 0x162($s0)
 /* 77998 80087198 0400028E */  lw         $v0, 0x4($s0)
 /* 7799C 8008719C 0020033C */  lui        $v1, (0x20000000 >> 16)

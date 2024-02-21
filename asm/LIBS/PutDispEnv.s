@@ -26,8 +26,8 @@ glabel PutDispEnv
 /* AB1F0 800BA9F0 0005023C */  lui        $v0, (0x5000000 >> 16)
 /* AB1F4 800BA9F4 02002396 */  lhu        $v1, 0x2($s1)
 /* AB1F8 800BA9F8 00002496 */  lhu        $a0, 0x0($s1)
-/* AB1FC 800BA9FC 0D80053C */  lui        $a1, %hi(the_attract_movies + 0x1158)
-/* AB200 800BAA00 04DAA58C */  lw         $a1, %lo(the_attract_movies + 0x1158)($a1)
+/* AB1FC 800BA9FC 0D80053C */  lui        $a1, %hi(D_800CDA04)
+/* AB200 800BAA00 04DAA58C */  lw         $a1, %lo(D_800CDA04)($a1)
 /* AB204 800BAA04 FF036330 */  andi       $v1, $v1, 0x3FF
 /* AB208 800BAA08 801A0300 */  sll        $v1, $v1, 10
 /* AB20C 800BAA0C FF038430 */  andi       $a0, $a0, 0x3FF
@@ -126,8 +126,8 @@ glabel PutDispEnv
 /* AB358 800BAB58 00000000 */   nop
 /* AB35C 800BAB5C 24001036 */  ori        $s0, $s0, 0x24
 .L800BAB60:
-/* AB360 800BAB60 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x1158)
-/* AB364 800BAB64 04DA428C */  lw         $v0, %lo(the_attract_movies + 0x1158)($v0)
+/* AB360 800BAB60 0D80023C */  lui        $v0, %hi(D_800CDA04)
+/* AB364 800BAB64 04DA428C */  lw         $v0, %lo(D_800CDA04)($v0)
 /* AB368 800BAB68 00000000 */  nop
 /* AB36C 800BAB6C 1000428C */  lw         $v0, 0x10($v0)
 /* AB370 800BAB70 00000000 */  nop
@@ -321,8 +321,8 @@ glabel PutDispEnv
 /* AB614 800BAE14 001B0300 */  sll        $v1, $v1, 12
 /* AB618 800BAE18 FF0F8430 */  andi       $a0, $a0, 0xFFF
 /* AB61C 800BAE1C 0006023C */  lui        $v0, (0x6000000 >> 16)
-/* AB620 800BAE20 0D80053C */  lui        $a1, %hi(the_attract_movies + 0x1158)
-/* AB624 800BAE24 04DAA58C */  lw         $a1, %lo(the_attract_movies + 0x1158)($a1)
+/* AB620 800BAE20 0D80053C */  lui        $a1, %hi(D_800CDA04)
+/* AB624 800BAE24 04DAA58C */  lw         $a1, %lo(D_800CDA04)($a1)
 /* AB628 800BAE28 25208200 */  or         $a0, $a0, $v0
 /* AB62C 800BAE2C 1000A28C */  lw         $v0, 0x10($a1)
 /* AB630 800BAE30 00000000 */  nop
@@ -332,8 +332,8 @@ glabel PutDispEnv
 /* AB640 800BAE40 801A0300 */  sll        $v1, $v1, 10
 /* AB644 800BAE44 FF030432 */  andi       $a0, $s0, 0x3FF
 /* AB648 800BAE48 0007023C */  lui        $v0, (0x7000000 >> 16)
-/* AB64C 800BAE4C 0D80053C */  lui        $a1, %hi(the_attract_movies + 0x1158)
-/* AB650 800BAE50 04DAA58C */  lw         $a1, %lo(the_attract_movies + 0x1158)($a1)
+/* AB64C 800BAE4C 0D80053C */  lui        $a1, %hi(D_800CDA04)
+/* AB650 800BAE50 04DAA58C */  lw         $a1, %lo(D_800CDA04)($a1)
 /* AB654 800BAE54 25208200 */  or         $a0, $a0, $v0
 /* AB658 800BAE58 1000A28C */  lw         $v0, 0x10($a1)
 /* AB65C 800BAE5C 00000000 */  nop

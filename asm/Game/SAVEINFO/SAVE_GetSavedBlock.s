@@ -14,8 +14,8 @@ glabel SAVE_GetSavedBlock
 /* A5BA8 800B53A8 2000B4AF */  sw         $s4, 0x20($sp)
 /* A5BAC 800B53AC 05004014 */  bnez       $v0, .L800B53C4
 /* A5BB0 800B53B0 1400B1AF */   sw        $s1, 0x14($sp)
-/* A5BB4 800B53B4 0D80043C */  lui        $a0, %hi(SaveArraySize + 0x28)
-/* A5BB8 800B53B8 0C1E8424 */  addiu      $a0, $a0, %lo(SaveArraySize + 0x28)
+/* A5BB4 800B53B4 0D80043C */  lui        $a0, %hi(D_800D1E0C)
+/* A5BB8 800B53B8 0C1E8424 */  addiu      $a0, $a0, %lo(D_800D1E0C)
 /* A5BBC 800B53BC 2B52000C */  jal        DEBUG_FatalError
 /* A5BC0 800B53C0 21286002 */   addu      $a1, $s3, $zero
 .L800B53C4:
@@ -31,8 +31,8 @@ glabel SAVE_GetSavedBlock
 /* A5BE8 800B53E8 FD03022A */  slti       $v0, $s0, 0x3FD
 /* A5BEC 800B53EC 06004014 */  bnez       $v0, .L800B5408
 /* A5BF0 800B53F0 21880000 */   addu      $s1, $zero, $zero
-/* A5BF4 800B53F4 0D80043C */  lui        $a0, %hi(SaveArraySize + 0x40)
-/* A5BF8 800B53F8 241E8424 */  addiu      $a0, $a0, %lo(SaveArraySize + 0x40)
+/* A5BF4 800B53F4 0D80043C */  lui        $a0, %hi(D_800D1E24)
+/* A5BF8 800B53F8 241E8424 */  addiu      $a0, $a0, %lo(D_800D1E24)
 /* A5BFC 800B53FC 21280002 */  addu       $a1, $s0, $zero
 /* A5C00 800B5400 2B52000C */  jal        DEBUG_FatalError
 /* A5C04 800B5404 21306002 */   addu      $a2, $s3, $zero
@@ -58,8 +58,8 @@ glabel SAVE_GetSavedBlock
 /* A5C48 800B5448 28D5020C */  jal        SAVE_PurgeAMemoryBlock
 /* A5C4C 800B544C 00000000 */   nop
 /* A5C50 800B5450 09004014 */  bnez       $v0, .L800B5478
-/* A5C54 800B5454 0D80043C */   lui       $a0, %hi(SaveArraySize + 0x60)
-/* A5C58 800B5458 441E8424 */  addiu      $a0, $a0, %lo(SaveArraySize + 0x60)
+/* A5C54 800B5454 0D80043C */   lui       $a0, %hi(D_800D1E44)
+/* A5C58 800B5458 441E8424 */  addiu      $a0, $a0, %lo(D_800D1E44)
 /* A5C5C 800B545C 21280002 */  addu       $a1, $s0, $zero
 /* A5C60 800B5460 01001124 */  addiu      $s1, $zero, 0x1
 /* A5C64 800B5464 E8FD828F */  lw         $v0, %gp_rel(savedInfoTracker + 0xC)($gp)

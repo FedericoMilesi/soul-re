@@ -15,7 +15,7 @@ glabel VOICEXA_Init
 /* A7308 800B6B08 4800B0AF */   sw        $s0, 0x48($sp)
 /* A730C 800B6B0C 21880000 */  addu       $s1, $zero, $zero
 /* A7310 800B6B10 2800B227 */  addiu      $s2, $sp, 0x28
-/* A7314 800B6B14 0D80133C */  lui        $s3, %hi(monVersion + 0xC)
+/* A7314 800B6B14 0D80133C */  lui        $s3, %hi(D_800D1EB0)
 /* A7318 800B6B18 21808000 */  addu       $s0, $a0, $zero
 /* A731C 800B6B1C AA0000A2 */  sb         $zero, 0xAA($s0)
 /* A7320 800B6B20 AB0000A2 */  sb         $zero, 0xAB($s0)
@@ -30,7 +30,7 @@ glabel VOICEXA_Init
 /* A7344 800B6B44 A80000A2 */  sb         $zero, 0xA8($s0)
 .L800B6B48:
 /* A7348 800B6B48 21204002 */  addu       $a0, $s2, $zero
-/* A734C 800B6B4C B01E6526 */  addiu      $a1, $s3, %lo(monVersion + 0xC)
+/* A734C 800B6B4C B01E6526 */  addiu      $a1, $s3, %lo(D_800D1EB0)
 /* A7350 800B6B50 1AD1010C */  jal        sprintf
 /* A7354 800B6B54 21302002 */   addu      $a2, $s1, $zero
 /* A7358 800B6B58 1000A427 */  addiu      $a0, $sp, 0x10

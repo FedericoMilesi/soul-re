@@ -8,9 +8,9 @@ glabel STREAM_AddQueueEntryToTail
 /* 508A0 800600A0 00000000 */  nop
 /* 508A4 800600A4 04000016 */  bnez       $s0, .L800600B8
 /* 508A8 800600A8 1400BFAF */   sw        $ra, 0x14($sp)
-/* 508AC 800600AC 0D80043C */  lui        $a0, %hi(gCurDir + 0x4)
+/* 508AC 800600AC 0D80043C */  lui        $a0, %hi(D_800D1980)
 /* 508B0 800600B0 2B52000C */  jal        DEBUG_FatalError
-/* 508B4 800600B4 80198424 */   addiu     $a0, $a0, %lo(gCurDir + 0x4)
+/* 508B4 800600B4 80198424 */   addiu     $a0, $a0, %lo(D_800D1980)
 .L800600B8:
 /* 508B8 800600B8 0000028E */  lw         $v0, 0x0($s0)
 /* 508BC 800600BC 48CB838F */  lw         $v1, %gp_rel(loadTail)($gp)

@@ -12,8 +12,8 @@ glabel STREAM_DumpObject
 /* 49BCC 800593CC 1000308E */  lw         $s0, 0x10($s1)
 /* 49BD0 800593D0 0C004314 */  bne        $v0, $v1, .L80059404
 /* 49BD4 800593D4 1000A427 */   addiu     $a0, $sp, 0x10
-/* 49BD8 800593D8 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x278)
-/* 49BDC 800593DC 1019A524 */  addiu      $a1, $a1, %lo(WarpRoomArray + 0x278)
+/* 49BD8 800593D8 0D80053C */  lui        $a1, %hi(D_800D1910)
+/* 49BDC 800593DC 1019A524 */  addiu      $a1, $a1, %lo(D_800D1910)
 /* 49BE0 800593E0 21302002 */  addu       $a2, $s1, $zero
 /* 49BE4 800593E4 1AD1010C */  jal        sprintf
 /* 49BE8 800593E8 2138C000 */   addu      $a3, $a2, $zero

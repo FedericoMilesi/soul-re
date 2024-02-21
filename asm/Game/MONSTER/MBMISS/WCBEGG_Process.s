@@ -22,7 +22,7 @@ glabel WCBEGG_Process
 /* 7FAC8 8008F2C8 0C01238E */  lw         $v1, 0x10C($s1)
 /* 7FACC 8008F2CC 3CF94224 */  addiu      $v0, $v0, %lo(WCBEGG_Collide)
 /* 7FAD0 8008F2D0 09006214 */  bne        $v1, $v0, .L8008F2F8
-/* 7FAD4 8008F2D4 0D80043C */   lui       $a0, %hi(WORSHIP_FunctionTable + 0x2C)
+/* 7FAD4 8008F2D4 0D80043C */   lui       $a0, %hi(D_800D1BFC)
 /* 7FAD8 8008F2D8 4801238E */  lw         $v1, 0x148($s1)
 /* 7FADC 8008F2DC F4BD828F */  lw         $v0, %gp_rel(gameTrackerX + 0x2C)($gp)
 /* 7FAE0 8008F2E0 00000000 */  nop
@@ -30,10 +30,10 @@ glabel WCBEGG_Process
 /* 7FAE8 8008F2E8 0980023C */   lui       $v0, %hi(WCBEGG_ExplodeCollide)
 /* 7FAEC 8008F2EC B8F74224 */  addiu      $v0, $v0, %lo(WCBEGG_ExplodeCollide)
 /* 7FAF0 8008F2F0 0C0122AE */  sw         $v0, 0x10C($s1)
-/* 7FAF4 8008F2F4 0D80043C */  lui        $a0, %hi(WORSHIP_FunctionTable + 0x2C)
+/* 7FAF4 8008F2F4 0D80043C */  lui        $a0, %hi(D_800D1BFC)
 .L8008F2F8:
 /* 7FAF8 8008F2F8 14F9000C */  jal        OBTABLE_FindObject
-/* 7FAFC 8008F2FC FC1B8424 */   addiu     $a0, $a0, %lo(WORSHIP_FunctionTable + 0x2C)
+/* 7FAFC 8008F2FC FC1B8424 */   addiu     $a0, $a0, %lo(D_800D1BFC)
 /* 7FB00 8008F300 4F004010 */  beqz       $v0, .L8008F440
 /* 7FB04 8008F304 00000000 */   nop
 /* 7FB08 8008F308 1C00428C */  lw         $v0, 0x1C($v0)

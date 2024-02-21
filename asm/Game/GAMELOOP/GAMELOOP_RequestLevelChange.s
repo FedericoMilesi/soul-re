@@ -18,10 +18,10 @@ glabel GAMELOOP_RequestLevelChange
 /* 2198C 8003118C 01004234 */  ori        $v0, $v0, 0x1
 /* 21990 80031190 B901010C */  jal        SOUND_ResetAllSound
 /* 21994 80031194 400102AE */   sw        $v0, 0x140($s0)
-/* 21998 80031198 0D80053C */  lui        $a1, %hi(fontsObject + 0xA4)
+/* 21998 80031198 0D80053C */  lui        $a1, %hi(D_800D07B8)
 /* 2199C 8003119C 003C1100 */  sll        $a3, $s1, 16
 /* 219A0 800311A0 5C010426 */  addiu      $a0, $s0, 0x15C
-/* 219A4 800311A4 B807A524 */  addiu      $a1, $a1, %lo(fontsObject + 0xA4)
+/* 219A4 800311A4 B807A524 */  addiu      $a1, $a1, %lo(D_800D07B8)
 /* 219A8 800311A8 21304002 */  addu       $a2, $s2, $zero
 /* 219AC 800311AC 1AD1010C */  jal        sprintf
 /* 219B0 800311B0 033C0700 */   sra       $a3, $a3, 16

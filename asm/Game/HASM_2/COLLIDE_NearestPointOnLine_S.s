@@ -40,7 +40,7 @@ glabel COLLIDE_NearestPointOnLine_S
 /* 68A6C 8007826C 2228A600 */  sub        $a1, $a1, $a2 # handwritten instruction
 /* 68A70 80078270 0700E010 */  beqz       $a3, .L80078290
 /* 68A74 80078274 002B0500 */   sll       $a1, $a1, 12
-/* 68A78 80078278 22280500 */  sub        $a1, $zero, $a1 # handwritten instruction
+/* 68A78 80078278 22280500 */  neg        $a1, $a1 # handwritten instruction
 /* 68A7C 8007827C 1A00A700 */  div        $zero, $a1, $a3
 /* 68A80 80078280 00488F48 */  mtc2       $t7, $9 # handwritten instruction
 /* 68A84 80078284 00509848 */  mtc2       $t8, $10 # handwritten instruction

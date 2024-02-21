@@ -34,7 +34,7 @@ glabel CAMERA_SetupColInfo
 /* DAB0 8001D2B0 00000000 */  nop
 /* DAB4 8001D2B4 08004014 */  bnez       $v0, .L8001D2D8
 /* DAB8 8001D2B8 1E000224 */   addiu     $v0, $zero, 0x1E
-/* DABC 8001D2BC 688E8387 */  lh         $v1, %gp_rel(CameraLookStickyFlag + 0x2)($gp)
+/* DABC 8001D2BC 688E8387 */  lh         $v1, %gp_rel(D_800D0400)($gp)
 /* DAC0 8001D2C0 06000224 */  addiu      $v0, $zero, 0x6
 /* DAC4 8001D2C4 03006010 */  beqz       $v1, .L8001D2D4
 /* DAC8 8001D2C8 580002AD */   sw        $v0, 0x58($t0)
@@ -44,15 +44,15 @@ glabel CAMERA_SetupColInfo
 /* DAD4 8001D2D4 16000224 */  addiu      $v0, $zero, 0x16
 .L8001D2D8:
 /* DAD8 8001D2D8 580002AD */  sw         $v0, 0x58($t0)
-/* DADC 8001D2DC 688E8287 */  lh         $v0, %gp_rel(CameraLookStickyFlag + 0x2)($gp)
+/* DADC 8001D2DC 688E8287 */  lh         $v0, %gp_rel(D_800D0400)($gp)
 /* DAE0 8001D2E0 00000000 */  nop
 /* DAE4 8001D2E4 04004010 */  beqz       $v0, .L8001D2F8
 /* DAE8 8001D2E8 01000224 */   addiu     $v0, $zero, 0x1
-/* DAEC 8001D2EC 688E80A7 */  sh         $zero, %gp_rel(CameraLookStickyFlag + 0x2)($gp)
+/* DAEC 8001D2EC 688E80A7 */  sh         $zero, %gp_rel(D_800D0400)($gp)
 /* DAF0 8001D2F0 0800E003 */  jr         $ra
 /* DAF4 8001D2F4 00000000 */   nop
 .L8001D2F8:
-/* DAF8 8001D2F8 688E82A7 */  sh         $v0, %gp_rel(CameraLookStickyFlag + 0x2)($gp)
+/* DAF8 8001D2F8 688E82A7 */  sh         $v0, %gp_rel(D_800D0400)($gp)
 /* DAFC 8001D2FC 0800E003 */  jr         $ra
 /* DB00 8001D300 00000000 */   nop
 .size CAMERA_SetupColInfo, . - CAMERA_SetupColInfo

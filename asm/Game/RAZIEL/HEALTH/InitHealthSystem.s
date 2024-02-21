@@ -20,7 +20,7 @@ glabel InitHealthSystem
 /* 94CDC 800A44DC E395020C */  jal        razMaterialShift
 /* 94CE0 800A44E0 00000000 */   nop
 /* 94CE4 800A44E4 42910208 */  j          .L800A4508
-/* 94CE8 800A44E8 0D80043C */   lui       $a0, %hi(ZoneDelta + 0x4)
+/* 94CE8 800A44E8 0D80043C */   lui       $a0, %hi(D_800D1D1C)
 .L800A44EC:
 /* 94CEC 800A44EC 68FA82AF */  sw         $v0, %gp_rel(Raziel + 0x438)($gp)
 /* 94CF0 800A44F0 0492020C */  jal        GetMaxHealth
@@ -28,9 +28,9 @@ glabel InitHealthSystem
 /* 94CF8 800A44F8 2CFA82AF */  sw         $v0, %gp_rel(Raziel + 0x3FC)($gp)
 /* 94CFC 800A44FC 9F95020C */  jal        razSpectralShift
 /* 94D00 800A4500 00000000 */   nop
-/* 94D04 800A4504 0D80043C */  lui        $a0, %hi(ZoneDelta + 0x4)
+/* 94D04 800A4504 0D80043C */  lui        $a0, %hi(D_800D1D1C)
 .L800A4508:
-/* 94D08 800A4508 1C1D8424 */  addiu      $a0, $a0, %lo(ZoneDelta + 0x4)
+/* 94D08 800A4508 1C1D8424 */  addiu      $a0, $a0, %lo(D_800D1D1C)
 /* 94D0C 800A450C AA9F020C */  jal        razInBaseArea
 /* 94D10 800A4510 05000524 */   addiu     $a1, $zero, 0x5
 /* 94D14 800A4514 04004010 */  beqz       $v0, .L800A4528

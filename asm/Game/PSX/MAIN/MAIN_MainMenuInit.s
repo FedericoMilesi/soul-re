@@ -3,8 +3,8 @@
 
 glabel MAIN_MainMenuInit
 /* 298D4 800390D4 A8FFBD27 */  addiu      $sp, $sp, -0x58
-/* 298D8 800390D8 0D80023C */  lui        $v0, %hi(mainMenuFading + 0xFE)
-/* 298DC 800390DC 5C0C4324 */  addiu      $v1, $v0, %lo(mainMenuFading + 0xFE)
+/* 298D8 800390D8 0D80023C */  lui        $v0, %hi(D_800D0C5C)
+/* 298DC 800390DC 5C0C4324 */  addiu      $v1, $v0, %lo(D_800D0C5C)
 /* 298E0 800390E0 03006230 */  andi       $v0, $v1, 0x3
 /* 298E4 800390E4 5000BFAF */  sw         $ra, 0x50($sp)
 /* 298E8 800390E8 B89580AF */  sw         $zero, %gp_rel(mainMenuMode)($gp)
@@ -66,8 +66,8 @@ glabel MAIN_MainMenuInit
 /* 299B8 800391B8 1000A427 */   addiu     $a0, $sp, 0x10
 /* 299BC 800391BC 0E004010 */  beqz       $v0, .L800391F8
 /* 299C0 800391C0 21280000 */   addu      $a1, $zero, $zero
-/* 299C4 800391C4 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x126)
-/* 299C8 800391C8 840C8424 */  addiu      $a0, $a0, %lo(mainMenuFading + 0x126)
+/* 299C4 800391C4 0D80043C */  lui        $a0, %hi(D_800D0C84)
+/* 299C8 800391C8 840C8424 */  addiu      $a0, $a0, %lo(D_800D0C84)
 /* 299CC 800391CC BF4A010C */  jal        aadLoadDynamicSfx
 /* 299D0 800391D0 2130A000 */   addu      $a2, $a1, $zero
 /* 299D4 800391D4 38BC82AF */  sw         $v0, %gp_rel(mainMenuSfx)($gp)
@@ -75,16 +75,16 @@ glabel MAIN_MainMenuInit
 /* 299D8 800391D8 AF4B010C */  jal        aadGetNumLoadsQueued
 /* 299DC 800391DC 00000000 */   nop
 /* 299E0 800391E0 06004010 */  beqz       $v0, .L800391FC
-/* 299E4 800391E4 0D80043C */   lui       $a0, %hi(mainMenuFading + 0x132)
+/* 299E4 800391E4 0D80043C */   lui       $a0, %hi(D_800D0C90)
 /* 299E8 800391E8 BA4B010C */  jal        aadProcessLoadQueue
 /* 299EC 800391EC 00000000 */   nop
 /* 299F0 800391F0 76E40008 */  j          .L800391D8
 /* 299F4 800391F4 00000000 */   nop
 .L800391F8:
-/* 299F8 800391F8 0D80043C */  lui        $a0, %hi(mainMenuFading + 0x132)
+/* 299F8 800391F8 0D80043C */  lui        $a0, %hi(D_800D0C90)
 .L800391FC:
 /* 299FC 800391FC B9E3000C */  jal        MAIN_LoadTim
-/* 29A00 80039200 900C8424 */   addiu     $a0, $a0, %lo(mainMenuFading + 0x132)
+/* 29A00 80039200 900C8424 */   addiu     $a0, $a0, %lo(D_800D0C90)
 /* 29A04 80039204 BC9582AF */  sw         $v0, %gp_rel(mainMenuScreen)($gp)
 /* 29A08 80039208 BDCB010C */  jal        VRAM_EnableTerrainArea
 /* 29A0C 8003920C 00000000 */   nop

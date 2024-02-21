@@ -25,8 +25,8 @@ glabel ResetGraph
 .L800BA1C0:
 /* AA9C0 800BA1C0 0180043C */  lui        $a0, %hi(D_8001257C)
 /* AA9C4 800BA1C4 7C258424 */  addiu      $a0, $a0, %lo(D_8001257C)
-/* AA9C8 800BA1C8 0D80053C */  lui        $a1, %hi(the_attract_movies + 0x1118)
-/* AA9CC 800BA1CC C4D9A524 */  addiu      $a1, $a1, %lo(the_attract_movies + 0x1118)
+/* AA9C8 800BA1C8 0D80053C */  lui        $a1, %hi(D_800CD9C4)
+/* AA9CC 800BA1CC C4D9A524 */  addiu      $a1, $a1, %lo(D_800CD9C4)
 /* AA9D0 800BA1D0 0D80063C */  lui        $a2, %hi(GEnv)
 /* AA9D4 800BA1D4 06D1010C */  jal        printf
 /* AA9D8 800BA1D8 0CDAC624 */   addiu     $a2, $a2, %lo(GEnv)
@@ -40,8 +40,8 @@ glabel ResetGraph
 /* AA9F4 800BA1F4 9FE6020C */  jal        ResetCallback
 /* AA9F8 800BA1F8 00000000 */   nop
 /* AA9FC 800BA1FC FF00023C */  lui        $v0, (0xFFFFFF >> 16)
-/* AAA00 800BA200 0D80043C */  lui        $a0, %hi(the_attract_movies + 0x1158)
-/* AAA04 800BA204 04DA848C */  lw         $a0, %lo(the_attract_movies + 0x1158)($a0)
+/* AAA00 800BA200 0D80043C */  lui        $a0, %hi(D_800CDA04)
+/* AAA04 800BA204 04DA848C */  lw         $a0, %lo(D_800CDA04)($a0)
 /* AAA08 800BA208 FFFF4234 */  ori        $v0, $v0, (0xFFFFFF & 0xFFFF)
 /* AAA0C 800BA20C D408030C */  jal        GPU_cw
 /* AAA10 800BA210 24208200 */   and       $a0, $a0, $v0
@@ -88,8 +88,8 @@ glabel ResetGraph
 /* AAAB0 800BA2B0 09F84000 */  jalr       $v0
 /* AAAB4 800BA2B4 21282002 */   addu      $a1, $s1, $zero
 .L800BA2B8:
-/* AAAB8 800BA2B8 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x1158)
-/* AAABC 800BA2BC 04DA428C */  lw         $v0, %lo(the_attract_movies + 0x1158)($v0)
+/* AAAB8 800BA2B8 0D80023C */  lui        $v0, %hi(D_800CDA04)
+/* AAABC 800BA2BC 04DA428C */  lw         $v0, %lo(D_800CDA04)($v0)
 /* AAAC0 800BA2C0 00000000 */  nop
 /* AAAC4 800BA2C4 3400428C */  lw         $v0, 0x34($v0)
 /* AAAC8 800BA2C8 00000000 */  nop

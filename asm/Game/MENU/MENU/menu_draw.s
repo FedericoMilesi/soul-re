@@ -5,7 +5,7 @@ glabel menu_draw
 /* A8930 800B8130 B0FFBD27 */  addiu      $sp, $sp, -0x50
 /* A8934 800B8134 3800B2AF */  sw         $s2, 0x38($sp)
 /* A8938 800B8138 21908000 */  addu       $s2, $a0, $zero
-/* A893C 800B813C 0D80023C */  lui        $v0, %hi(voiceList + 0x5C)
+/* A893C 800B813C 0D80023C */  lui        $v0, %hi(D_800D1F40)
 /* A8940 800B8140 4C00BFAF */  sw         $ra, 0x4C($sp)
 /* A8944 800B8144 4800B6AF */  sw         $s6, 0x48($sp)
 /* A8948 800B8148 4400B5AF */  sw         $s5, 0x44($sp)
@@ -13,7 +13,7 @@ glabel menu_draw
 /* A8950 800B8150 3C00B3AF */  sw         $s3, 0x3C($sp)
 /* A8954 800B8154 3400B1AF */  sw         $s1, 0x34($sp)
 /* A8958 800B8158 3000B0AF */  sw         $s0, 0x30($sp)
-/* A895C 800B815C 401F4C24 */  addiu      $t4, $v0, %lo(voiceList + 0x5C)
+/* A895C 800B815C 401F4C24 */  addiu      $t4, $v0, %lo(D_800D1F40)
 /* A8960 800B8160 0000898D */  lw         $t1, 0x0($t4)
 /* A8964 800B8164 04008A8D */  lw         $t2, 0x4($t4)
 /* A8968 800B8168 08008B8D */  lw         $t3, 0x8($t4)

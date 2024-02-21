@@ -197,7 +197,7 @@ glabel BSP_MarkVisibleLeaves_S
 /* 69FA8 800797A8 03440900 */  sra        $t0, $t1, 16
 /* 69FAC 800797AC 00000000 */  nop
 /* 69FB0 800797B0 1260484A */  MVMVA      1, 0, 0, 3, 0
-/* 69FB4 800797B4 22400800 */  sub        $t0, $zero, $t0 # handwritten instruction
+/* 69FB4 800797B4 22400800 */  neg        $t0, $t0 # handwritten instruction
 /* 69FB8 800797B8 6000828E */  lw         $v0, (0x1F800060 & 0xFFFF)($s4)
 /* 69FBC 800797BC 64008C8E */  lw         $t4, (0x1F800064 & 0xFFFF)($s4)
 /* 69FC0 800797C0 68008D8E */  lw         $t5, (0x1F800068 & 0xFFFF)($s4)
@@ -278,7 +278,7 @@ glabel BSP_MarkVisibleLeaves_S
 /* 6A0E4 800798E4 25002005 */  bltz       $t1, .L8007997C
 /* 6A0E8 800798E8 00000000 */   nop
 /* 6A0EC 800798EC 1E002013 */  beqz       $t9, .L80079968
-/* 6A0F0 800798F0 22400900 */   sub       $t0, $zero, $t1 # handwritten instruction
+/* 6A0F0 800798F0 22400900 */   neg       $t0, $t1 # handwritten instruction
 /* 6A0F4 800798F4 2A088901 */  slt        $at, $t4, $t1
 /* 6A0F8 800798F8 19002010 */  beqz       $at, .L80079960
 /* 6A0FC 800798FC 22104801 */   sub       $v0, $t2, $t0 # handwritten instruction
@@ -317,7 +317,7 @@ glabel BSP_MarkVisibleLeaves_S
 /* 6A178 80079978 04001022 */   addi      $s0, $s0, 0x4 # handwritten instruction
 .L8007997C:
 /* 6A17C 8007997C 1E00E010 */  beqz       $a3, .L800799F8
-/* 6A180 80079980 22400900 */   sub       $t0, $zero, $t1 # handwritten instruction
+/* 6A180 80079980 22400900 */   neg       $t0, $t1 # handwritten instruction
 /* 6A184 80079984 2A082D01 */  slt        $at, $t1, $t5
 /* 6A188 80079988 19002010 */  beqz       $at, .L800799F0
 /* 6A18C 8007998C 22104801 */   sub       $v0, $t2, $t0 # handwritten instruction

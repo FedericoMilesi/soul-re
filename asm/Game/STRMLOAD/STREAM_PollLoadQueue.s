@@ -15,8 +15,8 @@ glabel STREAM_PollLoadQueue
 /* 509FC 800601FC 00000000 */  nop
 /* 50A00 80060200 06004104 */  bgez       $v0, .L8006021C
 /* 50A04 80060204 21888000 */   addu      $s1, $a0, $zero
-/* 50A08 80060208 0D80043C */  lui        $a0, %hi(gCurDir + 0x28)
-/* 50A0C 8006020C A4198424 */  addiu      $a0, $a0, %lo(gCurDir + 0x28)
+/* 50A08 80060208 0D80043C */  lui        $a0, %hi(D_800D19A4)
+/* 50A0C 8006020C A4198424 */  addiu      $a0, $a0, %lo(D_800D19A4)
 /* 50A10 80060210 04002686 */  lh         $a2, 0x4($s1)
 /* 50A14 80060214 C3B5000C */  jal        FONT_Print
 /* 50A18 80060218 3C002526 */   addiu     $a1, $s1, 0x3C
@@ -136,10 +136,10 @@ jlabel .L80060390
 /* 50BB8 800603B8 00000000 */   nop
 /* 50BBC 800603BC 21804000 */  addu       $s0, $v0, $zero
 /* 50BC0 800603C0 3C004424 */  addiu      $a0, $v0, 0x3C
-/* 50BC4 800603C4 0D80053C */  lui        $a1, %hi(gCurDir + 0x38)
+/* 50BC4 800603C4 0D80053C */  lui        $a1, %hi(D_800D19B4)
 /* 50BC8 800603C8 0C00268E */  lw         $a2, 0xC($s1)
 /* 50BCC 800603CC 1AD1010C */  jal        sprintf
-/* 50BD0 800603D0 B419A524 */   addiu     $a1, $a1, %lo(gCurDir + 0x38)
+/* 50BD0 800603D0 B419A524 */   addiu     $a1, $a1, %lo(D_800D19B4)
 /* 50BD4 800603D4 0C00238E */  lw         $v1, 0xC($s1)
 /* 50BD8 800603D8 0A000224 */  addiu      $v0, $zero, 0xA
 /* 50BDC 800603DC 080000AE */  sw         $zero, 0x8($s0)
@@ -178,10 +178,10 @@ jlabel .L80060424
 /* 50C54 80060454 00000000 */   nop
 /* 50C58 80060458 21804000 */  addu       $s0, $v0, $zero
 /* 50C5C 8006045C 3C004424 */  addiu      $a0, $v0, 0x3C
-/* 50C60 80060460 0D80053C */  lui        $a1, %hi(gCurDir + 0x38)
+/* 50C60 80060460 0D80053C */  lui        $a1, %hi(D_800D19B4)
 /* 50C64 80060464 0C00268E */  lw         $a2, 0xC($s1)
 /* 50C68 80060468 1AD1010C */  jal        sprintf
-/* 50C6C 8006046C B419A524 */   addiu     $a1, $a1, %lo(gCurDir + 0x38)
+/* 50C6C 8006046C B419A524 */   addiu     $a1, $a1, %lo(D_800D19B4)
 /* 50C70 80060470 0C00238E */  lw         $v1, 0xC($s1)
 /* 50C74 80060474 0A000224 */  addiu      $v0, $zero, 0xA
 /* 50C78 80060478 080000AE */  sw         $zero, 0x8($s0)
@@ -247,9 +247,9 @@ jlabel .L80060540
 /* 50D54 80060554 06004014 */  bnez       $v0, .L80060570
 /* 50D58 80060558 0B000224 */   addiu     $v0, $zero, 0xB
 /* 50D5C 8006055C 0C00258E */  lw         $a1, 0xC($s1)
-/* 50D60 80060560 0D80043C */  lui        $a0, %hi(gCurDir + 0x40)
+/* 50D60 80060560 0D80043C */  lui        $a0, %hi(D_800D19BC)
 /* 50D64 80060564 2B52000C */  jal        DEBUG_FatalError
-/* 50D68 80060568 BC198424 */   addiu     $a0, $a0, %lo(gCurDir + 0x40)
+/* 50D68 80060568 BC198424 */   addiu     $a0, $a0, %lo(D_800D19BC)
 /* 50D6C 8006056C 0B000224 */  addiu      $v0, $zero, 0xB
 .L80060570:
 /* 50D70 80060570 6A810108 */  j          .L800605A8

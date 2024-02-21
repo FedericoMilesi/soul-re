@@ -30,8 +30,8 @@ glabel STREAM_PackVRAMObject
 /* 4CDD0 8005C5D0 1000A2AF */   sw        $v0, 0x10($sp)
 .L8005C5D4:
 /* 4CDD4 8005C5D4 1800A427 */  addiu      $a0, $sp, 0x18
-/* 4CDD8 8005C5D8 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x290)
-/* 4CDDC 8005C5DC 2819A524 */  addiu      $a1, $a1, %lo(WarpRoomArray + 0x290)
+/* 4CDD8 8005C5D8 0D80053C */  lui        $a1, %hi(D_800D1928)
+/* 4CDDC 8005C5DC 2819A524 */  addiu      $a1, $a1, %lo(D_800D1928)
 /* 4CDE0 8005C5E0 21302002 */  addu       $a2, $s1, $zero
 /* 4CDE4 8005C5E4 1AD1010C */  jal        sprintf
 /* 4CDE8 8005C5E8 21382002 */   addu      $a3, $s1, $zero

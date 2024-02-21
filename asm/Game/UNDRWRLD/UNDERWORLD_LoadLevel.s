@@ -52,8 +52,8 @@ glabel UNDERWORLD_LoadLevel
 /* A574C 800B4F4C 21300000 */   addu      $a2, $zero, $zero
 /* A5750 800B4F50 21208002 */  addu       $a0, $s4, $zero
 .L800B4F54:
-/* A5754 800B4F54 0D80053C */  lui        $a1, %hi(ScreenMorphArray + 0x4)
-/* A5758 800B4F58 C81DA524 */  addiu      $a1, $a1, %lo(ScreenMorphArray + 0x4)
+/* A5754 800B4F54 0D80053C */  lui        $a1, %hi(D_800D1DC8)
+/* A5758 800B4F58 C81DA524 */  addiu      $a1, $a1, %lo(D_800D1DC8)
 /* A575C 800B4F5C 586A010C */  jal        STREAM_LoadMainVram
 /* A5760 800B4F60 21306002 */   addu      $a2, $s3, $zero
 /* A5764 800B4F64 0400053C */  lui        $a1, (0x40001 >> 16)
@@ -91,11 +91,11 @@ glabel UNDERWORLD_LoadLevel
 /* A57E4 800B4FE4 00000000 */  nop
 /* A57E8 800B4FE8 1A004018 */  blez       $v0, .L800B5054
 /* A57EC 800B4FEC 21880000 */   addu      $s1, $zero, $zero
-/* A57F0 800B4FF0 0D80153C */  lui        $s5, %hi(ScreenMorphArray + 0xC)
+/* A57F0 800B4FF0 0D80153C */  lui        $s5, %hi(D_800D1DD0)
 /* A57F4 800B4FF4 21802002 */  addu       $s0, $s1, $zero
 .L800B4FF8:
 /* A57F8 800B4FF8 7C00648C */  lw         $a0, 0x7C($v1)
-/* A57FC 800B4FFC D01DA526 */  addiu      $a1, $s5, %lo(ScreenMorphArray + 0xC)
+/* A57FC 800B4FFC D01DA526 */  addiu      $a1, $s5, %lo(D_800D1DD0)
 /* A5800 800B5000 1CD2010C */  jal        strcmpi
 /* A5804 800B5004 21209000 */   addu      $a0, $a0, $s0
 /* A5808 800B5008 0B004014 */  bnez       $v0, .L800B5038
@@ -144,7 +144,7 @@ glabel UNDERWORLD_LoadLevel
 /* A58AC 800B50AC 1E000224 */  addiu      $v0, $zero, 0x1E
 /* A58B0 800B50B0 CE0082A6 */  sh         $v0, 0xCE($s4)
 /* A58B4 800B50B4 CC0082A6 */  sh         $v0, 0xCC($s4)
-/* A58B8 800B50B8 4CBA83A7 */  sh         $v1, %gp_rel(D_800D2FE4)($gp)
+/* A58B8 800B50B8 4CBA83A7 */  sh         $v1, %gp_rel(RENDER_currentStreamUnitID)($gp)
 .L800B50BC:
 /* A58BC 800B50BC 7580010C */  jal        STREAM_PollLoadQueue
 /* A58C0 800B50C0 00000000 */   nop

@@ -2,8 +2,8 @@
 .set noreorder /* don't insert nops after branches */
 
 glabel InterruptCallback
-/* AA2AC 800B9AAC 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x10F0)
-/* AA2B0 800B9AB0 9CD9428C */  lw         $v0, %lo(the_attract_movies + 0x10F0)($v0)
+/* AA2AC 800B9AAC 0D80023C */  lui        $v0, %hi(D_800CD99C)
+/* AA2B0 800B9AB0 9CD9428C */  lw         $v0, %lo(D_800CD99C)($v0)
 /* AA2B4 800B9AB4 E8FFBD27 */  addiu      $sp, $sp, -0x18
 /* AA2B8 800B9AB8 1000BFAF */  sw         $ra, 0x10($sp)
 /* AA2BC 800B9ABC 0800428C */  lw         $v0, 0x8($v0)

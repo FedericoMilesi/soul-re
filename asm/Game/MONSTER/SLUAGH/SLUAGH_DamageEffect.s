@@ -20,9 +20,9 @@ glabel SLUAGH_DamageEffect
 /* 7DAD8 8008D2D8 00806334 */  ori        $v1, $v1, (0x308000 & 0xFFFF)
 /* 7DADC 8008D2DC 21202002 */  addu       $a0, $s1, $zero
 /* 7DAE0 8008D2E0 08002526 */  addiu      $a1, $s1, 0x8
-/* 7DAE4 8008D2E4 0D80023C */  lui        $v0, %hi(SLUAGH_FunctionTable + 0x20)
+/* 7DAE4 8008D2E4 0D80023C */  lui        $v0, %hi(D_800D1B88)
 /* 7DAE8 8008D2E8 1800A627 */  addiu      $a2, $sp, 0x18
-/* 7DAEC 8008D2EC 881B4B24 */  addiu      $t3, $v0, %lo(SLUAGH_FunctionTable + 0x20)
+/* 7DAEC 8008D2EC 881B4B24 */  addiu      $t3, $v0, %lo(D_800D1B88)
 /* 7DAF0 8008D2F0 03006889 */  lwl        $t0, 0x3($t3)
 /* 7DAF4 8008D2F4 00006899 */  lwr        $t0, 0x0($t3)
 /* 7DAF8 8008D2F8 07006989 */  lwl        $t1, 0x7($t3)

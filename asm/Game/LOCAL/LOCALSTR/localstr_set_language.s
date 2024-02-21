@@ -3,8 +3,8 @@
 
 glabel localstr_set_language
 /* A7E3C 800B763C E8FFBD27 */  addiu      $sp, $sp, -0x18
-/* A7E40 800B7640 0D80043C */  lui        $a0, %hi(voiceList + 0x4)
-/* A7E44 800B7644 E81E8424 */  addiu      $a0, $a0, %lo(voiceList + 0x4)
+/* A7E40 800B7640 0D80043C */  lui        $a0, %hi(D_800D1EE8)
+/* A7E44 800B7644 E81E8424 */  addiu      $a0, $a0, %lo(D_800D1EE8)
 /* A7E48 800B7648 1000BFAF */  sw         $ra, 0x10($sp)
 /* A7E4C 800B764C 58DE000C */  jal        LOAD_ReadFileFromCD
 /* A7E50 800B7650 06000524 */   addiu     $a1, $zero, 0x6

@@ -21,8 +21,8 @@ glabel ClearOTagR
 /* AAFA8 800BA7A8 09F84000 */  jalr       $v0
 /* AAFAC 800BA7AC 21302002 */   addu      $a2, $s1, $zero
 .L800BA7B0:
-/* AAFB0 800BA7B0 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x1158)
-/* AAFB4 800BA7B4 04DA428C */  lw         $v0, %lo(the_attract_movies + 0x1158)($v0)
+/* AAFB0 800BA7B0 0D80023C */  lui        $v0, %hi(D_800CDA04)
+/* AAFB4 800BA7B4 04DA428C */  lw         $v0, %lo(D_800CDA04)($v0)
 /* AAFB8 800BA7B8 21200002 */  addu       $a0, $s0, $zero
 /* AAFBC 800BA7BC 2C00428C */  lw         $v0, 0x2C($v0)
 /* AAFC0 800BA7C0 00000000 */  nop

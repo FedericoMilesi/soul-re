@@ -74,9 +74,9 @@ glabel STREAM_ConnectStream
 /* 4A4C8 80059CC8 00000000 */   nop
 /* 4A4CC 80059CCC 21804000 */  addu       $s0, $v0, $zero
 /* 4A4D0 80059CD0 1000A427 */  addiu      $a0, $sp, 0x10
-/* 4A4D4 80059CD4 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x2A8)
+/* 4A4D4 80059CD4 0D80053C */  lui        $a1, %hi(D_800D1940)
 /* 4A4D8 80059CD8 1CD2010C */  jal        strcmpi
-/* 4A4DC 80059CDC 4019A524 */   addiu     $a1, $a1, %lo(WarpRoomArray + 0x2A8)
+/* 4A4DC 80059CDC 4019A524 */   addiu     $a1, $a1, %lo(D_800D1940)
 /* 4A4E0 80059CE0 07004014 */  bnez       $v0, .L80059D00
 /* 4A4E4 80059CE4 00000000 */   nop
 /* 4A4E8 80059CE8 2800A48F */  lw         $a0, 0x28($sp)
@@ -184,9 +184,9 @@ glabel STREAM_ConnectStream
 /* 4A65C 80059E5C BD670108 */  j          .L80059EF4
 /* 4A660 80059E60 01007326 */   addiu     $s3, $s3, 0x1
 .L80059E64:
-/* 4A664 80059E64 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x2A8)
+/* 4A664 80059E64 0D80053C */  lui        $a1, %hi(D_800D1940)
 /* 4A668 80059E68 1CD2010C */  jal        strcmpi
-/* 4A66C 80059E6C 4019A524 */   addiu     $a1, $a1, %lo(WarpRoomArray + 0x2A8)
+/* 4A66C 80059E6C 4019A524 */   addiu     $a1, $a1, %lo(D_800D1940)
 /* 4A670 80059E70 08004014 */  bnez       $v0, .L80059E94
 /* 4A674 80059E74 01000224 */   addiu     $v0, $zero, 0x1
 /* 4A678 80059E78 816D010C */  jal        WARPGATE_IsUnitWarpRoom
@@ -243,11 +243,11 @@ glabel STREAM_ConnectStream
 /* 4A72C 80059F2C 00000000 */  nop
 /* 4A730 80059F30 1A004018 */  blez       $v0, .L80059F9C
 /* 4A734 80059F34 21800000 */   addu      $s0, $zero, $zero
-/* 4A738 80059F38 0D80123C */  lui        $s2, %hi(WarpRoomArray + 0x2B4)
+/* 4A738 80059F38 0D80123C */  lui        $s2, %hi(D_800D194C)
 /* 4A73C 80059F3C 21880002 */  addu       $s1, $s0, $zero
 .L80059F40:
 /* 4A740 80059F40 7C00648C */  lw         $a0, 0x7C($v1)
-/* 4A744 80059F44 4C194526 */  addiu      $a1, $s2, %lo(WarpRoomArray + 0x2B4)
+/* 4A744 80059F44 4C194526 */  addiu      $a1, $s2, %lo(D_800D194C)
 /* 4A748 80059F48 1CD2010C */  jal        strcmpi
 /* 4A74C 80059F4C 21209100 */   addu      $a0, $a0, $s1
 /* 4A750 80059F50 0B004014 */  bnez       $v0, .L80059F80

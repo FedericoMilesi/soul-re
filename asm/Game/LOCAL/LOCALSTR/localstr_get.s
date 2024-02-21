@@ -6,7 +6,7 @@ glabel localstr_get
 /* A7ED0 800B76D0 00000000 */  nop
 /* A7ED4 800B76D4 04006014 */  bnez       $v1, .L800B76E8
 /* A7ED8 800B76D8 80100400 */   sll       $v0, $a0, 2
-/* A7EDC 800B76DC 60A98227 */  addiu      $v0, $gp, %gp_rel(voiceList + 0x14)
+/* A7EDC 800B76DC 60A98227 */  addiu      $v0, $gp, %gp_rel(D_800D1EF8)
 /* A7EE0 800B76E0 0800E003 */  jr         $ra
 /* A7EE4 800B76E4 00000000 */   nop
 .L800B76E8:

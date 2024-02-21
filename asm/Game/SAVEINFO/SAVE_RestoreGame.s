@@ -12,8 +12,8 @@ glabel SAVE_RestoreGame
 /* A715C 800B695C 00000000 */   nop
 /* A7160 800B6960 DCD9020C */  jal        SAVE_RestoreGlobalSaveTracker
 /* A7164 800B6964 00000000 */   nop
-/* A7168 800B6968 0D80043C */  lui        $a0, %hi(SaveArraySize + 0xB8)
-/* A716C 800B696C 9C1E8424 */  addiu      $a0, $a0, %lo(SaveArraySize + 0xB8)
+/* A7168 800B6968 0D80043C */  lui        $a0, %hi(D_800D1E9C)
+/* A716C 800B696C 9C1E8424 */  addiu      $a0, $a0, %lo(D_800D1E9C)
 /* A7170 800B6970 40A8828F */  lw         $v0, %gp_rel(GlobalSave)($gp)
 /* A7174 800B6974 00000000 */  nop
 /* A7178 800B6978 74004384 */  lh         $v1, 0x74($v0)

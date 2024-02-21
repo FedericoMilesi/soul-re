@@ -199,11 +199,11 @@ glabel CAMERA_DoCameraCollision2
 /* E048 8001D848 DB760008 */  j          .L8001DB6C
 /* E04C 8001D84C 21100000 */   addu      $v0, $zero, $zero
 .L8001D850:
-/* E050 8001D850 6C8E828F */  lw         $v0, %gp_rel(panic_count + 0x2)($gp)
+/* E050 8001D850 6C8E828F */  lw         $v0, %gp_rel(D_800D0404)($gp)
 /* E054 8001D854 00000000 */  nop
 /* E058 8001D858 02004018 */  blez       $v0, .L8001D864
 /* E05C 8001D85C FFFF4224 */   addiu     $v0, $v0, -0x1
-/* E060 8001D860 6C8E82AF */  sw         $v0, %gp_rel(panic_count + 0x2)($gp)
+/* E060 8001D860 6C8E82AF */  sw         $v0, %gp_rel(D_800D0404)($gp)
 .L8001D864:
 /* E064 8001D864 AE042286 */  lh         $v0, 0x4AE($s1)
 /* E068 8001D868 00000000 */  nop
@@ -240,7 +240,7 @@ glabel CAMERA_DoCameraCollision2
 /* E0D8 8001D8D8 1000A527 */   addiu     $a1, $sp, 0x10
 /* E0DC 8001D8DC 21904000 */  addu       $s2, $v0, $zero
 /* E0E0 8001D8E0 1E000224 */  addiu      $v0, $zero, 0x1E
-/* E0E4 8001D8E4 6C8E82AF */  sw         $v0, %gp_rel(panic_count + 0x2)($gp)
+/* E0E4 8001D8E4 6C8E82AF */  sw         $v0, %gp_rel(D_800D0404)($gp)
 /* E0E8 8001D8E8 3F760008 */  j          .L8001D8FC
 /* E0EC 8001D8EC 00000000 */   nop
 .L8001D8F0:
@@ -334,7 +334,7 @@ glabel CAMERA_DoCameraCollision2
 /* E220 8001DA20 21904000 */  addu       $s2, $v0, $zero
 /* E224 8001DA24 C0012396 */  lhu        $v1, 0x1C0($s1)
 /* E228 8001DA28 1E000224 */  addiu      $v0, $zero, 0x1E
-/* E22C 8001DA2C 6C8E82AF */  sw         $v0, %gp_rel(panic_count + 0x2)($gp)
+/* E22C 8001DA2C 6C8E82AF */  sw         $v0, %gp_rel(D_800D0404)($gp)
 /* E230 8001DA30 DA760008 */  j          .L8001DB68
 /* E234 8001DA34 B60123A6 */   sh        $v1, 0x1B6($s1)
 .L8001DA38:
@@ -358,7 +358,7 @@ glabel CAMERA_DoCameraCollision2
 /* E27C 8001DA7C 08004010 */  beqz       $v0, .L8001DAA0
 /* E280 8001DA80 00000000 */   nop
 /* E284 8001DA84 B6012296 */  lhu        $v0, 0x1B6($s1)
-/* E288 8001DA88 6C8E838F */  lw         $v1, %gp_rel(panic_count + 0x2)($gp)
+/* E288 8001DA88 6C8E838F */  lw         $v1, %gp_rel(D_800D0404)($gp)
 /* E28C 8001DA8C 00000000 */  nop
 /* E290 8001DA90 29006014 */  bnez       $v1, .L8001DB38
 /* E294 8001DA94 C00122A6 */   sh        $v0, 0x1C0($s1)
@@ -400,7 +400,7 @@ glabel CAMERA_DoCameraCollision2
 /* E310 8001DB10 CE760008 */  j          .L8001DB38
 /* E314 8001DB14 C00122A6 */   sh        $v0, 0x1C0($s1)
 .L8001DB18:
-/* E318 8001DB18 6C8E828F */  lw         $v0, %gp_rel(panic_count + 0x2)($gp)
+/* E318 8001DB18 6C8E828F */  lw         $v0, %gp_rel(D_800D0404)($gp)
 /* E31C 8001DB1C 00000000 */  nop
 /* E320 8001DB20 05004014 */  bnez       $v0, .L8001DB38
 /* E324 8001DB24 C0012426 */   addiu     $a0, $s1, 0x1C0
@@ -415,7 +415,7 @@ glabel CAMERA_DoCameraCollision2
 /* E344 8001DB44 05004010 */  beqz       $v0, .L8001DB5C
 /* E348 8001DB48 00000000 */   nop
 /* E34C 8001DB4C D4AB8297 */  lhu        $v0, %gp_rel(combat_cam_distance)($gp)
-/* E350 8001DB50 6C8E80AF */  sw         $zero, %gp_rel(panic_count + 0x2)($gp)
+/* E350 8001DB50 6C8E80AF */  sw         $zero, %gp_rel(D_800D0404)($gp)
 /* E354 8001DB54 DA760008 */  j          .L8001DB68
 /* E358 8001DB58 B00122A6 */   sh        $v0, 0x1B0($s1)
 .L8001DB5C:

@@ -29,16 +29,16 @@ glabel SIGNAL_HandleStreamLevel
 /* E628 8001DE28 000000A2 */  sb         $zero, 0x0($s0)
 /* E62C 8001DE2C 1000A427 */  addiu      $a0, $sp, 0x10
 .L8001DE30:
-/* E630 8001DE30 0D80053C */  lui        $a1, %hi(HandleGlobalValueSignal + 0x8)
+/* E630 8001DE30 0D80053C */  lui        $a1, %hi(D_800D0410)
 /* E634 8001DE34 1CD2010C */  jal        strcmpi
-/* E638 8001DE38 1004A524 */   addiu     $a1, $a1, %lo(HandleGlobalValueSignal + 0x8)
+/* E638 8001DE38 1004A524 */   addiu     $a1, $a1, %lo(D_800D0410)
 /* E63C 8001DE3C 2C004014 */  bnez       $v0, .L8001DEF0
 /* E640 8001DE40 00000000 */   nop
 /* E644 8001DE44 3800448E */  lw         $a0, 0x38($s2)
 /* E648 8001DE48 3266010C */  jal        STREAM_GetStreamUnitWithID
 /* E64C 8001DE4C 00000000 */   nop
 /* E650 8001DE50 F4BF838F */  lw         $v1, %gp_rel(gameTrackerX + 0x22C)($gp)
-/* E654 8001DE54 748E848F */  lw         $a0, %gp_rel(HandleGlobalValueSignal + 0x4)($gp)
+/* E654 8001DE54 748E848F */  lw         $a0, %gp_rel(D_800D040C)($gp)
 /* E658 8001DE58 00000000 */  nop
 /* E65C 8001DE5C 23186400 */  subu       $v1, $v1, $a0
 /* E660 8001DE60 6500632C */  sltiu      $v1, $v1, 0x65
@@ -91,7 +91,7 @@ glabel SIGNAL_HandleStreamLevel
 /* E714 8001DF14 48BF8427 */  addiu      $a0, $gp, %gp_rel(gameTrackerX + 0x180)
 /* E718 8001DF18 F4BF828F */  lw         $v0, %gp_rel(gameTrackerX + 0x22C)($gp)
 /* E71C 8001DF1C 44BF83A7 */  sh         $v1, %gp_rel(gameTrackerX + 0x17C)($gp)
-/* E720 8001DF20 748E82AF */  sw         $v0, %gp_rel(HandleGlobalValueSignal + 0x4)($gp)
+/* E720 8001DF20 748E82AF */  sw         $v0, %gp_rel(D_800D040C)($gp)
 /* E724 8001DF24 1CF4020C */  jal        strcpy
 /* E728 8001DF28 1000A527 */   addiu     $a1, $sp, 0x10
 /* E72C 8001DF2C 58BF95A7 */  sh         $s5, %gp_rel(gameTrackerX + 0x190)($gp)
@@ -104,9 +104,9 @@ glabel SIGNAL_HandleStreamLevel
 /* E748 8001DF48 00000000 */  nop
 /* E74C 8001DF4C 0A004014 */  bnez       $v0, .L8001DF78
 /* E750 8001DF50 1000A427 */   addiu     $a0, $sp, 0x10
-/* E754 8001DF54 0D80053C */  lui        $a1, %hi(HandleGlobalValueSignal + 0x14)
+/* E754 8001DF54 0D80053C */  lui        $a1, %hi(D_800D041C)
 /* E758 8001DF58 1CD2010C */  jal        strcmpi
-/* E75C 8001DF5C 1C04A524 */   addiu     $a1, $a1, %lo(HandleGlobalValueSignal + 0x14)
+/* E75C 8001DF5C 1C04A524 */   addiu     $a1, $a1, %lo(D_800D041C)
 /* E760 8001DF60 05004014 */  bnez       $v0, .L8001DF78
 /* E764 8001DF64 0010053C */   lui       $a1, (0x10002001 >> 16)
 /* E768 8001DF68 F4BD848F */  lw         $a0, %gp_rel(gameTrackerX + 0x2C)($gp)

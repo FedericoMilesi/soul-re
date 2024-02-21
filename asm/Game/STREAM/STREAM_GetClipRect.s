@@ -182,8 +182,8 @@ glabel STREAM_GetClipRect
 /* 4F4A8 8005ECA8 21B04002 */  addu       $s6, $s2, $zero
 /* 4F4AC 8005ECAC 1800B1AF */  sw         $s1, 0x18($sp)
 .L8005ECB0:
-/* 4F4B0 8005ECB0 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x2A8)
-/* 4F4B4 8005ECB4 4019A524 */  addiu      $a1, $a1, %lo(WarpRoomArray + 0x2A8)
+/* 4F4B0 8005ECB0 0D80053C */  lui        $a1, %hi(D_800D1940)
+/* 4F4B4 8005ECB4 4019A524 */  addiu      $a1, $a1, %lo(D_800D1940)
 /* 4F4B8 8005ECB8 6001030C */  jal        memcmp
 /* 4F4BC 8005ECBC 08000624 */   addiu     $a2, $zero, 0x8
 /* 4F4C0 8005ECC0 28004010 */  beqz       $v0, .L8005ED64

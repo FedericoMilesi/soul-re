@@ -152,8 +152,8 @@ glabel GAMELOOP_Process
 /* 20FEC 800307EC 00014230 */  andi       $v0, $v0, 0x100
 /* 20FF0 800307F0 06004010 */  beqz       $v0, .L8003080C
 /* 20FF4 800307F4 00000000 */   nop
-/* 20FF8 800307F8 0D80043C */  lui        $a0, %hi(fontsObject + 0x7C)
-/* 20FFC 800307FC 90078424 */  addiu      $a0, $a0, %lo(fontsObject + 0x7C)
+/* 20FF8 800307F8 0D80043C */  lui        $a0, %hi(D_800D0790)
+/* 20FFC 800307FC 90078424 */  addiu      $a0, $a0, %lo(D_800D0790)
 /* 21000 80030800 48C78527 */  addiu      $a1, $gp, %gp_rel(StreamTracker + 0xC)
 /* 21004 80030804 C3B5000C */  jal        FONT_Print
 /* 21008 80030808 21282502 */   addu      $a1, $s1, $a1
@@ -295,9 +295,9 @@ glabel GAMELOOP_Process
 /* 21204 80030A04 06004010 */  beqz       $v0, .L80030A20
 /* 21208 80030A08 21900000 */   addu      $s2, $zero, $zero
 /* 2120C 80030A0C E2BF8587 */  lh         $a1, %gp_rel(gameTrackerX + 0x21A)($gp)
-/* 21210 80030A10 0D80043C */  lui        $a0, %hi(fontsObject + 0x90)
+/* 21210 80030A10 0D80043C */  lui        $a0, %hi(D_800D07A4)
 /* 21214 80030A14 C3B5000C */  jal        FONT_Print
-/* 21218 80030A18 A4078424 */   addiu     $a0, $a0, %lo(fontsObject + 0x90)
+/* 21218 80030A18 A4078424 */   addiu     $a0, $a0, %lo(D_800D07A4)
 /* 2121C 80030A1C 21900000 */  addu       $s2, $zero, $zero
 .L80030A20:
 /* 21220 80030A20 02001124 */  addiu      $s1, $zero, 0x2

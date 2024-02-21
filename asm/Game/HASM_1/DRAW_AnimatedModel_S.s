@@ -86,7 +86,7 @@ glabel DRAW_AnimatedModel_S
 /* 15B58 80025358 00C00D48 */  mfc2       $t5, $24 # handwritten instruction
 /* 15B5C 8002535C 02004010 */  beqz       $v0, .L80025368
 /* 15B60 80025360 0080033C */   lui       $v1, (0x80008000 >> 16)
-/* 15B64 80025364 22680D00 */  sub        $t5, $zero, $t5 # handwritten instruction
+/* 15B64 80025364 22680D00 */  neg        $t5, $t5 # handwritten instruction
 .L80025368:
 /* 15B68 80025368 0100AD21 */  addi       $t5, $t5, 0x1 # handwritten instruction
 /* 15B6C 8002536C 4801A105 */  bgez       $t5, .L80025890

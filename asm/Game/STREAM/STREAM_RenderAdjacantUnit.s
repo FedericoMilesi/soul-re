@@ -19,7 +19,7 @@ glabel STREAM_RenderAdjacantUnit
 /* 4FC00 8005F400 0800468E */  lw         $a2, 0x8($s2)
 /* 4FC04 8005F404 00002296 */  lhu        $v0, 0x0($s1)
 /* 4FC08 8005F408 00000000 */  nop
-/* 4FC0C 8005F40C 4CBA82A7 */  sh         $v0, %gp_rel(D_800D2FE4)($gp)
+/* 4FC0C 8005F40C 4CBA82A7 */  sh         $v0, %gp_rel(RENDER_currentStreamUnitID)($gp)
 /* 4FC10 8005F410 EE7B010C */  jal        GetFogColor
 /* 4FC14 8005F414 21284002 */   addu      $a1, $s2, $zero
 /* 4FC18 8005F418 FF0B0624 */  addiu      $a2, $zero, 0xBFF

@@ -71,20 +71,20 @@ glabel InsertGlobalObject
 /* 498C0 800590C0 FFFF0224 */  addiu      $v0, $zero, -0x1
 /* 498C4 800590C4 06002216 */  bne        $s1, $v0, .L800590E0
 /* 498C8 800590C8 1800A427 */   addiu     $a0, $sp, 0x18
-/* 498CC 800590CC 0D80043C */  lui        $a0, %hi(WarpRoomArray + 0x24C)
-/* 498D0 800590D0 E4188424 */  addiu      $a0, $a0, %lo(WarpRoomArray + 0x24C)
+/* 498CC 800590CC 0D80043C */  lui        $a0, %hi(D_800D18E4)
+/* 498D0 800590D0 E4188424 */  addiu      $a0, $a0, %lo(D_800D18E4)
 /* 498D4 800590D4 2B52000C */  jal        DEBUG_FatalError
 /* 498D8 800590D8 30000524 */   addiu     $a1, $zero, 0x30
 /* 498DC 800590DC 1800A427 */  addiu      $a0, $sp, 0x18
 .L800590E0:
-/* 498E0 800590E0 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x278)
-/* 498E4 800590E4 1019A524 */  addiu      $a1, $a1, %lo(WarpRoomArray + 0x278)
+/* 498E0 800590E0 0D80053C */  lui        $a1, %hi(D_800D1910)
+/* 498E4 800590E4 1019A524 */  addiu      $a1, $a1, %lo(D_800D1910)
 /* 498E8 800590E8 21304002 */  addu       $a2, $s2, $zero
 /* 498EC 800590EC 1AD1010C */  jal        sprintf
 /* 498F0 800590F0 21384002 */   addu      $a3, $s2, $zero
 /* 498F4 800590F4 5800A427 */  addiu      $a0, $sp, 0x58
-/* 498F8 800590F8 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x290)
-/* 498FC 800590FC 2819A524 */  addiu      $a1, $a1, %lo(WarpRoomArray + 0x290)
+/* 498F8 800590F8 0D80053C */  lui        $a1, %hi(D_800D1928)
+/* 498FC 800590FC 2819A524 */  addiu      $a1, $a1, %lo(D_800D1928)
 /* 49900 80059100 21304002 */  addu       $a2, $s2, $zero
 /* 49904 80059104 1AD1010C */  jal        sprintf
 /* 49908 80059108 21384002 */   addu      $a3, $s2, $zero

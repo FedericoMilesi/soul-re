@@ -4,7 +4,7 @@
 glabel razSetCowlNoDraw
 /* 97EC4 800A76C4 21408000 */  addu       $t0, $a0, $zero
 /* 97EC8 800A76C8 A4A68627 */  addiu      $a2, $gp, %gp_rel(cowlList)
-/* 97ECC 800A76CC CAA68727 */  addiu      $a3, $gp, %gp_rel(cowlList + 0x26)
+/* 97ECC 800A76CC CAA68727 */  addiu      $a3, $gp, %gp_rel(D_800D1C62)
 .L800A76D0:
 /* 97ED0 800A76D0 11000011 */  beqz       $t0, .L800A7718
 /* 97ED4 800A76D4 00000000 */   nop

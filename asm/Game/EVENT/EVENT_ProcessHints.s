@@ -12,8 +12,8 @@ glabel EVENT_ProcessHints
 /* 5178C 80060F8C B3DD020C */  jal        localstr_get
 /* 51790 80060F90 00000000 */   nop
 /* 51794 80060F94 1000A427 */  addiu      $a0, $sp, 0x10
-/* 51798 80060F98 0D80053C */  lui        $a1, %hi(NumSignalsToReset + 0x4)
-/* 5179C 80060F9C 081AA524 */  addiu      $a1, $a1, %lo(NumSignalsToReset + 0x4)
+/* 51798 80060F98 0D80053C */  lui        $a1, %hi(D_800D1A08)
+/* 5179C 80060F9C 081AA524 */  addiu      $a1, $a1, %lo(D_800D1A08)
 /* 517A0 80060FA0 1AD1010C */  jal        sprintf
 /* 517A4 80060FA4 21304000 */   addu      $a2, $v0, $zero
 /* 517A8 80060FA8 18CF8397 */  lhu        $v1, %gp_rel(gHintSystem)($gp)
@@ -60,8 +60,8 @@ glabel EVENT_ProcessHints
 /* 51844 80061044 1000A427 */  addiu      $a0, $sp, 0x10
 /* 51848 80061048 A8B6000C */  jal        FONT_FontPrintCentered
 /* 5184C 8006104C 21280002 */   addu      $a1, $s0, $zero
-/* 51850 80061050 0D80043C */  lui        $a0, %hi(NumSignalsToReset + 0x8)
-/* 51854 80061054 0C1A8424 */  addiu      $a0, $a0, %lo(NumSignalsToReset + 0x8)
+/* 51850 80061050 0D80043C */  lui        $a0, %hi(D_800D1A0C)
+/* 51854 80061054 0C1A8424 */  addiu      $a0, $a0, %lo(D_800D1A0C)
 /* 51858 80061058 A8B6000C */  jal        FONT_FontPrintCentered
 /* 5185C 8006105C 21280002 */   addu      $a1, $s0, $zero
 /* 51860 80061060 FBB5000C */  jal        FONT_GetStringWidth

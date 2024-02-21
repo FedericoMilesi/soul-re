@@ -31,8 +31,8 @@ glabel PutDrawEnv
 /* AB144 800BA944 21280002 */  addu       $a1, $s0, $zero
 /* AB148 800BA948 40000624 */  addiu      $a2, $zero, 0x40
 /* AB14C 800BA94C 1C00228E */  lw         $v0, 0x1C($s1)
-/* AB150 800BA950 0D80033C */  lui        $v1, %hi(the_attract_movies + 0x1158)
-/* AB154 800BA954 04DA638C */  lw         $v1, %lo(the_attract_movies + 0x1158)($v1)
+/* AB150 800BA950 0D80033C */  lui        $v1, %hi(D_800CDA04)
+/* AB154 800BA954 04DA638C */  lw         $v1, %lo(D_800CDA04)($v1)
 /* AB158 800BA958 25104400 */  or         $v0, $v0, $a0
 /* AB15C 800BA95C 1C0022AE */  sw         $v0, 0x1C($s1)
 /* AB160 800BA960 1800648C */  lw         $a0, 0x18($v1)

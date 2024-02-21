@@ -16,9 +16,9 @@ glabel SIGNAL_IsThisStreamAWarpGate
 /* ECBC 8001E4BC 1000A427 */   addiu     $a0, $sp, 0x10
 /* ECC0 8001E4C0 000040A0 */  sb         $zero, 0x0($v0)
 .L8001E4C4:
-/* ECC4 8001E4C4 0D80053C */  lui        $a1, %hi(HandleGlobalValueSignal + 0x8)
+/* ECC4 8001E4C4 0D80053C */  lui        $a1, %hi(D_800D0410)
 /* ECC8 8001E4C8 1CD2010C */  jal        strcmpi
-/* ECCC 8001E4CC 1004A524 */   addiu     $a1, $a1, %lo(HandleGlobalValueSignal + 0x8)
+/* ECCC 8001E4CC 1004A524 */   addiu     $a1, $a1, %lo(D_800D0410)
 /* ECD0 8001E4D0 03004014 */  bnez       $v0, .L8001E4E0
 /* ECD4 8001E4D4 21100002 */   addu      $v0, $s0, $zero
 /* ECD8 8001E4D8 01001024 */  addiu      $s0, $zero, 0x1

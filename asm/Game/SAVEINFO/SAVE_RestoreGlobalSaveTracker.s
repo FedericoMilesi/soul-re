@@ -9,9 +9,9 @@ glabel SAVE_RestoreGlobalSaveTracker
 /* A6F80 800B6780 21550224 */  addiu      $v0, $zero, 0x5521
 /* A6F84 800B6784 06006210 */  beq        $v1, $v0, .L800B67A0
 /* A6F88 800B6788 00000000 */   nop
-/* A6F8C 800B678C 0D80043C */  lui        $a0, %hi(SaveArraySize + 0xA0)
+/* A6F8C 800B678C 0D80043C */  lui        $a0, %hi(D_800D1E84)
 /* A6F90 800B6790 2B52000C */  jal        DEBUG_FatalError
-/* A6F94 800B6794 841E8424 */   addiu     $a0, $a0, %lo(SaveArraySize + 0xA0)
+/* A6F94 800B6794 841E8424 */   addiu     $a0, $a0, %lo(D_800D1E84)
 /* A6F98 800B6798 0CDA0208 */  j          .L800B6830
 /* A6F9C 800B679C 00000000 */   nop
 .L800B67A0:

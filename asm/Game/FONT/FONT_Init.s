@@ -16,8 +16,8 @@ glabel FONT_Init
 /* 1D784 8002CF84 1400A2AF */   sw        $v0, 0x14($sp)
 /* 1D788 8002CF88 E4B382AF */  sw         $v0, %gp_rel(FONT_vramBlock)($gp)
 /* 1D78C 8002CF8C 2E004010 */  beqz       $v0, .L8002D048
-/* 1D790 8002CF90 0D80043C */   lui       $a0, %hi(the_font_color_table + 0x3C)
-/* 1D794 8002CF94 74068424 */  addiu      $a0, $a0, %lo(the_font_color_table + 0x3C)
+/* 1D790 8002CF90 0D80043C */   lui       $a0, %hi(D_800D0674)
+/* 1D794 8002CF94 74068424 */  addiu      $a0, $a0, %lo(D_800D0674)
 /* 1D798 8002CF98 3E82010C */  jal        LOAD_ReadFile
 /* 1D79C 8002CF9C 05000524 */   addiu     $a1, $zero, 0x5
 /* 1D7A0 8002CFA0 21804000 */  addu       $s0, $v0, $zero

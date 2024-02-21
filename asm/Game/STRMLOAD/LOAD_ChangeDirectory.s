@@ -15,8 +15,8 @@ glabel LOAD_ChangeDirectory
 /* 5116C 8006096C E4A382AF */  sw         $v0, %gp_rel(gCurDir)($gp)
 /* 51170 80060970 0C0002AE */  sw         $v0, 0xC($s0)
 /* 51174 80060974 0A000224 */  addiu      $v0, $zero, 0xA
-/* 51178 80060978 0D80053C */  lui        $a1, %hi(gCurDir + 0x6C)
-/* 5117C 8006097C E819A524 */  addiu      $a1, $a1, %lo(gCurDir + 0x6C)
+/* 51178 80060978 0D80053C */  lui        $a1, %hi(D_800D19E8)
+/* 5117C 8006097C E819A524 */  addiu      $a1, $a1, %lo(D_800D19E8)
 /* 51180 80060980 21302002 */  addu       $a2, $s1, $zero
 /* 51184 80060984 080000AE */  sw         $zero, 0x8($s0)
 /* 51188 80060988 1AD1010C */  jal        sprintf

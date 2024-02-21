@@ -96,9 +96,9 @@ glabel menu_draw_item
 .L800B7E7C:
 /* A867C 800B7E7C 1C01A2AF */  sw         $v0, 0x11C($sp)
 /* A8680 800B7E80 21200002 */  addu       $a0, $s0, $zero
-/* A8684 800B7E84 0D80053C */  lui        $a1, %hi(voiceList + 0x58)
+/* A8684 800B7E84 0D80053C */  lui        $a1, %hi(D_800D1F3C)
 /* A8688 800B7E88 BD02030C */  jal        strtok
-/* A868C 800B7E8C 3C1FA524 */   addiu     $a1, $a1, %lo(voiceList + 0x58)
+/* A868C 800B7E8C 3C1FA524 */   addiu     $a1, $a1, %lo(D_800D1F3C)
 /* A8690 800B7E90 21284000 */  addu       $a1, $v0, $zero
 /* A8694 800B7E94 8300A010 */  beqz       $a1, .L800B80A4
 /* A8698 800B7E98 00000000 */   nop
@@ -236,9 +236,9 @@ glabel menu_draw_item
 /* A8864 800B8064 0000C2A2 */   sb        $v0, 0x0($s6)
 .L800B8068:
 /* A8868 800B8068 21200000 */  addu       $a0, $zero, $zero
-/* A886C 800B806C 0D80053C */  lui        $a1, %hi(voiceList + 0x58)
+/* A886C 800B806C 0D80053C */  lui        $a1, %hi(D_800D1F3C)
 /* A8870 800B8070 2001A98F */  lw         $t1, 0x120($sp)
-/* A8874 800B8074 3C1FA524 */  addiu      $a1, $a1, %lo(voiceList + 0x58)
+/* A8874 800B8074 3C1FA524 */  addiu      $a1, $a1, %lo(D_800D1F3C)
 /* A8878 800B8078 21483E01 */  addu       $t1, $t1, $fp
 /* A887C 800B807C BD02030C */  jal        strtok
 /* A8880 800B8080 2001A9AF */   sw        $t1, 0x120($sp)

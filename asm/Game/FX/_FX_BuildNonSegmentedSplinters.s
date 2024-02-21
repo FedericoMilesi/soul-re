@@ -30,8 +30,8 @@ glabel _FX_BuildNonSegmentedSplinters
 /* 342C0 80043AC0 2128C003 */  addu       $a1, $fp, $zero
 /* 342C4 80043AC4 C000A8AF */  sw         $t0, 0xC0($sp)
 /* 342C8 80043AC8 1400548C */  lw         $s4, 0x14($v0)
-/* 342CC 80043ACC 0D80023C */  lui        $v0, %hi(FX_reaver_instance + 0x4)
-/* 342D0 80043AD0 18104824 */  addiu      $t0, $v0, %lo(FX_reaver_instance + 0x4)
+/* 342CC 80043ACC 0D80023C */  lui        $v0, %hi(D_800D1018)
+/* 342D0 80043AD0 18104824 */  addiu      $t0, $v0, %lo(D_800D1018)
 /* 342D4 80043AD4 03000989 */  lwl        $t1, 0x3($t0)
 /* 342D8 80043AD8 00000999 */  lwr        $t1, 0x0($t0)
 /* 342DC 80043ADC 07000A89 */  lwl        $t2, 0x7($t0)

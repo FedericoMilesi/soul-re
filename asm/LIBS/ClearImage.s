@@ -23,8 +23,8 @@ glabel ClearImage
 /* AAE08 800BA608 008A1100 */  sll        $s1, $s1, 8
 /* AAE0C 800BA60C 25801102 */  or         $s0, $s0, $s1
 /* AAE10 800BA610 FF005232 */  andi       $s2, $s2, 0xFF
-/* AAE14 800BA614 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x1158)
-/* AAE18 800BA618 04DA428C */  lw         $v0, %lo(the_attract_movies + 0x1158)($v0)
+/* AAE14 800BA614 0D80023C */  lui        $v0, %hi(D_800CDA04)
+/* AAE18 800BA618 04DA428C */  lw         $v0, %lo(D_800CDA04)($v0)
 /* AAE1C 800BA61C 08000624 */  addiu      $a2, $zero, 0x8
 /* AAE20 800BA620 0C00448C */  lw         $a0, 0xC($v0)
 /* AAE24 800BA624 0800428C */  lw         $v0, 0x8($v0)

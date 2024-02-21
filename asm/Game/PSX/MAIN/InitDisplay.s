@@ -3,10 +3,10 @@
 
 glabel InitDisplay
 /* 291D8 800389D8 D8FFBD27 */  addiu      $sp, $sp, -0x28
-/* 291DC 800389DC 0D80023C */  lui        $v0, %hi(mainMenuFading + 0x96)
+/* 291DC 800389DC 0D80023C */  lui        $v0, %hi(D_800D0BF4)
 /* 291E0 800389E0 2400BFAF */  sw         $ra, 0x24($sp)
 /* 291E4 800389E4 2000B0AF */  sw         $s0, 0x20($sp)
-/* 291E8 800389E8 F40B4D24 */  addiu      $t5, $v0, %lo(mainMenuFading + 0x96)
+/* 291E8 800389E8 F40B4D24 */  addiu      $t5, $v0, %lo(D_800D0BF4)
 /* 291EC 800389EC 0300AA89 */  lwl        $t2, 0x3($t5)
 /* 291F0 800389F0 0000AA99 */  lwr        $t2, 0x0($t5)
 /* 291F4 800389F4 0700AB89 */  lwl        $t3, 0x7($t5)

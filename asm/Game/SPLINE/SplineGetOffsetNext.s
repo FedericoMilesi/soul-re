@@ -121,9 +121,9 @@ glabel SplineGetOffsetNext
 /* 32B00 80042300 C6080108 */  j          .L80042318
 /* 32B04 80042304 00000000 */   nop
 .L80042308:
-/* 32B08 80042308 0D80043C */  lui        $a0, %hi(FRAC_BITS + 0x4)
+/* 32B08 80042308 0D80043C */  lui        $a0, %hi(D_800D0FD8)
 /* 32B0C 8004230C 06D1010C */  jal        printf
-/* 32B10 80042310 D80F8424 */   addiu     $a0, $a0, %lo(FRAC_BITS + 0x4)
+/* 32B10 80042310 D80F8424 */   addiu     $a0, $a0, %lo(D_800D0FD8)
 .L80042314:
 /* 32B14 80042314 21106002 */  addu       $v0, $s3, $zero
 .L80042318:

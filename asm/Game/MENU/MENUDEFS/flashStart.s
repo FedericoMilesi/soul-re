@@ -16,9 +16,9 @@ glabel flashStart
 /* A9544 800B8D44 94BE8387 */  lh         $v1, %gp_rel(gameTrackerX + 0xCC)($gp)
 /* A9548 800B8D48 FFFF0224 */  addiu      $v0, $zero, -0x1
 /* A954C 800B8D4C 6B006214 */  bne        $v1, $v0, .L800B8EFC
-/* A9550 800B8D50 0D80043C */   lui       $a0, %hi(hack_attract_movie + 0xC)
+/* A9550 800B8D50 0D80043C */   lui       $a0, %hi(D_800D1FC8)
 /* A9554 800B8D54 DAE1020C */  jal        womp_background
-/* A9558 800B8D58 C81F8424 */   addiu     $a0, $a0, %lo(hack_attract_movie + 0xC)
+/* A9558 800B8D58 C81F8424 */   addiu     $a0, $a0, %lo(D_800D1FC8)
 /* A955C 800B8D5C E8BD848F */  lw         $a0, %gp_rel(gameTrackerX + 0x20)($gp)
 /* A9560 800B8D60 0A000224 */  addiu      $v0, $zero, 0xA
 /* A9564 800B8D64 98BE82A7 */  sh         $v0, %gp_rel(gameTrackerX + 0xD0)($gp)
@@ -35,12 +35,12 @@ glabel flashStart
 /* A9590 800B8D90 C1E30208 */  j          .L800B8F04
 /* A9594 800B8D94 21100000 */   addu      $v0, $zero, $zero
 .L800B8D98:
-/* A9598 800B8D98 50AA848F */  lw         $a0, %gp_rel(hack_attract_movie + 0x2C)($gp)
+/* A9598 800B8D98 50AA848F */  lw         $a0, %gp_rel(D_800D1FE8)($gp)
 /* A959C 800B8D9C 89884234 */  ori        $v0, $v0, (0x88888889 & 0xFFFF)
 /* A95A0 800B8DA0 01008424 */  addiu      $a0, $a0, 0x1
 /* A95A4 800B8DA4 18008200 */  mult       $a0, $v0
-/* A95A8 800B8DA8 0D80023C */  lui        $v0, %hi(hack_attract_movie + 0x30)
-/* A95AC 800B8DAC EC1F4C24 */  addiu      $t4, $v0, %lo(hack_attract_movie + 0x30)
+/* A95A8 800B8DA8 0D80023C */  lui        $v0, %hi(D_800D1FEC)
+/* A95AC 800B8DAC EC1F4C24 */  addiu      $t4, $v0, %lo(D_800D1FEC)
 /* A95B0 800B8DB0 0000898D */  lw         $t1, 0x0($t4)
 /* A95B4 800B8DB4 04008A8D */  lw         $t2, 0x4($t4)
 /* A95B8 800B8DB8 08008B8D */  lw         $t3, 0x8($t4)
@@ -63,7 +63,7 @@ glabel flashStart
 /* A95FC 800B8DFC 80100200 */  sll        $v0, $v0, 2
 /* A9600 800B8E00 23208200 */  subu       $a0, $a0, $v0
 /* A9604 800B8E04 0A008228 */  slti       $v0, $a0, 0xA
-/* A9608 800B8E08 50AA84AF */  sw         $a0, %gp_rel(hack_attract_movie + 0x2C)($gp)
+/* A9608 800B8E08 50AA84AF */  sw         $a0, %gp_rel(D_800D1FE8)($gp)
 /* A960C 800B8E0C 03004010 */  beqz       $v0, .L800B8E1C
 /* A9610 800B8E10 1E008228 */   slti      $v0, $a0, 0x1E
 /* A9614 800B8E14 99E30208 */  j          .L800B8E64

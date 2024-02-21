@@ -15,15 +15,15 @@ glabel G2EulerAngles_FromMatrix
 /* 86884 80096084 C2180600 */  srl        $v1, $a2, 3
 /* 86888 80096088 5000A6AF */  sw         $a2, 0x50($sp)
 /* 8688C 8009608C 0100C730 */  andi       $a3, $a2, 0x1
-/* 86890 80096090 0D80023C */  lui        $v0, %hi(WORSHIP_FunctionTable + 0x38)
-/* 86894 80096094 081C4224 */  addiu      $v0, $v0, %lo(WORSHIP_FunctionTable + 0x38)
+/* 86890 80096090 0D80023C */  lui        $v0, %hi(D_800D1C08)
+/* 86894 80096094 081C4224 */  addiu      $v0, $v0, %lo(D_800D1C08)
 /* 86898 80096098 03006330 */  andi       $v1, $v1, 0x3
 /* 8689C 8009609C 21186200 */  addu       $v1, $v1, $v0
 /* 868A0 800960A0 00006690 */  lbu        $a2, 0x0($v1)
-/* 868A4 800960A4 0D80043C */  lui        $a0, %hi(WORSHIP_FunctionTable + 0x40)
+/* 868A4 800960A4 0D80043C */  lui        $a0, %hi(D_800D1C10)
 /* 868A8 800960A8 1800A7AF */  sw         $a3, 0x18($sp)
 /* 868AC 800960AC 1400A78F */  lw         $a3, 0x14($sp)
-/* 868B0 800960B0 101C8424 */  addiu      $a0, $a0, %lo(WORSHIP_FunctionTable + 0x40)
+/* 868B0 800960B0 101C8424 */  addiu      $a0, $a0, %lo(D_800D1C10)
 /* 868B4 800960B4 4400BFAF */  sw         $ra, 0x44($sp)
 /* 868B8 800960B8 4000BEAF */  sw         $fp, 0x40($sp)
 /* 868BC 800960BC 3C00B7AF */  sw         $s7, 0x3C($sp)

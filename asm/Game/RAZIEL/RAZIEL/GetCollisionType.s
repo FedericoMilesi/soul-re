@@ -86,9 +86,9 @@ glabel GetCollisionType
 /* A4464 800B3C64 1400028E */  lw         $v0, 0x14($s0)
 /* A4468 800B3C68 00000000 */  nop
 /* A446C 800B3C6C DBFF6210 */  beq        $v1, $v0, .L800B3BDC
-/* A4470 800B3C70 0D80043C */   lui       $a0, %hi(LastBlock + 0x4)
+/* A4470 800B3C70 0D80043C */   lui       $a0, %hi(D_800D1DB8)
 /* A4474 800B3C74 06D1010C */  jal        printf
-/* A4478 800B3C78 B81D8424 */   addiu     $a0, $a0, %lo(LastBlock + 0x4)
+/* A4478 800B3C78 B81D8424 */   addiu     $a0, $a0, %lo(D_800D1DB8)
 /* A447C 800B3C7C 33CF0208 */  j          .L800B3CCC
 /* A4480 800B3C80 01000224 */   addiu     $v0, $zero, 0x1
 .L800B3C84:

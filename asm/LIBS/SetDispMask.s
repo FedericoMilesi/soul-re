@@ -28,8 +28,8 @@ glabel SetDispMask
 /* AABFC 800BA3FC 14000624 */   addiu     $a2, $zero, 0x14
 .L800BA400:
 /* AAC00 800BA400 0003043C */  lui        $a0, (0x3000001 >> 16)
-/* AAC04 800BA404 0D80023C */  lui        $v0, %hi(the_attract_movies + 0x1158)
-/* AAC08 800BA408 04DA428C */  lw         $v0, %lo(the_attract_movies + 0x1158)($v0)
+/* AAC04 800BA404 0D80023C */  lui        $v0, %hi(D_800CDA04)
+/* AAC08 800BA408 04DA428C */  lw         $v0, %lo(D_800CDA04)($v0)
 /* AAC0C 800BA40C 02000012 */  beqz       $s0, .L800BA418
 /* AAC10 800BA410 01008434 */   ori       $a0, $a0, (0x3000001 & 0xFFFF)
 /* AAC14 800BA414 0003043C */  lui        $a0, (0x3000000 >> 16)

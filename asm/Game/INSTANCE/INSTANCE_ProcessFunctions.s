@@ -252,9 +252,9 @@ glabel INSTANCE_ProcessFunctions
 /* 241C8 800339C8 4000033C */  lui        $v1, (0x400000 >> 16)
 /* 241CC 800339CC 24104300 */  and        $v0, $v0, $v1
 /* 241D0 800339D0 0A004010 */  beqz       $v0, .L800339FC
-/* 241D4 800339D4 0D80043C */   lui       $a0, %hi(gpSaved + 0x14)
+/* 241D4 800339D4 0D80043C */   lui       $a0, %hi(D_800D0820)
 /* 241D8 800339D8 82020786 */  lh         $a3, 0x282($s0)
-/* 241DC 800339DC 20088424 */  addiu      $a0, $a0, %lo(gpSaved + 0x14)
+/* 241DC 800339DC 20088424 */  addiu      $a0, $a0, %lo(D_800D0820)
 /* 241E0 800339E0 1000B2AF */  sw         $s2, 0x10($sp)
 /* 241E4 800339E4 1400B3AF */  sw         $s3, 0x14($sp)
 /* 241E8 800339E8 1800B6AF */  sw         $s6, 0x18($sp)
@@ -322,10 +322,10 @@ glabel INSTANCE_ProcessFunctions
 /* 242C4 80033AC4 00000000 */  nop
 /* 242C8 80033AC8 24104300 */  and        $v0, $v0, $v1
 /* 242CC 80033ACC 0A004010 */  beqz       $v0, .L80033AF8
-/* 242D0 80033AD0 0D80043C */   lui       $a0, %hi(gpSaved + 0x64)
+/* 242D0 80033AD0 0D80043C */   lui       $a0, %hi(D_800D0870)
 /* 242D4 80033AD4 84020786 */  lh         $a3, 0x284($s0)
 /* 242D8 80033AD8 86020286 */  lh         $v0, 0x286($s0)
-/* 242DC 80033ADC 70088424 */  addiu      $a0, $a0, %lo(gpSaved + 0x64)
+/* 242DC 80033ADC 70088424 */  addiu      $a0, $a0, %lo(D_800D0870)
 /* 242E0 80033AE0 1400B2AF */  sw         $s2, 0x14($sp)
 /* 242E4 80033AE4 1800B3AF */  sw         $s3, 0x18($sp)
 /* 242E8 80033AE8 1000A2AF */  sw         $v0, 0x10($sp)
@@ -413,8 +413,8 @@ glabel INSTANCE_ProcessFunctions
 /* 24404 80033C04 21200002 */   addu      $a0, $s0, $zero
 /* 24408 80033C08 7CCD000C */  jal        INSTANCE_GetSplineFrameNumber
 /* 2440C 80033C0C 21288002 */   addu      $a1, $s4, $zero
-/* 24410 80033C10 0D80043C */  lui        $a0, %hi(gpSaved + 0x98)
-/* 24414 80033C14 A4088424 */  addiu      $a0, $a0, %lo(gpSaved + 0x98)
+/* 24410 80033C10 0D80043C */  lui        $a0, %hi(D_800D08A4)
+/* 24414 80033C14 A4088424 */  addiu      $a0, $a0, %lo(D_800D08A4)
 /* 24418 80033C18 5C010526 */  addiu      $a1, $s0, 0x15C
 /* 2441C 80033C1C 1000A2AF */  sw         $v0, 0x10($sp)
 /* 24420 80033C20 3000068E */  lw         $a2, 0x30($s0)

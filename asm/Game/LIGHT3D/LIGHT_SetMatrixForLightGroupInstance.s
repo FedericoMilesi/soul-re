@@ -5,11 +5,11 @@ glabel LIGHT_SetMatrixForLightGroupInstance
 /* 27000 80036800 70FFBD27 */  addiu      $sp, $sp, -0x90
 /* 27004 80036804 8800B2AF */  sw         $s2, 0x88($sp)
 /* 27008 80036808 21908000 */  addu       $s2, $a0, $zero
-/* 2700C 8003680C 0D80023C */  lui        $v0, %hi(default_lightgroup + 0x48)
+/* 2700C 8003680C 0D80023C */  lui        $v0, %hi(D_800D0910)
 /* 27010 80036810 8C00BFAF */  sw         $ra, 0x8C($sp)
 /* 27014 80036814 8400B1AF */  sw         $s1, 0x84($sp)
 /* 27018 80036818 8000B0AF */  sw         $s0, 0x80($sp)
-/* 2701C 8003681C 10094A24 */  addiu      $t2, $v0, %lo(default_lightgroup + 0x48)
+/* 2701C 8003681C 10094A24 */  addiu      $t2, $v0, %lo(D_800D0910)
 /* 27020 80036820 0000478D */  lw         $a3, 0x0($t2)
 /* 27024 80036824 0400488D */  lw         $t0, 0x4($t2)
 /* 27028 80036828 0800498D */  lw         $t1, 0x8($t2)

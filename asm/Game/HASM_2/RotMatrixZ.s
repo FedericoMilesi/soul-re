@@ -13,8 +13,8 @@ glabel RotMatrixZ
 /* 698E4 800790E4 00088430 */  andi       $a0, $a0, 0x800
 /* 698E8 800790E8 03008010 */  beqz       $a0, .L800790F8
 /* 698EC 800790EC 00000000 */   nop
-/* 698F0 800790F0 22100200 */  sub        $v0, $zero, $v0 # handwritten instruction
-/* 698F4 800790F4 22180300 */  sub        $v1, $zero, $v1 # handwritten instruction
+/* 698F0 800790F0 22100200 */  neg        $v0, $v0 # handwritten instruction
+/* 698F4 800790F4 22180300 */  neg        $v1, $v1 # handwritten instruction
 .L800790F8:
 /* 698F8 800790F8 0000A88C */  lw         $t0, 0x0($a1)
 /* 698FC 800790FC 0400AA8C */  lw         $t2, 0x4($a1)

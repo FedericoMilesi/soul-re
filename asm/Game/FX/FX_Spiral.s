@@ -51,16 +51,16 @@ glabel FX_Spiral
 /* 3E460 8004DC60 00000000 */  nop
 /* 3E464 8004DC64 0D006214 */  bne        $v1, $v0, .L8004DC9C
 /* 3E468 8004DC68 003A0C3C */   lui       $t4, (0x3A00BF00 >> 16)
-/* 3E46C 8004DC6C D09A8297 */  lhu        $v0, %gp_rel(Spiral_Max + 0x4)($gp)
+/* 3E46C 8004DC6C D09A8297 */  lhu        $v0, %gp_rel(D_800D1068)($gp)
 /* 3E470 8004DC70 00000000 */  nop
 /* 3E474 8004DC74 01004224 */  addiu      $v0, $v0, 0x1
-/* 3E478 8004DC78 D09A82A7 */  sh         $v0, %gp_rel(Spiral_Max + 0x4)($gp)
+/* 3E478 8004DC78 D09A82A7 */  sh         $v0, %gp_rel(D_800D1068)($gp)
 /* 3E47C 8004DC7C 00140200 */  sll        $v0, $v0, 16
 /* 3E480 8004DC80 03140200 */  sra        $v0, $v0, 16
 /* 3E484 8004DC84 51004228 */  slti       $v0, $v0, 0x51
 /* 3E488 8004DC88 0C004014 */  bnez       $v0, .L8004DCBC
 /* 3E48C 8004DC8C 00000000 */   nop
-/* 3E490 8004DC90 D09A80A7 */  sh         $zero, %gp_rel(Spiral_Max + 0x4)($gp)
+/* 3E490 8004DC90 D09A80A7 */  sh         $zero, %gp_rel(D_800D1068)($gp)
 /* 3E494 8004DC94 30370108 */  j          .L8004DCC0
 /* 3E498 8004DC98 003A063C */   lui       $a2, (0x3A00150B >> 16)
 .L8004DC9C:
@@ -78,16 +78,16 @@ glabel FX_Spiral
 /* 3E4C0 8004DCC0 3C370108 */  j          .L8004DCF0
 /* 3E4C4 8004DCC4 0B15C634 */   ori       $a2, $a2, (0x3A00150B & 0xFFFF)
 .L8004DCC8:
-/* 3E4C8 8004DCC8 D09A8297 */  lhu        $v0, %gp_rel(Spiral_Max + 0x4)($gp)
+/* 3E4C8 8004DCC8 D09A8297 */  lhu        $v0, %gp_rel(D_800D1068)($gp)
 /* 3E4CC 8004DCCC 00000000 */  nop
 /* 3E4D0 8004DCD0 01004224 */  addiu      $v0, $v0, 0x1
-/* 3E4D4 8004DCD4 D09A82A7 */  sh         $v0, %gp_rel(Spiral_Max + 0x4)($gp)
+/* 3E4D4 8004DCD4 D09A82A7 */  sh         $v0, %gp_rel(D_800D1068)($gp)
 /* 3E4D8 8004DCD8 00140200 */  sll        $v0, $v0, 16
 /* 3E4DC 8004DCDC 03140200 */  sra        $v0, $v0, 16
 /* 3E4E0 8004DCE0 51004228 */  slti       $v0, $v0, 0x51
 /* 3E4E4 8004DCE4 02004014 */  bnez       $v0, .L8004DCF0
 /* 3E4E8 8004DCE8 00000000 */   nop
-/* 3E4EC 8004DCEC D09A80A7 */  sh         $zero, %gp_rel(Spiral_Max + 0x4)($gp)
+/* 3E4EC 8004DCEC D09A80A7 */  sh         $zero, %gp_rel(D_800D1068)($gp)
 .L8004DCF0:
 /* 3E4F0 8004DCF0 CC9A848F */  lw         $a0, %gp_rel(Spiral_Max)($gp)
 /* 3E4F4 8004DCF4 00000000 */  nop
@@ -122,7 +122,7 @@ glabel FX_Spiral
 /* 3E564 8004DD64 FFFFD636 */  ori        $s6, $s6, (0xFFFFFF & 0xFFFF)
 /* 3E568 8004DD68 00FF023C */  lui        $v0, (0xFF000000 >> 16)
 /* 3E56C 8004DD6C 24106201 */  and        $v0, $t3, $v0
-/* 3E570 8004DD70 D09A8C87 */  lh         $t4, %gp_rel(Spiral_Max + 0x4)($gp)
+/* 3E570 8004DD70 D09A8C87 */  lh         $t4, %gp_rel(D_800D1068)($gp)
 /* 3E574 8004DD74 40005026 */  addiu      $s0, $s2, 0x40
 /* 3E578 8004DD78 4800A2AF */  sw         $v0, 0x48($sp)
 /* 3E57C 8004DD7C 3800A6AF */  sw         $a2, 0x38($sp)
@@ -256,7 +256,7 @@ glabel FX_Spiral
 /* 3E758 8004DF58 08BE868F */  lw         $a2, %gp_rel(gameTrackerX + 0x40)($gp)
 /* 3E75C 8004DF5C E0C6828F */  lw         $v0, %gp_rel(Spiral_Glow_X)($gp)
 /* 3E760 8004DF60 E4C6888F */  lw         $t0, %gp_rel(Spiral_Glow_Y)($gp)
-/* 3E764 8004DF64 D29A8397 */  lhu        $v1, %gp_rel(Spiral_Max + 0x6)($gp)
+/* 3E764 8004DF64 D29A8397 */  lhu        $v1, %gp_rel(D_800D1068 + 0x2)($gp)
 /* 3E768 8004DF68 8C00A78F */  lw         $a3, 0x8C($sp)
 /* 3E76C 8004DF6C E0FF6324 */  addiu      $v1, $v1, -0x20
 /* 3E770 8004DF70 2C00A8AF */  sw         $t0, 0x2C($sp)
@@ -266,7 +266,7 @@ glabel FX_Spiral
 /* 3E780 8004DF80 05000224 */  addiu      $v0, $zero, 0x5
 /* 3E784 8004DF84 1000A2AF */  sw         $v0, 0x10($sp)
 /* 3E788 8004DF88 00800234 */  ori        $v0, $zero, 0x8000
-/* 3E78C 8004DF8C D29A83A7 */  sh         $v1, %gp_rel(Spiral_Max + 0x6)($gp)
+/* 3E78C 8004DF8C D29A83A7 */  sh         $v1, %gp_rel(D_800D1068 + 0x2)($gp)
 /* 3E790 8004DF90 1400A2AF */  sw         $v0, 0x14($sp)
 /* 3E794 8004DF94 2000A3AF */  sw         $v1, 0x20($sp)
 /* 3E798 8004DF98 1800A8AF */  sw         $t0, 0x18($sp)

@@ -61,13 +61,13 @@ glabel INSTANCE_InstanceGroupNumber
 /* 22FBC 800327BC 00000000 */  nop
 /* 22FC0 800327C0 01004230 */  andi       $v0, $v0, 0x1
 /* 22FC4 800327C4 03004010 */  beqz       $v0, .L800327D4
-/* 22FC8 800327C8 0D80053C */   lui       $a1, %hi(gpSaved + 0x8)
+/* 22FC8 800327C8 0D80053C */   lui       $a1, %hi(D_800D0814)
 /* 22FCC 800327CC FDC90008 */  j          .L800327F4
 /* 22FD0 800327D0 08001036 */   ori       $s0, $s0, 0x8
 .L800327D4:
 /* 22FD4 800327D4 2400848C */  lw         $a0, 0x24($a0)
 /* 22FD8 800327D8 83F7020C */  jal        strcmp
-/* 22FDC 800327DC 1408A524 */   addiu     $a1, $a1, %lo(gpSaved + 0x8)
+/* 22FDC 800327DC 1408A524 */   addiu     $a1, $a1, %lo(D_800D0814)
 /* 22FE0 800327E0 04004010 */  beqz       $v0, .L800327F4
 /* 22FE4 800327E4 FDFF0224 */   addiu     $v0, $zero, -0x3
 /* 22FE8 800327E8 24800202 */  and        $s0, $s0, $v0

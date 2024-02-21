@@ -16,8 +16,8 @@ glabel RotMatrixZYX
 /* 69388 80078B88 00082B33 */  andi       $t3, $t9, 0x800
 /* 6938C 80078B8C 03006011 */  beqz       $t3, .L80078B9C
 /* 69390 80078B90 00000000 */   nop
-/* 69394 80078B94 22680D00 */  sub        $t5, $zero, $t5 # handwritten instruction
-/* 69398 80078B98 22500A00 */  sub        $t2, $zero, $t2 # handwritten instruction
+/* 69394 80078B94 22680D00 */  neg        $t5, $t5 # handwritten instruction
+/* 69398 80078B98 22500A00 */  neg        $t2, $t2 # handwritten instruction
 .L80078B9C:
 /* 6939C 80078B9C 25600F03 */  or         $t4, $t8, $t7
 /* 693A0 80078BA0 49008011 */  beqz       $t4, .L80078CC8
@@ -30,8 +30,8 @@ glabel RotMatrixZYX
 /* 693BC 80078BBC 00080B33 */  andi       $t3, $t8, 0x800
 /* 693C0 80078BC0 03006011 */  beqz       $t3, .L80078BD0
 /* 693C4 80078BC4 00000000 */   nop
-/* 693C8 80078BC8 22480900 */  sub        $t1, $zero, $t1 # handwritten instruction
-/* 693CC 80078BCC 22600C00 */  sub        $t4, $zero, $t4 # handwritten instruction
+/* 693C8 80078BC8 22480900 */  neg        $t1, $t1 # handwritten instruction
+/* 693CC 80078BCC 22600C00 */  neg        $t4, $t4 # handwritten instruction
 .L80078BD0:
 /* 693D0 80078BD0 FF07E831 */  andi       $t0, $t7, 0x7FF
 /* 693D4 80078BD4 40400800 */  sll        $t0, $t0, 1
@@ -41,8 +41,8 @@ glabel RotMatrixZYX
 /* 693E4 80078BE4 0008EE31 */  andi       $t6, $t7, 0x800
 /* 693E8 80078BE8 0300C011 */  beqz       $t6, .L80078BF8
 /* 693EC 80078BEC 00000000 */   nop
-/* 693F0 80078BF0 22580B00 */  sub        $t3, $zero, $t3 # handwritten instruction
-/* 693F4 80078BF4 22400800 */  sub        $t0, $zero, $t0 # handwritten instruction
+/* 693F0 80078BF0 22580B00 */  neg        $t3, $t3 # handwritten instruction
+/* 693F4 80078BF4 22400800 */  neg        $t0, $t0 # handwritten instruction
 .L80078BF8:
 /* 693F8 80078BF8 00488948 */  mtc2       $t1, $9 # handwritten instruction
 /* 693FC 80078BFC 00508A48 */  mtc2       $t2, $10 # handwritten instruction
@@ -98,7 +98,7 @@ glabel RotMatrixZYX
 /* 694C4 80078CC4 00000000 */   nop
 .L80078CC8:
 /* 694C8 80078CC8 006C0D00 */  sll        $t5, $t5, 16
-/* 694CC 80078CCC 22400D00 */  sub        $t0, $zero, $t5 # handwritten instruction
+/* 694CC 80078CCC 22400D00 */  neg        $t0, $t5 # handwritten instruction
 /* 694D0 80078CD0 FFFF4931 */  andi       $t1, $t2, 0xFFFF
 /* 694D4 80078CD4 25400901 */  or         $t0, $t0, $t1
 /* 694D8 80078CD8 00100B24 */  addiu      $t3, $zero, 0x1000

@@ -7,8 +7,8 @@ glabel my_itoa
 /* 64F1C 8007471C 2120A003 */  addu       $a0, $sp, $zero
 /* 64F20 80074720 09006014 */  bnez       $v1, .L80074748
 /* 64F24 80074724 2138A000 */   addu      $a3, $a1, $zero
-/* 64F28 80074728 0D80023C */  lui        $v0, %hi(VRAM_NeedToUpdateMorph + 0x4)
-/* 64F2C 8007472C 741A4B24 */  addiu      $t3, $v0, %lo(VRAM_NeedToUpdateMorph + 0x4)
+/* 64F28 80074728 0D80023C */  lui        $v0, %hi(D_800D1A74)
+/* 64F2C 8007472C 741A4B24 */  addiu      $t3, $v0, %lo(D_800D1A74)
 /* 64F30 80074730 00006881 */  lb         $t0, 0x0($t3)
 /* 64F34 80074734 01006981 */  lb         $t1, 0x1($t3)
 /* 64F38 80074738 0000A8A0 */  sb         $t0, 0x0($a1)

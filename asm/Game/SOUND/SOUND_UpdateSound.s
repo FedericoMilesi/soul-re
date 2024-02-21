@@ -27,13 +27,13 @@ glabel SOUND_UpdateSound
 /* 31790 80040F90 3C000224 */  addiu      $v0, $zero, 0x3C
 .L80040F94:
 /* 31794 80040F94 8C9982AF */  sw         $v0, %gp_rel(gSramFullMsgCnt)($gp)
-/* 31798 80040F98 0D80043C */  lui        $a0, %hi(objectOneShotTriggerTbl + 0x74)
+/* 31798 80040F98 0D80043C */  lui        $a0, %hi(D_800D0F9C)
 /* 3179C 80040F9C 1CC3828F */  lw         $v0, %gp_rel(gSramFreeBlocks)($gp)
 /* 317A0 80040FA0 D8C0838F */  lw         $v1, %gp_rel(gSramLargestFree)($gp)
 /* 317A4 80040FA4 24C3858F */  lw         $a1, %gp_rel(gSramTotalUsed)($gp)
 /* 317A8 80040FA8 20C3868F */  lw         $a2, %gp_rel(gSramUsedBlocks)($gp)
 /* 317AC 80040FAC 28C3878F */  lw         $a3, %gp_rel(gSramTotalFree)($gp)
-/* 317B0 80040FB0 9C0F8424 */  addiu      $a0, $a0, %lo(objectOneShotTriggerTbl + 0x74)
+/* 317B0 80040FB0 9C0F8424 */  addiu      $a0, $a0, %lo(D_800D0F9C)
 /* 317B4 80040FB4 1000A2AF */  sw         $v0, 0x10($sp)
 /* 317B8 80040FB8 C3B5000C */  jal        FONT_Print
 /* 317BC 80040FBC 1400A3AF */   sw        $v1, 0x14($sp)

@@ -19,12 +19,12 @@ glabel OBTABLE_InitObjectWithID
 /* 2EA34 8003E234 00000000 */  nop
 /* 2EA38 8003E238 45004010 */  beqz       $v0, .L8003E350
 /* 2EA3C 8003E23C 21880000 */   addu      $s1, $zero, $zero
-/* 2EA40 8003E240 0D80133C */  lui        $s3, %hi(gTimerEnabled + 0x148)
+/* 2EA40 8003E240 0D80133C */  lui        $s3, %hi(D_800D0EA8)
 /* 2EA44 8003E244 1CA39024 */  addiu      $s0, $a0, %lo(objectFunc)
 .L8003E248:
 /* 2EA48 8003E248 0000048E */  lw         $a0, 0x0($s0)
 /* 2EA4C 8003E24C 83F7020C */  jal        strcmp
-/* 2EA50 8003E250 A80E6526 */   addiu     $a1, $s3, %lo(gTimerEnabled + 0x148)
+/* 2EA50 8003E250 A80E6526 */   addiu     $a1, $s3, %lo(D_800D0EA8)
 /* 2EA54 8003E254 31004010 */  beqz       $v0, .L8003E31C
 /* 2EA58 8003E258 0D80023C */   lui       $v0, %hi(objectFunc)
 /* 2EA5C 8003E25C 24001026 */  addiu      $s0, $s0, 0x24
@@ -44,12 +44,12 @@ glabel OBTABLE_InitObjectWithID
 /* 2EA90 8003E290 00000000 */  nop
 /* 2EA94 8003E294 2E004010 */  beqz       $v0, .L8003E350
 /* 2EA98 8003E298 21880000 */   addu      $s1, $zero, $zero
-/* 2EA9C 8003E29C 0D80133C */  lui        $s3, %hi(gTimerEnabled + 0x154)
+/* 2EA9C 8003E29C 0D80133C */  lui        $s3, %hi(D_800D0EB4)
 /* 2EAA0 8003E2A0 1CA39024 */  addiu      $s0, $a0, %lo(objectFunc)
 .L8003E2A4:
 /* 2EAA4 8003E2A4 0000048E */  lw         $a0, 0x0($s0)
 /* 2EAA8 8003E2A8 83F7020C */  jal        strcmp
-/* 2EAAC 8003E2AC B40E6526 */   addiu     $a1, $s3, %lo(gTimerEnabled + 0x154)
+/* 2EAAC 8003E2AC B40E6526 */   addiu     $a1, $s3, %lo(D_800D0EB4)
 /* 2EAB0 8003E2B0 1A004010 */  beqz       $v0, .L8003E31C
 /* 2EAB4 8003E2B4 0D80023C */   lui       $v0, %hi(objectFunc)
 /* 2EAB8 8003E2B8 24001026 */  addiu      $s0, $s0, 0x24

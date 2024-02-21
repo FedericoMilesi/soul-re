@@ -30,8 +30,8 @@ glabel MoveImage
 /* AAF10 800BA710 FFFF4432 */  andi       $a0, $s2, 0xFFFF
 /* AAF14 800BA714 25104400 */  or         $v0, $v0, $a0
 /* AAF18 800BA718 0000058E */  lw         $a1, 0x0($s0)
-/* AAF1C 800BA71C 0D80073C */  lui        $a3, %hi(the_attract_movies + 0x1158)
-/* AAF20 800BA720 04DAE78C */  lw         $a3, %lo(the_attract_movies + 0x1158)($a3)
+/* AAF1C 800BA71C 0D80073C */  lui        $a3, %hi(D_800CDA04)
+/* AAF20 800BA720 04DAE78C */  lw         $a3, %lo(D_800CDA04)($a3)
 /* AAF24 800BA724 14000624 */  addiu      $a2, $zero, 0x14
 /* AAF28 800BA728 040062AC */  sw         $v0, 0x4($v1)
 /* AAF2C 800BA72C 000065AC */  sw         $a1, 0x0($v1)

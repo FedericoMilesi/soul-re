@@ -8,8 +8,8 @@ glabel GAMELOOP_InitStandardObjects
 /* 1E9CC 8002E1CC C7E0000C */  jal        LOAD_DumpCurrentDir
 /* 1E9D0 8002E1D0 1000B0AF */   sw        $s0, 0x10($sp)
 /* 1E9D4 8002E1D4 21880000 */  addu       $s1, $zero, $zero
-/* 1E9D8 8002E1D8 0D80023C */  lui        $v0, %hi(charMap + 0x114)
-/* 1E9DC 8002E1DC F4A15024 */  addiu      $s0, $v0, %lo(charMap + 0x114)
+/* 1E9D8 8002E1D8 0D80023C */  lui        $v0, %hi(D_800CA1F4)
+/* 1E9DC 8002E1DC F4A15024 */  addiu      $s0, $v0, %lo(D_800CA1F4)
 .L8002E1E0:
 /* 1E9E0 8002E1E0 0000048E */  lw         $a0, 0x0($s0)
 /* 1E9E4 8002E1E4 04001026 */  addiu      $s0, $s0, 0x4

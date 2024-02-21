@@ -57,7 +57,7 @@ glabel LOAD_CdReadReady
 /* 27D2C 8003752C 00000000 */   nop
 .L80037530:
 /* 27D30 80037530 07002216 */  bne        $s1, $v0, .L80037550
-/* 27D34 80037534 0D80043C */   lui       $a0, %hi(default_lightgroup + 0x5C)
+/* 27D34 80037534 0D80043C */   lui       $a0, %hi(D_800D0924)
 /* 27D38 80037538 06000224 */  addiu      $v0, $zero, 0x6
 /* 27D3C 8003753C C0BB82AF */  sw         $v0, %gp_rel(loadStatus + 0x2C)($gp)
 /* 27D40 80037540 04000224 */  addiu      $v0, $zero, 0x4
@@ -65,7 +65,7 @@ glabel LOAD_CdReadReady
 /* 27D48 80037548 57DD0008 */  j          .L8003755C
 /* 27D4C 8003754C 00000000 */   nop
 .L80037550:
-/* 27D50 80037550 24098424 */  addiu      $a0, $a0, %lo(default_lightgroup + 0x5C)
+/* 27D50 80037550 24098424 */  addiu      $a0, $a0, %lo(D_800D0924)
 /* 27D54 80037554 06D1010C */  jal        printf
 /* 27D58 80037558 21282002 */   addu      $a1, $s1, $zero
 .L8003755C:

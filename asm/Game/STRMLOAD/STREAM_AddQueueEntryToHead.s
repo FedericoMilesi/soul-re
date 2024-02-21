@@ -8,9 +8,9 @@ glabel STREAM_AddQueueEntryToHead
 /* 5090C 8006010C 00000000 */  nop
 /* 50910 80060110 04000016 */  bnez       $s0, .L80060124
 /* 50914 80060114 1400BFAF */   sw        $ra, 0x14($sp)
-/* 50918 80060118 0D80043C */  lui        $a0, %hi(gCurDir + 0x4)
+/* 50918 80060118 0D80043C */  lui        $a0, %hi(D_800D1980)
 /* 5091C 8006011C 2B52000C */  jal        DEBUG_FatalError
-/* 50920 80060120 80198424 */   addiu     $a0, $a0, %lo(gCurDir + 0x4)
+/* 50920 80060120 80198424 */   addiu     $a0, $a0, %lo(D_800D1980)
 .L80060124:
 /* 50924 80060124 0000028E */  lw         $v0, 0x0($s0)
 /* 50928 80060128 44CB848F */  lw         $a0, %gp_rel(loadHead)($gp)

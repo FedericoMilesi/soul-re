@@ -38,8 +38,8 @@ glabel STREAM_LoadObjectReturn
 /* 494C0 80058CC0 24104300 */  and        $v0, $v0, $v1
 /* 494C4 80058CC4 0F004010 */  beqz       $v0, .L80058D04
 /* 494C8 80058CC8 1000A427 */   addiu     $a0, $sp, 0x10
-/* 494CC 80058CCC 0D80053C */  lui        $a1, %hi(WarpRoomArray + 0x178)
-/* 494D0 80058CD0 1018A524 */  addiu      $a1, $a1, %lo(WarpRoomArray + 0x178)
+/* 494CC 80058CCC 0D80053C */  lui        $a1, %hi(D_800D1810)
+/* 494D0 80058CD0 1018A524 */  addiu      $a1, $a1, %lo(D_800D1810)
 /* 494D4 80058CD4 21302002 */  addu       $a2, $s1, $zero
 /* 494D8 80058CD8 1AD1010C */  jal        sprintf
 /* 494DC 80058CDC 21382002 */   addu      $a3, $s1, $zero

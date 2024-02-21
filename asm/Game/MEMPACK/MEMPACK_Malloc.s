@@ -52,8 +52,8 @@ glabel MEMPACK_Malloc
 /* 40AB0 800502B0 21100000 */   addu      $v0, $zero, $zero
 /* 40AB4 800502B4 7F41010C */  jal        MEMPACK_ReportMemory2
 /* 40AB8 800502B8 00000000 */   nop
-/* 40ABC 800502BC 0D80043C */  lui        $a0, %hi(vmClock + 0x4)
-/* 40AC0 800502C0 74108424 */  addiu      $a0, $a0, %lo(vmClock + 0x4)
+/* 40ABC 800502BC 0D80043C */  lui        $a0, %hi(D_800D1074)
+/* 40AC0 800502C0 74108424 */  addiu      $a0, $a0, %lo(D_800D1074)
 /* 40AC4 800502C4 21284002 */  addu       $a1, $s2, $zero
 /* 40AC8 800502C8 F4C6828F */  lw         $v0, %gp_rel(newMemTracker + 0x4)($gp)
 /* 40ACC 800502CC F8C6838F */  lw         $v1, %gp_rel(newMemTracker + 0x8)($gp)

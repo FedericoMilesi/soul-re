@@ -3,8 +3,8 @@
 
 glabel PSXPAD_TranslateData
 /* 221B0 800319B0 C0FFBD27 */  addiu      $sp, $sp, -0x40
-/* 221B4 800319B4 0D80023C */  lui        $v0, %hi(dualShock + 0x4)
-/* 221B8 800319B8 C8074324 */  addiu      $v1, $v0, %lo(dualShock + 0x4)
+/* 221B4 800319B4 0D80023C */  lui        $v0, %hi(D_800D07C8)
+/* 221B8 800319B8 C8074324 */  addiu      $v1, $v0, %lo(D_800D07C8)
 /* 221BC 800319BC 03006230 */  andi       $v0, $v1, 0x3
 /* 221C0 800319C0 17004010 */  beqz       $v0, .L80031A20
 /* 221C4 800319C4 2138A003 */   addu      $a3, $sp, $zero

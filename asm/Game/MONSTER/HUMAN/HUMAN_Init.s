@@ -44,10 +44,10 @@ glabel HUMAN_Init
 /* 6D74C 8007CF4C 0400A2AC */  sw         $v0, 0x4($a1)
 .L8007CF50:
 /* 6D750 8007CF50 1C00228E */  lw         $v0, 0x1C($s1)
-/* 6D754 8007CF54 0D80053C */  lui        $a1, %hi(HUMAN_FunctionTable + 0x20)
+/* 6D754 8007CF54 0D80053C */  lui        $a1, %hi(D_800D1ABC)
 /* 6D758 8007CF58 2400448C */  lw         $a0, 0x24($v0)
 /* 6D75C 8007CF5C 1CD2010C */  jal        strcmpi
-/* 6D760 8007CF60 BC1AA524 */   addiu     $a1, $a1, %lo(HUMAN_FunctionTable + 0x20)
+/* 6D760 8007CF60 BC1AA524 */   addiu     $a1, $a1, %lo(D_800D1ABC)
 /* 6D764 8007CF64 05004014 */  bnez       $v0, .L8007CF7C
 /* 6D768 8007CF68 00000000 */   nop
 /* 6D76C 8007CF6C 0400028E */  lw         $v0, 0x4($s0)

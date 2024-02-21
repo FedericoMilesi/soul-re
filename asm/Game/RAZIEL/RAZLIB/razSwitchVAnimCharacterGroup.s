@@ -7,12 +7,12 @@ glabel razSwitchVAnimCharacterGroup
 /* 978C4 800A70C4 21988000 */  addu       $s3, $a0, $zero
 /* 978C8 800A70C8 3800B4AF */  sw         $s4, 0x38($sp)
 /* 978CC 800A70CC 21A0A000 */  addu       $s4, $a1, $zero
-/* 978D0 800A70D0 0D80023C */  lui        $v0, %hi(ZoneDelta + 0x80)
+/* 978D0 800A70D0 0D80023C */  lui        $v0, %hi(D_800D1D98)
 /* 978D4 800A70D4 3C00BFAF */  sw         $ra, 0x3C($sp)
 /* 978D8 800A70D8 3000B2AF */  sw         $s2, 0x30($sp)
 /* 978DC 800A70DC 2C00B1AF */  sw         $s1, 0x2C($sp)
 /* 978E0 800A70E0 2800B0AF */  sw         $s0, 0x28($sp)
-/* 978E4 800A70E4 981D4B24 */  addiu      $t3, $v0, %lo(ZoneDelta + 0x80)
+/* 978E4 800A70E4 981D4B24 */  addiu      $t3, $v0, %lo(D_800D1D98)
 /* 978E8 800A70E8 0000688D */  lw         $t0, 0x0($t3)
 /* 978EC 800A70EC 0400698D */  lw         $t1, 0x4($t3)
 /* 978F0 800A70F0 08006A8D */  lw         $t2, 0x8($t3)
