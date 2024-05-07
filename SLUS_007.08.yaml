@@ -1,7 +1,7 @@
 name: SLUS_007.08
 sha1: b7f430596aa0c4f1f7b6550aa12a31c38f980cbb
 options:
-  basename: slus_007.08
+  basename: KAIN2
   target_path: SLUS_007.08
   base_path: .
   platform: psx
@@ -13,20 +13,15 @@ options:
   # build_path: build
   # create_asm_dependencies: True
 
-  ld_script_path: slus_007.08.ld
+  ld_script_path: KAIN2.ld
 
   find_file_boundaries: False
   gp_value: 0x800D7598
 
-  o_as_suffix: True
   use_legacy_include_asm: False
 
-  asm_function_macro: glabel
-  asm_jtbl_label_macro: jlabel
-  asm_data_macro: dlabel
-
-  section_order: [".rodata", ".text", ".data", ".bss"]
-  # auto_all_sections: [".data", ".rodata", ".bss"]
+  section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
+  auto_all_sections: []
 
   symbol_addrs_path:
     - symbol_addrs.txt
@@ -38,12 +33,13 @@ options:
 
   extensions_path: tools/splat_ext
 
-  subalign: 2
+  subalign: 4
 
   string_encoding: ASCII
   data_string_encoding: ASCII
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
+  ld_bss_is_noload: True
 segments:
   - name: header
     type: header
@@ -53,6 +49,7 @@ segments:
     type: code
     start: 0x800
     vram: 0x80010000
+    align: 4
     bss_size: 0xDDC8
     subsegments:
       - [0x000800, rodata, Game/DEBUG]
@@ -77,112 +74,112 @@ segments:
       - [0x0029EC, rodata, Game/RAZIEL/STEERING]
       - [0x002ADC, rodata, Game/RAZIEL/SENSES]
       - [0x002AFC, rodata, Game/RAZIEL/RAZIEL]
-      - [0x002C24, rodata, rodata]
-
-      - [0x003554, c, Game/PLAYER]
-      - [0x0036B8, c, Game/DEBUG]
-      - [0x0052A4, c, Game/CAMERA]
-      - [0x00E3F8, c, Game/SIGNAL]
-      - [0x00F018, c, Game/COLLIDE]
-      - [0x0159AC, c, Game/HASM_1]
-      - [0x01B110, c, Game/DRAW]
-      - [0x01D6D4, c, Game/FONT]
-      - [0x01E328, c, Game/GAMELOOP]
-      - [0x021A44, c, Game/GAMEPAD]
-      - [0x0229B4, c, Game/INSTANCE]
-      - [0x0262CC, c, Game/LIGHT3D]
-      - [0x027AC8, c, Game/LOAD3D]
-      - [0x028CF8, c, Game/PSX/MAIN]
-      - [0x02A258, c, Game/MATH3D]
-      - [0x02AFD0, c, Game/PIPE3D]
-      - [0x02D484, c, Game/RESOLVE]
-      - [0x02D4BC, c, Game/SCRIPT]
-      - [0x02E5BC, c, Game/TIMER]
-      - [0x02E734, c, Game/BSP]
-      - [0x02E7B8, c, Game/OBTABLE]
-      - [0x02EFA0, c, Game/GENERIC]
-      - [0x02F458, c, Game/SOUND]
-      - [0x031A24, c, Game/SPLINE]
-      - [0x032D60, c, Game/FX]
-      - [0x040354, c, Game/LIST]
-      - [0x040424, c, Game/VM]
-      - [0x040890, c, Game/MEMPACK]
-      - [0x042290, c, Game/PSX/AADLIB]
-      - [0x045618, c, Game/PSX/AADSEQEV]
-      - [0x046658, c, Game/PSX/AADSQCMD]
-      - [0x0476F8, c, Game/PSX/AADSFX]
-      - [0x0487B4, c, Game/PSX/AADVOICE]
-      - [0x049200, c, Game/STREAM]
-      - [0x050780, c, Game/STRMLOAD]
-      - [0x0512FC, c, Game/SCRIPT2]
-      - [0x05138C, c, Game/EVENT]
-      - [0x0594A4, c, Game/PHYSOBS]
-      - [0x061408, c, Game/RAZCNTRL]
-      - [0x061490, c, Game/STATE]
-      - [0x063644, c, Game/VRAM]
-      - [0x064C18, c, Game/PSX/SUPPORT]
-      - [0x0650D0, c, Game/PHYSICS]
-      - [0x0689E4, c, Game/HASM_2]
-      - [0x06A7F0, c, Game/REAVER]
-      - [0x06B364, c, Game/GLYPH]
-      - [0x06D3A4, c, Game/RELMOD]
-      - [0x06D570, c, Game/MONSTER/HUMAN]
-      - [0x06E1EC, c, Game/MONSTER/MISSILE]
-      - [0x06E4B0, c, Game/MONSTER/MONAPI]
-      - [0x06FDD8, c, Game/MONSTER/MONLIB]
-      - [0x075184, c, Game/MONSTER/MONMSG]
-      - [0x076470, c, Game/MONSTER/MONSENSE]
-      - [0x077BB8, c, Game/MONSTER/MONSTER]
-      - [0x07D844, c, Game/MONSTER/MONTABLE]
-      - [0x07DA08, c, Game/MONSTER/SLUAGH]
-      - [0x07E090, c, Game/MONSTER/SOUL]
-      - [0x07F234, c, Game/MONSTER/VWRAITH]
-      - [0x07F748, c, Game/MONSTER/WORSHIP]
-      - [0x07F8E8, c, Game/MONSTER/MBMISS]
-      - [0x080350, c, Game/G2/ANMG2ILF]
-      - [0x080A34, c, Game/G2/ANMDECMP]
-      - [0x080C58, c, Game/G2/ANMCTRLR]
-      - [0x082A1C, c, Game/G2/ANMINTRP]
-      - [0x0832E4, c, Game/G2/ANIMG2]
-      - [0x0856D0, c, Game/G2/INSTNCG2]
-      - [0x0866CC, c, Game/G2/MAING2]
-      - [0x0866DC, c, Game/G2/POOLMMG2]
-      - [0x086818, c, Game/G2/QUATG2]
-      - [0x086BC0, c, Game/G2/TIMERG2]
-      - [0x086C00, c, Game/PSX/PSX_G2/MAINVM]
-      - [0x086C34, c, Game/PSX/PSX_G2/QUATVM]
-      - [0x086EE4, c, Game/PLAN/ENMYPLAN]
-      - [0x087AC8, c, Game/PLAN/PLAN]
-      - [0x0884CC, c, Game/PLAN/PLANAPI]
-      - [0x0892E0, c, Game/PLAN/PLANCOLL]
-      - [0x0899D4, c, Game/PLAN/PLANPOOL]
-      - [0x08A578, c, Game/PLAN/PLANSRCH]
-      - [0x08A938, c, Game/RAZIEL/CONTROL]
-      - [0x08B10C, c, Game/RAZIEL/PUPPET]
-      - [0x08C27C, c, Game/RAZIEL/ATTACK]
-      - [0x08F62C, c, Game/RAZIEL/SWIM]
-      - [0x091588, c, Game/RAZIEL/SPIDER]
-      - [0x092354, c, Game/RAZIEL/ALGOCTRL]
-      - [0x09286C, c, Game/RAZIEL/STEERING]
-      - [0x093ABC, c, Game/RAZIEL/RAZDBUG]
-      - [0x093AC4, c, Game/RAZIEL/SENSES]
-      - [0x094CA0, c, Game/RAZIEL/HEALTH]
-      - [0x09585C, c, Game/RAZIEL/RAZLIB]
-      - [0x098754, c, Game/RAZIEL/RAZIEL]
-      - [0x0A5038, c, Game/UNDRWRLD]
-      - [0x0A59F8, c, Game/SAVEINFO]
-      - [0x0A72E0, c, Game/VOICEXA]
-      - [0x0A7C34, c, Game/CINEMA/CINEPSX]
-      - [0x0A7E30, c, Game/LOCAL/LOCALSTR]
-      - [0x0A7EF8, c, Game/MENU/MENU]
-      - [0x0A8CB4, c, Game/MENU/MENUUTIL]
-      - [0x0A8DF0, c, Game/MENU/MENUDEFS]
-      - [0x0A99B0, c, Game/MENU/MENUFACE]
-      - [0x0A9D9C, c, Game/MCARD/MEMCARD]
-      - [0x0AA238, c, Game/MCARD/MCASSERT]
-      - [0x0AA27C, c, LIBS]
-      - [0xB8890, data, data]
-      - [0xBFD9C, data, sdata]
-      - [0xC28AC, bss, sbss]
-      - [0xC7DBC, bss, bss]
-  - [0xC3000]
+      - [0x002C24, rodata, KAIN2]
+      - [0x003554, asm, Game/PLAYER]
+      - [0x0036B8, asm, Game/DEBUG]
+      - [0x0052A4, asm, Game/CAMERA]
+      - [0x00E3F8, asm, Game/SIGNAL]
+      - [0x00F018, asm, Game/COLLIDE]
+      - [0x0159AC, asm, Game/HASM_1]
+      - [0x01B110, asm, Game/DRAW]
+      - [0x01D6D4, asm, Game/FONT]
+      - [0x01E328, asm, Game/GAMELOOP]
+      - [0x021A44, asm, Game/GAMEPAD]
+      - [0x0229B4, asm, Game/INSTANCE]
+      - [0x0262CC, asm, Game/LIGHT3D]
+      - [0x027AC8, asm, Game/LOAD3D]
+      - [0x028CF8, asm, Game/PSX/MAIN]
+      - [0x02A258, asm, Game/MATH3D]
+      - [0x02AFD0, asm, Game/PIPE3D]
+      - [0x02D484, asm, Game/RESOLVE]
+      - [0x02D4BC, asm, Game/SCRIPT]
+      - [0x02E5BC, asm, Game/TIMER]
+      - [0x02E734, asm, Game/BSP]
+      - [0x02E7B8, asm, Game/OBTABLE]
+      - [0x02EFA0, asm, Game/GENERIC]
+      - [0x02F458, asm, Game/SOUND]
+      - [0x031A24, asm, Game/SPLINE]
+      - [0x032D60, asm, Game/FX]
+      - [0x040354, asm, Game/LIST]
+      - [0x040424, asm, Game/VM]
+      - [0x040890, asm, Game/MEMPACK]
+      - [0x042290, asm, Game/PSX/AADLIB]
+      - [0x045618, asm, Game/PSX/AADSEQEV]
+      - [0x046658, asm, Game/PSX/AADSQCMD]
+      - [0x0476F8, asm, Game/PSX/AADSFX]
+      - [0x0487B4, asm, Game/PSX/AADVOICE]
+      - [0x049200, asm, Game/STREAM]
+      - [0x050780, asm, Game/STRMLOAD]
+      - [0x0512FC, asm, Game/SCRIPT2]
+      - [0x05138C, asm, Game/EVENT]
+      - [0x0594A4, asm, Game/PHYSOBS]
+      - [0x061408, asm, Game/RAZCNTRL]
+      - [0x061490, asm, Game/STATE]
+      - [0x063644, asm, Game/VRAM]
+      - [0x064C18, asm, Game/PSX/SUPPORT]
+      - [0x0650D0, asm, Game/PHYSICS]
+      - [0x0689E4, asm, Game/HASM_2]
+      - [0x06A7F0, asm, Game/REAVER]
+      - [0x06B364, asm, Game/GLYPH]
+      - [0x06D3A4, asm, Game/RELMOD]
+      - [0x06D570, asm, Game/MONSTER/HUMAN]
+      - [0x06E1EC, asm, Game/MONSTER/MISSILE]
+      - [0x06E4B0, asm, Game/MONSTER/MONAPI]
+      - [0x06FDD8, asm, Game/MONSTER/MONLIB]
+      - [0x075184, asm, Game/MONSTER/MONMSG]
+      - [0x076470, asm, Game/MONSTER/MONSENSE]
+      - [0x077BB8, asm, Game/MONSTER/MONSTER]
+      - [0x07D844, asm, Game/MONSTER/MONTABLE]
+      - [0x07DA08, asm, Game/MONSTER/SLUAGH]
+      - [0x07E090, asm, Game/MONSTER/SOUL]
+      - [0x07F234, asm, Game/MONSTER/VWRAITH]
+      - [0x07F748, asm, Game/MONSTER/WORSHIP]
+      - [0x07F8E8, asm, Game/MONSTER/MBMISS]
+      - [0x080350, asm, Game/G2/ANMG2ILF]
+      - [0x080A34, asm, Game/G2/ANMDECMP]
+      - [0x080C58, asm, Game/G2/ANMCTRLR]
+      - [0x082A1C, asm, Game/G2/ANMINTRP]
+      - [0x0832E4, asm, Game/G2/ANIMG2]
+      - [0x0856D0, asm, Game/G2/INSTNCG2]
+      - [0x0866CC, asm, Game/G2/MAING2]
+      - [0x0866DC, asm, Game/G2/POOLMMG2]
+      - [0x086818, asm, Game/G2/QUATG2]
+      - [0x086BC0, asm, Game/G2/TIMERG2]
+      - [0x086C00, asm, Game/PSX/PSX_G2/MAINVM]
+      - [0x086C34, asm, Game/PSX/PSX_G2/QUATVM]
+      - [0x086EE4, asm, Game/PLAN/ENMYPLAN]
+      - [0x087AC8, asm, Game/PLAN/PLAN]
+      - [0x0884CC, asm, Game/PLAN/PLANAPI]
+      - [0x0892E0, asm, Game/PLAN/PLANCOLL]
+      - [0x0899D4, asm, Game/PLAN/PLANPOOL]
+      - [0x08A578, asm, Game/PLAN/PLANSRCH]
+      - [0x08A938, asm, Game/RAZIEL/CONTROL]
+      - [0x08B10C, asm, Game/RAZIEL/PUPPET]
+      - [0x08C27C, asm, Game/RAZIEL/ATTACK]
+      - [0x08F62C, asm, Game/RAZIEL/SWIM]
+      - [0x091588, asm, Game/RAZIEL/SPIDER]
+      - [0x092354, asm, Game/RAZIEL/ALGOCTRL]
+      - [0x09286C, asm, Game/RAZIEL/STEERING]
+      - [0x093ABC, asm, Game/RAZIEL/RAZDBUG]
+      - [0x093AC4, asm, Game/RAZIEL/SENSES]
+      - [0x094CA0, asm, Game/RAZIEL/HEALTH]
+      - [0x09585C, asm, Game/RAZIEL/RAZLIB]
+      - [0x098754, asm, Game/RAZIEL/RAZIEL]
+      - [0x0A5038, asm, Game/UNDRWRLD]
+      - [0x0A59F8, asm, Game/SAVEINFO]
+      - [0x0A72E0, asm, Game/VOICEXA]
+      - [0x0A7C34, asm, Game/CINEMA/CINEPSX]
+      - [0x0A7E30, asm, Game/LOCAL/LOCALSTR]
+      - [0x0A7EF8, asm, Game/MENU/MENU]
+      - [0x0A8CB4, asm, Game/MENU/MENUUTIL]
+      - [0x0A8DF0, asm, Game/MENU/MENUDEFS]
+      - [0x0A99B0, asm, Game/MENU/MENUFACE]
+      - [0x0A9D9C, asm, Game/MCARD/MEMCARD]
+      - [0x0AA238, asm, Game/MCARD/MCASSERT]
+      - [0x0AA27C, asm, LIBS]
+      - [0x0B8890, data, KAIN2]
+      - [0x0BFD9C, sdata, KAIN2]
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: KAIN2}
+      - {start: 0x0C28AC, type: bss, vram: 0x800D75BC, name: KAIN2}
+      
+  - [0x0C28AC]
