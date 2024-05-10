@@ -79,7 +79,7 @@ OPTFLAGS       :=
 ASFLAGS        := -Iinclude -march=r3000 -mtune=r3000 -no-pad-sections
 CFLAGS         :=
 CPPFLAGS       :=
-LDFLAGS        := -T undefined_syms_auto.txt -T undefined_funcs_auto.txt -T $(LD_SCRIPT) -Map $(LD_MAP) --no-check-sections
+LDFLAGS        := -T undefined_syms.txt -T undefined_funcs.txt -T $(BUILD_DIR)/$(LD_SCRIPT) -Map $(LD_MAP) --no-check-sections
 
 ifeq ($(NON_MATCHING),1)
 CPPFLAGS += -DNON_MATCHING
@@ -88,7 +88,8 @@ endif
 ### Sources ###
 
 # Object files
-OBJECTS := $(shell grep -E 'build.+\.o' $(LD_SCRIPT) -o)
+OBJECTS := $(shell grep -E 'BUILD_PATH.+\.o' $(LD_SCRIPT) -o)
+OBJECTS := $(OBJECTS:BUILD_PATH/%=$(BUILD_DIR)/%)
 DEPENDS := $(OBJECTS:=.d)
 
 ### Targets ###
@@ -128,8 +129,14 @@ $(BUILD_DIR)/%.bin.o: %.bin
 	@mkdir -p $(shell dirname $@)
 	$(V)$(LD) -r -b binary -o $@ $<
 
+$(BUILD_DIR)/$(LD_SCRIPT): $(LD_SCRIPT)
+	@$(PRINT)$(GREEN)Preprocessing linker script: $(ENDGREEN)$(BLUE)$<$(ENDBLUE)$(ENDLINE)
+	$(V)$(CPP) -P -DBUILD_PATH=$(BUILD_DIR) $< -o $@
+#Temporary hack for noload segment wrong alignment
+	@sed -r -i 's/\.main_bss \(NOLOAD\) : SUBALIGN\(4\)/.main_bss main_SDATA_END (NOLOAD) : SUBALIGN(4)/g' $@
+
 # Link the .o files into the .elf
-$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS)
+$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) $(BUILD_DIR)/$(LD_SCRIPT)
 	@$(PRINT)$(GREEN)Linking elf file: $(ENDGREEN)$(BLUE)$@$(ENDBLUE)$(ENDLINE)
 	$(V)$(LD) $(LDFLAGS) -o $@
 

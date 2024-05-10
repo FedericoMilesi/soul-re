@@ -6,40 +6,33 @@ options:
   base_path: .
   platform: psx
   compiler: GCC
-
   asm_path: asm
   src_path: .
   nonmatchings_path: .
-  # build_path: build
+  build_path: BUILD_PATH
   # create_asm_dependencies: True
-
   ld_script_path: KAIN2.ld
-
   find_file_boundaries: False
   gp_value: 0x800D7598
-
   use_legacy_include_asm: False
-
   section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
   auto_all_sections: []
-
   symbol_addrs_path:
     - symbol_addrs.txt
   reloc_addrs_path:
     - reloc_addrs.txt
-
+  create_undefined_funcs_auto: False
+  create_undefined_syms_auto: False
   # undefined_funcs_auto_path: undefined_funcs_auto.txt
   # undefined_syms_auto_path: undefined_syms_auto.txt
-
   extensions_path: tools/splat_ext
-
-  subalign: 4
-
   string_encoding: ASCII
   data_string_encoding: ASCII
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
   ld_bss_is_noload: True
+  subalign: 4
+
 segments:
   - name: header
     type: header
