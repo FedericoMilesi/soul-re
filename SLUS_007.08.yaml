@@ -53,7 +53,7 @@ segments:
       - [0x0009D0, rodata, Game/GENERIC]
       - [0x000A30, rodata, Game/SOUND]
       - [0x000AE8, rodata, Game/FX]
-      - [0x000B84, rodata, Game/STREAM]
+      - [0x000B84, rodata, Game/STRMLOAD]
       - [0x000BB0, rodata, Game/EVENT]
       - [0x0024D0, rodata, Game/PHYSOBS]
       - [0x0025C4, rodata, Game/STATE]
@@ -67,7 +67,11 @@ segments:
       - [0x0029EC, rodata, Game/RAZIEL/STEERING]
       - [0x002ADC, rodata, Game/RAZIEL/SENSES]
       - [0x002AFC, rodata, Game/RAZIEL/RAZIEL]
-      - [0x002C24, rodata, KAIN2]
+      - [0x002C24, rodata, Game/CINEMA/CINEPSX]
+      - [0x002C8C, rodata, Game/MCARD/MEMCARD]
+      - [0x002CAC, rodata, Game/MCARD/MCASSERT]
+      - [0x002CD4, rodata, LIBS]
+
       - [0x003554, asm, Game/PLAYER]
       - [0x0036B8, asm, Game/DEBUG]
       - [0x0052A4, asm, Game/CAMERA]
@@ -170,9 +174,32 @@ segments:
       - [0x0A9D9C, asm, Game/MCARD/MEMCARD]
       - [0x0AA238, asm, Game/MCARD/MCASSERT]
       - [0x0AA27C, asm, LIBS]
-      - [0x0B8890, data, KAIN2]
+
+      - [0x0B8890, data, Data/MENU]
+      - [0x0BA798, data, Game/DEBUG]
+      - [0x0BA7C0, data, Game/FONT]
+      - [0x0BA9F4, data, KAIN2]
+      - [0x0BCC5C, data, Game/MONSTER/HUMAN]
+      - [0x0BCCA4, data, Game/MONSTER/MISSILE]
+      - [0x0BCCAC, data, Game/MONSTER/MONMSG]
+      - [0x0BCCD0, data, Game/MONSTER/MONSTER]
+      - [0x0BCCD4, data, Game/MONSTER/MONTABLE]
+      - [0x0BCDFC, data, Game/MONSTER/SLUAGH]
+      - [0x0BCE80, data, Game/MONSTER/VWRAITH]
+      - [0x0BCED4, data, Game/MONSTER/WORSHIP]
+      - [0x0BCF10, data, Game/G2/ANMDECMP]
+      - [0x0BD050, data, Game/SAVEINFO]
+      - [0x0BD074, data, Game/CINEMA/CINEPSX]
+      - [0x0BD07C, data, Game/MENU/MENUUTIL]
+      - [0x0BD0AC, data, Game/MENU/MENUDEFS]
+      - [0x0BD0BC, data, LIBS]
+
       - [0x0BFD9C, sdata, KAIN2]
+
       - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: KAIN2}
-      - {start: 0x0C28AC, type: bss, vram: 0x800D75BC, name: KAIN2}
+
+      - {start: 0x0C28AC, type: bss, vram: 0x800D75BC, name: Game/SOUND}
+      - {start: 0x0C28AC, type: bss, vram: 0x800DA984, name: Game/STRMLOAD}
+      - {start: 0x0C28AC, type: bss, vram: 0x800DBB04, name: LIBS}
       
   - [0x0C28AC]
