@@ -3,4 +3,6 @@
 
 #include "include_asm.h"
 
+#define NULL (void*)0
+
 #endif
