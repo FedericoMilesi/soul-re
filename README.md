@@ -28,3 +28,11 @@ cd soul-re
 
 ### Install Python3 requirements
 Run `pip3 install -r requirements.txt`
+
+### Placing the ROM
+Obviously, you will need to provide your own rom dump of the game. The required version is the 1999-07-14 Prototype Version of Legacy of Kain: Soul Reaver.
+If done correctly, you will end up with a .IMG and a .CUE file that you can mount on your PC to get the required binary, SLUS_007.08, which needs to be placed inside the `soul-re` folder.
+
+### Build the code
+Run `make setup` to extract needed stuff from the SLUS_007.08 file, if that succeeds, run `make -j12` to build it.
+Once build has finished a folder will be produced with the name `build`, inside this, you will find the output.
