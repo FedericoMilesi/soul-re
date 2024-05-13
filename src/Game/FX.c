@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/FX.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Init);
 
@@ -52,7 +53,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawList);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SimpleQuadSetup);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_WaterRingProcess);
+void FX_WaterRingProcess(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker) 
+{
+    fxPrim->v0.x -= 8;
+	fxPrim->v0.y -= 8;
+	fxPrim->v1.x += 8;
+	fxPrim->v1.y -= 8;
+	fxPrim->v2.x -= 8;
+	fxPrim->v2.y += 8;
+	fxPrim->v3.x += 8;
+	fxPrim->v3.y += 8;
+    
+	FX_StandardFXPrimProcess(fxPrim, fxTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_WaterBubbleProcess);
 
