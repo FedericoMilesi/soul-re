@@ -1,0 +1,2 @@
+#!/bin/bash
+python3 $(dirname -- $0)/maspsx/maspsx.py --run-assembler -I${COMPILER_DIR} $@
