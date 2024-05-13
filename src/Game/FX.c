@@ -268,7 +268,36 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawRing2);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawFField);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartFField);
+struct _FXForceFieldEffect * FX_StartFField(struct _Instance *instance, int size, struct _Position *offset, int size_diff, int size_change, int deg_change, long color) 
+{
+    struct _FXForceFieldEffect *field; 
+    
+    field = (struct _FXForceFieldEffect*)MEMPACK_Malloc(sizeof(struct _FXForceFieldEffect), 13);
+    
+    if (field != NULL) 
+    {
+        field->effectType = 134;
+        field->instance = instance;
+        field->type = 0;
+        field->lifeTime = -1;
+        field->continue_process = NULL;
+        field->size = size;
+        
+        SET_SVEC(&field->offset, offset);
+        
+        field->size_diff = size_diff;
+        field->size_change = (short)size_change;
+        field->deg = 0; 
+        field->deg_change = (short)deg_change;
+        field->start_fade = 4096;
+        field->end_fade = 0;
+        field->color = color;
+        
+        FX_InsertGeneralEffect(field);
+    }
+    
+    return field;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_EndFField);
 

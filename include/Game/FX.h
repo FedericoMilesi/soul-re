@@ -1,5 +1,6 @@
 #include "TYPES.h"
 #include "LIST.h"
+#include "MATH3D.h"
 
 // size: 0x10
 struct TextureMT3 {
@@ -131,4 +132,38 @@ struct _FXTracker {
 	struct NodeType usedPrimListSprite;
 	// offset: 6DA0 (8 bytes)
 	struct NodeType freePrimList;
+};
+
+// size: 0x2C
+struct _FXForceFieldEffect {
+	// offset: 0000
+	void *next;
+	// offset: 0004
+	void *continue_process;
+	// offset: 0008 (668 bytes)
+	struct _Instance *instance;
+	// offset: 000C
+	unsigned char effectType;
+	// offset: 000D
+	unsigned char type;
+	// offset: 000E
+	short lifeTime;
+	// offset: 0010 (8 bytes)
+	struct _SVector offset;
+	// offset: 0018
+	short size;
+	// offset: 001A
+	short size_diff;
+	// offset: 001C
+	short size_change;
+	// offset: 001E
+	short deg;
+	// offset: 0020
+	short deg_change;
+	// offset: 0022
+	short start_fade;
+	// offset: 0024
+	short end_fade;
+	// offset: 0028
+	long color;
 };
