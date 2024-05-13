@@ -35,7 +35,6 @@ else
   endif
 endif
 
-
 ### Output ###
 
 EXE          := $(BUILD_DIR)/$(TARGET).EXE
@@ -43,13 +42,13 @@ ELF          := $(BUILD_DIR)/$(TARGET).elf
 LD_SCRIPT    := $(TARGET).ld
 LD_MAP       := $(BUILD_DIR)/$(TARGET).map
 
-
 ### Tools ###
 
 PYTHON     := python3
 SPLAT_YAML := $(BASEEXE).yaml
 SPLAT      := splat split $(SPLAT_YAML)
 DIFF       := diff
+MASPSX     := $(PYTHON) tools/maspsx/maspsx.py --aspsx-version=2.81
 
 CROSS    := mips-linux-gnu-
 AS       := $(CROSS)as -EL
@@ -57,7 +56,7 @@ LD       := $(CROSS)ld -EL
 OBJCOPY  := $(CROSS)objcopy
 STRIP    := $(CROSS)strip
 CPP      := $(CROSS)cpp
-CC       :=
+CC       := tools/gcc2.8.1-mipsel/cc1
 
 PRINT := printf '
  ENDCOLOR := \033[0m
@@ -75,10 +74,10 @@ ENDLINE := \n'
 
 ### Compiler Options ###
 
-OPTFLAGS       :=
 ASFLAGS        := -Iinclude -march=r3000 -mtune=r3000 -no-pad-sections
-CFLAGS         :=
-CPPFLAGS       :=
+CFLAGS         := -O2 -G65536 -fno-builtin -fpeephole -ffunction-cse -fkeep-static-consts -fpcc-struct-return \
+                  -fcommon -fgnu-linker -msplit-addresses -mgas -mgpOPT -mgpopt -msoft-float -gcoff
+CPPFLAGS       := -Iinclude
 LDFLAGS        := -T undefined_syms.txt -T undefined_funcs.txt -T $(BUILD_DIR)/$(LD_SCRIPT) -Map $(LD_MAP) --no-check-sections
 
 ifeq ($(NON_MATCHING),1)
@@ -115,7 +114,7 @@ split:
 $(BUILD_DIR)/%.c.o: %.c
 	@$(PRINT)$(GREEN)Compiling C file: $(ENDGREEN)$(BLUE)$<$(ENDBLUE)$(ENDLINE)
 	@mkdir -p $(shell dirname $@)
-#TODO
+	$(V)$(CPP) $(CPPFLAGS) $< | $(CC) $(CFLAGS) | $(MASPSX) | $(AS) $(ASFLAGS) -o $@
 
 # Compile .s files
 $(BUILD_DIR)/%.s.o: %.s
