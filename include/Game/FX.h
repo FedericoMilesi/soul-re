@@ -167,3 +167,17 @@ struct _FXForceFieldEffect {
 	// offset: 0028
 	long color;
 };
+
+// size: 0xC
+struct _PlaneConstants {
+	// offset: 0000
+	short a;
+	// offset: 0002
+	short b;
+	// offset: 0004
+	short c;
+	// offset: 0006
+	short flags;
+	// offset: 0008
+	long d;
+};

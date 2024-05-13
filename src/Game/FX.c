@@ -168,7 +168,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SoulReaverWinding);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_UpdateInstanceWaterSplit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetPlaneEquation);
+void FX_GetPlaneEquation(struct _SVector *normal, struct _SVector *poPlane, struct _PlaneConstants *plane) 
+{
+    plane->a = normal->x;
+    plane->b = normal->y;
+    plane->c = normal->z;
+    
+    plane->d = -(((plane->a * poPlane->x) + (plane->b * poPlane->y) + (plane->c * poPlane->z)) >> 12);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DoInstancePowerRing);
 
