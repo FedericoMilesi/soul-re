@@ -37,5 +37,7 @@ If done correctly, you will end up with a .IMG and a .CUE file that you can moun
 Run `make setup` to extract needed stuff from the SLUS_007.08 file, if that succeeds, run `make -j12` to build it.
 Once build has finished a folder will be produced with the name `build`, inside this, you will find the output.
 
+If you have trouble with this setup process, reach out on the Discord server for the project: https://discord.gg/W8khh4v4Gx  
+
 ## Contributing
 Contributions are welcome. If you would like to reserve a function, open a PR with the function or file name(s).
