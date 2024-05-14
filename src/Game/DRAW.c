@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/DRAW.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/DRAW", fDRAW_SPLIT_INTPL_XYZ);
 
@@ -14,7 +15,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/DRAW", DRAW_DrawButton);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DRAW", DRAW_LoadButton);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DRAW", DRAW_FreeButton);
+void DRAW_FreeButton(struct _ButtonTexture *button)
+{
+	VRAM_ClearVramBlock(button->vramBlock);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DRAW", DRAW_RingLine);
 
