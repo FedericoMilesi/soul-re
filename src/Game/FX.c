@@ -174,7 +174,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SetReaverInstance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SoulReaverBlade);
 
-void FX_ReaverBladeInit(void) {
+void FX_ReaverBladeInit() 
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SoulReaverWinding);
