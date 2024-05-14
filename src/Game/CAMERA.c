@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/TYPES.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateViewVolumeNormals);
 
@@ -33,7 +34,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetInstanceFocus);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetZRotation);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_LengthSVector);
+long CAMERA_LengthSVector(struct _SVector *sv)
+{
+	return MATH3D_FastSqrt0((sv->x * sv->x) + (sv->y * sv->y) + (sv->z * sv->z));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetValue);
 
