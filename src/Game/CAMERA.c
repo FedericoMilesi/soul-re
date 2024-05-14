@@ -43,7 +43,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetValue);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_AngleDifference);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SignedAngleDifference);
+short CAMERA_SignedAngleDifference(short angle0, short angle1)
+{ 
+	return AngleDiff(angle1, angle0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_QueryMode);
 
