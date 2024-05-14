@@ -1,3 +1,6 @@
+#ifndef _TYPES_H_
+#define _TYPES_H_
+
 // size: 0x6
 struct _Position {
 	// offset: 0000
@@ -51,3 +54,5 @@ struct CVECTOR {
 	// offset: 0003
 	unsigned char cd;
 };
+
+#endif
