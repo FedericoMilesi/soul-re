@@ -1,7 +1,18 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
+#include "Game/GAMELOOP.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAYER", PLAYER_TurnHead);
+void PLAYER_TurnHead(struct _Instance *instance, short *rotx, short *rotz, struct GameTracker *gameTracker)
+{
+	if ((INSTANCE_Query(instance, 1) & 0x1))
+	{
+		RAZIEL_TurnHead(instance, rotx, rotz, gameTracker);
+	}
+	else
+	{
+		MONAPI_TurnHead(instance, rotx, rotz, gameTracker);
+	}
+}
 
 long PLAYER_OkToLookAround(struct _Instance* instance)
 {

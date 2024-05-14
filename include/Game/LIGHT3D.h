@@ -74,3 +74,21 @@ struct LightInfo {
 	// offset: 0478
 	long numSavedColors;
 };
+
+// size: 0x14
+struct LightInstance {
+	// offset: 0000
+	struct _Instance *lightInstance;
+	// offset: 0004
+	long r;
+	// offset: 0008
+	long g;
+	// offset: 000C
+	long b;
+	// offset: 0010
+	short radius;
+	// offset: 0012
+	unsigned char segment;
+	// offset: 0013
+	unsigned char flags;
+};
