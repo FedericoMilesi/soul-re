@@ -132,7 +132,10 @@ void FX_Blood(struct _SVector *location, struct _SVector *input_vel, struct _SVe
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Blood2);
+void FX_Blood2(struct _SVector *location, struct _SVector *input_vel, struct _SVector *accel, int amount, long color, long dummyCrapShouldRemove)
+{
+    FX_Blood(location, input_vel, accel, amount, color, 4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Blood_Impale);
 
