@@ -117,7 +117,20 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DFacadeParticleSetup);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Dot);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Blood);
+void FX_Blood(struct _SVector *location, struct _SVector *input_vel, struct _SVector *accel, int amount, long color, long size)
+{
+    struct _SVector vel; 
+    int i; 
+
+    for (i = amount; i != 0; i--)
+    {
+        vel.x = ((input_vel->x * i) / 128) + ((rand() & 0x7)) - 4;
+        vel.y = ((input_vel->y * i) / 128) + ((rand() & 0x7)) - 4;
+        vel.z = ((input_vel->z * i) / 128) + ((rand() & 0x7)) - 4;
+        
+        FX_Dot(location, &vel, accel, 0, color, size * 2, 16, 1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Blood2);
 
