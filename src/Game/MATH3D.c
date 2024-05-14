@@ -2,7 +2,54 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_Sort3VectorCoords);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_LengthXYZ);
+long MATH3D_LengthXYZ(long x, long y, long z) 
+{
+    long t;
+
+    x = abs(x);
+    y = abs(y);
+    z = abs(z);
+
+    if (x < y)
+    {
+        if (z < x)
+        {
+            t = x;
+            x = z;
+            z = y;
+            y = t;
+        }
+        else if (z < y)
+        {
+            t = y;
+            y = z;
+            z = t;
+        }
+    }
+    else if (z < y)
+    {
+        t = x;
+        x = z;
+        z = t;
+    }
+    else if (z < x)
+    {
+        t = x;
+        x = y;
+        y = z;
+        z = t;
+    }
+    else
+    {
+        t = x;
+        x = y;
+        y = t;
+    }
+    
+    t = (z * 30) + (y * 12) + (x * 9);
+    
+    return t / 32;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_LengthXY);
 
