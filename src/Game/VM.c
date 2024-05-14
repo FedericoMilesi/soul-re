@@ -1,8 +1,8 @@
 #include "common.h"
 
-EXTERN STATIC long vmRealClock;
+static long vmRealClock = 0;
 
-EXTERN STATIC long vmClock;
+static long vmClock = 0;
 
 void VM_Tick(long time)
 {
