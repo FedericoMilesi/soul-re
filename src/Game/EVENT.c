@@ -34,7 +34,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_GetNextTerrainMove);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ProcessMovingWater);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_DoProcess);
+void EVENT_DoProcess()
+{
+	EVENT_ProcessMovingWater();
+
+	EVENT_ProcessTimers();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_BSPProcess);
 
