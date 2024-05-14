@@ -1,27 +1,43 @@
-# Splat Disassembly of Legacy of Kain: Soul Reaver
-## About 
+# Soul Reaverse
 
-When I started working on the <a href="https://github.com/Gh0stBlade/KAIN2">Legacy of Kain: Soul Reaver reverse-engineering project</a>, there were some functions I couldn't decompile because I was missing certain information about them from the IDA assembly dump of the game's executable that I was using. These functions usually had MIPS code like this:
+An in-progress decompilation of the Jul 14, 1999 prototype of Legacy of Kain: Soul Reaver on the Playstation 1.
 
+## Building (Linux)
+
+### Install build dependencies
+The build process has the following package requirements:
+- git
+- build-essential
+- binutils-mips-linux-gnu
+- python3
+- bchunk
+- 7z
+
+Under a Debian based distribution, you can install these with the following commands:
 ```
-addiu   $sp, $sp, -0x18
-sw      $s0, 0x10($sp)
-addu    $s0, $a0, $zero
-addu    $a0, $zero, $zero
-addiu   $v1, $a1, -1
-sltiu   $v0, $v1, 0x18
-beq     $v0, $zero, loc_8003EA9C
-sw      $ra, 0x14($sp)
-lui     $v0, 0x8001
-addiu   $v0, $v0, (off_800101D0 - 0x80010000)
-sll     $v1, $v1, 2
-addu    $v1, $v1, $v0
-lw      $v0, 0($v1)
-nop
-jr      $v0
-nop
+sudo apt update
+sudo apt install git build-essential binutils-mips-linux-gnu python3 bchunk p7zip-full p7zip-rar
 ```
 
-From that block of code and similar others, lines like "addiu   $v0, $v0, (off_800101D0 - 0x80010000)" were troublesome because they were referencing a point in memory (off_800101D0 in the above example) containing several integer values that the debugging symbols couldn't resolve. After some research and failed decompilation attempts, I found out that, translated to C such assembly code belongs to a switch statement and that usually when switches are large enough in a function, the GCC compiler stores the case values as part of a read-only data table that the function references outside of itself.
+### Clone the repository
+Clone `https://github.com/FedericoMilesi/soul-re` in whatever directory you wish. Make sure to clone recursively!
+```
+git clone --recursive https://github.com/FedericoMilesi/soul-re.git
+cd soul-re
+```
 
-Since I use <a href="https://decomp.me/">decomp.me</a> for function matching (measuring how accurate my C code is in regards to the MIPS assembly I'm trying to reverse), I asked on the Discord server for the site what was the best approach to decompiling these functions, and there I was suggested to use the <a href="https://github.com/ethteck/splat">splat</a> tool to do a disassemble of the game's binary file, by which I would be able to get a dump of the .rodata (read-only data). The tool (which uses <a href="https://github.com/Decompollaborate/spimdisasm">spimdisasm</a> for the disassembling process) worked successfully to that effect, and this repo contains the resulting files with both the assembly code for the game functions and the .rodata they reference, along with the "slus_007.08.yaml" file that's required in case you want to perform the operation with splat yourself. 
+### Install Python3 requirements
+Run `pip3 install -r requirements.txt`
+
+### Placing the ROM
+Obviously, you will need to provide your own rom dump of the game. The required version is the 1999-07-14 Prototype Version of Legacy of Kain: Soul Reaver.
+If done correctly, you will end up with a .IMG and a .CUE file that you can mount on your PC to get the required binary, SLUS_007.08, which needs to be placed inside the `soul-re` folder.
+
+### Build the code
+Run `make setup` to extract needed stuff from the SLUS_007.08 file, if that succeeds, run `make -j12` to build it.
+Once build has finished a folder will be produced with the name `build`, inside this, you will find the output.
+
+If you have trouble with this setup process, reach out on the Discord server for the project: https://discord.gg/W8khh4v4Gx  
+
+## Contributing
+Contributions are welcome. If you would like to reserve a function, open a PR with the function or file name(s).
