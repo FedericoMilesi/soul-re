@@ -15,7 +15,47 @@ void LIST_InsertFunc(struct NodeType *list, struct NodeType *node)
 	list->next = node;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/LIST", LIST_DeleteFunc);
+void LIST_DeleteFunc(struct NodeType *node)
+{
+    if (node->prev != NULL)
+    {
+        if (node->next != NULL)
+        {
+            node->prev->next = node->next;
+            
+            node->next->prev = node->prev;
+            
+            node->next = NULL;
+            
+            node->prev = NULL;
+            
+            return;
+        }
+    }
+    else if (node->next != NULL)
+    {
+        node->next->prev = NULL;
+        
+        node->next = NULL;
+        
+        node->prev = NULL;
+
+        return;
+    }
+    
+    if (node->prev != NULL)
+    {
+        node->prev->next = NULL;
+        
+        node->next = NULL;
+    }
+    else
+    {
+        node->next = NULL;
+    }
+    
+    node->prev = NULL;
+}
 
 struct NodeType * LIST_GetFunc(struct NodeType *list)
 {
