@@ -1,3 +1,39 @@
+// size: 0x4C
+struct Intro {
+	// offset: 0000 (16 bytes)
+	char name[16];
+	// offset: 0010
+	long intronum;
+	// offset: 0014
+	long UniqueID;
+	// offset: 0018 (8 bytes)
+	struct _Rotation rotation;
+	// offset: 0020 (6 bytes)
+	struct _Position position;
+	// offset: 0026
+	short maxRad;
+	// offset: 0028
+	long maxRadSq;
+	// offset: 002C
+	long flags;
+	// offset: 0030
+	void *data;
+	// offset: 0034 (668 bytes)
+	struct _Instance *instance;
+	// offset: 0038
+	struct MultiSpline *multiSpline;
+	// offset: 003C
+	void *dsignal;
+	// offset: 0040
+	short specturalLightGroup;
+	// offset: 0042
+	short meshColor;
+	// offset: 0044 (6 bytes)
+	struct _Position spectralPosition;
+	// offset: 004A
+	short spad;
+};
+
 // size: 0x54
 struct _Terrain {
 	// offset: 0000
