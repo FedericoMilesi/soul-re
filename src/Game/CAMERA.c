@@ -4,7 +4,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateViewVolumeNormals);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcVVClipInfo);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetViewVolume);
+void CAMERA_SetViewVolume(struct Camera *camera)
+{
+	CAMERA_CalculateViewVolumeNormals(camera);
+    
+	CAMERA_CalcVVClipInfo(camera);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetProjDistance);
 
