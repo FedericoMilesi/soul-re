@@ -72,6 +72,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_FindCollisionFaceNormal);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_GetBSPTreeFlag);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SetBSPTreeFlag);
+void COLLIDE_SetBSPTreeFlag(struct _CollideInfo *collideInfo, short flag)
+{
+	short* bspTreeFlags;
+
+	bspTreeFlags = COLLIDE_GetBSPTreeFlag(collideInfo);
+
+	*bspTreeFlags |= flag;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndTfaceFunc);
