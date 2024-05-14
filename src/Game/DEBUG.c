@@ -10,7 +10,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateHealth);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateMana);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FillUpHealth);
+void DEBUG_FillUpHealth(long *var)
+{
+    RAZIEL_DebugHealthFillUp();
+    
+    RAZIEL_DebugManaFillUp();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FogLoad);
 
