@@ -217,3 +217,13 @@ struct _Instance {
 	// offset: 0298 (4 bytes)
 	struct CVECTOR *perVertexColor;
 };
+
+// size: 0x4
+struct INICommand {
+	// offset: 0000
+	short command;
+	// offset: 0002
+	short numParameters;
+	// offset: 0004
+	long parameter[0];
+};

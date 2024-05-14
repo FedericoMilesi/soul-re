@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/INSTANCE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Deactivate);
 
@@ -29,7 +30,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_GetIntroCommand);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindIntroCommand);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ProcessIntro);
+void INSTANCE_ProcessIntro(struct _Instance* instance)
+{
+	struct INICommand* command;
+
+	if (instance->introData != NULL)
+	{
+		command = (struct INICommand*)instance->introData;
+
+		if (!(instance->flags & 0x2))
+		{
+			while (command->command != 0)
+			{
+				if (command->command == 18)
+				{
+					instance->currentModel = (short)command->parameter[0];
+				}
+
+				command += command->numParameters + 1;
+			}
+		}
+	}
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_InitEffects);
 
