@@ -17,4 +17,18 @@ void LIST_InsertFunc(struct NodeType *list, struct NodeType *node)
 
 INCLUDE_ASM("asm/nonmatchings/Game/LIST", LIST_DeleteFunc);
 
-INCLUDE_ASM("asm/nonmatchings/Game/LIST", LIST_GetFunc);
+struct NodeType * LIST_GetFunc(struct NodeType *list)
+{
+    struct NodeType* temp; // not from decls.h
+
+    temp = list->next;
+    
+	if (temp != NULL)
+	{
+		LIST_DeleteFunc(temp);
+
+		return temp;
+	}
+
+	return NULL;
+}
