@@ -316,4 +316,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_LightHouse);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartPassthruFX);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_EndPassthruFX);
+void FX_EndPassthruFX(struct _Instance *instance)
+{
+	FX_EndInstanceEffects(instance);
+}
