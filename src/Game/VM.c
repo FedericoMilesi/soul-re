@@ -1,6 +1,15 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/VM", VM_Tick);
+EXTERN STATIC long vmRealClock;
+
+EXTERN STATIC long vmClock;
+
+void VM_Tick(long time)
+{
+	vmRealClock += time;
+    
+	vmClock = vmRealClock >> 8;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VM", VM_UpdateMorph);
 

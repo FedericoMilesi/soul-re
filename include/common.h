@@ -5,4 +5,7 @@
 
 #define NULL (void*)0
 
+#define EXTERN extern
+#define STATIC
+
 #endif
