@@ -3,7 +3,17 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAYER", PLAYER_TurnHead);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAYER", PLAYER_OkToLookAround);
+long PLAYER_OkToLookAround(struct _Instance* instance)
+{
+	if ((INSTANCE_Query(instance, 1) & 0x1))
+	{
+		return RAZIEL_OkToLookAround(instance);
+	}
+	else
+	{
+		return MONAPI_OkToLookAround(instance);
+	}
+}
 
 void PLAYER_SetLookAround(struct _Instance* instance)
 {
