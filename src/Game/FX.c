@@ -13,6 +13,8 @@ EXTERN STATIC long Spiral_Max;
 
 EXTERN STATIC struct _FX_PRIM *FX_LastUsedPrim;
 
+EXTERN STATIC int Spiral_Mod;
+
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Init);
 
 void FX_Die(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
@@ -371,7 +373,88 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_CalcSpiral);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Spiral);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Health_Spiral);
+void FX_Health_Spiral(int number, int current_health, int max_health)
+{
+    int degchange;
+
+    if (number != 0)
+    {
+        degchange = Spiral_Mod;
+
+        if (degchange >= 2)
+        {
+            Spiral_Mod--;
+
+            FX_CalcSpiral(128);
+            return;
+        }
+    }
+    else
+    {
+        degchange = Spiral_Mod;
+
+        if (degchange < 6)
+        {
+            Spiral_Mod++;
+
+            Spiral_Number = 0;
+
+            FX_CalcSpiral(128);
+            return;
+        }
+    }
+
+    switch (number)
+    {
+    case 0:
+    case 1:
+    default:
+        degchange = 128;
+        break;
+    case 2:
+        degchange = 160;
+        break;
+    case 3:
+        degchange = 192;
+        break;
+    case 4:
+        degchange = 224;
+        break;
+    }
+
+    if ((degchange != Spiral_Degrees) || (Spiral_Number != number))
+    {
+        Spiral_Number = number;
+
+        if (Spiral_Degrees < degchange)
+        {
+            Spiral_Degrees += 4;
+
+            if (degchange < Spiral_Degrees)
+            {
+                Spiral_Degrees = degchange;
+            }
+        }
+        else
+        {
+            if (degchange < Spiral_Degrees)
+            {
+                Spiral_Degrees -= 4;
+
+                if (Spiral_Degrees < degchange)
+                {
+                    Spiral_Degrees = degchange;
+                }
+            }
+        }
+
+        FX_CalcSpiral(Spiral_Degrees);
+    }
+
+    Spiral_Current = current_health;
+
+    Spiral_Max = max_health;
+}
 
 void FX_Spiral_Init()
 {
