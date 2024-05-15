@@ -361,7 +361,25 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartLightbeam);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartInstanceEffect);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_EndInstanceEffects);
+void FX_EndInstanceEffects(struct _Instance *instance)
+{
+    struct _FXGeneralEffect *currentEffect;
+    struct _FXGeneralEffect *nextEffect;
+
+    currentEffect = FX_GeneralEffectTracker;
+
+    while (currentEffect != NULL)
+    {
+        nextEffect = (struct _FXGeneralEffect *)currentEffect->next;
+
+        if (currentEffect->instance == instance)
+        {
+            FX_DeleteGeneralEffect(currentEffect);
+        }
+
+        currentEffect = nextEffect;
+    }
+}
 
 void FX_EndInstanceParticleEffects(struct _Instance *instance)
 {
