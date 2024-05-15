@@ -363,7 +363,25 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartInstanceEffect);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_EndInstanceEffects);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_EndInstanceParticleEffects);
+void FX_EndInstanceParticleEffects(struct _Instance *instance)
+{
+    struct _FXGeneralEffect *currentEffect;
+    struct _FXGeneralEffect *nextEffect;
+
+    currentEffect = FX_GeneralEffectTracker;
+
+    while (currentEffect != NULL)
+    {
+        nextEffect = (struct _FXGeneralEffect *)currentEffect->next;
+
+        if ((currentEffect->instance == instance) && (currentEffect->effectType == 1))
+        {
+            FX_DeleteGeneralEffect(currentEffect);
+        }
+
+        currentEffect = nextEffect;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetSpiralPoint);
 
