@@ -1,7 +1,7 @@
 #ifndef _COLIDE_H_
 #define _COLIDE_H_
 
-#include "TYPES.h"
+#include "Game/TYPES.h"
 
 // size: 0x8
 struct _Normal {
@@ -44,5 +44,9 @@ struct _CollideInfo {
 	// offset: 002E
 	short bspID;
 };
+
+int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SVector *v2, struct _SVector *point, struct _SVector *normal);
+int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);
+void COLLIDE_SetBSPTreeFlag(struct _CollideInfo *collideInfo, short flag);
 
 #endif

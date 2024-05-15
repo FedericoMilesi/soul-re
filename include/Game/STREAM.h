@@ -1,7 +1,7 @@
 #ifndef _STREAM_H_
 #define _STREAM_H_
 
-#include "TYPES.h"
+#include "Game/TYPES.h"
 
 // size: 0x4C
 struct Intro {

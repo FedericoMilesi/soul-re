@@ -1,13 +1,13 @@
 #ifndef _INSTANCE_H_
 #define _INSTANCE_H_
 
-#include "TYPES.h"
-#include "LIST.h"
-#include "COLLIDE.h"
-#include "FX.h"
-#include "SOUND.h"
-#include "EVENT.h"
-#include "G2/ANIMG2.h"
+#include "Game/TYPES.h"
+#include "Game/LIST.h"
+#include "Game/COLLIDE.h"
+#include "Game/FX.h"
+#include "Game/SOUND.h"
+#include "Game/EVENT.h"
+#include "Game/G2/ANIMG2.h"
 
 // size: 0x29C
 struct _Instance {

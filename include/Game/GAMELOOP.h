@@ -1,10 +1,10 @@
 #ifndef _GAMELOOP_H_
 #define _GAMELOOP_H_
 
-#include "TYPES.h"
-#include "LIGHT3D.h"
-#include "DRAW.h"
-#include "SOUND.h"
+#include "Game/TYPES.h"
+#include "Game/LIGHT3D.h"
+#include "Game/DRAW.h"
+#include "Game/SOUND.h"
 
 // size: 0x20
 struct _GameTrackerASMData_Type {

@@ -1,8 +1,8 @@
 #ifndef _CAMERA_H_
 #define _CAMERA_H_
 
-#include "TYPES.h"
-#include "COLLIDE.h"
+#include "Game/TYPES.h"
+#include "Game/COLLIDE.h"
 
 // size: 0xE0
 struct _CameraCore_Type {

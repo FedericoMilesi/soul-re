@@ -1,8 +1,8 @@
 #ifndef _LIGHT3D_H_
 #define _LIGHT3D_H_
 
-#include "TYPES.h"
-#include "LIST.h"
+#include "Game/TYPES.h"
+#include "Game/LIST.h"
 
 // size: 0x18
 struct PointLight {

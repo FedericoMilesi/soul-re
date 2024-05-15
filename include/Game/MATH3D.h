@@ -1,7 +1,7 @@
 #ifndef _MATH3D_H_
 #define _MATH3D_H_
 
-#include "TYPES.h"
+#include "Game/TYPES.h"
 
 #define SET_SVEC(A, B) {\
 short _x0;\

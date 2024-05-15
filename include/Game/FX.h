@@ -1,9 +1,9 @@
 #ifndef _FX_H_
 #define _FX_H_
 
-#include "TYPES.h"
-#include "LIST.h"
-#include "MATH3D.h"
+#include "Game/TYPES.h"
+#include "Game/LIST.h"
+#include "Game/MATH3D.h"
 
 // size: 0x10
 struct TextureMT3 {
