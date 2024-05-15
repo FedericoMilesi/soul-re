@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/FX.h"
+#include "Game/MATH3D.h"
 
 EXTERN STATIC struct _FXGeneralEffect *FX_GeneralEffectTracker;
 
@@ -12,6 +13,18 @@ EXTERN STATIC long Spiral_Current;
 EXTERN STATIC long Spiral_Max;
 
 EXTERN STATIC struct _FX_PRIM *FX_LastUsedPrim;
+
+EXTERN STATIC struct DVECTOR Spiral_Array[65];
+
+EXTERN STATIC struct DVECTOR Spiral_OffsetP[64];
+
+EXTERN STATIC struct DVECTOR Spiral_OffsetM[64];
+
+EXTERN STATIC int Spiral_Glow_X;
+
+EXTERN STATIC int Spiral_Glow_Y;
+
+EXTERN STATIC int Spiral_Glow_Size;
 
 EXTERN STATIC int Spiral_Mod;
 
@@ -136,7 +149,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", _FX_Build);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Build);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_UpdatePos);
+void FX_UpdatePos(struct _FX_PRIM *fxPrim, struct _SVector *offset, int spriteflag)
+{
+    SET_SVEC2((struct _SVector *)&fxPrim->position, &fxPrim->position, (struct _Position *)offset);
+
+    if ((spriteflag == 0) && ((fxPrim->flags & 0x10000)))
+    {
+        fxPrim->v0.x += offset->x;
+        fxPrim->v0.y += offset->y;
+        fxPrim->v0.z += offset->z;
+
+        fxPrim->v1.x += offset->x;
+        fxPrim->v1.y += offset->y;
+        fxPrim->v1.z += offset->z;
+
+        fxPrim->v2.x += offset->x;
+        fxPrim->v2.y += offset->y;
+        fxPrim->v2.z += offset->z;
+
+        if ((fxPrim->flags & 0x8))
+        {
+            fxPrim->v3.x += offset->x;
+            fxPrim->v3.y += offset->y;
+            fxPrim->v3.z += offset->z;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Relocate);
 
