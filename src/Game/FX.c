@@ -24,7 +24,21 @@ void FX_Die(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
     LIST_InsertFunc(&fxTracker->freePrimList, &fxPrim->node);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetMatrix);
+struct _FX_MATRIX *FX_GetMatrix(struct _FXTracker *fxTracker)
+{
+    struct _FX_MATRIX *fxMatrix;
+
+    fxMatrix = (struct _FX_MATRIX *)LIST_GetFunc(&fxTracker->freeMatrixList);
+
+    if (fxMatrix != NULL)
+    {
+        fxMatrix->flags = 0x1;
+
+        LIST_InsertFunc(&fxTracker->usedMatrixList, &fxMatrix->node);
+    }
+
+    return fxMatrix;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetPrim);
 
