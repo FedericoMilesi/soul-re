@@ -1,4 +1,5 @@
 #include "common.h"
 
-void DebugProcess(void) {
+void DebugProcess(void)
+{
 }

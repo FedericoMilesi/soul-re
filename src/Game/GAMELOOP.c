@@ -8,7 +8,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SystemInit);
 
 void GAMELOOP_ResetGameStates()
 {
-	EVENT_Init();
+    EVENT_Init();
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ClearGameTracker);

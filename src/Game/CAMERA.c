@@ -7,9 +7,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcVVClipInfo);
 
 void CAMERA_SetViewVolume(struct Camera *camera)
 {
-	CAMERA_CalculateViewVolumeNormals(camera);
-    
-	CAMERA_CalcVVClipInfo(camera);
+    CAMERA_CalculateViewVolumeNormals(camera);
+
+    CAMERA_CalcVVClipInfo(camera);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetProjDistance);
@@ -36,7 +36,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetZRotation);
 
 long CAMERA_LengthSVector(struct _SVector *sv)
 {
-	return MATH3D_FastSqrt0((sv->x * sv->x) + (sv->y * sv->y) + (sv->z * sv->z));
+    return MATH3D_FastSqrt0((sv->x * sv->x) + (sv->y * sv->y) + (sv->z * sv->z));
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetValue);
@@ -44,8 +44,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetValue);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_AngleDifference);
 
 short CAMERA_SignedAngleDifference(short angle0, short angle1)
-{ 
-	return AngleDiff(angle1, angle0);
+{
+    return AngleDiff(angle1, angle0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_QueryMode);

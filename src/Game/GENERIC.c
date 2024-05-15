@@ -2,7 +2,8 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericInit);
 
-void GenericCollide(void) {
+void GenericCollide(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericProcess);

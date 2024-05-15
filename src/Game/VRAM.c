@@ -1,6 +1,7 @@
 #include "common.h"
 
-void VRAM_PrintVramBlock(void) {
+void VRAM_PrintVramBlock(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_PrintInfo);
@@ -45,11 +46,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_LoadReturn);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_GetObjectVramSpace);
 
-void VRAM_InitMorphPalettes(void) {
+void VRAM_InitMorphPalettes(void)
+{
 }
 
-void VRAM_UpdateMorphPalettes(void) {
+void VRAM_UpdateMorphPalettes(void)
+{
 }
 
-void MORPH_ChangeAreaPalettes(void) {
+void MORPH_ChangeAreaPalettes(void)
+{
 }

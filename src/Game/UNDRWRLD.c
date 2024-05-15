@@ -22,9 +22,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_LoadLevel);
 
 void UNDERWORLD_UpdatePlayer(struct Intro *playerIntro, struct _Instance *instance)
 {
-    struct _SVector offset; 
-    
+    struct _SVector offset;
+
     SET_SVEC3(&offset, &playerIntro->position, &instance->position);
-    
+
     STREAM_RelocateInstance(instance, &offset);
 }

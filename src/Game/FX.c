@@ -53,18 +53,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawList);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SimpleQuadSetup);
 
-void FX_WaterRingProcess(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker) 
+void FX_WaterRingProcess(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
 {
     fxPrim->v0.x -= 8;
-	fxPrim->v0.y -= 8;
-	fxPrim->v1.x += 8;
-	fxPrim->v1.y -= 8;
-	fxPrim->v2.x -= 8;
-	fxPrim->v2.y += 8;
-	fxPrim->v3.x += 8;
-	fxPrim->v3.y += 8;
-    
-	FX_StandardFXPrimProcess(fxPrim, fxTracker);
+    fxPrim->v0.y -= 8;
+    fxPrim->v1.x += 8;
+    fxPrim->v1.y -= 8;
+    fxPrim->v2.x -= 8;
+    fxPrim->v2.y += 8;
+    fxPrim->v3.x += 8;
+    fxPrim->v3.y += 8;
+
+    FX_StandardFXPrimProcess(fxPrim, fxTracker);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_WaterBubbleProcess);
@@ -119,15 +119,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Dot);
 
 void FX_Blood(struct _SVector *location, struct _SVector *input_vel, struct _SVector *accel, int amount, long color, long size)
 {
-    struct _SVector vel; 
-    int i; 
+    struct _SVector vel;
+    int i;
 
     for (i = amount; i != 0; i--)
     {
         vel.x = ((input_vel->x * i) / 128) + ((rand() & 0x7)) - 4;
         vel.y = ((input_vel->y * i) / 128) + ((rand() & 0x7)) - 4;
         vel.z = ((input_vel->z * i) / 128) + ((rand() & 0x7)) - 4;
-        
+
         FX_Dot(location, &vel, accel, 0, color, size * 2, 16, 1);
     }
 }
@@ -177,7 +177,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SetReaverInstance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SoulReaverBlade);
 
-void FX_ReaverBladeInit() 
+void FX_ReaverBladeInit()
 {
 }
 
@@ -185,12 +185,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SoulReaverWinding);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_UpdateInstanceWaterSplit);
 
-void FX_GetPlaneEquation(struct _SVector *normal, struct _SVector *poPlane, struct _PlaneConstants *plane) 
+void FX_GetPlaneEquation(struct _SVector *normal, struct _SVector *poPlane, struct _PlaneConstants *plane)
 {
     plane->a = normal->x;
     plane->b = normal->y;
     plane->c = normal->z;
-    
+
     plane->d = -(((plane->a * poPlane->x) + (plane->b * poPlane->y) + (plane->c * poPlane->z)) >> 12);
 }
 
@@ -292,13 +292,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawRing2);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawFField);
 
-struct _FXForceFieldEffect * FX_StartFField(struct _Instance *instance, int size, struct _Position *offset, int size_diff, int size_change, int deg_change, long color) 
+struct _FXForceFieldEffect *FX_StartFField(struct _Instance *instance, int size, struct _Position *offset, int size_diff, int size_change, int deg_change, long color)
 {
-    struct _FXForceFieldEffect *field; 
-    
-    field = (struct _FXForceFieldEffect*)MEMPACK_Malloc(sizeof(struct _FXForceFieldEffect), 13);
-    
-    if (field != NULL) 
+    struct _FXForceFieldEffect *field;
+
+    field = (struct _FXForceFieldEffect *)MEMPACK_Malloc(sizeof(struct _FXForceFieldEffect), 13);
+
+    if (field != NULL)
     {
         field->effectType = 134;
         field->instance = instance;
@@ -306,20 +306,20 @@ struct _FXForceFieldEffect * FX_StartFField(struct _Instance *instance, int size
         field->lifeTime = -1;
         field->continue_process = NULL;
         field->size = size;
-        
+
         SET_SVEC(&field->offset, offset);
-        
+
         field->size_diff = size_diff;
         field->size_change = (short)size_change;
-        field->deg = 0; 
+        field->deg = 0;
         field->deg_change = (short)deg_change;
         field->start_fade = 4096;
         field->end_fade = 0;
         field->color = color;
-        
+
         FX_InsertGeneralEffect(field);
     }
-    
+
     return field;
 }
 
@@ -335,5 +335,5 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartPassthruFX);
 
 void FX_EndPassthruFX(struct _Instance *instance)
 {
-	FX_EndInstanceEffects(instance);
+    FX_EndInstanceEffects(instance);
 }

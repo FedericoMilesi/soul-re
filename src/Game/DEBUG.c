@@ -13,7 +13,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateMana);
 void DEBUG_FillUpHealth(long *var)
 {
     RAZIEL_DebugHealthFillUp();
-    
+
     RAZIEL_DebugManaFillUp();
 }
 
@@ -75,7 +75,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_Menu);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_DisplayStatus);
 
-void DEBUG_DrawShrinkCels(void) {
+void DEBUG_DrawShrinkCels(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ContinueGame);
@@ -92,14 +93,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_EndViewVram);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ViewVram);
 
-void DEBUG_CaptureScreen(void) {
+void DEBUG_CaptureScreen(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_PageFlip);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FatalError);
 
-void DEBUG_ProcessSecondController(void) {
+void DEBUG_ProcessSecondController(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ProcessCheat);

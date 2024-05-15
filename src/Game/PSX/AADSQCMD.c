@@ -8,10 +8,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdSelectSlot);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdAssignSequence);
 
-void metaCmdUsePrimaryTempo(void) {
+void metaCmdUsePrimaryTempo(void)
+{
 }
 
-void metaCmdUseSecondaryTempo(void) {
+void metaCmdUseSecondaryTempo(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdSetTempo);
@@ -28,10 +30,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdPauseSlot);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdResumeSlot);
 
-void metaCmdSetSlotBendRange(void) {
+void metaCmdSetSlotBendRange(void)
+{
 }
 
-void metaCmdSetChannelBendRange(void) {
+void metaCmdSetChannelBendRange(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdSetSlotVolume);
@@ -60,21 +64,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdDelayMute);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdUpdateMute);
 
-void metaCmdChannelVolumeFade(void) {
+void metaCmdChannelVolumeFade(void)
+{
 }
 
-void metaCmdChannelPanFade(void) {
+void metaCmdChannelPanFade(void)
+{
 }
 
-void metaCmdSlotVolumeFade(void) {
+void metaCmdSlotVolumeFade(void)
+{
 }
 
-void metaCmdSlotPanFade(void) {
+void metaCmdSlotPanFade(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdSetChannelProgram);
 
-void metaCmdSetChannelBasePriority(void) {
+void metaCmdSetChannelBasePriority(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdSetChannelTranspose);
@@ -83,13 +92,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdIgnoreChannelTranspose)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdRespectChannelTranspose);
 
-void metaCmdSetChannelPitchMap(void) {
+void metaCmdSetChannelPitchMap(void)
+{
 }
 
-void metaCmdIgnoreChannelPitchMap(void) {
+void metaCmdIgnoreChannelPitchMap(void)
+{
 }
 
-void metaCmdRespectChannelPitchMap(void) {
+void metaCmdRespectChannelPitchMap(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdGetSequenceAssigned);
@@ -104,15 +116,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdGetChannelVolume);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdGetChannelPan);
 
-void metaCmdGetChannelTranspose(void) {
+void metaCmdGetChannelTranspose(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdGetChannelProgram);
 
-void metaCmdGetChannelBasePriority(void) {
+void metaCmdGetChannelBasePriority(void)
+{
 }
 
-void metaCmdGetChannelBendRange(void) {
+void metaCmdGetChannelBendRange(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdGetSlotVolume);
@@ -139,10 +154,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdLoopStart);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdLoopEnd);
 
-void metaCmdLoopBreak(void) {
+void metaCmdLoopBreak(void)
+{
 }
 
-void metaCmdDefineLabel(void) {
+void metaCmdDefineLabel(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdGotoLabel);
@@ -173,11 +190,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdSubstituteVariableParam
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", metaCmdEndSequence);
 
-void metaCmdPlaySoundEffect(void) {
+void metaCmdPlaySoundEffect(void)
+{
 }
 
-void metaCmdStopSoundEffect(void) {
+void metaCmdStopSoundEffect(void)
+{
 }
 
-void metaCmdSetSoundEffectVolumePan(void) {
+void metaCmdSetSoundEffectVolumePan(void)
+{
 }

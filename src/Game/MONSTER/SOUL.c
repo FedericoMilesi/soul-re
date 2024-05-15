@@ -40,5 +40,6 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_ReanimateEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Reanimate);
 
-void SOUL_Effect(void) {
+void SOUL_Effect(void)
+{
 }
