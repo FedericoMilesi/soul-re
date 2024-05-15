@@ -33,7 +33,7 @@ int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SV
     long xdiff;
     long ydiff;
     long ix;
-    int temp; // not from SYMDUMP
+    int temp; // not from decls.h
 
     nx = normal->x > 0 ? normal->x : -normal->x;
     ny = normal->y > 0 ? normal->y : -normal->y;
