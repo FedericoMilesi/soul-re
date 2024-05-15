@@ -3,6 +3,14 @@
 
 EXTERN STATIC struct _FXGeneralEffect *FX_GeneralEffectTracker;
 
+EXTERN STATIC short Spiral_Number;
+
+EXTERN STATIC short Spiral_Degrees;
+
+EXTERN STATIC long Spiral_Current;
+
+EXTERN STATIC long Spiral_Max;
+
 EXTERN STATIC struct _FX_PRIM *FX_LastUsedPrim;
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Init);
@@ -365,7 +373,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Spiral);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Health_Spiral);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Spiral_Init);
+void FX_Spiral_Init()
+{
+    Spiral_Max = 100000;
+
+    Spiral_Current = 100000;
+
+    Spiral_Number = 1;
+
+    Spiral_Degrees = 128;
+
+    FX_CalcSpiral(128);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawModel);
 
