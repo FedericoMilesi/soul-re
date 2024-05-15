@@ -299,4 +299,20 @@ struct _Model {
     struct TextureMT3 *endTextures;
 };
 
+// size: 0x10
+struct _FXGeneralEffect {
+    // offset: 0000
+    void *next;
+    // offset: 0004
+    void *continue_process;
+    // offset: 0008 (668 bytes)
+    struct _Instance *instance;
+    // offset: 000C
+    unsigned char effectType;
+    // offset: 000D
+    unsigned char type;
+    // offset: 000E
+    short lifeTime;
+};
+
 #endif

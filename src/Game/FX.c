@@ -1,6 +1,8 @@
 #include "common.h"
 #include "Game/FX.h"
 
+EXTERN STATIC struct _FXGeneralEffect *FX_GeneralEffectTracker;
+
 EXTERN STATIC struct _FX_PRIM *FX_LastUsedPrim;
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Init);
@@ -410,7 +412,38 @@ struct _FXForceFieldEffect *FX_StartFField(struct _Instance *instance, int size,
     return field;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_EndFField);
+void FX_EndFField(struct _Instance *instance)
+{
+    struct _FXGeneralEffect *currentEffect;
+    struct _FXForceFieldEffect *forceField; // not from decls.h
+
+    currentEffect = FX_GeneralEffectTracker;
+
+    while (currentEffect != NULL)
+    {
+        if ((currentEffect->instance == instance) && (currentEffect->effectType == 134))
+        {
+            forceField = (struct _FXForceFieldEffect *)currentEffect;
+
+            if (forceField->start_fade != 0)
+            {
+                forceField->end_fade = 4096 - forceField->start_fade;
+                forceField->start_fade = 0;
+
+                if (forceField->end_fade == 0)
+                {
+                    forceField->end_fade = 1;
+                }
+            }
+            else
+            {
+                forceField->end_fade = 4096;
+            }
+        }
+
+        currentEffect = (struct _FXGeneralEffect *)currentEffect->next;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Draw_Glowing_Line);
 
