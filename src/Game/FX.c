@@ -1,9 +1,28 @@
 #include "common.h"
 #include "Game/FX.h"
 
+EXTERN STATIC struct _FX_PRIM *FX_LastUsedPrim;
+
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Init);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Die);
+void FX_Die(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
+{
+    if (FX_LastUsedPrim == fxPrim)
+    {
+        FX_LastUsedPrim = (struct _FX_PRIM *)fxPrim->node.prev;
+
+        if (FX_LastUsedPrim->node.prev == NULL)
+        {
+            FX_LastUsedPrim = NULL;
+        }
+    }
+
+    fxPrim->flags |= 0x10;
+
+    LIST_DeleteFunc(&fxPrim->node);
+
+    LIST_InsertFunc(&fxTracker->freePrimList, &fxPrim->node);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetMatrix);
 
