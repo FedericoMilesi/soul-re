@@ -2,7 +2,8 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
 
-void GlyphCollide(void) {
+void GlyphCollide(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphProcess);

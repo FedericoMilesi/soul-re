@@ -23,7 +23,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_StartInstanceSound);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_StopInstanceSound);
 
-int SOUND_IsInstanceSoundLoaded(unsigned char* sfxFileData, long soundNumber)
+int SOUND_IsInstanceSoundLoaded(unsigned char *sfxFileData, long soundNumber)
 {
     unsigned short *sfxIDList; // $s1
     int numSounds; // $a3
@@ -34,45 +34,45 @@ int SOUND_IsInstanceSoundLoaded(unsigned char* sfxFileData, long soundNumber)
     if ((sfxFileData != NULL) && (*sfxFileData++ == 190) && (*sfxFileData++ == 239))
     {
         numSounds = *sfxFileData;
-        
+
         sfxFileData += 2;
 
         for (i = 0; i < numSounds; i++)
         {
-            switch (*sfxFileData) 
+            switch (*sfxFileData)
             {
-                case 0:
-                    sfxIDList = &sfxFileData[18];
-                    numSfxIDs = sfxFileData[1];
-                    sfxFileData += numSfxIDs*2+18;
-                    break;
-                case 1:
-                    sfxIDList = &sfxFileData[14];
-                    numSfxIDs = sfxFileData[1];
-                    sfxFileData += numSfxIDs*2+14;
-                    break;
-                case 2:
-                default:
-                    sfxIDList = &sfxFileData[14];
-                    numSfxIDs = sfxFileData[1];
-                    sfxFileData += numSfxIDs*2+14;
+            case 0:
+                sfxIDList = (unsigned short *)&sfxFileData[18];
+                numSfxIDs = sfxFileData[1];
+                sfxFileData += numSfxIDs*2+18;
+                break;
+            case 1:
+                sfxIDList = (unsigned short *)&sfxFileData[14];
+                numSfxIDs = sfxFileData[1];
+                sfxFileData += numSfxIDs*2+14;
+                break;
+            case 2:
+            default:
+                sfxIDList = (unsigned short *)&sfxFileData[14];
+                numSfxIDs = sfxFileData[1];
+                sfxFileData += numSfxIDs*2+14;
                 break;
             }
-       
-            if (i == soundNumber) 
+
+            if (i == soundNumber)
             {
                 numSfxIDs--;
-                while(1)
+                while (1)
                 {
-                    if (numSfxIDs == -1) 
+                    if (numSfxIDs == -1)
                         return 1;
-    
+
                     status = aadIsSfxLoaded(sfxIDList[0]);
-                    sfxIDList += 1; 
-                    if (status != 0) 
+                    sfxIDList += 1;
+                    if (status != 0)
                     {
                         numSfxIDs -= 1;
-                        if (status == -1) 
+                        if (status == -1)
                             return -1;
                     }
                     else
@@ -80,7 +80,7 @@ int SOUND_IsInstanceSoundLoaded(unsigned char* sfxFileData, long soundNumber)
                 }
             }
         }
-       
+
     }
     return -1;
 }
@@ -95,7 +95,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Play3dSound);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Update3dSound);
 
-void SOUND_HandleGlobalValueSignal(void) {
+void SOUND_HandleGlobalValueSignal(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Init);
@@ -124,7 +125,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_MusicOn);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SfxOff);
 
-void SOUND_SfxOn(void) {
+void SOUND_SfxOn(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndIsPlaying);

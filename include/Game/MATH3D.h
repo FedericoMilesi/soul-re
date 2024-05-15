@@ -1,4 +1,7 @@
-#include "TYPES.h"
+#ifndef _MATH3D_H_
+#define _MATH3D_H_
+
+#include "Game/TYPES.h"
 
 #define SET_SVEC(A, B) {\
 short _x0;\
@@ -47,3 +50,5 @@ _v->x = _x0 - _x1;\
 _v->y = _y0 - _y1;\
 _v->z = _z0 - _z1;\
 }
+
+#endif

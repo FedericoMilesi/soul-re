@@ -14,7 +14,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_MissileHitEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_MissileHit);
 
-void MON_BirthEntry(void) {
+void MON_BirthEntry(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Birth);
@@ -107,10 +108,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_SurpriseAttackEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_SurpriseAttack);
 
-void MON_EnvironmentDamageEntry(void) {
+void MON_EnvironmentDamageEntry(void)
+{
 }
 
-void MON_EnvironmentDamage(void) {
+void MON_EnvironmentDamage(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_MonsterGlow);

@@ -20,7 +20,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", voiceCmdPause);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", voiceCmdResume);
 
-void voiceCmdNull(void) {
+void voiceCmdNull(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_Play);

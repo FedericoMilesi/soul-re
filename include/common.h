@@ -8,4 +8,7 @@
 #define EXTERN extern
 #define STATIC
 
+/*TODO: Remove this when adding PSYQ headers*/
+#define getScratchAddr(offset)  ((unsigned long *)(0x1f800000+(offset)*4))
+
 #endif

@@ -7,7 +7,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Reactivate);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ForceActive);
 
-void INSTANCE_DeactivatedProcess(void) {
+void INSTANCE_DeactivatedProcess(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_DeactivateFarInstances);
@@ -30,27 +31,27 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_GetIntroCommand);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindIntroCommand);
 
-void INSTANCE_ProcessIntro(struct _Instance* instance)
+void INSTANCE_ProcessIntro(struct _Instance *instance)
 {
-	struct INICommand* command;
+    struct INICommand *command;
 
-	if (instance->introData != NULL)
-	{
-		command = (struct INICommand*)instance->introData;
+    if (instance->introData != NULL)
+    {
+        command = (struct INICommand *)instance->introData;
 
-		if (!(instance->flags & 0x2))
-		{
-			while (command->command != 0)
-			{
-				if (command->command == 18)
-				{
-					instance->currentModel = (short)command->parameter[0];
-				}
+        if (!(instance->flags & 0x2))
+        {
+            while (command->command != 0)
+            {
+                if (command->command == 18)
+                {
+                    instance->currentModel = (short)command->parameter[0];
+                }
 
-				command += command->numParameters + 1;
-			}
-		}
-	}
+                command += command->numParameters + 1;
+            }
+        }
+    }
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_InitEffects);
@@ -65,7 +66,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ProcessFunctions);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_BirthObject);
 
-void INSTANCE_BuildStaticShadow(void) {
+void INSTANCE_BuildStaticShadow(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_DefaultInit);

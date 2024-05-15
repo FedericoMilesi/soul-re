@@ -1,0 +1,9 @@
+pycparser
+pynacl
+toml
+colorama
+watchdog
+levenshtein
+cxxfilt
+GitPython
+colour

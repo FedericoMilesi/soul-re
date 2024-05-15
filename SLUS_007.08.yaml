@@ -196,6 +196,8 @@ segments:
       - [0x0BD0BC, data, LIBS]
 
       - [0x0BFD9C, sdata, 0BFD9C]
+      - [0x0C0D6C, .sdata, Game/COLLIDE]
+      - [0x0C0DDC, sdata, 0C0DDC]
       - [0x0C186C, .sdata, Game/VM]
       - [0x0C1874, sdata, 0C1874]
 

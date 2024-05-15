@@ -27,7 +27,7 @@ cd soul-re
 ```
 
 ### Install Python3 requirements
-Run `pip3 install -r requirements.txt`
+Run `python3 -m install -r requirements.txt`
 
 ### Placing the ROM
 Obviously, you will need to provide your own rom dump of the game. The required version is the 1999-07-14 Prototype Version of Legacy of Kain: Soul Reaver.

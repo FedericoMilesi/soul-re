@@ -36,9 +36,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ProcessMovingWater);
 
 void EVENT_DoProcess()
 {
-	EVENT_ProcessMovingWater();
+    EVENT_ProcessMovingWater();
 
-	EVENT_ProcessTimers();
+    EVENT_ProcessTimers();
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_BSPProcess);
@@ -215,7 +215,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_RemoveStreamToInstanceList);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_RelocateInstanceList);
 
-void EVENT_PrintVars(void) {
+void EVENT_PrintVars(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ExecuteActionCommand);

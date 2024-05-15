@@ -17,7 +17,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/DRAW", DRAW_LoadButton);
 
 void DRAW_FreeButton(struct _ButtonTexture *button)
 {
-	VRAM_ClearVramBlock(button->vramBlock);
+    VRAM_ClearVramBlock(button->vramBlock);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/DRAW", DRAW_RingLine);

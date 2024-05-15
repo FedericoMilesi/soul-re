@@ -16,7 +16,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/LIGHT3D", LIGHT_DrawShadow);
 
 INCLUDE_ASM("asm/nonmatchings/Game/LIGHT3D", LIGHT_CalcShadowPositions);
 
-void LIGHT_Restore(void) {
+void LIGHT_Restore(void)
+{
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/LIGHT3D", LIGHT_CalcDQPTable);

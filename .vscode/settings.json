@@ -1,0 +1,22 @@
+{
+    "[c]": {
+        "editor.formatOnSave": true
+    },
+    "terminal.integrated.env.windows": {
+        "PATH": "${env:PATH}"
+    },
+    "editor.tokenColorCustomizations": {
+        "[Default Dark+]": {
+            "textMateRules": [
+                {
+                    "scope": "constant.other.placeholder",
+                    "settings": {
+                        "foreground": "#CE9178"
+                    }
+                }
+            ]
+        }
+    },
+    "terminal.integrated.tabs.enableAnimation": false,
+    "files.autoGuessEncoding": true
+}
