@@ -1,3 +1,6 @@
+#ifndef _FX_H_
+#define _FX_H_
+
 #include "TYPES.h"
 #include "LIST.h"
 #include "MATH3D.h"
@@ -181,3 +184,5 @@ struct _PlaneConstants {
 	// offset: 0008
 	long d;
 };
+
+#endif

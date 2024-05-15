@@ -1,3 +1,8 @@
+#ifndef _STREAM_H_
+#define _STREAM_H_
+
+#include "TYPES.h"
+
 // size: 0x4C
 struct Intro {
 	// offset: 0000 (16 bytes)
@@ -81,3 +86,5 @@ struct _Terrain {
 	// offset: 0050 (904 bytes)
 	struct _MultiSignal *signals;
 };
+
+#endif

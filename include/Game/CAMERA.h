@@ -1,3 +1,6 @@
+#ifndef _CAMERA_H_
+#define _CAMERA_H_
+
 #include "TYPES.h"
 #include "COLLIDE.h"
 
@@ -54,3 +57,5 @@ struct _CameraCore_Type {
 	// offset: 00DC
 	short pad6;
 };
+
+#endif

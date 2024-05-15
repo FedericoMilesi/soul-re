@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/SCRIPT2.h"
 #include "Game/INSTANCE.h"
+#include "Game/GAMELOOP.h"
 
 void LitShaftInit(struct _Instance *instance, struct GameTracker *gameTracker)
 {

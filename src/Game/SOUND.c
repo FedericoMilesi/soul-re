@@ -42,18 +42,18 @@ int SOUND_IsInstanceSoundLoaded(unsigned char* sfxFileData, long soundNumber)
             switch (*sfxFileData) 
             {
                 case 0:
-                    sfxIDList = &sfxFileData[18];
+                    sfxIDList = (unsigned short*)&sfxFileData[18];
                     numSfxIDs = sfxFileData[1];
                     sfxFileData += numSfxIDs*2+18;
                     break;
                 case 1:
-                    sfxIDList = &sfxFileData[14];
+                    sfxIDList = (unsigned short*)&sfxFileData[14];
                     numSfxIDs = sfxFileData[1];
                     sfxFileData += numSfxIDs*2+14;
                     break;
                 case 2:
                 default:
-                    sfxIDList = &sfxFileData[14];
+                    sfxIDList = (unsigned short*)&sfxFileData[14];
                     numSfxIDs = sfxFileData[1];
                     sfxFileData += numSfxIDs*2+14;
                 break;

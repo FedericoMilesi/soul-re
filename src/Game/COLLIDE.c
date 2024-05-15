@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/COLLIDE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointInTriangle);
 
@@ -70,6 +71,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SegmentCollisionOff);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_FindCollisionFaceNormal);
 
+short *COLLIDE_GetBSPTreeFlag(struct _CollideInfo *collideInfo);
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_GetBSPTreeFlag);
 
 void COLLIDE_SetBSPTreeFlag(struct _CollideInfo *collideInfo, short flag)

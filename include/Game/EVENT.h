@@ -1,3 +1,6 @@
+#ifndef _EVENT_H_
+#define _EVENT_H_
+
 // size: 0xC
 struct EventAliasCommandStruct {
 	// offset: 0000
@@ -11,3 +14,5 @@ struct EventAliasCommandStruct {
 	// offset: 000A
 	short speed;
 };
+
+#endif

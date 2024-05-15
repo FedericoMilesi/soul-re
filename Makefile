@@ -76,9 +76,10 @@ ENDLINE := \n'
 
 ASFLAGS        := -Iinclude -march=r3000 -mtune=r3000 -no-pad-sections
 CFLAGS         := -O2 -G65536 -fpeephole -ffunction-cse -fkeep-static-consts -fpcc-struct-return \
-                  -fcommon -fgnu-linker -msplit-addresses -mgas -mgpOPT -mgpopt -msoft-float -gcoff
+                  -fcommon -fgnu-linker -msplit-addresses -mgas -mgpOPT -mgpopt -msoft-float -gcoff -quiet
 CPPFLAGS       := -Iinclude
-LDFLAGS        := -T undefined_syms.txt -T undefined_funcs.txt -T $(BUILD_DIR)/$(LD_SCRIPT) -Map $(LD_MAP) --no-check-sections -nostdlib
+LDFLAGS        := -T undefined_syms.txt -T undefined_funcs.txt -T $(BUILD_DIR)/$(LD_SCRIPT) -Map $(LD_MAP) \
+                  --no-check-sections -nostdlib
 
 ifeq ($(NON_MATCHING),1)
 CPPFLAGS += -DNON_MATCHING
@@ -114,7 +115,7 @@ split:
 $(BUILD_DIR)/%.c.o: %.c
 	@$(PRINT)$(GREEN)Compiling C file: $(ENDGREEN)$(BLUE)$<$(ENDBLUE)$(ENDLINE)
 	@mkdir -p $(shell dirname $@)
-	$(V)$(CPP) $(CPPFLAGS) $< | $(CC) $(CFLAGS) | $(MASPSX) | $(AS) $(ASFLAGS) -o $@
+	$(V)$(CPP) $(CPPFLAGS) -ffreestanding -MMD -MP -MT $@ -MF $@.d $< | $(CC) $(CFLAGS) | $(MASPSX) | $(AS) $(ASFLAGS) -o $@
 
 # Compile .s files
 $(BUILD_DIR)/%.s.o: %.s

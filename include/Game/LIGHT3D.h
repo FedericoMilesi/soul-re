@@ -1,3 +1,6 @@
+#ifndef _LIGHT3D_H_
+#define _LIGHT3D_H_
+
 #include "TYPES.h"
 #include "LIST.h"
 
@@ -92,3 +95,5 @@ struct LightInstance {
 	// offset: 0013
 	unsigned char flags;
 };
+
+#endif

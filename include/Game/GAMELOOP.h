@@ -1,3 +1,6 @@
+#ifndef _GAMELOOP_H_
+#define _GAMELOOP_H_
+
 #include "TYPES.h"
 #include "LIGHT3D.h"
 #include "DRAW.h"
@@ -252,3 +255,5 @@ struct GameTracker {
 	// offset: 026F
 	char pad;
 };
+
+#endif

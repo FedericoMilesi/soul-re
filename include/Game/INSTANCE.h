@@ -1,3 +1,6 @@
+#ifndef _INSTANCE_H_
+#define _INSTANCE_H_
+
 #include "TYPES.h"
 #include "LIST.h"
 #include "COLLIDE.h"
@@ -227,3 +230,5 @@ struct INICommand {
 	// offset: 0004
 	long parameter[0];
 };
+
+#endif

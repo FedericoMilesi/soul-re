@@ -1,3 +1,6 @@
+#ifndef _ANIMG2_H_
+#define _ANIMG2_H_
+
 // size: 0x6
 struct _G2SVector3_Type {
 	// offset: 0000
@@ -71,3 +74,5 @@ struct _G2Anim_Type {
 	// offset: 0024 (144 bytes)
 	struct _G2AnimSection_Type section[3];
 };
+
+#endif

@@ -20,6 +20,18 @@ struct MATRIX {
 };
 
 // size: 0x8
+struct SVECTOR {
+	// offset: 0000
+	short vx;
+	// offset: 0002
+	short vy;
+	// offset: 0004
+	short vz;
+	// offset: 0006
+	short pad;
+};
+
+// size: 0x8
 struct _SVector {
 	// offset: 0000
 	short x;

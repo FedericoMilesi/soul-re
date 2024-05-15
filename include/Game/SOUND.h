@@ -1,3 +1,6 @@
+#ifndef _SOUND_H_
+#define _SOUND_H_
+
 // size: 0x3
 struct SoundInstance {
 	// offset: 0000
@@ -27,3 +30,5 @@ struct gSoundData {
 	// offset: 0013
 	char soundsLoaded;
 };
+
+#endif

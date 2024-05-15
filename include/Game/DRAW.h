@@ -1,3 +1,6 @@
+#ifndef _DRAW_H_
+#define _DRAW_H_
+
 // size: 0x4
 struct _ColorType {
 	// offset: 0000
@@ -25,3 +28,5 @@ struct _ButtonTexture {
 	// offset: 000C
 	long xshift;
 };
+
+#endif
