@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/FX.h"
 #include "Game/MATH3D.h"
+#include "Game/INSTANCE.h"
 
 EXTERN STATIC struct _FXGeneralEffect *FX_GeneralEffectTracker;
 
@@ -658,7 +659,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Lightning);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_LightHouse);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartPassthruFX);
+void FX_StartPassthruFX(struct _Instance *instance, struct _SVector *normal, struct _SVector *point)
+{
+    long color;
+
+    instance->halvePlane.a = normal->x;
+    instance->halvePlane.b = normal->y;
+    instance->halvePlane.c = normal->z;
+
+    color = 0x20FF40;
+
+    instance->halvePlane.d = -(((normal->x * point->x) + (normal->y * point->y) + (normal->z * point->z)) >> 12);
+
+    FX_DoInstancePowerRing(instance, 8400, &color, 0, 2);
+    FX_DoInstancePowerRing(instance, 8400, &color, 0, 1);
+}
 
 void FX_EndPassthruFX(struct _Instance *instance)
 {
