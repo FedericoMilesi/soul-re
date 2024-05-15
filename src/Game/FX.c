@@ -81,7 +81,21 @@ struct _FX_PRIM *FX_GetPrim(struct _FXTracker *fxTracker)
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetParticle);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_AniTexSetup);
+void FX_AniTexSetup(struct _FX_PRIM *fxPrim, struct _MFace *mface, struct _Model *model, struct _FXTracker *fxTracker)
+{
+    if ((mface->flags & 0x2))
+    {
+        fxPrim->flags |= 0x1;
+        fxPrim->texture = (struct TextureMT3 *)mface->color;
+        fxPrim->color = ((fxPrim->texture->color & 0x3FFFFFF)) | 0x24000000;
+    }
+    else
+    {
+        fxPrim->flags &= ~0x1;
+        fxPrim->flags &= ~0x4;
+        fxPrim->color = ((mface->color & 0x3FFFFFF)) | 0x20000000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StandardProcess);
 

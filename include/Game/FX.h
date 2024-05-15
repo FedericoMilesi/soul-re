@@ -185,4 +185,118 @@ struct _PlaneConstants {
     long d;
 };
 
+// size: 0x4C
+struct _FXParticle {
+    // offset: 0000
+    void *next;
+    // offset: 0004
+    void *continue_process;
+    // offset: 0008 (668 bytes)
+    struct _Instance *instance;
+    // offset: 000C
+    unsigned char effectType;
+    // offset: 000D
+    unsigned char type;
+    // offset: 000E
+    short lifeTime;
+    // offset: 0010 (16 bytes)
+    struct TextureMT3 *texture;
+    // offset: 0014
+    void *fxprim_modify_process;
+    // offset: 0018
+    void *fxprim_process;
+    // offset: 001C
+    short size;
+    // offset: 001E
+    short primLifeTime;
+    // offset: 0020
+    short birthRadius;
+    // offset: 0022
+    short scaleSpeed;
+    // offset: 0024 (6 bytes)
+    struct _Position direction;
+    // offset: 002A
+    unsigned short flag_bits;
+    // offset: 002C (6 bytes)
+    struct _Position acceleration;
+    // offset: 0032
+    short startScale;
+    // offset: 0034 (6 bytes)
+    struct _Position offset;
+    // offset: 003A
+    char startSegment;
+    // offset: 003B
+    char z_undulate;
+    // offset: 003C
+    long startColor;
+    // offset: 0040
+    long endColor;
+    // offset: 0044
+    short colorStepValue;
+    // offset: 0046
+    char numberBirthParticles;
+    // offset: 0047
+    char endSegment;
+    // offset: 0048
+    short startFadeValue;
+    // offset: 004A
+    short fadeStep;
+};
+
+// size: 0x6
+struct _Face {
+    // offset: 0000
+    unsigned short v0;
+    // offset: 0002
+    unsigned short v1;
+    // offset: 0004
+    unsigned short v2;
+};
+
+// size: 0xC
+struct _MFace {
+    // offset: 0000 (6 bytes)
+    struct _Face face;
+    // offset: 0006
+    unsigned char normal;
+    // offset: 0007
+    unsigned char flags;
+    // offset: 0008
+    long color;
+};
+
+// size: 0x38
+struct _Model {
+    // offset: 0000
+    long numVertices;
+    // offset: 0004 (8 bytes)
+    struct _MVertex *vertexList;
+    // offset: 0008
+    long numNormals;
+    // offset: 000C (6 bytes)
+    struct _SVectorNoPad *normalList;
+    // offset: 0010
+    long numFaces;
+    // offset: 0014 (12 bytes)
+    struct _MFace *faceList;
+    // offset: 0018
+    long numSegments;
+    // offset: 001C (24 bytes)
+    struct _Segment *segmentList;
+    // offset: 0020 (16 bytes)
+    struct AniTex *aniTextures;
+    // offset: 0024
+    short maxRad;
+    // offset: 0026
+    short pad;
+    // offset: 0028
+    long maxRadSq;
+    // offset: 002C
+    struct MultiSpline *multiSpline;
+    // offset: 0030 (16 bytes)
+    struct TextureMT3 *startTextures;
+    // offset: 0034 (16 bytes)
+    struct TextureMT3 *endTextures;
+};
+
 #endif
