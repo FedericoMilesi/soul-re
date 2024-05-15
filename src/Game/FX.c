@@ -226,7 +226,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SoulDustProcess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_MakeSoulDust);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_WaterTrailProcess);
+void FX_WaterTrailProcess(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
+{
+    FX_StandardProcess(fxPrim, fxTracker);
+
+    fxPrim->v0.x = (fxPrim->v0.x * 7) >> 3;
+    fxPrim->v0.y = (fxPrim->v0.y * 7) >> 3;
+    fxPrim->v0.z = (fxPrim->v0.z * 7) >> 3;
+
+    fxPrim->v1.x = (fxPrim->v1.x * 7) >> 3;
+    fxPrim->v1.y = (fxPrim->v1.y * 7) >> 3;
+    fxPrim->v1.z = (fxPrim->v1.z * 7) >> 3;
+
+    fxPrim->v2.x = (fxPrim->v2.x * 7) >> 3;
+    fxPrim->v2.y = (fxPrim->v2.y * 7) >> 3;
+    fxPrim->v2.z = (fxPrim->v2.z * 7) >> 3;
+
+    fxPrim->v3.x = (fxPrim->v3.x * 7) >> 3;
+    fxPrim->v3.y = (fxPrim->v3.y * 7) >> 3;
+    fxPrim->v3.z = (fxPrim->v3.z * 7) >> 3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_MakeWaterTrail);
 
