@@ -97,7 +97,10 @@ void FX_AniTexSetup(struct _FX_PRIM *fxPrim, struct _MFace *mface, struct _Model
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StandardProcess);
+void FX_StandardProcess(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
+{
+    FX_StandardFXPrimProcess(fxPrim, fxTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_ShatterProcess);
 
