@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/MEMPACK.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Init);
 
@@ -10,7 +11,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_RelocatableType);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Malloc);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMORY_MergeAddresses);
+void MEMORY_MergeAddresses(struct MemHeader *firstAddress, struct MemHeader *secondAddress)
+{
+    if ((firstAddress->memStatus == 0) && (secondAddress->memStatus == 0))
+    {
+        firstAddress->memSize += secondAddress->memSize;
+
+        secondAddress->magicNumber = 0;
+        secondAddress->memStatus = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Return);
 
