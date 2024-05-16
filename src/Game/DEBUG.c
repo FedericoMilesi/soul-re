@@ -544,7 +544,10 @@ static int cem_line_width = 0xF0;
 static int cem_line_leading = 0xC;
 static int cem_item_leading = 0x10;
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_SetGameTime);
+void DEBUG_SetGameTime(long *var)
+{
+    GAMELOOP_SetGameTime(*var);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_KeepGameTime);
 
