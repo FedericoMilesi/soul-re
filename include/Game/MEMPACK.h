@@ -13,4 +13,18 @@ struct MemHeader {
 	unsigned long memSize;
 };
 
+// size: 0x14
+struct NewMemTracker {
+	// offset: 0000 (8 bytes)
+	struct MemHeader *rootNode;
+	// offset: 0004
+	unsigned long totalMemory;
+	// offset: 0008
+	unsigned long currentMemoryUsed;
+	// offset: 000C
+	char *lastMemoryAddress;
+	// offset: 0010
+	long doingGarbageCollection;
+};
+
 #endif

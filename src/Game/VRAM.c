@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/VRAM.h"
 
 void VRAM_PrintVramBlock(void)
 {
@@ -32,7 +33,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_InsertFreeVram);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_CheckVramSlot);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_ClearVramBlock);
+void VRAM_ClearVramBlock(struct _BlockVramEntry *block)
+{
+    if (block != NULL)
+    {
+        VRAM_DeleteUsedBlock(block);
+
+        VRAM_InsertFreeBlock(block);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", AdjustVramCoordsObject);
 
