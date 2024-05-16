@@ -58,4 +58,6 @@ struct _CameraCore_Type {
     short pad6;
 };
 
+extern int CameraCenterDelay;
+
 #endif

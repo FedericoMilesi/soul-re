@@ -176,8 +176,7 @@ segments:
       - [0x0AA238, c, Game/MCARD/MCASSERT]
       - [0x0AA27C, asm, LIBS]
 
-      - [0x0B8890, data, Data/MENU]
-      - [0x0BA798, data, Game/DEBUG]
+      - [0x0B8890, .data, Game/DEBUG]
       - [0x0BA7C0, data, Game/FONT]
       - [0x0BA9F4, data, KAIN2]
       - [0x0BCC5C, data, Game/MONSTER/HUMAN]
@@ -195,7 +194,8 @@ segments:
       - [0x0BD0AC, data, Game/MENU/MENUDEFS]
       - [0x0BD0BC, data, LIBS]
 
-      - [0x0BFD9C, sdata, 0BFD9C]
+      - [0x0BFD9C, .sdata, Game/DEBUG]
+      - [0x0C0BA0, sdata, 0C0BA0]
       - [0x0C0D6C, .sdata, Game/COLLIDE]
       - [0x0C0DDC, sdata, 0C0DDC]
       - [0x0C186C, .sdata, Game/VM]
