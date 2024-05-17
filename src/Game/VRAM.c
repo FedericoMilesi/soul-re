@@ -53,7 +53,22 @@ INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_InsertFreeBlock);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DeleteFreeBlock);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_InsertUsedBlock);
+void VRAM_InsertUsedBlock(struct _BlockVramEntry *block)
+{
+    if (block != NULL)
+    {
+        if (usedVramBlocks == NULL)
+        {
+            usedVramBlocks = block;
+        }
+        else
+        {
+            block->next = usedVramBlocks;
+
+            usedVramBlocks = block;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DeleteUsedBlock);
 
