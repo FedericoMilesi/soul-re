@@ -5,7 +5,7 @@ EXTERN struct _BlockVramEntry *usedVramBlocks;
 
 EXTERN struct _BlockVramEntry *openVramBlocks;
 
-void VRAM_PrintVramBlock(void)
+void VRAM_PrintVramBlock()
 {
 }
 
@@ -105,14 +105,14 @@ void VRAM_LoadReturn(void *dataPtr, void *data1, void *data2)
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_GetObjectVramSpace);
 
-void VRAM_InitMorphPalettes(void)
+void VRAM_InitMorphPalettes()
 {
 }
 
-void VRAM_UpdateMorphPalettes(void)
+void VRAM_UpdateMorphPalettes()
 {
 }
 
-void MORPH_ChangeAreaPalettes(void)
+void MORPH_ChangeAreaPalettes()
 {
 }
