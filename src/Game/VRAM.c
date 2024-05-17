@@ -30,7 +30,10 @@ void VRAM_PrintInfo()
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_InitVramBlockCache);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_EnableTerrainArea);
+void VRAM_EnableTerrainArea()
+{
+    VRAM_InsertFreeVram(512, 0, 512, 240 + 16, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DisableTerrainArea);
 
