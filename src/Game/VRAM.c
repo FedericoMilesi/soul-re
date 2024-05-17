@@ -98,7 +98,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_RearrangeVramsLayer);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_TransferBufferToVram);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_LoadReturn);
+void VRAM_LoadReturn(void *dataPtr, void *data1, void *data2)
+{
+    MEMPACK_Free((char *)data1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_GetObjectVramSpace);
 
