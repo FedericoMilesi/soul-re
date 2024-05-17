@@ -1,4 +1,7 @@
 #include "common.h"
+#include "Game/EVENT.h"
+
+EXTERN struct HintSystemStruct gHintSystem;
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_UpdateResetSignalArrayAndWaterMovement);
 
@@ -6,7 +9,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ResetAllOneTimeVariables);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_AddSignalToReset);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_ResetHint);
+void HINT_ResetHint()
+{
+    memset(&gHintSystem, 0, sizeof(struct HintSystemStruct));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_StartHint);
 
