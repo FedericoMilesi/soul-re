@@ -1,6 +1,11 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_NextLoadFromHead);
+EXTERN STATIC int loadFromHead;
+
+void STREAM_NextLoadFromHead()
+{
+    loadFromHead = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_NextLoadAsNormal);
 
