@@ -555,7 +555,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateFog);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateHealth);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateMana);
+void DEBUG_UpdateMana(long *var)
+{
+    RAZIEL_DebugManaSetMax(debugManaLevel);
+}
 
 void DEBUG_FillUpHealth(long *var)
 {
