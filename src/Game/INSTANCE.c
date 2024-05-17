@@ -83,7 +83,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_DefaultInit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_PlainDeath);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_KillInstance);
+void INSTANCE_KillInstance(struct _Instance *instance)
+{
+    if (!(instance->flags & 0x20))
+    {
+        INSTANCE_PlainDeath(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Query);
 
