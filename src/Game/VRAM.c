@@ -1,11 +1,32 @@
 #include "common.h"
 #include "Game/VRAM.h"
 
+EXTERN struct _BlockVramEntry *usedVramBlocks;
+
+EXTERN struct _BlockVramEntry *openVramBlocks;
+
 void VRAM_PrintVramBlock(void)
 {
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_PrintInfo);
+void VRAM_PrintInfo()
+{
+    struct _BlockVramEntry *vblock;
+
+    vblock = usedVramBlocks;
+
+    while (vblock != NULL)
+    {
+        vblock = vblock->next;
+    }
+
+    vblock = openVramBlocks;
+
+    while (vblock != NULL)
+    {
+        vblock = vblock->next;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_InitVramBlockCache);
 
