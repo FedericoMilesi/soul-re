@@ -553,7 +553,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_KeepGameTime);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateFog);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateHealth);
+void DEBUG_UpdateHealth(long *var)
+{
+    RAZIEL_DebugHealthSetScale(debugHealthLevel);
+}
 
 void DEBUG_UpdateMana(long *var)
 {
