@@ -74,7 +74,63 @@ INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DeleteUsedBlock);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_GetOpenBlock);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DeleteFreeVram);
+int VRAM_DeleteFreeVram(short x, short y, short w, short h)
+{
+    struct _BlockVramEntry *prev;
+    struct _BlockVramEntry *vblock;
+    struct _BlockVramEntry *nextVBlock;
+    struct _BlockVramEntry *blockLists[2] = {
+        openVramBlocks, usedVramBlocks
+    };
+    int i;
+    int delCount;
+
+    delCount = 0;
+
+    for (i = 0; i < 2; i++)
+    {
+        vblock = blockLists[i];
+
+        prev = NULL;
+
+        while (vblock != NULL)
+        {
+            nextVBlock = vblock->next;
+
+            if ((vblock->x >= x) && ((x + w) >= (vblock->x + vblock->w)) && (vblock->y >= y)
+            && ((y + h) >= (vblock->y + vblock->h)))
+            {
+                vblock->flags = 0;
+
+                if (prev == NULL)
+                {
+                    if (i == 0)
+                    {
+                        openVramBlocks = nextVBlock;
+                    }
+                    else
+                    {
+                        usedVramBlocks = nextVBlock;
+                    }
+                }
+                else
+                {
+                    prev->next = nextVBlock;
+                }
+
+                delCount++;
+            }
+            else
+            {
+                prev = vblock;
+            }
+
+            vblock = nextVBlock;
+        }
+    }
+
+    return delCount;
+}
 
 int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags)
 {
