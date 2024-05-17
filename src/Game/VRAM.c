@@ -92,7 +92,40 @@ void VRAM_ClearVramBlock(struct _BlockVramEntry *block)
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", AdjustVramCoordsObject);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_InsertionSort);
+struct _BlockVramEntry *VRAM_InsertionSort(struct _BlockVramEntry *rootNode, struct _BlockVramEntry *newBlock)
+{
+    struct _BlockVramEntry *prev;
+    struct _BlockVramEntry *next;
+
+    prev = NULL;
+    next = rootNode;
+
+    while (next != NULL)
+    {
+        if (newBlock->area >= next->area)
+        {
+            break;
+        }
+
+        prev = next;
+        next = next->next;
+    }
+
+    if (prev == NULL)
+    {
+        newBlock->next = rootNode;
+
+        rootNode = newBlock;
+    }
+    else
+    {
+        newBlock->next = next;
+
+        prev->next = newBlock;
+    }
+
+    return rootNode;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_RearrangeVramsLayer);
 
