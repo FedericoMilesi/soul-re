@@ -9,7 +9,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GetSmallestBlockTopBottom);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GetSmallestBlockBottomTop);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_RelocatableType);
+long MEMPACK_RelocatableType(long memType)
+{
+    if ((memType == 1) || (memType == 2) || (memType == 44) || (memType == 47) || (memType == 4))
+    {
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Malloc);
 
