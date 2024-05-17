@@ -42,7 +42,73 @@ void VRAM_DisableTerrainArea()
     VRAM_DeleteFreeVram(512, 0, 512, 240 + 16);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_ConcatanateMemory);
+int VRAM_ConcatanateMemory(struct _BlockVramEntry *curBlock)
+{
+    struct _BlockVramEntry *nextBlock;
+
+    while (curBlock != NULL)
+    {
+        nextBlock = curBlock->next;
+
+        while (nextBlock != NULL)
+        {
+            if ((curBlock->x == nextBlock->x) && ((curBlock->w == nextBlock->w)))
+            {
+                if ((curBlock->y >> 8) == (nextBlock->y >> 8))
+                {
+                    if ((curBlock->y + curBlock->h) == nextBlock->y)
+                    {
+                        curBlock->h += nextBlock->h;
+
+                        VRAM_DeleteFreeBlock(nextBlock);
+
+                        nextBlock->flags = 0;
+                        return 1;
+                    }
+
+                    if ((nextBlock->y + nextBlock->h) == curBlock->y)
+                    {
+                        nextBlock->h += curBlock->h;
+
+                        VRAM_DeleteFreeBlock(curBlock);
+
+                        curBlock->flags = 0;
+                        return 1;
+                    }
+                }
+            }
+
+            if ((curBlock->y == nextBlock->y) && (curBlock->h == nextBlock->h))
+            {
+                if (((curBlock->x + curBlock->w) == nextBlock->x) && ((!(curBlock->x & 0x3F)) || ((curBlock->w + nextBlock->w) < 65)))
+                {
+                    curBlock->w += nextBlock->w;
+
+                    VRAM_DeleteFreeBlock(nextBlock);
+
+                    nextBlock->flags = 0;
+                    return 1;
+                }
+
+                if (((nextBlock->x + nextBlock->w) == curBlock->x) && ((!(nextBlock->x & 0x3F)) || ((curBlock->w + nextBlock->w) < 65)))
+                {
+                    nextBlock->w += curBlock->w;
+
+                    VRAM_DeleteFreeBlock(curBlock);
+
+                    curBlock->flags = 0;
+                    return 1;
+                }
+            }
+
+            nextBlock = nextBlock->next;
+        }
+
+        curBlock = curBlock->next;
+    }
+
+    return 0;
+}
 
 void VRAM_GarbageCollect()
 {
