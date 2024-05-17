@@ -76,7 +76,75 @@ INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_GetOpenBlock);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DeleteFreeVram);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_InsertFreeVram);
+int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags)
+{
+    struct _BlockVramEntry *useBlock;
+
+    if (((x & 0x3F)) && (w > (64 - ((x & 0x3F)))))
+    {
+        useBlock = VRAM_GetOpenBlock();
+
+        useBlock->next = NULL;
+        useBlock->flags = (unsigned char)flags;
+        useBlock->time = 0;
+        useBlock->ID = 0;
+
+        useBlock->x = x;
+        useBlock->y = y;
+        useBlock->w = 64;
+
+        useBlock->w -= ((x & 0x3F));
+
+        useBlock->h = h;
+
+        useBlock->area = useBlock->w * h;
+
+        VRAM_InsertFreeBlock(useBlock);
+
+        useBlock = VRAM_GetOpenBlock();
+
+        useBlock->next = NULL;
+        useBlock->flags = (unsigned char)flags;
+        useBlock->time = 0;
+        useBlock->ID = 0;
+
+        useBlock->x = x + 64;
+
+        useBlock->x -= ((x & 0x3F));
+
+        useBlock->y = y;
+
+        useBlock->w = w - 64;
+
+        useBlock->w += ((x & 0x3F));
+
+        useBlock->h = h;
+
+        useBlock->area = useBlock->w * useBlock->h;
+
+        VRAM_InsertFreeBlock(useBlock);
+    }
+    else
+    {
+        useBlock = VRAM_GetOpenBlock();
+
+        useBlock->next = NULL;
+        useBlock->flags = (unsigned char)flags;
+        useBlock->time = 0;
+        useBlock->ID = 0;
+
+        useBlock->x = x;
+        useBlock->y = y;
+        useBlock->w = w;
+        useBlock->h = h;
+
+        useBlock->area = w * h;
+
+        VRAM_InsertFreeBlock(useBlock);
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_CheckVramSlot);
 
