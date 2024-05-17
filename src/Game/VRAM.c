@@ -42,7 +42,12 @@ void VRAM_DisableTerrainArea()
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_ConcatanateMemory);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_GarbageCollect);
+void VRAM_GarbageCollect()
+{
+    while (VRAM_ConcatanateMemory(openVramBlocks) == 1)
+    {
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_InsertFreeBlock);
 
