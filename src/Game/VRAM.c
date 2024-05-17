@@ -5,6 +5,8 @@ EXTERN struct _BlockVramEntry *usedVramBlocks;
 
 EXTERN struct _BlockVramEntry *openVramBlocks;
 
+EXTERN struct _BlockVramEntry vramBlockList[90];
+
 void VRAM_PrintVramBlock()
 {
 }
@@ -49,7 +51,47 @@ void VRAM_GarbageCollect()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_InsertFreeBlock);
+int VRAM_InsertFreeBlock(struct _BlockVramEntry *block)
+{
+    struct _BlockVramEntry *next;
+    struct _BlockVramEntry *prev;
+
+    prev = NULL;
+
+    if (block == NULL)
+    {
+        return 0;
+    }
+
+    next = openVramBlocks;
+
+    while (next != NULL)
+    {
+        if (next->area >= block->area)
+        {
+            break;
+        }
+
+        prev = next;
+        next = prev->next;
+    }
+
+    if (prev == NULL)
+    {
+        block->next = openVramBlocks;
+
+        openVramBlocks = block;
+    }
+    else
+    {
+        block->next = next;
+        prev->next = block;
+    }
+
+    VRAM_GarbageCollect();
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DeleteFreeBlock);
 
