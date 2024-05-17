@@ -5,7 +5,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Deactivate);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Reactivate);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ForceActive);
+void INSTANCE_ForceActive(struct _Instance *instance)
+{
+    if ((instance->flags2 & 0x1))
+    {
+        INSTANCE_Reactivate(instance);
+    }
+}
 
 void INSTANCE_DeactivatedProcess(void)
 {
