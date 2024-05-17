@@ -35,7 +35,10 @@ void VRAM_EnableTerrainArea()
     VRAM_InsertFreeVram(512, 0, 512, 240 + 16, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DisableTerrainArea);
+void VRAM_DisableTerrainArea()
+{
+    VRAM_DeleteFreeVram(512, 0, 512, 240 + 16);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_ConcatanateMemory);
 
