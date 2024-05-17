@@ -1,5 +1,7 @@
 #include "common.h"
 
+EXTERN STATIC int numLoads;
+
 EXTERN STATIC int loadFromHead;
 
 void STREAM_NextLoadFromHead()
@@ -22,7 +24,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_AddQueueEntryToTail);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_AddQueueEntryToHead);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_IsCdBusy);
+int STREAM_IsCdBusy(long *numberInQueue)
+{
+    if (numberInQueue != NULL)
+    {
+        *numberInQueue = numLoads;
+    }
+
+    return numLoads;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_PollLoadQueue);
 
