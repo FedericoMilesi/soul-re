@@ -7,7 +7,10 @@ void STREAM_NextLoadFromHead()
     loadFromHead = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_NextLoadAsNormal);
+void STREAM_NextLoadAsNormal()
+{
+    loadFromHead = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_InitLoader);
 
