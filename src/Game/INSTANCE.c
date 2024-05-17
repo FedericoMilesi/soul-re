@@ -66,7 +66,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_IntroduceInstance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_AdditionalCollideFunctions);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_GetSplineFrameNumber);
+long INSTANCE_GetSplineFrameNumber(struct _Instance *instance, struct MultiSpline *spline)
+{
+    return SCRIPT_GetSplineFrameNumber(instance, SCRIPT_GetPosSplineDef(instance, spline, 0, 0));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ProcessFunctions);
 
