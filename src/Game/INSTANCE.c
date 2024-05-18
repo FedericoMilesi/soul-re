@@ -53,7 +53,10 @@ struct INICommand *INSTANCE_GetIntroCommand(struct INICommand *command, int cmd)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindIntroCommand);
+struct INICommand *INSTANCE_FindIntroCommand(struct _Instance *instance, int cmd)
+{
+    return INSTANCE_GetIntroCommand((struct INICommand *)instance->introData, cmd);
+}
 
 void INSTANCE_ProcessIntro(struct _Instance *instance)
 {
