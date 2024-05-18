@@ -9,4 +9,6 @@ struct NodeType {
     struct NodeType *next;
 };
 
+typedef struct NodeType NodeType;
+
 #endif

@@ -1,7 +1,7 @@
 #include "common.h"
 #include "Game/LIST.h"
 
-void LIST_InsertFunc(struct NodeType *list, struct NodeType *node)
+void LIST_InsertFunc(NodeType *list, NodeType *node)
 {
     node->prev = list;
 
@@ -15,7 +15,7 @@ void LIST_InsertFunc(struct NodeType *list, struct NodeType *node)
     list->next = node;
 }
 
-void LIST_DeleteFunc(struct NodeType *node)
+void LIST_DeleteFunc(NodeType *node)
 {
     if (node->prev != NULL)
     {
@@ -57,9 +57,9 @@ void LIST_DeleteFunc(struct NodeType *node)
     node->prev = NULL;
 }
 
-struct NodeType *LIST_GetFunc(struct NodeType *list)
+NodeType *LIST_GetFunc(NodeType *list)
 {
-    struct NodeType *temp; // not from decls.h
+    NodeType *temp; // not from decls.h
 
     temp = list->next;
 
