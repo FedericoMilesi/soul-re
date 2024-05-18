@@ -315,4 +315,22 @@ struct _FXGeneralEffect {
     short lifeTime;
 };
 
+typedef struct _PlaneConstants PlaneConstants;
+
+typedef struct _MFace MFace;
+
+typedef struct _Model Model;
+
+typedef struct TextureMT3 TextureMT3;
+
+typedef struct _FX_PRIM FX_PRIM;
+
+typedef struct _FX_MATRIX FX_MATRIX;
+
+typedef struct _FXTracker FXTracker;
+
+typedef struct _FXGeneralEffect FXGeneralEffect;
+
+typedef struct _FXForceFieldEffect FXForceFieldEffect;
+
 #endif

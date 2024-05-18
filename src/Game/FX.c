@@ -1,9 +1,10 @@
 #include "common.h"
+#include "Game/TYPES.h"
 #include "Game/FX.h"
 #include "Game/MATH3D.h"
 #include "Game/INSTANCE.h"
 
-EXTERN STATIC struct _FXGeneralEffect *FX_GeneralEffectTracker;
+EXTERN STATIC FXGeneralEffect *FX_GeneralEffectTracker;
 
 EXTERN STATIC short Spiral_Number;
 
@@ -13,13 +14,13 @@ EXTERN STATIC long Spiral_Current;
 
 EXTERN STATIC long Spiral_Max;
 
-EXTERN STATIC struct _FX_PRIM *FX_LastUsedPrim;
+EXTERN STATIC FX_PRIM *FX_LastUsedPrim;
 
-EXTERN STATIC struct DVECTOR Spiral_Array[65];
+EXTERN STATIC DVECTOR Spiral_Array[65];
 
-EXTERN STATIC struct DVECTOR Spiral_OffsetP[64];
+EXTERN STATIC DVECTOR Spiral_OffsetP[64];
 
-EXTERN STATIC struct DVECTOR Spiral_OffsetM[64];
+EXTERN STATIC DVECTOR Spiral_OffsetM[64];
 
 EXTERN STATIC int Spiral_Glow_X;
 
@@ -31,11 +32,11 @@ EXTERN STATIC int Spiral_Mod;
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Init);
 
-void FX_Die(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
+void FX_Die(FX_PRIM *fxPrim, FXTracker *fxTracker)
 {
     if (FX_LastUsedPrim == fxPrim)
     {
-        FX_LastUsedPrim = (struct _FX_PRIM *)fxPrim->node.prev;
+        FX_LastUsedPrim = (FX_PRIM *)fxPrim->node.prev;
 
         if (FX_LastUsedPrim->node.prev == NULL)
         {
@@ -50,11 +51,11 @@ void FX_Die(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
     LIST_InsertFunc(&fxTracker->freePrimList, &fxPrim->node);
 }
 
-struct _FX_MATRIX *FX_GetMatrix(struct _FXTracker *fxTracker)
+FX_MATRIX *FX_GetMatrix(FXTracker *fxTracker)
 {
-    struct _FX_MATRIX *fxMatrix;
+    FX_MATRIX *fxMatrix;
 
-    fxMatrix = (struct _FX_MATRIX *)LIST_GetFunc(&fxTracker->freeMatrixList);
+    fxMatrix = (FX_MATRIX *)LIST_GetFunc(&fxTracker->freeMatrixList);
 
     if (fxMatrix != NULL)
     {
@@ -66,11 +67,11 @@ struct _FX_MATRIX *FX_GetMatrix(struct _FXTracker *fxTracker)
     return fxMatrix;
 }
 
-struct _FX_PRIM *FX_GetPrim(struct _FXTracker *fxTracker)
+FX_PRIM *FX_GetPrim(FXTracker *fxTracker)
 {
-    struct _FX_PRIM *fxPrim;
+    FX_PRIM *fxPrim;
 
-    fxPrim = (struct _FX_PRIM *)LIST_GetFunc(&fxTracker->freePrimList);
+    fxPrim = (FX_PRIM *)LIST_GetFunc(&fxTracker->freePrimList);
 
     if (fxPrim == NULL)
     {
@@ -78,7 +79,7 @@ struct _FX_PRIM *FX_GetPrim(struct _FXTracker *fxTracker)
         {
             fxPrim = FX_LastUsedPrim;
 
-            FX_LastUsedPrim = (struct _FX_PRIM *)fxPrim->node.prev;
+            FX_LastUsedPrim = (FX_PRIM *)fxPrim->node.prev;
 
             FX_LastUsedPrim->node.next = NULL;
 
@@ -107,12 +108,12 @@ struct _FX_PRIM *FX_GetPrim(struct _FXTracker *fxTracker)
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetParticle);
 
-void FX_AniTexSetup(struct _FX_PRIM *fxPrim, struct _MFace *mface, struct _Model *model, struct _FXTracker *fxTracker)
+void FX_AniTexSetup(FX_PRIM *fxPrim, MFace *mface, Model *model, FXTracker *fxTracker)
 {
     if ((mface->flags & 0x2))
     {
         fxPrim->flags |= 0x1;
-        fxPrim->texture = (struct TextureMT3 *)mface->color;
+        fxPrim->texture = (TextureMT3 *)mface->color;
         fxPrim->color = ((fxPrim->texture->color & 0x3FFFFFF)) | 0x24000000;
     }
     else
@@ -123,7 +124,7 @@ void FX_AniTexSetup(struct _FX_PRIM *fxPrim, struct _MFace *mface, struct _Model
     }
 }
 
-void FX_StandardProcess(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
+void FX_StandardProcess(FX_PRIM *fxPrim, FXTracker *fxTracker)
 {
     FX_StandardFXPrimProcess(fxPrim, fxTracker);
 }
@@ -150,9 +151,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", _FX_Build);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Build);
 
-void FX_UpdatePos(struct _FX_PRIM *fxPrim, struct _SVector *offset, int spriteflag)
+void FX_UpdatePos(FX_PRIM *fxPrim, SVector *offset, int spriteflag)
 {
-    SET_SVEC2((struct _SVector *)&fxPrim->position, &fxPrim->position, (struct _Position *)offset);
+    SET_SVEC2((SVector *)&fxPrim->position, &fxPrim->position, (Position *)offset);
 
     if ((spriteflag == 0) && ((fxPrim->flags & 0x10000)))
     {
@@ -191,7 +192,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawList);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SimpleQuadSetup);
 
-void FX_WaterRingProcess(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
+void FX_WaterRingProcess(FX_PRIM *fxPrim, FXTracker *fxTracker)
 {
     fxPrim->v0.x -= 8;
     fxPrim->v0.y -= 8;
@@ -227,7 +228,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SoulDustProcess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_MakeSoulDust);
 
-void FX_WaterTrailProcess(struct _FX_PRIM *fxPrim, struct _FXTracker *fxTracker)
+void FX_WaterTrailProcess(FX_PRIM *fxPrim, FXTracker *fxTracker)
 {
     FX_StandardProcess(fxPrim, fxTracker);
 
@@ -274,9 +275,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DFacadeParticleSetup);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Dot);
 
-void FX_Blood(struct _SVector *location, struct _SVector *input_vel, struct _SVector *accel, int amount, long color, long size)
+void FX_Blood(SVector *location, SVector *input_vel, SVector *accel, int amount, long color, long size)
 {
-    struct _SVector vel;
+    SVector vel;
     int i;
 
     for (i = amount; i != 0; i--)
@@ -289,7 +290,7 @@ void FX_Blood(struct _SVector *location, struct _SVector *input_vel, struct _SVe
     }
 }
 
-void FX_Blood2(struct _SVector *location, struct _SVector *input_vel, struct _SVector *accel, int amount, long color, long dummyCrapShouldRemove)
+void FX_Blood2(SVector *location, SVector *input_vel, SVector *accel, int amount, long color, long dummyCrapShouldRemove)
 {
     FX_Blood(location, input_vel, accel, amount, color, 4);
 }
@@ -342,7 +343,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SoulReaverWinding);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_UpdateInstanceWaterSplit);
 
-void FX_GetPlaneEquation(struct _SVector *normal, struct _SVector *poPlane, struct _PlaneConstants *plane)
+void FX_GetPlaneEquation(SVector *normal, SVector *poPlane, PlaneConstants *plane)
 {
     plane->a = normal->x;
     plane->b = normal->y;
@@ -419,16 +420,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartLightbeam);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartInstanceEffect);
 
-void FX_EndInstanceEffects(struct _Instance *instance)
+void FX_EndInstanceEffects(Instance *instance)
 {
-    struct _FXGeneralEffect *currentEffect;
-    struct _FXGeneralEffect *nextEffect;
+    FXGeneralEffect *currentEffect;
+    FXGeneralEffect *nextEffect;
 
     currentEffect = FX_GeneralEffectTracker;
 
     while (currentEffect != NULL)
     {
-        nextEffect = (struct _FXGeneralEffect *)currentEffect->next;
+        nextEffect = (FXGeneralEffect *)currentEffect->next;
 
         if (currentEffect->instance == instance)
         {
@@ -439,16 +440,16 @@ void FX_EndInstanceEffects(struct _Instance *instance)
     }
 }
 
-void FX_EndInstanceParticleEffects(struct _Instance *instance)
+void FX_EndInstanceParticleEffects(Instance *instance)
 {
-    struct _FXGeneralEffect *currentEffect;
-    struct _FXGeneralEffect *nextEffect;
+    FXGeneralEffect *currentEffect;
+    FXGeneralEffect *nextEffect;
 
     currentEffect = FX_GeneralEffectTracker;
 
     while (currentEffect != NULL)
     {
-        nextEffect = (struct _FXGeneralEffect *)currentEffect->next;
+        nextEffect = (FXGeneralEffect *)currentEffect->next;
 
         if ((currentEffect->instance == instance) && (currentEffect->effectType == 1))
         {
@@ -589,11 +590,11 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawRing2);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawFField);
 
-struct _FXForceFieldEffect *FX_StartFField(struct _Instance *instance, int size, struct _Position *offset, int size_diff, int size_change, int deg_change, long color)
+FXForceFieldEffect *FX_StartFField(Instance *instance, int size, Position *offset, int size_diff, int size_change, int deg_change, long color)
 {
-    struct _FXForceFieldEffect *field;
+    FXForceFieldEffect *field;
 
-    field = (struct _FXForceFieldEffect *)MEMPACK_Malloc(sizeof(struct _FXForceFieldEffect), 13);
+    field = (FXForceFieldEffect *)MEMPACK_Malloc(sizeof(FXForceFieldEffect), 13);
 
     if (field != NULL)
     {
@@ -620,10 +621,10 @@ struct _FXForceFieldEffect *FX_StartFField(struct _Instance *instance, int size,
     return field;
 }
 
-void FX_EndFField(struct _Instance *instance)
+void FX_EndFField(Instance *instance)
 {
-    struct _FXGeneralEffect *currentEffect;
-    struct _FXForceFieldEffect *forceField; // not from decls.h
+    FXGeneralEffect *currentEffect;
+    FXForceFieldEffect *forceField; // not from decls.h
 
     currentEffect = FX_GeneralEffectTracker;
 
@@ -631,7 +632,7 @@ void FX_EndFField(struct _Instance *instance)
     {
         if ((currentEffect->instance == instance) && (currentEffect->effectType == 134))
         {
-            forceField = (struct _FXForceFieldEffect *)currentEffect;
+            forceField = (FXForceFieldEffect *)currentEffect;
 
             if (forceField->start_fade != 0)
             {
@@ -649,7 +650,7 @@ void FX_EndFField(struct _Instance *instance)
             }
         }
 
-        currentEffect = (struct _FXGeneralEffect *)currentEffect->next;
+        currentEffect = (FXGeneralEffect *)currentEffect->next;
     }
 }
 
@@ -659,7 +660,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Lightning);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_LightHouse);
 
-void FX_StartPassthruFX(struct _Instance *instance, struct _SVector *normal, struct _SVector *point)
+void FX_StartPassthruFX(Instance *instance, SVector *normal, SVector *point)
 {
     long color;
 
@@ -675,7 +676,7 @@ void FX_StartPassthruFX(struct _Instance *instance, struct _SVector *normal, str
     FX_DoInstancePowerRing(instance, 8400, &color, 0, 1);
 }
 
-void FX_EndPassthruFX(struct _Instance *instance)
+void FX_EndPassthruFX(Instance *instance)
 {
     FX_EndInstanceEffects(instance);
 }
