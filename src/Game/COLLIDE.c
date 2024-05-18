@@ -323,7 +323,22 @@ long COLLIDE_WithinXZBounds(SVector *point, HBox *hbox)
     return temp;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_WithinXYBounds);
+long COLLIDE_WithinXYBounds(SVector *point, HBox *hbox)
+{
+    int temp; // not from decls.h
+
+    temp = 0;
+
+    if ((point->x >= hbox->minX) && (hbox->maxX >= point->x))
+    {
+        if (point->y >= hbox->minY)
+        {
+            temp = hbox->maxY >= point->y;
+        }
+    }
+
+    return temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_LineWithBoxFace);
 
