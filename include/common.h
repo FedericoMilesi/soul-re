@@ -11,4 +11,7 @@
 /*TODO: Remove this when adding PSYQ headers*/
 #define getScratchAddr(offset)  ((unsigned long *)(0x1f800000+(offset)*4))
 
+extern int rcos(int a);
+extern int rsin(int a);
+
 #endif

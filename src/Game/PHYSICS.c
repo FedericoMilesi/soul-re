@@ -50,7 +50,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsSetVelFromRot);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_SetVAndAFromRot);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_FindAFromDAndT);
+long PHYSICS_FindAFromDAndT(long d, long t)
+{
+    if (t != 0)
+    {
+        t = (d * 8192) / (t * t);
+
+        return t / 4096;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_FindVFromAAndD);
 
