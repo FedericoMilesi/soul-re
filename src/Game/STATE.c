@@ -46,7 +46,31 @@ void EnMessageQueue(MessageQueue *In, Message *Element)
     EnMessageQueueData(In, Element->ID, Element->Data);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", EnMessageQueueData);
+void EnMessageQueueData(MessageQueue *In, int ID, int Data)
+{
+    int i;
+
+    In->Queue[In->Tail].ID = ID;
+    In->Queue[In->Tail].Data = Data;
+
+    if (++In->Tail == 16)
+    {
+        In->Tail = 0;
+    }
+
+    i = In->Head;
+
+    if (i == In->Tail)
+    {
+        do
+        {
+            if (++i == 16)
+            {
+                i = 0;
+            }
+        } while (i != In->Tail);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", CIRC_Alloc);
 
