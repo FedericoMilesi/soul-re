@@ -21,9 +21,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_InitDisplayProcess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_LoadLevel);
 
-void UNDERWORLD_UpdatePlayer(struct Intro *playerIntro, struct _Instance *instance)
+void UNDERWORLD_UpdatePlayer(Intro *playerIntro, Instance *instance)
 {
-    struct _SVector offset;
+    SVector offset;
 
     SET_SVEC3(&offset, &playerIntro->position, &instance->position);
 
