@@ -7,7 +7,23 @@ void InitMessageQueue(MessageQueue *In)
     In->Tail = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", DeMessageQueue);
+Message *DeMessageQueue(MessageQueue *In)
+{
+    int head;
+
+    head = In->Head;
+
+    if (In->Head == In->Tail)
+    {
+        return NULL;
+    }
+    else if (++In->Head == 16)
+    {
+        In->Head = 0;
+    }
+
+    return &In->Queue[head];
+}
 
 void PurgeMessageQueue(MessageQueue *In)
 {
