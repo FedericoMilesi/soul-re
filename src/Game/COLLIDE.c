@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/COLLIDE.h"
+#include "Game/INSTANCE.h"
 
 long dyna_clddyna[8] = {
     0x0C, 0x0D, 0x0E, 0x0F, 0x1C, 0x1D, 0x1E, 0x1F};
@@ -214,7 +215,42 @@ long COLLIDE_GetNormal(short nNum, short *nrmlArray, SVector *nrml)
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_MakeNormal);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_UpdateAllTransforms);
+void COLLIDE_UpdateAllTransforms(Instance *instance, SVECTOR *offset)
+{
+    MATRIX *swTransform;
+    int i;
+    long numMatrices;
+    long ox;
+    long oy;
+    long oz;
+
+    if (instance->matrix != NULL)
+    {
+        ox = offset->vx;
+        oy = offset->vy;
+        oz = offset->vz;
+
+        if ((instance->object->animList != NULL) && (!(instance->object->oflags2 & 0x40000000)))
+        {
+            swTransform = instance->matrix - 1;
+
+            numMatrices = instance->object->modelList[instance->currentModel]->numSegments + 1;
+        }
+        else
+        {
+            swTransform = instance->matrix;
+
+            numMatrices = instance->object->modelList[instance->currentModel]->numSegments;
+        }
+
+        for (i = numMatrices; i != 0; i--, swTransform++)
+        {
+            swTransform->t[0] += ox;
+            swTransform->t[1] += oy;
+            swTransform->t[2] += oz;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_MoveAllTransforms);
 

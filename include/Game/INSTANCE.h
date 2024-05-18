@@ -7,6 +7,7 @@
 #include "Game/FX.h"
 #include "Game/SOUND.h"
 #include "Game/EVENT.h"
+#include "Game/OBTABLE.h"
 #include "Game/G2/ANIMG2.h"
 
 // size: 0x29C

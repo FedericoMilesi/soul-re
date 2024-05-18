@@ -77,6 +77,10 @@ struct CVECTOR {
 
 typedef struct _Position Position;
 
+typedef struct MATRIX MATRIX;
+
+typedef struct SVECTOR SVECTOR;
+
 typedef struct _SVector SVector;
 
 typedef struct DVECTOR DVECTOR;
