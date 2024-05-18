@@ -29,4 +29,6 @@ struct _ButtonTexture {
     long xshift;
 };
 
+typedef struct _ButtonTexture ButtonTexture;
+
 #endif
