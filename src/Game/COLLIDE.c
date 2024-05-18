@@ -14,17 +14,17 @@ long collide_ignoreAttr = 0;
 
 long collide_acceptAttr = 0;
 
-int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SVector *v2, struct _SVector *point, struct _SVector *normal)
+int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal)
 {
-    struct _Triangle2D *triangle;
+    Triangle2D *triangle;
     int nx;
     int ny;
     short tx;
     short ty;
     int inside_flag;
     int line_flag;
-    struct DVECTOR *vert1;
-    struct DVECTOR *vert0;
+    DVECTOR *vert1;
+    DVECTOR *vert0;
     int yflag1;
     int yflag0;
     int j;
@@ -38,7 +38,7 @@ int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SV
     nx = normal->x > 0 ? normal->x : -normal->x;
     ny = normal->y > 0 ? normal->y : -normal->y;
 
-    triangle = (struct _Triangle2D *)getScratchAddr(0);
+    triangle = (Triangle2D *)getScratchAddr(0);
 
     if (ny < nx)
     {
@@ -83,8 +83,8 @@ int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SV
         }
     }
 
-    vert1 = (struct DVECTOR *)triangle;
-    vert0 = (struct DVECTOR *)vert1 + 2;
+    vert1 = (DVECTOR *)triangle;
+    vert0 = (DVECTOR *)vert1 + 2;
 
     yflag0 = (vert0->vy >= ty);
     inside_flag = 0;
@@ -174,12 +174,12 @@ int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SV
 
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point)
 {
-    struct _SVector normal = {.x = 0, .y = 0, .z = 4096};
+    SVector normal = {.x = 0, .y = 0, .z = 4096};
 
-    return COLLIDE_PointInTriangle((struct _SVector *)v0, (struct _SVector *)v1, (struct _SVector *)v2, (struct _SVector *)point, (struct _SVector *)&normal);
+    return COLLIDE_PointInTriangle((SVector *)v0, (SVector *)v1, (SVector *)v2, (SVector *)point, (SVector *)&normal);
 }
 
-long COLLIDE_GetNormal(short nNum, short *nrmlArray, struct _SVector *nrml)
+long COLLIDE_GetNormal(short nNum, short *nrmlArray, SVector *nrml)
 {
     short *sPtr;
     long bitMask;
@@ -276,10 +276,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SegmentCollisionOff);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_FindCollisionFaceNormal);
 
-short *COLLIDE_GetBSPTreeFlag(struct _CollideInfo *collideInfo);
+short *COLLIDE_GetBSPTreeFlag(CollideInfo *collideInfo);
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_GetBSPTreeFlag);
 
-void COLLIDE_SetBSPTreeFlag(struct _CollideInfo *collideInfo, short flag)
+void COLLIDE_SetBSPTreeFlag(CollideInfo *collideInfo, short flag)
 {
     short *bspTreeFlags;
 

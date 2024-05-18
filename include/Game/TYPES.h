@@ -75,22 +75,8 @@ struct CVECTOR {
     unsigned char cd;
 };
 
-// size: 0xC
-struct _Triangle2D {
-    // offset: 0000
-    short x0;
-    // offset: 0002
-    short y0;
-    // offset: 0004
-    short x1;
-    // offset: 0006
-    short y1;
-    // offset: 0008
-    short x2;
-    // offset: 000A
-    short y2;
-};
-
 typedef struct _SVector SVector;
+
+typedef struct DVECTOR DVECTOR;
 
 #endif
