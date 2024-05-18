@@ -3,28 +3,32 @@
 
 // size: 0x8
 struct MemHeader {
-	// offset: 0000
-	unsigned short magicNumber;
-	// offset: 0002
-	unsigned char memStatus;
-	// offset: 0003
-	unsigned char memType;
-	// offset: 0004
-	unsigned long memSize;
+    // offset: 0000
+    unsigned short magicNumber;
+    // offset: 0002
+    unsigned char memStatus;
+    // offset: 0003
+    unsigned char memType;
+    // offset: 0004
+    unsigned long memSize;
 };
 
 // size: 0x14
 struct NewMemTracker {
-	// offset: 0000 (8 bytes)
-	struct MemHeader *rootNode;
-	// offset: 0004
-	unsigned long totalMemory;
-	// offset: 0008
-	unsigned long currentMemoryUsed;
-	// offset: 000C
-	char *lastMemoryAddress;
-	// offset: 0010
-	long doingGarbageCollection;
+    // offset: 0000 (8 bytes)
+    struct MemHeader *rootNode;
+    // offset: 0004
+    unsigned long totalMemory;
+    // offset: 0008
+    unsigned long currentMemoryUsed;
+    // offset: 000C
+    char *lastMemoryAddress;
+    // offset: 0010
+    long doingGarbageCollection;
 };
+
+typedef struct MemHeader MemHeader;
+
+typedef struct NewMemTracker NewMemTracker;
 
 #endif

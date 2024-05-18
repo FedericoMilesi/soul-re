@@ -1,7 +1,7 @@
 #include "common.h"
 #include "Game/MEMPACK.h"
 
-EXTERN STATIC struct NewMemTracker newMemTracker;
+EXTERN STATIC NewMemTracker newMemTracker;
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Init);
 
@@ -21,7 +21,7 @@ long MEMPACK_RelocatableType(long memType)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Malloc);
 
-void MEMORY_MergeAddresses(struct MemHeader *firstAddress, struct MemHeader *secondAddress)
+void MEMORY_MergeAddresses(MemHeader *firstAddress, MemHeader *secondAddress)
 {
     if ((firstAddress->memStatus == 0) && (secondAddress->memStatus == 0))
     {
