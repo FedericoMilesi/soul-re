@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/TYPES.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_Sort3VectorCoords);
 
@@ -125,7 +126,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_FastSqrt);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_FastSqrt0);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_DistanceBetweenPositions);
+long MATH3D_DistanceBetweenPositions(struct _Position *pos1, struct _Position *pos2)
+{
+    return MATH3D_FastSqrt0(MATH3D_SquareLength((pos2->x - pos1->x), (pos2->y - pos1->y), (pos2->z - pos1->z)));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_AngleBetweenVectors);
 
