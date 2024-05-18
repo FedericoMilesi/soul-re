@@ -34,4 +34,6 @@ struct _BlockVramEntry {
     } udata;
 };
 
+typedef struct _BlockVramEntry BlockVramEntry;
+
 #endif

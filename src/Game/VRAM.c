@@ -1,11 +1,11 @@
 #include "common.h"
 #include "Game/VRAM.h"
 
-EXTERN struct _BlockVramEntry *usedVramBlocks;
+EXTERN BlockVramEntry *usedVramBlocks;
 
-EXTERN struct _BlockVramEntry *openVramBlocks;
+EXTERN BlockVramEntry *openVramBlocks;
 
-EXTERN struct _BlockVramEntry vramBlockList[90];
+EXTERN BlockVramEntry vramBlockList[90];
 
 void VRAM_PrintVramBlock()
 {
@@ -13,7 +13,7 @@ void VRAM_PrintVramBlock()
 
 void VRAM_PrintInfo()
 {
-    struct _BlockVramEntry *vblock;
+    BlockVramEntry *vblock;
 
     vblock = usedVramBlocks;
 
@@ -42,9 +42,9 @@ void VRAM_DisableTerrainArea()
     VRAM_DeleteFreeVram(512, 0, 512, 240 + 16);
 }
 
-int VRAM_ConcatanateMemory(struct _BlockVramEntry *curBlock)
+int VRAM_ConcatanateMemory(BlockVramEntry *curBlock)
 {
-    struct _BlockVramEntry *nextBlock;
+    BlockVramEntry *nextBlock;
 
     while (curBlock != NULL)
     {
@@ -117,10 +117,10 @@ void VRAM_GarbageCollect()
     }
 }
 
-int VRAM_InsertFreeBlock(struct _BlockVramEntry *block)
+int VRAM_InsertFreeBlock(BlockVramEntry *block)
 {
-    struct _BlockVramEntry *next;
-    struct _BlockVramEntry *prev;
+    BlockVramEntry *next;
+    BlockVramEntry *prev;
 
     prev = NULL;
 
@@ -161,7 +161,7 @@ int VRAM_InsertFreeBlock(struct _BlockVramEntry *block)
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DeleteFreeBlock);
 
-void VRAM_InsertUsedBlock(struct _BlockVramEntry *block)
+void VRAM_InsertUsedBlock(BlockVramEntry *block)
 {
     if (block != NULL)
     {
@@ -184,10 +184,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_GetOpenBlock);
 
 int VRAM_DeleteFreeVram(short x, short y, short w, short h)
 {
-    struct _BlockVramEntry *prev;
-    struct _BlockVramEntry *vblock;
-    struct _BlockVramEntry *nextVBlock;
-    struct _BlockVramEntry *blockLists[2] = {
+    BlockVramEntry *prev;
+    BlockVramEntry *vblock;
+    BlockVramEntry *nextVBlock;
+    BlockVramEntry *blockLists[2] = {
         openVramBlocks, usedVramBlocks
     };
     int i;
@@ -242,7 +242,7 @@ int VRAM_DeleteFreeVram(short x, short y, short w, short h)
 
 int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags)
 {
-    struct _BlockVramEntry *useBlock;
+    BlockVramEntry *useBlock;
 
     if (((x & 0x3F)) && (w > (64 - ((x & 0x3F)))))
     {
@@ -312,7 +312,7 @@ int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags)
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_CheckVramSlot);
 
-void VRAM_ClearVramBlock(struct _BlockVramEntry *block)
+void VRAM_ClearVramBlock(BlockVramEntry *block)
 {
     if (block != NULL)
     {
@@ -324,10 +324,10 @@ void VRAM_ClearVramBlock(struct _BlockVramEntry *block)
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", AdjustVramCoordsObject);
 
-struct _BlockVramEntry *VRAM_InsertionSort(struct _BlockVramEntry *rootNode, struct _BlockVramEntry *newBlock)
+BlockVramEntry *VRAM_InsertionSort(BlockVramEntry *rootNode, BlockVramEntry *newBlock)
 {
-    struct _BlockVramEntry *prev;
-    struct _BlockVramEntry *next;
+    BlockVramEntry *prev;
+    BlockVramEntry *next;
 
     prev = NULL;
     next = rootNode;
