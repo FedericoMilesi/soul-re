@@ -91,4 +91,6 @@ struct _Triangle2D {
     short y2;
 };
 
+typedef struct _SVector SVector;
+
 #endif

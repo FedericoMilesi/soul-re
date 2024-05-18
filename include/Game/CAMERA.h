@@ -60,6 +60,8 @@ struct _CameraCore_Type {
 
 extern int CameraCenterDelay;
 
+typedef struct Camera Camera;
+
 typedef struct _CameraCore_Type CameraCore;
 
 #endif
