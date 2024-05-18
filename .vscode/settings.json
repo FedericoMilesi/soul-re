@@ -22,6 +22,7 @@
     "files.associations": {
         "camera.h": "c",
         "gameloop.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "common.h": "c"
     }
 }
