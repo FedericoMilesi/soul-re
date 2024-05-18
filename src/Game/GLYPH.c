@@ -58,7 +58,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", MANNA_Pickup);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HEALTHU_Pickup);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HUD_Damp);
+void HUD_Damp(short *val, short target, short *vel, short max)
+{
+    short accl;
+
+    CriticalDampValue(1, val, target, vel, &accl, max);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HUD_Init);
 
