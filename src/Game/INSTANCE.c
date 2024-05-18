@@ -33,7 +33,25 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_CleanUpInstanceList);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Introduced);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_GetIntroCommand);
+struct INICommand *INSTANCE_GetIntroCommand(struct INICommand *command, int cmd)
+{
+    if (command != NULL)
+    {
+        while (command->command != 0)
+        {
+            if (command->command != cmd)
+            {
+                command += command->numParameters + 1;
+            }
+            else
+            {
+                return command;
+            }
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindIntroCommand);
 
