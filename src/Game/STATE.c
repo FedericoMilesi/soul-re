@@ -17,7 +17,10 @@ void PurgeMessageQueue(MessageQueue *In)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", PeekMessageQueue);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", EnMessageQueue);
+void EnMessageQueue(MessageQueue *In, Message *Element)
+{
+    EnMessageQueueData(In, Element->ID, Element->Data);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", EnMessageQueueData);
 
