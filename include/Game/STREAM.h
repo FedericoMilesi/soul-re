@@ -91,4 +91,6 @@ typedef struct Intro Intro;
 
 typedef struct _Terrain Terrain;
 
+typedef struct Level Level;
+
 #endif

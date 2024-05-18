@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/VM.h"
+#include "Game/STREAM.h"
 
 static long vmRealClock = 0;
 
@@ -14,9 +15,9 @@ void VM_Tick(long time)
 
 INCLUDE_ASM("asm/nonmatchings/Game/VM", VM_UpdateMorph);
 
-void VM_VMObjectSetTable(struct Level *level, struct _VMObject *vmobject, int table)
+void VM_VMObjectSetTable(Level *level, VMObject *vmobject, int table)
 {
-    struct _VMOffsetTable *curTable;
+    VMOffsetTable *curTable;
 
     curTable = vmobject->curVMOffsetTable;
 
@@ -26,5 +27,5 @@ void VM_VMObjectSetTable(struct Level *level, struct _VMObject *vmobject, int ta
     }
 
     vmobject->currentIdx = table;
-    vmobject->curVMOffsetTable = (struct _VMOffsetTable *)vmobject->vmoffsetTableList[vmobject->currentIdx];
+    vmobject->curVMOffsetTable = (VMOffsetTable *)vmobject->vmoffsetTableList[vmobject->currentIdx];
 }
