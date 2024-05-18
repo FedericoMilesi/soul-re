@@ -31,7 +31,15 @@ void PurgeMessageQueue(MessageQueue *In)
     In->Head = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", PeekMessageQueue);
+Message *PeekMessageQueue(MessageQueue *In)
+{
+    if (In->Head == In->Tail)
+    {
+        return NULL;
+    }
+
+    return &In->Queue[In->Head];
+}
 
 void EnMessageQueue(MessageQueue *In, Message *Element)
 {
