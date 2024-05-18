@@ -1,11 +1,12 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
+#include "Game/SPLINE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Deactivate);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Reactivate);
 
-void INSTANCE_ForceActive(struct _Instance *instance)
+void INSTANCE_ForceActive(Instance *instance)
 {
     if ((instance->flags2 & 0x1))
     {
@@ -33,7 +34,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_CleanUpInstanceList);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Introduced);
 
-struct INICommand *INSTANCE_GetIntroCommand(struct INICommand *command, int cmd)
+INICommand *INSTANCE_GetIntroCommand(INICommand *command, int cmd)
 {
     if (command != NULL)
     {
@@ -53,18 +54,18 @@ struct INICommand *INSTANCE_GetIntroCommand(struct INICommand *command, int cmd)
     return 0;
 }
 
-struct INICommand *INSTANCE_FindIntroCommand(struct _Instance *instance, int cmd)
+INICommand *INSTANCE_FindIntroCommand(Instance *instance, int cmd)
 {
-    return INSTANCE_GetIntroCommand((struct INICommand *)instance->introData, cmd);
+    return INSTANCE_GetIntroCommand((INICommand *)instance->introData, cmd);
 }
 
-void INSTANCE_ProcessIntro(struct _Instance *instance)
+void INSTANCE_ProcessIntro(Instance *instance)
 {
-    struct INICommand *command;
+    INICommand *command;
 
     if (instance->introData != NULL)
     {
-        command = (struct INICommand *)instance->introData;
+        command = (INICommand *)instance->introData;
 
         if (!(instance->flags & 0x2))
         {
@@ -87,7 +88,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_IntroduceInstance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_AdditionalCollideFunctions);
 
-long INSTANCE_GetSplineFrameNumber(struct _Instance *instance, struct MultiSpline *spline)
+long INSTANCE_GetSplineFrameNumber(Instance *instance, MultiSpline *spline)
 {
     return SCRIPT_GetSplineFrameNumber(instance, SCRIPT_GetPosSplineDef(instance, spline, 0, 0));
 }
@@ -104,7 +105,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_DefaultInit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_PlainDeath);
 
-void INSTANCE_KillInstance(struct _Instance *instance)
+void INSTANCE_KillInstance(Instance *instance)
 {
     if (!(instance->flags & 0x20))
     {

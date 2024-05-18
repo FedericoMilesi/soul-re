@@ -231,4 +231,8 @@ struct INICommand {
     long parameter[0];
 };
 
+typedef struct _Instance Instance;
+
+typedef struct INICommand INICommand;
+
 #endif
