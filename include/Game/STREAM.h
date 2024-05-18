@@ -87,4 +87,6 @@ struct _Terrain {
     struct _MultiSignal *signals;
 };
 
+typedef struct _Terrain Terrain;
+
 #endif

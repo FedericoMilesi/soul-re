@@ -96,4 +96,6 @@ struct LightInstance {
     unsigned char flags;
 };
 
+typedef struct LightInfo LightInfo;
+
 #endif
