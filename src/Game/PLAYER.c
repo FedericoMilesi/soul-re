@@ -2,7 +2,7 @@
 #include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
 
-void PLAYER_TurnHead(struct _Instance *instance, short *rotx, short *rotz, struct GameTracker *gameTracker)
+void PLAYER_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *gameTracker)
 {
     if ((INSTANCE_Query(instance, 1) & 0x1))
     {
@@ -14,7 +14,7 @@ void PLAYER_TurnHead(struct _Instance *instance, short *rotx, short *rotz, struc
     }
 }
 
-long PLAYER_OkToLookAround(struct _Instance *instance)
+long PLAYER_OkToLookAround(Instance *instance)
 {
     if ((INSTANCE_Query(instance, 1) & 0x1))
     {
@@ -26,7 +26,7 @@ long PLAYER_OkToLookAround(struct _Instance *instance)
     }
 }
 
-void PLAYER_SetLookAround(struct _Instance *instance)
+void PLAYER_SetLookAround(Instance *instance)
 {
     if ((INSTANCE_Query(instance, 1) & 0x1))
     {
@@ -38,7 +38,7 @@ void PLAYER_SetLookAround(struct _Instance *instance)
     }
 }
 
-void PLAYER_ReSetLookAround(struct _Instance *instance)
+void PLAYER_ReSetLookAround(Instance *instance)
 {
     if ((INSTANCE_Query(instance, 1) & 0x1))
     {

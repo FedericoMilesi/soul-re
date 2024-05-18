@@ -256,6 +256,8 @@ struct GameTracker {
     char pad;
 };
 
-extern struct GameTracker gameTrackerX;
+typedef struct GameTracker GameTracker;
+
+extern GameTracker gameTrackerX;
 
 #endif
