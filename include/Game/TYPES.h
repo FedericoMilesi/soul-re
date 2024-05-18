@@ -75,6 +75,8 @@ struct CVECTOR {
     unsigned char cd;
 };
 
+typedef struct _Position Position;
+
 typedef struct _SVector SVector;
 
 typedef struct DVECTOR DVECTOR;
