@@ -179,7 +179,38 @@ int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point)
     return COLLIDE_PointInTriangle((struct _SVector *)v0, (struct _SVector *)v1, (struct _SVector *)v2, (struct _SVector *)point, (struct _SVector *)&normal);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_GetNormal);
+long COLLIDE_GetNormal(short nNum, short *nrmlArray, struct _SVector *nrml)
+{
+    short *sPtr;
+    long bitMask;
+
+    if (nNum >= 0)
+    {
+        sPtr = &nrmlArray[nNum * 3];
+
+        bitMask = *sPtr++;
+
+        nrml->x = bitMask & 0x1FFF;
+        nrml->y = *sPtr++;
+        nrml->z = *sPtr;
+
+        bitMask >>= 13;
+    }
+    else
+    {
+        sPtr = &nrmlArray[-nNum * 3];
+
+        bitMask = *sPtr++;
+
+        nrml->x = -(bitMask & 0x1FFF);
+        nrml->y = -(*sPtr++);
+        nrml->z = -(*sPtr);
+
+        bitMask >>= 13;
+    }
+
+    return bitMask;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_MakeNormal);
 
