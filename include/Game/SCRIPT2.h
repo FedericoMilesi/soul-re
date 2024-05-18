@@ -9,4 +9,6 @@ struct LitShaftProperties {
     short pad;
 };
 
+typedef struct LitShaftProperties LitShaftProperties;
+
 #endif

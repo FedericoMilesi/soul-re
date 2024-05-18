@@ -3,11 +3,11 @@
 #include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
 
-void LitShaftInit(struct _Instance *instance, struct GameTracker *gameTracker)
+void LitShaftInit(Instance *instance, GameTracker *gameTracker)
 {
-    struct LitShaftProperties *Prop;
+    LitShaftProperties *Prop;
 
-    Prop = (struct LitShaftProperties *)instance->data;
+    Prop = (LitShaftProperties *)instance->data;
 
     if (Prop != NULL)
     {
