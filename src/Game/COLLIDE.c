@@ -252,7 +252,42 @@ void COLLIDE_UpdateAllTransforms(Instance *instance, SVECTOR *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_MoveAllTransforms);
+void COLLIDE_MoveAllTransforms(Instance *instance, Position *offset)
+{
+    MATRIX *swTransform;
+    int i;
+    long numMatrices;
+    long ox;
+    long oy;
+    long oz;
+
+    if (instance->oldMatrix != NULL)
+    {
+        ox = offset->x;
+        oy = offset->y;
+        oz = offset->z;
+
+        if ((instance->object->animList != NULL) && (!(instance->object->oflags2 & 0x40000000)))
+        {
+            swTransform = instance->oldMatrix - 1;
+
+            numMatrices = instance->object->modelList[instance->currentModel]->numSegments + 1;
+        }
+        else
+        {
+            swTransform = instance->oldMatrix;
+
+            numMatrices = instance->object->modelList[instance->currentModel]->numSegments;
+        }
+
+        for (i = numMatrices; i != 0; i--, swTransform++)
+        {
+            swTransform->t[0] += ox;
+            swTransform->t[1] += oy;
+            swTransform->t[2] += oz;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_WithinYZBounds);
 
