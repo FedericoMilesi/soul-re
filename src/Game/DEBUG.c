@@ -6,24 +6,6 @@
 #include "Game/PSX/MAIN.h"
 #include "Game/CAMERA.h"
 
-// size: 0x8
-typedef struct {
-    // offset: 0000 (4 bytes)
-    enum DEBUG_LINE_TYPE type;
-    // offset: 0004
-    void (*fn)();
-}debug_dispatch_t;
-
-// size: 0x10
-typedef struct {
-    // offset: 0000 (12 bytes)
-    unsigned char cheatKeys[12];
-    // offset: 000C
-    short cheatLen;
-    // offset: 000E
-    short cheatStage;
-}GameCheat;
-
 void DEBUG_FillUpHealth(long *var);
 void DEBUG_FogLoad();
 void DEBUG_SetViewVram();

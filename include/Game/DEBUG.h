@@ -13,7 +13,7 @@ enum DEBUG_LINE_TYPE {
 };
 
 // size: 0x18
-typedef struct {
+struct DebugMenuLine {
     // offset: 0000 (4 bytes)
     enum DEBUG_LINE_TYPE type;
     // offset: 0004
@@ -26,6 +26,30 @@ typedef struct {
     long *var_address;
     // offset: 0014
     long bit_mask;
-}DebugMenuLine;
+};
+
+// size: 0x8
+struct debug_dispatch_t {
+    // offset: 0000 (4 bytes)
+    enum DEBUG_LINE_TYPE type;
+    // offset: 0004
+    void (*fn)();
+};
+
+// size: 0x10
+struct GameCheat {
+    // offset: 0000 (12 bytes)
+    unsigned char cheatKeys[12];
+    // offset: 000C
+    short cheatLen;
+    // offset: 000E
+    short cheatStage;
+};
+
+typedef struct DebugMenuLine DebugMenuLine;
+
+typedef struct debug_dispatch_t debug_dispatch_t;
+
+typedef struct GameCheat GameCheat;
 
 #endif
