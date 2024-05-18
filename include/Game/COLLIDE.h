@@ -61,9 +61,45 @@ struct _Triangle2D {
     short y2;
 };
 
+// size: 0x1C
+struct _HBox {
+    // offset: 0000
+    short flags;
+    // offset: 0002
+    unsigned char id;
+    // offset: 0003
+    unsigned char rank;
+    // offset: 0004
+    short minX;
+    // offset: 0006
+    short minY;
+    // offset: 0008
+    short minZ;
+    // offset: 000A
+    short maxX;
+    // offset: 000C
+    short maxY;
+    // offset: 000E
+    short maxZ;
+    // offset: 0010
+    short refMinX;
+    // offset: 0012
+    short refMinY;
+    // offset: 0014
+    short refMinZ;
+    // offset: 0016
+    short refMaxX;
+    // offset: 0018
+    short refMaxY;
+    // offset: 001A
+    short refMaxZ;
+};
+
 typedef struct _CollideInfo CollideInfo;
 
 typedef struct _Triangle2D Triangle2D;
+
+typedef struct _HBox HBox;
 
 int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SVector *v2, struct _SVector *point, struct _SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);

@@ -289,7 +289,22 @@ void COLLIDE_MoveAllTransforms(Instance *instance, Position *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_WithinYZBounds);
+long COLLIDE_WithinYZBounds(SVector *point, HBox *hbox)
+{
+    int temp; // not from decls.h
+
+    temp = 0;
+
+    if ((point->y >= hbox->minY) && (hbox->maxY >= point->y))
+    {
+        if (point->z >= hbox->minZ)
+        {
+            temp = hbox->maxZ >= point->z;
+        }
+    }
+
+    return temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_WithinXZBounds);
 
