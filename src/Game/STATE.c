@@ -1,6 +1,11 @@
 #include "common.h"
+#include "Game/STATE.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", InitMessageQueue);
+void InitMessageQueue(MessageQueue *In)
+{
+    In->Head = 0;
+    In->Tail = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", DeMessageQueue);
 
