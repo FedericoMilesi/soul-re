@@ -62,7 +62,19 @@ long PHYSICS_FindAFromDAndT(long d, long t)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_FindVFromAAndD);
+long PHYSICS_FindVFromAAndD(long a, long d)
+{
+    long vsq;
+
+    vsq = a * 2 * d;
+
+    if (vsq != 0)
+    {
+        return MATH3D_FastSqrt0(vsq);
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_StopIfCloseToTarget);
 
