@@ -9,7 +9,11 @@ void InitMessageQueue(MessageQueue *In)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", DeMessageQueue);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", PurgeMessageQueue);
+void PurgeMessageQueue(MessageQueue *In)
+{
+    In->Tail = 0;
+    In->Head = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", PeekMessageQueue);
 
