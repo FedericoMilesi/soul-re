@@ -1,6 +1,10 @@
 #include "common.h"
 #include "Game/STATE.h"
 
+EXTERN STATIC char circBuf[4096];
+
+EXTERN STATIC void *circWhere;
+
 void InitMessageQueue(MessageQueue *In)
 {
     In->Head = 0;

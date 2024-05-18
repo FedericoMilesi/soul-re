@@ -1,5 +1,7 @@
 #include "common.h"
 
+EXTERN STATIC short FireReaverFlag;
+
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverInit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverCollide);
@@ -22,4 +24,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/REAVER", REAVER_GetGlowColor);
 
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", _SoulReaverAnimate);
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverFire);
+int SoulReaverFire()
+{
+    return FireReaverFlag;
+}
