@@ -194,7 +194,24 @@ void PhysicsSetVelFromZRot(Instance *instance, short angle, long magnitude)
     instance->yVel = (rsin(angle - 1024) * magnitude) >> 12;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsSetVelFromRot);
+void PhysicsSetVelFromRot(Instance *instance, Rotation *rot, long magnitude)
+{
+    MATRIX mat;
+    SVECTOR flatPt;
+    SVECTOR newPt;
+
+    flatPt.vx = 0;
+    flatPt.vy = (short)-magnitude;
+    flatPt.vz = 0;
+
+    RotMatrix((SVECTOR *)&instance->rotation, &mat);
+
+    ApplyMatrixSV(&mat, &flatPt, &newPt);
+
+    instance->xVel = newPt.vx;
+    instance->yVel = newPt.vy;
+    instance->zVel = newPt.vz;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_SetVAndAFromRot);
 
