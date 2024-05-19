@@ -18,7 +18,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverImbue);
 
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverCharge);
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", StopSoulReaverCharge);
+void StopSoulReaverCharge(ReaverData *data, Instance *instance)
+{
+    data->ReaverChargeTime = 0;
+    data->ReaverShockAmount = 0;
+
+    GAMEPAD_Shock1(0, 0);
+
+    FX_EndInstanceEffects(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverPost);
 
