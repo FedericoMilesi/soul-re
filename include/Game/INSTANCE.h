@@ -232,4 +232,6 @@ typedef struct INICommand {
     long parameter[0];
 } INICommand;
 
+struct _Instance *INSTANCE_IntroduceInstance(struct Intro *intro, short streamUnitID);
+
 #endif

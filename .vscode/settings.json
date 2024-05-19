@@ -24,6 +24,8 @@
         "gameloop.h": "c",
         "main.h": "c",
         "common.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "light3d.h": "c",
+        "stream.h": "c"
     }
 }
