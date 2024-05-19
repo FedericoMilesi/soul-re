@@ -1,5 +1,5 @@
-#ifndef _COLIDE_H_
-#define _COLIDE_H_
+#ifndef _COLLIDE_H_
+#define _COLLIDE_H_
 
 #include "Game/TYPES.h"
 #include "Game/FX.h"
