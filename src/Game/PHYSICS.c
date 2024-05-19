@@ -1,7 +1,21 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", SetNoPtCollideInFamily);
+void SetNoPtCollideInFamily(Instance *instance)
+{
+    Instance *child;
+
+    child = instance->LinkChild;
+
+    instance->flags |= 0x40;
+
+    while (child != NULL)
+    {
+        SetNoPtCollideInFamily(child);
+
+        child = child->LinkSibling;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", ResetNoPtCollideInFamily);
 
