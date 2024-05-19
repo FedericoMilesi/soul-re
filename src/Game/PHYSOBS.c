@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/TYPES.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_PlayDropSound);
 
@@ -134,7 +135,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", DropPhysOb);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysicalRelocateTune);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_CheckObjectAxisAlignment);
+int PHYSOBS_CheckObjectAxisAlignment(MATRIX *m0, MATRIX *m1, SVector *axis)
+{
+    VECTOR r0;
+    VECTOR r1;
+    SVector v0;
+    SVector v1;
+
+    ApplyMatrix(m0, (SVECTOR *)axis, &r0);
+    ApplyMatrix(m1, (SVECTOR *)axis, &r1);
+
+    v0.x = (short)r0.vx;
+    v0.y = (short)r0.vy;
+    v0.z = (short)r0.vz;
+
+    v1.x = (short)r1.vx;
+    v1.y = (short)r1.vy;
+    v1.z = (short)r1.vz;
+
+    return (short)(((v0.x * v1.x) + (v0.y * v1.y) + (v0.z * v1.z)) >> 12);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckSlide);
 
