@@ -4,7 +4,7 @@
 #include "Game/TYPES.h"
 
 // size: 0x8
-struct _Normal {
+typedef struct _Normal {
     // offset: 0000
     short x;
     // offset: 0002
@@ -13,10 +13,10 @@ struct _Normal {
     short z;
     // offset: 0006
     short pad;
-};
+} _Normal;
 
 // size: 0x30
-struct _CollideInfo {
+typedef struct _CollideInfo {
     // offset: 0000
     void *level;
     // offset: 0004
@@ -43,10 +43,10 @@ struct _CollideInfo {
     struct _Position offset;
     // offset: 002E
     short bspID;
-};
+} _CollideInfo;
 
 // size: 0xC
-struct _Triangle2D {
+typedef struct _Triangle2D {
     // offset: 0000
     short x0;
     // offset: 0002
@@ -59,10 +59,10 @@ struct _Triangle2D {
     short x2;
     // offset: 000A
     short y2;
-};
+} _Triangle2D;
 
 // size: 0x1C
-struct _HBox {
+typedef struct _HBox {
     // offset: 0000
     short flags;
     // offset: 0002
@@ -93,7 +93,7 @@ struct _HBox {
     short refMaxY;
     // offset: 001A
     short refMaxZ;
-};
+} _HBox;
 
 typedef struct _CollideInfo CollideInfo;
 

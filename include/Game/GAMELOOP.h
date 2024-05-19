@@ -7,7 +7,7 @@
 #include "Game/SOUND.h"
 
 // size: 0x20
-struct _GameTrackerASMData_Type {
+typedef struct _GameTrackerASMData_Type {
     // offset: 0000
     long drawBackFaces;
     // offset: 0004
@@ -18,16 +18,16 @@ struct _GameTrackerASMData_Type {
     short MorphType;
     // offset: 000C (20 bytes)
     struct LightInstance lightInstances[1];
-};
+} _GameTrackerASMData_Type;
 
 // size: 0x20
-struct _GameData_Type {
+typedef struct _GameData_Type {
     // offset: 0000 (32 bytes)
     struct _GameTrackerASMData_Type asmData;
-};
+} _GameData_Type;
 
 // size: 0x270
-struct GameTracker {
+typedef struct GameTracker {
     // offset: 0000 (32 bytes)
     struct _GameData_Type gameData;
     // offset: 0020
@@ -254,9 +254,7 @@ struct GameTracker {
     char monster_collide_override;
     // offset: 026F
     char pad;
-};
-
-typedef struct GameTracker GameTracker;
+} GameTracker;
 
 extern GameTracker gameTrackerX;
 

@@ -2,7 +2,7 @@
 #define _EVENT_H_
 
 // size: 0xC
-struct EventAliasCommandStruct {
+typedef struct EventAliasCommandStruct {
     // offset: 0000
     struct _Instance *hostInstance;
     // offset: 0004
@@ -13,6 +13,6 @@ struct EventAliasCommandStruct {
     short interpframes;
     // offset: 000A
     short speed;
-};
+} EventAliasCommandStruct;
 
 #endif

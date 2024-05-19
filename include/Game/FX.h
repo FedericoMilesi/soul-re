@@ -6,7 +6,7 @@
 #include "Game/MATH3D.h"
 
 // size: 0x10
-struct TextureMT3 {
+typedef struct TextureMT3 {
     // offset: 0000
     unsigned char u0;
     // offset: 0001
@@ -29,20 +29,20 @@ struct TextureMT3 {
     char sortPush;
     // offset: 000C
     long color;
-};
+} TextureMT3;
 
 // size: 0x2C
-struct _FX_MATRIX {
+typedef struct _FX_MATRIX {
     // offset: 0000 (8 bytes)
     struct NodeType node;
     // offset: 0008
     long flags;
     // offset: 000C (32 bytes)
     struct MATRIX lwTransform;
-};
+} _FX_MATRIX;
 
 // size: 0x68
-struct _FX_PRIM {
+typedef struct _FX_PRIM {
     // offset: 0000 (8 bytes)
     struct NodeType node;
     // offset: 0008 (16 bytes)
@@ -117,10 +117,10 @@ struct _FX_PRIM {
             short zAccl;
         } phys;
     } duo;
-};
+} _FX_PRIM;
 
 // size: 0x6DA8
-struct _FXTracker {
+typedef struct _FXTracker {
     // offset: 0000 (1408 bytes)
     struct _FX_MATRIX matrixPool[32];
     // offset: 0580 (8 bytes)
@@ -135,10 +135,10 @@ struct _FXTracker {
     struct NodeType usedPrimListSprite;
     // offset: 6DA0 (8 bytes)
     struct NodeType freePrimList;
-};
+} _FXTracker;
 
 // size: 0x2C
-struct _FXForceFieldEffect {
+typedef struct _FXForceFieldEffect {
     // offset: 0000
     void *next;
     // offset: 0004
@@ -169,10 +169,10 @@ struct _FXForceFieldEffect {
     short end_fade;
     // offset: 0028
     long color;
-};
+} _FXForceFieldEffect;
 
 // size: 0xC
-struct _PlaneConstants {
+typedef struct _PlaneConstants {
     // offset: 0000
     short a;
     // offset: 0002
@@ -183,10 +183,10 @@ struct _PlaneConstants {
     short flags;
     // offset: 0008
     long d;
-};
+} _PlaneConstants;
 
 // size: 0x4C
-struct _FXParticle {
+typedef struct _FXParticle {
     // offset: 0000
     void *next;
     // offset: 0004
@@ -241,20 +241,20 @@ struct _FXParticle {
     short startFadeValue;
     // offset: 004A
     short fadeStep;
-};
+} _FXParticle;
 
 // size: 0x6
-struct _Face {
+typedef struct _Face {
     // offset: 0000
     unsigned short v0;
     // offset: 0002
     unsigned short v1;
     // offset: 0004
     unsigned short v2;
-};
+} _Face;
 
 // size: 0xC
-struct _MFace {
+typedef struct _MFace {
     // offset: 0000 (6 bytes)
     struct _Face face;
     // offset: 0006
@@ -263,10 +263,10 @@ struct _MFace {
     unsigned char flags;
     // offset: 0008
     long color;
-};
+} _MFace;
 
 // size: 0x38
-struct _Model {
+typedef struct _Model {
     // offset: 0000
     long numVertices;
     // offset: 0004 (8 bytes)
@@ -297,10 +297,10 @@ struct _Model {
     struct TextureMT3 *startTextures;
     // offset: 0034 (16 bytes)
     struct TextureMT3 *endTextures;
-};
+} _Model;
 
 // size: 0x10
-struct _FXGeneralEffect {
+typedef struct _FXGeneralEffect {
     // offset: 0000
     void *next;
     // offset: 0004
@@ -313,15 +313,13 @@ struct _FXGeneralEffect {
     unsigned char type;
     // offset: 000E
     short lifeTime;
-};
+} _FXGeneralEffect;
 
 typedef struct _PlaneConstants PlaneConstants;
 
 typedef struct _MFace MFace;
 
 typedef struct _Model Model;
-
-typedef struct TextureMT3 TextureMT3;
 
 typedef struct _FX_PRIM FX_PRIM;
 

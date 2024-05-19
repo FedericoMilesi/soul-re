@@ -5,7 +5,7 @@
 #include "Game/COLLIDE.h"
 
 // size: 0xE0
-struct _CameraCore_Type {
+typedef struct _CameraCore_Type {
     // offset: 0000 (6 bytes)
     struct _Position position;
     // offset: 0006
@@ -56,7 +56,7 @@ struct _CameraCore_Type {
     struct _Position nondebugPos;
     // offset: 00DC
     short pad6;
-};
+} _CameraCore_Type;
 
 extern int CameraCenterDelay;
 

@@ -2,7 +2,7 @@
 #define _DRAW_H_
 
 // size: 0x4
-struct _ColorType {
+typedef struct _ColorType {
     // offset: 0000
     unsigned char r;
     // offset: 0001
@@ -11,10 +11,10 @@ struct _ColorType {
     unsigned char b;
     // offset: 0003
     unsigned char code;
-};
+} _ColorType;
 
 // size: 0x10
-struct _ButtonTexture {
+typedef struct _ButtonTexture {
     // offset: 0000
     short tpage;
     // offset: 0002
@@ -27,7 +27,7 @@ struct _ButtonTexture {
     struct _BlockVramEntry *vramBlock;
     // offset: 000C
     long xshift;
-};
+} _ButtonTexture;
 
 typedef struct _ButtonTexture ButtonTexture;
 
