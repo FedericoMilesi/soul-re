@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/FONT.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/FONT", FONT_MakeSpecialFogClut);
 
@@ -30,7 +31,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/FONT", FONT_SetCursor);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FONT", FONT_VaReallyPrint);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FONT", FONT_FontPrintCentered);
+void FONT_FontPrintCentered(char *text, long y)
+{
+    FONT_SetCursor((512 / 2) - (FONT_GetStringWidth(text) >> 1), y);
+
+    FONT_Print2(text);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FONT", FONT_SetColorIndex);
 
