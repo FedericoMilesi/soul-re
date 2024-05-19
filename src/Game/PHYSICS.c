@@ -17,7 +17,21 @@ void SetNoPtCollideInFamily(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", ResetNoPtCollideInFamily);
+void ResetNoPtCollideInFamily(Instance *instance)
+{
+    Instance *child;
+
+    child = instance->LinkChild;
+
+    instance->flags &= ~0x40;
+
+    while (child != NULL)
+    {
+        ResetNoPtCollideInFamily(child);
+
+        child = child->LinkSibling;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckLineInWorld);
 
