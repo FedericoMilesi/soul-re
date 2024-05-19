@@ -279,6 +279,11 @@ void PHYSICS_GenericLineCheckSetup(short x, short y, short z, SVECTOR *inVec)
     inVec->vz = z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_GenericLineCheck);
+void PHYSICS_GenericLineCheck(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo)
+{
+    cInfo->collideType = 63;
+
+    PHYSICS_GenericLineCheckMask(instance, transMat, rotMat, cInfo);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_GenericLineCheckMask);
