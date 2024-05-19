@@ -329,7 +329,22 @@ int PHYSICS_CheckForTerrainCollide(Instance *instance, SVECTOR *startVec, SVECTO
     return CInfo.type == 3;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckForObjectCollide);
+int PHYSICS_CheckForObjectCollide(Instance *instance, SVECTOR *startVec, SVECTOR *endVec, int segment)
+{
+    PCollideInfo CInfo;
+    MATRIX *pTempMat;
+
+    CInfo.oldPoint = startVec;
+    CInfo.newPoint = endVec;
+
+    pTempMat = instance->matrix;
+
+    CInfo.collideType = 62;
+
+    PHYSICS_GenericLineCheckMask(instance, &pTempMat[segment], &pTempMat[segment], &CInfo);
+
+    return CInfo.type != 0;
+}
 
 int PHYSICS_CheckForValidMove(Instance *instance, SVECTOR *startVec, SVECTOR *endVec, int segment)
 {
