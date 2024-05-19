@@ -325,7 +325,7 @@ int PHYSICS_CheckForValidMove(Instance *instance, SVECTOR *startVec, SVECTOR *en
     CInfo.oldPoint = startVec;
     CInfo.newPoint = endVec;
 
-    pTempMat = instance->matrix + segment;
+    pTempMat = &instance->matrix[segment];
 
     PHYSICS_GenericLineCheck(instance, pTempMat, pTempMat, &CInfo);
 
