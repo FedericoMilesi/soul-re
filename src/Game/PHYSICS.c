@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
+#include "Game/COLLIDE.h"
 
 void SetNoPtCollideInFamily(Instance *instance)
 {
@@ -33,7 +34,12 @@ void ResetNoPtCollideInFamily(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckLineInWorld);
+void PHYSICS_CheckLineInWorld(Instance *instance, _PCollideInfo *pcollideInfo)
+{
+    pcollideInfo->collideType = 63;
+
+    PHYSICS_CheckLineInWorldMask(instance, pcollideInfo);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckLineInWorldMask);
 

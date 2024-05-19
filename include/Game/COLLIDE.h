@@ -95,6 +95,30 @@ typedef struct _HBox {
     short refMaxZ;
 } _HBox;
 
+// size: 0x2C
+typedef struct _PCollideInfo {
+    // offset: 0000
+    short type;
+    // offset: 0002
+    short segment;
+    // offset: 0004
+    void *prim;
+    // offset: 0008
+    struct _Instance *inst;
+    // offset: 000C (8 bytes)
+    struct SVECTOR wNormal;
+    // offset: 0014 (8 bytes)
+    struct SVECTOR *newPoint;
+    // offset: 0018 (8 bytes)
+    struct SVECTOR *oldPoint;
+    // offset: 001C (8 bytes)
+    struct SVECTOR cldPoint;
+    // offset: 0024
+    long collideType;
+    // offset: 0028
+    struct _Instance *instance;
+} _PCollideInfo;
+
 typedef struct _CollideInfo CollideInfo;
 
 typedef struct _Triangle2D Triangle2D;
