@@ -188,7 +188,11 @@ void PhysicsMoveLocalZClamp(Instance *instance, long segment, long time, long cl
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsMove);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsSetVelFromZRot);
+void PhysicsSetVelFromZRot(Instance *instance, short angle, long magnitude)
+{
+    instance->xVel = (rcos(angle - 1024) * magnitude) >> 12;
+    instance->yVel = (rsin(angle - 1024) * magnitude) >> 12;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsSetVelFromRot);
 
