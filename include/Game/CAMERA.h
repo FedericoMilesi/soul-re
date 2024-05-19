@@ -56,12 +56,10 @@ typedef struct _CameraCore_Type {
     struct _Position nondebugPos;
     // offset: 00DC
     short pad6;
-} _CameraCore_Type;
+} CameraCore;
 
 extern int CameraCenterDelay;
 
 typedef struct Camera Camera;
-
-typedef struct _CameraCore_Type CameraCore;
 
 #endif

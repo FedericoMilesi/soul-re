@@ -36,14 +36,14 @@ void ResetNoPtCollideInFamily(Instance *instance)
     }
 }
 
-void PHYSICS_CheckLineInWorld(Instance *instance, _PCollideInfo *pcollideInfo)
+void PHYSICS_CheckLineInWorld(Instance *instance, PCollideInfo *pcollideInfo)
 {
     pcollideInfo->collideType = 63;
 
     PHYSICS_CheckLineInWorldMask(instance, pcollideInfo);
 }
 
-void PHYSICS_CheckLineInWorldMask(Instance *instance, _PCollideInfo *pcollideInfo)
+void PHYSICS_CheckLineInWorldMask(Instance *instance, PCollideInfo *pcollideInfo)
 {
     Level *level;
 

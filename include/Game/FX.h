@@ -39,7 +39,7 @@ typedef struct _FX_MATRIX {
     long flags;
     // offset: 000C (32 bytes)
     struct MATRIX lwTransform;
-} _FX_MATRIX;
+} FX_MATRIX;
 
 // size: 0x68
 typedef struct _FX_PRIM {
@@ -117,7 +117,7 @@ typedef struct _FX_PRIM {
             short zAccl;
         } phys;
     } duo;
-} _FX_PRIM;
+} FX_PRIM;
 
 // size: 0x6DA8
 typedef struct _FXTracker {
@@ -135,7 +135,7 @@ typedef struct _FXTracker {
     struct NodeType usedPrimListSprite;
     // offset: 6DA0 (8 bytes)
     struct NodeType freePrimList;
-} _FXTracker;
+} FXTracker;
 
 // size: 0x2C
 typedef struct _FXForceFieldEffect {
@@ -169,7 +169,7 @@ typedef struct _FXForceFieldEffect {
     short end_fade;
     // offset: 0028
     long color;
-} _FXForceFieldEffect;
+} FXForceFieldEffect;
 
 // size: 0xC
 typedef struct _PlaneConstants {
@@ -183,7 +183,7 @@ typedef struct _PlaneConstants {
     short flags;
     // offset: 0008
     long d;
-} _PlaneConstants;
+} PlaneConstants;
 
 // size: 0x4C
 typedef struct _FXParticle {
@@ -241,7 +241,7 @@ typedef struct _FXParticle {
     short startFadeValue;
     // offset: 004A
     short fadeStep;
-} _FXParticle;
+} FXParticle;
 
 // size: 0x6
 typedef struct _Face {
@@ -251,7 +251,7 @@ typedef struct _Face {
     unsigned short v1;
     // offset: 0004
     unsigned short v2;
-} _Face;
+} Face;
 
 // size: 0xC
 typedef struct _MFace {
@@ -263,7 +263,7 @@ typedef struct _MFace {
     unsigned char flags;
     // offset: 0008
     long color;
-} _MFace;
+} MFace;
 
 // size: 0x38
 typedef struct _Model {
@@ -297,7 +297,7 @@ typedef struct _Model {
     struct TextureMT3 *startTextures;
     // offset: 0034 (16 bytes)
     struct TextureMT3 *endTextures;
-} _Model;
+} Model;
 
 // size: 0x10
 typedef struct _FXGeneralEffect {
@@ -313,22 +313,6 @@ typedef struct _FXGeneralEffect {
     unsigned char type;
     // offset: 000E
     short lifeTime;
-} _FXGeneralEffect;
-
-typedef struct _PlaneConstants PlaneConstants;
-
-typedef struct _MFace MFace;
-
-typedef struct _Model Model;
-
-typedef struct _FX_PRIM FX_PRIM;
-
-typedef struct _FX_MATRIX FX_MATRIX;
-
-typedef struct _FXTracker FXTracker;
-
-typedef struct _FXGeneralEffect FXGeneralEffect;
-
-typedef struct _FXForceFieldEffect FXForceFieldEffect;
+} FXGeneralEffect;
 
 #endif

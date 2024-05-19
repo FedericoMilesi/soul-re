@@ -11,7 +11,7 @@ typedef struct _ColorType {
     unsigned char b;
     // offset: 0003
     unsigned char code;
-} _ColorType;
+} ColorType;
 
 // size: 0x10
 typedef struct _ButtonTexture {
@@ -27,8 +27,6 @@ typedef struct _ButtonTexture {
     struct _BlockVramEntry *vramBlock;
     // offset: 000C
     long xshift;
-} _ButtonTexture;
-
-typedef struct _ButtonTexture ButtonTexture;
+} ButtonTexture;
 
 #endif

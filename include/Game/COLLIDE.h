@@ -13,7 +13,7 @@ typedef struct _Normal {
     short z;
     // offset: 0006
     short pad;
-} _Normal;
+} Normal;
 
 // size: 0x30
 typedef struct _CollideInfo {
@@ -43,7 +43,7 @@ typedef struct _CollideInfo {
     struct _Position offset;
     // offset: 002E
     short bspID;
-} _CollideInfo;
+} CollideInfo;
 
 // size: 0xC
 typedef struct _Triangle2D {
@@ -59,7 +59,7 @@ typedef struct _Triangle2D {
     short x2;
     // offset: 000A
     short y2;
-} _Triangle2D;
+} Triangle2D;
 
 // size: 0x1C
 typedef struct _HBox {
@@ -93,7 +93,7 @@ typedef struct _HBox {
     short refMaxY;
     // offset: 001A
     short refMaxZ;
-} _HBox;
+} HBox;
 
 // size: 0x2C
 typedef struct _PCollideInfo {
@@ -117,13 +117,7 @@ typedef struct _PCollideInfo {
     long collideType;
     // offset: 0028
     struct _Instance *instance;
-} _PCollideInfo;
-
-typedef struct _CollideInfo CollideInfo;
-
-typedef struct _Triangle2D Triangle2D;
-
-typedef struct _HBox HBox;
+} PCollideInfo;
 
 int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SVector *v2, struct _SVector *point, struct _SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);

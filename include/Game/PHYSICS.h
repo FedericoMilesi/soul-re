@@ -15,4 +15,20 @@ typedef struct evPhysicsLinkedMoveData {
     struct _SVector rotDelta;
 } evPhysicsLinkedMoveData;
 
+// size: 0xC
+typedef struct evPhysicsGravityData {
+	// offset: 0000
+	short UpperOffset;
+	// offset: 0002
+	short LowerOffset;
+	// offset: 0004
+	short x;
+	// offset: 0006
+	short y;
+	// offset: 0008
+	short z;
+	// offset: 000A
+	short slipSlope;
+} evPhysicsGravityData;
+
 #endif
