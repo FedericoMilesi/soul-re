@@ -144,4 +144,38 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckDropOnSlope);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckSlideNormal);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_NormalToAxis);
+void PHYSOB_NormalToAxis(short *x, short *y)
+{
+    int x1;
+    int y1;
+
+    x1 = *x;
+    y1 = *y;
+
+    if (x1 >= 1025)
+    {
+        *x = 1;
+    }
+    else if (x1 < -1024)
+    {
+        *x = -1;
+    }
+    else
+    {
+        *x = 0;
+    }
+
+    if (y1 >= 1025)
+    {
+        *y = 1;
+        return;
+    }
+
+    if (y1 < -1024)
+    {
+        *y = -1;
+        return;
+    }
+
+    *y = 0;
+}
