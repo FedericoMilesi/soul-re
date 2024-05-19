@@ -20,7 +20,28 @@ void PIPE3D_AspectAdjustMatrix(MATRIX *matrix)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_CalculateWCTransform);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_InvertTransform);
+void PIPE3D_InvertTransform(MATRIX *target, MATRIX *source)
+{
+    VECTOR sourceTrans;
+    MATRIX normMat;
+
+    if (((short *)&source->t)[-1] == 1)
+    {
+        PIPE3D_NormalizeMatrix(&normMat, source);
+
+        TransposeMatrix(&normMat, target);
+    }
+    else
+    {
+        TransposeMatrix(source, target);
+    }
+
+    sourceTrans.vx = -source->t[0];
+    sourceTrans.vy = -source->t[1];
+    sourceTrans.vz = -source->t[2];
+
+    ApplyMatrixLV(target, &sourceTrans, (VECTOR *)target->t);
+}
 
 long PIPE3D_MatrixColumnLength(MATRIX *transform, long column)
 {

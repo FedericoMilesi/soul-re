@@ -19,6 +19,18 @@ typedef struct MATRIX {
     long t[3];
 } MATRIX;
 
+// size: 0x10
+typedef struct VECTOR {
+    // offset: 0000
+    long vx;
+    // offset: 0004
+    long vy;
+    // offset: 0008
+    long vz;
+    // offset: 000C
+    long pad;
+} VECTOR;
+
 // size: 0x8
 typedef struct SVECTOR {
     // offset: 0000
