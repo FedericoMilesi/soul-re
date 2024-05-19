@@ -312,7 +312,22 @@ void PHYSICS_StopIfCloseToTarget(Instance *instance, int x, int y, int z)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckForTerrainCollide);
+int PHYSICS_CheckForTerrainCollide(Instance *instance, SVECTOR *startVec, SVECTOR *endVec, int segment)
+{
+    PCollideInfo CInfo;
+    MATRIX *pTempMat;
+
+    CInfo.oldPoint = startVec;
+    CInfo.newPoint = endVec;
+
+    pTempMat = &instance->matrix[segment];
+
+    CInfo.collideType = 1;
+
+    PHYSICS_GenericLineCheckMask(instance, pTempMat, pTempMat, &CInfo);
+
+    return CInfo.type == 3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckForObjectCollide);
 
