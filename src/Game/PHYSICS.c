@@ -213,7 +213,57 @@ void PhysicsSetVelFromRot(Instance *instance, Rotation *rot, long magnitude)
     instance->zVel = newPt.vz;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_SetVAndAFromRot);
+void PHYSICS_SetVAndAFromRot(Instance *instance, Rotation *rot, long v, long a)
+{
+    SVECTOR flatPt;
+    MATRIX mat;
+
+    if ((v != 0) || (a != 0))
+    {
+        RotMatrix((SVECTOR *)&instance->rotation, &mat);
+
+        flatPt.vx = 0;
+        flatPt.vz = 0;
+    }
+
+    if (v != 0)
+    {
+        SVECTOR newPt;
+
+        flatPt.vy = (short)-v;
+
+        ApplyMatrixSV(&mat, &flatPt, &newPt);
+
+        instance->xVel = newPt.vx;
+        instance->yVel = newPt.vy;
+        instance->zVel = newPt.vz;
+    }
+    else
+    {
+        instance->xVel = 0;
+        instance->yVel = 0;
+        instance->zVel = 0;
+    }
+
+    if (a != 0)
+    {
+        SVECTOR newPt;
+
+        flatPt.vy = (short)-a;
+
+        ApplyMatrixSV(&mat, &flatPt, &newPt);
+
+        instance->xAccl = newPt.vx;
+        instance->yAccl = newPt.vy;
+        instance->zAccl = newPt.vz;
+    }
+    else
+    {
+        instance->xAccl = 0;
+        instance->yAccl = 0;
+        instance->zAccl = 0;
+    }
+}
 
 long PHYSICS_FindAFromDAndT(long d, long t)
 {
