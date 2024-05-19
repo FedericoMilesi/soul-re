@@ -266,7 +266,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckForTerrainCollide);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckForObjectCollide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckForValidMove);
+int PHYSICS_CheckForValidMove(Instance *instance, SVECTOR *startVec, SVECTOR *endVec, int segment)
+{
+    PCollideInfo CInfo;
+    MATRIX *pTempMat;
+    int rc;
+
+    CInfo.oldPoint = startVec;
+    CInfo.newPoint = endVec;
+
+    pTempMat = instance->matrix + segment;
+
+    PHYSICS_GenericLineCheck(instance, pTempMat, pTempMat, &CInfo);
+
+    rc = PHYSICS_CheckFaceStick(&CInfo) != 0;
+
+    if ((CInfo.type == 2) || (CInfo.type == 3) || (CInfo.type == 5))
+    {
+        rc += 2;
+    }
+
+    return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckFaceStick);
 
