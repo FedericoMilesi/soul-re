@@ -14,7 +14,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/REAVER", CollideReaverProjectile);
 
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverQuery);
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverImbue);
+void SoulReaverImbue(Instance *instance, int number)
+{
+    long color;
+    ReaverTuneData *tuneData;
+
+    tuneData = (ReaverTuneData *)instance->data;
+
+    color = ((long *)tuneData)[number - 1];
+
+    FX_DoBlastRing(instance, (SVector *)&instance->position, instance->matrix, 0, 320, 0, 240, 0, 0, -65536, 0, 0, 160, 320, color, 0, 0, 20, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverCharge);
 
