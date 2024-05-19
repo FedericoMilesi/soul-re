@@ -143,7 +143,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsDefaultCheckSwimResponse);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsForceSetWater);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckLOS);
+int PhysicsCheckLOS(Instance *instance, int Data, int Mode)
+{
+    PCollideInfo CInfo;
+
+    CInfo.oldPoint = (SVECTOR *)(Data + 8);
+    CInfo.newPoint = (SVECTOR *)Data;
+
+    PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+    return CInfo.type == 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropHeight);
 
