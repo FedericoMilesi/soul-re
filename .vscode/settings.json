@@ -23,6 +23,7 @@
         "camera.h": "c",
         "gameloop.h": "c",
         "main.h": "c",
-        "common.h": "c"
+        "common.h": "c",
+        "types.h": "c"
     }
 }
