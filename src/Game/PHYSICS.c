@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/INSTANCE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", SetNoPtCollideInFamily);
 
@@ -76,7 +77,26 @@ long PHYSICS_FindVFromAAndD(long a, long d)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_StopIfCloseToTarget);
+void PHYSICS_StopIfCloseToTarget(Instance *instance, int x, int y, int z)
+{
+    if ((instance->xAccl < 0) && (instance->xVel <= x) || (instance->xAccl > 0) && (instance->xVel >= x))
+    {
+        instance->xAccl = 0;
+        instance->xVel = x;
+    }
+
+    if ((instance->yAccl < 0) && (instance->yVel <= y) || (instance->yAccl > 0) && (instance->yVel >= y))
+    {
+        instance->yAccl = 0;
+        instance->yVel = y;
+    }
+
+    if ((instance->zAccl < 0) && (instance->zVel <= z) || (instance->zAccl > 0) && (instance->zVel >= z))
+    {
+        instance->zAccl = 0;
+        instance->zVel = z;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckForTerrainCollide);
 
