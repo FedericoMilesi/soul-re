@@ -2,7 +2,7 @@
 #define _MEMPACK_H_
 
 // size: 0x8
-struct MemHeader {
+typedef struct MemHeader {
     // offset: 0000
     unsigned short magicNumber;
     // offset: 0002
@@ -11,10 +11,10 @@ struct MemHeader {
     unsigned char memType;
     // offset: 0004
     unsigned long memSize;
-};
+} MemHeader;
 
 // size: 0x14
-struct NewMemTracker {
+typedef struct NewMemTracker {
     // offset: 0000 (8 bytes)
     struct MemHeader *rootNode;
     // offset: 0004
@@ -25,10 +25,6 @@ struct NewMemTracker {
     char *lastMemoryAddress;
     // offset: 0010
     long doingGarbageCollection;
-};
-
-typedef struct MemHeader MemHeader;
-
-typedef struct NewMemTracker NewMemTracker;
+} NewMemTracker;
 
 #endif

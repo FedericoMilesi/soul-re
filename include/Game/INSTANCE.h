@@ -11,7 +11,7 @@
 #include "Game/G2/ANIMG2.h"
 
 // size: 0x29C
-struct _Instance {
+typedef struct _Instance {
     // offset: 0000 (8 bytes)
     struct NodeType node;
     // offset: 0008 (668 bytes)
@@ -220,20 +220,18 @@ struct _Instance {
     long light_color;
     // offset: 0298 (4 bytes)
     struct CVECTOR *perVertexColor;
-};
+} _Instance;
 
 // size: 0x4
-struct INICommand {
+typedef struct INICommand {
     // offset: 0000
     short command;
     // offset: 0002
     short numParameters;
     // offset: 0004
     long parameter[0];
-};
+} INICommand;
 
 typedef struct _Instance Instance;
-
-typedef struct INICommand INICommand;
 
 #endif

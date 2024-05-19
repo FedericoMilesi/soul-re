@@ -5,7 +5,7 @@
 #include "Game/LIST.h"
 
 // size: 0x18
-struct PointLight {
+typedef struct PointLight {
     // offset: 0000 (8 bytes)
     struct NodeType node;
     // offset: 0008
@@ -22,10 +22,10 @@ struct PointLight {
     short radius;
     // offset: 0014
     long radiusSquared;
-};
+} PointLight;
 
 // size: 0x28
-struct SpotLight {
+typedef struct SpotLight {
     // offset: 0000 (8 bytes)
     struct NodeType node;
     // offset: 0008
@@ -50,10 +50,10 @@ struct SpotLight {
     short cosFalloffAngle;
     // offset: 0026
     short attenuationScale;
-};
+} SpotLight;
 
 // size: 0x47C
-struct LightInfo {
+typedef struct LightInfo {
     // offset: 0000
     long numPointLights;
     // offset: 0004 (768 bytes)
@@ -76,10 +76,10 @@ struct LightInfo {
     struct NodeType activeSpotLightList;
     // offset: 0478
     long numSavedColors;
-};
+} LightInfo;
 
 // size: 0x14
-struct LightInstance {
+typedef struct LightInstance {
     // offset: 0000
     struct _Instance *lightInstance;
     // offset: 0004
@@ -94,8 +94,6 @@ struct LightInstance {
     unsigned char segment;
     // offset: 0013
     unsigned char flags;
-};
-
-typedef struct LightInfo LightInfo;
+} LightInstance;
 
 #endif

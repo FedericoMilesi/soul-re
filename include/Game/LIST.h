@@ -2,13 +2,11 @@
 #define _LIST_H_
 
 // size: 0x8
-struct NodeType {
+typedef struct NodeType {
     // offset: 0000 (8 bytes)
     struct NodeType *prev;
     // offset: 0004 (8 bytes)
     struct NodeType *next;
-};
-
-typedef struct NodeType NodeType;
+} NodeType;
 
 #endif
