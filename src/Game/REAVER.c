@@ -12,7 +12,39 @@ INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverProcess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", CollideReaverProjectile);
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverQuery);
+unsigned long SoulReaverQuery(Instance *instance, unsigned long query)
+{
+    ReaverData *reaverData;
+    unsigned long retval;
+
+    switch (query)
+    {
+    case 1:
+        return 0x20000;
+    case 4:
+        return 0x1000;
+    case 40:
+        reaverData = (ReaverData *)instance->extraData;
+
+        if ((unsigned)reaverData->ReaverOn != 0)
+        {
+            if (reaverData->ReaverTargetScale != 0)
+            {
+                retval = 3;
+            }
+            else
+            {
+                retval = 1;
+            }
+
+            return retval;
+        }
+    default:
+        retval = 0;
+    }
+
+    return retval;
+}
 
 void SoulReaverImbue(Instance *instance, int number)
 {
