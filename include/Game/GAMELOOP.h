@@ -18,13 +18,13 @@ typedef struct _GameTrackerASMData_Type {
     short MorphType;
     // offset: 000C (20 bytes)
     struct LightInstance lightInstances[1];
-} _GameTrackerASMData_Type;
+} GameTrackerASMData;
 
 // size: 0x20
 typedef struct _GameData_Type {
     // offset: 0000 (32 bytes)
     struct _GameTrackerASMData_Type asmData;
-} _GameData_Type;
+} GameData;
 
 // size: 0x270
 typedef struct GameTracker {

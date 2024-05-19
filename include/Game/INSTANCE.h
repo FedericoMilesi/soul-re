@@ -220,7 +220,7 @@ typedef struct _Instance {
     long light_color;
     // offset: 0298 (4 bytes)
     struct CVECTOR *perVertexColor;
-} _Instance;
+} Instance;
 
 // size: 0x4
 typedef struct INICommand {
@@ -231,7 +231,5 @@ typedef struct INICommand {
     // offset: 0004
     long parameter[0];
 } INICommand;
-
-typedef struct _Instance Instance;
 
 #endif

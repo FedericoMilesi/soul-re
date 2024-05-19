@@ -32,8 +32,6 @@ typedef struct _BlockVramEntry {
         // offset: 0000 (16 bytes)
         struct _ButtonTexture *button;
     } udata;
-} _BlockVramEntry;
-
-typedef struct _BlockVramEntry BlockVramEntry;
+} BlockVramEntry;
 
 #endif

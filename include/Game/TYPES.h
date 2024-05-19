@@ -9,7 +9,7 @@ typedef struct _Position {
     short y;
     // offset: 0004
     short z;
-} _Position;
+} Position;
 
 // size: 0x20
 typedef struct MATRIX {
@@ -41,7 +41,7 @@ typedef struct _SVector {
     short z;
     // offset: 0006
     short pad;
-} _SVector;
+} SVector;
 
 // size: 0x4
 typedef struct DVECTOR {
@@ -61,7 +61,7 @@ typedef struct _Rotation {
     short z;
     // offset: 0006
     short pad;
-} _Rotation;
+} Rotation;
 
 // size: 0x4
 typedef struct CVECTOR {
@@ -74,9 +74,5 @@ typedef struct CVECTOR {
     // offset: 0003
     unsigned char cd;
 } CVECTOR;
-
-typedef struct _Position Position;
-
-typedef struct _SVector SVector;
 
 #endif

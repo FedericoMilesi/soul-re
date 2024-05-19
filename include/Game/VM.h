@@ -41,10 +41,8 @@ typedef struct _VMObject {
     struct _VMInterpolated *vminterpolatedList;
     // offset: 0038
     char *name;
-} _VMObject;
+} VMObject;
 
 typedef struct _VMOffsetTable VMOffsetTable;
-
-typedef struct _VMObject VMObject;
 
 #endif

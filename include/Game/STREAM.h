@@ -85,9 +85,7 @@ typedef struct _Terrain {
     short *morphNormalIdx;
     // offset: 0050 (904 bytes)
     struct _MultiSignal *signals;
-} _Terrain;
-
-typedef struct _Terrain Terrain;
+} Terrain;
 
 typedef struct Level Level;
 

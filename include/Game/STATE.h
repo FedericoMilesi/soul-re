@@ -7,7 +7,7 @@ typedef struct __Event {
     int ID;
     // offset: 0004
     int Data;
-} __Event;
+} Message;
 
 // size: 0x88
 typedef struct __MessageQueue {
@@ -17,10 +17,6 @@ typedef struct __MessageQueue {
     int Tail;
     // offset: 0008 (128 bytes)
     struct __Event Queue[16];
-} __MessageQueue;
-
-typedef struct __Event Message;
-
-typedef struct __MessageQueue MessageQueue;
+} MessageQueue;
 
 #endif
