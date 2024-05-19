@@ -2,6 +2,21 @@
 #define _COLIDE_H_
 
 #include "Game/TYPES.h"
+#include "Game/FX.h"
+
+// size: 0xC
+typedef struct _TFace {
+    // offset: 0000 (6 bytes)
+    struct _Face face;
+    // offset: 0006
+    unsigned char attr;
+    // offset: 0007
+    char sortPush;
+    // offset: 0008
+    unsigned short normal;
+    // offset: 000A
+    unsigned short textoff;
+} TFace;
 
 // size: 0x8
 typedef struct _Normal {

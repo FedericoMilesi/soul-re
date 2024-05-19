@@ -92,7 +92,48 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsDefaultEdgeGrabResponse);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckSliding);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsUpdateTface);
+int PhysicsUpdateTface(Instance *instance, int Data)
+{
+    PCollideInfo CInfo;
+    SVECTOR Old;
+    SVECTOR New;
+
+    CInfo.oldPoint = &Old;
+    CInfo.newPoint = &New;
+
+    Old.vx = New.vx = instance->position.x;
+    Old.vy = New.vy = instance->position.y;
+    Old.vz = New.vz = instance->position.z;
+
+    Old.vz = New.vz + ((short *)Data)[0];
+
+    New.vz -= ((short *)Data)[1];
+
+    PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+    if (CInfo.type == 3)
+    {
+        if (instance->tface != CInfo.prim)
+        {
+            instance->oldTFace = instance->tface;
+            instance->tface = (TFace *)CInfo.prim;
+            instance->tfaceLevel = CInfo.inst;
+            instance->bspTree = CInfo.segment;
+        }
+
+        return 1;
+    }
+
+    if (instance->tface != NULL)
+    {
+        instance->oldTFace = instance->tface;
+        instance->tface = NULL;
+        instance->tfaceLevel = NULL;
+        instance->bspTree = 0;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckBlockers);
 
