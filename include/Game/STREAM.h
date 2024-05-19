@@ -4,7 +4,7 @@
 #include "Game/TYPES.h"
 
 // size: 0x4C
-struct Intro {
+typedef struct Intro {
     // offset: 0000 (16 bytes)
     char name[16];
     // offset: 0010
@@ -37,10 +37,10 @@ struct Intro {
     struct _Position spectralPosition;
     // offset: 004A
     short spad;
-};
+} Intro;
 
 // size: 0x54
-struct _Terrain {
+typedef struct _Terrain {
     // offset: 0000
     short UnitChangeFlags;
     // offset: 0002
@@ -85,9 +85,7 @@ struct _Terrain {
     short *morphNormalIdx;
     // offset: 0050 (904 bytes)
     struct _MultiSignal *signals;
-};
-
-typedef struct Intro Intro;
+} _Terrain;
 
 typedef struct _Terrain Terrain;
 

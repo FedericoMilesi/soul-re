@@ -4,7 +4,7 @@
 #include "TYPES.h"
 
 // size: 0x3C
-struct _VMObject {
+typedef struct _VMObject {
     // offset: 0000
     unsigned short flags;
     // offset: 0002
@@ -41,7 +41,7 @@ struct _VMObject {
     struct _VMInterpolated *vminterpolatedList;
     // offset: 0038
     char *name;
-};
+} _VMObject;
 
 typedef struct _VMOffsetTable VMOffsetTable;
 

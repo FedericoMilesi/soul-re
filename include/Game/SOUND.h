@@ -2,17 +2,17 @@
 #define _SOUND_H_
 
 // size: 0x3
-struct SoundInstance {
+typedef struct SoundInstance {
     // offset: 0000
     unsigned char channel;
     // offset: 0001
     unsigned char state;
     // offset: 0002
     unsigned char delay;
-};
+} SoundInstance;
 
 // size: 0x14
-struct gSoundData {
+typedef struct gSoundData {
     // offset: 0000
     unsigned long gMasterVol;
     // offset: 0004
@@ -29,6 +29,6 @@ struct gSoundData {
     char gVoiceOn;
     // offset: 0013
     char soundsLoaded;
-};
+} gSoundData;
 
 #endif

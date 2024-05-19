@@ -2,7 +2,7 @@
 #define _VRAM_H_
 
 // size: 0x1C
-struct _BlockVramEntry {
+typedef struct _BlockVramEntry {
     // offset: 0000 (28 bytes)
     struct _BlockVramEntry *next;
     // offset: 0004
@@ -32,7 +32,7 @@ struct _BlockVramEntry {
         // offset: 0000 (16 bytes)
         struct _ButtonTexture *button;
     } udata;
-};
+} _BlockVramEntry;
 
 typedef struct _BlockVramEntry BlockVramEntry;
 
