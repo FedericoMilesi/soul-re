@@ -161,7 +161,30 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropOff);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsFollowWall);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsMoveLocalZClamp);
+void PhysicsMoveLocalZClamp(Instance *instance, long segment, long time, long clamp)
+{
+    Position pos;
+    SVECTOR v;
+    SVECTOR dv;
+
+    memset(&pos, 0, sizeof(Position));
+
+    PhysicsMove(instance, &pos, time);
+
+    v.vx = pos.x;
+    v.vy = -pos.y;
+    v.vz = pos.z;
+
+    ApplyMatrixSV(&instance->matrix[segment], &v, &dv);
+
+    instance->position.x += dv.vx;
+    instance->position.y += dv.vy;
+
+    if (clamp == 0)
+    {
+        instance->position.z += dv.vz;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsMove);
 
