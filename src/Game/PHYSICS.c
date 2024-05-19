@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
 #include "Game/COLLIDE.h"
+#include "Game/STREAM.h"
 
 void SetNoPtCollideInFamily(Instance *instance)
 {
@@ -41,7 +42,28 @@ void PHYSICS_CheckLineInWorld(Instance *instance, _PCollideInfo *pcollideInfo)
     PHYSICS_CheckLineInWorldMask(instance, pcollideInfo);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckLineInWorldMask);
+void PHYSICS_CheckLineInWorldMask(Instance *instance, _PCollideInfo *pcollideInfo)
+{
+    Level *level;
+
+    level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+    pcollideInfo->inst = NULL;
+    pcollideInfo->instance = instance;
+
+    SetNoPtCollideInFamily(instance);
+
+    if (level != NULL)
+    {
+        COLLIDE_PointAndWorld(pcollideInfo, level);
+    }
+    else
+    {
+        pcollideInfo->type = 0;
+    }
+
+    ResetNoPtCollideInFamily(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckLinkedMove);
 
