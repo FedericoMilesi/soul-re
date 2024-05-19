@@ -125,7 +125,25 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteGravitate);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteFollow);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_Normalize);
+void PHYSOB_Normalize(SVector *v)
+{
+    long len;
+
+    len = MATH3D_SquareLength(v->x, v->y, v->z);
+
+    if (len != 0)
+    {
+        len = MATH3D_FastSqrt0(len);
+    }
+    else
+    {
+        len = 1;
+    }
+
+    v->x = (short)((v->x << 12) / len);
+    v->y = (short)((v->y << 12) / len);
+    v->z = (short)((v->z << 12) / len);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_MoveTowardsAlign);
 
