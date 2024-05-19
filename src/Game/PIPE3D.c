@@ -48,7 +48,51 @@ long PIPE3D_MatrixColumnLength(MATRIX *transform, long column)
     return MATH3D_FastSqrt0(MATH3D_SquareLength(transform->m[0][column], transform->m[1][column], transform->m[2][column]));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_NormalizeMatrix);
+void PIPE3D_NormalizeMatrix(MATRIX *target, MATRIX *source)
+{
+    VECTOR scalevec;
+    long scale;
+    typedef struct
+    {
+        long m[3];
+    } tmm;
+    typedef struct
+    {
+        long m[5];
+    } cmm;
+
+    scale = PIPE3D_MatrixColumnLength(source, 0);
+
+    if (scale != 0)
+    {
+        scale = 16777216 / scale;
+    }
+
+    scalevec.vx = scale;
+
+    scale = PIPE3D_MatrixColumnLength(source, 1);
+
+    if (scale != 0)
+    {
+        scale = 16777216 / scale;
+    }
+
+    scalevec.vy = scale;
+
+    scale = PIPE3D_MatrixColumnLength(source, 2);
+
+    if (scale != 0)
+    {
+        scale = 16777216 / scale;
+    }
+
+    scalevec.vz = scale;
+
+    *(tmm *)(target->t) = *(tmm *)(source->t);
+    *(cmm *)(target->m) = *(cmm *)(source->m);
+
+    ScaleMatrix(target, &scalevec);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_TransformVerticesToWorld);
 
