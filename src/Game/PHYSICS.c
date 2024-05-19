@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/PHYSICS.h"
 #include "Game/INSTANCE.h"
 #include "Game/COLLIDE.h"
 #include "Game/STREAM.h"
@@ -67,7 +68,19 @@ void PHYSICS_CheckLineInWorldMask(Instance *instance, _PCollideInfo *pcollideInf
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckLinkedMove);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsDefaultLinkedMoveResponse);
+void PhysicsDefaultLinkedMoveResponse(Instance *instance, evPhysicsLinkedMoveData *Data, int updateTransforms)
+{
+    instance->position.x += Data->posDelta.x;
+    instance->position.y += Data->posDelta.y;
+    instance->position.z += Data->posDelta.z;
+
+    if (updateTransforms != 0)
+    {
+        COLLIDE_UpdateAllTransforms(instance, (SVECTOR *)&Data->posDelta);
+    }
+
+    instance->rotation.z += Data->rotDelta.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckGravity);
 
