@@ -272,7 +272,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckFaceStick);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckDontGrabEdge);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_GenericLineCheckSetup);
+void PHYSICS_GenericLineCheckSetup(short x, short y, short z, SVECTOR *inVec)
+{
+    inVec->vx = x;
+    inVec->vy = y;
+    inVec->vz = z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_GenericLineCheck);
 
