@@ -22,7 +22,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_CalculateWCTransform);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_InvertTransform);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_MatrixColumnLength);
+long PIPE3D_MatrixColumnLength(MATRIX *transform, long column)
+{
+    return MATH3D_FastSqrt0(MATH3D_SquareLength(transform->m[0][column], transform->m[1][column], transform->m[2][column]));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_NormalizeMatrix);
 
