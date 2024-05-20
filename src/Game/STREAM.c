@@ -1,8 +1,18 @@
 #include "common.h"
+#include "Game/VRAM.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FillOutFileNames);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_AbortAreaLoad);
+void STREAM_AbortAreaLoad(char *baseAreaName)
+{
+    char vramName[80];
+
+    STREAM_FillOutFileNames(baseAreaName, NULL, vramName, NULL);
+
+    LOAD_AbortDirectoryChange(baseAreaName);
+
+    LOAD_AbortFileLoad(vramName, (void *)VRAM_LoadReturn);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_Init);
 

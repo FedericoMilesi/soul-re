@@ -34,4 +34,6 @@ typedef struct _BlockVramEntry {
     } udata;
 } BlockVramEntry;
 
+void VRAM_LoadReturn(void *dataPtr, void *data1, void *data2);
+
 #endif
