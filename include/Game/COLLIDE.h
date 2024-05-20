@@ -174,6 +174,36 @@ typedef struct BSPTree {
     struct _Instance *instanceSpline;
 } BSPTree;
 
+// size: 0x8
+typedef struct _HPrim {
+    // offset: 0000
+    unsigned char hpFlags;
+    // offset: 0001
+    unsigned char withFlags;
+    // offset: 0002
+    unsigned char type;
+    // offset: 0003
+    unsigned char segment;
+    // offset: 0004 (4 bytes)
+    // size: 0x4
+    union {
+        // offset: 0000 (20 bytes)
+        struct _HSphere *hsphere;
+        // offset: 0000 (28 bytes)
+        struct _HBox *hbox;
+        // offset: 0000 (12 bytes)
+        struct _HFace *hface;
+    } data;
+} HPrim;
+
+// size: 0x8
+typedef struct _HModel {
+    // offset: 0000 (8 bytes)
+    struct _HPrim *hPrimList;
+    // offset: 0004
+    long numHPrims;
+} HModel;
+
 int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SVector *v2, struct _SVector *point, struct _SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);
 void COLLIDE_SetBSPTreeFlag(struct _CollideInfo *collideInfo, short flag);

@@ -389,7 +389,42 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceListTerrain);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SegmentCollisionOn);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SegmentCollisionOff);
+void COLLIDE_SegmentCollisionOff(Instance *instance, int segment)
+{
+    int i;
+    int enabled;
+    HModel *hmodel;
+    HPrim *hprim;
+
+    if (instance->hModelList != NULL)
+    {
+        hmodel = &instance->hModelList[instance->currentModel];
+
+        hprim = hmodel->hPrimList;
+
+        enabled = 0;
+
+        for (i = hmodel->numHPrims; i != 0; i--)
+        {
+            if (hprim->segment == segment)
+            {
+                hprim->hpFlags &= ~0x1;
+            }
+
+            if ((enabled == 0) && ((hprim->hpFlags & 0x1)))
+            {
+                enabled = 1;
+            }
+
+            hprim++;
+        }
+
+        if (enabled == 0)
+        {
+            instance->flags2 |= 0x40000;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_FindCollisionFaceNormal);
 
