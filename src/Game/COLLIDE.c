@@ -387,7 +387,31 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceListWithSignals);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceListTerrain);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SegmentCollisionOn);
+void COLLIDE_SegmentCollisionOn(Instance *instance, int segment)
+{
+    int i;
+    HModel *hmodel;
+    HPrim *hprim;
+
+    if (instance->hModelList != NULL)
+    {
+        hmodel = &instance->hModelList[instance->currentModel];
+
+        hprim = hmodel->hPrimList;
+
+        for (i = hmodel->numHPrims; i != 0; i--)
+        {
+            if (hprim->segment == segment)
+            {
+                hprim->hpFlags |= 0x1;
+            }
+
+            hprim++;
+        }
+
+        instance->flags2 &= ~0x40000;
+    }
+}
 
 void COLLIDE_SegmentCollisionOff(Instance *instance, int segment)
 {
