@@ -106,7 +106,47 @@ FX_PRIM *FX_GetPrim(FXTracker *fxTracker)
     return fxPrim;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetParticle);
+FXParticle *FX_GetParticle(Instance *instance, short startSegment)
+{
+    FXParticle *particle;
+
+    particle = (FXParticle *)MEMPACK_Malloc(sizeof(FXParticle), 13);
+
+    if (particle != NULL)
+    {
+        particle->effectType = 1;
+
+        particle->continue_process = FX_ContinueParticle;
+
+        particle->type = 0;
+
+        particle->instance = instance;
+
+        particle->startSegment = (char)startSegment;
+
+        particle->texture = NULL;
+
+        particle->fxprim_process = NULL;
+        particle->fxprim_modify_process = NULL;
+
+        particle->startScale = 4096;
+        particle->scaleSpeed = 0;
+
+        particle->offset.z = 0;
+        particle->offset.y = 0;
+        particle->offset.x = 0;
+
+        particle->acceleration.z = 0;
+        particle->acceleration.y = 0;
+        particle->acceleration.x = 0;
+
+        particle->flag_bits = 0;
+
+        particle->z_undulate = 0;
+    }
+
+    return particle;
+}
 
 void FX_AniTexSetup(FX_PRIM *fxPrim, MFace *mface, Model *model, FXTracker *fxTracker)
 {
