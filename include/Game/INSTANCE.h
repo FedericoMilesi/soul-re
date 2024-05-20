@@ -232,6 +232,18 @@ typedef struct INICommand {
     long parameter[0];
 } INICommand;
 
+// size: 0x10C
+typedef struct _InstanceList {
+    // offset: 0000
+    long numInstances;
+    // offset: 0004 (668 bytes)
+    struct _Instance *first;
+    // offset: 0008 (40092 bytes)
+    struct _InstancePool *pool;
+    // offset: 000C (256 bytes)
+    struct NodeType group[32];
+} InstanceList;
+
 struct _Instance *INSTANCE_IntroduceInstance(struct Intro *intro, short streamUnitID);
 
 #endif
