@@ -126,7 +126,46 @@ void INSTANCE_InsertInstanceGroup(InstanceList *list, Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ReallyRemoveInstance);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_CleanUpInstanceList);
+void INSTANCE_CleanUpInstanceList(InstanceList *list, long reset)
+{
+    Instance *instance;
+    Instance *next;
+
+    instance = list->first;
+
+    while (instance != NULL)
+    {
+        next = instance->next;
+
+        if (!(instance->flags & 0x400))
+        {
+            if ((instance->flags & 0x20))
+            {
+                instance->flags |= 0x20;
+            }
+        }
+        else if ((instance->flags & 0x20))
+        {
+            instance->flags &= ~0x20;
+        }
+
+        instance = next;
+    }
+
+    instance = list->first;
+
+    while (instance != NULL)
+    {
+        next = instance->next;
+
+        if ((instance->flags & 0x20))
+        {
+            INSTANCE_ReallyRemoveInstance(list, instance, reset);
+        }
+
+        instance = next;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Introduced);
 
