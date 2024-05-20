@@ -81,7 +81,41 @@ void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool)
     pool->nextInstanceID = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_NewInstance);
+Instance *INSTANCE_NewInstance(InstanceList *list)
+{
+    Instance *temp;
+    Instance *instance;
+
+    if (list->pool->numFreeInstances != 0)
+    {
+        list->pool->numFreeInstances--;
+
+        instance = list->pool->first_free;
+
+        list->pool->first_free = instance->next;
+
+        temp = list->first;
+
+        list->first = instance;
+
+        instance->next = temp;
+
+        if (instance->next != NULL)
+        {
+            temp->prev = instance;
+        }
+
+        instance->prev = NULL;
+
+        instance->instanceID = list->pool->nextInstanceID++;
+
+        list->numInstances++;
+
+        return instance;
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_InstanceGroupNumber);
 
