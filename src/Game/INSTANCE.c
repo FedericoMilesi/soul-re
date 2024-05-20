@@ -293,7 +293,24 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_UpdateFamilyStreamUnitID)
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ReallyRemoveAllChildren);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_GetChildLinkedToSegment);
+Instance *INSTANCE_GetChildLinkedToSegment(Instance *instance, int segment)
+{
+    Instance *child;
+
+    child = instance->LinkChild;
+
+    while (child != NULL)
+    {
+        if (child->ParentLinkNode == segment)
+        {
+            break;
+        }
+
+        child = child->LinkSibling;
+    }
+
+    return child;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Linked);
 
