@@ -383,7 +383,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceTerrainSignal);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_CameraWithStreamSignals);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceListWithSignals);
+void COLLIDE_InstanceListWithSignals(InstanceList *instanceList)
+{
+    Instance *instance;
+    Level *level;
+
+    instance = (Instance *)instanceList->first;
+
+    while (instance != NULL)
+    {
+        if (!(instance->flags2 & 0x24000000))
+        {
+            level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+            if (level != NULL)
+            {
+                COLLIDE_InstanceTerrainSignal(instance, level);
+            }
+        }
+
+        instance = instance->next;
+    }
+}
 
 void COLLIDE_InstanceListTerrain(InstanceList *instanceList)
 {
