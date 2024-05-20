@@ -183,7 +183,7 @@ void SoulReaverPost(Instance *instance, unsigned long message, unsigned long dat
 
         {
             ReaverData *reaverData;
-            struct evObjectBirthProjectileData *pData;
+            evObjectBirthProjectileData *pData;
 
             reaverData = (ReaverData *)instance->extraData;
 
@@ -193,11 +193,11 @@ void SoulReaverPost(Instance *instance, unsigned long message, unsigned long dat
             {
                 pData->birthInstance->collideFunc = CollideReaverProjectile;
 
-                SET_SVEC((struct _SVector *)&pData->birthInstance->position, (struct _Position *)&startPos);
+                SET_SVEC((SVector *)&pData->birthInstance->position, (Position *)&startPos);
 
                 INSTANCE_Post(pData->birthInstance, 0x800010, data);
 
-                SET_SVEC((struct _SVector *)&pData->birthInstance->position, (struct _Position *)&startPos);
+                SET_SVEC((SVector *)&pData->birthInstance->position, (Position *)&startPos);
             }
         }
         break;
