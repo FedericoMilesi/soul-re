@@ -1,10 +1,44 @@
 #include "common.h"
 #include "Game/REAVER.h"
 #include "Game/INSTANCE.h"
+#include "Game/GAMELOOP.h"
 
 EXTERN STATIC short FireReaverFlag;
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverInit);
+void SoulReaverInit(Instance *instance, GameTracker *gameTracker)
+{
+    ReaverData *data;
+
+    if ((instance->flags & 0x20000))
+    {
+        data = (ReaverData *)instance->extraData;
+
+        MEMPACK_Free((char *)data);
+    }
+    else
+    {
+        data = (ReaverData *)MEMPACK_Malloc(sizeof(ReaverData), 30);
+
+        instance->extraData = (void *)data;
+
+        FireReaverFlag = 0;
+
+        data->CurrentReaver = 2;
+
+        data->ReaverOn = 1;
+        data->ReaverChargeTime = 0;
+        data->ReaverShockAmount = 0;
+        data->ReaverPickedUp = 0;
+        data->ReaverSize = 4096;
+        data->ReaverDeg = 0;
+        data->ReaverScale = 4096;
+        data->ReaverTargetScale = 4096;
+
+        COLLIDE_SegmentCollisionOff(instance, 0);
+    }
+
+    FX_ReaverBladeInit();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverCollide);
 
