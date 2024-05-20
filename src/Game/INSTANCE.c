@@ -178,7 +178,18 @@ void INSTANCE_ProcessIntro(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_InitEffects);
+void INSTANCE_InitEffects(Instance *instance, Object *object)
+{
+    int i;
+
+    if ((!(object->oflags2 & 0x100)) && (object->numberOfEffects != 0))
+    {
+        for (i = 0; i < object->numberOfEffects; i++)
+        {
+            FX_StartInstanceEffect(instance, &object->effectList[i], 1);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_IntroduceInstance);
 

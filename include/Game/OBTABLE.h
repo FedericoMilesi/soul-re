@@ -13,6 +13,14 @@ typedef struct VramSize {
     short h;
 } VramSize;
 
+// size: 0x4
+typedef struct ObjectEffect {
+    // offset: 0000
+    unsigned char effectNumber;
+    // offset: 0001 (3 bytes)
+    unsigned char modifierList[3];
+} ObjectEffect;
+
 // size: 0x4C
 typedef struct Object {
     // offset: 0000
