@@ -119,7 +119,10 @@ Instance *INSTANCE_NewInstance(InstanceList *list)
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_InstanceGroupNumber);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_InsertInstanceGroup);
+void INSTANCE_InsertInstanceGroup(InstanceList *list, Instance *instance)
+{
+    LIST_InsertFunc(&list->group[INSTANCE_InstanceGroupNumber(instance)], &instance->node);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ReallyRemoveInstance);
 
