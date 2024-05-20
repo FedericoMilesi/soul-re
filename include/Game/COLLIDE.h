@@ -204,6 +204,16 @@ typedef struct _HModel {
     long numHPrims;
 } HModel;
 
+// size: 0xC
+typedef struct _LCollideInfo {
+    // offset: 0000 (12 bytes)
+    struct _TFace *tface;
+    // offset: 0004 (84 bytes)
+    struct _Terrain *terrain;
+    // offset: 0008
+    int curTree;
+} LCollideInfo;
+
 int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SVector *v2, struct _SVector *point, struct _SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);
 void COLLIDE_SetBSPTreeFlag(struct _CollideInfo *collideInfo, short flag);
