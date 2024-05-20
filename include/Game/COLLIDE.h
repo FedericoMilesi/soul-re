@@ -152,6 +152,28 @@ typedef struct _HSphere {
     unsigned long radiusSquared;
 } HSphere;
 
+// size: 0x24
+typedef struct BSPTree {
+    // offset: 0000 (44 bytes)
+    struct _BSPNode *bspRoot;
+    // offset: 0004 (48 bytes)
+    struct _BSPLeaf *startLeaves;
+    // offset: 0008 (48 bytes)
+    struct _BSPLeaf *endLeaves;
+    // offset: 000C (6 bytes)
+    struct _Position globalOffset;
+    // offset: 0012
+    short flags;
+    // offset: 0014 (6 bytes)
+    struct _Position localOffset;
+    // offset: 001A
+    short ID;
+    // offset: 001C
+    long splineID;
+    // offset: 0020 (668 bytes)
+    struct _Instance *instanceSpline;
+} BSPTree;
+
 int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SVector *v2, struct _SVector *point, struct _SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);
 void COLLIDE_SetBSPTreeFlag(struct _CollideInfo *collideInfo, short flag);
