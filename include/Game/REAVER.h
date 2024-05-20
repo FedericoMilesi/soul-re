@@ -90,4 +90,6 @@ typedef struct __ReaverData {
     struct __ReaverSaveDat saveData;
 } ReaverData;
 
+void CollideReaverProjectile(struct _Instance *instance, struct GameTracker *gameTracker);
+
 #endif

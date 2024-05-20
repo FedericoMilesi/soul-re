@@ -3,6 +3,7 @@
 #include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MATH3D.h"
+#include "Game/PHYSOBS.h"
 
 EXTERN STATIC short FireReaverFlag;
 
@@ -105,7 +106,123 @@ void StopSoulReaverCharge(ReaverData *data, Instance *instance)
     FX_EndInstanceEffects(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverPost);
+void SoulReaverPost(Instance *instance, unsigned long message, unsigned long data)
+{
+    ReaverData *reaverData;
+
+    reaverData = (ReaverData *)instance->extraData;
+
+    switch (message)
+    {
+    case 0x800002:
+        if (instance->LinkParent == NULL)
+        {
+            INSTANCE_LinkToParent(instance, (Instance *)data, 41);
+        }
+
+        reaverData->ReaverOn = 1;
+        reaverData->ReaverPickedUp = 1;
+
+        instance->flags &= ~0x800;
+        break;
+    case 0x800100:
+        reaverData->ReaverOn = 1;
+
+        if (reaverData->ReaverTargetScale == 0)
+        {
+            reaverData->ReaverTargetScale = 4096;
+        }
+
+        instance->flags &= ~0x800;
+        break;
+    case 0x800101:
+        reaverData->ReaverOn = 0;
+
+        StopSoulReaverCharge(reaverData, instance);
+
+        instance->flags |= 0x800;
+        break;
+    case 0x800103:
+        reaverData->CurrentReaver = (short)data;
+
+        if ((short)data == 6)
+        {
+            FireReaverFlag = 1;
+        }
+        else
+        {
+            FireReaverFlag = 0;
+        }
+
+        SoulReaverImbue(instance, data);
+        break;
+    case 0x800104:
+        reaverData->ReaverChargeTime = 61440;
+
+        INSTANCE_Broadcast(instance, 32, 0x800028, SetObjectAbsorbData(instance, 0, 60));
+        break;
+    case 0x800107:
+        reaverData->ReaverTargetScale = (short)data;
+        break;
+    case 0x800010:
+    {
+        SVECTOR oldVector;
+        SVECTOR startPos;
+
+        StopSoulReaverCharge(reaverData, instance);
+
+        oldVector.vx = 0;
+        oldVector.vy = 0;
+        oldVector.vz = 400;
+
+        ApplyMatrixSV(instance->matrix, &oldVector, &startPos);
+
+        startPos.vx += instance->position.x;
+        startPos.vy += instance->position.y;
+        startPos.vz += instance->position.z;
+
+        {
+            ReaverData *reaverData;
+            struct evObjectBirthProjectileData *pData;
+
+            reaverData = (ReaverData *)instance->extraData;
+
+            pData = PHYSOB_BirthProjectile(instance->LinkParent, 0, reaverData->CurrentReaver + 2);
+
+            if (pData->birthInstance != NULL)
+            {
+                pData->birthInstance->collideFunc = CollideReaverProjectile;
+
+                SET_SVEC((struct _SVector *)&pData->birthInstance->position, (struct _Position *)&startPos);
+
+                INSTANCE_Post(pData->birthInstance, 0x800010, data);
+
+                SET_SVEC((struct _SVector *)&pData->birthInstance->position, (struct _Position *)&startPos);
+            }
+        }
+        break;
+    }
+    case 0x200002:
+        COLLIDE_SegmentCollisionOn(instance, 0);
+        break;
+    case 0x200003:
+        COLLIDE_SegmentCollisionOff(instance, 0);
+        break;
+    case 0x800105:
+        StopSoulReaverCharge(reaverData, instance);
+        break;
+    case 0x800108:
+        reaverData->ReaverTargetScale = 4096;
+
+        instance->flags &= ~0x800;
+        break;
+    case 0x800109:
+        StopSoulReaverCharge(reaverData, instance);
+
+        reaverData->ReaverTargetScale = 0;
+        break;
+    }
+}
 
 unsigned long REAVER_GetGlowColor(Instance *instance)
 {
