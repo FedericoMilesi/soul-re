@@ -357,7 +357,65 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndInstanceTrivialReje
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndWorld);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_ClosestPointInBoxToPoint);
+long COLLIDE_ClosestPointInBoxToPoint(Position *boxPoint, HBox *hbox, SVector *point)
+{
+    long inside;
+
+    inside = 1;
+
+    if (point->x < hbox->minX)
+    {
+        boxPoint->x = hbox->minX;
+
+        inside = 0;
+    }
+    else if (hbox->maxX < point->x)
+    {
+        boxPoint->x = hbox->maxX;
+
+        inside = 0;
+    }
+    else
+    {
+        boxPoint->x = point->x;
+    }
+
+    if (point->y < hbox->minY)
+    {
+        boxPoint->y = hbox->minY;
+
+        inside = 0;
+    }
+    else if (hbox->maxY < point->y)
+    {
+        boxPoint->y = hbox->maxY;
+
+        inside = 0;
+    }
+    else
+    {
+        boxPoint->y = point->y;
+    }
+
+    if (point->z < hbox->minZ)
+    {
+        boxPoint->z = hbox->minZ;
+
+        inside = 0;
+    }
+    else if (hbox->maxZ < point->z)
+    {
+        boxPoint->z = hbox->maxZ;
+
+        inside = 0;
+    }
+    else
+    {
+        boxPoint->z = point->z;
+    }
+
+    return inside;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndPoint);
 
