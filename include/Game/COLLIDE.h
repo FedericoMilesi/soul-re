@@ -134,6 +134,24 @@ typedef struct _PCollideInfo {
     struct _Instance *instance;
 } PCollideInfo;
 
+// size: 0x14
+typedef struct _HSphere {
+    // offset: 0000
+    long attr;
+    // offset: 0004
+    unsigned char id;
+    // offset: 0005
+    unsigned char rank;
+    // offset: 0006
+    short pad;
+    // offset: 0008 (6 bytes)
+    struct _Position position;
+    // offset: 000E
+    unsigned short radius;
+    // offset: 0010
+    unsigned long radiusSquared;
+} HSphere;
+
 int COLLIDE_PointInTriangle(struct _SVector *v0, struct _SVector *v1, struct _SVector *v2, struct _SVector *point, struct _SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);
 void COLLIDE_SetBSPTreeFlag(struct _CollideInfo *collideInfo, short flag);

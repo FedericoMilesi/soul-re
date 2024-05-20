@@ -3,6 +3,8 @@
 
 #include "Game/TYPES.h"
 
+#define abs_diff(a,b) ( a-b<0?b-a:a-b )
+
 #define SET_SVEC(A, B) {\
 short _x0;\
 short _y0;\

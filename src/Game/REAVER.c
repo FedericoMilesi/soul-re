@@ -2,6 +2,7 @@
 #include "Game/REAVER.h"
 #include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MATH3D.h"
 
 EXTERN STATIC short FireReaverFlag;
 
@@ -118,7 +119,78 @@ unsigned long REAVER_GetGlowColor(Instance *instance)
     return ((unsigned long *)tuneData)[data->CurrentReaver - 1];
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", _SoulReaverAnimate);
+void _SoulReaverAnimate(Instance *instance)
+{
+    ReaverData *data;
+    ReaverTuneData *tuneData;
+
+    data = (ReaverData *)instance->extraData;
+
+    tuneData = (ReaverTuneData *)instance->data;
+
+    FX_SetReaverInstance(instance);
+
+    data->ReaverDeg += 256 + (rand() & 31);
+
+    data->ReaverDeg &= 0xFFF;
+
+    if ((unsigned char)data->ReaverOn == 1)
+    {
+        if (data->ReaverSize < 4096)
+        {
+            data->ReaverSize += 256;
+        }
+    }
+    else if (data->ReaverSize > 0)
+    {
+        data->ReaverSize -= 256;
+    }
+
+    if (data->CurrentReaver > 0)
+    {
+        unsigned long *temp; // not from decls.h
+
+        temp = &tuneData->spectralInnerColor;
+
+        data->ReaverBladeColor = temp[data->CurrentReaver - 1];
+
+        temp = &tuneData->spectralInnerGlowColor;
+
+        data->ReaverBladeGlowColor = temp[data->CurrentReaver - 1];
+
+        temp = &tuneData->spectralGlowColor;
+
+        data->ReaverGlowColor = temp[data->CurrentReaver - 1];
+    }
+
+    if (abs_diff(data->ReaverTargetScale, data->ReaverScale) <= 128)
+    {
+        data->ReaverScale = data->ReaverTargetScale;
+    }
+    else
+    {
+        if (data->ReaverScale > data->ReaverTargetScale)
+        {
+            data->ReaverScale -= 128;
+        }
+
+        if (data->ReaverScale < data->ReaverTargetScale)
+        {
+            data->ReaverScale += 128;
+        }
+    }
+
+    if (((unsigned char)data->ReaverOn == 1) && (data->ReaverScale > 0))
+    {
+        instance->flags &= ~0x800;
+    }
+    else
+    {
+        instance->flags |= 0x800;
+    }
+
+    SoulReaverCharge(instance, data);
+}
 
 int SoulReaverFire()
 {
