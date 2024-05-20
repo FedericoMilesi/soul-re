@@ -1,10 +1,36 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
 #include "Game/SPLINE.h"
+#include "Game/OBTABLE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Deactivate);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Reactivate);
+void INSTANCE_Reactivate(Instance *instance)
+{
+    Object *object;
+
+    object = instance->object;
+
+    instance->flags2 &= ~0x1;
+
+    if ((instance->flags & 0x40000))
+    {
+        instance->flags &= ~0x40000;
+        instance->flags2 |= 0x20000000;
+    }
+    else
+    {
+        instance->flags2 &= ~0x20000000;
+    }
+
+    if (object->animList != NULL)
+    {
+        if (!(object->oflags2 & 0x40000000))
+        {
+            G2Anim_Restore(&instance->anim);
+        }
+    }
+}
 
 void INSTANCE_ForceActive(Instance *instance)
 {
