@@ -46,7 +46,40 @@ void INSTANCE_DeactivatedProcess(void)
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_DeactivateFarInstances);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_InitInstanceList);
+void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool)
+{
+    long i;
+
+    pool->numFreeInstances = 60;
+
+    for (i = 1; i < 59; i++)
+    {
+        pool->instance[i].next = &pool->instance[i + 1];
+        pool->instance[i].prev = &pool->instance[i - 1];
+    }
+
+    pool->instance[0].next = &pool->instance[1];
+    pool->instance[0].prev = NULL;
+
+    pool->instance[59].prev = &pool->instance[58];
+    pool->instance[59].next = NULL;
+
+    pool->first_free = &pool->instance[0];
+
+    list->pool = pool;
+
+    list->numInstances = 0;
+
+    list->first = NULL;
+
+    for (i = 0; i < 32; i++)
+    {
+        list->group[i].next = NULL;
+        list->group[i].prev = NULL;
+    }
+
+    pool->nextInstanceID = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_NewInstance);
 

@@ -244,6 +244,18 @@ typedef struct _InstanceList {
     struct NodeType group[32];
 } InstanceList;
 
+// size: 0x9C9C
+typedef struct _InstancePool {
+    // offset: 0000
+    long nextInstanceID;
+    // offset: 0004
+    long numFreeInstances;
+    // offset: 0008 (40080 bytes)
+    struct _Instance instance[60];
+    // offset: 9C98 (668 bytes)
+    struct _Instance *first_free;
+} InstancePool;
+
 struct _Instance *INSTANCE_IntroduceInstance(struct Intro *intro, short streamUnitID);
 
 #endif
