@@ -18,7 +18,12 @@ void MON_TurnOffAllSpheres(Instance *instance)
     MON_TurnOffBodySpheres(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnAllSpheres);
+void MON_TurnOnAllSpheres(Instance *instance)
+{
+    MON_TurnOnWeaponSpheres(instance);
+
+    MON_TurnOnBodySpheres(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SwitchState);
 
