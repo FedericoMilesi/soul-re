@@ -19,4 +19,6 @@ typedef struct __MessageQueue {
     struct __Event Queue[16];
 } MessageQueue;
 
+void EnMessageQueueData(MessageQueue *In, int ID, int Data);
+
 #endif

@@ -4,6 +4,9 @@
 #include "Game/COLLIDE.h"
 #include "Game/STREAM.h"
 
+void PHYSICS_GenericLineCheck(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
+void PHYSICS_GenericLineCheckMask(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
+
 void SetNoPtCollideInFamily(Instance *instance)
 {
     Instance *child;

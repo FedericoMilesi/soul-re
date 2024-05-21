@@ -1,17 +1,7 @@
 #ifndef _OBTABLE_H_
 #define _OBTABLE_H_
 
-// size: 0x8
-typedef struct VramSize {
-    // offset: 0000
-    short x;
-    // offset: 0002
-    short y;
-    // offset: 0004
-    short w;
-    // offset: 0006
-    short h;
-} VramSize;
+#include "Game/VRAM.h"
 
 // size: 0x4
 typedef struct ObjectEffect {

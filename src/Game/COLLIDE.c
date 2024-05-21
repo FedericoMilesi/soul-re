@@ -436,6 +436,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SAndT);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndTerrain);
 
+void COLLIDE_InstanceTerrain(Instance *instance, Level *level);
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceTerrain);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_LineWithSignals);

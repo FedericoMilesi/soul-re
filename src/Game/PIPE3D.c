@@ -1,6 +1,8 @@
 #include "common.h"
 #include "Game/TYPES.h"
 
+void PIPE3D_NormalizeMatrix(MATRIX *target, MATRIX *source);
+
 void PIPE3D_AspectAdjustMatrix(MATRIX *matrix)
 {
     int temp, temp2, temp3; // not from decls.h
