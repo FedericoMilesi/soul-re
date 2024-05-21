@@ -283,7 +283,19 @@ void INSTANCE_KillInstance(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Query);
+unsigned long INSTANCE_Query(Instance *Inst, int Query)
+{
+    unsigned long (*Func)(Instance *, unsigned long);
+
+    Func = Inst->queryFunc;
+
+    if (Func == NULL)
+    {
+        return 0;
+    }
+
+    return Func(Inst, Query);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Post);
 
