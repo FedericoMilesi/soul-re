@@ -297,7 +297,19 @@ unsigned long INSTANCE_Query(Instance *Inst, int Query)
     return Func(Inst, Query);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Post);
+void INSTANCE_Post(Instance *Inst, int Message, int Data)
+{
+    void (*Func)(Instance *, unsigned long, unsigned long);
+
+    Func = Inst->messageFunc;
+
+    if (Func != NULL)
+    {
+        INSTANCE_ForceActive(Inst);
+
+        Func(Inst, Message, Data);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Broadcast);
 
