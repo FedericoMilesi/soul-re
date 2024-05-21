@@ -45,6 +45,7 @@ segments:
     vram: 0x80010000
     align: 4
     bss_size: 0xDDC8
+    bss_contains_common: True
     subsegments:
       - [0x000800, .rodata, Game/DEBUG]
       - [0x00085C, .rodata, Game/CAMERA]

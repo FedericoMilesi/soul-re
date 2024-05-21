@@ -256,6 +256,8 @@ typedef struct _InstancePool {
     struct _Instance *first_free;
 } InstancePool;
 
-struct _Instance *INSTANCE_IntroduceInstance(struct Intro *intro, short streamUnitID);
+void INSTANCE_UpdateFamilyStreamUnitID(Instance *instance);
+Instance *INSTANCE_Find(long introUniqueID);
+Instance *INSTANCE_IntroduceInstance(Intro *intro, short streamUnitID);
 
 #endif
