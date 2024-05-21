@@ -38,7 +38,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetAnim);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_PlayAnimID);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_PlayAnimFromList);
+void MON_PlayAnimFromList(Instance *instance, char *animList, int animtype, int mode)
+{
+    MON_PlayAnimID(instance, animList[animtype], mode);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_AnimIDPlaying);
 
