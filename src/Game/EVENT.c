@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/EVENT.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_UpdateResetSignalArrayAndWaterMovement);
 
@@ -153,7 +154,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_DoObjectSoundAction);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_DoSoundMarkerAction);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_GetSoundValue);
+long EVENT_GetSoundValue(SoundObject *soundObject)
+{
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_DoAreaAction);
 

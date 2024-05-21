@@ -15,4 +15,26 @@ typedef struct EventAliasCommandStruct {
     short speed;
 } EventAliasCommandStruct;
 
+// size: 0x14
+typedef struct SoundObject {
+    // offset: 0000
+    short flags;
+    // offset: 0002
+    short attribute;
+    // offset: 0004
+    long soundNumber;
+    // offset: 0008
+    long value;
+    // offset: 000C
+    long duration;
+    // offset: 0010 (4 bytes)
+    // size: 0x4
+    union {
+        // offset: 0000 (668 bytes)
+        struct _Instance *instance;
+        // offset: 0000 (36 bytes)
+        struct _SFXMkr *sfxMarker;
+    } data;
+} SoundObject;
+
 #endif
