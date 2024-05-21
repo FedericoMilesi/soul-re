@@ -28,7 +28,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterRelocateInstanceObjec
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_TurnHead);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_SetLookAround);
+void MONAPI_SetLookAround(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    MON_EnableHeadMove(instance);
+
+    mv->mode = 0x80000;
+}
 
 void MONAPI_ResetLookAround(Instance *instance)
 {
