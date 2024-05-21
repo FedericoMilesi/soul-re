@@ -363,7 +363,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_UnlinkFromParent);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_UnlinkChildren);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_UpdateFamilyStreamUnitID);
+void INSTANCE_UpdateFamilyStreamUnitID(Instance *instance)
+{
+    Instance *child;
+
+    child = instance->LinkChild;
+
+    while (child != NULL)
+    {
+        child->currentStreamUnitID = instance->currentStreamUnitID;
+
+        INSTANCE_UpdateFamilyStreamUnitID(child);
+
+        child = child->LinkSibling;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ReallyRemoveAllChildren);
 
