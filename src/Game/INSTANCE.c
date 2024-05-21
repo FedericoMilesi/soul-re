@@ -438,7 +438,20 @@ Instance *INSTANCE_GetChildLinkedToSegment(Instance *instance, int segment)
     return child;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Linked);
+int INSTANCE_Linked(Instance *instance1, Instance *instance2)
+{
+    while (instance1->LinkParent != NULL)
+    {
+        instance1 = instance1->LinkParent;
+    }
+
+    while (instance2->LinkParent != NULL)
+    {
+        instance2 = instance2->LinkParent;
+    }
+
+    return instance1 == instance2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_GetFadeValue);
 
