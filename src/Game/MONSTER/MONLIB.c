@@ -29,7 +29,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SwitchState);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SwitchStateDoEntry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TransNodeAnimation);
+int MON_TransNodeAnimation(Instance *instance)
+{
+    return G2Anim_SegmentHasActiveChannels(&instance->anim, 0, 0x700);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetAnim);
 
