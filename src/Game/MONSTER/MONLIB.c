@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/INSTANCE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffWeaponSpheres);
 
@@ -10,7 +11,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffBodySpheres);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnBodySpheres);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffAllSpheres);
+void MON_TurnOffAllSpheres(Instance *instance)
+{
+    MON_TurnOffWeaponSpheres(instance);
+
+    MON_TurnOffBodySpheres(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnAllSpheres);
 
