@@ -249,7 +249,31 @@ void INSTANCE_BuildStaticShadow(void)
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_DefaultInit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_PlainDeath);
+void INSTANCE_PlainDeath(Instance *instance)
+{
+    Instance *oldOn;
+
+    instance->flags &= ~0x400;
+
+    if ((instance->object->oflags2 & 0x4))
+    {
+        instance->flags2 |= 0x1000;
+
+        SOUND_ProcessInstanceSounds(instance->object->soundData, instance->soundInstanceTbl, &instance->position, instance->object->oflags2 & 0x2000000, instance->flags2 & 0x8000000, 0, 0, &instance->flags2);
+        SOUND_ProcessInstanceSounds(instance->object->soundData, instance->soundInstanceTbl, &instance->position, instance->object->oflags2 & 0x2000000, instance->flags2 & 0x8000000, 0, 0, &instance->flags2);
+    }
+
+    oldOn = INSTANCE_Find(instance->attachedID);
+
+    if (oldOn != NULL)
+    {
+        oldOn->flags2 &= ~0x80;
+    }
+
+    SAVE_MarkDeadDead(instance);
+
+    instance->flags |= 0x20;
+}
 
 void INSTANCE_KillInstance(Instance *instance)
 {
