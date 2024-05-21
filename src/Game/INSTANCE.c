@@ -357,7 +357,25 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_SpatialRelationships);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_SetStatsData);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_LinkToParent);
+void INSTANCE_LinkToParent(Instance *instance, Instance *parent, int node)
+{
+    instance->LinkSibling = parent->LinkChild;
+
+    parent->LinkChild = instance;
+
+    instance->LinkParent = parent;
+    instance->ParentLinkNode = node;
+
+    instance->scale.x = (instance->scale.x << 12) / parent->scale.x;
+    instance->scale.y = (instance->scale.y << 12) / parent->scale.y;
+    instance->scale.z = (instance->scale.z << 12) / parent->scale.z;
+
+    INSTANCE_UpdateFamilyStreamUnitID(parent);
+
+    INSTANCE_Post(parent, 0x100012, (int)instance);
+
+    instance->flags2 |= 0x8;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_UnlinkFromParent);
 
