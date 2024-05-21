@@ -1,18 +1,27 @@
 #ifndef _ANIMG2_H_
 #define _ANIMG2_H_
 
+typedef enum _G2AnimCallbackMsg_Enum {
+    G2ANIM_MSG_DONE = 1,
+    G2ANIM_MSG_LOOPPOINT = 2,
+    G2ANIM_MSG_SECTION_INTERPDONE = 3,
+    G2ANIM_MSG_SEGCTRLR_INTERPDONE = 4,
+    G2ANIM_MSG_SWALARMSET = 5,
+    G2ANIM_MSG_PLAYEFFECT = 6,
+} G2AnimCallbackMsg;
+
 // size: 0x6
-struct _G2SVector3_Type {
+typedef struct _G2SVector3_Type {
     // offset: 0000
     short x;
     // offset: 0002
     short y;
     // offset: 0004
     short z;
-};
+} G2SVector3;
 
 // size: 0x30
-struct _G2AnimSection_Type {
+typedef struct _G2AnimSection_Type {
     // offset: 0000
     unsigned char flags;
     // offset: 0001
@@ -47,10 +56,10 @@ struct _G2AnimSection_Type {
     struct _G2AnimChanStatusBlock_Type *chanStatusBlockList;
     // offset: 002C (12 bytes)
     struct _G2AnimInterpInfo_Type *interpInfo;
-};
+} G2AnimSection;
 
 // size: 0xB4
-struct _G2Anim_Type {
+typedef struct _G2Anim_Type {
     // offset: 0000
     unsigned char sectionCount;
     // offset: 0001
@@ -73,6 +82,18 @@ struct _G2Anim_Type {
     unsigned long disabledBits[3];
     // offset: 0024 (144 bytes)
     struct _G2AnimSection_Type section[3];
-};
+} G2Anim;
+
+// size: 0x8
+typedef struct _AnimSoundData_Type {
+    // offset: 0000
+    short sfxToneID;
+    // offset: 0002
+    short volume;
+    // offset: 0004
+    short pitch;
+    // offset: 0006
+    short minVolDistance;
+} AnimSoundData;
 
 #endif

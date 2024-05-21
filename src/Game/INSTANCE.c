@@ -2,6 +2,7 @@
 #include "Game/INSTANCE.h"
 #include "Game/SPLINE.h"
 #include "Game/OBTABLE.h"
+#include "Game/G2/ANIMG2.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Deactivate);
 
@@ -455,4 +456,47 @@ int INSTANCE_Linked(Instance *instance1, Instance *instance2)
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_GetFadeValue);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_DefaultAnimCallback);
+unsigned long INSTANCE_DefaultAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, Instance *instance)
+{
+    AnimSoundData *soundData;
+    int id;
+    int vol;
+    int temp; // not from decls.h
+
+    if (message == G2ANIM_MSG_PLAYEFFECT)
+    {
+        switch (messageDataA)
+        {
+        case 0:
+            soundData = (AnimSoundData *)messageDataB;
+
+            if (soundData != NULL)
+            {
+                vol = soundData->volume;
+
+                if (soundData->volume >= 1000)
+                {
+                    temp = vol / 1000;
+
+                    vol %= 1000;
+
+                    if (temp != HUMAN_TypeOfHuman(instance))
+                    {
+                        return 0;
+                    }
+                }
+
+                SOUND_Play3dSound(&instance->position, soundData->sfxToneID, soundData->pitch, vol, soundData->minVolDistance);
+            }
+
+            break;
+        case 1:
+            FX_StartInstanceEffect(instance, (ObjectEffect *)messageDataB, 0);
+            break;
+        default:
+            return messageDataA;
+        }
+    }
+
+    return messageDataA;
+}
