@@ -361,7 +361,27 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_LinkToParent);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_UnlinkFromParent);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_UnlinkChildren);
+void INSTANCE_UnlinkChildren(Instance *instance)
+{
+    Instance *child;
+    Instance *sibling;
+
+    child = instance->LinkChild;
+
+    while (child != NULL)
+    {
+        sibling = child->LinkSibling;
+
+        INSTANCE_Post(instance, 0x100013, (int)child);
+
+        child->LinkParent = NULL;
+        child->LinkSibling = NULL;
+
+        child = sibling;
+    }
+
+    instance->LinkChild = NULL;
+}
 
 void INSTANCE_UpdateFamilyStreamUnitID(Instance *instance)
 {
