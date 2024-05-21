@@ -1,6 +1,8 @@
 #include "common.h"
 #include "Game/PSX/AADLIB.h"
 
+char soundBuffer[13256];
+
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndOpenSfxChannel);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndCloseSfxChannel);

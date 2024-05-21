@@ -48,7 +48,7 @@ PYTHON     := python3
 SPLAT_YAML := $(BASEEXE).yaml
 SPLAT      := splat split $(SPLAT_YAML)
 DIFF       := diff
-MASPSX     := $(PYTHON) tools/maspsx/maspsx.py --aspsx-version=2.81
+MASPSX     := $(PYTHON) tools/maspsx/maspsx.py --aspsx-version=2.81 -G4096
 
 CROSS    := mips-linux-gnu-
 AS       := $(CROSS)as -EL
@@ -75,7 +75,7 @@ ENDLINE := \n'
 ### Compiler Options ###
 
 ASFLAGS        := -Iinclude -march=r3000 -mtune=r3000 -no-pad-sections
-CFLAGS         := -O2 -G65536 -fpeephole -ffunction-cse -fkeep-static-consts -fpcc-struct-return \
+CFLAGS         := -O2 -G4096 -fpeephole -ffunction-cse -fkeep-static-consts -fpcc-struct-return \
                   -fcommon -fgnu-linker -msplit-addresses -mgas -mgpOPT -mgpopt -msoft-float -gcoff -quiet
 CPPFLAGS       := -Iinclude
 LDFLAGS        := -T undefined_syms.txt -T undefined_funcs.txt -T $(BUILD_DIR)/$(LD_SCRIPT) -Map $(LD_MAP) \
