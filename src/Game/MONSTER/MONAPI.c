@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/INSTANCE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterProcess);
 
@@ -30,7 +31,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_SetLookAround);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_ResetLookAround);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_OkToLookAround);
+long MONAPI_OkToLookAround(Instance *instance)
+{
+    return instance->currentMainState == 2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_DeleteRegen);
 
