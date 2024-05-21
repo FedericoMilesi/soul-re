@@ -26,6 +26,7 @@
         "common.h": "c",
         "types.h": "c",
         "light3d.h": "c",
-        "stream.h": "c"
+        "stream.h": "c",
+        "instance.h": "c"
     }
 }

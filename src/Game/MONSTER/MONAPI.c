@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/MONSTER/MONAPI.h"
 #include "Game/INSTANCE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterProcess);
@@ -29,7 +30,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_TurnHead);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_SetLookAround);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_ResetLookAround);
+void MONAPI_ResetLookAround(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    MON_DisableHeadMove(instance);
+
+    mv->mode = 0x1;
+}
 
 long MONAPI_OkToLookAround(Instance *instance)
 {

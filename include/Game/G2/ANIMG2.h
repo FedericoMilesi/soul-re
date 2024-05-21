@@ -20,6 +20,18 @@ typedef struct _G2SVector3_Type {
     short z;
 } G2SVector3;
 
+// size: 0xC
+typedef struct _G2AnimInterpInfo_Type {
+    // offset: 0000
+    short duration;
+    // offset: 0002
+    short targetTime;
+    // offset: 0004 (4 bytes)
+    struct _G2AnimAlphaTable_Type *alphaTable;
+    // offset: 0008 (164 bytes)
+    struct _G2AnimInterpStateBlock_Type *stateBlockList;
+} G2AnimInterpInfo;
+
 // size: 0x30
 typedef struct _G2AnimSection_Type {
     // offset: 0000
