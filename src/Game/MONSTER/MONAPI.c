@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/INSTANCE.h"
+#include "Game/GAMELOOP.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterProcess);
 
@@ -10,7 +11,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", SendHitObject);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterCollide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterAdditionalCollide);
+void MonsterAdditionalCollide(Instance *instance, GameTracker *gameTracker)
+{
+    if (instance->data != NULL)
+    {
+        MON_CheckEnvironment(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterQuery);
 
