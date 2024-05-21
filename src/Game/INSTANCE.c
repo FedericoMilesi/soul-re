@@ -313,7 +313,33 @@ void INSTANCE_Post(Instance *Inst, int Message, int Data)
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Broadcast);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_InPlane);
+int INSTANCE_InPlane(Instance *instance, int plane)
+{
+    int ret;
+
+    ret = 0;
+
+    if (instance->object != NULL)
+    {
+        if (!(instance->object->oflags2 & 0x2000000))
+        {
+            ret = 1;
+        }
+        else if (!(instance->flags2 & 0x8000000))
+        {
+            if (plane == 0)
+            {
+                ret = 1;
+            }
+        }
+        else if (plane != 0)
+        {
+            ret = 1;
+        }
+    }
+
+    return ret;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindWithID);
 
