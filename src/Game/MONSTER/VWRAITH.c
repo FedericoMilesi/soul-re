@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/INSTANCE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_MoveVertical);
 
@@ -18,4 +19,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_Combat);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_EmbraceEntry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_Embrace);
+void VWRAITH_Embrace(Instance *instance)
+{
+    MON_Embrace(instance);
+
+    VWRAITH_VerticalMove(instance);
+}
