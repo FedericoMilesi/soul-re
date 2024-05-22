@@ -49,7 +49,45 @@ void SOUL_Physics(Instance *instance, long time)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Fade);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_MoveToDest);
+void SOUL_MoveToDest(Instance *instance, long maxAccel, long time)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    instance->xAccl = (mv->destination.x - instance->position.x) - instance->xVel;
+    instance->yAccl = (mv->destination.y - instance->position.y) - instance->yVel;
+    instance->zAccl = (mv->destination.z - instance->position.z) - instance->zVel;
+
+    if (instance->xAccl < -maxAccel)
+    {
+        instance->xAccl = -maxAccel;
+    }
+    else if (maxAccel < instance->xAccl)
+    {
+        instance->xAccl = maxAccel;
+    }
+
+    if (instance->yAccl < -maxAccel)
+    {
+        instance->yAccl = -maxAccel;
+    }
+    else if (maxAccel < instance->yAccl)
+    {
+        instance->yAccl = maxAccel;
+    }
+
+    if (instance->zAccl < -maxAccel)
+    {
+        instance->zAccl = -maxAccel;
+    }
+    else if (maxAccel < instance->zAccl)
+    {
+        instance->zAccl = maxAccel;
+    }
+
+    SOUL_Physics(instance, time);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_MovePastWall);
 
