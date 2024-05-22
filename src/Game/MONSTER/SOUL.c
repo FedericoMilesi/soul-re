@@ -4,7 +4,26 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_QueueHandler);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Physics);
+void SOUL_Physics(Instance *instance, long time)
+{
+    MonsterVars *mv;
+    int a;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    a = -4;
+
+    if (((mv->speed & 31)) < 16)
+    {
+        a = 4;
+    }
+
+    instance->zAccl += a;
+
+    mv->speed += 1;
+
+    PhysicsMove(instance, &instance->position, time);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Fade);
 
