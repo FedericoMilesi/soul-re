@@ -1,4 +1,6 @@
 #include "common.h"
+#include "Game/INSTANCE.h"
+#include "Game/MONSTER/MONTABLE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_SetupTablePointer);
 
@@ -12,4 +14,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_GetCleanUpFunc);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_SetQueryFunc);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_SetMessageFunc);
+void MONTABLE_SetMessageFunc(Instance *instance)
+{
+    MonsterFunctionTable *ft;
+
+    ft = (MonsterFunctionTable *)instance->object->relocModule;
+
+    if ((ft != NULL) && (ft->messageFunc != NULL))
+    {
+        instance->messageFunc = ft->messageFunc;
+    }
+}
