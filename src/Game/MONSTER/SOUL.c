@@ -1,8 +1,30 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
+#include "Game/STATE.h"
 #include "Game/MONSTER/MONAPI.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_QueueHandler);
+void SOUL_QueueHandler(Instance *instance)
+{
+    MonsterVars *mv;
+    Message *message;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    while (message = DeMessageQueue(&mv->messageQueue))
+    {
+        if ((message != NULL) && (message->ID == 0x100000D))
+        {
+            if (instance->currentMainState != MONSTER_STATE_DEAD)
+            {
+                MON_SwitchState(instance, MONSTER_STATE_DEAD);
+            }
+
+            continue;
+        }
+
+        MON_DefaultMessageHandler(instance, message);
+    }
+}
 
 void SOUL_Physics(Instance *instance, long time)
 {
