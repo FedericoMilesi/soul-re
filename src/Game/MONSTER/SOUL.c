@@ -19,7 +19,23 @@ void SOUL_CleanUp(Instance *instance)
     MON_CleanUp(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_BirthEntry);
+void SOUL_BirthEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    instance->maxXVel = 15;
+    instance->maxYVel = 15;
+    instance->maxZVel = 17;
+
+    instance->zAccl = 0;
+    instance->zVel = 0;
+
+    instance->position.z += 120;
+
+    mv->generalTimer = MON_GetTime(instance) + 1500;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Birth);
 
