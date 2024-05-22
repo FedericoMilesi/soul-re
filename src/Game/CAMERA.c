@@ -59,7 +59,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcPosition);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetFocus);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Lock);
+void CAMERA_Lock(Camera *camera, long lock)
+{
+    camera->lock |= lock;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Unlock);
 

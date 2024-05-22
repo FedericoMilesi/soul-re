@@ -214,6 +214,16 @@ typedef struct _LCollideInfo {
     int curTree;
 } LCollideInfo;
 
+// size: 0xC
+typedef struct _Sphere {
+    // offset: 0000 (6 bytes)
+    struct _Position position;
+    // offset: 0006
+    unsigned short radius;
+    // offset: 0008
+    unsigned long radiusSquared;
+} Sphere;
+
 TFace *COLLIDE_PointAndTerrainFunc(Terrain *terrain, PCollideInfo *pCollideInfo, int Flags, short *Backface_Flag, long ignoreAttr, long acceptAttr, LCollideInfo *lcolinfo);
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);

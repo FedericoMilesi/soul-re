@@ -28,6 +28,7 @@
         "light3d.h": "c",
         "stream.h": "c",
         "instance.h": "c",
-        "monapi.h": "c"
+        "monapi.h": "c",
+        "collide.h": "c"
     }
 }
