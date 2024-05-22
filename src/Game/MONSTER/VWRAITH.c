@@ -17,7 +17,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_CombatEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_Combat);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_EmbraceEntry);
+void VWRAITH_EmbraceEntry(Instance *instance)
+{
+    MON_EmbraceEntry(instance);
+}
 
 void VWRAITH_Embrace(Instance *instance)
 {
