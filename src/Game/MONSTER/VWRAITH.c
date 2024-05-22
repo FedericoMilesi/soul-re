@@ -13,7 +13,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_Pursue);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_VerticalMove);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_CombatEntry);
+void VWRAITH_CombatEntry(Instance *instance)
+{
+    MON_CombatEntry(instance);
+}
 
 void VWRAITH_Combat(Instance *instance)
 {
