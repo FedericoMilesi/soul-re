@@ -31,7 +31,38 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_MoveToDest);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_MovePastWall);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Init);
+void SOUL_Init(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    MON_DefaultInit(instance);
+
+    mv->mvFlags |= 0x200000 | 0x880;
+
+    instance->maxXVel = 600;
+    instance->maxYVel = 600;
+    instance->maxZVel = 600;
+
+    instance->flags2 |= 0x20000;
+
+    mv->speed = 0;
+
+    mv->damageTimer = MON_GetTime(instance) + 6500;
+
+    if (instance->parent != NULL)
+    {
+        mv->soulID = instance->parent->introUniqueID;
+    }
+
+    if (!(instance->flags & 0x2))
+    {
+        instance->flags2 |= 0x8000000;
+
+        MON_SwitchState(instance, MONSTER_STATE_IDLE);
+    }
+}
 
 void SOUL_CleanUp(Instance *instance)
 {
