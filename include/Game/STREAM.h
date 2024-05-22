@@ -2,6 +2,7 @@
 #define _STREAM_H_
 
 #include "Game/TYPES.h"
+#include "Game/VRAM.h"
 
 // size: 0x4C
 typedef struct Intro {
@@ -274,5 +275,7 @@ typedef struct Level {
     // offset: 0184 (64 bytes)
     struct LightGroup *razielSpectralLightGroup;
 } Level;
+
+Level *STREAM_GetLevelWithID(long id);
 
 #endif

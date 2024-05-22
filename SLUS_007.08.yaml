@@ -203,8 +203,8 @@ segments:
 
       - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: KAIN2}
 
-      - {start: 0x0C28AC, type: bss, vram: 0x800D75BC, name: Game/SOUND}
-      - {start: 0x0C28AC, type: bss, vram: 0x800DA984, name: Game/STRMLOAD}
+      - {start: 0x0C28AC, type: .bss, vram: 0x800D75BC, name: Game/SOUND}
+      - {start: 0x0C28AC, type: .bss, vram: 0x800DA984, name: Game/STRMLOAD}
       - {start: 0x0C28AC, type: bss, vram: 0x800DBB04, name: LIBS}
       
   - [0x0C28AC]

@@ -1,4 +1,7 @@
 #include "common.h"
+#include "Game/STRMLOAD.h"
+
+static LoadQueueEntry LoadQueue[40];
 
 EXTERN STATIC int numLoads;
 

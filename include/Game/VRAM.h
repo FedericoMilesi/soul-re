@@ -1,6 +1,18 @@
 #ifndef _VRAM_H_
 #define _VRAM_H_
 
+// size: 0x8
+typedef struct VramSize {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short w;
+    // offset: 0006
+    short h;
+} VramSize;
+
 // size: 0x1C
 typedef struct _BlockVramEntry {
     // offset: 0000 (28 bytes)

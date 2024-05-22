@@ -1,7 +1,7 @@
 #ifndef _PHYSICS_H_
 #define _PHYSICS_H_
 
-#include "Game/TYPES.h"
+#include "Game/INSTANCE.h"
 
 // size: 0x18
 typedef struct evPhysicsLinkedMoveData {
@@ -17,18 +17,20 @@ typedef struct evPhysicsLinkedMoveData {
 
 // size: 0xC
 typedef struct evPhysicsGravityData {
-	// offset: 0000
-	short UpperOffset;
-	// offset: 0002
-	short LowerOffset;
-	// offset: 0004
-	short x;
-	// offset: 0006
-	short y;
-	// offset: 0008
-	short z;
-	// offset: 000A
-	short slipSlope;
+    // offset: 0000
+    short UpperOffset;
+    // offset: 0002
+    short LowerOffset;
+    // offset: 0004
+    short x;
+    // offset: 0006
+    short y;
+    // offset: 0008
+    short z;
+    // offset: 000A
+    short slipSlope;
 } evPhysicsGravityData;
+
+void PHYSICS_CheckLineInWorldMask(Instance *instance, PCollideInfo *pcollideInfo);
 
 #endif

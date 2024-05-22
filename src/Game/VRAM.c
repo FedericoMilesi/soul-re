@@ -1,6 +1,9 @@
 #include "common.h"
 #include "Game/VRAM.h"
 
+int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags);
+int VRAM_DeleteFreeVram(short x, short y, short w, short h);
+
 EXTERN BlockVramEntry *usedVramBlocks;
 
 EXTERN BlockVramEntry *openVramBlocks;
@@ -180,6 +183,7 @@ void VRAM_InsertUsedBlock(BlockVramEntry *block)
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DeleteUsedBlock);
 
+BlockVramEntry *VRAM_GetOpenBlock();
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_GetOpenBlock);
 
 int VRAM_DeleteFreeVram(short x, short y, short w, short h)

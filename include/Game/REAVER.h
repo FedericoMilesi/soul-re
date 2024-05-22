@@ -1,6 +1,9 @@
 #ifndef _REAVER_H_
 #define _REAVER_H_
 
+#include "Game/INSTANCE.h"
+#include "Game/GAMELOOP.h"
+
 // size: 0xC0
 typedef struct __ReaverTuneData {
     // offset: 0000
@@ -90,6 +93,6 @@ typedef struct __ReaverData {
     struct __ReaverSaveDat saveData;
 } ReaverData;
 
-void CollideReaverProjectile(struct _Instance *instance, struct GameTracker *gameTracker);
+void CollideReaverProjectile(Instance *instance, GameTracker *gameTracker);
 
 #endif

@@ -19,11 +19,11 @@ void DEBUG_SendCinematicSwitch();
 void DEBUG_LevelSelectNew();
 void DEBUG_SendMoveTo();
 void DEBUG_ReloadCurrentLevel();
-void handle_line_type_bit(struct GameTracker *gt, DebugMenuLine *line);
-void handle_line_type_long(struct GameTracker *gt, DebugMenuLine *line);
-void handle_line_type_action(struct GameTracker *gt, DebugMenuLine *line);
-void handle_line_type_action_with_line(struct GameTracker *gt, DebugMenuLine *line);
-void handle_line_type_menu(struct GameTracker *gt, DebugMenuLine *line);
+void handle_line_type_bit(GameTracker *gt, DebugMenuLine *line);
+void handle_line_type_long(GameTracker *gt, DebugMenuLine *line);
+void handle_line_type_action(GameTracker *gt, DebugMenuLine *line);
+void handle_line_type_action_with_line(GameTracker *gt, DebugMenuLine *line);
+void handle_line_type_menu(GameTracker *gt, DebugMenuLine *line);
 
 DebugMenuLine levelSelectMenu[];
 DebugMenuLine debugRazielMenu[];
