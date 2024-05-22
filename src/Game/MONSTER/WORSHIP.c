@@ -38,4 +38,38 @@ void WORSHIP_Init(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/WORSHIP", WORSHIP_CombatEntry);
+void WORSHIP_CombatEntry(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+    Instance *temp; // not from decls.h
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((mv->enemy != NULL) && (mv->enemy->distance < mv->subAttr->combatAttributes->combatRange) && (mv->age == 1))
+    {
+        ma = (MonsterAttributes *)instance->data;
+
+        temp = instance->LinkChild;
+
+        if (temp != NULL)
+        {
+            if ((temp->LinkSibling == NULL) && (temp->ParentLinkNode == ma->rightWeaponSegment))
+            {
+                INSTANCE_UnlinkFromParent(temp);
+
+                INSTANCE_LinkToParent(temp, instance, ma->leftWeaponSegment);
+
+                mv->mvFlags |= 0x20;
+            }
+        }
+        else
+        {
+            HUMAN_CreateWeapon(instance, 11, ma->leftWeaponSegment);
+
+            mv->mvFlags |= 0x20;
+        }
+    }
+
+    MON_CombatEntry(instance);
+}

@@ -5,6 +5,166 @@
 #include "Game/STATE.h"
 #include "Game/G2/ANIMG2.h"
 
+// size: 0x24
+typedef struct _MonsterIR {
+    // offset: 0000 (36 bytes)
+    struct _MonsterIR *next;
+    // offset: 0004 (668 bytes)
+    struct _Instance *instance;
+    // offset: 0008
+    long handle;
+    // offset: 000C (8 bytes)
+    struct _SVector relativePosition;
+    // offset: 0014
+    short distance;
+    // offset: 0016
+    unsigned short mirFlags;
+    // offset: 0018
+    unsigned short mirConditions;
+    // offset: 001C
+    unsigned long forgetTimer;
+    // offset: 0020
+    unsigned long idleTime;
+} MonsterIR;
+
+// size: 0x2E
+typedef struct _MonsterCombatAttributes {
+    // offset: 0000
+    short stunTime;
+    // offset: 0002
+    short damageTime;
+    // offset: 0004
+    short recovery;
+    // offset: 0006
+    short surpriseTime;
+    // offset: 0008
+    short grabTime;
+    // offset: 000A
+    short combatRange;
+    // offset: 000C
+    short surpriseRange;
+    // offset: 000E
+    short allyRange;
+    // offset: 0010
+    short enemyAttackRange;
+    // offset: 0012
+    short enemyRunAttackRange;
+    // offset: 0014
+    short preferredCombatRange;
+    // offset: 0016
+    short suckPower;
+    // offset: 0018
+    short suckRange;
+    // offset: 001A
+    short suckTime;
+    // offset: 001C
+    char hitPoints;
+    // offset: 001D
+    char numAttacks;
+    // offset: 001E
+    char missileAttack;
+    // offset: 001F
+    char ambushAttack;
+    // offset: 0020 (12 bytes)
+    char evadeProbability[12];
+    // offset: 002C (1 bytes)
+    char attackList[1];
+} MonsterCombatAttributes;
+
+// size: 0x54
+typedef struct _MonsterSubAttributes {
+    // offset: 0000
+    char *animList;
+    // offset: 0004 (18 bytes)
+    struct _MonsterSenses *senses;
+    // offset: 0008 (46 bytes)
+    struct _MonsterCombatAttributes *combatAttributes;
+    // offset: 000C (16 bytes)
+    struct _MonsterAllegiances *allegiances;
+    // offset: 0010
+    char *behaviorList;
+    // offset: 0014
+    short scale;
+    // offset: 0016
+    short fallDistance;
+    // offset: 0018
+    short defAmbushRange;
+    // offset: 001A
+    short fleeRange;
+    // offset: 001C
+    short speedPivotTurn;
+    // offset: 001E
+    short speedWalkTurn;
+    // offset: 0020
+    short speedRunTurn;
+    // offset: 0022
+    short speedFleeTurn;
+    // offset: 0024
+    short forgetTime;
+    // offset: 0026
+    unsigned char modelNum;
+    // offset: 0027
+    unsigned char physAbility;
+    // offset: 0028
+    unsigned char stunnable;
+    // offset: 0029
+    unsigned char grabable;
+    // offset: 002A
+    unsigned char numSections;
+    // offset: 002B (3 bytes)
+    unsigned char sectionEnd[3];
+    // offset: 002E
+    short defPlayerAttitude;
+    // offset: 0030
+    short defWanderRange;
+    // offset: 0032
+    short defGuardRange;
+    // offset: 0034
+    unsigned char defInitialBehavior;
+    // offset: 0035
+    unsigned char defTriggeredBehavior;
+    // offset: 0036
+    char defActiveBehavior;
+    // offset: 0037
+    unsigned char defSpectral;
+    // offset: 0038
+    unsigned char sunVuln;
+    // offset: 0039
+    unsigned char fireVuln;
+    // offset: 003A
+    unsigned char waterVuln;
+    // offset: 003B
+    unsigned char impaleVuln;
+    // offset: 003C
+    unsigned char soundVuln;
+    // offset: 003D
+    unsigned char weaponVuln;
+    // offset: 003E
+    unsigned char missileVuln;
+    // offset: 003F
+    unsigned char bruiseRed;
+    // offset: 0040
+    unsigned char bruiseGreen;
+    // offset: 0041
+    unsigned char bruiseBlue;
+    // offset: 0042
+    short minSpikeRange;
+    // offset: 0044
+    short maxSpikeRange;
+    // offset: 0046
+    short maxSpikeAngle;
+    // offset: 0048
+    short minSpikeHorzSpeed;
+    // offset: 004A
+    short maxSpikeHorzSpeed;
+    // offset: 004C
+    short maxSpikeVertSpeed;
+    // offset: 004E
+    short upOnGroundOffset;
+    // offset: 0050
+    short downOnGroundOffset;
+} MonsterSubAttributes;
+
 // size: 0x50
 typedef struct _MonsterAttributes {
     // offset: 0000
