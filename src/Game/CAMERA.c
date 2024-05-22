@@ -64,7 +64,10 @@ void CAMERA_Lock(Camera *camera, long lock)
     camera->lock |= lock;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Unlock);
+void CAMERA_Unlock(Camera *camera, long unlock)
+{
+    camera->lock &= ~unlock;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetSmoothValue);
 
