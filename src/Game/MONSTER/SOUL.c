@@ -34,7 +34,20 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_FleeEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Flee);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_IdleEntry);
+void SOUL_IdleEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    instance->maxXVel = 15;
+    instance->maxYVel = 15;
+    instance->maxZVel = 17;
+
+    mv->generalTimer = MON_GetTime(instance) + 3000 + (rand() % 3000);
+
+    mv->mvFlags &= ~0x40000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Idle);
 
