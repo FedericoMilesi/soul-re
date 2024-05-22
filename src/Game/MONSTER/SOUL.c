@@ -26,7 +26,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_CalcAccel);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_SoulSuck);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_WanderEntry);
+void SOUL_WanderEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    instance->maxXVel = 10;
+    instance->maxYVel = 10;
+    instance->maxZVel = 17;
+
+    if (!(mv->mvFlags & 0x40000))
+    {
+        if (instance->intro != NULL)
+        {
+            MON_GetRandomDestinationInWorld(instance, &instance->intro->position, mv->wanderRange);
+        }
+        else
+        {
+            MON_GetRandomDestinationInWorld(instance, &instance->position, mv->wanderRange);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Wander);
 
