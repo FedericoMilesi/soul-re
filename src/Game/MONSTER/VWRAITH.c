@@ -1,7 +1,27 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_MoveVertical);
+void VWRAITH_MoveVertical(Instance *instance, long targetZ, int velocity)
+{
+    if (instance->position.z < targetZ)
+    {
+        instance->position.z += velocity;
+
+        if (targetZ < instance->position.z)
+        {
+            instance->position.z = targetZ;
+        }
+    }
+    else if (targetZ < instance->position.z)
+    {
+        instance->position.z -= velocity;
+
+        if (instance->position.z < targetZ)
+        {
+            instance->position.z = targetZ;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_Init);
 
