@@ -30,7 +30,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_WanderEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Wander);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_FleeEntry);
+void SOUL_FleeEntry(Instance *instance)
+{
+    instance->maxXVel = 15;
+    instance->maxYVel = 15;
+    instance->maxZVel = 17;
+
+    MON_FleeEntry(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Flee);
 
