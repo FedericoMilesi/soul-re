@@ -14,7 +14,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_MovePastWall);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Init);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_CleanUp);
+void SOUL_CleanUp(Instance *instance)
+{
+    MON_CleanUp(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_BirthEntry);
 
