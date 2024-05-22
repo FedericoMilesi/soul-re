@@ -12,7 +12,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_GetInitFunc);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_GetCleanUpFunc);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_SetQueryFunc);
+void MONTABLE_SetQueryFunc(Instance *instance)
+{
+    MonsterFunctionTable *ft;
+
+    ft = (MonsterFunctionTable *)instance->object->relocModule;
+
+    if ((ft != NULL) && (ft->queryFunc != NULL))
+    {
+        instance->queryFunc = ft->queryFunc;
+    }
+}
 
 void MONTABLE_SetMessageFunc(Instance *instance)
 {
