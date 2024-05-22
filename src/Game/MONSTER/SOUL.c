@@ -29,7 +29,32 @@ void SOUL_SoulSuckEntry(Instance *instance)
     instance->flags &= ~0x800;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_CalcAccel);
+long SOUL_CalcAccel(long delta, long vel, long magnitude)
+{
+    long rv;
+
+    if (delta > 0)
+    {
+        if (vel < 0)
+        {
+            rv = (delta * 16) / magnitude;
+        }
+        else
+        {
+            rv = (delta * 5) / magnitude;
+        }
+    }
+    else if (vel > 0)
+    {
+        rv = (delta * 16) / magnitude;
+    }
+    else
+    {
+        rv = (delta * 5) / magnitude;
+    }
+
+    return rv;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_SoulSuck);
 
