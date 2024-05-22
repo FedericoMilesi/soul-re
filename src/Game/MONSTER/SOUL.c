@@ -1,4 +1,6 @@
 #include "common.h"
+#include "Game/INSTANCE.h"
+#include "Game/MONSTER/MONAPI.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_QueueHandler);
 
@@ -36,7 +38,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_IdleEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Idle);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_ReanimateEntry);
+void SOUL_ReanimateEntry(Instance *instance)
+{
+    MonsterVars *mv;
+    Instance *body;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    body = INSTANCE_Find(mv->soulID);
+
+    mv->destination.x = body->position.x;
+    mv->destination.y = body->position.y;
+    mv->destination.z = body->position.z + 160;
+
+    MON_TurnOffBodySpheres(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Reanimate);
 
