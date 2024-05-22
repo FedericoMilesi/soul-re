@@ -20,7 +20,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_BirthEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Birth);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_SoulSuckEntry);
+void SOUL_SoulSuckEntry(Instance *instance)
+{
+    instance->maxXVel = 600;
+    instance->maxYVel = 600;
+    instance->maxZVel = 17;
+
+    instance->flags &= ~0x800;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_CalcAccel);
 
