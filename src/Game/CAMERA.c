@@ -186,7 +186,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_EndLook);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ChangeToUnderWater);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ChangeToOutOfWater);
+void CAMERA_ChangeToOutOfWater(Camera *camera, Instance *instance)
+{
+    if (instance == camera->focusInstance)
+    {
+        if (camera->mode != 5)
+        {
+            CAMERA_SetMode(camera, 13);
+
+            camera->rotationVel.z = 0;
+
+            camera->targetTilt = 0;
+        }
+        else
+        {
+            CAMERA_SaveMode(camera, 13);
+        }
+
+        camera->flags &= ~0x10000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusDistance);
 
