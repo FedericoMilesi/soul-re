@@ -176,7 +176,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetLookRot);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_StartLookaroundMode);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_StartSwimThrowMode);
+void CAMERA_StartSwimThrowMode(Camera *camera)
+{
+    CameraLookStickyFlag = 0x1;
+
+    CAMERA_StartLookaroundMode(camera);
+
+    PLAYER_SetLookAround(camera->focusInstance);
+
+    camera->lookTimer = 2;
+}
 
 void CAMERA_EndSwimThrowMode(Camera *camera)
 {
