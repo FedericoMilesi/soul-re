@@ -315,6 +315,6 @@ typedef struct _FXGeneralEffect {
     short lifeTime;
 } FXGeneralEffect;
 
-void FX_ContinueParticle(FXParticle *currentParticle, FXTracker *fxTracker);
+void FX_ContinueParticle(struct _FXParticle *currentParticle, struct _FXTracker *fxTracker);
 
 #endif

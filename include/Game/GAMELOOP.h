@@ -256,6 +256,6 @@ typedef struct GameTracker {
     char pad;
 } GameTracker;
 
-GameTracker gameTrackerX;
+extern GameTracker gameTrackerX;
 
 #endif
