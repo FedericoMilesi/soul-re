@@ -422,4 +422,6 @@ typedef struct CameraCollisionInfo {
 
 extern int CameraCenterDelay;
 
+void Decouple_AngleMoveToward(short *current_ptr, short destination, short step);
+
 #endif

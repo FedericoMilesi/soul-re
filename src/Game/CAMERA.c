@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/TYPES.h"
 #include "Game/CAMERA.h"
+#include "Game/INSTANCE.h"
 
 EXTERN STATIC short panic_count;
 
@@ -201,7 +202,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_FollowPlayerTilt);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_FollowGoBehindPlayerWithTimer);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_FollowGoBehindPlayer);
+void CAMERA_FollowGoBehindPlayer(Camera *camera)
+{
+	Instance* focusInstance;
+
+	focusInstance = camera->focusInstance;
+
+	Decouple_AngleMoveToward(&camera->targetFocusRotation.z, focusInstance->rotation.z + 2048, camera->rotationVel.z);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateLead);
 
