@@ -5,6 +5,8 @@
 
 EXTERN STATIC short panic_count;
 
+EXTERN STATIC short CameraLookStickyFlag;
+
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateViewVolumeNormals);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcVVClipInfo);
@@ -178,7 +180,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_StartSwimThrowMode);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_EndSwimThrowMode);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ForceEndLookaroundMode);
+void CAMERA_ForceEndLookaroundMode(Camera *camera)
+{
+    CameraLookStickyFlag = 0;
+
+    CAMERA_EndLook(camera);
+
+    camera->flags &= ~0x20000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Control);
 
