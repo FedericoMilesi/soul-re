@@ -112,6 +112,33 @@ INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_ReadFile);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_ChangeDirectory);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_AbortDirectoryChange);
+void LOAD_AbortDirectoryChange(char *name)
+{
+    LoadQueueEntry *entry;
+    LoadQueueEntry *prev;
+    long hash;
+
+    if (loadHead != NULL)
+    {
+        hash = LOAD_HashUnit(name);
+
+        prev = loadHead;
+
+        entry = prev->next;
+
+        while (entry != NULL)
+        {
+            if ((entry->status == 10) && (entry->loadEntry.dirHash == hash))
+            {
+                STREAM_RemoveQueueEntry(entry, prev);
+                break;
+            }
+
+            prev = entry;
+
+            entry = prev->next;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_AbortFileLoad);
