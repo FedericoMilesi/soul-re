@@ -98,7 +98,24 @@ void STREAM_QueueNonblockingLoads(char *fileName, unsigned char memType, void *r
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_LoadToAddress);
+void LOAD_LoadToAddress(char *fileName, void *loadAddr, long relocateBinary)
+{
+    LoadQueueEntry *currentEntry;
+
+    currentEntry = STREAM_SetUpQueueEntry(fileName, NULL, NULL, NULL, NULL, 0);
+
+    currentEntry->loadEntry.loadAddr = loadAddr;
+
+    currentEntry->status = 1;
+
+    currentEntry->relocateBinary = (char)relocateBinary;
+
+    currentEntry->mempackUsed = 0;
+
+    while (STREAM_PollLoadQueue() != 0)
+    {
+    }
+}
 
 void LOAD_NonBlockingBinaryLoad(char *fileName, void *retFunc, void *retData, void *retData2, void **retPointer, int memType)
 {
