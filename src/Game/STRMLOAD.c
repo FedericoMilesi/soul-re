@@ -106,7 +106,24 @@ INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_NonBlockingFileLoad);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_NonBlockingBufferedLoad);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_IsXAInQueue);
+int LOAD_IsXAInQueue()
+{
+    LoadQueueEntry *entry;
+
+    entry = loadHead;
+
+    while (entry != NULL)
+    {
+        if ((entry->status == 8) || (entry->status == 9))
+        {
+            return 1;
+        }
+
+        entry = entry->next;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_PlayXA);
 
