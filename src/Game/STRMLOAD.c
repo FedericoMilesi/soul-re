@@ -141,4 +141,49 @@ void LOAD_AbortDirectoryChange(char *name)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_AbortFileLoad);
+void LOAD_AbortFileLoad(char *fileName, void *retFunc)
+{
+    LoadQueueEntry *entry;
+    LoadQueueEntry *prev;
+    long hash;
+    typedef void (*ret)(long *, void *, void *); // not from decls.h
+    ret returnFunction; // not from decls.h
+
+    if (loadHead != NULL)
+    {
+        prev = NULL;
+
+        hash = LOAD_HashName(fileName);
+
+        entry = loadHead;
+
+        while (entry != NULL)
+        {
+            if (entry->loadEntry.fileHash == hash)
+            {
+                if (prev == NULL)
+                {
+                    LOAD_StopLoad();
+                }
+
+                if (entry->status == 6)
+                {
+                    LOAD_CleanUpBuffers();
+                }
+
+                returnFunction = (ret)retFunc;
+
+                returnFunction(entry->loadEntry.loadAddr, entry->loadEntry.retData, entry->loadEntry.retData2);
+
+                STREAM_RemoveQueueEntry(entry, prev);
+                break;
+            }
+            else
+            {
+                prev = entry;
+
+                entry = entry->next;
+            }
+        }
+    }
+}
