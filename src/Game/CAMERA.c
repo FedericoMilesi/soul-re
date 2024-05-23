@@ -245,7 +245,30 @@ void CAMERA_UpdateFocusDistance(Camera *camera)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusTilt);
+void CAMERA_UpdateFocusTilt(Camera *camera)
+{
+    if ((camera->flags & 0x1800))
+    {
+        camera->x_rot_change = 0;
+
+        camera->focusRotation.x = camera->tfaceTilt;
+    }
+    else
+    {
+        camera->x_rot_change = camera->focusRotation.x;
+
+        if ((camera->forced_movement != 3) && (!(camera->lock & 0x2)) || ((camera->flags & 0x10000)))
+        {
+            CriticalDampAngle(1, &camera->focusRotation.x, camera->tfaceTilt, &camera->focusRotVel.x, &camera->focusRotAccl.x, 32);
+        }
+        else
+        {
+            camera->focusRotation.x = camera->targetFocusRotation.x;
+        }
+
+        camera->x_rot_change = CAMERA_SignedAngleDifference(camera->x_rot_change, camera->focusRotation.x);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusRoll);
 
