@@ -213,4 +213,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Panic);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_DoCameraCollision2);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_FocusInstanceMoved);
+int CAMERA_FocusInstanceMoved(Camera *camera)
+{
+    return ((camera->newFocusInstancePos.x != camera->oldFocusInstancePos.x) || (camera->newFocusInstancePos.y != camera->oldFocusInstancePos.y)
+    || (camera->newFocusInstancePos.z != camera->oldFocusInstancePos.z) || (camera->newFocusInstanceRot.x != camera->oldFocusInstanceRot.x)
+    || (camera->newFocusInstanceRot.y != camera->oldFocusInstanceRot.y) || (camera->newFocusInstanceRot.z != camera->oldFocusInstanceRot.z));
+}
