@@ -7,6 +7,10 @@ EXTERN STATIC short panic_count;
 
 EXTERN STATIC short CameraLookStickyFlag;
 
+EXTERN STATIC short Camera_lookHeight;
+
+EXTERN STATIC short Camera_lookDist;
+
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateViewVolumeNormals);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcVVClipInfo);
@@ -174,7 +178,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CenterCamera);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetLookRot);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_StartLookaroundMode);
+void CAMERA_StartLookaroundMode(Camera *camera)
+{
+    Camera_lookHeight = 512;
+    Camera_lookDist = 650;
+
+    CAMERA_SaveMode(camera, camera->mode);
+
+    camera->mode = 6;
+
+    camera->savedFocusDistance = camera->targetFocusDistance;
+    camera->savedFocusRotation = camera->targetFocusRotation;
+
+    camera->targetFocusDistance = 650;
+
+    camera->lookRot.x = 0;
+    camera->lookRot.y = 0;
+    camera->lookRot.z = 0;
+
+    CAMERA_SetLookFocusAndBase(camera->focusInstance, &camera->targetFocusPoint);
+}
 
 void CAMERA_StartSwimThrowMode(Camera *camera)
 {
