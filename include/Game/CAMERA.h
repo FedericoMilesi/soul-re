@@ -423,5 +423,7 @@ typedef struct CameraCollisionInfo {
 extern int CameraCenterDelay;
 
 void Decouple_AngleMoveToward(short *current_ptr, short destination, short step);
+void CriticalDampAngle(long dampMode, short *currentVal, short target, short *vel, short *accl, int smooth);
+short CAMERA_AngleDifference(short angle0, short angle1);
 
 #endif

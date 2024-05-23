@@ -194,7 +194,48 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusTilt);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusRoll);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusRotate);
+void CAMERA_UpdateFocusRotate(Camera *camera)
+{
+    int dampspeed;
+    long dampmode;
+
+    if (camera->forced_movement != 1)
+    {
+        if (!(camera->lock & 0x4))
+        {
+            dampmode = 1;
+
+            if (camera->always_rotate_flag != 0)
+            {
+                dampspeed = -camera->smooth;
+            }
+            else if (!(camera->flags & 0x10000))
+            {
+                dampmode = 5;
+                dampspeed = 160;
+            }
+            else
+            {
+                dampspeed = 128;
+            }
+
+            CriticalDampAngle(dampmode, &camera->focusRotation.z, camera->collisionTargetFocusRotation.z, &camera->focusRotVel.z, &camera->focusRotAccl.z, (short)dampspeed);
+
+            if (CAMERA_AngleDifference(camera->targetFocusRotation.z, camera->focusRotation.z) < 4)
+            {
+                camera->always_rotate_flag = 0;
+            }
+        }
+        else
+        {
+            camera->focusRotation.z = camera->targetFocusRotation.z;
+        }
+    }
+    else if ((camera->lock & 0x4))
+    {
+        camera->focusRotation.z = camera->targetFocusRotation.z;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusRotationX);
 
@@ -204,11 +245,11 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_FollowGoBehindPlayerWithTimer
 
 void CAMERA_FollowGoBehindPlayer(Camera *camera)
 {
-	Instance* focusInstance;
+    Instance *focusInstance;
 
-	focusInstance = camera->focusInstance;
+    focusInstance = camera->focusInstance;
 
-	Decouple_AngleMoveToward(&camera->targetFocusRotation.z, focusInstance->rotation.z + 2048, camera->rotationVel.z);
+    Decouple_AngleMoveToward(&camera->targetFocusRotation.z, focusInstance->rotation.z + 2048, camera->rotationVel.z);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateLead);

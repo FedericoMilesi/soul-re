@@ -20,15 +20,6 @@
     "terminal.integrated.tabs.enableAnimation": false,
     "files.autoGuessEncoding": true,
     "files.associations": {
-        "camera.h": "c",
-        "gameloop.h": "c",
-        "main.h": "c",
-        "common.h": "c",
-        "types.h": "c",
-        "light3d.h": "c",
-        "stream.h": "c",
-        "instance.h": "c",
-        "monapi.h": "c",
-        "collide.h": "c"
+        "vram.h": "c"
     }
 }
