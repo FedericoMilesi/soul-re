@@ -176,7 +176,11 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Process);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CenterCamera);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetLookRot);
+void CAMERA_SetLookRot(Camera *camera, int x_rotation, int z_rotation)
+{
+    camera->lookRot.x = x_rotation;
+    camera->lookRot.z = z_rotation;
+}
 
 void CAMERA_StartLookaroundMode(Camera *camera)
 {
