@@ -207,7 +207,43 @@ void CAMERA_ChangeToOutOfWater(Camera *camera, Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusDistance);
+void CAMERA_UpdateFocusDistance(Camera *camera)
+{
+    int smooth;
+    long dampMode;
+
+    if ((camera->forced_movement != 2) && (!(camera->lock & 0x1)))
+    {
+        if ((camera->targetFocusDistance < camera->collisionTargetFocusDistance) && (!(camera->instance_mode & 0x82000000)))
+        {
+            camera->collisionTargetFocusDistance = camera->targetFocusDistance;
+        }
+
+        dampMode = 6;
+
+        if (camera->collisionTargetFocusDistance < camera->focusDistance)
+        {
+            if (camera->collisionTargetFocusDistance < camera->targetFocusDistance)
+            {
+                smooth = 512;
+
+                dampMode = 5;
+            }
+            else
+            {
+                smooth = 128;
+
+                dampMode = 1;
+            }
+        }
+        else
+        {
+            smooth = 64;
+        }
+
+        CriticalDampValue(dampMode, &camera->focusDistance, camera->collisionTargetFocusDistance, &camera->focusDistanceVel, &camera->focusDistanceAccl, smooth);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusTilt);
 
