@@ -13,6 +13,8 @@ EXTERN STATIC LoadQueueEntry *loadHead;
 
 EXTERN STATIC LoadQueueEntry *loadTail;
 
+EXTERN STATIC int gCurDir;
+
 void STREAM_NextLoadFromHead()
 {
     loadFromHead = 1;
@@ -108,7 +110,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_IsXAInQueue);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_PlayXA);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_ReadFile);
+long *LOAD_ReadFile(char *fileName, unsigned char memType)
+{
+    void *loadAddr;
+
+    STREAM_QueueNonblockingLoads(fileName, memType, NULL, NULL, NULL, &loadAddr, 0);
+
+    while (STREAM_PollLoadQueue() != 0)
+    {
+    }
+
+    return (long *)loadAddr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_ChangeDirectory);
 
