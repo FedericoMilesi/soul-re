@@ -182,7 +182,45 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ForceEndLookaroundMode);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Control);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_EndLook);
+void CAMERA_EndLook(Camera *camera)
+{
+    Instance *focusInstance;
+
+    focusInstance = camera->focusInstance;
+
+    if ((camera->lookTimer >= 2) && (camera->mode == 6))
+    {
+        CAMERA_RestoreMode(camera);
+
+        camera->forced_movement = 0;
+
+        camera->smooth = 8;
+
+        camera->targetFocusDistance = camera->savedFocusDistance;
+
+        camera->targetFocusRotation = camera->savedFocusRotation;
+
+        if ((camera->mode != 4) && (camera->mode != 2))
+        {
+            camera->targetFocusRotation.z = (focusInstance->rotation.z + 2048) & 0xFFF;
+
+            CAMERA_CenterCamera(camera);
+        }
+
+        camera->always_rotate_flag = 1;
+
+        camera->collisionTargetFocusRotation.z = camera->targetFocusRotation.z;
+
+        if (!(camera->flags & 0x10000))
+        {
+            camera->actual_x_rot = camera->core.rotation.x;
+        }
+
+        PLAYER_ReSetLookAround(focusInstance);
+    }
+
+    camera->lookTimer = 0;
+}
 
 void CAMERA_ChangeToUnderWater(Camera *camera, Instance *instance)
 {
