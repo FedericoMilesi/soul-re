@@ -104,7 +104,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_NonBlockingBinaryLoad);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_NonBlockingFileLoad);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_NonBlockingBufferedLoad);
+void LOAD_NonBlockingBufferedLoad(char *fileName, void *retFunc, void *retData, void *retData2)
+{
+    STREAM_QueueNonblockingLoads(fileName, 0, retFunc, retData, retData2, NULL, 0);
+}
 
 int LOAD_IsXAInQueue()
 {
