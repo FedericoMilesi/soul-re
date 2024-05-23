@@ -178,7 +178,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_StartLookaroundMode);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_StartSwimThrowMode);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_EndSwimThrowMode);
+void CAMERA_EndSwimThrowMode(Camera *camera)
+{
+    CameraLookStickyFlag = 0;
+
+    CAMERA_EndLook(camera);
+}
 
 void CAMERA_ForceEndLookaroundMode(Camera *camera)
 {
