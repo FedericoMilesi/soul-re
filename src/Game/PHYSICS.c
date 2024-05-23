@@ -3,6 +3,7 @@
 #include "Game/INSTANCE.h"
 #include "Game/COLLIDE.h"
 #include "Game/STREAM.h"
+#include "Game/GAMELOOP.h"
 
 void PHYSICS_GenericLineCheck(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
 void PHYSICS_GenericLineCheckMask(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
@@ -87,7 +88,20 @@ void PhysicsDefaultLinkedMoveResponse(Instance *instance, evPhysicsLinkedMoveDat
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckGravity);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsDefaultGravityResponse);
+void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Data)
+{
+    instance->position.x += Data->x;
+    instance->position.y += Data->y;
+
+    if ((instance == gameTrackerX.playerInstance) && (Data->z >= 129))
+    {
+        instance->position.z += 128;
+    }
+    else
+    {
+        instance->position.z += Data->z;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckEdgeGrabbing);
 
