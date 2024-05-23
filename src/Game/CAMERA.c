@@ -11,6 +11,8 @@ EXTERN STATIC short Camera_lookHeight;
 
 EXTERN STATIC short Camera_lookDist;
 
+EXTERN STATIC short CenterFlag;
+
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateViewVolumeNormals);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcVVClipInfo);
@@ -174,7 +176,36 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ShakeCamera);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Process);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CenterCamera);
+void CAMERA_CenterCamera(Camera *camera)
+{
+    int tmp1;
+    int tmp2;
+
+    if ((camera->instance_mode & 0x2000000))
+    {
+        tmp1 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z + 1024));
+        tmp2 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z - 1024));
+
+        if (tmp1 < tmp2)
+        {
+            CenterFlag = camera->focusInstance->rotation.z + 1024;
+        }
+        else
+        {
+            CenterFlag = camera->focusInstance->rotation.z - 1024;
+        }
+    }
+    else
+    {
+        CenterFlag = camera->focusInstance->rotation.z + 2048;
+    }
+
+    camera->focusRotAccl.z = 0;
+
+    camera->focusRotVel.z = 0;
+
+    CenterFlag &= 0xFFF;
+}
 
 void CAMERA_SetLookRot(Camera *camera, int x_rotation, int z_rotation)
 {
