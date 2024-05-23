@@ -209,7 +209,23 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFollowPosition);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetupColInfo);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_DoPanicCheck);
+void CAMERA_DoPanicCheck(Camera *camera, CameraCollisionInfo *tmpcolInfo, Rotation *rotation, short *best_z, short *max_dist)
+{
+    Position targetCamPos;
+
+    CAMERA_CalcPosition(&targetCamPos, &camera->focusPoint, rotation, camera->targetFocusDistance);
+
+    SET_SVEC((SVector *)&camera->posSphere.position, &targetCamPos);
+
+    CAMERA_SphereToSphereWithLines(camera, tmpcolInfo, 0);
+
+    if ((tmpcolInfo->numCollided == 0) || ((int)*max_dist < tmpcolInfo->lenCenterToExtend))
+    {
+        *best_z = rotation->z;
+
+        *max_dist = (short)tmpcolInfo->lenCenterToExtend;
+    }
+}
 
 void CAMERA_Panic(Camera *camera, short min_dist)
 {
