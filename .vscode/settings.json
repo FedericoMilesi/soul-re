@@ -20,6 +20,7 @@
     "terminal.integrated.tabs.enableAnimation": false,
     "files.autoGuessEncoding": true,
     "files.associations": {
-        "vram.h": "c"
+        "vram.h": "c",
+        "strmload.h": "c"
     }
 }
