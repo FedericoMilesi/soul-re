@@ -2,6 +2,8 @@
 #include "Game/TYPES.h"
 #include "Game/CAMERA.h"
 
+EXTERN STATIC short panic_count;
+
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateViewVolumeNormals);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcVVClipInfo);
@@ -209,7 +211,87 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetupColInfo);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_DoPanicCheck);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Panic);
+void CAMERA_Panic(Camera *camera, short min_dist)
+{
+    Position targetCamPos;
+    Rotation rotation;
+    int n;
+    short best_z;
+    short max_dist;
+    CameraCollisionInfo tmpcolInfo;
+    short free_count1;
+    short free_count2;
+
+    free_count1 = 0;
+    free_count2 = 0;
+
+    max_dist = min_dist;
+
+    CAMERA_SetupColInfo(camera, &tmpcolInfo, &targetCamPos);
+
+    n = 0;
+
+    rotation = camera->focusRotation;
+
+    best_z = rotation.z;
+
+    while (1)
+    {
+        rotation.z = camera->focusRotation.z + n;
+
+        CAMERA_DoPanicCheck(camera, &tmpcolInfo, &rotation, &best_z, &max_dist);
+
+        if (tmpcolInfo.numCollided == 0)
+        {
+            free_count1++;
+
+            if (2 < ((free_count1 * 65536) >> 16))
+            {
+                break;
+            }
+        }
+
+        rotation.z = camera->focusRotation.z - n;
+
+        CAMERA_DoPanicCheck(camera, &tmpcolInfo, &rotation, &best_z, &max_dist);
+
+        if (tmpcolInfo.numCollided == 0)
+        {
+            free_count2++;
+
+            if (2 < ((free_count2 * 65536) >> 16))
+            {
+                break;
+            }
+        }
+
+        n += 128;
+
+        if (n > 2047)
+        {
+            break;
+        }
+    }
+
+    if (max_dist == min_dist)
+    {
+        panic_count = -32767;
+    }
+    else
+    {
+        camera->always_rotate_flag = 0x1;
+
+        camera->rotState = 3;
+
+        camera->smooth = -112;
+
+        camera->targetFocusRotation.z = best_z;
+
+        camera->collisionTargetFocusRotation.z = best_z;
+
+        camera->signalRot.z = best_z;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_DoCameraCollision2);
 

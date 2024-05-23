@@ -394,6 +394,32 @@ typedef struct Camera {
     short lead_timer;
 } Camera;
 
+// size: 0x5C
+typedef struct CameraCollisionInfo {
+    // offset: 0000 (20 bytes)
+    struct _TFace *tfaceList[5];
+    // offset: 0014 (20 bytes)
+    struct _Terrain *tfaceTerrain[5];
+    // offset: 0028 (12 bytes)
+    short bspTree[6];
+    // offset: 0034 (12 bytes)
+    short lengthList[6];
+    // offset: 0040
+    long flags;
+    // offset: 0044
+    long line;
+    // offset: 0048
+    long numCollided;
+    // offset: 004C
+    long lenCenterToExtend;
+    // offset: 0050 (12 bytes)
+    struct _Sphere *start;
+    // offset: 0054 (12 bytes)
+    struct _Sphere *end;
+    // offset: 0058
+    long cldLines;
+} CameraCollisionInfo;
+
 extern int CameraCenterDelay;
 
 #endif
