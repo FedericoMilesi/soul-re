@@ -42,7 +42,68 @@ void SoulReaverInit(Instance *instance, GameTracker *gameTracker)
     FX_ReaverBladeInit();
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverCollide);
+void SoulReaverCollide(Instance *instance, GameTracker *gameTracker)
+{
+    CollideInfo *collideInfo;
+    HSphere *S;
+    Instance *target;
+    ReaverData *reaverData;
+    long type;
+    Instance *inst;
+
+    collideInfo = (CollideInfo *)instance->collideInfo;
+
+    if ((collideInfo->type0 == 1) && (collideInfo->type1 == 1))
+    {
+        S = (HSphere *)collideInfo->prim0;
+
+        if (S->id == 9)
+        {
+            S = (HSphere *)collideInfo->prim1;
+
+            if (S->id == 8)
+            {
+                type = 0;
+
+                target = (Instance *)collideInfo->inst1;
+
+                COLLIDE_SegmentCollisionOff(instance, 0);
+
+                reaverData = (ReaverData *)instance->extraData;
+
+                switch (reaverData->CurrentReaver)
+                {
+                case 1:
+                case 2:
+                    type = 4096;
+                    break;
+                case 6:
+                    type = 32;
+                    break;
+                }
+
+                if (instance->LinkParent != NULL)
+                {
+                    COLLIDE_SegmentCollisionOff(instance, 0);
+
+                    INSTANCE_Post(gameTrackerX.playerInstance, 0x100001F, SetMonsterHitData(instance->LinkParent, target, type, 0, 0));
+                    INSTANCE_Post(target, 0x400000, SetFXHitData(instance, (unsigned char)collideInfo->segment, 50, type));
+                }
+            }
+        }
+    }
+
+    if ((unsigned)collideInfo->type1 != 3)
+    {
+        inst = (Instance *)collideInfo->inst1;
+
+        inst->flags |= 0x4;
+    }
+    else
+    {
+        COLLIDE_SetBSPTreeFlag(collideInfo, 0x800);
+    }
+}
 
 void SoulReaverProcess(Instance *instance, GameTracker *gameTracker)
 {
