@@ -48,7 +48,39 @@ void SOUL_Physics(Instance *instance, long time)
     PhysicsMove(instance, &instance->position, time);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Fade);
+void SOUL_Fade(Instance *instance)
+{
+    MonsterVars *mv;
+    unsigned long time;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    time = MON_GetTime(instance);
+
+    if (!(gameTrackerX.gameFlags & 0x80))
+    {
+        if (mv->damageTimer < time)
+        {
+            if (instance->fadeValue == 0)
+            {
+                MON_StartSpecialFade(instance, 4096, 100);
+            }
+
+            if (instance->fadeValue >= 4096)
+            {
+                instance->flags2 |= 0x8000000;
+
+                MORPH_SetupInstanceFlags(instance);
+
+                instance->fadeValue = 0;
+            }
+        }
+    }
+    else
+    {
+        mv->damageTimer = time + 6500;
+    }
+}
 
 void SOUL_MoveToDest(Instance *instance, long maxAccel, long time)
 {
