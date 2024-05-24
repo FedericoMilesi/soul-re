@@ -259,7 +259,82 @@ void SOUL_WanderEntry(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Wander);
+void SOUL_Wander(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (!(mv->mvFlags & 0x40000))
+    {
+        if (instance->intro != NULL)
+        {
+            MON_GetRandomDestinationInWorld(instance, &instance->intro->position, mv->wanderRange);
+
+            instance->zAccl = 0;
+        }
+        else
+        {
+            MON_GetRandomDestinationInWorld(instance, &instance->position, mv->wanderRange);
+
+            instance->zAccl = 0;
+        }
+    }
+    else if (MATH3D_LengthXY(mv->destination.x - instance->position.x, mv->destination.y - instance->position.y) < 100)
+    {
+        MON_SwitchState(instance, MONSTER_STATE_IDLE);
+
+        instance->zAccl = 0;
+    }
+    else
+    {
+        instance->xAccl = mv->destination.x - instance->position.x - instance->xVel;
+        instance->yAccl = mv->destination.y - instance->position.y - instance->yVel;
+
+        if (instance->xAccl >= -2)
+        {
+            if (instance->xAccl >= 3)
+            {
+                instance->xAccl = 2;
+            }
+        }
+        else
+        {
+            instance->xAccl = -2;
+        }
+
+        if (instance->yAccl >= -2)
+        {
+            if (instance->yAccl >= 3)
+            {
+                instance->yAccl = 2;
+            }
+        }
+        else
+        {
+            instance->yAccl = -2;
+        }
+
+        instance->zAccl = 0;
+    }
+
+    SOUL_Physics(instance, gameTrackerX.timeMult);
+
+    if (!(mv->mvFlags & 0x4))
+    {
+        if (!(instance->flags2 & 0x8000000))
+        {
+            SOUL_Fade(instance);
+        }
+
+        if (mv->enemy != NULL)
+        {
+            MON_SwitchState(instance, MONSTER_STATE_FLEE);
+        }
+    }
+
+    SOUL_QueueHandler(instance);
+}
 
 void SOUL_FleeEntry(Instance *instance)
 {
