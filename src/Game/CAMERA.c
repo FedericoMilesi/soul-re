@@ -2,6 +2,7 @@
 #include "Game/TYPES.h"
 #include "Game/CAMERA.h"
 #include "Game/INSTANCE.h"
+#include "Game/GAMELOOP.h"
 
 void CAMERA_EndLook(Camera *camera);
 
@@ -477,7 +478,36 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusRotationX);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_FollowPlayerTilt);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_FollowGoBehindPlayerWithTimer);
+void CAMERA_FollowGoBehindPlayerWithTimer(Camera *camera)
+{
+    Instance *focusInstance;
+
+    focusInstance = camera->focusInstance;
+
+    if (camera->data.Follow.hit != 0)
+    {
+        camera->data.Follow.stopTimer = 0xE5A20000;
+    }
+
+    if (CAMERA_FocusInstanceMoved(camera) != 0)
+    {
+        camera->data.Follow.stopTimer = -CameraCenterDelay * 122880;
+    }
+    else if (!(gameTrackerX.streamFlags & 0x100000))
+    {
+        camera->data.Follow.stopTimer += gameTrackerX.timeMult;
+    }
+
+    if (camera->data.Follow.stopTimer > 0)
+    {
+        Decouple_AngleMoveToward(&camera->targetFocusRotation.z, focusInstance->rotation.z + 2048, 32);
+        Decouple_AngleMoveToward(&camera->collisionTargetFocusRotation.z, focusInstance->rotation.z + 2048, 32);
+
+        CriticalDampAngle(1, &camera->focusRotation.z, camera->collisionTargetFocusRotation.z, &camera->focusRotVel.z, &camera->focusRotAccl.z, 32);
+
+        camera->forced_movement = 1;
+    }
+}
 
 void CAMERA_FollowGoBehindPlayer(Camera *camera)
 {
