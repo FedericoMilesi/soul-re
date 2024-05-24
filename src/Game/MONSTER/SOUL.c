@@ -148,7 +148,23 @@ void SOUL_BirthEntry(Instance *instance)
     mv->generalTimer = MON_GetTime(instance) + 1500;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Birth);
+void SOUL_Birth(Instance *instance)
+{
+    MonsterVars *mv;
+
+    instance->zAccl = 0;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    SOUL_Physics(instance, gameTrackerX.timeMult);
+
+    if (MON_GetTime(instance) > mv->generalTimer)
+    {
+        MON_SwitchState(instance, MONSTER_STATE_IDLE);
+    }
+
+    SOUL_QueueHandler(instance);
+}
 
 void SOUL_SoulSuckEntry(Instance *instance)
 {
