@@ -70,7 +70,7 @@ void INSTANCE_ForceActive(Instance *instance)
     }
 }
 
-void INSTANCE_DeactivatedProcess(void)
+void INSTANCE_DeactivatedProcess()
 {
 }
 
@@ -273,7 +273,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ProcessFunctions);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_BirthObject);
 
-void INSTANCE_BuildStaticShadow(void)
+void INSTANCE_BuildStaticShadow()
 {
 }
 
@@ -447,7 +447,24 @@ void INSTANCE_UpdateFamilyStreamUnitID(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ReallyRemoveAllChildren);
+void INSTANCE_ReallyRemoveAllChildren(Instance *instance)
+{
+    Instance *child;
+    Instance *sibling;
+
+    child = instance->LinkChild;
+
+    while (child != NULL)
+    {
+        sibling = child->LinkSibling;
+
+        INSTANCE_ReallyRemoveAllChildren(child);
+
+        INSTANCE_ReallyRemoveInstance(gameTrackerX.instanceList, child, 0);
+
+        child = sibling;
+    }
+}
 
 Instance *INSTANCE_GetChildLinkedToSegment(Instance *instance, int segment)
 {
