@@ -158,7 +158,36 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckSwim);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsDefaultCheckSwimResponse);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsForceSetWater);
+void PhysicsForceSetWater(Instance *instance, int *Time, int Depth, int rate, int maxAmplitude)
+{
+    int Amplitude;
+
+    Amplitude = Depth;
+
+    if (Amplitude < -3072)
+    {
+        Amplitude = -3072;
+    }
+
+    if (Amplitude > 0)
+    {
+        Amplitude = 0;
+    }
+
+    Amplitude = (Amplitude * maxAmplitude) / -3072;
+
+    *Time += (rate << 12) / gameTrackerX.timeMult;
+
+    if (*Time >= 4097)
+    {
+        *Time -= 4096;
+    }
+
+    if (Depth < 0)
+    {
+        instance->position.z += (Amplitude * rcos(*Time)) / 4096;
+    }
+}
 
 int PhysicsCheckLOS(Instance *instance, int Data, int Mode)
 {
