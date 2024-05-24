@@ -44,7 +44,19 @@ void SoulReaverInit(Instance *instance, GameTracker *gameTracker)
 
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverCollide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverProcess);
+void SoulReaverProcess(Instance *instance, GameTracker *gameTracker)
+{
+    ReaverData *data;
+
+    data = (ReaverData *)instance->extraData;
+
+    if ((unsigned)data->ReaverPickedUp != 0)
+    {
+        instance->currentStreamUnitID = gameTrackerX.playerInstance->currentStreamUnitID;
+    }
+
+    _SoulReaverAnimate(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/REAVER", CollideReaverProjectile);
 
