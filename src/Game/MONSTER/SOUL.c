@@ -239,7 +239,63 @@ void SOUL_IdleEntry(Instance *instance)
     mv->mvFlags &= ~0x40000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Idle);
+void SOUL_Idle(Instance *instance)
+{
+    MonsterVars *mv;
+    long xAccl;
+    long yAccl;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    xAccl = 3;
+
+    if (instance->xVel >= -3)
+    {
+        xAccl = -3;
+
+        if (instance->xVel < 4)
+        {
+            xAccl = -instance->xVel;
+        }
+    }
+
+    yAccl = 3;
+
+    if (instance->yVel >= -3)
+    {
+        yAccl = -3;
+
+        if (instance->yVel < 4)
+        {
+            yAccl = -instance->yVel;
+        }
+    }
+
+    instance->xAccl = xAccl;
+    instance->yAccl = yAccl;
+    instance->zAccl = 0;
+
+    SOUL_Physics(instance, gameTrackerX.timeMult);
+
+    if (!(mv->mvFlags & 0x4))
+    {
+        if (mv->enemy != NULL)
+        {
+            MON_SwitchState(instance, MONSTER_STATE_FLEE);
+        }
+        else if (MON_GetTime(instance) > mv->generalTimer)
+        {
+            MON_SwitchState(instance, MONSTER_STATE_WANDER);
+        }
+
+        if (!(instance->flags2 & 0x8000000))
+        {
+            SOUL_Fade(instance);
+        }
+    }
+
+    SOUL_QueueHandler(instance);
+}
 
 void SOUL_ReanimateEntry(Instance *instance)
 {
