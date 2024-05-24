@@ -3,6 +3,8 @@
 #include "Game/CAMERA.h"
 #include "Game/INSTANCE.h"
 
+void CAMERA_EndLook(Camera *camera);
+
 EXTERN STATIC short panic_count;
 
 EXTERN STATIC short CameraLookStickyFlag;
