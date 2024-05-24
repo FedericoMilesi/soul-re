@@ -31,6 +31,16 @@ typedef struct VECTOR {
     long pad;
 } VECTOR;
 
+// size: 0xC
+typedef struct _Vector {
+    // offset: 0000
+    long x;
+    // offset: 0004
+    long y;
+    // offset: 0008
+    long z;
+} Vector;
+
 // size: 0x8
 typedef struct SVECTOR {
     // offset: 0000

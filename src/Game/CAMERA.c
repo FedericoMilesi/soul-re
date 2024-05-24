@@ -159,7 +159,37 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CinematicProcess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GetDistSq);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_NearestPointOnLineVec);
+void CAMERA_NearestPointOnLineVec(SVector *linePoint, SVector *start, SVector *line, Position *point)
+{
+    MATRIX nmat;
+    Vector dpv;
+    long t;
+
+    nmat.m[0][0] = line->x;
+    nmat.m[0][1] = line->y;
+    nmat.m[0][2] = line->z;
+
+    nmat.m[1][0] = start->x;
+    nmat.m[1][1] = start->y;
+    nmat.m[1][2] = start->z;
+
+    nmat.m[2][0] = point->x;
+    nmat.m[2][1] = point->y;
+    nmat.m[2][2] = point->z;
+
+    ApplyMatrix(&nmat, (SVECTOR *)line, (VECTOR *)&dpv);
+
+    t = (dpv.y - dpv.z) * 4096;
+
+    if (dpv.x != 0)
+    {
+        t = -t / dpv.x;
+    }
+
+    linePoint->x = start->x + (short)((line->x * t) >> 12);
+    linePoint->y = start->y + (short)((line->y * t) >> 12);
+    linePoint->z = start->z + (short)((line->z * t) >> 12);
+}
 
 int CAMERA_CheckPoint(int linePoint, int linept1, int linept2)
 {
