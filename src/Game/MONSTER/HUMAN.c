@@ -15,7 +15,25 @@ void HUMAN_CleanUp(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Query);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_DeadEntry);
+void HUMAN_DeadEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    mv->soulJuice /= 4;
+
+    if (mv->soulJuice >= 4097)
+    {
+        mv->soulJuice = 4096;
+    }
+
+    MON_DeadEntry(instance);
+
+    mv->damageTimer = MON_GetTime(instance);
+
+    MON_BirthMana(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Dead);
 
