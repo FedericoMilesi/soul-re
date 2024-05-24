@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
 #include "Game/STATE.h"
+#include "Game/GAMELOOP.h"
 #include "Game/MONSTER/MONAPI.h"
 
 void SOUL_QueueHandler(Instance *instance)
@@ -256,8 +257,38 @@ void SOUL_ReanimateEntry(Instance *instance)
     MON_TurnOffBodySpheres(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Reanimate);
+void SOUL_Reanimate(Instance *instance)
+{
+    MonsterVars *mv;
+    Instance *body;
 
-void SOUL_Effect(void)
+    mv = (MonsterVars *)instance->extraData;
+
+    SOUL_MoveToDest(instance, 16, gameTrackerX.timeMult);
+
+    if (MATH3D_LengthXY(instance->position.x - mv->destination.x, instance->position.y - mv->destination.y) < 250)
+    {
+        if (mv->soulID != 0)
+        {
+            body = INSTANCE_Find(mv->soulID);
+
+            if (body != NULL)
+            {
+                INSTANCE_Post(body, 0x100000D, 0);
+            }
+
+            SAVE_DeleteInstance(instance);
+        }
+
+        MON_KillMonster(instance);
+        return;
+    }
+
+    while (DeMessageQueue(&mv->messageQueue) != NULL)
+    {
+    }
+}
+
+void SOUL_Effect()
 {
 }
