@@ -1,4 +1,6 @@
 #include "common.h"
+#include "Game/INSTANCE.h"
+#include "Game/MONSTER/MONAPI.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_WaitForWeapon);
 
@@ -30,4 +32,34 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Flee);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_GetAngry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_TypeOfHuman);
+int HUMAN_TypeOfHuman(Instance *instance)
+{
+    int type;
+    MonsterVars *mv;
+
+    type = INSTANCE_Query(instance, 1);
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((type & 0x4000))
+    {
+        return 1;
+    }
+
+    if ((type & 0x2000))
+    {
+        return 4;
+    }
+
+    if (!(type & 0x8000))
+    {
+        return 0;
+    }
+
+    if ((mv->auxFlags & 0x20))
+    {
+        return 3;
+    }
+
+    return 2;
+}
