@@ -176,7 +176,19 @@ int CAMERA_CheckPoint(int linePoint, int linept1, int linept2)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CheckIfPointOnLine);
+int CAMERA_CheckIfPointOnLine(SVector *linePoint, SVector *linept1, SVector *linept2)
+{
+    if ((CAMERA_CheckPoint(linePoint->x, linept1->x, linept2->x) == 0) && (CAMERA_CheckPoint(linePoint->y, linept1->y, linept2->y) == 0))
+    {
+        return CAMERA_CheckPoint(linePoint->z, linept1->z, linept2->z) == 0;
+    }
+    else
+    {
+        return 0;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_FindLinePoint);
 
