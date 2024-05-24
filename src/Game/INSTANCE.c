@@ -2,9 +2,38 @@
 #include "Game/INSTANCE.h"
 #include "Game/SPLINE.h"
 #include "Game/OBTABLE.h"
+#include "Game/GAMELOOP.h"
 #include "Game/G2/ANIMG2.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Deactivate);
+void INSTANCE_Deactivate(Instance *instance)
+{
+    Object *object;
+
+    object = instance->object;
+
+    if (!(gameTrackerX.streamFlags & 0x2000000))
+    {
+        instance->flags2 |= 0x1;
+
+        if ((instance->flags2 & 0x20000000))
+        {
+            instance->flags |= 0x40000;
+        }
+        else
+        {
+            instance->flags &= ~0x40000;
+            instance->flags2 |= 0x20000000;
+        }
+
+        if ((object->animList != NULL) && (!(object->oflags2 & 0x40000000)))
+        {
+            G2Anim_Free(&instance->anim);
+        }
+
+        instance->waterFace = NULL;
+        instance->waterFaceTerrain = NULL;
+    }
+}
 
 void INSTANCE_Reactivate(Instance *instance)
 {
