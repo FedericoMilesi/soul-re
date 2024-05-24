@@ -161,7 +161,20 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GetDistSq);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_NearestPointOnLineVec);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CheckPoint);
+int CAMERA_CheckPoint(int linePoint, int linept1, int linept2)
+{
+    if ((linept1 < (linePoint - 20)) && (linept2 < (linePoint - 20)))
+    {
+        return 1;
+    }
+
+    if (((linePoint + 20) < linept1) && ((linePoint + 20) < linept2))
+    {
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CheckIfPointOnLine);
 
