@@ -1,3 +1,23 @@
 #include "common.h"
+#include "Game/GAMELOOP.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/TIMERG2", G2Timer_GetFrameTime);
+short G2Timer_GetFrameTime()
+{
+    short atime;
+
+    if (gameTrackerX.timeMult == 0)
+    {
+        atime = 100;
+    }
+    else
+    {
+        atime = (short)((gameTrackerX.timeMult * 100) / 4096);
+    }
+
+    if (atime <= 0)
+    {
+        atime = 1;
+    }
+
+    return atime;
+}
