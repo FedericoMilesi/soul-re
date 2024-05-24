@@ -167,7 +167,41 @@ void SoulReaverImbue(Instance *instance, int number)
     FX_DoBlastRing(instance, (SVector *)&instance->position, instance->matrix, 0, 320, 0, 240, 0, 0, -65536, 0, 0, 160, 320, color, 0, 0, 20, 1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", SoulReaverCharge);
+void SoulReaverCharge(Instance *instance, ReaverData *data)
+{
+    long color;
+    long shock;
+    ReaverTuneData *tuneData;
+
+    tuneData = (ReaverTuneData *)instance->data;
+
+    if (data->ReaverChargeTime != 0)
+    {
+        data->ReaverChargeTime -= gameTrackerX.timeMult;
+
+        if (data->ReaverShockAmount <= 245759)
+        {
+            data->ReaverShockAmount += gameTrackerX.timeMult;
+
+            shock = (data->ReaverShockAmount / 4096) + 50;
+        }
+        else
+        {
+            shock = 110;
+        }
+
+        GAMEPAD_Shock1(shock, 20480);
+
+        if (data->ReaverChargeTime <= 0)
+        {
+            data->ReaverChargeTime += 61440;
+
+            color = ((long *)tuneData)[data->CurrentReaver - 1];
+
+            FX_DoBlastRing(instance, (SVector *)&instance->position, instance->matrix, 0, 360, 0, 0, 0, 0, 0xFFFF0000, 0, 320, 272, 224, color, 0, 0, -1, 1);
+        }
+    }
+}
 
 void StopSoulReaverCharge(ReaverData *data, Instance *instance)
 {
