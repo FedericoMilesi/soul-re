@@ -44,7 +44,78 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Stunned);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_EmbraceEntry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Embrace);
+void HUMAN_Embrace(Instance *instance)
+{
+    MonsterVars *mv;
+    Message *message;
+    int letgo;
+    int juice;
+
+    letgo = 0;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    MON_TurnToPosition(instance, &gameTrackerX.playerInstance->position, 4096);
+
+    while (message = DeMessageQueue(&mv->messageQueue))
+    {
+        if ((message != NULL) && (message->ID == 0x1000014))
+        {
+            letgo = 1;
+        }
+        else
+        {
+            MON_DefaultMessageHandler(instance, message);
+        }
+    }
+
+    juice = (mv->generalTimer * gameTrackerX.timeMult * 33) / 5000;
+
+    INSTANCE_Post(gameTrackerX.playerInstance, 0x1000016, juice);
+
+    do
+    {
+
+    } while (0); // garbage code for reodering
+
+    if (mv->soulJuice < juice)
+    {
+        mv->soulJuice = 0;
+    }
+    else
+    {
+        mv->soulJuice -= juice;
+    }
+
+    GAMEPAD_Shock1(128 - ((mv->soulJuice << 7) / (mv->generalTimer << 12)), 61440);
+
+    if (mv->soulJuice == 0)
+    {
+        mv->damageType = 0;
+
+        MON_SwitchState(instance, MONSTER_STATE_GENERALDEATH);
+
+        INSTANCE_Post(gameTrackerX.playerInstance, 0x1000006, (int)instance);
+
+        mv->soulJuice = 0;
+
+        SOUND_Play3dSound(&instance->position, 8, -450, 80, 3500);
+    }
+    else if (letgo != 0)
+    {
+        mv->auxFlags |= 0x10;
+
+        MON_SwitchState(instance, MONSTER_STATE_STUNNED);
+
+        MON_TurnOnBodySpheres(instance);
+    }
+    else if (instance->currentMainState != MONSTER_STATE_EMBRACE)
+    {
+        INSTANCE_Post(gameTrackerX.playerInstance, 0x1000006, (int)instance);
+
+        MON_TurnOnBodySpheres(instance);
+    }
+}
 
 void HUMAN_IdleEntry(Instance *instance)
 {
