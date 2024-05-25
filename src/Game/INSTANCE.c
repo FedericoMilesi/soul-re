@@ -451,23 +451,27 @@ void INSTANCE_SpatialRelationships(InstanceList *instanceList)
 
             INSTANCE_Post(instance, 0x200000, 0);
 
-            if (lookMatrix != NULL)
+            if (lookMatrix == NULL)
             {
-                TransposeMatrix(lookMatrix, &invMatrix);
+                continue;
+            }
 
-                for (checkee = instanceList->first; checkee != NULL; checkee = checkee->next)
+            TransposeMatrix(lookMatrix, &invMatrix);
+
+            for (checkee = instanceList->first; checkee != NULL; checkee = checkee->next)
+            {
+                if ((checkee != instance) && (!(checkee->flags2 & 0x10000000)) && (!(checkee->flags & 0x20)) && ((INSTANCE_Query(checkee, 1) & checkMask)))
                 {
-                    if ((checkee != instance) && (!(checkee->flags2 & 0x10000000)) && (!(checkee->flags & 0x20)) && ((INSTANCE_Query(checkee, 1) & checkMask)))
-                    {
-                        mat = (MATRIX *)INSTANCE_Query(checkee, 14);
+                    mat = (MATRIX *)INSTANCE_Query(checkee, 14);
 
-                        if ((mat != NULL) || (mat = checkee->matrix, mat != NULL))
-                        {
-                            if (INSTANCE_SetStatsData(instance, checkee, (Vector *)&mat->t[0], &data, &invMatrix) != 0)
-                            {
-                                INSTANCE_Post(instance, 0x200001, (int)&data);
-                            }
-                        }
+                    if (mat == NULL)
+                    {
+                        mat = checkee->matrix;
+                    }
+
+                    if ((mat != NULL) && (INSTANCE_SetStatsData(instance, checkee, (Vector *)&mat->t[0], &data, &invMatrix) != 0))
+                    {
+                        INSTANCE_Post(instance, 0x200001, (int)&data);
                     }
                 }
             }
