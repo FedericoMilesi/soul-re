@@ -375,7 +375,30 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindWithID);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindWithName);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindIntro);
+Intro *INSTANCE_FindIntro(long areaID, long introUniqueID)
+{
+    Intro *ret;
+    long i;
+    Level *level;
+
+    ret = NULL;
+
+    level = STREAM_GetLevelWithID(areaID);
+
+    if (level != NULL)
+    {
+        for (i = 0; i < level->numIntros; i++)
+        {
+            if (introUniqueID == level->introList[i].UniqueID)
+            {
+                ret = &level->introList[i];
+                break;
+            }
+        }
+    }
+
+    return ret;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Find);
 
