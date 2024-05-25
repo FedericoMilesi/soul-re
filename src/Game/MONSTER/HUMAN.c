@@ -48,7 +48,75 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Embrace);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_IdleEntry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Idle);
+void HUMAN_Idle(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+    MonsterIR *ally;
+    MonsterIR *enemy;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    ally = mv->ally;
+
+    enemy = mv->enemy;
+
+    if ((!(mv->mvFlags & 0x4)) && (ally != NULL) && ((ally->mirFlags & 0x4)))
+    {
+        if ((mv->auxFlags & 0x2))
+        {
+            MON_TurnToPosition(instance, &ally->instance->position, mv->subAttr->speedPivotTurn);
+
+            if ((instance->flags2 & 0x2))
+            {
+                mv->auxFlags = (mv->auxFlags & ~0x2) | 0x1;
+            }
+
+            MON_DefaultQueueHandler(instance);
+            return;
+        }
+
+        if ((mv->auxFlags & 0x1))
+        {
+            if ((ally->distance >= 2000) || ((enemy != NULL) && (enemy->distance < 2000)))
+            {
+                mv->auxFlags = (mv->auxFlags & ~0x1) | 0x4;
+
+                MON_PlayAnimFromList(instance, ma->auxAnimList, 1, 1);
+            }
+
+            MON_DefaultQueueHandler(instance);
+            return;
+        }
+
+        if ((mv->auxFlags & 0x4))
+        {
+            if ((instance->flags2 & 0x10))
+            {
+                mv->auxFlags &= ~0x4;
+
+                MON_PlayRandomIdle(instance, 2);
+            }
+
+            MON_DefaultQueueHandler(instance);
+            return;
+        }
+
+        if ((ally->distance < 2000) && ((enemy == NULL) || (enemy->distance >= 2000)))
+        {
+            mv->auxFlags |= 0x2;
+
+            MON_PlayAnimFromList(instance, ma->auxAnimList, 0, 2);
+
+            MON_DefaultQueueHandler(instance);
+            return;
+        }
+    }
+
+    MON_Idle(instance);
+}
 
 void HUMAN_Flee(Instance *instance)
 {
