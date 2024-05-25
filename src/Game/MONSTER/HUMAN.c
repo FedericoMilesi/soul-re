@@ -29,7 +29,63 @@ void HUMAN_CleanUp(Instance *instance)
     MON_CleanUp(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Query);
+unsigned long HUMAN_Query(Instance *instance, unsigned long query)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+    unsigned long ret;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (ma == NULL)
+    {
+        return 0;
+    }
+
+    switch (query)
+    {
+    case 0:
+        if ((mv->mvFlags & 0x200))
+        {
+            ret = 0x40000000;
+            break;
+        }
+
+        ret = 0x12000000;
+
+        if (instance->currentMainState != MONSTER_STATE_PETRIFIED)
+        {
+            ret = ((mv->mvFlags & 0x100) != 0) << 29;
+
+            if (!(mv->mvFlags & 0x200000))
+            {
+                if ((mv->hitPoints <= 4096) || ((mv->auxFlags & 0x3)))
+                {
+                    ret |= 0x08000000;
+                }
+            }
+        }
+
+        break;
+    case 37:
+        if (!(ma->whatAmI & 0x8000))
+        {
+            ret = mv->subAttr->allegiances->enemies & 0x1;
+        }
+        else
+        {
+            ret = 0;
+        }
+
+        break;
+    default:
+        ret = MonsterQuery(instance, query);
+    }
+
+    return ret;
+}
 
 void HUMAN_DeadEntry(Instance *instance)
 {
