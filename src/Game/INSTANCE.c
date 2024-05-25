@@ -371,7 +371,31 @@ int INSTANCE_InPlane(Instance *instance, int plane)
     return ret;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindWithID);
+long INSTANCE_FindWithID(long uniqueID)
+{
+    Instance *instance;
+    Instance *next;
+    long ret;
+
+    instance = gameTrackerX.instanceList->first;
+
+    ret = 0;
+
+    while (instance != NULL)
+    {
+        next = instance->next;
+
+        if (instance->introUniqueID == uniqueID)
+        {
+            ret = 1;
+            break;
+        }
+
+        instance = next;
+    }
+
+    return ret;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindWithName);
 
