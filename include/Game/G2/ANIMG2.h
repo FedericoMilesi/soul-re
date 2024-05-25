@@ -10,6 +10,37 @@ typedef enum _G2AnimCallbackMsg_Enum {
     G2ANIM_MSG_PLAYEFFECT = 6,
 } G2AnimCallbackMsg;
 
+// size: 0x8
+typedef struct _G2EulerAngles_Type {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short z;
+    // offset: 0006
+    short order;
+} G2EulerAngles;
+
+// size: 0xC
+typedef struct _G2LVector3_Type {
+    // offset: 0000
+    long x;
+    // offset: 0004
+    long y;
+    // offset: 0008
+    long z;
+} G2LVector3;
+
+typedef struct _G2Matrix_Type {
+    // offset: 0000 (18 bytes)
+    short rotScale[3][3];
+    // offset: 0012
+    short scaleFlag;
+    // offset: 0014 (12 bytes)
+    struct _G2LVector3_Type trans;
+} G2Matrix;
+
 // size: 0x6
 typedef struct _G2SVector3_Type {
     // offset: 0000

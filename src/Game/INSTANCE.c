@@ -454,7 +454,51 @@ void INSTANCE_LinkToParent(Instance *instance, Instance *parent, int node)
     instance->flags2 |= 0x8;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_UnlinkFromParent);
+void INSTANCE_UnlinkFromParent(Instance *instance)
+{
+    Instance *parent;
+    G2EulerAngles ea;
+    Instance *sibling;
+
+    parent = instance->LinkParent;
+
+    if (parent != NULL)
+    {
+        if (parent->LinkChild == instance)
+        {
+            parent->LinkChild = instance->LinkSibling;
+        }
+        else
+        {
+            sibling = parent->LinkChild;
+
+            while (sibling->LinkSibling != instance)
+            {
+                sibling = sibling->LinkSibling;
+            }
+
+            sibling->LinkSibling = instance->LinkSibling;
+        }
+
+        instance->LinkSibling = NULL;
+        instance->LinkParent = NULL;
+
+        instance->scale.x = (instance->scale.x * parent->scale.x) / 4096;
+        instance->scale.y = (instance->scale.y * parent->scale.y) / 4096;
+        instance->scale.z = (instance->scale.z * parent->scale.z) / 4096;
+
+        if (parent->matrix != NULL)
+        {
+            G2EulerAngles_FromMatrix(&ea, (G2Matrix *)(&parent->matrix[instance->ParentLinkNode]), 21);
+
+            instance->rotation.x = ea.x;
+            instance->rotation.y = ea.y;
+            instance->rotation.z = ea.z;
+        }
+
+        INSTANCE_Post(parent, 0x100013, (int)instance);
+    }
+}
 
 void INSTANCE_UnlinkChildren(Instance *instance)
 {
