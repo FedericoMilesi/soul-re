@@ -42,7 +42,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_StunnedEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Stunned);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_EmbraceEntry);
+void HUMAN_EmbraceEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    MON_PlayAnim(instance, MONSTER_ANIM_EMBRACE, 1);
+
+    MON_TurnOffBodySpheres(instance);
+
+    mv->generalTimer = mv->soulJuice / 4096;
+}
 
 void HUMAN_Embrace(Instance *instance)
 {
