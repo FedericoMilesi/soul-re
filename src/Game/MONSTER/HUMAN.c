@@ -40,7 +40,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Dead);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_StunnedEntry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Stunned);
+void HUMAN_Stunned(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((mv->auxFlags & 0x10))
+    {
+        if ((instance->flags2 & 0x10))
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_STUNNED, 2);
+        }
+
+        if (mv->generalTimer < MON_GetTime(instance))
+        {
+            mv->soulJuice = 16384;
+
+            mv->auxFlags &= ~0x10;
+        }
+
+        MON_DefaultQueueHandler(instance);
+        return;
+    }
+
+    MON_Stunned(instance);
+}
 
 void HUMAN_EmbraceEntry(Instance *instance)
 {
