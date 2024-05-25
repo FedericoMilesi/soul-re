@@ -36,7 +36,39 @@ void HUMAN_DeadEntry(Instance *instance)
     MON_BirthMana(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Dead);
+void HUMAN_Dead(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    instance->fadeValue = (short)(MON_GetTime(instance) - mv->damageTimer);
+
+    if (mv->causeOfDeath == 6)
+    {
+        MON_Dead(instance);
+        return;
+    }
+
+    if (instance->fadeValue >= 4096)
+    {
+        MON_KillMonster(instance);
+    }
+
+    if (((mv->mvFlags & 0x400000)) && (mv->effectTimer < MON_GetTime(instance)))
+    {
+        mv->mvFlags &= ~0x400000;
+    }
+
+    if (!(mv->mvFlags & 0x2))
+    {
+        MON_ApplyPhysics(instance);
+    }
+
+    while (DeMessageQueue(&mv->messageQueue) != NULL)
+    {
+    }
+}
 
 void HUMAN_StunnedEntry(Instance *instance)
 {
