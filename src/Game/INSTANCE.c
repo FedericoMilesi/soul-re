@@ -431,7 +431,49 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_IntroduceSavedInstance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_IntroduceSavedInstanceWithIntro);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_SpatialRelationships);
+void INSTANCE_SpatialRelationships(InstanceList *instanceList)
+{
+    Instance *instance;
+    int checkMask;
+    MATRIX *lookMatrix;
+    Instance *checkee;
+    MATRIX *mat;
+    MATRIX invMatrix;
+    evCollideInstanceStatsData data;
+
+    for (instance = instanceList->first; instance != NULL; instance = instance->next)
+    {
+        if ((instance->flags2 & 0x10000401) == 0x400)
+        {
+            checkMask = instance->checkMask;
+
+            lookMatrix = (MATRIX *)INSTANCE_Query(instance, 13);
+
+            INSTANCE_Post(instance, 0x200000, 0);
+
+            if (lookMatrix != NULL)
+            {
+                TransposeMatrix(lookMatrix, &invMatrix);
+
+                for (checkee = instanceList->first; checkee != NULL; checkee = checkee->next)
+                {
+                    if ((checkee != instance) && (!(checkee->flags2 & 0x10000000)) && (!(checkee->flags & 0x20)) && ((INSTANCE_Query(checkee, 1) & checkMask)))
+                    {
+                        mat = (MATRIX *)INSTANCE_Query(checkee, 14);
+
+                        if ((mat != NULL) || (mat = checkee->matrix, mat != NULL))
+                        {
+                            if (INSTANCE_SetStatsData(instance, checkee, (Vector *)&mat->t[0], &data, &invMatrix) != 0)
+                            {
+                                INSTANCE_Post(instance, 0x200001, (int)&data);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 int INSTANCE_SetStatsData(Instance *instance, Instance *checkee, Vector *checkPoint, evCollideInstanceStatsData *data, MATRIX *mat)
 {
