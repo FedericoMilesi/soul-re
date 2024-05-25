@@ -38,7 +38,23 @@ void HUMAN_DeadEntry(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Dead);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_StunnedEntry);
+void HUMAN_StunnedEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((mv->auxFlags & 0x10))
+    {
+        mv->generalTimer = MON_GetTime(instance) + 60000;
+
+        MON_PlayAnim(instance, MONSTER_ANIM_SOULSUCK, 1);
+    }
+    else
+    {
+        MON_StunnedEntry(instance);
+    }
+}
 
 void HUMAN_Stunned(Instance *instance)
 {
