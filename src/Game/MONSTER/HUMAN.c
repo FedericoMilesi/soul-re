@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
+#include "Game/OBTABLE.h"
 #include "Game/MONSTER/MONAPI.h"
 
 void HUMAN_WaitForWeapon(Instance *instance, GameTracker *gameTracker)
@@ -20,7 +21,35 @@ void HUMAN_WaitForWeapon(Instance *instance, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_CreateWeapon);
+Instance *HUMAN_CreateWeapon(Instance *instance, int weaponid, int segment)
+{
+    Object *weapon;
+    Instance *iweapon;
+
+    weapon = (Object *)objectAccess[weaponid].object;
+
+    if (weapon != NULL)
+    {
+        iweapon = INSTANCE_BirthObject(instance, weapon, 0);
+
+        if (iweapon != NULL)
+        {
+            INSTANCE_Post(iweapon, 0x800002, SetObjectData(0, 0, 0, instance, segment));
+
+            iweapon->flags2 |= 0x20000;
+
+            return iweapon;
+        }
+    }
+
+    instance->processFunc = HUMAN_WaitForWeapon;
+
+    instance->flags |= 0x800;
+
+    instance->flags2 |= 0x20000080;
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Init);
 

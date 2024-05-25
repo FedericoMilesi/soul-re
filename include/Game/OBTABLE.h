@@ -63,4 +63,14 @@ typedef struct Object {
     struct VramSize vramSize;
 } Object;
 
+// size: 0x8
+typedef struct ObjectAccess {
+    // offset: 0000
+    char *objectName;
+    // offset: 0004
+    void *object;
+} ObjectAccess;
+
+extern ObjectAccess objectAccess[8924+28];
+
 #endif
