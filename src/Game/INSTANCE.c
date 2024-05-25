@@ -547,7 +547,47 @@ int INSTANCE_Linked(Instance *instance1, Instance *instance2)
     return instance1 == instance2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_GetFadeValue);
+int INSTANCE_GetFadeValue(Instance *instance)
+{
+    int fadeValue;
+
+    fadeValue = instance->fadeValue;
+
+    if (gameTrackerX.gameData.asmData.MorphTime != 1000)
+    {
+        fadeValue = 4096 - fadeValue;
+
+        if (MEMPACK_MemoryValidFunc((char *)instance->object) != 0)
+        {
+            if (((instance->object->oflags2 & 0x2000000)) || ((instance->LinkParent != NULL) && ((instance->LinkParent->object->oflags2 & 0x2000000))))
+            {
+                if ((instance->flags2 & 0x8000000))
+                {
+                    if ((gameTrackerX.spectral_fadeValue * fadeValue) < 0)
+                    {
+                        fadeValue = ((gameTrackerX.spectral_fadeValue * fadeValue) + 4095) >> 12;
+                    }
+                    else
+                    {
+                        fadeValue = (gameTrackerX.spectral_fadeValue * fadeValue) >> 12;
+                    }
+                }
+                else if ((gameTrackerX.material_fadeValue * fadeValue) < 0)
+                {
+                    fadeValue = ((gameTrackerX.material_fadeValue * fadeValue) + 4095) >> 12;
+                }
+                else
+                {
+                    fadeValue = (gameTrackerX.material_fadeValue * fadeValue) >> 12;
+                }
+            }
+        }
+
+        fadeValue = 4096 - fadeValue;
+    }
+
+    return fadeValue;
+}
 
 unsigned long INSTANCE_DefaultAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, Instance *instance)
 {
