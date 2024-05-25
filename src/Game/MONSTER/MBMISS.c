@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/INSTANCE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Message);
 
@@ -22,4 +23,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WALBOSC_AnimCallback);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WALBOSC_Collide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WALBOSC_Message);
+void WALBOSC_Message(Instance *instance, unsigned long message, unsigned long data)
+{
+    if ((message == 0x1000017) && (data == 0))
+    {
+        COLLIDE_SegmentCollisionOff(instance, 1);
+
+        instance->flags2 |= 0x20000000;
+    }
+}
