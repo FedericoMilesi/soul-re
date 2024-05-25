@@ -492,4 +492,6 @@ typedef struct _MonsterVars {
     short fadeRate;
 } MonsterVars;
 
+void MonsterProcess(Instance *instance, GameTracker *gameTracker);
+
 #endif

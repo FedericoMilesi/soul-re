@@ -3,7 +3,22 @@
 #include "Game/GAMELOOP.h"
 #include "Game/MONSTER/MONAPI.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_WaitForWeapon);
+void HUMAN_WaitForWeapon(Instance *instance, GameTracker *gameTracker)
+{
+    typedef void (*MONTABLE_InitFunc)(Instance *); // not from decls.h
+
+    ((MONTABLE_InitFunc)MONTABLE_GetInitFunc(instance))(instance);
+
+    if (instance->LinkChild != NULL)
+    {
+        instance->processFunc = MonsterProcess;
+
+        instance->flags &= ~0x800;
+
+        instance->flags2 &= ~0x20000000;
+        instance->flags2 &= ~0x80;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_CreateWeapon);
 
