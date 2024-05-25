@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
+#include "Game/G2/ANIMG2.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Message);
 
@@ -19,7 +20,25 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_ExplodeCollide);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Collide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WALBOSC_AnimCallback);
+long WALBOSC_AnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, Instance *instance)
+{
+    if (message == G2ANIM_MSG_DONE)
+    {
+        COLLIDE_SegmentCollisionOff(instance, 1);
+
+        instance->flags |= 0x800;
+
+        instance->flags2 |= 0x20000000;
+
+        instance->halvePlane.flags = 0;
+    }
+    else
+    {
+        INSTANCE_DefaultAnimCallback(anim, sectionID, message, messageDataA, messageDataB, instance);
+    }
+
+    return messageDataA;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WALBOSC_Collide);
 
