@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/INSTANCE.h"
+#include "Game/GAMELOOP.h"
 #include "Game/MONSTER/MONAPI.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_WaitForWeapon);
@@ -51,7 +52,46 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Idle);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Flee);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_GetAngry);
+void HUMAN_GetAngry()
+{
+    Instance *instance;
+
+    instance = gameTrackerX.instanceList->first;
+
+    while (instance != NULL)
+    {
+        if ((INSTANCE_Query(instance, 1) & 0xC000))
+        {
+            MonsterVars *mv;
+            MonsterAllegiances *allegiances;
+            MonsterIR *mir;
+
+            mv = (MonsterVars *)instance->extraData;
+
+            allegiances = mv->subAttr->allegiances;
+
+            do
+            {
+
+            } while (0); // garbage code for reodering
+
+            allegiances->gods &= ~0x1;
+
+            allegiances->allies &= ~0x1;
+
+            allegiances->enemies |= 0x1;
+
+            mir = MONSENSE_SetEnemy(instance, gameTrackerX.playerInstance);
+
+            if (mir != NULL)
+            {
+                mir->mirFlags &= ~0x6;
+            }
+        }
+
+        instance = instance->next;
+    }
+}
 
 int HUMAN_TypeOfHuman(Instance *instance)
 {

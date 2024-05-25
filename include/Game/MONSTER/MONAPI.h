@@ -106,6 +106,18 @@ typedef struct _MonsterCombatAttributes {
     char attackList[1];
 } MonsterCombatAttributes;
 
+// size: 0x10
+typedef struct _MonsterAllegiances {
+    // offset: 0000
+    unsigned long enemies;
+    // offset: 0004
+    unsigned long allies;
+    // offset: 0008
+    unsigned long food;
+    // offset: 000C
+    unsigned long gods;
+} MonsterAllegiances;
+
 // size: 0x54
 typedef struct _MonsterSubAttributes {
     // offset: 0000
