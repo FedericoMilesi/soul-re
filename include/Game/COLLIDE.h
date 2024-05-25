@@ -224,6 +224,20 @@ typedef struct _Sphere {
     unsigned long radiusSquared;
 } Sphere;
 
+// size: 0x18
+typedef struct evCollideInstanceStatsData {
+    // offset: 0000 (668 bytes)
+    struct _Instance *instance;
+    // offset: 0004
+    unsigned long distance;
+    // offset: 0008 (8 bytes)
+    struct _SVector relativePosition;
+    // offset: 0010
+    long xyDistance;
+    // offset: 0014
+    long zDelta;
+} evCollideInstanceStatsData;
+
 TFace *COLLIDE_PointAndTerrainFunc(Terrain *terrain, PCollideInfo *pCollideInfo, int Flags, short *Backface_Flag, long ignoreAttr, long acceptAttr, LCollideInfo *lcolinfo);
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);

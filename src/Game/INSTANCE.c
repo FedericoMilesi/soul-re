@@ -3,6 +3,7 @@
 #include "Game/SPLINE.h"
 #include "Game/OBTABLE.h"
 #include "Game/GAMELOOP.h"
+#include "Game/COLLIDE.h"
 #include "Game/G2/ANIMG2.h"
 
 void INSTANCE_Deactivate(Instance *instance)
@@ -432,7 +433,36 @@ INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_IntroduceSavedInstanceWit
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_SpatialRelationships);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_SetStatsData);
+int INSTANCE_SetStatsData(Instance *instance, Instance *checkee, Vector *checkPoint, evCollideInstanceStatsData *data, MATRIX *mat)
+{
+    long distance;
+    SVECTOR *delta;
+
+    distance = MATH3D_LengthXYZ(instance->position.x - checkPoint->x, instance->position.y - checkPoint->y, instance->position.z - checkPoint->z);
+
+    if ((unsigned)distance < instance->maxCheckDistance)
+    {
+        delta = (SVECTOR *)getScratchAddr(0);
+
+        delta->vx = (short)checkPoint->x - instance->position.x;
+        delta->vy = (short)checkPoint->y - instance->position.y;
+        delta->vz = (short)checkPoint->z - instance->position.z;
+
+        ApplyMatrixSV(mat, delta, (SVECTOR *)&data->relativePosition);
+
+        data->instance = checkee;
+
+        data->distance = distance;
+
+        data->zDelta = delta->vz;
+
+        data->xyDistance = MATH3D_LengthXY(delta->vx, delta->vy);
+
+        return 1;
+    }
+
+    return 0;
+}
 
 void INSTANCE_LinkToParent(Instance *instance, Instance *parent, int node)
 {
