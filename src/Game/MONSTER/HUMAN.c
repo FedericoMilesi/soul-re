@@ -46,7 +46,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_EmbraceEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Embrace);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_IdleEntry);
+void HUMAN_IdleEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    MON_IdleEntry(instance);
+
+    mv->auxFlags &= ~0x2;
+    mv->auxFlags &= ~0x4;
+    mv->auxFlags &= ~0x1;
+}
 
 void HUMAN_Idle(Instance *instance)
 {
