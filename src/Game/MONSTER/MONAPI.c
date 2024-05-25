@@ -59,7 +59,7 @@ void MONAPI_ResetLookAround(Instance *instance)
 
 long MONAPI_OkToLookAround(Instance *instance)
 {
-    return instance->currentMainState == 2;
+    return instance->currentMainState == MONSTER_STATE_IDLE;
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_DeleteRegen);
