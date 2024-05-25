@@ -50,7 +50,55 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_IdleEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Idle);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Flee);
+void HUMAN_Flee(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterIR *enemy;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    enemy = mv->enemy;
+
+    if ((enemy != NULL) && (enemy->distance < 640))
+    {
+        if (!(mv->auxFlags & 0x8))
+        {
+            MonsterAttributes *ma;
+
+            ma = (MonsterAttributes *)instance->data;
+
+            MON_PlayAnimFromList(instance, ma->auxAnimList, 2, 2);
+
+            mv->auxFlags |= 0x8;
+
+            if ((mv->auxFlags & 0x20))
+            {
+                SOUND_Play3dSound(&instance->position, 459, 0, 88, 3500);
+            }
+            else
+            {
+                SOUND_Play3dSound(&instance->position, 458, -100, 92, 3500);
+            }
+        }
+
+        MON_TurnToPosition(instance, &enemy->instance->position, mv->subAttr->speedPivotTurn);
+
+        MON_DefaultQueueHandler(instance);
+    }
+    else if ((mv->auxFlags & 0x8))
+    {
+        MON_SwitchState(instance, MONSTER_STATE_FLEE);
+    }
+    else
+    {
+        MON_Flee(instance);
+    }
+
+    if (((mv->auxFlags & 0x8)) && ((mv->mvFlags & 0x1)))
+    {
+        mv->auxFlags &= ~0x8;
+    }
+}
 
 void HUMAN_GetAngry()
 {
