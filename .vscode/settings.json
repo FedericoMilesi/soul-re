@@ -20,6 +20,7 @@
     "terminal.integrated.tabs.enableAnimation": false,
     "files.autoGuessEncoding": true,
     "files.associations": {
-        "common.h": "c"
+        "common.h": "c",
+        "missile.h": "c"
     },
 }
