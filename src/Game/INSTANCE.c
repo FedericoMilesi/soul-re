@@ -198,7 +198,49 @@ void INSTANCE_CleanUpInstanceList(InstanceList *list, long reset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Introduced);
+long INSTANCE_Introduced(Intro *intro, short streamUnitID)
+{
+    Instance *instance;
+    Instance *next;
+    long ret;
+
+    instance = gameTrackerX.instanceList->first;
+
+    ret = 0;
+
+    while (instance != NULL)
+    {
+        next = instance->next;
+
+        if (intro->UniqueID == instance->introUniqueID)
+        {
+            ret = 1;
+
+            intro->flags |= 0x8;
+            break;
+        }
+
+        instance = next;
+    }
+
+    if (ret == 0)
+    {
+        if (SAVE_HasSavedIntro(intro, streamUnitID) != 0)
+        {
+            intro->flags |= 0x8;
+
+            ret = 1;
+        }
+        else if (SAVE_IsIntroDeadDead(intro) != 0)
+        {
+            intro->flags |= 0x8;
+
+            ret = 1;
+        }
+    }
+
+    return ret;
+}
 
 INICommand *INSTANCE_GetIntroCommand(INICommand *command, int cmd)
 {
