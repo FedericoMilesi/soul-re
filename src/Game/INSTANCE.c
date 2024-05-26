@@ -4,6 +4,7 @@
 #include "Game/OBTABLE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/COLLIDE.h"
+#include "Game/SAVEINFO.h"
 #include "Game/G2/ANIMG2.h"
 
 void INSTANCE_Deactivate(Instance *instance)
@@ -465,7 +466,91 @@ long INSTANCE_GetSplineFrameNumber(Instance *instance, MultiSpline *spline)
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ProcessFunctions);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_BirthObject);
+Instance *INSTANCE_BirthObject(Instance *parent, Object *object, int modelNum)
+{
+    Instance *instance;
+    int i;
+
+    if (object == NULL)
+    {
+        return NULL;
+    }
+
+    instance = INSTANCE_NewInstance(gameTrackerX.instanceList);
+
+    if (instance != NULL)
+    {
+        INSTANCE_DefaultInit(instance, object, modelNum);
+
+        instance->position = parent->position;
+        instance->initialPos = instance->position;
+        instance->oldPos = parent->position;
+
+        instance->rotation = parent->rotation;
+        instance->scale = parent->scale;
+
+        instance->lightGroup = parent->lightGroup;
+        instance->spectralLightGroup = parent->spectralLightGroup;
+
+        instance->currentStreamUnitID = parent->currentStreamUnitID;
+        instance->birthStreamUnitID = parent->birthStreamUnitID;
+
+        instance->introUniqueID = GlobalSave->CurrentBirthID++;
+
+        strcpy(instance->introName, object->name);
+
+        for (i = 0; i < (int)strlen(instance->introName); i++)
+        {
+            if ((unsigned char)instance->introName[i] == '_')
+            {
+                instance->introName[i] = 0;
+                break;
+            }
+        }
+
+        instance->parent = parent;
+
+        instance->intro = parent->intro;
+        instance->introData = parent->introData;
+
+        LIGHT_GetAmbient((ColorType *)&instance->light_color, instance);
+
+        if ((instance->object->oflags & 0x100))
+        {
+            INSTANCE_BuildStaticShadow(instance);
+        }
+
+        if (SCRIPT_GetMultiSpline(instance, NULL, NULL) == NULL)
+        {
+            instance->flags |= 0x100000;
+        }
+
+        if ((parent->flags2 & 0x8000000))
+        {
+            instance->flags2 |= 0x8000000;
+        }
+
+        INSTANCE_InsertInstanceGroup(gameTrackerX.instanceList, instance);
+
+        OBTABLE_GetInstanceCollideFunc(instance);
+        OBTABLE_GetInstanceProcessFunc(instance);
+        OBTABLE_GetInstanceQueryFunc(instance);
+        OBTABLE_GetInstanceMessageFunc(instance);
+        OBTABLE_GetInstanceAdditionalCollideFunc(instance);
+
+        instance->flags |= 0x2;
+
+        OBTABLE_InstanceInit(instance);
+
+        EVENT_AddInstanceToInstanceList(instance);
+
+        INSTANCE_InitEffects(instance, object);
+
+        return instance;
+    }
+
+    return NULL;
+}
 
 void INSTANCE_BuildStaticShadow()
 {
