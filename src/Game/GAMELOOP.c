@@ -66,7 +66,39 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DisplayFrame);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DrawSavedOT);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", ResetPrimPool);
+void ResetPrimPool()
+{
+    ResetDrawPage();
+
+    if (!(gameTrackerX.gameFlags & 0x8000000))
+    {
+        if (gameTrackerX.primPool == primPool[0])
+        {
+            gameTrackerX.primPool = primPool[1];
+        }
+        else
+        {
+            gameTrackerX.primPool = primPool[0];
+        }
+
+        gameTrackerX.primPool->nextPrim = gameTrackerX.primPool->prim;
+
+        gameTrackerX.primPool->numPrims = 0;
+    }
+    else
+    {
+        if (gameTrackerX.drawPage != 0)
+        {
+            gameTrackerX.primPool->nextPrim = &gameTrackerX.primPool->prim[16500];
+        }
+        else
+        {
+            gameTrackerX.primPool->nextPrim = &gameTrackerX.primPool->prim[9000];
+        }
+
+        gameTrackerX.primPool->numPrims = 0;
+    }
+}
 
 void Switch_For_Redraw()
 {
