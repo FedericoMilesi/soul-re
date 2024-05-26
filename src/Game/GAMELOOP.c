@@ -3,6 +3,8 @@
 
 EXTERN STATIC short pause_redraw_flag;
 
+EXTERN STATIC PrimPool *primPool[2];
+
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AllocStaticMemory);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_InitGameTracker);
@@ -66,7 +68,41 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DrawSavedOT);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", ResetPrimPool);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", Switch_For_Redraw);
+void Switch_For_Redraw()
+{
+    unsigned long **temp;
+
+    temp = gameTrackerX.drawOT;
+
+    gameTrackerX.drawOT = gameTrackerX.dispOT;
+    gameTrackerX.dispOT = temp;
+
+    if (gameTrackerX.drawPage != 0)
+    {
+        gameTrackerX.drawPage = 0;
+
+        gameTrackerX.gameData.asmData.dispPage = 1;
+    }
+    else
+    {
+        gameTrackerX.drawPage = 1;
+
+        gameTrackerX.gameData.asmData.dispPage = 0;
+    }
+
+    if (gameTrackerX.primPool == primPool[0])
+    {
+        gameTrackerX.primPool = primPool[1];
+    }
+    else
+    {
+        gameTrackerX.primPool = primPool[0];
+    }
+
+    gameTrackerX.primPool->nextPrim = gameTrackerX.primPool->prim;
+
+    gameTrackerX.primPool->numPrims = 0;
+}
 
 void GAMELOOP_Set_Pause_Redraw()
 {
