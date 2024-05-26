@@ -70,7 +70,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_Set_Pause_Redraw);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", SaveOT);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", ResetDrawPage);
+void ResetDrawPage()
+{
+    unsigned long **temp;
+
+    temp = gameTrackerX.drawOT;
+
+    gameTrackerX.drawOT = gameTrackerX.dispOT;
+    gameTrackerX.dispOT = temp;
+
+    gameTrackerX.drawPage = 1 - gameTrackerX.drawPage;
+
+    ClearOTagR((unsigned long *)gameTrackerX.drawOT, 3072);
+}
 
 void GAMELOOP_Set24FPS()
 {
