@@ -155,7 +155,119 @@ void INSTANCE_InsertInstanceGroup(InstanceList *list, Instance *instance)
     LIST_InsertFunc(&list->group[INSTANCE_InstanceGroupNumber(instance)], &instance->node);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ReallyRemoveInstance);
+void INSTANCE_ReallyRemoveInstance(InstanceList *list, Instance *instance, long reset)
+{
+    Instance *temp;
+    int i;
+
+    EVENT_RemoveInstanceFromInstanceList(instance);
+
+    if ((instance->flags & 0x800000))
+    {
+        SAVE_DoInstanceDeadDead(instance);
+    }
+
+    if ((!(instance->flags & 0x2)) && (instance->intro != NULL))
+    {
+        instance->intro->flags &= ~reset;
+
+        instance->intro->instance = NULL;
+    }
+
+    if (instance->prev != NULL)
+    {
+        instance->prev->next = instance->next;
+    }
+    else
+    {
+        list->first = instance->next;
+    }
+
+    if (instance->next != NULL)
+    {
+        instance->next->prev = instance->prev;
+    }
+
+    instance->instanceID = 0;
+
+    list->numInstances--;
+
+    list->pool->numFreeInstances++;
+
+    temp = list->pool->first_free;
+
+    list->pool->first_free = instance;
+
+    instance->prev = NULL;
+    instance->next = temp;
+
+    if (temp != NULL)
+    {
+        temp->prev = instance;
+    }
+
+    LIST_DeleteFunc((NodeType *)instance);
+
+    FX_EndInstanceEffects(instance);
+
+    if ((instance->flags & 0x10000))
+    {
+        instance->flags |= 0x20000;
+
+        OBTABLE_InstanceInit(instance);
+    }
+
+    if ((instance->object->animList != NULL) && (!(instance->object->oflags2 & 0x40000000)))
+    {
+        G2Anim_Free(&instance->anim);
+    }
+
+    if (instance->shadow0 != NULL)
+    {
+        ((LightInstance *)(instance->shadow0))->radius = 0;
+    }
+
+    if (instance->shadow1 != NULL)
+    {
+        ((LightInstance *)(instance->shadow1))->radius = 0;
+    }
+
+    if ((instance->object->oflags2 & 0x4))
+    {
+        SOUND_EndInstanceSounds(instance->object->soundData, instance->soundInstanceTbl);
+    }
+
+    if (instance->LinkParent != NULL)
+    {
+        INSTANCE_UnlinkFromParent(instance);
+    }
+
+    if (instance->LinkChild != NULL)
+    {
+        INSTANCE_UnlinkChildren(instance);
+    }
+
+    if (instance->hModelList != NULL)
+    {
+        MEMPACK_Free((char *)instance->hModelList);
+    }
+
+    if (instance->perVertexColor != NULL)
+    {
+        MEMPACK_Free((char *)instance->perVertexColor);
+
+        instance->perVertexColor = NULL;
+    }
+
+    for (i = 0; i < 1; i++)
+    {
+        if (gameTrackerX.gameData.asmData.lightInstances[i].lightInstance == instance)
+        {
+            gameTrackerX.gameData.asmData.lightInstances[i].lightInstance = NULL;
+            break;
+        }
+    }
+}
 
 void INSTANCE_CleanUpInstanceList(InstanceList *list, long reset)
 {
