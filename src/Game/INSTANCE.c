@@ -342,7 +342,25 @@ void INSTANCE_Post(Instance *Inst, int Message, int Data)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Broadcast);
+void INSTANCE_Broadcast(Instance *sender, long whatAmIMask, int Message, int Data)
+{
+    Instance *instance;
+    int plane;
+
+    instance = gameTrackerX.instanceList->first;
+
+    plane = gameTrackerX.gameData.asmData.MorphType;
+
+    while (instance != NULL)
+    {
+        if ((instance != sender) && ((INSTANCE_Query(instance, 1) & whatAmIMask)) && (INSTANCE_InPlane(instance, plane) != 0))
+        {
+            INSTANCE_Post(instance, Message, Data);
+        }
+
+        instance = instance->next;
+    }
+}
 
 int INSTANCE_InPlane(Instance *instance, int plane)
 {
