@@ -19,6 +19,40 @@ typedef struct __MessageQueue {
     struct __Event Queue[16];
 } MessageQueue;
 
+// size: 0x14
+typedef struct evAnimationInstanceSwitchData {
+    // offset: 0000 (668 bytes)
+    struct _Instance *instance;
+    // offset: 0004
+    int anim;
+    // offset: 0008
+    int frame;
+    // offset: 000C
+    int frames;
+    // offset: 0010
+    int mode;
+} evAnimationInstanceSwitchData;
+
+// size: 0x8
+typedef struct evPositionData {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short z;
+    // offset: 0006
+    short pad;
+} evPositionData;
+
+// size: 0x8
+typedef struct evControlSaveDataData {
+    // offset: 0000
+    long length;
+    // offset: 0004
+    void *data;
+} evControlSaveDataData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 

@@ -3,6 +3,8 @@
 #include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/OBTABLE.h"
+#include "Game/STATE.h"
+#include "Game/SAVEINFO.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericInit);
 
@@ -24,7 +26,58 @@ void GenericProcess(Instance *instance, GameTracker *gameTracker)
 
 INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericQuery);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericMessage);
+void GenericMessage(Instance *instance, unsigned long message, unsigned long data)
+{
+    evAnimationInstanceSwitchData *Ptr;
+
+    switch (message)
+    {
+    case 0x8000008:
+        Ptr = (evAnimationInstanceSwitchData *)data;
+
+        if (instance->anim.section[0].interpInfo != NULL)
+        {
+            G2EmulationInstanceSetAnimation(instance, 0, Ptr->anim, Ptr->frame, Ptr->frames);
+        }
+        else
+        {
+            G2EmulationInstanceSetAnimation(instance, 0, Ptr->anim, Ptr->frame, 0);
+        }
+
+        G2EmulationInstanceSetMode(instance, 0, Ptr->mode);
+        break;
+    case 0x4000A:
+        STREAM_SetInstancePosition(instance, (evPositionData *)data);
+        break;
+    case 0x4000B:
+    {
+        evPositionData *temp; // not from decls.h
+
+        temp = (evPositionData *)data;
+
+        instance->rotation.x = temp->x;
+        instance->rotation.y = temp->y;
+        instance->rotation.z = temp->z;
+        break;
+    }
+    case 0x8000010:
+        G2EmulationInstanceSetMode(instance, 0, data);
+        break;
+    case 0x40002:
+        ScriptKillInstance(instance, data);
+        break;
+    case 0x100007:
+    {
+        evControlSaveDataData *temp; // not from decls.h
+
+        temp = (evControlSaveDataData *)data;
+
+        instance->flags = ((MonsterSaveInfo *)temp->data)->mvFlags;
+        instance->flags2 = ((MonsterSaveInfo *)temp->data)->auxFlags;
+        break;
+    }
+    }
+}
 
 void GenericRelocateTune(Object *object, long offset)
 {
