@@ -398,7 +398,58 @@ long INSTANCE_FindWithID(long uniqueID)
     return ret;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_FindWithName);
+Instance *INSTANCE_FindWithName(long areaID, char *instanceName, Instance *startInstance)
+{
+    Instance *instance;
+    Instance *ret;
+    Instance *next;
+
+    ret = NULL;
+
+    instance = gameTrackerX.instanceList->first;
+
+    if (startInstance != NULL)
+    {
+        instance = startInstance->next;
+    }
+
+    if (areaID != 0)
+    {
+        while (instance != NULL)
+        {
+            next = instance->next;
+
+            if ((instance->birthStreamUnitID != areaID) || (strcmpi(instance->introName, instanceName) != 0))
+            {
+                instance = next;
+            }
+            else
+            {
+                ret = instance;
+                break;
+            }
+        }
+    }
+    else
+    {
+        while (instance != NULL)
+        {
+            next = instance->next;
+
+            if (strcmpi(instance->introName, instanceName) != 0)
+            {
+                instance = next;
+            }
+            else
+            {
+                ret = instance;
+                break;
+            }
+        }
+    }
+
+    return ret;
+}
 
 Intro *INSTANCE_FindIntro(long areaID, long introUniqueID)
 {
