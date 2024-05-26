@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/GENERIC.h"
 #include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/OBTABLE.h"
@@ -25,4 +26,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericQuery);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericMessage);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericRelocateTune);
+void GenericRelocateTune(Object *object, long offset)
+{
+    GenericTune *tune;
+
+    tune = (GenericTune *)object->data;
+
+    if ((tune != NULL) && (tune->shatterData != NULL))
+    {
+        tune->shatterData = (char *)tune->shatterData + offset;
+    }
+}
