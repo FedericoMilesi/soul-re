@@ -425,7 +425,24 @@ Intro *INSTANCE_FindIntro(long areaID, long introUniqueID)
     return ret;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_Find);
+Instance *INSTANCE_Find(long introUniqueID)
+{
+    Instance *instance;
+
+    instance = gameTrackerX.instanceList->first;
+
+    while (instance != NULL)
+    {
+        if (instance->introUniqueID == introUniqueID)
+        {
+            break;
+        }
+
+        instance = instance->next;
+    }
+
+    return instance;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_IntroduceSavedInstance);
 
