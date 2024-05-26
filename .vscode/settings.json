@@ -21,6 +21,8 @@
     "files.autoGuessEncoding": true,
     "files.associations": {
         "common.h": "c",
-        "missile.h": "c"
+        "missile.h": "c",
+        "instance.h": "c",
+        "types.h": "c"
     },
 }

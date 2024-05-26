@@ -417,7 +417,46 @@ void INSTANCE_InitEffects(Instance *instance, Object *object)
 
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_IntroduceInstance);
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_AdditionalCollideFunctions);
+void INSTANCE_AdditionalCollideFunctions(InstanceList *instanceList)
+{
+    Instance *instance;
+
+    instance = instanceList->first;
+
+    while (instance != NULL)
+    {
+        if ((gameTrackerX.gameMode != 6) || ((instance->object->oflags & 0x20000)))
+        {
+            if ((!(gameTrackerX.streamFlags & 0x100000)) || ((instance->object->oflags & 0x40000)))
+            {
+                if ((instance->additionalCollideFunc != NULL) && (!(instance->flags2 & 0x24000000)))
+                {
+                    if ((instance->object != NULL) && ((instance->object->oflags2 & 0x2000000)))
+                    {
+                        if ((instance->flags2 & 0x8000000))
+                        {
+                            gameTrackerX.timeMult = gameTrackerX.spectralTimeMult;
+                        }
+                        else
+                        {
+                            gameTrackerX.timeMult = gameTrackerX.materialTimeMult;
+                        }
+                    }
+                    else
+                    {
+                        gameTrackerX.timeMult = gameTrackerX.globalTimeMult;
+                    }
+
+                    instance->additionalCollideFunc(instance, &gameTrackerX);
+                }
+            }
+        }
+
+        instance = instance->next;
+    }
+
+    gameTrackerX.timeMult = gameTrackerX.globalTimeMult;
+}
 
 long INSTANCE_GetSplineFrameNumber(Instance *instance, MultiSpline *spline)
 {
