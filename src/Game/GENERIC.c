@@ -24,7 +24,98 @@ void GenericProcess(Instance *instance, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericQuery);
+unsigned long GenericQuery(Instance *instance, unsigned long query)
+{
+    long ret;
+    evControlSaveDataData *pdata;
+    Object *object;
+
+    ret = 0;
+
+    switch (query)
+    {
+    case 6:
+        ret = SetPositionData(instance->position.x, instance->position.y, instance->position.z);
+        break;
+    case 7:
+        ret = SetPositionData(instance->rotation.x, instance->rotation.y, instance->rotation.z);
+        break;
+    case 11:
+        ret = 1;
+
+        if ((instance->flags2 & 0x8000000))
+        {
+            ret = 2;
+        }
+
+        break;
+    case 12:
+        ret = (long)instance->matrix;
+        break;
+    case 17:
+        ret = G2EmulationInstanceQueryAnimation(instance, 0);
+        break;
+    case 18:
+        ret = G2EmulationInstanceQueryFrame(instance, 0);
+        break;
+    case 24:
+        if ((instance->flags2 & 0x4))
+        {
+            pdata = (evControlSaveDataData *)CIRC_Alloc(sizeof(evControlSaveDataData) + 4);
+
+            ret = (long)pdata;
+
+            pdata->length = 8;
+
+            memcpy(pdata->data, &instance->flags, 8);
+        }
+
+        break;
+    case 1:
+        object = instance->object;
+
+        if ((object->oflags2 & 0x4000000))
+        {
+            ret = 0x40000;
+            break;
+        }
+
+        if ((object->oflags & 0x100000))
+        {
+            ret = 0x100000;
+            break;
+        }
+
+        if ((object->oflags2 & 0x20))
+        {
+            ret = 0x200000;
+            break;
+        }
+
+        ret = 0x80000000;
+        break;
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 8:
+    case 9:
+    case 10:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 19:
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+        ret = 0;
+        break;
+    }
+
+    return ret;
+}
 
 void GenericMessage(Instance *instance, unsigned long message, unsigned long data)
 {
