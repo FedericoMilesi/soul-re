@@ -1,7 +1,8 @@
 #include "common.h"
-#include "Game/MONSTER/MONAPI.h"
+#include "Game/SAVEINFO.h"
 #include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MONSTER/MONAPI.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterProcess);
 
@@ -68,4 +69,22 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_ProcessGenerator);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_AddToGenerator);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_CheckGenerator);
+void MONAPI_CheckGenerator(Instance *instance)
+{
+    int i;
+    MONAPI_Regenerator *regen;
+    int id;
+
+    regen = GlobalSave->regenEntries;
+
+    id = instance->introUniqueID;
+
+    for (i = 0; i < GlobalSave->numRegens; i++, regen++)
+    {
+        if (regen->introUniqueID == id)
+        {
+            MONAPI_DeleteRegen(regen);
+            break;
+        }
+    }
+}

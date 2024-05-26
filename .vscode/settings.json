@@ -23,6 +23,7 @@
         "common.h": "c",
         "missile.h": "c",
         "instance.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "gameloop.h": "c"
     },
 }
