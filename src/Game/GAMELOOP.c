@@ -1,6 +1,8 @@
 #include "common.h"
 #include "Game/GAMELOOP.h"
 
+EXTERN STATIC short pause_redraw_flag;
+
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AllocStaticMemory);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_InitGameTracker);
@@ -66,7 +68,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", ResetPrimPool);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", Switch_For_Redraw);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_Set_Pause_Redraw);
+void GAMELOOP_Set_Pause_Redraw()
+{
+    pause_redraw_flag = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", SaveOT);
 
