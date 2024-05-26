@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/GAMELOOP.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AllocStaticMemory);
 
@@ -91,4 +92,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", PSX_GameLoop);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetMatrices);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetGT);
+GameTracker *GAMELOOP_GetGT()
+{
+    return &gameTrackerX;
+}

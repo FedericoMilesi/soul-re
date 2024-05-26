@@ -8,7 +8,7 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericInit);
 
-void GenericCollide(void)
+void GenericCollide()
 {
 }
 
