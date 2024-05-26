@@ -88,7 +88,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ChangeMode);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_RequestLevelChange);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", PSX_GameLoop);
+void PSX_GameLoop(GameTracker *gameTracker)
+{
+    GAMEPAD_Process(gameTracker);
+
+    GAMELOOP_Process(gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetMatrices);
 
