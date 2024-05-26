@@ -74,7 +74,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", ResetDrawPage);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_Set24FPS);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_Reset24FPS);
+void GAMELOOP_Reset24FPS()
+{
+    gameTrackerX.frameRate24fps = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DoTimeProcess);
 
