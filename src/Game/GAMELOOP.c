@@ -95,7 +95,24 @@ void PSX_GameLoop(GameTracker *gameTracker)
     GAMELOOP_Process(gameTracker);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetMatrices);
+MATRIX *GAMELOOP_GetMatrices(int numMatrices)
+{
+    MATRIX *matrix;
+    PrimPool *pool;
+
+    pool = gameTrackerX.primPool;
+
+    matrix = (MATRIX *)pool->nextPrim;
+
+    if (&matrix[numMatrices] < (MATRIX *)pool->lastPrim)
+    {
+        pool->nextPrim = (unsigned long *)&matrix[numMatrices];
+
+        return matrix;
+    }
+
+    return NULL;
+}
 
 GameTracker *GAMELOOP_GetGT()
 {

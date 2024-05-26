@@ -1,6 +1,18 @@
 #ifndef _DRAW_H_
 #define _DRAW_H_
 
+// size: 0x1770C
+typedef struct _PrimPool {
+    // offset: 0000
+    long numPrims;
+    // offset: 0004
+    unsigned long *nextPrim;
+    // offset: 0008
+    unsigned long *lastPrim;
+    // offset: 000C (96000 bytes)
+    unsigned long prim[24000];
+} PrimPool;
+
 // size: 0x4
 typedef struct _ColorType {
     // offset: 0000
