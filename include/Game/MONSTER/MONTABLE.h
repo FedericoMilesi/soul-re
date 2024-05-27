@@ -33,6 +33,14 @@ typedef struct _MonsterFunctionTable {
     char *localVersionID;
 } MonsterFunctionTable;
 
+// size: 0x8
+typedef struct _MonsterChoice {
+    // offset: 0000
+    long whatAmI;
+    // offset: 0004 (32 bytes)
+    struct _MonsterFunctionTable *table;
+} MonsterChoice;
+
 void *MONTABLE_GetInitFunc(Instance *instance);
 
 #endif

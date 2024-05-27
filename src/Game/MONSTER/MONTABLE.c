@@ -14,9 +14,25 @@ static MonsterFunctionTable DefaultFunctionTable = {
     NULL,
 };
 
-EXTERN STATIC struct _MonsterState DefaultStateTable[31];
+EXTERN STATIC MonsterStateFunction DefaultStateTable[31];
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_SetupTablePointer);
+EXTERN STATIC MonsterChoice functionChoiceTable[8924+6];
+
+void MONTABLE_SetupTablePointer(Object *object)
+{
+    long whatAmI;
+    int i; // not from decls.h
+
+    whatAmI = ((MonsterAttributes *)(object->data))->whatAmI;
+
+    for (i = 0; functionChoiceTable[i].whatAmI != 0; i++)
+    {
+        if (whatAmI == functionChoiceTable[i].whatAmI)
+        {
+            object->relocModule = functionChoiceTable[i].table;
+        }
+    }
+}
 
 MonsterStateFunction *MONTABLE_GetStateFuncs(Instance *instance, int state)
 {
