@@ -18,7 +18,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_SetupTablePointer
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_GetStateFuncs);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_GetDamageEffectFunc);
+void *MONTABLE_GetDamageEffectFunc(Instance *instance)
+{
+    MonsterFunctionTable *ft;
+
+    ft = (MonsterFunctionTable *)instance->object->relocModule;
+
+    if ((ft != NULL) && (ft->damageEffectFunc != NULL))
+    {
+        return (void *)ft->damageEffectFunc;
+    }
+
+    return (void *)DefaultFunctionTable.damageEffectFunc;
+}
 
 void *MONTABLE_GetInitFunc(Instance *instance)
 {
