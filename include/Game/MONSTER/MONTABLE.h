@@ -3,6 +3,16 @@
 
 #include "common.h"
 
+typedef struct _MonsterState {
+    void (*entryFunction)(); // size=0, offset=0
+    void (*stateFunction)(); // size=0, offset=4
+} MonsterStateFunction;
+
+typedef struct _MonsterStateChoice {
+    int state; // size=0, offset=0
+    struct _MonsterState functions; // size=8, offset=4
+} MonsterStateChoice;
+
 // size: 0x20
 typedef struct _MonsterFunctionTable {
     // offset: 0000

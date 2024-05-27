@@ -19,4 +19,8 @@
     },
     "terminal.integrated.tabs.enableAnimation": false,
     "files.autoGuessEncoding": true,
+    "files.associations": {
+        "montable.h": "c",
+        "common.h": "c"
+    },
 }

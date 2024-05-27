@@ -14,9 +14,35 @@ static MonsterFunctionTable DefaultFunctionTable = {
     NULL,
 };
 
+EXTERN STATIC struct _MonsterState DefaultStateTable[31];
+
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_SetupTablePointer);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_GetStateFuncs);
+MonsterStateFunction *MONTABLE_GetStateFuncs(Instance *instance, int state)
+{
+    MonsterFunctionTable *ft;
+
+    ft = (MonsterFunctionTable *)instance->object->relocModule;
+
+    if (ft != NULL)
+    {
+        MonsterStateChoice *choice;
+
+        choice = ft->stateFuncs;
+
+        while (choice->state != -1)
+        {
+            if (state == choice->state)
+            {
+                return (MonsterStateFunction *)&choice->functions.entryFunction;
+            }
+
+            choice++;
+        }
+    }
+
+    return (MonsterStateFunction *)&DefaultStateTable[state].entryFunction;
+}
 
 void *MONTABLE_GetDamageEffectFunc(Instance *instance)
 {
