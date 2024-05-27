@@ -1,5 +1,18 @@
 #include "common.h"
+#include "Game/MONSTER.h"
 #include "Game/MONSTER/MONTABLE.h"
+#include "Game/MONSTER/MONAPI.h"
+
+static MonsterFunctionTable DefaultFunctionTable = {
+    MON_DefaultInit,
+    MON_CleanUp,
+    MON_DamageEffect,
+    MonsterQuery,
+    MonsterMessage,
+    NULL,
+    monVersion,
+    NULL,
+};
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_SetupTablePointer);
 
@@ -9,7 +22,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_GetDamageEffectFu
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_GetInitFunc);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_GetCleanUpFunc);
+void *MONTABLE_GetCleanUpFunc(Instance *instance)
+{
+    MonsterFunctionTable *ft;
+
+    ft = (MonsterFunctionTable *)instance->object->relocModule;
+
+    if ((ft != NULL) && (ft->cleanUpFunc != NULL))
+    {
+        return (void *)ft->cleanUpFunc;
+    }
+
+    return (void *)DefaultFunctionTable.cleanUpFunc;
+}
 
 void MONTABLE_SetQueryFunc(Instance *instance)
 {

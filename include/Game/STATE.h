@@ -55,6 +55,18 @@ typedef struct evControlSaveDataData {
     void *data;
 } evControlSaveDataData;
 
+// size: 0x14
+typedef struct evFXHitData {
+    // offset: 0000 (8 bytes)
+    struct _SVector location;
+    // offset: 0008 (8 bytes)
+    struct _SVector velocity;
+    // offset: 0010
+    short amount;
+    // offset: 0012
+    short type;
+}evFXHitData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 int SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);

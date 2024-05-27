@@ -201,6 +201,8 @@ segments:
       - [0x0C0DDC, sdata, 0C0DDC]
       - [0x0C186C, .sdata, Game/VM]
       - [0x0C1874, sdata, 0C1874]
+      - [0x0C2348, .sdata, Game/MONSTER/MONTABLE]
+      - [0x0C2368, sdata, 0C2368]
 
       - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: KAIN2}
 

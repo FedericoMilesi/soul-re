@@ -17,5 +17,8 @@ void MON_DefaultInit(Instance *instance);
 void MON_StunnedEntry(Instance *instance);
 void MON_Dead(Instance *instance);
 void MON_DeadEntry(Instance *instance);
+void MON_DamageEffect(Instance *instance, evFXHitData *data);
+
+extern char monVersion[];
 
 #endif

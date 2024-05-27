@@ -507,5 +507,6 @@ void MONAPI_ResetLookAround(Instance *instance);
 void MONAPI_SetLookAround(Instance *instance);
 long MONAPI_OkToLookAround(Instance *instance);
 void MONAPI_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *gameTracker);
+void MonsterMessage(Instance *instance, unsigned long message, unsigned long data);
 
 #endif
