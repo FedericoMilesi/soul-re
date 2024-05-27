@@ -3,8 +3,58 @@
 #include "Game/GAMELOOP.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/MONSTER/MONTABLE.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterProcess);
+void MonsterProcess(Instance *instance, GameTracker *gameTracker)
+{
+    MonsterStateFunction *state;
+    MonsterVars *mv;
+    MonsterAttributes *attributes;
+    typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int); // not from decls.h 
+
+    attributes = (MonsterAttributes *)instance->data;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((mv != NULL) && (attributes != NULL) && (!(mv->mvFlags & 0x80000)))
+    {
+        instance->waterFace = NULL;
+        instance->waterFaceTerrain = NULL;
+
+        MONSENSE_DoSenses(instance);
+
+        MON_DoCombatTimers(instance);
+
+        state = MONTABLE_GetStateFuncs(instance, instance->currentMainState);
+
+        instance->flags2 &= ~0x10;
+        instance->flags2 &= ~0x2;
+
+        if (!(mv->mvFlags & 0x80))
+        {
+            G2EmulationInstancePlayAnimation(instance);
+        }
+
+        (state->stateFunction)(instance);
+
+        if ((mv->mvFlags & 0x1))
+        {
+            state = MONTABLE_GetStateFuncs(instance, instance->currentMainState);
+
+            ((state)->entryFunction)(instance);
+        }
+
+        mv->mvFlags &= ~0x41;
+
+        if ((instance->flags & 0x200))
+        {
+            ((MONTABLE_DamageEffectFunc)MONTABLE_GetDamageEffectFunc(instance))(instance, 0);
+        }
+
+        MON_ProcessLookAt(instance);
+        MON_ProcessSpecialFade(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterInit);
 
