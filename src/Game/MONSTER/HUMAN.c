@@ -2,7 +2,7 @@
 #include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/OBTABLE.h"
-#include "Game/MONSTER/MONAPI.h"
+#include "Game/MONSTER/MONSENSE.h"
 
 void HUMAN_WaitForWeapon(Instance *instance, GameTracker *gameTracker)
 {
@@ -124,7 +124,7 @@ void HUMAN_DeadEntry(Instance *instance)
 
     mv->soulJuice /= 4;
 
-    if (mv->soulJuice >= 4097)
+    if (mv->soulJuice > 4096)
     {
         mv->soulJuice = 4096;
     }
@@ -165,9 +165,7 @@ void HUMAN_Dead(Instance *instance)
         MON_ApplyPhysics(instance);
     }
 
-    while (DeMessageQueue(&mv->messageQueue) != NULL)
-    {
-    }
+    while (DeMessageQueue(&mv->messageQueue) != NULL);
 }
 
 void HUMAN_StunnedEntry(Instance *instance)
@@ -209,10 +207,11 @@ void HUMAN_Stunned(Instance *instance)
         }
 
         MON_DefaultQueueHandler(instance);
-        return;
     }
-
-    MON_Stunned(instance);
+    else
+    {
+        MON_Stunned(instance);
+    }
 }
 
 void HUMAN_EmbraceEntry(Instance *instance)
@@ -257,10 +256,7 @@ void HUMAN_Embrace(Instance *instance)
 
     INSTANCE_Post(gameTrackerX.playerInstance, 0x1000016, juice);
 
-    do
-    {
-
-    } while (0); // garbage code for reodering
+    do {} while (0); // garbage code for reodering
 
     if (mv->soulJuice < juice)
     {
@@ -452,10 +448,7 @@ void HUMAN_GetAngry()
 
             allegiances = mv->subAttr->allegiances;
 
-            do
-            {
-
-            } while (0); // garbage code for reodering
+            do {} while (0); // garbage code for reodering
 
             allegiances->gods &= ~0x1;
 

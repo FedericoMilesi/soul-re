@@ -1,9 +1,7 @@
 #ifndef _SAVEINFO_H_
 #define _SAVEINFO_H_
 
-void SAVE_DebugSaveGame();
-void SAVE_LoadSaveGame();
-void SAVE_LoadSaveGame();
+#include "Game/SOUND.h"
 
 // size: 0x8
 typedef struct _MONAPI_Regenerator {
@@ -64,6 +62,10 @@ typedef struct _MonsterSaveInfo {
     // offset: 0075 (3 bytes)
     // unsigned int causeOfDeath;
 } MonsterSaveInfo;
+
+void SAVE_DebugSaveGame();
+void SAVE_LoadSaveGame();
+void SAVE_LoadSaveGame();
 
 extern GlobalSaveTracker *GlobalSave;
 

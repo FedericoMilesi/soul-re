@@ -5,6 +5,8 @@ EXTERN STATIC short pause_redraw_flag;
 
 EXTERN STATIC PrimPool *primPool[2];
 
+void ResetDrawPage();
+
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AllocStaticMemory);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_InitGameTracker);

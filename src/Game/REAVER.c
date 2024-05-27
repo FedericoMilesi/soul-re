@@ -7,6 +7,8 @@
 
 EXTERN STATIC short FireReaverFlag;
 
+void _SoulReaverAnimate(Instance *instance);
+
 void SoulReaverInit(Instance *instance, GameTracker *gameTracker)
 {
     ReaverData *data;

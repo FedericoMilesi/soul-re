@@ -142,13 +142,9 @@ void GenericMessage(Instance *instance, unsigned long message, unsigned long dat
         break;
     case 0x4000B:
     {
-        evPositionData *temp; // not from decls.h
-
-        temp = (evPositionData *)data;
-
-        instance->rotation.x = temp->x;
-        instance->rotation.y = temp->y;
-        instance->rotation.z = temp->z;
+        instance->rotation.x = ((evPositionData *)data)->x;
+        instance->rotation.y = ((evPositionData *)data)->y;
+        instance->rotation.z = ((evPositionData *)data)->z;
         break;
     }
     case 0x8000010:
@@ -159,12 +155,8 @@ void GenericMessage(Instance *instance, unsigned long message, unsigned long dat
         break;
     case 0x100007:
     {
-        evControlSaveDataData *temp; // not from decls.h
-
-        temp = (evControlSaveDataData *)data;
-
-        instance->flags = ((MonsterSaveInfo *)temp->data)->mvFlags;
-        instance->flags2 = ((MonsterSaveInfo *)temp->data)->auxFlags;
+        instance->flags = ((MonsterSaveInfo *)((evControlSaveDataData *)data)->data)->mvFlags;
+        instance->flags2 = ((MonsterSaveInfo *)((evControlSaveDataData *)data)->data)->auxFlags;
         break;
     }
     }

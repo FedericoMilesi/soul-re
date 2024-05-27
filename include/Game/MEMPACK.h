@@ -27,4 +27,6 @@ typedef struct NewMemTracker {
     long doingGarbageCollection;
 } NewMemTracker;
 
+char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType);
+
 #endif

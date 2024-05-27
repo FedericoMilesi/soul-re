@@ -160,9 +160,7 @@ long *LOAD_ReadFile(char *fileName, unsigned char memType)
 
     STREAM_QueueNonblockingLoads(fileName, memType, NULL, NULL, NULL, &loadAddr, 0);
 
-    while (STREAM_PollLoadQueue() != 0)
-    {
-    }
+    while (STREAM_PollLoadQueue() != 0);
 
     return (long *)loadAddr;
 }

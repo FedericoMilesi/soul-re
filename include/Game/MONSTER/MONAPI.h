@@ -4,6 +4,7 @@
 #include "Game/TYPES.h"
 #include "Game/STATE.h"
 #include "Game/G2/ANIMG2.h"
+#include "Game/GAMELOOP.h"
 
 typedef enum MonsterState {
     MONSTER_STATE_BIRTH = 0,

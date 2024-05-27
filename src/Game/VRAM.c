@@ -55,7 +55,7 @@ int VRAM_ConcatanateMemory(BlockVramEntry *curBlock)
 
         while (nextBlock != NULL)
         {
-            if ((curBlock->x == nextBlock->x) && ((curBlock->w == nextBlock->w)))
+            if ((curBlock->x == nextBlock->x) && (curBlock->w == nextBlock->w))
             {
                 if ((curBlock->y >> 8) == (nextBlock->y >> 8))
                 {
@@ -115,9 +115,7 @@ int VRAM_ConcatanateMemory(BlockVramEntry *curBlock)
 
 void VRAM_GarbageCollect()
 {
-    while (VRAM_ConcatanateMemory(openVramBlocks) == 1)
-    {
-    }
+    while (VRAM_ConcatanateMemory(openVramBlocks) == 1);
 }
 
 int VRAM_InsertFreeBlock(BlockVramEntry *block)

@@ -80,22 +80,22 @@ short MATH3D_FastAtan2(long y, long x)
         {
             if (ax < ay)
             {
-                return (short)(1024 - ((ax * 512) / ay));
+                return (1024 - ((ax * 512) / ay));
             }
             else
             {
-                return (short)((ay * 512) / ax);
+                return ((ay * 512) / ax);
             }
         }
         else
         {
             if (ay < ax)
             {
-                return (short)(4096 - ((ay * 512) / ax));
+                return (4096 - ((ay * 512) / ax));
             }
             else
             {
-                return (short)(((ax * 512) / ay) + 3072);
+                return (((ax * 512) / ay) + 3072);
             }
         }
     }
@@ -104,21 +104,21 @@ short MATH3D_FastAtan2(long y, long x)
     {
         if (ax < ay)
         {
-            return (short)(((ax * 512) / ay) + 1024);
+            return (((ax * 512) / ay) + 1024);
         }
         else
         {
-            return (short)(2048 - ((ay * 512) / ax));
+            return (2048 - ((ay * 512) / ax));
         }
     }
 
     if (ay < ax)
     {
-        return (short)(((ay * 512) / ax) + 2048);
+        return (((ay * 512) / ax) + 2048);
     }
     else
     {
-        return (short)(3072 - ((ax * 512) / ay));
+        return (3072 - ((ax * 512) / ay));
     }
 }
 

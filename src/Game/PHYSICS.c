@@ -93,7 +93,7 @@ void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Dat
     instance->position.x += Data->x;
     instance->position.y += Data->y;
 
-    if ((instance == gameTrackerX.playerInstance) && (Data->z >= 129))
+    if ((instance == gameTrackerX.playerInstance) && (Data->z > 128))
     {
         instance->position.z += 128;
     }
@@ -247,7 +247,7 @@ void PhysicsSetVelFromRot(Instance *instance, Rotation *rot, long magnitude)
     SVECTOR newPt;
 
     flatPt.vx = 0;
-    flatPt.vy = (short)-magnitude;
+    flatPt.vy = -magnitude;
     flatPt.vz = 0;
 
     RotMatrix((SVECTOR *)&instance->rotation, &mat);
@@ -276,7 +276,7 @@ void PHYSICS_SetVAndAFromRot(Instance *instance, Rotation *rot, long v, long a)
     {
         SVECTOR newPt;
 
-        flatPt.vy = (short)-v;
+        flatPt.vy = -v;
 
         ApplyMatrixSV(&mat, &flatPt, &newPt);
 
@@ -295,7 +295,7 @@ void PHYSICS_SetVAndAFromRot(Instance *instance, Rotation *rot, long v, long a)
     {
         SVECTOR newPt;
 
-        flatPt.vy = (short)-a;
+        flatPt.vy = -a;
 
         ApplyMatrixSV(&mat, &flatPt, &newPt);
 

@@ -259,5 +259,7 @@ typedef struct _InstancePool {
 void INSTANCE_UpdateFamilyStreamUnitID(Instance *instance);
 Instance *INSTANCE_Find(long introUniqueID);
 Instance *INSTANCE_IntroduceInstance(Intro *intro, short streamUnitID);
+void INSTANCE_UnlinkFromParent(Instance *instance);
+Instance *INSTANCE_BirthObject(Instance *parent, Object *object, int modelNum);
 
 #endif

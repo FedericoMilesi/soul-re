@@ -3,6 +3,7 @@
 #include "Game/FX.h"
 #include "Game/MATH3D.h"
 #include "Game/INSTANCE.h"
+#include "Game/MEMPACK.h"
 
 EXTERN STATIC FXGeneralEffect *FX_GeneralEffectTracker;
 

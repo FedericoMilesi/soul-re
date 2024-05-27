@@ -460,11 +460,10 @@ void SOUL_Reanimate(Instance *instance)
         }
 
         MON_KillMonster(instance);
-        return;
     }
-
-    while (DeMessageQueue(&mv->messageQueue) != NULL)
+    else
     {
+        while (DeMessageQueue(&mv->messageQueue) != NULL);
     }
 }
 

@@ -9,4 +9,6 @@ typedef struct NodeType {
     struct NodeType *next;
 } NodeType;
 
+NodeType *LIST_GetFunc(NodeType *list);
+
 #endif

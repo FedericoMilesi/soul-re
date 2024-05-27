@@ -212,11 +212,6 @@ int CAMERA_CheckIfPointOnLine(SVector *linePoint, SVector *linept1, SVector *lin
     {
         return CAMERA_CheckPoint(linePoint->z, linept1->z, linept2->z) == 0;
     }
-    else
-    {
-        return 0;
-    }
-
     return 0;
 }
 
@@ -236,13 +231,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Process);
 
 void CAMERA_CenterCamera(Camera *camera)
 {
-    int tmp1;
-    int tmp2;
-
     if ((camera->instance_mode & 0x2000000))
     {
-        tmp1 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z + 1024));
-        tmp2 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z - 1024));
+        int tmp1 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z + 1024));
+        int tmp2 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z - 1024));
 
         if (tmp1 < tmp2)
         {
@@ -589,11 +581,11 @@ void CAMERA_DoPanicCheck(Camera *camera, CameraCollisionInfo *tmpcolInfo, Rotati
 
     CAMERA_SphereToSphereWithLines(camera, tmpcolInfo, 0);
 
-    if ((tmpcolInfo->numCollided == 0) || ((int)*max_dist < tmpcolInfo->lenCenterToExtend))
+    if ((tmpcolInfo->numCollided == 0) || (*max_dist < tmpcolInfo->lenCenterToExtend))
     {
         *best_z = rotation->z;
 
-        *max_dist = (short)tmpcolInfo->lenCenterToExtend;
+        *max_dist = tmpcolInfo->lenCenterToExtend;
     }
 }
 

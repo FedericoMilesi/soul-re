@@ -6,6 +6,10 @@
 #include "Game/COLLIDE.h"
 #include "Game/SAVEINFO.h"
 #include "Game/G2/ANIMG2.h"
+#include "Game/SCRIPT.h"
+
+void INSTANCE_BuildStaticShadow();
+void INSTANCE_UnlinkChildren(Instance *instance);
 
 void INSTANCE_Deactivate(Instance *instance)
 {
