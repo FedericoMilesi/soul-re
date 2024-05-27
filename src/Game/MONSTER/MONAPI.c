@@ -66,6 +66,7 @@ void MonsterAdditionalCollide(Instance *instance, GameTracker *gameTracker)
 {
     if (instance->data != NULL)
     {
+        (void)gameTracker;
         MON_CheckEnvironment(instance);
     }
 }
