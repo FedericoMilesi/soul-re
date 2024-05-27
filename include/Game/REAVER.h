@@ -1,7 +1,7 @@
 #ifndef _REAVER_H_
 #define _REAVER_H_
 
-#include "Game/INSTANCE.h"
+#include "common.h"
 #include "Game/GAMELOOP.h"
 
 // size: 0xC0

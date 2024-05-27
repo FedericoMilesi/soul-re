@@ -1,7 +1,8 @@
 #ifndef _PHYSOBS_H_
 #define _PHYSOBS_H_
 
-#include "Game/INSTANCE.h"
+#include "common.h"
+#include "Game/GAMELOOP.h"
 
 // size: 0x8
 typedef struct PhysObSplinter {
@@ -70,5 +71,7 @@ typedef struct evObjectBirthProjectileData {
 } evObjectBirthProjectileData;
 
 evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint, int type);
+void CollidePhysicalObject(Instance *instance, GameTracker *gameTracker);
+void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker);
 
 #endif

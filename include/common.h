@@ -1,17 +1,22 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-#include "include_asm.h"
-
+#ifdef TARGET_PSX
+typedef unsigned long uintptr_t;
+typedef long intptr_t;
 #define NULL (void*)0
+#else
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#endif
+
+#include "include_asm.h"
+#include "Game/TYPES.h"
+#include "LIBS.h"
+#include "Game/INSTANCE.h"
 
 #define EXTERN extern
 #define STATIC
-
-/*TODO: Remove this when adding PSYQ headers*/
-#define getScratchAddr(offset)  ((unsigned long *)(0x1f800000+(offset)*4))
-
-extern int rcos(int a);
-extern int rsin(int a);
 
 #endif

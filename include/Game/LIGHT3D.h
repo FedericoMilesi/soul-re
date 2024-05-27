@@ -1,8 +1,8 @@
 #ifndef _LIGHT3D_H_
 #define _LIGHT3D_H_
 
-#include "Game/TYPES.h"
-#include "Game/LIST.h"
+#include "common.h"
+#include "Game/DRAW.h"
 
 // size: 0x18
 typedef struct PointLight {
@@ -95,5 +95,7 @@ typedef struct LightInstance {
     // offset: 0013
     unsigned char flags;
 } LightInstance;
+
+void LIGHT_GetAmbient(ColorType *color, Instance *instance);
 
 #endif

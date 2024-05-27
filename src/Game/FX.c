@@ -1,8 +1,5 @@
 #include "common.h"
-#include "Game/TYPES.h"
-#include "Game/FX.h"
 #include "Game/MATH3D.h"
-#include "Game/INSTANCE.h"
 #include "Game/MEMPACK.h"
 
 EXTERN STATIC FXGeneralEffect *FX_GeneralEffectTracker;
@@ -30,6 +27,8 @@ EXTERN STATIC int Spiral_Glow_Y;
 EXTERN STATIC int Spiral_Glow_Size;
 
 EXTERN STATIC int Spiral_Mod;
+
+void FX_StandardFXPrimProcess(FX_PRIM *fxPrim, FXTracker *fxTracker);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Init);
 
@@ -151,6 +150,8 @@ FXParticle *FX_GetParticle(Instance *instance, short startSegment)
 
 void FX_AniTexSetup(FX_PRIM *fxPrim, MFace *mface, Model *model, FXTracker *fxTracker)
 {
+    (void)model;
+    (void)fxTracker;
     if ((mface->flags & 0x2))
     {
         fxPrim->flags |= 0x1;
@@ -333,6 +334,7 @@ void FX_Blood(SVector *location, SVector *input_vel, SVector *accel, int amount,
 
 void FX_Blood2(SVector *location, SVector *input_vel, SVector *accel, int amount, long color, long dummyCrapShouldRemove)
 {
+    (void)dummyCrapShouldRemove;
     FX_Blood(location, input_vel, accel, amount, color, 4);
 }
 
@@ -401,8 +403,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_UpdateInstanceSplitRing);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_UpdateGlowEffect);
 
+void FX_InsertGeneralEffect(void *ptr);
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_InsertGeneralEffect);
 
+void FX_DeleteGeneralEffect(FXGeneralEffect *effect);
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DeleteGeneralEffect);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DoInstanceOneSegmentGlow);
@@ -501,6 +505,7 @@ void FX_EndInstanceParticleEffects(Instance *instance)
     }
 }
 
+void FX_GetSpiralPoint(int radius, int deg, int *x, int *y);
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetSpiralPoint);
 
 void FX_GetLinePoint(int radius, int next_radius, int deg, int next_deg, int *pntx, int *pnty, int part)
@@ -517,6 +522,7 @@ void FX_GetLinePoint(int radius, int next_radius, int deg, int next_deg, int *pn
     *pnty = y1 + (((y2 - y1) * part) / 4096);
 }
 
+void FX_CalcSpiral(int degchange);
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_CalcSpiral);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Spiral);

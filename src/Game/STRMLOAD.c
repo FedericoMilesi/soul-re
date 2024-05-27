@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/LOAD3D.h"
 #include "Game/STRMLOAD.h"
 
 static LoadQueueEntry LoadQueue[40];
@@ -49,6 +50,7 @@ void STREAM_InitLoader(char *bigFileName, char *voiceFileName)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_RemoveQueueHead);
 
+void STREAM_RemoveQueueEntry(LoadQueueEntry *entry, LoadQueueEntry *prev);
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_RemoveQueueEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_AddQueueEntryToTail);
@@ -65,6 +67,7 @@ int STREAM_IsCdBusy(long *numberInQueue)
     return numLoads;
 }
 
+int STREAM_PollLoadQueue();
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_PollLoadQueue);
 
 LoadQueueEntry *STREAM_SetUpQueueEntry(char *fileName, void *retFunc, void *retData, void *retData2, void **retPointer, int fromhead);

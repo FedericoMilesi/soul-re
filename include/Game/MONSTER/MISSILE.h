@@ -1,6 +1,8 @@
 #ifndef _MISSILE_H_
 #define _MISSILE_H_
 
+#include "common.h"
+
 // size: 0x10
 typedef struct _MonsterMissile {
     // offset: 0000

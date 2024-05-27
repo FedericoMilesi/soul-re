@@ -28,5 +28,7 @@ typedef struct NewMemTracker {
 } NewMemTracker;
 
 char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType);
+void MEMPACK_Free(char *address);
+long MEMPACK_MemoryValidFunc(char *address);
 
 #endif

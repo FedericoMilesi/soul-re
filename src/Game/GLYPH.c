@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/CAMERA.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
 

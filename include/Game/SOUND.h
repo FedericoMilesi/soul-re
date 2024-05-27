@@ -1,6 +1,8 @@
 #ifndef _SOUND_H_
 #define _SOUND_H_
 
+#include "common.h"
+
 // size: 0x3
 typedef struct SoundInstance {
     // offset: 0000
@@ -30,5 +32,9 @@ typedef struct gSoundData {
     // offset: 0013
     char soundsLoaded;
 } gSoundData;
+
+unsigned long SOUND_Play3dSound(Position *position, int sfxToneID, int pitch, int maxVolume, int minVolDist);
+void SOUND_ProcessInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl, Position *position, int livesInOnePlace, int inSpectral, int hidden, int burning, long *triggerFlags);
+void SOUND_EndInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl);
 
 #endif

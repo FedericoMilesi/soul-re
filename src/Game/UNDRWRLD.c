@@ -1,9 +1,6 @@
 #include "common.h"
 #include "Game/UNDRWRLD.h"
-#include "Game/TYPES.h"
 #include "Game/MATH3D.h"
-#include "Game/INSTANCE.h"
-#include "Game/STREAM.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_StartProcess);
 

@@ -1,5 +1,5 @@
 #include "common.h"
-#include "Game/TYPES.h"
+#include "Game/MATH3D.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_PlayDropSound);
 

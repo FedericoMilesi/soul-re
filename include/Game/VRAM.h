@@ -47,5 +47,6 @@ typedef struct _BlockVramEntry {
 } BlockVramEntry;
 
 void VRAM_LoadReturn(void *dataPtr, void *data1, void *data2);
+void VRAM_ClearVramBlock(BlockVramEntry *block);
 
 #endif

@@ -1,6 +1,7 @@
 #include "common.h"
-#include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MONSTER/MONAPI.h"
+#include "Game/RAZIEL/RAZIEL.h"
 
 void PLAYER_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *gameTracker)
 {

@@ -1,6 +1,7 @@
 #ifndef _OBTABLE_H_
 #define _OBTABLE_H_
 
+#include "common.h"
 #include "Game/VRAM.h"
 
 // size: 0x4
@@ -72,5 +73,12 @@ typedef struct ObjectAccess {
 } ObjectAccess;
 
 extern ObjectAccess objectAccess[8924+28];
+
+void OBTABLE_GetInstanceAdditionalCollideFunc(Instance *instance);
+void OBTABLE_GetInstanceMessageFunc(Instance *instance);
+void OBTABLE_GetInstanceQueryFunc(Instance *instance);
+void OBTABLE_GetInstanceProcessFunc(Instance *instance);
+void OBTABLE_GetInstanceCollideFunc(Instance *instance);
+void OBTABLE_InstanceInit(Instance *instance);
 
 #endif

@@ -1,7 +1,4 @@
 #include "common.h"
-#include "Game/COLLIDE.h"
-#include "Game/INSTANCE.h"
-#include "Game/STREAM.h"
 
 long dyna_clddyna[8] = {
     0x0C, 0x0D, 0x0E, 0x0F, 0x1C, 0x1D, 0x1E, 0x1F};
@@ -147,7 +144,7 @@ int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *poin
             {
                 if (ty == vert1->vy)
                 {
-                    if (((vert0->vx < tx) != (vert1->vx < tx) == 0) && (tx != vert0->vx))
+                    if ((((vert0->vx < tx) != (vert1->vx < tx)) == 0) && (tx != vert0->vx))
                     {
                         if (tx == vert1->vx)
                         {
@@ -441,6 +438,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceTerrain);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_LineWithSignals);
 
+void COLLIDE_InstanceTerrainSignal(Instance *instance, Level *level);
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceTerrainSignal);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_CameraWithStreamSignals);

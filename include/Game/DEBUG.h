@@ -25,7 +25,7 @@ typedef struct DebugMenuLine {
     // offset: 0010
     long *var_address;
     // offset: 0014
-    long bit_mask;
+    intptr_t bit_mask;
 } DebugMenuLine;
 
 // size: 0x8

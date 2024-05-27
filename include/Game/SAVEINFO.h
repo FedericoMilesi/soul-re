@@ -1,17 +1,8 @@
 #ifndef _SAVEINFO_H_
 #define _SAVEINFO_H_
 
-#include "Game/SOUND.h"
-
-// size: 0x8
-typedef struct _MONAPI_Regenerator {
-    // offset: 0000
-    unsigned long regenTime;
-    // offset: 0004
-    short introUniqueID;
-    // offset: 0006
-    short streamUnitID;
-} MONAPI_Regenerator;
+#include "common.h"
+#include "Game/MONSTER/MONAPI.h"
 
 // size: 0x78
 typedef struct _GlobalSaveTracker {
@@ -66,6 +57,11 @@ typedef struct _MonsterSaveInfo {
 void SAVE_DebugSaveGame();
 void SAVE_LoadSaveGame();
 void SAVE_LoadSaveGame();
+void SAVE_DeleteInstance(Instance *instance);
+void SAVE_MarkDeadDead(Instance *instance);
+long SAVE_IsIntroDeadDead(Intro *intro);
+long SAVE_HasSavedIntro(Intro *intro, long currentStreamID);
+void SAVE_DoInstanceDeadDead(Instance *instance);
 
 extern GlobalSaveTracker *GlobalSave;
 

@@ -1,9 +1,7 @@
 #include "common.h"
-#include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
-#include "Game/COLLIDE.h"
 #include "Game/PHYSOBS.h"
-#include "Game/G2/ANIMG2.h"
+#include "Game/STATE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Message);
 
@@ -48,6 +46,8 @@ void WALBOSC_Collide(Instance *instance, GameTracker *gameTracker)
     CollideInfo *collideInfo;
     HSphere *s1;
     Instance *inst1;
+
+    (void)gameTracker;
 
     collideInfo = (CollideInfo *)instance->collideInfo;
 

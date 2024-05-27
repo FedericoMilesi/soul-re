@@ -1,6 +1,9 @@
 #ifndef _ANIMG2_H_
 #define _ANIMG2_H_
 
+#include "common.h"
+#include "Game/G2/MAING2.h"
+
 typedef enum _G2AnimCallbackMsg_Enum {
     G2ANIM_MSG_DONE = 1,
     G2ANIM_MSG_LOOPPOINT = 2,
@@ -138,5 +141,9 @@ typedef struct _AnimSoundData_Type {
     // offset: 0006
     short minVolDistance;
 } AnimSoundData;
+
+void G2Anim_Restore(G2Anim *anim);
+void G2Anim_Free(G2Anim *anim);
+G2Bool G2Anim_SegmentHasActiveChannels(G2Anim *anim, int segNumber, unsigned short chanMask);
 
 #endif

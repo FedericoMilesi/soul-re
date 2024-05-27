@@ -1,9 +1,8 @@
 #include "common.h"
 #include "Game/GENERIC.h"
-#include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
-#include "Game/OBTABLE.h"
 #include "Game/STATE.h"
+#include "Game/SCRIPT.h"
 #include "Game/SAVEINFO.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericInit);
@@ -16,6 +15,7 @@ void GenericProcess(Instance *instance, GameTracker *gameTracker)
 {
     Object *object;
 
+    (void)gameTracker;
     object = instance->object;
 
     if ((object != NULL) && (object->numAnims != 0) && (!(object->oflags2 & 0x40000000)))

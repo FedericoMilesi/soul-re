@@ -1,10 +1,8 @@
 #ifndef _GAMELOOP_H_
 #define _GAMELOOP_H_
 
-#include "Game/TYPES.h"
+#include "common.h"
 #include "Game/LIGHT3D.h"
-#include "Game/DRAW.h"
-#include "Game/SOUND.h"
 
 // size: 0x20
 typedef struct _GameTrackerASMData_Type {
@@ -255,6 +253,9 @@ typedef struct GameTracker {
     // offset: 026F
     char pad;
 } GameTracker;
+
+void GAMELOOP_SetGameTime(long timeOfDay);
+int GAMELOOP_GetTimeOfDay();
 
 GameTracker gameTrackerX;
 

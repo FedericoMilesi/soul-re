@@ -1,7 +1,7 @@
 #ifndef _VM_H_
 #define _VM_H_
 
-#include "TYPES.h"
+#include "common.h"
 
 // size: 0x3C
 typedef struct _VMObject {

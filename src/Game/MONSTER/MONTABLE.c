@@ -1,5 +1,4 @@
 #include "common.h"
-#include "Game/INSTANCE.h"
 #include "Game/MONSTER/MONTABLE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONTABLE", MONTABLE_SetupTablePointer);

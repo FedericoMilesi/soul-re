@@ -1,8 +1,6 @@
 #include "common.h"
-#include "Game/STREAM.h"
 #include "Game/CAMERA.h"
 #include "Game/LIGHT3D.h"
-#include "Game/INSTANCE.h"
 
 void SBSP_IntroduceInstances(Terrain *terrain, int unitID)
 {
@@ -24,5 +22,7 @@ void SBSP_IntroduceInstances(Terrain *terrain, int unitID)
 
 void SBSP_IntroduceInstancesAndLights(Terrain *terrain, CameraCore *cameraCore, LightInfo *lightInfo, int unitID)
 {
+    (void)cameraCore;
+    (void)lightInfo;
     SBSP_IntroduceInstances(terrain, unitID);
 }

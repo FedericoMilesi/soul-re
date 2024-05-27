@@ -1,6 +1,6 @@
 #include "common.h"
 
-void RELMOD_InitModulePointers(int baseaddr, int *relocs)
+void RELMOD_InitModulePointers(intptr_t baseaddr, int *relocs)
 {
     unsigned int *rel_addr;
     int temp; // not from decls.h

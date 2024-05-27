@@ -1,13 +1,17 @@
 #include "common.h"
-#include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
-#include "Game/OBTABLE.h"
 #include "Game/MONSTER/MONSENSE.h"
+#include "Game/MONSTER/MONTABLE.h"
+#include "Game/MONSTER/MONLIB.h"
+#include "Game/MONSTER/MONMSG.h"
+#include "Game/MONSTER.h"
+#include "Game/GAMEPAD.h"
+
+typedef void (*MONTABLE_InitFunc)(Instance *); // not from decls.h
 
 void HUMAN_WaitForWeapon(Instance *instance, GameTracker *gameTracker)
 {
-    typedef void (*MONTABLE_InitFunc)(Instance *); // not from decls.h
-
+    (void)gameTracker;
     ((MONTABLE_InitFunc)MONTABLE_GetInitFunc(instance))(instance);
 
     if (instance->LinkChild != NULL)
@@ -240,7 +244,7 @@ void HUMAN_Embrace(Instance *instance)
 
     MON_TurnToPosition(instance, &gameTrackerX.playerInstance->position, 4096);
 
-    while (message = DeMessageQueue(&mv->messageQueue))
+    while ((message = DeMessageQueue(&mv->messageQueue)))
     {
         if ((message != NULL) && (message->ID == 0x1000014))
         {
@@ -275,7 +279,7 @@ void HUMAN_Embrace(Instance *instance)
 
         MON_SwitchState(instance, MONSTER_STATE_GENERALDEATH);
 
-        INSTANCE_Post(gameTrackerX.playerInstance, 0x1000006, (int)instance);
+        INSTANCE_Post(gameTrackerX.playerInstance, 0x1000006, (intptr_t)instance);
 
         mv->soulJuice = 0;
 
@@ -291,7 +295,7 @@ void HUMAN_Embrace(Instance *instance)
     }
     else if (instance->currentMainState != MONSTER_STATE_EMBRACE)
     {
-        INSTANCE_Post(gameTrackerX.playerInstance, 0x1000006, (int)instance);
+        INSTANCE_Post(gameTrackerX.playerInstance, 0x1000006, (intptr_t)instance);
 
         MON_TurnOnBodySpheres(instance);
     }

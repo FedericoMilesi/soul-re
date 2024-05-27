@@ -62,7 +62,7 @@ DebugMenuLine standardMenu[] = {
     {DEBUG_LINE_TYPE_BIT,     0, 0, "SHORT SHORT STATS", &gameTrackerX.debugFlags, 0x04000000},
     {DEBUG_LINE_TYPE_MENU,    0, 0, "RAZIEL MENU...", (long *)debugRazielMenu, 0},
     {DEBUG_LINE_TYPE_MENU,    0, 0, "CAMERA MENU...", (long *)cameraMenu, 0},
-    {DEBUG_LINE_TYPE_MENU,    0, 0, "FOG MENU...", (long *)fogMenu, (long)DEBUG_FogLoad},
+    {DEBUG_LINE_TYPE_MENU,    0, 0, "FOG MENU...", (long *)fogMenu, (intptr_t)DEBUG_FogLoad},
     {DEBUG_LINE_TYPE_ACTION,  0, 0, "VIEW VRAM", (long *)DEBUG_SetViewVram, 0},
     {DEBUG_LINE_TYPE_BIT,     0, 0, "Show Warp Gate Info", &gameTrackerX.debugFlags2, 0x01000000},
     {DEBUG_LINE_TYPE_BIT,     0, 0, "Activate All WarpGates", &gameTrackerX.streamFlags, 0x400000},
@@ -81,25 +81,25 @@ DebugMenuLine eventMenu[] = {
     {DEBUG_LINE_TYPE_BIT,     0, 0, "SHOW EVENT DEBUG", &gameTrackerX.debugFlags2, 0x100},
     {DEBUG_LINE_TYPE_BIT,     0, 0, "SHOW Spline Info", &gameTrackerX.debugFlags2, 0x400000},
     {DEBUG_LINE_TYPE_BIT,     0, 0, "SHOW GAME TIME", &gameTrackerX.debugFlags2, 0x10000},
-    {DEBUG_LINE_TYPE_LONG,    0, 0x4000, "GAME TIME MULT", &gameTrackerX.multGameTime, (long)DEBUG_KeepGameTime},
-    {DEBUG_LINE_TYPE_LONG,    0, 0x960, "SET GAME TIME", &debugGameTime, (long)DEBUG_SetGameTime},
+    {DEBUG_LINE_TYPE_LONG,    0, 0x4000, "GAME TIME MULT", &gameTrackerX.multGameTime, (intptr_t)DEBUG_KeepGameTime},
+    {DEBUG_LINE_TYPE_LONG,    0, 0x960, "SET GAME TIME", &debugGameTime, (intptr_t)DEBUG_SetGameTime},
     {DEBUG_LINE_TYPE_BIT,     0, 0, "Show Warp Gate Info", &gameTrackerX.debugFlags2, 0x01000000},
     {DEBUG_LINE_TYPE_BIT,     0, 0, "Activate All WarpGates", &gameTrackerX.streamFlags, 0x400000},
     {DEBUG_LINE_TYPE_ENDLIST, 0, 0, "", &gameTrackerX.debugFlags, 0},
 };
 DebugMenuLine fogMenu[] = {
     {DEBUG_LINE_TYPE_MENU,    0,  0, "MAIN MENU...", (long *)standardMenu, 0},
-    {DEBUG_LINE_TYPE_LONG,    -1, 0x2CEC,"FOG FAR", &debugFogFar, (long)DEBUG_UpdateFog},
-    {DEBUG_LINE_TYPE_LONG,    -1, 0x2CEC,"FOG NEAR", &debugFogNear, (long)DEBUG_UpdateFog},
-    {DEBUG_LINE_TYPE_LONG,    0,  0xFF,"FOG RED", &debugFogRed, (long)DEBUG_UpdateFog},
-    {DEBUG_LINE_TYPE_LONG,    0,  0xFF,"FOG GREEN", &debugFogGrn, (long)DEBUG_UpdateFog},
-    {DEBUG_LINE_TYPE_LONG,    0,  0xFF,"FOG BLUE", &debugFogBlu, (long)DEBUG_UpdateFog},
+    {DEBUG_LINE_TYPE_LONG,    -1, 0x2CEC,"FOG FAR", &debugFogFar, (intptr_t)DEBUG_UpdateFog},
+    {DEBUG_LINE_TYPE_LONG,    -1, 0x2CEC,"FOG NEAR", &debugFogNear, (intptr_t)DEBUG_UpdateFog},
+    {DEBUG_LINE_TYPE_LONG,    0,  0xFF,"FOG RED", &debugFogRed, (intptr_t)DEBUG_UpdateFog},
+    {DEBUG_LINE_TYPE_LONG,    0,  0xFF,"FOG GREEN", &debugFogGrn, (intptr_t)DEBUG_UpdateFog},
+    {DEBUG_LINE_TYPE_LONG,    0,  0xFF,"FOG BLUE", &debugFogBlu, (intptr_t)DEBUG_UpdateFog},
     {DEBUG_LINE_TYPE_ACTION,  0,  0, "RESTORE FOG", (long *)DEBUG_FogRestore, 0},
     {DEBUG_LINE_TYPE_ENDLIST, 0,  0, "", &gameTrackerX.debugFlags, 0},
 };
 DebugMenuLine goodiesMenu[] = {
     {DEBUG_LINE_TYPE_MENU,    0, 0, "MAIN MENU...", (long *)standardMenu, 0},
-    {DEBUG_LINE_TYPE_MENU,    0, 0, "FOG MENU...", (long *)fogMenu, (long)DEBUG_FogLoad},
+    {DEBUG_LINE_TYPE_MENU,    0, 0, "FOG MENU...", (long *)fogMenu, (intptr_t)DEBUG_FogLoad},
     {DEBUG_LINE_TYPE_BIT,     0, 0, "SHRINK CELS", &gameTrackerX.debugFlags, 0x40},
     {DEBUG_LINE_TYPE_BIT,     0, 0, "DECOUPLE", &gameTrackerX.decoupleGame, 1},
     {DEBUG_LINE_TYPE_LONG,    0, 2, "FRAME RATE LOCK", &gameTrackerX.frameRateLock, 0},
@@ -123,14 +123,14 @@ DebugMenuLine debugRazielMenu[] = {
     {DEBUG_LINE_TYPE_MENU,    0, 0, "Forged  Abilities...", (long *)debugForgedAbilitiesMenu, 0},
     {DEBUG_LINE_TYPE_MENU,    0, 0, "Glyph   Abilities...", (long *)debugGlyphAbilitiesMenu, 0},
     {DEBUG_LINE_TYPE_MENU,    0, 0, "IMBUE SOUL REAVER...", (long *)debugImbueSoulReaverMenu, 0},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "SHIFT ANY TIME", &debugRazielFlags1, 0x50},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "SHIFT ANY TIME", (long *)&debugRazielFlags1, 0x50},
     {DEBUG_LINE_TYPE_ENDLIST, 0, 0, "", &gameTrackerX.debugFlags, 0},
 };
 DebugMenuLine debugHealthSystemMenu[] = {
     {DEBUG_LINE_TYPE_MENU,    0, 0, "MAIN MENU...", (long *)standardMenu, 0},
     {DEBUG_LINE_TYPE_MENU,    0, 0, "RAZIEL MENU...", (long *)debugRazielMenu, 0},
-    {DEBUG_LINE_TYPE_LONG,    1, 4,"HEALTH LEVEL", &debugHealthLevel, (long)DEBUG_UpdateHealth},
-    {DEBUG_LINE_TYPE_LONG,    1, 6,"MANA LEVEL", &debugManaLevel, (long)DEBUG_UpdateMana},
+    {DEBUG_LINE_TYPE_LONG,    1, 4,"HEALTH LEVEL", &debugHealthLevel, (intptr_t)DEBUG_UpdateHealth},
+    {DEBUG_LINE_TYPE_LONG,    1, 6,"MANA LEVEL", &debugManaLevel, (intptr_t)DEBUG_UpdateMana},
     {DEBUG_LINE_TYPE_BIT,     0, 0, "INVINCIBLE", &gameTrackerX.debugFlags2, 0x100000},
     {DEBUG_LINE_TYPE_ACTION,  0, 0, "HURT RAZIEL", (long *)RAZIEL_DebugHurtRaziel, 0},
     {DEBUG_LINE_TYPE_ENDLIST, 0, 0, "", &gameTrackerX.debugFlags, 0},
@@ -138,44 +138,44 @@ DebugMenuLine debugHealthSystemMenu[] = {
 DebugMenuLine debugSpecialAbilitiesMenu[] = {
     {DEBUG_LINE_TYPE_MENU,    0, 0, "MAIN MENU...", (long *)standardMenu, 0},
     {DEBUG_LINE_TYPE_MENU,    0, 0, "RAZIEL MENU...", (long *)debugRazielMenu, 0},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "ALL", &debugRazielFlags1, 0x3F},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "PASS THROUGH BARRIERS", &debugRazielFlags1,1},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "WALL CRAWLING", &debugRazielFlags1, 0xB},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "FORCE", &debugRazielFlags1, 0xF},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "SOUL REAVER", &debugRazielFlags1,9},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "SWIM", &debugRazielFlags1, 0x1F},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "CONSTRICT", &debugRazielFlags1, 0x3F},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "ALL", (long *)&debugRazielFlags1, 0x3F},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "PASS THROUGH BARRIERS", (long *)&debugRazielFlags1,1},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "WALL CRAWLING", (long *)&debugRazielFlags1, 0xB},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "FORCE", (long *)&debugRazielFlags1, 0xF},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "SOUL REAVER", (long *)&debugRazielFlags1,9},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "SWIM", (long *)&debugRazielFlags1, 0x1F},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "CONSTRICT", (long *)&debugRazielFlags1, 0x3F},
     {DEBUG_LINE_TYPE_ENDLIST, 0, 0, "", &gameTrackerX.debugFlags, 0},
 };
 DebugMenuLine debugForgedAbilitiesMenu[] = {
     {DEBUG_LINE_TYPE_MENU,    0, 0, "MAIN MENU...", (long *)standardMenu, 0},
     {DEBUG_LINE_TYPE_MENU,    0, 0, "RAZIEL MENU...", (long *)debugRazielMenu, 0},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "ALL", &debugRazielFlags1, 0x3FC00},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Spectral Reaver", &debugRazielFlags1, 0x400},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Material Reaver", &debugRazielFlags1, 0x800},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Fire Reaver", &debugRazielFlags1, 0x8000},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "ALL", (long *)&debugRazielFlags1, 0x3FC00},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Spectral Reaver", (long *)&debugRazielFlags1, 0x400},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Material Reaver", (long *)&debugRazielFlags1, 0x800},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Fire Reaver", (long *)&debugRazielFlags1, 0x8000},
     {DEBUG_LINE_TYPE_ENDLIST, 0, 0, "", &gameTrackerX.debugFlags, 0},
 };
 DebugMenuLine debugGlyphAbilitiesMenu[] = {
     {DEBUG_LINE_TYPE_MENU,    0, 0, "MAIN MENU...", (long *)standardMenu, 0},
     {DEBUG_LINE_TYPE_MENU,    0, 0, "RAZIEL MENU...", (long *)debugRazielMenu, 0},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "ALL", &debugRazielFlags1, 0x01FC0000},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Sunlight Glyph", &debugRazielFlags1, 0x400000},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Water Glyph", &debugRazielFlags1, 0x200000},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Fire Glyph", &debugRazielFlags1, 0x800000},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Stone Glyph", &debugRazielFlags1, 0x80000},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Force Glyph", &debugRazielFlags1, 0x40000},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Sound Glyph", &debugRazielFlags1, 0x100000},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Plane Shift Glyph", &debugRazielFlags1, 0x01000000},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "ALL", (long *)&debugRazielFlags1, 0x01FC0000},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Sunlight Glyph", (long *)&debugRazielFlags1, 0x400000},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Water Glyph", (long *)&debugRazielFlags1, 0x200000},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Fire Glyph", (long *)&debugRazielFlags1, 0x800000},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Stone Glyph", (long *)&debugRazielFlags1, 0x80000},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Force Glyph", (long *)&debugRazielFlags1, 0x40000},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Sound Glyph", (long *)&debugRazielFlags1, 0x100000},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Plane Shift Glyph", (long *)&debugRazielFlags1, 0x01000000},
     {DEBUG_LINE_TYPE_ENDLIST, 0, 0, "", &gameTrackerX.debugFlags, 0},
 };
 DebugMenuLine debugImbueSoulReaverMenu[] = {
     {DEBUG_LINE_TYPE_MENU,    0, 0, "MAIN MENU...", (long *)standardMenu, 0},
     {DEBUG_LINE_TYPE_MENU,    0, 0, "RAZIEL MENU...", (long *)debugRazielMenu, 0},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Hold Soul Reaver", &debugRazielFlags1, 8},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Spectral Reaver", &debugRazielFlags2, 0x400},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Material Reaver", &debugRazielFlags2, 0x800},
-    {DEBUG_LINE_TYPE_BIT,     0, 0, "Fire Reaver", &debugRazielFlags2, 0x8000},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Hold Soul Reaver", (long *)&debugRazielFlags1, 8},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Spectral Reaver", (long *)&debugRazielFlags2, 0x400},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Material Reaver", (long *)&debugRazielFlags2, 0x800},
+    {DEBUG_LINE_TYPE_BIT,     0, 0, "Fire Reaver", (long *)&debugRazielFlags2, 0x8000},
     {DEBUG_LINE_TYPE_ENDLIST, 0, 0, "", &gameTrackerX.debugFlags, 0},
 };
 DebugMenuLine cheatsMenu[] = {
@@ -537,16 +537,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateFog);
 
 void DEBUG_UpdateHealth(long *var)
 {
+    (void)var;
     RAZIEL_DebugHealthSetScale(debugHealthLevel);
 }
 
 void DEBUG_UpdateMana(long *var)
 {
+    (void)var;
     RAZIEL_DebugManaSetMax(debugManaLevel);
 }
 
 void DEBUG_FillUpHealth(long *var)
 {
+    (void)var;
     RAZIEL_DebugHealthFillUp();
 
     RAZIEL_DebugManaFillUp();

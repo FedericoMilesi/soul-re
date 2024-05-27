@@ -1,7 +1,7 @@
 #ifndef _MATH3D_H_
 #define _MATH3D_H_
 
-#include "Game/TYPES.h"
+#include "common.h"
 
 #define abs_diff(a,b) ( a-b<0?b-a:a-b )
 
@@ -9,8 +9,8 @@
 short _x0;\
 short _y0;\
 short _z0;\
-struct _SVector *_v;\
-struct _Position *_v0;\
+SVector *_v;\
+Position *_v0;\
 \
 _v0 = B;\
 _v = A;\
@@ -32,9 +32,9 @@ short _z0;\
 short _x1;\
 short _y1;\
 short _z1;\
-struct _SVector *_v;\
-struct _Position *_v0;\
-struct _Position *_v1;\
+SVector *_v;\
+Position *_v0;\
+Position *_v1;\
 \
 _v0 = B;\
 _v1 = C;\
@@ -60,9 +60,9 @@ short _z0;\
 short _x1;\
 short _y1;\
 short _z1;\
-struct _SVector *_v;\
-struct _Position *_v0;\
-struct _Position *_v1;\
+SVector *_v;\
+Position *_v0;\
+Position *_v1;\
 \
 _v0 = B;\
 _v1 = C;\
@@ -80,5 +80,11 @@ _v->x = _x0 - _x1;\
 _v->y = _y0 - _y1;\
 _v->z = _z0 - _z1;\
 }
+
+long MATH3D_LengthXY(long x, long y);
+long MATH3D_FastSqrt0(long square);
+long MATH3D_LengthXYZ(long x, long y, long z);
+unsigned long MATH3D_SquareLength(long x, long y, long z);
+short AngleDiff(short current, short destination);
 
 #endif

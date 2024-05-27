@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/GAMELOOP.h"
+#include "Game/GAMEPAD.h"
 
 EXTERN STATIC short pause_redraw_flag;
 
@@ -171,6 +172,7 @@ void GAMELOOP_Reset24FPS()
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DoTimeProcess);
 
+void GAMELOOP_Process(GameTracker *gameTracker);
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_Process);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ModeStartRunning);
