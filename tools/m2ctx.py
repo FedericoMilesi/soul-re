@@ -14,6 +14,7 @@ src_dir = root_dir + "src/"
 CPP_FLAGS = [
     "-Iinclude",
     "-D__asm__(A)=",
+    "-DTARGET_PSX",
     "-D__CTX__",
 ]
 

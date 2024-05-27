@@ -1,6 +1,8 @@
 #ifndef _EVENT_H_
 #define _EVENT_H_
 
+#include "common.h"
+
 // size: 0xC
 typedef struct EventAliasCommandStruct {
     // offset: 0000
@@ -36,5 +38,9 @@ typedef struct SoundObject {
         struct _SFXMkr *sfxMarker;
     } data;
 } SoundObject;
+
+void EVENT_Init();
+void EVENT_AddInstanceToInstanceList(Instance *instance);
+void EVENT_RemoveInstanceFromInstanceList(Instance *instance);
 
 #endif

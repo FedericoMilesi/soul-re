@@ -1,9 +1,8 @@
 #ifndef _FX_H_
 #define _FX_H_
 
-#include "Game/TYPES.h"
-#include "Game/LIST.h"
-#include "Game/MATH3D.h"
+#include "common.h"
+#include "Game/OBTABLE.h"
 
 // size: 0x10
 typedef struct TextureMT3 {
@@ -315,6 +314,74 @@ typedef struct _FXGeneralEffect {
     short lifeTime;
 } FXGeneralEffect;
 
+// size: 0x78
+typedef struct _FXBlastringEffect {
+    // offset: 0000
+    void *next;
+    // offset: 0004
+    void *continue_process;
+    // offset: 0008 (668 bytes)
+    struct _Instance *instance;
+    // offset: 000C
+    unsigned char effectType;
+    // offset: 000D
+    unsigned char type;
+    // offset: 000E
+    short lifeTime;
+    // offset: 0010 (8 bytes)
+    struct _SVector position;
+    // offset: 0018 (32 bytes)
+    struct MATRIX matrix;
+    // offset: 0038
+    short segment;
+    // offset: 003A
+    short pad;
+    // offset: 003C
+    int radius;
+    // offset: 0040
+    int size1;
+    // offset: 0044
+    int size2;
+    // offset: 0048
+    int startRadius;
+    // offset: 004C
+    int endRadius;
+    // offset: 0050
+    int colorchange_radius;
+    // offset: 0054
+    int vel;
+    // offset: 0058
+    int accl;
+    // offset: 005C
+    int height1;
+    // offset: 0060
+    int height2;
+    // offset: 0064
+    int height3;
+    // offset: 0068
+    char predator_offset;
+    // offset: 0069
+    char predator_offset_orig;
+    // offset: 006A
+    char stay_in_place;
+    // offset: 006B
+    char sortInWorld;
+    // offset: 006C
+    long color;
+    // offset: 0070
+    long startColor;
+    // offset: 0074
+    long endColor;
+}FXBlastringEffect;
+
 void FX_ContinueParticle(FXParticle *currentParticle, FXTracker *fxTracker);
+void FX_SetReaverInstance(Instance *instance);
+void FX_EndInstanceEffects(Instance *instance);
+FXBlastringEffect *FX_DoBlastRing(Instance *instance, SVector *position, MATRIX *mat, int segment, int radius, int endRadius, int colorChangeRadius, int size1, int size2, int vel, int accl, int height1, int height2, int height3, long startColor, long endColor, int pred_offset, int lifeTime, int sortInWorld);
+void FX_ReaverBladeInit();
+void FX_DoInstancePowerRing(Instance *instance, long atuTime, long *color, long numColors, int follow_halveplane);
+FX_PRIM *FX_Dot(SVector *location, SVector *vel, SVector *accel, int scale_speed, long color, long size, int lifetime, int texture_num);
+void FX_StartInstanceEffect(Instance *instance, ObjectEffect *effect, int InitFlag);
+
 
 #endif

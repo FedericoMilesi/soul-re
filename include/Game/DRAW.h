@@ -1,6 +1,9 @@
 #ifndef _DRAW_H_
 #define _DRAW_H_
 
+#include "common.h"
+#include "Game/VRAM.h"
+
 // size: 0x1770C
 typedef struct _PrimPool {
     // offset: 0000

@@ -1,9 +1,8 @@
 #include "common.h"
 #include "Game/GENERIC.h"
-#include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
-#include "Game/OBTABLE.h"
 #include "Game/STATE.h"
+#include "Game/SCRIPT.h"
 #include "Game/SAVEINFO.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericInit);
@@ -16,6 +15,7 @@ void GenericProcess(Instance *instance, GameTracker *gameTracker)
 {
     Object *object;
 
+    (void)gameTracker;
     object = instance->object;
 
     if ((object != NULL) && (object->numAnims != 0) && (!(object->oflags2 & 0x40000000)))
@@ -142,13 +142,9 @@ void GenericMessage(Instance *instance, unsigned long message, unsigned long dat
         break;
     case 0x4000B:
     {
-        evPositionData *temp; // not from decls.h
-
-        temp = (evPositionData *)data;
-
-        instance->rotation.x = temp->x;
-        instance->rotation.y = temp->y;
-        instance->rotation.z = temp->z;
+        instance->rotation.x = ((evPositionData *)data)->x;
+        instance->rotation.y = ((evPositionData *)data)->y;
+        instance->rotation.z = ((evPositionData *)data)->z;
         break;
     }
     case 0x8000010:
@@ -159,12 +155,8 @@ void GenericMessage(Instance *instance, unsigned long message, unsigned long dat
         break;
     case 0x100007:
     {
-        evControlSaveDataData *temp; // not from decls.h
-
-        temp = (evControlSaveDataData *)data;
-
-        instance->flags = ((MonsterSaveInfo *)temp->data)->mvFlags;
-        instance->flags2 = ((MonsterSaveInfo *)temp->data)->auxFlags;
+        instance->flags = ((MonsterSaveInfo *)((evControlSaveDataData *)data)->data)->mvFlags;
+        instance->flags2 = ((MonsterSaveInfo *)((evControlSaveDataData *)data)->data)->auxFlags;
         break;
     }
     }

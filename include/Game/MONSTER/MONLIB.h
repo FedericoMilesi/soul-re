@@ -1,8 +1,26 @@
 #ifndef _MONLIB_H_
 #define _MONLIB_H_
 
-#include "Game/INSTANCE.h"
+#include "common.h"
+#include "Game/MONSTER/MONAPI.h"
 
 unsigned long MON_GetTime(Instance *instance);
+void MON_PlayRandomIdle(Instance *instance, int mode);
+void MON_TurnOnBodySpheres(Instance *instance);
+void MON_PlayAnimFromList(Instance *instance, char *animList, int animtype, int mode);
+void MON_SwitchState(Instance *instance, MonsterState state);
+int MON_TurnToPosition(Instance *instance, Position *position, short turnspeed);
+void MON_KillMonster(Instance *instance);
+void MON_TurnOffBodySpheres(Instance *instance);
+int MON_GetRandomDestinationInWorld(Instance *instance, Position *in, short r);
+void MON_StartSpecialFade(Instance *instance, int fadeLevel, int fadeTime);
+void MON_PlayAnim(Instance *instance, MonsterAnim animtype, int mode);
+void MON_ApplyPhysics(Instance *instance);
+void MON_BirthMana(Instance *instance);
+void MON_DisableHeadMove(Instance *instance);
+void MON_EnableHeadMove(Instance *instance);
+void MON_CheckEnvironment(Instance *instance);
+void MON_PlayAnimID(Instance *instance, int index, int mode);
+void MON_TurnOffWeaponSpheres(Instance *instance);
 
 #endif

@@ -9,4 +9,8 @@ typedef struct NodeType {
     struct NodeType *next;
 } NodeType;
 
+void LIST_DeleteFunc(NodeType *node);
+NodeType *LIST_GetFunc(NodeType *list);
+void LIST_InsertFunc(NodeType *list, NodeType *node);
+
 #endif

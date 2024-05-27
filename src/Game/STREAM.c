@@ -1,6 +1,7 @@
 #include "common.h"
-#include "Game/VRAM.h"
+#include "Game/STRMLOAD.h"
 
+void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FillOutFileNames);
 
 void STREAM_AbortAreaLoad(char *baseAreaName)

@@ -6,6 +6,7 @@ COMPARE      ?= 1
 NON_MATCHING ?= 0
 VERBOSE      ?= 0
 BUILD_DIR    ?= build
+CHECK        ?= 1
 
 # Fail early if baserom does not exist
 ifeq ($(wildcard $(BASEEXE)),)
@@ -57,6 +58,7 @@ OBJCOPY  := $(CROSS)objcopy
 STRIP    := $(CROSS)strip
 CPP      := $(CROSS)cpp
 CC       := tools/gcc2.8.1-mipsel/cc1
+CC_HOST  := gcc
 
 PRINT := printf '
  ENDCOLOR := \033[0m
@@ -77,9 +79,11 @@ ENDLINE := \n'
 ASFLAGS        := -Iinclude -march=r3000 -mtune=r3000 -no-pad-sections
 CFLAGS         := -O2 -G4096 -fpeephole -ffunction-cse -fkeep-static-consts -fpcc-struct-return \
                   -fcommon -fgnu-linker -msplit-addresses -mgas -mgpOPT -mgpopt -msoft-float -gcoff -quiet
-CPPFLAGS       := -Iinclude
+CPPFLAGS       := -Iinclude -DTARGET_PSX
 LDFLAGS        := -T undefined_syms.txt -T undefined_funcs.txt -T $(BUILD_DIR)/$(LD_SCRIPT) -Map $(LD_MAP) \
                   --no-check-sections -nostdlib
+CFLAGS_CHECK   := -fsyntax-only -fno-builtin -std=gnu90
+CHECK_WARNINGS := -Wall -Wextra
 
 ifeq ($(NON_MATCHING),1)
 CPPFLAGS += -DNON_MATCHING
@@ -115,6 +119,9 @@ split:
 $(BUILD_DIR)/%.c.o: %.c
 	@$(PRINT)$(GREEN)Compiling C file: $(ENDGREEN)$(BLUE)$<$(ENDBLUE)$(ENDLINE)
 	@mkdir -p $(shell dirname $@)
+ifeq ($(CHECK),1)
+	@$(CC_HOST) $(CFLAGS_CHECK) $(CHECK_WARNINGS) $(CPPFLAGS) -UTARGET_PSX $<
+endif
 	$(V)$(CPP) $(CPPFLAGS) -ffreestanding -MMD -MP -MT $@ -MF $@.d $< | $(CC) $(CFLAGS) | $(MASPSX) | $(AS) $(ASFLAGS) -o $@
 
 # Compile .s files

@@ -1,8 +1,7 @@
 #ifndef _CAMERA_H_
 #define _CAMERA_H_
 
-#include "Game/TYPES.h"
-#include "Game/COLLIDE.h"
+#include "common.h"
 
 // size: 0xE0
 typedef struct _CameraCore_Type {
@@ -425,5 +424,9 @@ extern int CameraCenterDelay;
 void Decouple_AngleMoveToward(short *current_ptr, short destination, short step);
 void CriticalDampAngle(long dampMode, short *currentVal, short target, short *vel, short *accl, int smooth);
 short CAMERA_AngleDifference(short angle0, short angle1);
+void CriticalDampValue(long dampMode, short *sourceVal, short targetVal, short *vel, short *accl, int smooth);
+void CAMERA_SetMode(Camera *camera, long mode);
+void CAMERA_RestoreMode(Camera *camera);
+void CAMERA_CalcVVClipInfo(Camera *camera);
 
 #endif

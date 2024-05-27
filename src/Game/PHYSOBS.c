@@ -1,5 +1,5 @@
 #include "common.h"
-#include "Game/TYPES.h"
+#include "Game/MATH3D.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_PlayDropSound);
 
@@ -140,9 +140,9 @@ void PHYSOB_Normalize(SVector *v)
         len = 1;
     }
 
-    v->x = (short)((v->x << 12) / len);
-    v->y = (short)((v->y << 12) / len);
-    v->z = (short)((v->z << 12) / len);
+    v->x = ((v->x << 12) / len);
+    v->y = ((v->y << 12) / len);
+    v->z = ((v->z << 12) / len);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_MoveTowardsAlign);
@@ -163,13 +163,13 @@ int PHYSOBS_CheckObjectAxisAlignment(MATRIX *m0, MATRIX *m1, SVector *axis)
     ApplyMatrix(m0, (SVECTOR *)axis, &r0);
     ApplyMatrix(m1, (SVECTOR *)axis, &r1);
 
-    v0.x = (short)r0.vx;
-    v0.y = (short)r0.vy;
-    v0.z = (short)r0.vz;
+    v0.x = r0.vx;
+    v0.y = r0.vy;
+    v0.z = r0.vz;
 
-    v1.x = (short)r1.vx;
-    v1.y = (short)r1.vy;
-    v1.z = (short)r1.vz;
+    v1.x = r1.vx;
+    v1.y = r1.vy;
+    v1.z = r1.vz;
 
     return (short)(((v0.x * v1.x) + (v0.y * v1.y) + (v0.z * v1.z)) >> 12);
 }

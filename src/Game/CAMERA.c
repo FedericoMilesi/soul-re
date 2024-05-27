@@ -1,10 +1,8 @@
 #include "common.h"
-#include "Game/TYPES.h"
 #include "Game/CAMERA.h"
-#include "Game/INSTANCE.h"
+#include "Game/PLAYER.h"
 #include "Game/GAMELOOP.h"
-
-void CAMERA_EndLook(Camera *camera);
+#include "Game/MATH3D.h"
 
 EXTERN STATIC short panic_count;
 
@@ -16,6 +14,10 @@ EXTERN STATIC short Camera_lookDist;
 
 EXTERN STATIC short CenterFlag;
 
+int CAMERA_FocusInstanceMoved(Camera *camera);
+void CAMERA_EndLook(Camera *camera);
+
+void CAMERA_CalculateViewVolumeNormals(Camera *camera);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateViewVolumeNormals);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcVVClipInfo);
@@ -29,8 +31,10 @@ void CAMERA_SetViewVolume(Camera *camera)
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetProjDistance);
 
+void CAMERA_CreateNewFocuspoint(Camera *camera);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CreateNewFocuspoint);
 
+void CAMERA_SaveMode(Camera *camera, long mode);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SaveMode);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_RestoreMode);
@@ -69,6 +73,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetMaxVel);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetTarget);
 
+void CAMERA_CalcPosition(Position *position, Position *base, Rotation *rotation, short distance);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcPosition);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetFocus);
@@ -117,10 +122,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFSRotation);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Relocate);
 
+TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colInfo, int secondcheck_flag);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SphereToSphereWithLines);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcTilt);
 
+void CAMERA_SetLookFocusAndBase(Instance *focusInstance, Position *focusPoint);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetLookFocusAndBase);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetLookFocusAndDistance);
@@ -212,11 +219,6 @@ int CAMERA_CheckIfPointOnLine(SVector *linePoint, SVector *linept1, SVector *lin
     {
         return CAMERA_CheckPoint(linePoint->z, linept1->z, linept2->z) == 0;
     }
-    else
-    {
-        return 0;
-    }
-
     return 0;
 }
 
@@ -236,13 +238,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Process);
 
 void CAMERA_CenterCamera(Camera *camera)
 {
-    int tmp1;
-    int tmp2;
-
     if ((camera->instance_mode & 0x2000000))
     {
-        tmp1 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z + 1024));
-        tmp2 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z - 1024));
+        int tmp1 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z + 1024));
+        int tmp2 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z - 1024));
 
         if (tmp1 < tmp2)
         {
@@ -471,7 +470,7 @@ void CAMERA_UpdateFocusTilt(Camera *camera)
     {
         camera->x_rot_change = camera->focusRotation.x;
 
-        if ((camera->forced_movement != 3) && (!(camera->lock & 0x2)) || ((camera->flags & 0x10000)))
+        if (((camera->forced_movement != 3) && (!(camera->lock & 0x2))) || ((camera->flags & 0x10000)))
         {
             CriticalDampAngle(1, &camera->focusRotation.x, camera->tfaceTilt, &camera->focusRotVel.x, &camera->focusRotAccl.x, 32);
         }
@@ -577,6 +576,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateLead);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFollowPosition);
 
+void CAMERA_SetupColInfo(Camera *camera, CameraCollisionInfo *colInfo, Position *targetCamPos);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetupColInfo);
 
 void CAMERA_DoPanicCheck(Camera *camera, CameraCollisionInfo *tmpcolInfo, Rotation *rotation, short *best_z, short *max_dist)
@@ -589,11 +589,11 @@ void CAMERA_DoPanicCheck(Camera *camera, CameraCollisionInfo *tmpcolInfo, Rotati
 
     CAMERA_SphereToSphereWithLines(camera, tmpcolInfo, 0);
 
-    if ((tmpcolInfo->numCollided == 0) || ((int)*max_dist < tmpcolInfo->lenCenterToExtend))
+    if ((tmpcolInfo->numCollided == 0) || (*max_dist < tmpcolInfo->lenCenterToExtend))
     {
         *best_z = rotation->z;
 
-        *max_dist = (short)tmpcolInfo->lenCenterToExtend;
+        *max_dist = tmpcolInfo->lenCenterToExtend;
     }
 }
 

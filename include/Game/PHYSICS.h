@@ -1,7 +1,7 @@
 #ifndef _PHYSICS_H_
 #define _PHYSICS_H_
 
-#include "Game/INSTANCE.h"
+#include "common.h"
 
 // size: 0x18
 typedef struct evPhysicsLinkedMoveData {
@@ -32,5 +32,6 @@ typedef struct evPhysicsGravityData {
 } evPhysicsGravityData;
 
 void PHYSICS_CheckLineInWorldMask(Instance *instance, PCollideInfo *pcollideInfo);
+void PhysicsMove(Instance *instance, Position *position, long time);
 
 #endif

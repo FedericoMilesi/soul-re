@@ -1,16 +1,21 @@
 #include "common.h"
 #include "Game/REAVER.h"
-#include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MATH3D.h"
 #include "Game/PHYSOBS.h"
+#include "Game/STATE.h"
+#include "Game/GAMEPAD.h"
+#include "Game/MEMPACK.h"
 
 EXTERN STATIC short FireReaverFlag;
+
+void _SoulReaverAnimate(Instance *instance);
 
 void SoulReaverInit(Instance *instance, GameTracker *gameTracker)
 {
     ReaverData *data;
 
+    (void)gameTracker;
     if ((instance->flags & 0x20000))
     {
         data = (ReaverData *)instance->extraData;
@@ -51,6 +56,7 @@ void SoulReaverCollide(Instance *instance, GameTracker *gameTracker)
     long type;
     Instance *inst;
 
+    (void)gameTracker;
     collideInfo = (CollideInfo *)instance->collideInfo;
 
     if ((collideInfo->type0 == 1) && (collideInfo->type1 == 1))
@@ -109,6 +115,7 @@ void SoulReaverProcess(Instance *instance, GameTracker *gameTracker)
 {
     ReaverData *data;
 
+    (void)gameTracker;
     data = (ReaverData *)instance->extraData;
 
     if ((unsigned)data->ReaverPickedUp != 0)

@@ -1,12 +1,12 @@
 #include "common.h"
 #include "Game/SCRIPT2.h"
-#include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
 
 void LitShaftInit(Instance *instance, GameTracker *gameTracker)
 {
     LitShaftProperties *Prop;
 
+    (void)gameTracker;
     Prop = (LitShaftProperties *)instance->data;
 
     if (Prop != NULL)

@@ -1,17 +1,18 @@
 #ifndef _INSTANCE_H_
 #define _INSTANCE_H_
 
-#include "Game/TYPES.h"
+typedef struct _Instance Instance;
+
+#include "common.h"
 #include "Game/LIST.h"
 #include "Game/COLLIDE.h"
-#include "Game/FX.h"
 #include "Game/SOUND.h"
 #include "Game/EVENT.h"
 #include "Game/OBTABLE.h"
 #include "Game/G2/ANIMG2.h"
 
 // size: 0x29C
-typedef struct _Instance {
+struct _Instance {
     // offset: 0000 (8 bytes)
     struct NodeType node;
     // offset: 0008 (668 bytes)
@@ -220,7 +221,7 @@ typedef struct _Instance {
     long light_color;
     // offset: 0298 (4 bytes)
     struct CVECTOR *perVertexColor;
-} Instance;
+};
 
 // size: 0x4
 typedef struct INICommand {
@@ -259,5 +260,13 @@ typedef struct _InstancePool {
 void INSTANCE_UpdateFamilyStreamUnitID(Instance *instance);
 Instance *INSTANCE_Find(long introUniqueID);
 Instance *INSTANCE_IntroduceInstance(Intro *intro, short streamUnitID);
+void INSTANCE_UnlinkFromParent(Instance *instance);
+Instance *INSTANCE_BirthObject(Instance *parent, Object *object, int modelNum);
+void INSTANCE_Post(Instance *Inst, int Message, intptr_t Data);
+unsigned long INSTANCE_DefaultAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, Instance *instance);
+unsigned long INSTANCE_Query(Instance *Inst, int Query);
+void INSTANCE_LinkToParent(Instance *instance, Instance *parent, int node);
+void INSTANCE_KillInstance(Instance *instance);
+void INSTANCE_Broadcast(Instance *sender, long whatAmIMask, int Message, int Data);
 
 #endif

@@ -1,10 +1,11 @@
 #include "common.h"
 #include "Game/PHYSICS.h"
-#include "Game/INSTANCE.h"
-#include "Game/COLLIDE.h"
-#include "Game/STREAM.h"
+#include "Game/MATH3D.h"
+#include "Game/PHYSICS.h"
 #include "Game/GAMELOOP.h"
+#include "Game/HASM.h"
 
+int PHYSICS_CheckFaceStick(PCollideInfo *CInfo);
 void PHYSICS_GenericLineCheck(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
 void PHYSICS_GenericLineCheckMask(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
 
@@ -93,7 +94,7 @@ void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Dat
     instance->position.x += Data->x;
     instance->position.y += Data->y;
 
-    if ((instance == gameTrackerX.playerInstance) && (Data->z >= 129))
+    if ((instance == gameTrackerX.playerInstance) && (Data->z > 128))
     {
         instance->position.z += 128;
     }
@@ -109,7 +110,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsDefaultEdgeGrabResponse);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckSliding);
 
-int PhysicsUpdateTface(Instance *instance, int Data)
+int PhysicsUpdateTface(Instance *instance, intptr_t Data)
 {
     PCollideInfo CInfo;
     SVECTOR Old;
@@ -189,10 +190,11 @@ void PhysicsForceSetWater(Instance *instance, int *Time, int Depth, int rate, in
     }
 }
 
-int PhysicsCheckLOS(Instance *instance, int Data, int Mode)
+int PhysicsCheckLOS(Instance *instance, intptr_t Data, int Mode)
 {
     PCollideInfo CInfo;
 
+    (void)Mode;
     CInfo.oldPoint = (SVECTOR *)(Data + 8);
     CInfo.newPoint = (SVECTOR *)Data;
 
@@ -246,8 +248,9 @@ void PhysicsSetVelFromRot(Instance *instance, Rotation *rot, long magnitude)
     SVECTOR flatPt;
     SVECTOR newPt;
 
+    (void)rot;
     flatPt.vx = 0;
-    flatPt.vy = (short)-magnitude;
+    flatPt.vy = -magnitude;
     flatPt.vz = 0;
 
     RotMatrix((SVECTOR *)&instance->rotation, &mat);
@@ -264,6 +267,7 @@ void PHYSICS_SetVAndAFromRot(Instance *instance, Rotation *rot, long v, long a)
     SVECTOR flatPt;
     MATRIX mat;
 
+    (void)rot;
     if ((v != 0) || (a != 0))
     {
         RotMatrix((SVECTOR *)&instance->rotation, &mat);
@@ -276,7 +280,7 @@ void PHYSICS_SetVAndAFromRot(Instance *instance, Rotation *rot, long v, long a)
     {
         SVECTOR newPt;
 
-        flatPt.vy = (short)-v;
+        flatPt.vy = -v;
 
         ApplyMatrixSV(&mat, &flatPt, &newPt);
 
@@ -295,7 +299,7 @@ void PHYSICS_SetVAndAFromRot(Instance *instance, Rotation *rot, long v, long a)
     {
         SVECTOR newPt;
 
-        flatPt.vy = (short)-a;
+        flatPt.vy = -a;
 
         ApplyMatrixSV(&mat, &flatPt, &newPt);
 
@@ -339,19 +343,19 @@ long PHYSICS_FindVFromAAndD(long a, long d)
 
 void PHYSICS_StopIfCloseToTarget(Instance *instance, int x, int y, int z)
 {
-    if ((instance->xAccl < 0) && (instance->xVel <= x) || (instance->xAccl > 0) && (instance->xVel >= x))
+    if (((instance->xAccl < 0) && (instance->xVel <= x)) || ((instance->xAccl > 0) && (instance->xVel >= x)))
     {
         instance->xAccl = 0;
         instance->xVel = x;
     }
 
-    if ((instance->yAccl < 0) && (instance->yVel <= y) || (instance->yAccl > 0) && (instance->yVel >= y))
+    if (((instance->yAccl < 0) && (instance->yVel <= y)) || ((instance->yAccl > 0) && (instance->yVel >= y)))
     {
         instance->yAccl = 0;
         instance->yVel = y;
     }
 
-    if ((instance->zAccl < 0) && (instance->zVel <= z) || (instance->zAccl > 0) && (instance->zVel >= z))
+    if (((instance->zAccl < 0) && (instance->zVel <= z)) || ((instance->zAccl > 0) && (instance->zVel >= z)))
     {
         instance->zAccl = 0;
         instance->zVel = z;

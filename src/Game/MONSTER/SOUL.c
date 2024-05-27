@@ -1,8 +1,13 @@
 #include "common.h"
-#include "Game/INSTANCE.h"
 #include "Game/STATE.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MONSTER.h"
+#include "Game/SAVEINFO.h"
+#include "Game/PHYSICS.h"
+#include "Game/MATH3D.h"
 #include "Game/MONSTER/MONAPI.h"
+#include "Game/MONSTER/MONLIB.h"
+#include "Game/MONSTER/MONMSG.h"
 
 void SOUL_QueueHandler(Instance *instance)
 {
@@ -11,7 +16,7 @@ void SOUL_QueueHandler(Instance *instance)
 
     mv = (MonsterVars *)instance->extraData;
 
-    while (message = DeMessageQueue(&mv->messageQueue))
+    while ((message = DeMessageQueue(&mv->messageQueue)))
     {
         if ((message != NULL) && (message->ID == 0x100000D))
         {
@@ -460,11 +465,10 @@ void SOUL_Reanimate(Instance *instance)
         }
 
         MON_KillMonster(instance);
-        return;
     }
-
-    while (DeMessageQueue(&mv->messageQueue) != NULL)
+    else
     {
+        while (DeMessageQueue(&mv->messageQueue) != NULL);
     }
 }
 

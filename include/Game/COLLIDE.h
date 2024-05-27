@@ -1,6 +1,7 @@
 #ifndef _COLLIDE_H_
 #define _COLLIDE_H_
 
+#include "common.h"
 #include "Game/FX.h"
 #include "Game/STREAM.h"
 
@@ -242,5 +243,9 @@ TFace *COLLIDE_PointAndTerrainFunc(Terrain *terrain, PCollideInfo *pCollideInfo,
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);
 void COLLIDE_SetBSPTreeFlag(CollideInfo *collideInfo, short flag);
+void COLLIDE_SegmentCollisionOff(Instance *instance, int segment);
+void COLLIDE_SegmentCollisionOn(Instance *instance, int segment);
+void COLLIDE_UpdateAllTransforms(Instance *instance, SVECTOR *offset);
+void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level);
 
 #endif

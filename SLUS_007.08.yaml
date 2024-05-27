@@ -79,7 +79,7 @@ segments:
       - [0x0052A4, c, Game/CAMERA]
       - [0x00E3F8, c, Game/SIGNAL]
       - [0x00F018, c, Game/COLLIDE]
-      - [0x0159AC, c, Game/HASM_1]
+      - [0x0159AC, asm, Game/HASM_1]
       - [0x01B110, c, Game/DRAW]
       - [0x01D6D4, c, Game/FONT]
       - [0x01E328, c, Game/GAMELOOP]
@@ -117,7 +117,7 @@ segments:
       - [0x063644, c, Game/VRAM]
       - [0x064C18, c, Game/PSX/SUPPORT]
       - [0x0650D0, c, Game/PHYSICS]
-      - [0x0689E4, c, Game/HASM_2]
+      - [0x0689E4, asm, Game/HASM_2]
       - [0x06A7F0, c, Game/REAVER]
       - [0x06B364, c, Game/GLYPH]
       - [0x06D3A4, c, Game/RELMOD]
@@ -201,6 +201,8 @@ segments:
       - [0x0C0DDC, sdata, 0C0DDC]
       - [0x0C186C, .sdata, Game/VM]
       - [0x0C1874, sdata, 0C1874]
+      - [0x0C2348, .sdata, Game/MONSTER/MONTABLE]
+      - [0x0C2368, sdata, 0C2368]
 
       - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: KAIN2}
 

@@ -3,6 +3,10 @@
 
 G2Bool MainG2_InitEngine(void *appData, unsigned int screenWidth, unsigned int screenHeight, char *filesystemName)
 {
+    (void)appData;
+    (void)screenWidth;
+    (void)screenHeight;
+    (void)filesystemName;
     return !G2FALSE;
 }
 

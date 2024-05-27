@@ -1,6 +1,6 @@
 #include "common.h"
-#include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
+#include "Game/PHYSOBS.h"
 #include "Game/MONSTER/MISSILE.h"
 #include "Game/MONSTER/MONLIB.h"
 
@@ -8,7 +8,7 @@ void MISSILE_Process(Instance *instance, GameTracker *gameTracker)
 {
     ProcessPhysicalObject(instance, gameTracker);
 
-    if ((instance->LinkParent == NULL) && (instance->work2 < MON_GetTime(instance)))
+    if ((instance->LinkParent == NULL) && ((unsigned)instance->work2 < MON_GetTime(instance)))
     {
         INSTANCE_KillInstance(instance);
     }

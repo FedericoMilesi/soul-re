@@ -1,11 +1,20 @@
 #include "common.h"
-#include "Game/INSTANCE.h"
 #include "Game/SPLINE.h"
-#include "Game/OBTABLE.h"
 #include "Game/GAMELOOP.h"
-#include "Game/COLLIDE.h"
 #include "Game/SAVEINFO.h"
-#include "Game/G2/ANIMG2.h"
+#include "Game/SCRIPT.h"
+#include "Game/MEMPACK.h"
+#include "Game/MATH3D.h"
+#include "Game/LIGHT3D.h"
+#include "Game/SUPPORT.h"
+#include "Game/G2/QUATG2.h"
+#include "Game/MONSTER/HUMAN.h"
+
+void INSTANCE_BuildStaticShadow();
+int INSTANCE_InPlane(Instance *instance, int plane);
+void INSTANCE_UnlinkChildren(Instance *instance);
+int INSTANCE_SetStatsData(Instance *instance, Instance *checkee, Vector *checkPoint, evCollideInstanceStatsData *data, MATRIX *mat);
+void INSTANCE_DefaultInit(Instance *instance, Object *object, int modelNum);
 
 void INSTANCE_Deactivate(Instance *instance)
 {
@@ -149,6 +158,7 @@ Instance *INSTANCE_NewInstance(InstanceList *list)
     return NULL;
 }
 
+long INSTANCE_InstanceGroupNumber(Instance *instance);
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_InstanceGroupNumber);
 
 void INSTANCE_InsertInstanceGroup(InstanceList *list, Instance *instance)
@@ -606,9 +616,9 @@ unsigned long INSTANCE_Query(Instance *Inst, int Query)
     return Func(Inst, Query);
 }
 
-void INSTANCE_Post(Instance *Inst, int Message, int Data)
+void INSTANCE_Post(Instance *Inst, int Message, intptr_t Data)
 {
-    void (*Func)(Instance *, unsigned long, unsigned long);
+    void (*Func)(Instance *, unsigned long, intptr_t);
 
     Func = Inst->messageFunc;
 
@@ -835,7 +845,7 @@ void INSTANCE_SpatialRelationships(InstanceList *instanceList)
 
                     if ((mat != NULL) && (INSTANCE_SetStatsData(instance, checkee, (Vector *)&mat->t[0], &data, &invMatrix) != 0))
                     {
-                        INSTANCE_Post(instance, 0x200001, (int)&data);
+                        INSTANCE_Post(instance, 0x200001, (intptr_t)&data);
                     }
                 }
             }
@@ -889,7 +899,7 @@ void INSTANCE_LinkToParent(Instance *instance, Instance *parent, int node)
 
     INSTANCE_UpdateFamilyStreamUnitID(parent);
 
-    INSTANCE_Post(parent, 0x100012, (int)instance);
+    INSTANCE_Post(parent, 0x100012, (intptr_t)instance);
 
     instance->flags2 |= 0x8;
 }
@@ -936,7 +946,7 @@ void INSTANCE_UnlinkFromParent(Instance *instance)
             instance->rotation.z = ea.z;
         }
 
-        INSTANCE_Post(parent, 0x100013, (int)instance);
+        INSTANCE_Post(parent, 0x100013, (intptr_t)instance);
     }
 }
 
@@ -951,7 +961,7 @@ void INSTANCE_UnlinkChildren(Instance *instance)
     {
         sibling = child->LinkSibling;
 
-        INSTANCE_Post(instance, 0x100013, (int)child);
+        INSTANCE_Post(instance, 0x100013, (intptr_t)child);
 
         child->LinkParent = NULL;
         child->LinkSibling = NULL;
@@ -1080,6 +1090,9 @@ unsigned long INSTANCE_DefaultAnimCallback(G2Anim *anim, int sectionID, G2AnimCa
     int vol;
     int temp; // not from decls.h
 
+    (void)id;
+    (void)anim;
+    (void)sectionID;
     if (message == G2ANIM_MSG_PLAYEFFECT)
     {
         switch (messageDataA)

@@ -1,8 +1,9 @@
 #include "common.h"
-#include "Game/INSTANCE.h"
+#include "Game/MONSTER/MONLIB.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffWeaponSpheres);
 
+void MON_TurnOnWeaponSpheres(Instance *instance);
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnWeaponSpheres);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnWeaponSphere);
@@ -43,6 +44,7 @@ void MON_PlayAnimFromList(Instance *instance, char *animList, int animtype, int 
     MON_PlayAnimID(instance, animList[animtype], mode);
 }
 
+int MON_AnimIDPlaying(Instance *instance, int index);
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_AnimIDPlaying);
 
 void MON_PlayAnimIDIfNotPlaying(Instance *instance, int index, int mode)

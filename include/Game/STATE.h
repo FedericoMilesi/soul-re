@@ -1,6 +1,8 @@
 #ifndef _STATE_H_
 #define _STATE_H_
 
+#include "common.h"
+
 // size: 0x8
 typedef struct __Event {
     // offset: 0000
@@ -53,7 +55,30 @@ typedef struct evControlSaveDataData {
     void *data;
 } evControlSaveDataData;
 
+// size: 0x14
+typedef struct evFXHitData {
+    // offset: 0000 (8 bytes)
+    struct _SVector location;
+    // offset: 0008 (8 bytes)
+    struct _SVector velocity;
+    // offset: 0010
+    short amount;
+    // offset: 0012
+    short type;
+}evFXHitData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
+int SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
+int SetFXHitData(Instance *hitter, int segment, int amount, int type);
+int SetObjectData(int x, int y, int PathNumber, Instance *Force, int node);
+int SetObjectAbsorbData(Instance *force, unsigned short node, unsigned short steps);
+void G2EmulationInstanceSetMode(Instance *instance, int CurrentSection, int Mode);
+void G2EmulationInstanceSetAnimation(Instance *instance, int CurrentSection, int NewAnim, int NewFrame, int Frames);
+int G2EmulationInstanceQueryFrame(Instance *instance, int CurrentSection);
+int G2EmulationInstanceQueryAnimation(Instance *instance, int CurrentSection);
+void G2EmulationInstancePlayAnimation(Instance *instance);
+int SetPositionData(int x, int y, int z);
+void *CIRC_Alloc(int size);
 
 #endif

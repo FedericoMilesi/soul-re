@@ -1,9 +1,8 @@
 #ifndef _MONAPI_H_
 #define _MONAPI_H_
 
-#include "Game/TYPES.h"
-#include "Game/STATE.h"
-#include "Game/G2/ANIMG2.h"
+#include "common.h"
+#include "Game/GAMELOOP.h"
 
 typedef enum MonsterState {
     MONSTER_STATE_BIRTH = 0,
@@ -492,6 +491,22 @@ typedef struct _MonsterVars {
     short fadeRate;
 } MonsterVars;
 
+// size: 0x8
+typedef struct _MONAPI_Regenerator {
+    // offset: 0000
+    unsigned long regenTime;
+    // offset: 0004
+    short introUniqueID;
+    // offset: 0006
+    short streamUnitID;
+} MONAPI_Regenerator;
+
 void MonsterProcess(Instance *instance, GameTracker *gameTracker);
+unsigned long MonsterQuery(Instance *instance, unsigned long query);
+void MONAPI_ResetLookAround(Instance *instance);
+void MONAPI_SetLookAround(Instance *instance);
+long MONAPI_OkToLookAround(Instance *instance);
+void MONAPI_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *gameTracker);
+void MonsterMessage(Instance *instance, unsigned long message, unsigned long data);
 
 #endif

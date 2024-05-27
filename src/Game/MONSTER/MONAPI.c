@@ -1,8 +1,8 @@
 #include "common.h"
 #include "Game/SAVEINFO.h"
-#include "Game/INSTANCE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MONSTER/MONAPI.h"
+#include "Game/MONSTER/MONLIB.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterProcess);
 
@@ -14,6 +14,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterCollide);
 
 void MonsterAdditionalCollide(Instance *instance, GameTracker *gameTracker)
 {
+    (void)gameTracker;
     if (instance->data != NULL)
     {
         MON_CheckEnvironment(instance);
@@ -63,6 +64,7 @@ long MONAPI_OkToLookAround(Instance *instance)
     return instance->currentMainState == MONSTER_STATE_IDLE;
 }
 
+void MONAPI_DeleteRegen(MONAPI_Regenerator *regen);
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_DeleteRegen);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_ProcessGenerator);

@@ -1,5 +1,6 @@
 #include "common.h"
-#include "Game/TYPES.h"
+#include "Game/MATH3D.h"
+#include "Game/HASM.h"
 
 void PIPE3D_NormalizeMatrix(MATRIX *target, MATRIX *source);
 

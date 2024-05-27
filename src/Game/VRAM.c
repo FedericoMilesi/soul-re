@@ -1,8 +1,9 @@
 #include "common.h"
-#include "Game/VRAM.h"
+#include "Game/MEMPACK.h"
 
 int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags);
 int VRAM_DeleteFreeVram(short x, short y, short w, short h);
+void VRAM_DeleteFreeBlock(BlockVramEntry *block);
 
 EXTERN BlockVramEntry *usedVramBlocks;
 
@@ -55,7 +56,7 @@ int VRAM_ConcatanateMemory(BlockVramEntry *curBlock)
 
         while (nextBlock != NULL)
         {
-            if ((curBlock->x == nextBlock->x) && ((curBlock->w == nextBlock->w)))
+            if ((curBlock->x == nextBlock->x) && (curBlock->w == nextBlock->w))
             {
                 if ((curBlock->y >> 8) == (nextBlock->y >> 8))
                 {
@@ -115,9 +116,7 @@ int VRAM_ConcatanateMemory(BlockVramEntry *curBlock)
 
 void VRAM_GarbageCollect()
 {
-    while (VRAM_ConcatanateMemory(openVramBlocks) == 1)
-    {
-    }
+    while (VRAM_ConcatanateMemory(openVramBlocks) == 1);
 }
 
 int VRAM_InsertFreeBlock(BlockVramEntry *block)
@@ -181,6 +180,7 @@ void VRAM_InsertUsedBlock(BlockVramEntry *block)
     }
 }
 
+void VRAM_DeleteUsedBlock(BlockVramEntry *block);
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DeleteUsedBlock);
 
 BlockVramEntry *VRAM_GetOpenBlock();
@@ -369,6 +369,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_TransferBufferToVram);
 
 void VRAM_LoadReturn(void *dataPtr, void *data1, void *data2)
 {
+    (void)dataPtr;
+    (void)data2;
     MEMPACK_Free((char *)data1);
 }
 

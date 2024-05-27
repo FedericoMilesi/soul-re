@@ -1,8 +1,8 @@
 #ifndef _STREAM_H_
 #define _STREAM_H_
 
-#include "Game/TYPES.h"
-#include "Game/VRAM.h"
+#include "common.h"
+#include "Game/STATE.h"
 
 // size: 0x4C
 typedef struct Intro {
@@ -277,5 +277,8 @@ typedef struct Level {
 } Level;
 
 Level *STREAM_GetLevelWithID(long id);
+void STREAM_RelocateInstance(Instance *instance, SVector *offset);
+void MORPH_SetupInstanceFlags(Instance *instance);
+void STREAM_SetInstancePosition(Instance *instance, evPositionData *data);
 
 #endif

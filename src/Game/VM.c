@@ -1,6 +1,6 @@
 #include "common.h"
 #include "Game/VM.h"
-#include "Game/STREAM.h"
+#include "Game/MEMPACK.h"
 
 static long vmRealClock = 0;
 
@@ -19,6 +19,7 @@ void VM_VMObjectSetTable(Level *level, VMObject *vmobject, int table)
 {
     VMOffsetTable *curTable;
 
+    (void)level;
     curTable = vmobject->curVMOffsetTable;
 
     if (curTable != vmobject->vmoffsetTableList[vmobject->currentIdx])
