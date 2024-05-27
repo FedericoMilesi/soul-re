@@ -64,7 +64,6 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterCollide);
 
 void MonsterAdditionalCollide(Instance *instance, GameTracker *gameTracker)
 {
-    (void)gameTracker;
     if (instance->data != NULL)
     {
         MON_CheckEnvironment(instance);
