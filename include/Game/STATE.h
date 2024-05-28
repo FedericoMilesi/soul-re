@@ -88,5 +88,6 @@ int G2EmulationInstanceQueryAnimation(Instance *instance, int CurrentSection);
 void G2EmulationInstancePlayAnimation(Instance *instance);
 int SetPositionData(int x, int y, int z);
 void *CIRC_Alloc(int size);
+void InitMessageQueue(MessageQueue *In);
 
 #endif
