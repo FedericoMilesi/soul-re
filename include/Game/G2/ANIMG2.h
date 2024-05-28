@@ -66,6 +66,34 @@ typedef struct _G2AnimInterpInfo_Type {
     struct _G2AnimInterpStateBlock_Type *stateBlockList;
 } G2AnimInterpInfo;
 
+// size: 0x14
+typedef struct _G2AnimKeylist_Type {
+    // offset: 0000
+    unsigned char sectionCount;
+    // offset: 0001
+    unsigned char s0TailTime;
+    // offset: 0002
+    unsigned char s1TailTime;
+    // offset: 0003
+    unsigned char s2TailTime;
+    // offset: 0004
+    unsigned short keyCount;
+    // offset: 0006
+    short timePerKey;
+    // offset: 0008
+    unsigned short pad00;
+    // offset: 000A
+    short pad01;
+    // offset: 000C
+    unsigned short pad10;
+    // offset: 000E
+    short pad11;
+    // offset: 0010 (4 bytes)
+    struct _G2AnimFxHeader_Type *fxList;
+    // offset: 0014
+    unsigned short *sectionData[1];
+} G2AnimKeylist;
+
 // size: 0x30
 typedef struct _G2AnimSection_Type {
     // offset: 0000

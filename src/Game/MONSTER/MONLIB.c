@@ -157,7 +157,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_RelocateCoords);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ValidUnit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ValidPosition);
+int MON_ValidPosition(Instance *instance)
+{
+    MonsterVars *mv;
+
+    if (MON_ValidUnit(instance, instance->currentStreamUnitID) != 0)
+    {
+        mv = (MonsterVars *)instance->extraData;
+
+        mv->lastValidPos = instance->position;
+
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SphereWorldPos);
 

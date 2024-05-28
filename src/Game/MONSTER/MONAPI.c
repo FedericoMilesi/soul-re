@@ -9,6 +9,7 @@
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONTABLE.h"
 #include "Game/MONSTER/MONSENSE.h"
+#include "Game/G2/INSTNCG2.h"
 
 typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int);
 
