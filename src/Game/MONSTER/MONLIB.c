@@ -179,7 +179,38 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnSphereCollisions);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ProcessSpecialFade);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_StartSpecialFade);
+void MON_StartSpecialFade(Instance *instance, int fadeLevel, int fadeTime)
+{
+    MonsterVars *mv;
+    int diff;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    mv->targetFade = fadeLevel;
+
+    mv->auxFlags |= 0x8000000;
+
+    diff = fadeLevel - instance->fadeValue;
+
+    if (fadeTime <= 0)
+    {
+        fadeTime = 1;
+    }
+
+    mv->fadeRate = diff / fadeTime;
+
+    if (((diff / fadeTime) << 16) == 0)
+    {
+        if (diff < 0)
+        {
+            mv->fadeRate = -1;
+        }
+        else
+        {
+            mv->fadeRate = 1;
+        }
+    }
+}
 
 void MON_UnlinkFromRaziel(Instance *instance)
 {
