@@ -71,6 +71,8 @@ void MonsterInit(Instance *instance, GameTracker *gameTracker)
     typedef void (*MONTABLE_CleanUpFunc)(Instance *); // not from decls.h
     typedef void (*MONTABLE_InitFunc)(Instance *);    // not from decls.h
 
+    (void)gameTracker;
+
     attributes = (MonsterAttributes *)instance->data;
 
     if ((instance->flags & 0x20000))
@@ -218,9 +220,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterCollide);
 
 void MonsterAdditionalCollide(Instance *instance, GameTracker *gameTracker)
 {
+    (void)gameTracker;
+
     if (instance->data != NULL)
     {
-        (void)gameTracker;
         MON_CheckEnvironment(instance);
     }
 }

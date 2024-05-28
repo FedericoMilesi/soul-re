@@ -119,6 +119,17 @@ void MON_PupateQueueHandler(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONMSG", MON_IdleQueueHandler);
+void MON_IdleQueueHandler(Instance *instance)
+{
+    MonsterVars *mv;
+    Message *message;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    while (message = DeMessageQueue(&mv->messageQueue))
+    {
+        MON_IdleMessageHandler(instance, message);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONMSG", MON_DefaultQueueHandler);
