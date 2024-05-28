@@ -152,7 +152,33 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIAmbushEnemy);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIFireAtTarget);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIFlee);
+int MON_ShouldIFlee(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterIR *enemy;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    enemy = mv->enemy;
+
+    if ((enemy != NULL) && (!(enemy->mirFlags & 0x8)) && (enemy->distance < mv->subAttr->fleeRange))
+    {
+        if (MON_ValidPosition(instance) != 0)
+        {
+            if ((mv->behaviorState == 9) || (((mv->mvFlags & 0x2000000)) && ((mv->ally == NULL) || (!(mv->ally->mirFlags & 0x200))) && (mv->hitPoints < 8192)))
+            {
+                return 1;
+            }
+
+            if (((mv->mvFlags & 0x2000)) && (mv->hitPoints == 0))
+            {
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
 
 void MON_RelocateCoords(Instance *instance, SVector *offset)
 {

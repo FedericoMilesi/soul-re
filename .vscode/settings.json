@@ -21,6 +21,7 @@
     "files.autoGuessEncoding": true,
     "files.associations": {
         "state.h": "c",
-        "monapi.h": "c"
+        "monapi.h": "c",
+        "monlib.h": "c"
     },
 }
