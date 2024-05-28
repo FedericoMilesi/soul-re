@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MONSTER/MONLIB.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffWeaponSpheres);
@@ -153,7 +154,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIFireAtTarget);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIFlee);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_RelocateCoords);
+void MON_RelocateCoords(Instance *instance, SVector *offset)
+{
+    MonsterVars *mv;
+    int ox;
+    int oy;
+    int oz;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ox = offset->x;
+    oy = offset->y;
+    oz = offset->z;
+
+    mv->destination.x += ox;
+    mv->destination.y += oy;
+    mv->destination.z += oz;
+
+    mv->lastValidPos.x += ox;
+    mv->lastValidPos.y += oy;
+    mv->lastValidPos.z += oz;
+
+    if (mv->pathSlotID != -1)
+    {
+        ENMYPLAN_RelocatePlanPositions(mv->pathSlotID, (Position *)offset);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ValidUnit);
 
