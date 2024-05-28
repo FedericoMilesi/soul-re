@@ -3,6 +3,7 @@
 #include "Game/SAVEINFO.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MONSTER.h"
+#include "Game/STATE.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONTABLE.h"
@@ -168,7 +169,49 @@ void MonsterInit(Instance *instance, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", SendHitObject);
+void SendHitObject(Instance *instance, Instance *hit, int type)
+{
+    MonsterVars *mv;
+    int i;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    i = mv->messageQueue.Head;
+
+    do
+    {
+        if (mv->messageQueue.Queue[i].ID == 0x1000008)
+        {
+            evMonsterHitObjectData *data1;
+
+            data1 = (evMonsterHitObjectData *)mv->messageQueue.Queue[i].Data;
+
+            if (data1->instance == hit)
+            {
+                break;
+            }
+        }
+
+        i++;
+
+        if (i == 16)
+        {
+            i = 0;
+        }
+    } while (i != mv->messageQueue.Tail);
+
+    if (i == mv->messageQueue.Tail)
+    {
+        evMonsterHitObjectData *data;
+
+        data = (evMonsterHitObjectData *)CIRC_Alloc(sizeof(evMonsterHitObjectData));
+
+        data->instance = hit;
+        data->hitType = type;
+
+        INSTANCE_Post(instance, 0x1000008, (int)data);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterCollide);
 

@@ -65,7 +65,15 @@ typedef struct evFXHitData {
     short amount;
     // offset: 0012
     short type;
-}evFXHitData;
+} evFXHitData;
+
+// size: 0x8
+typedef struct evMonsterHitObjectData {
+    // offset: 0000 (668 bytes)
+    struct _Instance *instance;
+    // offset: 0004
+    int hitType;
+} evMonsterHitObjectData;
 
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
