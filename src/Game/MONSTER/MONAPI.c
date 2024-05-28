@@ -61,7 +61,112 @@ void MonsterProcess(Instance *instance, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterInit);
+void MonsterInit(Instance *instance, GameTracker *gameTracker)
+{
+    MonsterStateFunction *state;
+    MonsterAttributes *attributes;
+    MonsterVars *mv;
+    typedef void (*MONTABLE_CleanUpFunc)(Instance *); // not from decls.h
+    typedef void (*MONTABLE_InitFunc)(Instance *);    // not from decls.h
+
+    attributes = (MonsterAttributes *)instance->data;
+
+    if ((instance->flags & 0x20000))
+    {
+        mv = (MonsterVars *)instance->extraData;
+
+        ((MONTABLE_CleanUpFunc)MONTABLE_GetCleanUpFunc(instance))(instance);
+
+        MONSENSE_RemoveSenses(instance);
+
+        MEMPACK_Free((char *)mv);
+    }
+    else if ((attributes == NULL) || (attributes->magicnum != 0xACE00065))
+    {
+        instance->data = NULL;
+
+        G2Anim_SwitchToKeylist(&instance->anim, G2Instance_GetKeylist(instance, 0), 0);
+    }
+    else
+    {
+        mv = (MonsterVars *)MEMPACK_Malloc(608, 23);
+
+        instance->extraData = mv;
+
+        if (instance->instanceID == 0)
+        {
+            if (instance->extraData == NULL)
+            {
+                return;
+            }
+
+            MEMPACK_Free((char *)mv);
+        }
+        else if (mv == NULL)
+        {
+            instance->data = NULL;
+
+            G2Anim_SwitchToKeylist(&instance->anim, G2Instance_GetKeylist(instance, 0), 0);
+        }
+        else
+        {
+            memset(mv, 0, 608);
+
+            InitMessageQueue(&mv->messageQueue);
+
+            instance->currentMainState = -1;
+
+            mv->pathSlotID = -1;
+
+            mv->lastValidPos = instance->position;
+
+            mv->terrainImpaleID = -1;
+
+            mv->mode = 0;
+
+            instance->flags |= 0x10000;
+            instance->flags |= 0x40;
+
+            if (!(attributes->whatAmI & 0x10000))
+            {
+                instance->flags2 |= 0x100;
+            }
+
+            instance->maxXVel = 400;
+            instance->maxYVel = 400;
+            instance->maxZVel = 400;
+
+            instance->xVel = 0;
+            instance->yVel = 0;
+            instance->zVel = 0;
+
+            MONTABLE_SetQueryFunc(instance);
+            MONTABLE_SetMessageFunc(instance);
+
+            MON_ProcessIntro(instance);
+
+            mv->maxHitPoints = mv->hitPoints;
+
+            MON_TurnOnAllSpheres(instance);
+            MON_TurnOffWeaponSpheres(instance);
+
+            MONSENSE_SetupSenses(instance);
+
+            MON_AnimInit(instance);
+
+            ((MONTABLE_InitFunc)MONTABLE_GetInitFunc(instance))(instance);
+
+            if ((mv->mvFlags & 0x1))
+            {
+                state = MONTABLE_GetStateFuncs(instance, instance->currentMainState);
+
+                mv->mvFlags &= ~0x1;
+
+                state->entryFunction(instance);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", SendHitObject);
 
