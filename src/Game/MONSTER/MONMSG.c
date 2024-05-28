@@ -113,7 +113,7 @@ void MON_PupateQueueHandler(Instance *instance)
 
     mv = (MonsterVars *)instance->extraData;
 
-    while (message = DeMessageQueue(&mv->messageQueue))
+    while ((message = DeMessageQueue(&mv->messageQueue)) != NULL)
     {
         MON_PupateMessageHandler(instance, message);
     }
@@ -126,10 +126,21 @@ void MON_IdleQueueHandler(Instance *instance)
 
     mv = (MonsterVars *)instance->extraData;
 
-    while (message = DeMessageQueue(&mv->messageQueue))
+    while ((message = DeMessageQueue(&mv->messageQueue)) != NULL)
     {
         MON_IdleMessageHandler(instance, message);
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONMSG", MON_DefaultQueueHandler);
+void MON_DefaultQueueHandler(Instance *instance)
+{
+    MonsterVars *mv;
+    Message *message;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    while ((message = DeMessageQueue(&mv->messageQueue)) != NULL)
+    {
+        MON_DefaultMessageHandler(instance, message);
+    }
+}
