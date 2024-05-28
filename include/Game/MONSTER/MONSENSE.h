@@ -6,5 +6,7 @@
 
 MonsterIR *MONSENSE_SetEnemy(Instance *instance, Instance *newenemy);
 void MONSENSE_DoSenses(Instance *instance);
+void MONSENSE_RemoveSenses(Instance *instance);
+void MONSENSE_SetupSenses(Instance *instance);
 
 #endif

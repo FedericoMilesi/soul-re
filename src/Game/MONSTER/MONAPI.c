@@ -4,6 +4,7 @@
 #include "Game/GAMELOOP.h"
 #include "Game/MONSTER.h"
 #include "Game/STATE.h"
+#include "Game/MEMPACK.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONTABLE.h"

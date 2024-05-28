@@ -24,5 +24,6 @@ void MON_PlayAnimID(Instance *instance, int index, int mode);
 void MON_TurnOffWeaponSpheres(Instance *instance);
 void MON_ProcessLookAt(Instance *instance);
 void MON_ProcessSpecialFade(Instance *instance);
+void MON_ChangeBehavior(Instance *instance, int behavior);
 
 #endif

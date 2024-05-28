@@ -44,5 +44,8 @@ typedef struct _MonsterChoice {
 void *MONTABLE_GetInitFunc(Instance *instance);
 void *MONTABLE_GetDamageEffectFunc(Instance *instance);
 MonsterStateFunction *MONTABLE_GetStateFuncs(Instance *instance, int state);
+void *MONTABLE_GetCleanUpFunc(Instance *instance);
+void MONTABLE_SetQueryFunc(Instance *instance);
+void MONTABLE_SetMessageFunc(Instance *instance);
 
 #endif
