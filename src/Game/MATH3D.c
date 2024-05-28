@@ -71,8 +71,8 @@ short MATH3D_FastAtan2(long y, long x)
         return (x < 1) * 2048;
     }
 
-    ax = abs(-x);
-    ay = abs(-y);
+    ax = abs(x);
+    ay = abs(y);
 
     if (x > 0)
     {

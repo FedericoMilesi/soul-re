@@ -18,6 +18,7 @@ void MON_StunnedEntry(Instance *instance);
 void MON_Dead(Instance *instance);
 void MON_DeadEntry(Instance *instance);
 void MON_DamageEffect(Instance *instance, evFXHitData *data);
+void MON_DoCombatTimers(Instance *instance);
 
 extern char monVersion[];
 

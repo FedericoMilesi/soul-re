@@ -98,6 +98,8 @@ DEPENDS := $(OBJECTS:=.d)
 
 ### Targets ###
 
+$(BUILD_DIR)/src/Game/MONSTER/MONAPI.c.o: CFLAGS += -fno-builtin
+
 all: $(EXE)
 
 -include $(DEPENDS)

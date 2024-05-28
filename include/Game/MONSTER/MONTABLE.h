@@ -42,5 +42,7 @@ typedef struct _MonsterChoice {
 } MonsterChoice;
 
 void *MONTABLE_GetInitFunc(Instance *instance);
+void *MONTABLE_GetDamageEffectFunc(Instance *instance);
+MonsterStateFunction *MONTABLE_GetStateFuncs(Instance *instance, int state);
 
 #endif

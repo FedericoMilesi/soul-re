@@ -13,8 +13,8 @@ typedef long intptr_t;
 
 #include "include_asm.h"
 #include "Game/TYPES.h"
-#include "LIBS.h"
 #include "Game/INSTANCE.h"
+#include "Libs/SDK.h"
 
 #define EXTERN extern
 #define STATIC
