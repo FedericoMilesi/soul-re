@@ -14,15 +14,8 @@ int MON_GroundMoveQueueHandler(Instance *instance)
 
     mv = (MonsterVars *)instance->extraData;
 
-    while (1)
+    while ((message = DeMessageQueue(&mv->messageQueue)) != NULL)
     {
-        message = DeMessageQueue(&mv->messageQueue);
-
-        if (message == NULL)
-        {
-            break;
-        }
-
         if (message->ID == 0x4010080)
         {
             ret = 0x4010080;
