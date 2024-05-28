@@ -4,6 +4,7 @@
 #include "common.h"
 #include "Game/STATE.h"
 
+void MON_IdleMessageHandler(Instance *instance, Message *message);
 void MON_DefaultMessageHandler(Instance *instance, Message *message);
 void MON_DefaultQueueHandler(Instance *instance);
 
