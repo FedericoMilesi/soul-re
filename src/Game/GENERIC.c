@@ -24,9 +24,9 @@ void GenericProcess(Instance *instance, GameTracker *gameTracker)
     }
 }
 
-unsigned long GenericQuery(Instance *instance, unsigned long query)
+uintptr_t GenericQuery(Instance *instance, unsigned long query)
 {
-    long ret;
+    intptr_t ret;
     evControlSaveDataData *pdata;
     Object *object;
 
@@ -50,7 +50,7 @@ unsigned long GenericQuery(Instance *instance, unsigned long query)
 
         break;
     case 12:
-        ret = (long)instance->matrix;
+        ret = (intptr_t)instance->matrix;
         break;
     case 17:
         ret = G2EmulationInstanceQueryAnimation(instance, 0);
@@ -63,7 +63,7 @@ unsigned long GenericQuery(Instance *instance, unsigned long query)
         {
             pdata = (evControlSaveDataData *)CIRC_Alloc(sizeof(evControlSaveDataData) + 4);
 
-            ret = (long)pdata;
+            ret = (intptr_t)pdata;
 
             pdata->length = 8;
 

@@ -2,6 +2,11 @@
 #include "Game/MONSTER.h"
 #include "Game/MONSTER/MONTABLE.h"
 #include "Game/MONSTER/MONAPI.h"
+#include "Game/MONSTER/SOUL.h"
+#include "Game/MONSTER/SLUAGH.h"
+#include "Game/MONSTER/VWRAITH.h"
+#include "Game/MONSTER/WORSHIP.h"
+#include "Game/MONSTER/HUMAN.h"
 
 static MonsterFunctionTable DefaultFunctionTable = {
     MON_DefaultInit,
@@ -14,9 +19,48 @@ static MonsterFunctionTable DefaultFunctionTable = {
     NULL,
 };
 
-EXTERN STATIC MonsterStateFunction DefaultStateTable[31];
+static MonsterChoice functionChoiceTable[] = {
+    { 4, &SOUL_FunctionTable },
+    { 0x802, &SLUAGH_FunctionTable },
+    { 0x1002, &VWRAITH_FunctionTable },
+    { 0x2008, &WORSHIP_FunctionTable },
+    { 0x8008, &HUMAN_FunctionTable },
+    { 0, NULL },
+};
 
-EXTERN STATIC MonsterChoice functionChoiceTable[8924+6];
+static MonsterStateFunction DefaultStateTable[] = {
+    { MON_BirthEntry, MON_Birth },
+    { MON_PursueEntry, MON_Pursue },
+    { MON_IdleEntry, MON_Idle },
+    { MON_MissileHitEntry, MON_MissileHit },
+    { MON_FallEntry, MON_Fall },
+    { MON_WanderEntry, MON_Wander },
+    { MON_AttackEntry, MON_Attack },
+    { MON_ImpaleDeathEntry, MON_ImpaleDeath },
+    { MON_HitEntry, MON_Hit },
+    { MON_StunnedEntry, MON_Stunned },
+    { MON_GrabbedEntry, MON_Grabbed },
+    { MON_ThrownEntry, MON_Thrown },
+    { MON_ImpactEntry, MON_Impact },
+    { MON_CombatEntry, MON_Combat },
+    { MON_BreakHoldEntry, MON_BreakHold },
+    { MON_LandOnFeetEntry, MON_LandOnFeet },
+    { MON_GeneralDeathEntry, MON_GeneralDeath },
+    { MON_EnvironmentDamageEntry, MON_EnvironmentDamage },
+    { MON_LandInWaterEntry, MON_LandInWater },
+    { MON_FleeEntry, MON_Flee },
+    { MON_HideEntry, MON_Hide },
+    { MON_SurpriseAttackEntry, MON_SurpriseAttack },
+    { MON_ParryEntry, MON_Parry },
+    { MON_DeadEntry, MON_Dead },
+    { MON_SurprisedEntry, MON_Surprised },
+    { MON_NoticeEntry, MON_Notice },
+    { MON_PupateEntry, MON_Pupate },
+    { MON_EmbraceEntry, MON_Embrace },
+    { MON_ProjectileEntry, MON_Projectile },
+    { MON_TerrainImpaleDeathEntry, MON_TerrainImpaleDeath },
+    { MON_PetrifiedEntry, MON_Petrified },
+};
 
 void MONTABLE_SetupTablePointer(Object *object)
 {

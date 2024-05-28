@@ -5,5 +5,6 @@
 #include "Game/MONSTER/MONAPI.h"
 
 MonsterIR *MONSENSE_SetEnemy(Instance *instance, Instance *newenemy);
+void MONSENSE_DoSenses(Instance *instance);
 
 #endif

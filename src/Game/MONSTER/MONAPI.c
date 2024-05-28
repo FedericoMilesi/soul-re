@@ -1,17 +1,22 @@
 #include "common.h"
+#include "Libs/STRING.h"
 #include "Game/SAVEINFO.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MONSTER.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONTABLE.h"
+#include "Game/MONSTER/MONSENSE.h"
+
+typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int);
 
 void MonsterProcess(Instance *instance, GameTracker *gameTracker)
 {
     MonsterStateFunction *state;
     MonsterVars *mv;
     MonsterAttributes *attributes;
-    typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int); // not from decls.h 
 
+    (void)gameTracker;
     attributes = (MonsterAttributes *)instance->data;
 
     mv = (MonsterVars *)instance->extraData;
@@ -114,8 +119,12 @@ long MONAPI_OkToLookAround(Instance *instance)
     return instance->currentMainState == MONSTER_STATE_IDLE;
 }
 
-void MONAPI_DeleteRegen(MONAPI_Regenerator *regen);
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_DeleteRegen);
+void MONAPI_DeleteRegen(MONAPI_Regenerator *regen)
+{
+    GlobalSave->numRegens--;
+
+    memcpy(regen, &regen[1], ((signed char)GlobalSave->numRegens - (regen - GlobalSave->regenEntries)) * sizeof(MONAPI_Regenerator));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_ProcessGenerator);
 

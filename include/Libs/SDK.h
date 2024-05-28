@@ -1,7 +1,7 @@
-#ifndef _LIBS_H_
-#define _LIBS_H_
+#ifndef _SDK_H_
+#define _SDK_H_
 
-/*TODO: Remove LIBS.h when adding PSYQ headers*/
+/*TODO: Remove LIBS/ when adding PSYQ headers*/
 
 #define getScratchAddr(offset)  ((unsigned long *)(0x1f800000+(offset)*4))
 
