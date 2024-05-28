@@ -181,7 +181,31 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ProcessSpecialFade);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_StartSpecialFade);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_UnlinkFromRaziel);
+void MON_UnlinkFromRaziel(Instance *instance)
+{
+    MonsterVars *mv;
+    evPositionData *data;
+    Instance *enemy;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    enemy = mv->enemy->instance;
+
+    INSTANCE_UnlinkFromParent(instance);
+
+    MON_SwitchState(instance, MONSTER_STATE_FALL);
+
+    data = (evPositionData *)INSTANCE_Query(enemy, 7);
+
+    if (data != NULL)
+    {
+        instance->rotation.x = data->x;
+        instance->rotation.y = data->y;
+        instance->rotation.z = data->z + 2048;
+    }
+
+    INSTANCE_Post(enemy, 0x1000006, (int)instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_BurnInAir);
 
