@@ -173,6 +173,34 @@ typedef struct evPhysicsGravityData {
     short slipSlope;
 } evPhysicsGravityData;
 
+// size: 0x24
+typedef struct evPhysicsEdgeData {
+    // offset: 0000
+    short UpperOffset;
+    // offset: 0002
+    short ForwardOffset;
+    // offset: 0004
+    short AboveOffset;
+    // offset: 0006
+    short XDistance;
+    // offset: 0008
+    short YDistance;
+    // offset: 000A
+    short ZDistance;
+    // offset: 000C (8 bytes)
+    struct _SVector *Normal1;
+    // offset: 0010 (8 bytes)
+    struct _SVector *Normal2;
+    // offset: 0014 (8 bytes)
+    struct _SVector *Delta;
+    // offset: 0018 (668 bytes)
+    struct _Instance *instance;
+    // offset: 001C
+    int zRot;
+    // offset: 0020
+    int rc;
+} evPhysicsEdgeData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);

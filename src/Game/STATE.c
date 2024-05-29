@@ -217,7 +217,27 @@ uintptr_t SetPhysicsGravityData(int UpperOffset, int LowerOffset, int x, int y, 
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsEdgeData);
+uintptr_t SetPhysicsEdgeData(int UpperOffset, int ForwardOffset, int AboveOffset, int x, int y, int z, SVector *Normal1, SVector *Normal2, SVector *Delta)
+{
+    evPhysicsEdgeData *Ptr;
+
+    Ptr = (evPhysicsEdgeData *)CIRC_Alloc(sizeof(evPhysicsEdgeData));
+
+    Ptr->UpperOffset = UpperOffset;
+    Ptr->ForwardOffset = ForwardOffset;
+    Ptr->AboveOffset = AboveOffset;
+
+    Ptr->XDistance = x;
+    Ptr->YDistance = y;
+    Ptr->ZDistance = z;
+
+    Ptr->Normal1 = Normal1;
+    Ptr->Normal2 = Normal2;
+
+    Ptr->Delta = Delta;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsSwimData);
 
