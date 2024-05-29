@@ -351,7 +351,22 @@ uintptr_t SetPhysicsDropHeightData(Position *offset, int dropOffset, int mode)
     return (uintptr_t)ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetAnimationControllerDoneData);
+uintptr_t SetAnimationControllerDoneData(Instance *instance, long segment, long type, int data)
+{
+    evAnimationControllerDoneData *Ptr;
+
+    Ptr = (evAnimationControllerDoneData *)CIRC_Alloc(sizeof(evAnimationControllerDoneData));
+
+    Ptr->instance = instance;
+
+    Ptr->segment = segment;
+
+    Ptr->type = type;
+
+    Ptr->data = data;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetAnimationInstanceSwitchData);
 

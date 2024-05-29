@@ -301,6 +301,18 @@ typedef struct evPhysicsDropHeightData {
     struct _TFace *tface;
 } evPhysicsDropHeightData;
 
+// size: 0x10
+typedef struct evAnimationControllerDoneData {
+    // offset: 0000 (668 bytes)
+    struct _Instance *instance;
+    // offset: 0004
+    long segment;
+    // offset: 0008
+    long type;
+    // offset: 000C
+    int data;
+} evAnimationControllerDoneData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
