@@ -352,7 +352,49 @@ void FX_Blood2(SVector *location, SVector *input_vel, SVector *accel, int amount
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Blood_Impale);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_BloodCone);
+FXParticle *FX_BloodCone(Instance *instance, short startSegment, long time)
+{
+    FXParticle *currentParticle;
+    Object *particle;
+
+    particle = (Object *)objectAccess[10].object;
+
+    if (particle == NULL)
+    {
+        return NULL;
+    }
+
+    currentParticle = FX_GetParticle(instance, startSegment);
+
+    if (currentParticle != NULL)
+    {
+        currentParticle->size = 14;
+
+        currentParticle->texture = FX_GetTextureObject(particle, 0, 1);
+
+        currentParticle->birthRadius = 20;
+
+        currentParticle->direction.x = 256;
+        currentParticle->direction.y = 256;
+        currentParticle->direction.z = 256;
+
+        currentParticle->acceleration.x = 0;
+        currentParticle->acceleration.y = 0;
+        currentParticle->acceleration.z = -2;
+
+        currentParticle->numberBirthParticles = 10;
+
+        currentParticle->startColor = 0x021800FF;
+        currentParticle->endColor = 0;
+
+        currentParticle->lifeTime = (short)time;
+        currentParticle->primLifeTime = 10;
+
+        FX_InsertGeneralEffect(currentParticle);
+    }
+
+    return currentParticle;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetTorchParticle);
 

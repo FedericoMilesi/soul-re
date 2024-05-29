@@ -385,5 +385,7 @@ FX_PRIM *FX_Dot(SVector *location, SVector *vel, SVector *accel, int scale_speed
 void FX_StartInstanceEffect(Instance *instance, ObjectEffect *effect, int InitFlag);
 void FX_SoulReaverWinding(Instance *instance, PrimPool *primPool, unsigned long **ot, MATRIX *wcTransform);
 void FX_SoulReaverBlade(Instance *instance, unsigned long **drawot);
+TextureMT3 *FX_GetTextureObject(Object *object, int modelnum, int texnum);
+void FX_InsertGeneralEffect(void *ptr);
 
 #endif
