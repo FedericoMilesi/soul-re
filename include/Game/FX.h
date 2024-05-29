@@ -375,6 +375,84 @@ typedef struct _FXBlastringEffect {
     long endColor;
 }FXBlastringEffect;
 
+// size: 0x2C
+typedef struct _FXRibbon {
+    // offset: 0000
+    void *next;
+    // offset: 0004
+    void *continue_process;
+    // offset: 0008 (668 bytes)
+    struct _Instance *instance;
+    // offset: 000C
+    unsigned char effectType;
+    // offset: 000D
+    unsigned char type;
+    // offset: 000E
+    short lifeTime;
+    // offset: 0010
+    short numberVerts;
+    // offset: 0012
+    short endIndex;
+    // offset: 0014 (8 bytes)
+    struct SVECTOR *vertexPool;
+    // offset: 0018
+    short startSegment;
+    // offset: 001A
+    short endSegment;
+    // offset: 001C
+    long startColor;
+    // offset: 0020
+    long endColor;
+    // offset: 0024
+    short colorStepValue;
+    // offset: 0026
+    short faceLifeTime;
+    // offset: 0028
+    short startFadeValue;
+    // offset: 002A
+    short fadeStep;
+} FXRibbon;
+
+// size: 0x18
+typedef struct _FXLightBeam {
+    // offset: 0000
+    void *next;
+    // offset: 0004
+    void *continue_process;
+    // offset: 0008 (668 bytes)
+    struct _Instance *instance;
+    // offset: 000C
+    unsigned char effectType;
+    // offset: 000D
+    unsigned char type;
+    // offset: 000E
+    short lifeTime;
+    // offset: 0010
+    short startSeg;
+    // offset: 0012
+    short endSeg;
+    // offset: 0014
+    long color;
+} FXLightBeam;
+
+// size: 0x1C
+typedef struct GenericFXObject {
+    // offset: 0000 (48 bytes)
+    struct _GenericParticleParams *ParticleList;
+    // offset: 0004 (20 bytes)
+    struct _GenericRibbonParams *RibbonList;
+    // offset: 0008 (24 bytes)
+    struct _GenericGlowParams *GlowList;
+    // offset: 000C (40 bytes)
+    struct _GenericLightningParams *LightningList;
+    // offset: 0010 (48 bytes)
+    struct _GenericBlastringParams *BlastList;
+    // offset: 0014 (12 bytes)
+    struct _GenericFlashParams *FlashList;
+    // offset: 0018
+    long *ColorList;
+} GenericFXObject;
+
 void FX_ContinueParticle(FXParticle *currentParticle, FXTracker *fxTracker);
 void FX_SetReaverInstance(Instance *instance);
 void FX_EndInstanceEffects(Instance *instance);

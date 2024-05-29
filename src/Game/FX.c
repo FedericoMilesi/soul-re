@@ -556,7 +556,44 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Start_Snow);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Start_Rain);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartLightbeam);
+void FX_StartLightbeam(Instance *instance, int startSeg, int endSeg, int color_num)
+{
+    Object *particle;
+    FXLightBeam *beam;
+    GenericFXObject *GFXO;
+    long color;
+
+    particle = (Object *)objectAccess[10].object;
+
+    if (particle != NULL)
+    {
+        GFXO = (GenericFXObject *)particle->data;
+
+        color = GFXO->ColorList[color_num];
+
+        beam = (FXLightBeam *)MEMPACK_Malloc(sizeof(FXLightBeam), 13);
+
+        if (beam != NULL)
+        {
+            beam->effectType = 133;
+
+            beam->instance = instance;
+
+            beam->continue_process = NULL;
+
+            beam->type = 0;
+
+            beam->lifeTime = -1;
+
+            beam->startSeg = startSeg;
+            beam->endSeg = endSeg;
+
+            beam->color = color;
+
+            FX_InsertGeneralEffect(beam);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_StartInstanceEffect);
 
