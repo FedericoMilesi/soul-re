@@ -368,7 +368,24 @@ uintptr_t SetAnimationControllerDoneData(Instance *instance, long segment, long 
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetAnimationInstanceSwitchData);
+uintptr_t SetAnimationInstanceSwitchData(Instance *instance, int anim, int frame, int frames, int mode)
+{
+    evAnimationInstanceSwitchData *Ptr;
+
+    Ptr = (evAnimationInstanceSwitchData *)CIRC_Alloc(sizeof(evAnimationInstanceSwitchData));
+
+    Ptr->instance = instance;
+
+    Ptr->anim = anim;
+
+    Ptr->frame = frame;
+
+    Ptr->frames = frames;
+
+    Ptr->mode = mode;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetFXHitData);
 
