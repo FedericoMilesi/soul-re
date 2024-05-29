@@ -387,7 +387,30 @@ uintptr_t SetAnimationInstanceSwitchData(Instance *instance, int anim, int frame
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetFXHitData);
+uintptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type)
+{
+    evFXHitData *Ptr;
+
+    Ptr = (evFXHitData *)CIRC_Alloc(sizeof(evFXHitData));
+
+    Ptr->amount = amount;
+
+    Ptr->type = type;
+
+    if (hitter != NULL)
+    {
+        Ptr->location.x = (short)hitter->matrix[segment].t[0];
+        Ptr->velocity.x = Ptr->location.x - (short)hitter->oldMatrix[segment].t[0];
+
+        Ptr->location.y = (short)hitter->matrix[segment].t[1];
+        Ptr->velocity.y = Ptr->location.y - (short)hitter->oldMatrix[segment].t[1];
+
+        Ptr->location.z = (short)hitter->matrix[segment].t[2];
+        Ptr->velocity.z = Ptr->location.z - (short)hitter->oldMatrix[segment].t[2];
+    }
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectThrowData);
 

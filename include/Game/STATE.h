@@ -316,7 +316,7 @@ typedef struct evAnimationControllerDoneData {
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
-int SetFXHitData(Instance *hitter, int segment, int amount, int type);
+uintptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type);
 uintptr_t SetObjectData(int x, int y, int PathNumber, Instance *Force, int node);
 int SetObjectAbsorbData(Instance *force, unsigned short node, unsigned short steps);
 void G2EmulationInstanceSetMode(Instance *instance, int CurrentSection, int Mode);
