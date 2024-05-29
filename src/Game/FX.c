@@ -416,7 +416,48 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_ProcessRain);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_ContinueRain);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_MakeSpark);
+void FX_MakeSpark(Instance *instance, Model *model, int segment)
+{
+    FXParticle *currentParticle;
+    Object *particle;
+
+    (void)model;
+
+    particle = (Object *)objectAccess[10].object;
+
+    if (particle != NULL)
+    {
+        currentParticle = FX_GetParticle(instance, segment);
+
+        if (currentParticle != NULL)
+        {
+            currentParticle->size = 48;
+
+            currentParticle->birthRadius = 50;
+
+            currentParticle->direction.x = 128;
+            currentParticle->direction.y = 128;
+            currentParticle->direction.z = 160;
+
+            currentParticle->acceleration.x = 0;
+            currentParticle->acceleration.y = 0;
+            currentParticle->acceleration.z = 1;
+
+            currentParticle->texture = FX_GetTextureObject(particle, 0, 0);
+
+            currentParticle->numberBirthParticles = 2;
+
+            currentParticle->lifeTime = 2;
+
+            currentParticle->startColor = 0x02004960;
+            currentParticle->endColor = 0;
+
+            currentParticle->primLifeTime = 4;
+
+            FX_InsertGeneralEffect(currentParticle);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_ContinueParticle);
 

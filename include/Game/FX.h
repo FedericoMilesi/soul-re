@@ -387,5 +387,6 @@ void FX_SoulReaverWinding(Instance *instance, PrimPool *primPool, unsigned long 
 void FX_SoulReaverBlade(Instance *instance, unsigned long **drawot);
 TextureMT3 *FX_GetTextureObject(Object *object, int modelnum, int texnum);
 void FX_InsertGeneralEffect(void *ptr);
+FXParticle *FX_GetParticle(Instance *instance, short startSegment);
 
 #endif
