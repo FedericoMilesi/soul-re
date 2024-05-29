@@ -285,6 +285,22 @@ typedef struct evPhysicsWallCrawlData {
     int rc;
 } evPhysicsWallCrawlData;
 
+// size: 0x14
+typedef struct evPhysicsDropHeightData {
+    // offset: 0000 (6 bytes)
+    struct _Position origin;
+    // offset: 0006
+    short mode;
+    // offset: 0008
+    short DropOffset;
+    // offset: 000A
+    short result;
+    // offset: 000C (36 bytes)
+    struct BSPTree *bsp;
+    // offset: 0010 (12 bytes)
+    struct _TFace *tface;
+} evPhysicsDropHeightData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
