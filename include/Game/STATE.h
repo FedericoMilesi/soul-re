@@ -261,6 +261,30 @@ typedef struct evPhysicsSlideData {
     int Dot;
 } evPhysicsSlideData;
 
+// size: 0x2C
+typedef struct evPhysicsWallCrawlData {
+    // offset: 0000
+    short Segment;
+    // offset: 0002
+    short Length;
+    // offset: 0004
+    short ForwardOffset;
+    // offset: 0006
+    short NormalDistance;
+    // offset: 0008 (8 bytes)
+    struct _SVector DropNormal;
+    // offset: 0010 (8 bytes)
+    struct _SVector ForwardNormal;
+    // offset: 0018 (6 bytes)
+    struct _Position NewPosition;
+    // offset: 001E (8 bytes)
+    struct _Rotation DropRotation;
+    // offset: 0026
+    short ForwardXRotation;
+    // offset: 0028
+    int rc;
+} evPhysicsWallCrawlData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);

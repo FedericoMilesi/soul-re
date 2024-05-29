@@ -294,7 +294,22 @@ uintptr_t SetPhysicsSlideData(int Segment, int ForwardVectorX, int ForwardVector
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsWallCrawlData);
+uintptr_t SetPhysicsWallCrawlData(int Segment, int Length, int ForwardOffset, int NormalDistance)
+{
+    evPhysicsWallCrawlData *Ptr;
+
+    Ptr = (evPhysicsWallCrawlData *)CIRC_Alloc(sizeof(evPhysicsWallCrawlData));
+
+    Ptr->Segment = Segment;
+
+    Ptr->Length = Length;
+
+    Ptr->ForwardOffset = ForwardOffset;
+
+    Ptr->NormalDistance = NormalDistance;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsLinkedMoveData);
 
