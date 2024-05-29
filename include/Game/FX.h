@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "Game/OBTABLE.h"
+#include "Game/DRAW.h"
 
 // size: 0x10
 typedef struct TextureMT3 {
@@ -382,6 +383,7 @@ void FX_ReaverBladeInit();
 void FX_DoInstancePowerRing(Instance *instance, long atuTime, long *color, long numColors, int follow_halveplane);
 FX_PRIM *FX_Dot(SVector *location, SVector *vel, SVector *accel, int scale_speed, long color, long size, int lifetime, int texture_num);
 void FX_StartInstanceEffect(Instance *instance, ObjectEffect *effect, int InitFlag);
-
+void FX_SoulReaverWinding(Instance *instance, PrimPool *primPool, unsigned long **ot, MATRIX *wcTransform);
+void FX_SoulReaverBlade(Instance *instance, unsigned long **drawot);
 
 #endif

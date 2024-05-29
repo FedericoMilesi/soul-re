@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/MATH3D.h"
 #include "Game/MEMPACK.h"
+#include "Game/DRAW.h"
 
 EXTERN STATIC FXGeneralEffect *FX_GeneralEffectTracker;
 
@@ -27,6 +28,8 @@ EXTERN STATIC int Spiral_Glow_Y;
 EXTERN STATIC int Spiral_Glow_Size;
 
 EXTERN STATIC int Spiral_Mod;
+
+EXTERN STATIC Instance *FX_reaver_instance;
 
 void FX_StandardFXPrimProcess(FX_PRIM *fxPrim, FXTracker *fxTracker);
 
@@ -228,7 +231,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_RelocateFXPointers);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_ProcessList);
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawReaver);
+void FX_DrawReaver(PrimPool *primPool, unsigned long **ot, MATRIX *wcTransform)
+{
+    if (FX_reaver_instance != NULL)
+    {
+        FX_SoulReaverWinding(FX_reaver_instance, primPool, ot, wcTransform);
+        FX_SoulReaverBlade(FX_reaver_instance, ot);
+    }
+
+    FX_reaver_instance = NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawList);
 
