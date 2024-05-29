@@ -239,7 +239,22 @@ uintptr_t SetPhysicsEdgeData(int UpperOffset, int ForwardOffset, int AboveOffset
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsSwimData);
+uintptr_t SetPhysicsSwimData(int CheckDepth, SVector *iVelocity, int SwimDepth, int WadeDepth, int TreadDepth)
+{
+    evPhysicsSwimData *Ptr;
+
+    Ptr = (evPhysicsSwimData *)CIRC_Alloc(sizeof(evPhysicsSwimData));
+
+    Ptr->CheckDepth = CheckDepth;
+
+    Ptr->iVelocity = iVelocity;
+
+    Ptr->SwimDepth = SwimDepth;
+    Ptr->WadeDepth = WadeDepth;
+    Ptr->TreadDepth = TreadDepth;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsDropOffData);
 

@@ -201,6 +201,30 @@ typedef struct evPhysicsEdgeData {
     int rc;
 } evPhysicsEdgeData;
 
+// size: 0x18
+typedef struct evPhysicsSwimData {
+    // offset: 0000
+    short CheckDepth;
+    // offset: 0002
+    short SwimDepth;
+    // offset: 0004
+    short WadeDepth;
+    // offset: 0006
+    short TreadDepth;
+    // offset: 0008 (8 bytes)
+    struct _SVector *iVelocity;
+    // offset: 000C
+    short Depth;
+    // offset: 000E
+    short WaterDepth;
+    // offset: 0010
+    short rc;
+    // offset: 0012
+    short pad;
+    // offset: 0014
+    int WaterLevel;
+} evPhysicsSwimData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
