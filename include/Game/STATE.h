@@ -239,6 +239,28 @@ typedef struct evPhysicsDropOffData {
     int UpperOffset;
 } evPhysicsDropOffData;
 
+// size: 0x28
+typedef struct evPhysicsSlideData {
+    // offset: 0000 (8 bytes)
+    struct _SVector ForwardVector;
+    // offset: 0008 (8 bytes)
+    struct _SVector ForwardNormal;
+    // offset: 0010 (8 bytes)
+    struct _SVector DropNormal;
+    // offset: 0018
+    short Segment;
+    // offset: 001A
+    short DropOffset;
+    // offset: 001C
+    short UpperOffset;
+    // offset: 001E
+    short Height;
+    // offset: 0020 (668 bytes)
+    struct _Instance *UpperInstance;
+    // offset: 0024
+    int Dot;
+} evPhysicsSlideData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);

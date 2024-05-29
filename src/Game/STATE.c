@@ -274,7 +274,25 @@ uintptr_t SetPhysicsDropOffData(int xOffset, int yOffset, int DropOffset, int sl
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsSlideData);
+uintptr_t SetPhysicsSlideData(int Segment, int ForwardVectorX, int ForwardVectorY, int ForwardVectorZ, int DropOffset, int UpperOffset, int Height)
+{
+    evPhysicsSlideData *Ptr;
+
+    Ptr = (evPhysicsSlideData *)CIRC_Alloc(sizeof(evPhysicsSlideData));
+
+    Ptr->Segment = Segment;
+
+    Ptr->ForwardVector.x = ForwardVectorX;
+    Ptr->ForwardVector.y = ForwardVectorY;
+    Ptr->ForwardVector.z = ForwardVectorZ;
+
+    Ptr->DropOffset = DropOffset;
+    Ptr->UpperOffset = UpperOffset;
+
+    Ptr->Height = Height;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsWallCrawlData);
 
