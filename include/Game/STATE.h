@@ -156,7 +156,7 @@ void G2EmulationInstanceSetAnimation(Instance *instance, int CurrentSection, int
 int G2EmulationInstanceQueryFrame(Instance *instance, int CurrentSection);
 int G2EmulationInstanceQueryAnimation(Instance *instance, int CurrentSection);
 void G2EmulationInstancePlayAnimation(Instance *instance);
-int SetPositionData(int x, int y, int z);
+uintptr_t SetPositionData(int x, int y, int z);
 void *CIRC_Alloc(int size);
 void InitMessageQueue(MessageQueue *In);
 

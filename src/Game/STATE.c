@@ -186,7 +186,18 @@ uintptr_t SetObjectData(int x, int y, int PathNumber, Instance *Force, int node)
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPositionData);
+uintptr_t SetPositionData(int x, int y, int z)
+{
+    evPositionData *Ptr;
+
+    Ptr = (evPositionData *)CIRC_Alloc(sizeof(evPositionData));
+
+    Ptr->x = x;
+    Ptr->y = y;
+    Ptr->z = z;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsGravityData);
 
