@@ -311,7 +311,28 @@ uintptr_t SetPhysicsWallCrawlData(int Segment, int Length, int ForwardOffset, in
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsLinkedMoveData);
+uintptr_t SetPhysicsLinkedMoveData(Instance *instance, int segment, SVector *posDelta, SVector *rotDelta)
+{
+    evPhysicsLinkedMoveData *Ptr;
+
+    Ptr = (evPhysicsLinkedMoveData *)CIRC_Alloc(sizeof(evPhysicsLinkedMoveData));
+
+    Ptr->segment = segment;
+
+    Ptr->instance = instance;
+
+    if (posDelta != NULL)
+    {
+        Ptr->posDelta = *posDelta;
+    }
+
+    if (rotDelta != NULL)
+    {
+        Ptr->rotDelta = *rotDelta;
+    }
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsDropHeightData);
 
