@@ -225,6 +225,20 @@ typedef struct evPhysicsSwimData {
     int WaterLevel;
 } evPhysicsSwimData;
 
+// size: 0xC
+typedef struct evPhysicsDropOffData {
+    // offset: 0000
+    short xOffset;
+    // offset: 0002
+    short yOffset;
+    // offset: 0004
+    short DropOffset;
+    // offset: 0006
+    short slipSlope;
+    // offset: 0008
+    int UpperOffset;
+} evPhysicsDropOffData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);

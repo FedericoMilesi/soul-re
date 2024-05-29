@@ -256,7 +256,23 @@ uintptr_t SetPhysicsSwimData(int CheckDepth, SVector *iVelocity, int SwimDepth, 
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsDropOffData);
+uintptr_t SetPhysicsDropOffData(int xOffset, int yOffset, int DropOffset, int slipSlope, int UpperOffset)
+{
+    evPhysicsDropOffData *Ptr;
+
+    Ptr = (evPhysicsDropOffData *)CIRC_Alloc(sizeof(evPhysicsDropOffData));
+
+    Ptr->xOffset = xOffset;
+    Ptr->yOffset = yOffset;
+
+    Ptr->DropOffset = DropOffset;
+
+    Ptr->slipSlope = slipSlope;
+
+    Ptr->UpperOffset = UpperOffset;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsSlideData);
 
