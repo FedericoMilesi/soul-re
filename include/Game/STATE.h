@@ -117,6 +117,18 @@ typedef struct evMonsterSoulSuckData {
     struct _Position Destination;
 } evMonsterSoulSuckData;
 
+// size: 0x14
+typedef struct evMonsterImpaleData {
+    // offset: 0000 (668 bytes)
+    struct _Instance *weapon;
+    // offset: 0004 (8 bytes)
+    struct _Rotation direction;
+    // offset: 000C (6 bytes)
+    struct _Position position;
+    // offset: 0012
+    short distance;
+} evMonsterImpaleData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);

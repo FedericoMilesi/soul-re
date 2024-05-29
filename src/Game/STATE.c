@@ -147,7 +147,26 @@ uintptr_t SetMonsterSoulSuckData(Instance *Sender, int x, int y, int z)
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetMonsterImpaleData);
+uintptr_t SetMonsterImpaleData(Instance *weapon, Rotation *direction, Position *position, int distance)
+{
+    evMonsterImpaleData *Ptr;
+
+    Ptr = (evMonsterImpaleData *)CIRC_Alloc(sizeof(evMonsterImpaleData));
+
+    Ptr->weapon = weapon;
+
+    Ptr->direction.x = direction->x;
+    Ptr->direction.y = direction->y;
+    Ptr->direction.z = direction->z;
+
+    Ptr->position.x = position->x;
+    Ptr->position.y = position->y;
+    Ptr->position.z = position->z;
+
+    Ptr->distance = distance;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectData);
 
