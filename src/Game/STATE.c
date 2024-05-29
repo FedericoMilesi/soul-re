@@ -199,7 +199,23 @@ uintptr_t SetPositionData(int x, int y, int z)
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsGravityData);
+uintptr_t SetPhysicsGravityData(int UpperOffset, int LowerOffset, int x, int y, int z, int slope)
+{
+    evPhysicsGravityData *Ptr;
+
+    Ptr = (evPhysicsGravityData *)CIRC_Alloc(sizeof(evPhysicsGravityData));
+
+    Ptr->UpperOffset = UpperOffset;
+    Ptr->LowerOffset = LowerOffset;
+
+    Ptr->x = x;
+    Ptr->y = y;
+    Ptr->z = z;
+
+    Ptr->slipSlope = slope;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPhysicsEdgeData);
 
