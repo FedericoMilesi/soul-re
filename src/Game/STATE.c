@@ -132,7 +132,20 @@ uintptr_t SetMonsterAlarmData(Instance *sender, Position *position, int type)
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetMonsterSoulSuckData);
+uintptr_t SetMonsterSoulSuckData(Instance *Sender, int x, int y, int z)
+{
+    evMonsterSoulSuckData *Ptr;
+
+    Ptr = (evMonsterSoulSuckData *)CIRC_Alloc(sizeof(evMonsterSoulSuckData));
+
+    Ptr->sender = Sender;
+
+    Ptr->Destination.x = x;
+    Ptr->Destination.y = y;
+    Ptr->Destination.z = z;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetMonsterImpaleData);
 
