@@ -168,7 +168,23 @@ uintptr_t SetMonsterImpaleData(Instance *weapon, Rotation *direction, Position *
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectData);
+uintptr_t SetObjectData(int x, int y, int PathNumber, Instance *Force, int node)
+{
+    evObjectData *Ptr;
+
+    Ptr = (evObjectData *)CIRC_Alloc(sizeof(evObjectData));
+
+    Ptr->x = x;
+    Ptr->y = y;
+
+    Ptr->PathNumber = PathNumber;
+
+    Ptr->LinkNode = node;
+
+    Ptr->Force = Force;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetPositionData);
 

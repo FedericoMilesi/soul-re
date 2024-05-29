@@ -129,11 +129,27 @@ typedef struct evMonsterImpaleData {
     short distance;
 } evMonsterImpaleData;
 
+// size: 0x10
+typedef struct evObjectData {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short PathNumber;
+    // offset: 0006
+    short LinkNode;
+    // offset: 0008 (668 bytes)
+    struct _Instance *Force;
+    // offset: 000C
+    int rc;
+} evObjectData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
 int SetFXHitData(Instance *hitter, int segment, int amount, int type);
-int SetObjectData(int x, int y, int PathNumber, Instance *Force, int node);
+uintptr_t SetObjectData(int x, int y, int PathNumber, Instance *Force, int node);
 int SetObjectAbsorbData(Instance *force, unsigned short node, unsigned short steps);
 void G2EmulationInstanceSetMode(Instance *instance, int CurrentSection, int Mode);
 void G2EmulationInstanceSetAnimation(Instance *instance, int CurrentSection, int NewAnim, int NewFrame, int Frames);
