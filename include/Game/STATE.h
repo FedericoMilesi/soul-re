@@ -99,6 +99,16 @@ typedef struct evMonsterThrownData {
     short power;
 } evMonsterThrownData;
 
+// size: 0xC
+typedef struct evMonsterAlarmData {
+    // offset: 0000 (668 bytes)
+    struct _Instance *sender;
+    // offset: 0004 (6 bytes)
+    struct _Position position;
+    // offset: 000A
+    short type;
+} evMonsterAlarmData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
