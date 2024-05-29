@@ -98,7 +98,22 @@ uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int 
     return (uintptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetMonsterThrownData);
+uintptr_t SetMonsterThrownData(Instance *Sender, Rotation *Direction, int Power)
+{
+    evMonsterThrownData *Ptr;
+
+    Ptr = (evMonsterThrownData *)CIRC_Alloc(sizeof(evMonsterThrownData));
+
+    Ptr->sender = Sender;
+
+    Ptr->direction.x = Direction->x;
+    Ptr->direction.y = Direction->y;
+    Ptr->direction.z = Direction->z;
+
+    Ptr->power = Power;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetMonsterAlarmData);
 
