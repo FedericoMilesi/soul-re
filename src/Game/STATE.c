@@ -80,7 +80,23 @@ INCLUDE_ASM("asm/nonmatchings/Game/STATE", CIRC_Alloc);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetCollideInfoData);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetMonsterHitData);
+uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames)
+{
+    evMonsterHitData *Ptr;
+
+    Ptr = (evMonsterHitData *)CIRC_Alloc(sizeof(evMonsterHitData));
+
+    Ptr->sender = Sender;
+
+    Ptr->lastHit = lastHit;
+
+    Ptr->power = Power;
+
+    Ptr->knockBackDistance = knockBackDistance;
+    Ptr->knockBackDuration = knockBackFrames;
+
+    return (uintptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetMonsterThrownData);
 

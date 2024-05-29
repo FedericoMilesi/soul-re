@@ -75,9 +75,23 @@ typedef struct evMonsterHitObjectData {
     int hitType;
 } evMonsterHitObjectData;
 
+// size: 0x10
+typedef struct evMonsterHitData {
+    // offset: 0000 (668 bytes)
+    struct _Instance *sender;
+    // offset: 0004 (668 bytes)
+    struct _Instance *lastHit;
+    // offset: 0008
+    short knockBackDistance;
+    // offset: 000A
+    short knockBackDuration;
+    // offset: 000C
+    long power;
+} evMonsterHitData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
-int SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
+uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
 int SetFXHitData(Instance *hitter, int segment, int amount, int type);
 int SetObjectData(int x, int y, int PathNumber, Instance *Force, int node);
 int SetObjectAbsorbData(Instance *force, unsigned short node, unsigned short steps);
