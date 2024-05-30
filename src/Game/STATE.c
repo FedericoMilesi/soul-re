@@ -437,7 +437,20 @@ intptr_t SetObjectBreakOffData(Instance *force, short node, short distance, shor
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetControlInitHangData);
+intptr_t SetControlInitHangData(Instance *instance, long frame, long frames)
+{
+    evControlInitHangData *Ptr;
+
+    Ptr = (evControlInitHangData *)CIRC_Alloc(sizeof(evControlInitHangData));
+
+    Ptr->instance = instance;
+
+    Ptr->frame = frame;
+
+    Ptr->frames = frames;
+
+    return (intptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetControlInitIdleData);
 

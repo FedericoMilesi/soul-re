@@ -331,6 +331,16 @@ typedef struct evObjectBreakOffData {
     unsigned short action;
 } evObjectBreakOffData;
 
+// size: 0xC
+typedef struct evControlInitHangData {
+    // offset: 0000 (668 bytes)
+    struct _Instance *instance;
+    // offset: 0004
+    int frame;
+    // offset: 0008
+    int frames;
+} evControlInitHangData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
