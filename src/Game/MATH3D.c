@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/MATH3D.h"
+#include "Game/G2/QUATG2.h"
 
 void MATH3D_Sort3VectorCoords(long *a, long *b, long *c)
 {
@@ -343,7 +344,19 @@ short MATH3D_AngleFromPosToPos(Position *from, Position *to)
     return (ratan2(from->y - to->y, from->x - to->x) + 3072) & 0xFFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_ZYXtoXYZ);
+void MATH3D_ZYXtoXYZ(Rotation *rot)
+{
+    MATRIX tempMat;
+    G2EulerAngles ea;
+
+    RotMatrixZYX((SVECTOR *)rot, &tempMat);
+
+    G2EulerAngles_FromMatrix(&ea, (G2Matrix *)&tempMat, 21);
+
+    rot->x = ea.x;
+    rot->y = ea.y;
+    rot->z = ea.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_ElevationFromPosToPos);
 

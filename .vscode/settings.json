@@ -21,6 +21,7 @@
     "files.autoGuessEncoding": true,
     "files.associations": {
         "common.h": "c",
-        "sdk.h": "c"
+        "sdk.h": "c",
+        "types.h": "c"
     },
 }
