@@ -526,7 +526,26 @@ intptr_t SetObjectIdleData(long mode, Instance *instance)
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetActionPlayHostAnimationData);
+intptr_t SetActionPlayHostAnimationData(Instance *instance, Instance *host, int newAnim, int newFrame, int frames, int mode)
+{
+    evActionPlayHostAnimationData *Ptr;
+
+    Ptr = (evActionPlayHostAnimationData *)CIRC_Alloc(sizeof(evActionPlayHostAnimationData));
+
+    Ptr->instance = instance;
+
+    Ptr->host = host;
+
+    Ptr->newAnim = newAnim;
+
+    Ptr->newFrame = newFrame;
+
+    Ptr->frames = frames;
+
+    Ptr->mode = mode;
+
+    return (intptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectBirthProjectileData);
 

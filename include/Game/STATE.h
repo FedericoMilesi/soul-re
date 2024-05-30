@@ -383,6 +383,22 @@ typedef struct evObjectIdleData {
     struct _Instance *instance;
 } evObjectIdleData;
 
+// size: 0x18
+typedef struct evActionPlayHostAnimationData {
+    // offset: 0000 (668 bytes)
+    struct _Instance *instance;
+    // offset: 0004 (668 bytes)
+    struct _Instance *host;
+    // offset: 0008
+    int newAnim;
+    // offset: 000C
+    int newFrame;
+    // offset: 0010
+    int frames;
+    // offset: 0014
+    int mode;
+} evActionPlayHostAnimationData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
