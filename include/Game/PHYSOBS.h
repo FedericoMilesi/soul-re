@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "Game/GAMELOOP.h"
+#include "Game/STATE.h"
 
 // size: 0x8
 typedef struct PhysObSplinter {
@@ -57,18 +58,6 @@ typedef struct PhysObWeaponProperties {
     // offset: 0008 (28 bytes)
     struct PhysObWeaponAttributes WeaponAttributes;
 } PhysObWeaponProperties;
-
-// size: 0x10
-typedef struct evObjectBirthProjectileData {
-    // offset: 0000 (668 bytes)
-    struct _Instance *instance;
-    // offset: 0004
-    int joint;
-    // offset: 0008
-    int type;
-    // offset: 000C (668 bytes)
-    struct _Instance *birthInstance;
-} evObjectBirthProjectileData;
 
 evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint, int type);
 void CollidePhysicalObject(Instance *instance, GameTracker *gameTracker);

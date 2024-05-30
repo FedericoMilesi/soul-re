@@ -547,7 +547,22 @@ intptr_t SetActionPlayHostAnimationData(Instance *instance, Instance *host, int 
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectBirthProjectileData);
+intptr_t SetObjectBirthProjectileData(Instance *instance, int joint, int type)
+{
+    evObjectBirthProjectileData *Ptr;
+
+    Ptr = (evObjectBirthProjectileData *)CIRC_Alloc(sizeof(evObjectBirthProjectileData));
+
+    Ptr->instance = instance;
+
+    Ptr->joint = joint;
+
+    Ptr->type = type;
+
+    Ptr->birthInstance = NULL;
+
+    return (intptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetShadowSegmentData);
 
