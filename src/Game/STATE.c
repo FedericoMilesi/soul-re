@@ -500,7 +500,18 @@ intptr_t SetObjectAbsorbData(Instance *force, unsigned short node, unsigned shor
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetControlSaveDataData);
+intptr_t SetControlSaveDataData(long length, void *data)
+{
+    evControlSaveDataData *Ptr;
+
+    Ptr = (evControlSaveDataData *)CIRC_Alloc(sizeof(evControlSaveDataData));
+
+    Ptr->length = length;
+
+    Ptr->data = data;
+
+    return (intptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectIdleData);
 
