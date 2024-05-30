@@ -351,6 +351,20 @@ typedef struct evControlInitIdleData {
     int frames;
 } evControlInitIdleData;
 
+// size: 0xA
+typedef struct evObjectDraftData {
+    // offset: 0000
+    short force;
+    // offset: 0002
+    unsigned short radius;
+    // offset: 0004
+    unsigned short radiusCoef;
+    // offset: 0006
+    unsigned short height;
+    // offset: 0008
+    unsigned short maxVelocity;
+} evObjectDraftData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);

@@ -467,7 +467,23 @@ intptr_t SetControlInitIdleData(int mode, long frame, long frames)
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectDraftData);
+intptr_t SetObjectDraftData(short force, unsigned short radius, unsigned short radiusCoef, unsigned short height, int maxVelocity)
+{
+    evObjectDraftData *Ptr;
+
+    Ptr = (evObjectDraftData *)CIRC_Alloc(sizeof(evObjectDraftData));
+
+    Ptr->force = force;
+
+    Ptr->radius = radius;
+    Ptr->radiusCoef = radiusCoef;
+
+    Ptr->height = height;
+
+    Ptr->maxVelocity = maxVelocity;
+
+    return (intptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectAbsorbData);
 
