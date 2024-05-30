@@ -326,7 +326,17 @@ void MATH3D_SetUnityMatrix(MATRIX *mat)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", AngleMoveToward);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", AngleDiff);
+short AngleDiff(short current, short destination)
+{
+    current = (destination - current) & 0xFFF;
+
+    if (current >= 2049)
+    {
+        current |= 0xF000;
+    }
+
+    return current;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_AngleFromPosToPos);
 
