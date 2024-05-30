@@ -14,5 +14,6 @@ void EnterCriticalSection();
 void ExitCriticalSection();
 int GetRCnt(int);
 void ClearOTagR(unsigned long *, int);
+long ratan2(long y, long x);
 
 #endif

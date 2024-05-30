@@ -183,7 +183,28 @@ long MATH3D_DistanceBetweenPositions(Position *pos1, Position *pos2)
     return MATH3D_FastSqrt0(MATH3D_SquareLength((pos2->x - pos1->x), (pos2->y - pos1->y), (pos2->z - pos1->z)));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_AngleBetweenVectors);
+short MATH3D_AngleBetweenVectors(SVector *vector1, SVector *vector2)
+{
+    long projection_length;
+
+    if ((vector1->x == vector2->x) && (vector1->y == vector2->y) && (vector1->z == vector2->z))
+    {
+        return 0;
+    }
+
+    projection_length = (((vector1->x * vector2->x) + (vector1->y * vector2->y) + (vector1->z * vector2->z)) + 2048) >> 12;
+
+    if (projection_length >= 4097)
+    {
+        projection_length = 4096;
+    }
+    else if (projection_length < -4096)
+    {
+        projection_length = -4096;
+    }
+
+    return (short)ratan2(MATH3D_FastSqrt0(16777216 - projection_length * projection_length), projection_length);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_RotMatAboutVec);
 
