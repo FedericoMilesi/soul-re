@@ -485,7 +485,20 @@ intptr_t SetObjectDraftData(short force, unsigned short radius, unsigned short r
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectAbsorbData);
+intptr_t SetObjectAbsorbData(Instance *force, unsigned short node, unsigned short steps)
+{
+    evObjectAbsorbData *Ptr;
+
+    Ptr = (evObjectAbsorbData *)CIRC_Alloc(sizeof(evObjectAbsorbData));
+
+    Ptr->force = force;
+
+    Ptr->node = node;
+
+    Ptr->steps = steps;
+
+    return (intptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetControlSaveDataData);
 
