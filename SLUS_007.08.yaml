@@ -199,6 +199,8 @@ segments:
       - [0x0C0BA0, sdata]
       - [0x0C0D6C, .sdata, Game/COLLIDE]
       - [0x0C0DDC, sdata]
+      - [0x0C1010, .sdata, Game/INSTANCE]
+      - [0x0C10C8, sdata]
       - [0x0C186C, .sdata, Game/VM]
       - [0x0C1874, sdata]
       - [0x0C229C, .sdata, Game/MONSTER/HUMAN]

@@ -9,6 +9,7 @@
 #include "Game/PSX/SUPPORT.h"
 #include "Game/G2/QUATG2.h"
 #include "Game/MONSTER/HUMAN.h"
+#include "Game/CAMERA.h"
 
 void INSTANCE_BuildStaticShadow();
 int INSTANCE_InPlane(Instance *instance, int plane);
@@ -85,7 +86,112 @@ void INSTANCE_DeactivatedProcess()
 {
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_DeactivateFarInstances);
+void INSTANCE_DeactivateFarInstances(GameTracker *gameTracker)
+{
+    InstanceList *instanceList;
+    Instance *instance;
+    SVECTOR *line;
+    long distSq;
+    int numInstances;
+    int numToProcess;
+    int cntInst;
+    static int lastInst = 0;
+
+    line = (SVECTOR *)getScratchAddr(0);
+
+    instanceList = gameTracker->instanceList;
+    numInstances = instanceList->numInstances;
+    instance = instanceList->first;
+    numToProcess = (numInstances >> 3) + 1;
+
+    if (numInstances <= lastInst)
+    {
+        lastInst = 0;
+    }
+
+    cntInst = lastInst;
+    lastInst = lastInst + numToProcess;
+
+    if (numInstances <= lastInst)
+    {
+        lastInst = 0;
+    }
+
+    while (cntInst != 0)
+    {
+        instance = instance->next;
+        cntInst--;
+    }
+
+    for (; instance != NULL; instance = instance->next, numToProcess--)
+    {
+        if (numToProcess == 0)
+        {
+            return;
+        }
+
+        if ((instance->flags2 & 0x80) || (instance->object->oflags & 0x10000) || (INSTANCE_Query(instance, 0x23) != 0) ||
+            (INSTANCE_Query(instance, 0x2F) != 0) || (instance->LinkParent != NULL) || (instance->matrix == NULL))
+        {
+            if ((instance->flags2 & 1) != 0)
+            {
+                INSTANCE_Reactivate(instance);
+            }
+        }
+        else
+        {
+            line->vx = instance->position.x - theCamera.core.position.x;
+            line->vy = instance->position.y - theCamera.core.position.y;
+            line->vz = instance->position.z - theCamera.core.position.z;
+            distSq = line->vx * line->vx;
+            cntInst = distSq + (line->vy * line->vy);
+            cntInst += (line->vz * line->vz);
+
+            if ((instance->flags & 0x200) != 0)
+            {
+                if (cntInst > (instance->object->vvRemoveDist * instance->object->vvRemoveDist))
+                {
+                    if ((instance->flags2 & 1) == 0)
+                    {
+                        INSTANCE_Deactivate(instance);
+                    }
+                }
+                else if ((instance->flags2 & 1) != 0)
+                {
+                    INSTANCE_Reactivate(instance);
+                }
+            }
+            else if ((instance->flags2 & 0x80000) == 0)
+            {
+                if (cntInst > (instance->object->removeDist * instance->object->removeDist))
+                {
+                    if ((instance->flags2 & 1) == 0)
+                    {
+                        INSTANCE_Deactivate(instance);
+                    }
+                }
+                else if ((instance->flags2 & 1) != 0)
+                {
+                    INSTANCE_Reactivate(instance);
+                }
+            }
+            else
+            {
+                if (cntInst > (gameTracker->defRemoveDist * gameTracker->defRemoveDist))
+                {
+                    if ((instance->flags2 & 1) == 0)
+                    {
+                        INSTANCE_Deactivate(instance);
+                    }
+                }
+                else if ((instance->flags2 & 1) != 0)
+                {
+                    INSTANCE_Reactivate(instance);
+                }
+            }
+        }
+    }
+}
 
 void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool)
 {
@@ -158,8 +264,44 @@ Instance *INSTANCE_NewInstance(InstanceList *list)
     return NULL;
 }
 
-long INSTANCE_InstanceGroupNumber(Instance *instance);
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_InstanceGroupNumber);
+long INSTANCE_InstanceGroupNumber(Instance *instance)
+{
+    long result;
+
+    result = 0;
+
+    if (((instance->object->oflags & 0x80)) && (!(instance->flags & 0x8000)))
+    {
+        result = 0x1;
+    }
+
+    if (((instance->object->oflags & 0x20)) && (!(instance->flags & 0x2000)))
+    {
+        result |= 0x2;
+    }
+
+    if (((instance->object->oflags & 0x40)) && (!(instance->flags & 0x4000)))
+    {
+        result |= 0x4;
+    }
+
+    if (((instance->object->oflags & 0x10)) && (!(instance->flags & 0x1000)))
+    {
+        result |= 0x10;
+    }
+
+    if ((instance->object->oflags & 0x1))
+    {
+        result |= 0x8;
+    }
+    else if (strcmp(instance->object->name, "raziel__") != 0)
+    {
+        result &= ~0x2;
+        result &= ~0x1;
+    }
+
+    return result;
+}
 
 void INSTANCE_InsertInstanceGroup(InstanceList *list, Instance *instance)
 {
@@ -474,6 +616,10 @@ long INSTANCE_GetSplineFrameNumber(Instance *instance, MultiSpline *spline)
     return SCRIPT_GetSplineFrameNumber(instance, SCRIPT_GetPosSplineDef(instance, spline, 0, 0));
 }
 
+/*TODO: migrate to INSTANCE_ProcessFunctions*/
+static char D_800D0820[] = "Spline %s%ld playto %d preveFram=%ld frame=%ld endOfSpline=%ld, maxFrames=%ld\n";
+static char D_800D0870[] = "Spline %s%d : clip(%d,%d) prevFrame=%d, frame=%d\n";
+static char D_800D08A4[] = "Spline %s%d prevFrame=%d, frame=%d\n";
 INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_ProcessFunctions);
 
 Instance *INSTANCE_BirthObject(Instance *parent, Object *object, int modelNum)
