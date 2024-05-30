@@ -414,7 +414,28 @@ intptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectThrowData);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectBreakOffData);
+intptr_t SetObjectBreakOffData(Instance *force, short node, short distance, short animation, int frame, int type, int action)
+{
+    evObjectBreakOffData *Ptr;
+
+    Ptr = (evObjectBreakOffData *)CIRC_Alloc(sizeof(evObjectBreakOffData));
+
+    Ptr->force = force;
+
+    Ptr->node = node;
+
+    Ptr->distance = distance;
+
+    Ptr->animation = animation;
+
+    Ptr->frame = frame;
+
+    Ptr->type = type;
+
+    Ptr->action = action;
+
+    return (intptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetControlInitHangData);
 

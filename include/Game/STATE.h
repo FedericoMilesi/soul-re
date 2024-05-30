@@ -313,6 +313,24 @@ typedef struct evAnimationControllerDoneData {
     int data;
 } evAnimationControllerDoneData;
 
+// size: 0x10
+typedef struct evObjectBreakOffData {
+    // offset: 0000 (668 bytes)
+    struct _Instance *force;
+    // offset: 0004
+    unsigned short node;
+    // offset: 0006
+    short distance;
+    // offset: 0008
+    unsigned short animation;
+    // offset: 000A
+    unsigned short frame;
+    // offset: 000C
+    unsigned short type;
+    // offset: 000E
+    unsigned short action;
+} evObjectBreakOffData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
