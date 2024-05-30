@@ -380,7 +380,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_veclen2);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_RotateAxisToVector);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_ConeDetect);
+int MATH3D_ConeDetect(SVector *pos, int arc, int elevation)
+{
+    long x;
+    long y;
+
+    x = pos->x;
+    y = -pos->y;
+
+    if (((short)MATH3D_FastAtan2(abs(x), y) < arc) && ((short)MATH3D_FastAtan2(abs(pos->z), MATH3D_LengthXY(x, y)) < elevation))
+    {
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_CrossProduct);
 
