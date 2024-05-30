@@ -1,7 +1,47 @@
 #include "common.h"
 #include "Game/MATH3D.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_Sort3VectorCoords);
+void MATH3D_Sort3VectorCoords(long *a, long *b, long *c)
+{
+    long a1;
+    long b1;
+    long c1;
+
+    a1 = *a;
+    b1 = *b;
+    c1 = *c;
+
+    if (a1 < b1)
+    {
+        if (c1 < a1)
+        {
+            *c = b1;
+            *b = a1;
+            *a = c1;
+        }
+        else if (c1 < b1)
+        {
+            *c = b1;
+            *b = c1;
+        }
+    }
+    else if (c1 < b1)
+    {
+        *a = c1;
+        *c = a1;
+    }
+    else if (c1 < a1)
+    {
+        *a = b1;
+        *b = c1;
+        *c = a1;
+    }
+    else
+    {
+        *a = b1;
+        *b = a1;
+    }
+}
 
 long MATH3D_LengthXYZ(long x, long y, long z)
 {
