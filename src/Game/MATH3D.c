@@ -369,7 +369,12 @@ short MATH3D_ElevationFromPosToPos(Position *from, Position *to)
     return -(ratan2(to->z - from->z, (short)MATH3D_FastSqrt0((dx * dx) + (dy * dy)))) & 0xFFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_RotationFromPosToPos);
+void MATH3D_RotationFromPosToPos(Position *from, Position *to, Rotation *rot)
+{
+    rot->x = MATH3D_ElevationFromPosToPos(from, to);
+    rot->y = 0;
+    rot->z = MATH3D_AngleFromPosToPos(from, to);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_veclen2);
 
