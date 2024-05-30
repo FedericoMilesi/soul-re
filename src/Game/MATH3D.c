@@ -396,6 +396,11 @@ int MATH3D_ConeDetect(SVector *pos, int arc, int elevation)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_CrossProduct);
+void MATH3D_CrossProduct(SVector *t, SVector *r, SVector *s)
+{
+    t->x = ((r->y * s->z) - (r->z * s->y)) >> 12;
+    t->y = -(((r->x * s->z) - (r->z * s->x)) >> 12);
+    t->z = ((r->x * s->y) - (r->y * s->x)) >> 12;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_SquareLength);
