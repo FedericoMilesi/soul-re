@@ -4,10 +4,39 @@
 #include "Game/MONSTER/MONTABLE.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONMSG.h"
+#include "Game/MONSTER/HUMAN.h"
 #include "Game/MONSTER.h"
 #include "Game/GAMEPAD.h"
+#include "Game/SAVEINFO.h"
+#include "Game/PSX/SUPPORT.h"
 
-typedef void (*MONTABLE_InitFunc)(Instance *); // not from decls.h
+void HUMAN_CleanUp(Instance *instance);
+uintptr_t HUMAN_Query(Instance *instance, unsigned long query);
+void HUMAN_IdleEntry(Instance *instance);
+void HUMAN_Idle(Instance *instance);
+void HUMAN_Flee(Instance *instance);
+
+MonsterStateChoice HUMAN_StateChoiceTable[] = {
+    { 9, { HUMAN_StunnedEntry, HUMAN_Stunned } },
+    { 0x17, { HUMAN_DeadEntry, HUMAN_Dead } },
+    { 0x1B, { HUMAN_EmbraceEntry, HUMAN_Embrace } },
+    { 2, { HUMAN_IdleEntry, HUMAN_Idle } },
+    { 0x13, { MON_FleeEntry, HUMAN_Flee } },
+    { -1, { NULL, NULL } },
+};
+
+MonsterFunctionTable HUMAN_FunctionTable = {
+    HUMAN_Init,
+    HUMAN_CleanUp,
+    NULL,
+    HUMAN_Query,
+    NULL,
+    HUMAN_StateChoiceTable,
+    monVersion,
+    NULL,
+};
+
+typedef void (*MONTABLE_InitFunc)(Instance *);
 
 void HUMAN_WaitForWeapon(Instance *instance, GameTracker *gameTracker)
 {
@@ -55,14 +84,53 @@ Instance *HUMAN_CreateWeapon(Instance *instance, int weaponid, int segment)
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/HUMAN", HUMAN_Init);
+void HUMAN_Init(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+
+    mv = (MonsterVars *)instance->extraData;
+    ma = (MonsterAttributes *)instance->data;
+
+    if (!(ma->whatAmI & 0x2000))
+    {
+        int opinion;
+        MonsterAllegiances *allegiances;
+
+        (void)opinion;
+
+        allegiances = mv->subAttr->allegiances;
+        if (GlobalSave->humanOpinionOfRaziel > 0)
+        {
+            allegiances->enemies &= ~0x1;
+            allegiances->gods |= 0x1;
+            allegiances->allies |= 0x1;
+        }
+        else
+        {
+            allegiances->gods &= ~0x1;
+            allegiances->allies &= ~0x1;
+            allegiances->enemies |= 0x1;
+        }
+    }
+    if (strcmpi(instance->object->name, "vlgrb___") == 0)
+    {
+        mv->auxFlags |= 0x20;
+    }
+    MON_DefaultInit(instance);
+    mv->soulJuice = 16384;
+    mv->mvFlags |= 0x2000;
+}
+
+/*Unused*/ static char D_800D1AC8[] = "";
+/*Unused*/ static char D_800D1ACC[] = "Switching possession to %s\n";
 
 void HUMAN_CleanUp(Instance *instance)
 {
     MON_CleanUp(instance);
 }
 
-unsigned long HUMAN_Query(Instance *instance, unsigned long query)
+uintptr_t HUMAN_Query(Instance *instance, unsigned long query)
 {
     MonsterVars *mv;
     MonsterAttributes *ma;
@@ -146,7 +214,7 @@ void HUMAN_Dead(Instance *instance)
 
     mv = (MonsterVars *)instance->extraData;
 
-    instance->fadeValue = (short)(MON_GetTime(instance) - mv->damageTimer);
+    instance->fadeValue = (MON_GetTime(instance) - mv->damageTimer);
 
     if (mv->causeOfDeath == 6)
     {

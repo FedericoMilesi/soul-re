@@ -9,17 +9,25 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("data_file")
     args = parser.parse_args()
-    data = args.data_file
-    c_file = data.replace('asm/data/', 'src/', 1).replace('.data.s', '.c')
-    rodata = data.replace('.data.s', '.rodata.s')
-    sdata = data.replace('.data.s', '.sdata.s')
+
+    if args.data_file.endswith('.sdata.s'):
+        c_file = args.data_file.replace('asm/data/', 'src/', 1).replace('.sdata.s', '.c')
+        rodata = args.data_file.replace('.sdata.s', '.rodata.s')
+        sdata = args.data_file
+        data = args.data_file.replace('.sdata.s', '.data.s')
+    else:
+        c_file = args.data_file.replace('asm/data/', 'src/', 1).replace('.data.s', '.c')
+        rodata = args.data_file.replace('.data.s', '.rodata.s')
+        sdata = args.data_file.replace('.data.s', '.sdata.s')
+        data = args.data_file
 
     filenames = []
     if os.path.isfile(rodata):
         filenames.append(rodata)
     if os.path.isfile(sdata):
         filenames.append(sdata)
-    filenames.append(data)
+    if os.path.isfile(data):
+        filenames.append(data)
 
     f = open('data.s', 'w')
     for fname in filenames:
@@ -43,3 +51,5 @@ if __name__ == '__main__':
     f = open('data.c', 'w')
     f.write(decomp)
     f.close()
+
+    os.remove('data.c.m2c')

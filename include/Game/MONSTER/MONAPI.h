@@ -502,7 +502,7 @@ typedef struct _MONAPI_Regenerator {
 } MONAPI_Regenerator;
 
 void MonsterProcess(Instance *instance, GameTracker *gameTracker);
-unsigned long MonsterQuery(Instance *instance, unsigned long query);
+uintptr_t MonsterQuery(Instance *instance, unsigned long query);
 void MONAPI_ResetLookAround(Instance *instance);
 void MONAPI_SetLookAround(Instance *instance);
 long MONAPI_OkToLookAround(Instance *instance);

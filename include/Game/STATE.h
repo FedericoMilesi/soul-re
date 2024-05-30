@@ -8,7 +8,7 @@ typedef struct __Event {
     // offset: 0000
     int ID;
     // offset: 0004
-    int Data;
+    intptr_t Data;
 } Message;
 
 // size: 0x88
@@ -315,16 +315,16 @@ typedef struct evAnimationControllerDoneData {
 
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
-uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
-uintptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type);
-uintptr_t SetObjectData(int x, int y, int PathNumber, Instance *Force, int node);
-int SetObjectAbsorbData(Instance *force, unsigned short node, unsigned short steps);
+intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
+intptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type);
+intptr_t SetObjectData(int x, int y, int PathNumber, Instance *Force, int node);
+intptr_t SetObjectAbsorbData(Instance *force, unsigned short node, unsigned short steps);
 void G2EmulationInstanceSetMode(Instance *instance, int CurrentSection, int Mode);
 void G2EmulationInstanceSetAnimation(Instance *instance, int CurrentSection, int NewAnim, int NewFrame, int Frames);
 int G2EmulationInstanceQueryFrame(Instance *instance, int CurrentSection);
 int G2EmulationInstanceQueryAnimation(Instance *instance, int CurrentSection);
 void G2EmulationInstancePlayAnimation(Instance *instance);
-uintptr_t SetPositionData(int x, int y, int z);
+intptr_t SetPositionData(int x, int y, int z);
 void *CIRC_Alloc(int size);
 void InitMessageQueue(MessageQueue *In);
 
