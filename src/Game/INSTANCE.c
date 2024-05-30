@@ -6,7 +6,7 @@
 #include "Game/MEMPACK.h"
 #include "Game/MATH3D.h"
 #include "Game/LIGHT3D.h"
-#include "Game/SUPPORT.h"
+#include "Game/PSX/SUPPORT.h"
 #include "Game/G2/QUATG2.h"
 #include "Game/MONSTER/HUMAN.h"
 
@@ -602,9 +602,9 @@ void INSTANCE_KillInstance(Instance *instance)
     }
 }
 
-unsigned long INSTANCE_Query(Instance *Inst, int Query)
+uintptr_t INSTANCE_Query(Instance *Inst, int Query)
 {
-    unsigned long (*Func)(Instance *, unsigned long);
+    uintptr_t(*Func)(Instance *, unsigned long);
 
     Func = Inst->queryFunc;
 
@@ -630,7 +630,7 @@ void INSTANCE_Post(Instance *Inst, int Message, intptr_t Data)
     }
 }
 
-void INSTANCE_Broadcast(Instance *sender, long whatAmIMask, int Message, int Data)
+void INSTANCE_Broadcast(Instance *sender, long whatAmIMask, int Message, intptr_t Data)
 {
     Instance *instance;
     int plane;

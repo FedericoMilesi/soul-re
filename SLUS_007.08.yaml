@@ -179,8 +179,8 @@ segments:
 
       - [0x0B8890, .data, Game/DEBUG]
       - [0x0BA7C0, data, Game/FONT]
-      - [0x0BA9F4, data, KAIN2]
-      - [0x0BCC5C, data, Game/MONSTER/HUMAN]
+      - [0x0BA9F4, data]
+      - [0x0BCC5C, .data, Game/MONSTER/HUMAN]
       - [0x0BCCA4, data, Game/MONSTER/MISSILE]
       - [0x0BCCAC, data, Game/MONSTER/MONMSG]
       - [0x0BCCD0, data, Game/MONSTER/MONSTER]
@@ -196,13 +196,15 @@ segments:
       - [0x0BD0BC, data, LIBS]
 
       - [0x0BFD9C, .sdata, Game/DEBUG]
-      - [0x0C0BA0, sdata, 0C0BA0]
+      - [0x0C0BA0, sdata]
       - [0x0C0D6C, .sdata, Game/COLLIDE]
-      - [0x0C0DDC, sdata, 0C0DDC]
+      - [0x0C0DDC, sdata]
       - [0x0C186C, .sdata, Game/VM]
-      - [0x0C1874, sdata, 0C1874]
+      - [0x0C1874, sdata]
+      - [0x0C229C, .sdata, Game/MONSTER/HUMAN]
+      - [0x0C22E8, sdata]
       - [0x0C2348, .sdata, Game/MONSTER/MONTABLE]
-      - [0x0C2368, sdata, 0C2368]
+      - [0x0C2368, sdata]
 
       - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: KAIN2}
 

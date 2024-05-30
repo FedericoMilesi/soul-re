@@ -301,7 +301,7 @@ void MON_UnlinkFromRaziel(Instance *instance)
         instance->rotation.z = data->z + 2048;
     }
 
-    INSTANCE_Post(enemy, 0x1000006, (int)instance);
+    INSTANCE_Post(enemy, 0x1000006, (intptr_t)instance);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_BurnInAir);

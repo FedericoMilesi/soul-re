@@ -80,7 +80,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/STATE", CIRC_Alloc);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetCollideInfoData);
 
-uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames)
+intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames)
 {
     evMonsterHitData *Ptr;
 
@@ -95,10 +95,10 @@ uintptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int 
     Ptr->knockBackDistance = knockBackDistance;
     Ptr->knockBackDuration = knockBackFrames;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetMonsterThrownData(Instance *Sender, Rotation *Direction, int Power)
+intptr_t SetMonsterThrownData(Instance *Sender, Rotation *Direction, int Power)
 {
     evMonsterThrownData *Ptr;
 
@@ -112,10 +112,10 @@ uintptr_t SetMonsterThrownData(Instance *Sender, Rotation *Direction, int Power)
 
     Ptr->power = Power;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetMonsterAlarmData(Instance *sender, Position *position, int type)
+intptr_t SetMonsterAlarmData(Instance *sender, Position *position, int type)
 {
     evMonsterAlarmData *Ptr;
 
@@ -129,10 +129,10 @@ uintptr_t SetMonsterAlarmData(Instance *sender, Position *position, int type)
 
     Ptr->type = type;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetMonsterSoulSuckData(Instance *Sender, int x, int y, int z)
+intptr_t SetMonsterSoulSuckData(Instance *Sender, int x, int y, int z)
 {
     evMonsterSoulSuckData *Ptr;
 
@@ -144,10 +144,10 @@ uintptr_t SetMonsterSoulSuckData(Instance *Sender, int x, int y, int z)
     Ptr->Destination.y = y;
     Ptr->Destination.z = z;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetMonsterImpaleData(Instance *weapon, Rotation *direction, Position *position, int distance)
+intptr_t SetMonsterImpaleData(Instance *weapon, Rotation *direction, Position *position, int distance)
 {
     evMonsterImpaleData *Ptr;
 
@@ -165,10 +165,10 @@ uintptr_t SetMonsterImpaleData(Instance *weapon, Rotation *direction, Position *
 
     Ptr->distance = distance;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetObjectData(int x, int y, int PathNumber, Instance *Force, int node)
+intptr_t SetObjectData(int x, int y, int PathNumber, Instance *Force, int node)
 {
     evObjectData *Ptr;
 
@@ -183,10 +183,10 @@ uintptr_t SetObjectData(int x, int y, int PathNumber, Instance *Force, int node)
 
     Ptr->Force = Force;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetPositionData(int x, int y, int z)
+intptr_t SetPositionData(int x, int y, int z)
 {
     evPositionData *Ptr;
 
@@ -196,10 +196,10 @@ uintptr_t SetPositionData(int x, int y, int z)
     Ptr->y = y;
     Ptr->z = z;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetPhysicsGravityData(int UpperOffset, int LowerOffset, int x, int y, int z, int slope)
+intptr_t SetPhysicsGravityData(int UpperOffset, int LowerOffset, int x, int y, int z, int slope)
 {
     evPhysicsGravityData *Ptr;
 
@@ -214,10 +214,10 @@ uintptr_t SetPhysicsGravityData(int UpperOffset, int LowerOffset, int x, int y, 
 
     Ptr->slipSlope = slope;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetPhysicsEdgeData(int UpperOffset, int ForwardOffset, int AboveOffset, int x, int y, int z, SVector *Normal1, SVector *Normal2, SVector *Delta)
+intptr_t SetPhysicsEdgeData(int UpperOffset, int ForwardOffset, int AboveOffset, int x, int y, int z, SVector *Normal1, SVector *Normal2, SVector *Delta)
 {
     evPhysicsEdgeData *Ptr;
 
@@ -236,10 +236,10 @@ uintptr_t SetPhysicsEdgeData(int UpperOffset, int ForwardOffset, int AboveOffset
 
     Ptr->Delta = Delta;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetPhysicsSwimData(int CheckDepth, SVector *iVelocity, int SwimDepth, int WadeDepth, int TreadDepth)
+intptr_t SetPhysicsSwimData(int CheckDepth, SVector *iVelocity, int SwimDepth, int WadeDepth, int TreadDepth)
 {
     evPhysicsSwimData *Ptr;
 
@@ -253,10 +253,10 @@ uintptr_t SetPhysicsSwimData(int CheckDepth, SVector *iVelocity, int SwimDepth, 
     Ptr->WadeDepth = WadeDepth;
     Ptr->TreadDepth = TreadDepth;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetPhysicsDropOffData(int xOffset, int yOffset, int DropOffset, int slipSlope, int UpperOffset)
+intptr_t SetPhysicsDropOffData(int xOffset, int yOffset, int DropOffset, int slipSlope, int UpperOffset)
 {
     evPhysicsDropOffData *Ptr;
 
@@ -271,10 +271,10 @@ uintptr_t SetPhysicsDropOffData(int xOffset, int yOffset, int DropOffset, int sl
 
     Ptr->UpperOffset = UpperOffset;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetPhysicsSlideData(int Segment, int ForwardVectorX, int ForwardVectorY, int ForwardVectorZ, int DropOffset, int UpperOffset, int Height)
+intptr_t SetPhysicsSlideData(int Segment, int ForwardVectorX, int ForwardVectorY, int ForwardVectorZ, int DropOffset, int UpperOffset, int Height)
 {
     evPhysicsSlideData *Ptr;
 
@@ -291,10 +291,10 @@ uintptr_t SetPhysicsSlideData(int Segment, int ForwardVectorX, int ForwardVector
 
     Ptr->Height = Height;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetPhysicsWallCrawlData(int Segment, int Length, int ForwardOffset, int NormalDistance)
+intptr_t SetPhysicsWallCrawlData(int Segment, int Length, int ForwardOffset, int NormalDistance)
 {
     evPhysicsWallCrawlData *Ptr;
 
@@ -308,10 +308,10 @@ uintptr_t SetPhysicsWallCrawlData(int Segment, int Length, int ForwardOffset, in
 
     Ptr->NormalDistance = NormalDistance;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetPhysicsLinkedMoveData(Instance *instance, int segment, SVector *posDelta, SVector *rotDelta)
+intptr_t SetPhysicsLinkedMoveData(Instance *instance, int segment, SVector *posDelta, SVector *rotDelta)
 {
     evPhysicsLinkedMoveData *Ptr;
 
@@ -331,10 +331,10 @@ uintptr_t SetPhysicsLinkedMoveData(Instance *instance, int segment, SVector *pos
         Ptr->rotDelta = *rotDelta;
     }
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetPhysicsDropHeightData(Position *offset, int dropOffset, int mode)
+intptr_t SetPhysicsDropHeightData(Position *offset, int dropOffset, int mode)
 {
     evPhysicsDropHeightData *ptr;
 
@@ -348,10 +348,10 @@ uintptr_t SetPhysicsDropHeightData(Position *offset, int dropOffset, int mode)
     ptr->origin.y = offset->y;
     ptr->origin.z = offset->z + 25;
 
-    return (uintptr_t)ptr;
+    return (intptr_t)ptr;
 }
 
-uintptr_t SetAnimationControllerDoneData(Instance *instance, long segment, long type, int data)
+intptr_t SetAnimationControllerDoneData(Instance *instance, long segment, long type, int data)
 {
     evAnimationControllerDoneData *Ptr;
 
@@ -365,10 +365,10 @@ uintptr_t SetAnimationControllerDoneData(Instance *instance, long segment, long 
 
     Ptr->data = data;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetAnimationInstanceSwitchData(Instance *instance, int anim, int frame, int frames, int mode)
+intptr_t SetAnimationInstanceSwitchData(Instance *instance, int anim, int frame, int frames, int mode)
 {
     evAnimationInstanceSwitchData *Ptr;
 
@@ -384,10 +384,10 @@ uintptr_t SetAnimationInstanceSwitchData(Instance *instance, int anim, int frame
 
     Ptr->mode = mode;
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
-uintptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type)
+intptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type)
 {
     evFXHitData *Ptr;
 
@@ -399,17 +399,17 @@ uintptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type)
 
     if (hitter != NULL)
     {
-        Ptr->location.x = (short)hitter->matrix[segment].t[0];
-        Ptr->velocity.x = Ptr->location.x - (short)hitter->oldMatrix[segment].t[0];
+        Ptr->location.x = hitter->matrix[segment].t[0];
+        Ptr->velocity.x = Ptr->location.x - hitter->oldMatrix[segment].t[0];
 
-        Ptr->location.y = (short)hitter->matrix[segment].t[1];
-        Ptr->velocity.y = Ptr->location.y - (short)hitter->oldMatrix[segment].t[1];
+        Ptr->location.y = hitter->matrix[segment].t[1];
+        Ptr->velocity.y = Ptr->location.y - hitter->oldMatrix[segment].t[1];
 
-        Ptr->location.z = (short)hitter->matrix[segment].t[2];
-        Ptr->velocity.z = Ptr->location.z - (short)hitter->oldMatrix[segment].t[2];
+        Ptr->location.z = hitter->matrix[segment].t[2];
+        Ptr->velocity.z = Ptr->location.z - hitter->oldMatrix[segment].t[2];
     }
 
-    return (uintptr_t)Ptr;
+    return (intptr_t)Ptr;
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectThrowData);

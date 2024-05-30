@@ -214,7 +214,7 @@ void SendHitObject(Instance *instance, Instance *hit, int type)
         data->instance = hit;
         data->hitType = type;
 
-        INSTANCE_Post(instance, 0x1000008, (int)data);
+        INSTANCE_Post(instance, 0x1000008, (intptr_t)data);
     }
 }
 

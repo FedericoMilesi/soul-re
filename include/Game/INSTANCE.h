@@ -126,7 +126,7 @@ struct _Instance {
     // offset: 0114
     void *additionalDrawFunc;
     // offset: 0118
-    unsigned long (*queryFunc)();
+    uintptr_t(*queryFunc)();
     // offset: 011C
     void (*messageFunc)();
     // offset: 0120 (6 bytes)
@@ -264,9 +264,9 @@ void INSTANCE_UnlinkFromParent(Instance *instance);
 Instance *INSTANCE_BirthObject(Instance *parent, Object *object, int modelNum);
 void INSTANCE_Post(Instance *Inst, int Message, intptr_t Data);
 unsigned long INSTANCE_DefaultAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, Instance *instance);
-unsigned long INSTANCE_Query(Instance *Inst, int Query);
+uintptr_t INSTANCE_Query(Instance *Inst, int Query);
 void INSTANCE_LinkToParent(Instance *instance, Instance *parent, int node);
 void INSTANCE_KillInstance(Instance *instance);
-void INSTANCE_Broadcast(Instance *sender, long whatAmIMask, int Message, int Data);
+void INSTANCE_Broadcast(Instance *sender, long whatAmIMask, int Message, intptr_t Data);
 
 #endif
