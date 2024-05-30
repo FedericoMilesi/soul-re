@@ -174,7 +174,112 @@ short MATH3D_FastAtan2(long y, long x)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_FastSqrt);
+long MATH3D_FastSqrt(long square)
+{
+    unsigned long result;
+    long remainder;
+    long mask;
+    long shift;
+    long mask_squared;
+    long result_shift;
+
+    shift = 31;
+
+    if (square != 0)
+    {
+        mask = 0x80000000;
+
+        if (square >= 0)
+        {
+            do
+            {
+                mask >>= 1;
+
+                shift--;
+            } while (!(mask & square));
+        }
+
+        shift >>= 1;
+
+        result = 1 << (shift + 6);
+
+        mask = result;
+
+        result_shift = 1 << (shift << 1);
+
+        mask_squared = result_shift;
+
+        shift--;
+
+        square -= result_shift;
+
+        while (shift != -1)
+        {
+            mask_squared >>= 2;
+
+            remainder = result_shift + mask_squared;
+            remainder = square - remainder;
+
+            mask >>= 1;
+
+            if (remainder < 0)
+            {
+                result_shift >>= 1;
+            }
+            else
+            {
+                square = remainder;
+
+                remainder = result_shift >> 1;
+
+                result_shift = remainder + mask_squared;
+
+                result |= mask;
+            }
+
+            shift--;
+        }
+
+        mask_squared >>= 2;
+
+        square <<= 12;
+
+        result_shift <<= 12;
+
+        mask_squared = 4096;
+
+        mask >>= 1;
+
+        while (mask != 0)
+        {
+            mask_squared >>= 2;
+
+            remainder = result_shift + mask_squared;
+            remainder = square - remainder;
+
+            if (remainder < 0)
+            {
+                result_shift >>= 1;
+            }
+            else
+            {
+                square = remainder;
+
+                remainder = result_shift >> 1;
+
+                result_shift = remainder + mask_squared;
+
+                result |= mask;
+            }
+
+            mask >>= 1;
+        }
+
+        return result;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_FastSqrt0);
 
