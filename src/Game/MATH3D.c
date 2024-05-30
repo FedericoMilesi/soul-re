@@ -338,7 +338,10 @@ short AngleDiff(short current, short destination)
     return current;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_AngleFromPosToPos);
+short MATH3D_AngleFromPosToPos(Position *from, Position *to)
+{
+    return (ratan2(from->y - to->y, from->x - to->x) + 3072) & 0xFFF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_ZYXtoXYZ);
 
