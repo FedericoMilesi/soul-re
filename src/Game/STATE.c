@@ -564,7 +564,16 @@ intptr_t SetObjectBirthProjectileData(Instance *instance, int joint, int type)
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetShadowSegmentData);
+intptr_t SetShadowSegmentData(unsigned long total)
+{
+    evShadowSegmentData *Ptr;
+
+    Ptr = (evShadowSegmentData *)CIRC_Alloc(sizeof(evShadowSegmentData));
+
+    Ptr->totalShadowSegments = total;
+
+    return (intptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInit);
 

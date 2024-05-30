@@ -411,6 +411,14 @@ typedef struct evObjectBirthProjectileData {
     struct _Instance *birthInstance;
 } evObjectBirthProjectileData;
 
+// size: 0xC
+typedef struct evShadowSegmentData {
+    // offset: 0000
+    unsigned long totalShadowSegments;
+    // offset: 0004 (8 bytes)
+    unsigned short shadowSegments[4];
+} evShadowSegmentData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
