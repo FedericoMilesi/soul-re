@@ -358,7 +358,16 @@ void MATH3D_ZYXtoXYZ(Rotation *rot)
     rot->z = ea.z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_ElevationFromPosToPos);
+short MATH3D_ElevationFromPosToPos(Position *from, Position *to)
+{
+    int dx;
+    int dy;
+
+    dx = from->x - to->x;
+    dy = from->y - to->y;
+
+    return -(ratan2(to->z - from->z, (short)MATH3D_FastSqrt0((dx * dx) + (dy * dy)))) & 0xFFF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_RotationFromPosToPos);
 
