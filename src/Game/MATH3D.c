@@ -312,7 +312,32 @@ short MATH3D_AngleBetweenVectors(SVector *vector1, SVector *vector2)
     return (short)ratan2(MATH3D_FastSqrt0(16777216 - projection_length * projection_length), projection_length);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_RotMatAboutVec);
+void MATH3D_RotMatAboutVec(SVector *vec, MATRIX *mat, short angle)
+{
+    long length;
+    SVECTOR rot_angs;
+    MATRIX mat1;
+    MATRIX mat2;
+
+    if (angle != 0)
+    {
+        length = MATH3D_FastSqrt0(MATH3D_SquareLength(0, (int)vec->y, (int)vec->z) + 2048);
+
+        rot_angs.vx = -(short)ratan2(vec->y, vec->z);
+        rot_angs.vy = (short)ratan2(vec->x, length);
+        rot_angs.vz = 0;
+
+        RotMatrix(&rot_angs, &mat1);
+
+        TransposeMatrix(&mat1, &mat2);
+
+        MulMatrix2(&mat2, mat);
+
+        RotMatrixZ(angle, mat);
+
+        MulMatrix2(&mat1, mat);
+    }
+}
 
 void MATH3D_SetUnityMatrix(MATRIX *mat)
 {
