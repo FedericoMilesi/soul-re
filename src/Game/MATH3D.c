@@ -313,7 +313,16 @@ short MATH3D_AngleBetweenVectors(SVector *vector1, SVector *vector2)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_RotMatAboutVec);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_SetUnityMatrix);
+void MATH3D_SetUnityMatrix(MATRIX *mat)
+{
+    ((unsigned int *)&mat->m[0][0])[0] = 4096;
+    ((unsigned int *)&mat->m[0][2])[0] = 0;
+
+    ((unsigned int *)&mat->m[1][1])[0] = 4096;
+    ((unsigned int *)&mat->m[2][0])[0] = 0;
+
+    mat->m[2][2] = 4096;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", AngleMoveToward);
 
