@@ -513,7 +513,18 @@ intptr_t SetControlSaveDataData(long length, void *data)
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectIdleData);
+intptr_t SetObjectIdleData(long mode, Instance *instance)
+{
+    evObjectIdleData *Ptr;
+
+    Ptr = (evObjectIdleData *)CIRC_Alloc(sizeof(evObjectIdleData));
+
+    Ptr->mode = mode;
+
+    Ptr->instance = instance;
+
+    return (intptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetActionPlayHostAnimationData);
 

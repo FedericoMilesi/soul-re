@@ -375,6 +375,14 @@ typedef struct evObjectAbsorbData {
     unsigned short steps;
 } evObjectAbsorbData;
 
+// size: 0x8
+typedef struct evObjectIdleData {
+    // offset: 0000
+    long mode;
+    // offset: 0004 (668 bytes)
+    struct _Instance *instance;
+} evObjectIdleData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
