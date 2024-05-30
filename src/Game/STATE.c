@@ -452,7 +452,20 @@ intptr_t SetControlInitHangData(Instance *instance, long frame, long frames)
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetControlInitIdleData);
+intptr_t SetControlInitIdleData(int mode, long frame, long frames)
+{
+    evControlInitIdleData *Ptr;
+
+    Ptr = (evControlInitIdleData *)CIRC_Alloc(sizeof(evControlInitIdleData));
+
+    Ptr->mode = mode;
+
+    Ptr->frame = frame;
+
+    Ptr->frames = frames;
+
+    return (intptr_t)Ptr;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectDraftData);
 

@@ -341,6 +341,16 @@ typedef struct evControlInitHangData {
     int frames;
 } evControlInitHangData;
 
+// size: 0xC
+typedef struct evControlInitIdleData {
+    // offset: 0000
+    int mode;
+    // offset: 0004
+    int frame;
+    // offset: 0008
+    int frames;
+} evControlInitIdleData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
