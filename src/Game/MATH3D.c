@@ -94,7 +94,19 @@ long MATH3D_LengthXYZ(long x, long y, long z)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_LengthXY);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_Normalize);
+void MATH3D_Normalize(Normal *normal)
+{
+    long length;
+
+    length = MATH3D_LengthXYZ(normal->x * 4, normal->y * 4, normal->z * 4);
+
+    if (length != 0)
+    {
+        normal->x = (short)((normal->x << 14) / length);
+        normal->y = (short)((normal->y << 14) / length);
+        normal->z = (short)((normal->z << 14) / length);
+    }
+}
 
 short MATH3D_FastAtan2(long y, long x)
 {
