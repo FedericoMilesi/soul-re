@@ -419,6 +419,36 @@ typedef struct evShadowSegmentData {
     unsigned short shadowSegments[4];
 } evShadowSegmentData;
 
+// size: 0x1C
+typedef struct evObjectThrowData {
+    // offset: 0000
+    short type;
+    // offset: 0002
+    short spinType;
+    // offset: 0004 (8 bytes)
+    // size: 0x8
+    union {
+        // offset: 0000 (668 bytes)
+        struct _Instance *target;
+        // offset: 0000 (6 bytes)
+        struct _Position position;
+        // offset: 0000 (8 bytes)
+        struct _Rotation direction;
+        // offset: 0000 (6 bytes)
+        struct _Position throwVector;
+    } data;
+    // offset: 000C (8 bytes)
+    struct _SVector angularVel;
+    // offset: 0014
+    unsigned short speed;
+    // offset: 0016
+    short gravity;
+    // offset: 0018
+    short initialXRot;
+    // offset: 001A
+    short zVel;
+} evObjectThrowData;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);

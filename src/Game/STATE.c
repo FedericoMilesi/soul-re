@@ -5,6 +5,33 @@ EXTERN STATIC char circBuf[4096];
 
 EXTERN STATIC void *circWhere;
 
+static inline void STATE_ConfigThrowFields(evObjectThrowData *Ptr, SVector *angularVel, long spinType)
+{
+    if (spinType < 0)
+    {
+        return;
+    }
+
+    if (spinType < 2)
+    {
+        return;
+    }
+
+    if (spinType != 2)
+    {
+        return;
+    }
+
+    if (angularVel == NULL)
+    {
+        Ptr->spinType = 0;
+    }
+    else
+    {
+        Ptr->angularVel = *angularVel;
+    }
+}
+
 void InitMessageQueue(MessageQueue *In)
 {
     In->Head = 0;
@@ -412,7 +439,60 @@ intptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type)
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetObjectThrowData);
+intptr_t SetObjectThrowData(void *target, SVector *angularVel, unsigned short type, unsigned short spinType, int speed, int gravity, int zVel, int initialXRot)
+{
+    evObjectThrowData *Ptr;
+    short temp, temp2, temp3, temp4; // not from decls.h
+
+    temp = speed;
+
+    temp2 = gravity;
+
+    temp3 = zVel;
+
+    temp4 = initialXRot;
+
+    Ptr = (evObjectThrowData *)CIRC_Alloc(sizeof(evObjectThrowData));
+
+    Ptr->type = type;
+
+    Ptr->spinType = spinType;
+
+    if (target == NULL)
+    {
+        Ptr->type = 0;
+    }
+    else
+    {
+        switch (type)
+        {
+        case 0:
+            break;
+        case 1:
+            Ptr->data.target = (Instance *)target;
+            break;
+        case 3:
+            Ptr->data.direction = *(Rotation *)target;
+            break;
+        case 2:
+        case 4:
+            Ptr->data.throwVector = *(Position *)target;
+            break;
+        }
+    }
+
+    STATE_ConfigThrowFields(Ptr, angularVel, spinType);
+
+    Ptr->speed = temp;
+
+    Ptr->gravity = temp2;
+
+    Ptr->zVel = temp3;
+
+    Ptr->initialXRot = temp4;
+
+    return (intptr_t)Ptr;
+}
 
 intptr_t SetObjectBreakOffData(Instance *force, short node, short distance, short animation, int frame, int type, int action)
 {
