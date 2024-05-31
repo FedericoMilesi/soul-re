@@ -1,4 +1,6 @@
 #include "common.h"
+#include "Game/GAMEPAD.h"
+#include "Game/GAMELOOP.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Commands);
 
@@ -32,7 +34,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_GetData);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_DisplayControllerStatus);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Process);
+void GAMEPAD_Process(GameTracker *gameTracker)
+{
+    GAMEPAD_GetData(gameTracker->controlData);
+
+    GAMEPAD_Commands(gameTracker->controlCommand, gameTracker->controlData, 0);
+    GAMEPAD_Commands(gameTracker->controlCommand, gameTracker->controlData, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_SaveControllers);
 
