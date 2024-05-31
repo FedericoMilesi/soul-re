@@ -268,5 +268,6 @@ uintptr_t INSTANCE_Query(Instance *Inst, int Query);
 void INSTANCE_LinkToParent(Instance *instance, Instance *parent, int node);
 void INSTANCE_KillInstance(Instance *instance);
 void INSTANCE_Broadcast(Instance *sender, long whatAmIMask, int Message, intptr_t Data);
+void INSTANCE_PlainDeath(Instance *instance);
 
 #endif

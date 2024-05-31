@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/MATH3D.h"
+#include "Game/GAMELOOP.h"
 #include "Game/G2/QUATG2.h"
 
 void SCRIPT_CombineEulerAngles(Rotation *combinedRotation, Rotation *inputRotation1, Rotation *inputRotation2)
@@ -44,6 +45,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_SplineProcess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_InstanceSplineProcess);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_FadeOutProcess);
+void SCRIPT_FadeOutProcess(Instance *instance)
+{
+    instance->fadeValue += (short)(gameTrackerX.timeMult / 32);
+
+    if (instance->fadeValue >= 4096)
+    {
+        INSTANCE_PlainDeath(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", ScriptKillInstance);
