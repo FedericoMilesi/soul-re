@@ -26,6 +26,8 @@ EXTERN STATIC short camera_still;
 
 EXTERN STATIC Rotation splinecam_helprot;
 
+EXTERN STATIC short combat_cam_weight;
+
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
 
@@ -160,7 +162,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GetLineAngle);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ACForcedMovement);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_update_dist_debounced);
+void CAMERA_update_dist_debounced(Camera *camera, short dist)
+{
+    if ((!(camera->instance_mode & 0x2000000)) || (dist >= 600) || (combat_cam_weight >= 4040))
+    {
+        shorten_flag = 1;
+
+        if (++shorten_count >= 3)
+        {
+            camera->collisionTargetFocusDistance = dist;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_dampgetline);
 

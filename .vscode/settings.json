@@ -28,6 +28,7 @@
         "collide.h": "c",
         "camera.h": "c",
         "gameloop.h": "c",
-        "player.h": "c"
+        "player.h": "c",
+        "math3d.h": "c"
     },
 }
