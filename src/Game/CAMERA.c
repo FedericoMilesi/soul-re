@@ -24,6 +24,8 @@ EXTERN STATIC short shorten_flag;
 
 EXTERN STATIC short camera_still;
 
+EXTERN STATIC Rotation splinecam_helprot;
+
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
 
@@ -238,7 +240,47 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineGetNearestPoint2);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineGetNearestPoint);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineHelpMove);
+void CAMERA_SplineHelpMove(Camera *camera)
+{
+    SVector camPos;
+    Position pos;
+    Rotation rotation;
+    Instance *focusInstance;
+    MultiSpline *posSpline;
+    short temp; // not from decls.h
+
+    posSpline = camera->data.Cinematic.posSpline;
+
+    focusInstance = camera->focusInstance;
+
+    if (CAMERA_AngleDifference(splinecam_helprot.z, camera->targetFocusRotation.z) < 400)
+    {
+        splinecam_helprot.z = camera->targetFocusRotation.z + 2048;
+
+        camera->targetFocusRotation.z &= 0xFFF;
+    }
+
+    CAMERA_CalcPosition(&pos, &camera->targetFocusPoint, &splinecam_helprot, camera->targetFocusDistance);
+
+    CAMERA_SplineGetNearestPoint2(camera, posSpline->positional, (SVector *)&pos, &camera->data.Cinematic.splinecam_helpkey, &camPos);
+
+    CAMERA_CalcRotation(&rotation, &camera->focusPoint, (Position *)&camPos);
+
+    splinecam_helprot.x = rotation.x;
+    splinecam_helprot.z = rotation.z;
+
+    if (CAMERA_AngleDifference(focusInstance->rotation.z, camera->lagZ + 2048) < 900)
+    {
+        rotation.z = (rotation.z + 2048) & 0xFFF;
+
+        temp = CAMERA_SignedAngleDifference(rotation.z, camera->lagZ);
+
+        if (abs(temp) < 900)
+        {
+            camera->lagZ += (temp * 1331) >> 11;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineProcess);
 

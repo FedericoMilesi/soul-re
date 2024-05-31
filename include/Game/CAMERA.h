@@ -2,6 +2,7 @@
 #define _CAMERA_H_
 
 #include "common.h"
+#include "Game/SPLINE.h"
 
 // size: 0xE0
 typedef struct _CameraCore_Type {
@@ -435,6 +436,8 @@ void CAMERA_GenericCameraProcess(Camera *camera);
 void CAMERA_CinematicProcess(Camera *camera);
 void CAMERA_SplineProcess(Camera *camera);
 void CAMERA_ShakeCamera(Camera *camera);
+void CAMERA_SplineGetNearestPoint2(Camera *camera, Spline *spline, SVector *point, int *currkey, SVector *ret_dpoint);
+void CAMERA_CalcRotation(Rotation *rotation, Position *target, Position *position);
 
 extern int CameraCenterDelay;
 Camera theCamera;
