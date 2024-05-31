@@ -95,12 +95,12 @@ long MATH3D_LengthXYZ(long x, long y, long z)
 
 long MATH3D_LengthXY(long x, long y)
 {
-    long t; // not from decls.h
+    long temp; // not from decls.h
 
     x = abs(x);
     y = abs(y);
 
-    t = y * 16;
+    temp = y * 16;
 
     if (y < x)
     {
@@ -108,10 +108,10 @@ long MATH3D_LengthXY(long x, long y)
         y = x ^ y;
         x = x ^ y;
 
-        t = y * 16;
+        temp = y * 16;
     }
 
-    return (((t - y) * 2) + (12 * x)) / 32;
+    return (((temp - y) * 2) + (12 * x)) / 32;
 }
 
 void MATH3D_Normalize(Normal *normal)
@@ -369,7 +369,33 @@ void MATH3D_SetUnityMatrix(MATRIX *mat)
     mat->m[2][2] = 4096;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", AngleMoveToward);
+void AngleMoveToward(short *current_ptr, short destination, short step)
+{
+    long diff;
+    short current;
+
+    current = *current_ptr;
+
+    diff = AngleDiff(current, destination);
+
+    if ((diff == 0) || (abs(diff) < step))
+    {
+        *current_ptr = destination;
+    }
+    else
+    {
+        if (diff > 0)
+        {
+            current += step;
+        }
+        else if (diff < 0)
+        {
+            current -= step;
+        }
+
+        *current_ptr = current & 0xFFF;
+    }
+}
 
 short AngleDiff(short current, short destination)
 {
