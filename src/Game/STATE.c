@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/STATE.h"
+#include "Game/G2/ANMG2ILF.h"
 
 EXTERN STATIC char circBuf[4096];
 
