@@ -428,6 +428,13 @@ void CAMERA_SetMode(Camera *camera, long mode);
 void CAMERA_RestoreMode(Camera *camera);
 void CAMERA_CalcVVClipInfo(Camera *camera);
 long CAMERA_CalcTilt(Normal *normal, short zRot);
+unsigned long CAMERA_QueryMode(Camera *camera);
+void CAMERA_HandleTransitions(Camera *camera);
+void CAMERA_LookProcess(Camera *camera);
+void CAMERA_GenericCameraProcess(Camera *camera);
+void CAMERA_CinematicProcess(Camera *camera);
+void CAMERA_SplineProcess(Camera *camera);
+void CAMERA_ShakeCamera(Camera *camera);
 
 extern int CameraCenterDelay;
 Camera theCamera;

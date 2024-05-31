@@ -18,6 +18,12 @@ EXTERN STATIC short CenterFlag;
 
 EXTERN STATIC short combat_cam_angle;
 
+EXTERN STATIC short shorten_count;
+
+EXTERN STATIC short shorten_flag;
+
+EXTERN STATIC short camera_still;
+
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
 
@@ -238,7 +244,87 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineProcess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ShakeCamera);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Process);
+void CAMERA_Process(Camera *camera)
+{
+    Instance *focusInstance;
+
+    focusInstance = camera->focusInstance;
+
+    camera->focuspoint_fallz -= camera->newFocusInstancePos.z - focusInstance->oldPos.z;
+
+    camera->oldFocusInstancePos = camera->newFocusInstancePos;
+    camera->newFocusInstancePos = focusInstance->position;
+
+    camera->oldFocusInstanceRot = camera->newFocusInstanceRot;
+    camera->newFocusInstanceRot = focusInstance->rotation;
+
+    if ((camera->signalPos.x == camera->core.position.x) && (camera->signalPos.y == camera->core.position.y) && (camera->signalPos.z == camera->core.position.z))
+    {
+        camera_still = 1;
+    }
+    else
+    {
+        camera_still = 0;
+    }
+
+    camera->signalPos = camera->core.position;
+
+    camera->prev_instance_mode = camera->instance_mode;
+
+    camera->x_rot_change = 0;
+
+    camera->instance_mode = CAMERA_QueryMode(camera);
+
+    SET_SVEC3(&camera->focusInstanceVelVec, &camera->newFocusInstancePos, &camera->oldFocusInstancePos);
+
+    camera->instance_prev_xyvel = camera->instance_xyvel;
+
+    camera->instance_xyvel = MATH3D_FastSqrt0((camera->focusInstanceVelVec.x * camera->focusInstanceVelVec.x) + (camera->focusInstanceVelVec.y * camera->focusInstanceVelVec.y));
+
+    if (shorten_flag == 0)
+    {
+        shorten_count = 0;
+    }
+
+    shorten_flag = 0;
+
+    if (camera->cuckooTimer > 0)
+    {
+        camera->cuckooTimer--;
+    }
+
+    if (camera->mode != 6)
+    {
+        CAMERA_HandleTransitions(camera);
+    }
+
+    switch (camera->mode)
+    {
+    case 6:
+        CAMERA_LookProcess(camera);
+        break;
+    case 0:
+    case 12:
+    case 13:
+        CAMERA_GenericCameraProcess(camera);
+        break;
+    case 5:
+        CAMERA_CinematicProcess(camera);
+        break;
+    case 2:
+    case 4:
+        CAMERA_SplineProcess(camera);
+        break;
+    case 8:
+    case 15:
+        return;
+    }
+
+    camera->flags &= ~0x800;
+    camera->flags &= ~0x1000;
+
+    CAMERA_ShakeCamera(camera);
+}
 
 void CAMERA_CenterCamera(Camera *camera)
 {
