@@ -93,7 +93,26 @@ long MATH3D_LengthXYZ(long x, long y, long z)
     return t / 32;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_LengthXY);
+long MATH3D_LengthXY(long x, long y)
+{
+    long t; // not from decls.h
+
+    x = abs(x);
+    y = abs(y);
+
+    t = y * 16;
+
+    if (y < x)
+    {
+        x = x ^ y;
+        y = x ^ y;
+        x = x ^ y;
+
+        t = y * 16;
+    }
+
+    return (((t - y) * 2) + (12 * x)) / 32;
+}
 
 void MATH3D_Normalize(Normal *normal)
 {
