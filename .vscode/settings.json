@@ -26,6 +26,8 @@
         "obtable.h": "c",
         "stream.h": "c",
         "collide.h": "c",
-        "camera.h": "c"
+        "camera.h": "c",
+        "gameloop.h": "c",
+        "player.h": "c"
     },
 }
