@@ -670,7 +670,10 @@ void G2EmulationInstancePlayAnimation(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulatePlayAnimation);
+void G2EmulatePlayAnimation(CharacterState *In)
+{
+    G2EmulationInstancePlayAnimation(In->CharacterInstance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceToInstanceSwitchAnimation);
 

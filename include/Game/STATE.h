@@ -449,6 +449,30 @@ typedef struct evObjectThrowData {
     short zVel;
 } evObjectThrowData;
 
+// size: 0x11C
+typedef struct __State {
+    // offset: 0000
+    void (*Process)();
+    // offset: 0004 (136 bytes)
+    struct __MessageQueue Event;
+    // offset: 008C (136 bytes)
+    struct __MessageQueue Defer;
+    // offset: 0114
+    int Data1;
+    // offset: 0118
+    int Data2;
+} State;
+
+// size: 0x35C
+typedef struct __CharacterState {
+    // offset: 0000 (668 bytes)
+    struct _Instance *CharacterInstance;
+    // offset: 0004
+    int TotalSections;
+    // offset: 0008 (852 bytes)
+    struct __State SectionList[3];
+} CharacterState;
+
 Message *DeMessageQueue(MessageQueue *In);
 void EnMessageQueueData(MessageQueue *In, int ID, int Data);
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
