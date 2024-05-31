@@ -29,7 +29,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_RemoveObjectEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_FindObject);
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_ChangeObjectAccessPointers);
+void OBTABLE_ChangeObjectAccessPointers(Object *oldObject, Object *newObject)
+{
+    ObjectAccess *oa;
+
+    for (oa = objectAccess; oa->objectName != NULL; oa++)
+    {
+        if (oa->object == oldObject)
+        {
+            oa->object = newObject;
+            break;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_RelocateObjectTune);
 
