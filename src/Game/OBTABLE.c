@@ -25,7 +25,19 @@ void OBTABLE_ClearObjectReferences()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_RemoveObjectEntry);
+void OBTABLE_RemoveObjectEntry(Object *object)
+{
+    ObjectAccess *oa;
+
+    for (oa = objectAccess; oa->objectName != NULL; oa++)
+    {
+        if (oa->object == object)
+        {
+            oa->object = NULL;
+            break;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_FindObject);
 
