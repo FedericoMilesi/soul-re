@@ -446,7 +446,36 @@ void MATH3D_RotationFromPosToPos(Position *from, Position *to, Rotation *rot)
     rot->z = MATH3D_AngleFromPosToPos(from, to);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_veclen2);
+int MATH3D_veclen2(int ix, int iy)
+{
+    int t;
+    int temp; // not from decls.h
+
+    if (ix < 0)
+    {
+        ix = -ix;
+    }
+
+    if (iy < 0)
+    {
+        iy = -iy;
+    }
+
+    t = iy >> 1;
+
+    if (ix < iy)
+    {
+        ix = ix ^ iy;
+        iy = ix ^ iy;
+        ix = ix ^ iy;
+
+        t = iy >> 1;
+    }
+
+    temp = iy + t;
+
+    return (((ix - (ix >> 5)) - (ix >> 7)) + (temp >> 2)) + (temp >> 6);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_RotateAxisToVector);
 
