@@ -3,6 +3,8 @@
 #include "Game/PLAYER.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MATH3D.h"
+#include "Game/STREAM.h"
+#include "Game/COLLIDE.h"
 
 EXTERN STATIC short panic_count;
 
@@ -13,6 +15,8 @@ EXTERN STATIC short Camera_lookHeight;
 EXTERN STATIC short Camera_lookDist;
 
 EXTERN STATIC short CenterFlag;
+
+EXTERN STATIC short combat_cam_angle;
 
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
@@ -528,7 +532,96 @@ void CAMERA_UpdateFocusRotate(Camera *camera)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusRotationX);
+void CAMERA_UpdateFocusRotationX(Camera *camera, Instance *focusInstance)
+{
+    short cameraPlayerRotX;
+    short dist;
+    short tfaceFlag;
+    Normal normal;
+    //int mult; unused
+    int tmpsmooth;
+
+    dist = camera->targetFocusDistance;
+
+    tfaceFlag = 0;
+
+    if ((focusInstance->tface != NULL) && (((Level *)focusInstance->tfaceLevel)->terrain != NULL) && (focusInstance->tface->textoff != 0xFFFF)
+    && ((((TextureFT3 *)((char *)((Level *)focusInstance->tfaceLevel)->terrain->StartTextureList + focusInstance->tface->textoff))->attr & 0x8000))
+    && (dist < 2912))
+    {
+        COLLIDE_GetNormal(focusInstance->tface->normal, (short *)((Level *)focusInstance->tfaceLevel)->terrain->normalList, (SVector *)&normal);
+
+        if (normal.z < 3950)
+        {
+            tfaceFlag = 1;
+
+            camera->targetTilt = (CAMERA_CalcTilt(&normal, camera->focusRotation.z) * 9) / 16;
+
+            if (camera->targetTilt < -256)
+            {
+                camera->targetTilt = -256;
+            }
+            else if (camera->targetTilt > 256)
+            {
+                camera->targetTilt = 256;
+            }
+
+            if ((2912 - dist) < 512)
+            {
+                camera->targetTilt = (camera->targetTilt * (2912 - dist)) / 512;
+            }
+
+            CriticalDampAngle(1, &camera->tilt, camera->targetTilt, &camera->tiltVel, &camera->tiltAccl, 8);
+        }
+    }
+
+    if (tfaceFlag == 0)
+    {
+        tmpsmooth = 24;
+
+        if (!(camera->instance_mode & 0x38))
+        {
+            camera->targetTilt = 0;
+        }
+
+        if (((camera->instance_mode & 0x2000)) && (camera->real_focuspoint.z < camera->focuspoint_fallz))
+        {
+            camera->targetTilt = -384;
+
+            tmpsmooth = 12;
+        }
+
+        CriticalDampAngle(1, &camera->tilt, camera->targetTilt, &camera->tiltVel, &camera->tiltAccl, tmpsmooth);
+    }
+
+    cameraPlayerRotX = (((camera->targetFocusRotation.x + camera->tilt + camera->extraXRot) & 0xFFF));
+
+    if ((cameraPlayerRotX > 768) && (cameraPlayerRotX < 2048))
+    {
+        cameraPlayerRotX = 768;
+    }
+    else if ((cameraPlayerRotX >= 2048) && (cameraPlayerRotX < 3328))
+    {
+        cameraPlayerRotX = -768;
+    }
+
+    cameraPlayerRotX &= 0xFFF;
+
+    camera->tfaceTilt = cameraPlayerRotX;
+
+    if ((camera->instance_mode & 0x2000000))
+    {
+        if (cameraPlayerRotX > 2048)
+        {
+            cameraPlayerRotX |= 0xF000;
+        }
+
+        if (combat_cam_angle < cameraPlayerRotX)
+        {
+            camera->tfaceTilt = combat_cam_angle + 0x1000;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_FollowPlayerTilt);
 

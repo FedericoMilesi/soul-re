@@ -23,6 +23,9 @@
         "common.h": "c",
         "sdk.h": "c",
         "types.h": "c",
-        "obtable.h": "c"
+        "obtable.h": "c",
+        "stream.h": "c",
+        "collide.h": "c",
+        "camera.h": "c"
     },
 }

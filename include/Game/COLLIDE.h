@@ -247,5 +247,6 @@ void COLLIDE_SegmentCollisionOff(Instance *instance, int segment);
 void COLLIDE_SegmentCollisionOn(Instance *instance, int segment);
 void COLLIDE_UpdateAllTransforms(Instance *instance, SVECTOR *offset);
 void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level);
+long COLLIDE_GetNormal(short nNum, short *nrmlArray, SVector *nrml);
 
 #endif

@@ -427,6 +427,7 @@ void CriticalDampValue(long dampMode, short *sourceVal, short targetVal, short *
 void CAMERA_SetMode(Camera *camera, long mode);
 void CAMERA_RestoreMode(Camera *camera);
 void CAMERA_CalcVVClipInfo(Camera *camera);
+long CAMERA_CalcTilt(Normal *normal, short zRot);
 
 extern int CameraCenterDelay;
 Camera theCamera;

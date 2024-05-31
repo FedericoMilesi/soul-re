@@ -40,6 +40,28 @@ typedef struct Intro {
     short spad;
 } Intro;
 
+// size: 0xC
+typedef struct TextureFT3 {
+    // offset: 0000
+    unsigned char u0;
+    // offset: 0001
+    unsigned char v0;
+    // offset: 0002
+    unsigned short clut;
+    // offset: 0004
+    unsigned char u1;
+    // offset: 0005
+    unsigned char v1;
+    // offset: 0006
+    unsigned short tpage;
+    // offset: 0008
+    unsigned char u2;
+    // offset: 0009
+    unsigned char v2;
+    // offset: 000A
+    unsigned short attr;
+} TextureFT3;
+
 // size: 0x54
 typedef struct _Terrain {
     // offset: 0000
