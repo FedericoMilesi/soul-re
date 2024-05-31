@@ -1,6 +1,22 @@
 #include "common.h"
+#include "Game/MATH3D.h"
+#include "Game/G2/QUATG2.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_CombineEulerAngles);
+void SCRIPT_CombineEulerAngles(Rotation *combinedRotation, Rotation *inputRotation1, Rotation *inputRotation2)
+{
+    MATRIX rotMatrix1;
+    MATRIX rotMatrix2;
+    G2EulerAngles ea;
+
+    RotMatrix((SVECTOR *)inputRotation1, &rotMatrix1);
+    RotMatrix((SVECTOR *)inputRotation2, &rotMatrix2);
+
+    MulMatrix2(&rotMatrix2, &rotMatrix1);
+
+    G2EulerAngles_FromMatrix(&ea, (G2Matrix *)&rotMatrix1, 21);
+
+    SET_ROT((Rotation *)combinedRotation, (Position *)&ea);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_InstanceSplineInit);
 

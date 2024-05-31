@@ -81,6 +81,26 @@ _v->y = _y0 - _y1;\
 _v->z = _z0 - _z1;\
 }
 
+#define SET_ROT(A, B) {\
+short _x0;\
+short _y0;\
+short _z0;\
+Rotation *_v;\
+Position *_v0;\
+\
+_v0 = B;\
+_v = A;\
+\
+_x0 = _v0->x;\
+_y0 = _v0->y;\
+_z0 = _v0->z;\
+\
+\
+_v->x = _x0;\
+_v->y = _y0;\
+_v->z = _z0;\
+}
+
 long MATH3D_LengthXY(long x, long y);
 long MATH3D_FastSqrt0(long square);
 long MATH3D_LengthXYZ(long x, long y, long z);
