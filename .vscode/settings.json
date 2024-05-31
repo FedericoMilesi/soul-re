@@ -22,6 +22,7 @@
     "files.associations": {
         "common.h": "c",
         "sdk.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "obtable.h": "c"
     },
 }

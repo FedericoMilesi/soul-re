@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/OBTABLE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_InstanceInit);
 
@@ -14,7 +15,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_GetInstanceMessageFunc);
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_InitObjectWithID);
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_ClearObjectReferences);
+void OBTABLE_ClearObjectReferences()
+{
+    ObjectAccess *oa;
+
+    for (oa = objectAccess; oa->objectName != NULL; oa++)
+    {
+        oa->object = NULL;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_RemoveObjectEntry);
 
