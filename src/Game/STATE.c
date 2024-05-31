@@ -657,7 +657,18 @@ intptr_t SetShadowSegmentData(unsigned long total)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstancePlayAnimation);
+void G2EmulationInstancePlayAnimation(Instance *instance)
+{
+    int i;
+    G2Anim *anim;
+
+    anim = &instance->anim;
+
+    for (i = 0; i < anim->sectionCount; i++)
+    {
+        G2AnimSection_NextKeyframe(&anim->section[i & 0xFF]);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulatePlayAnimation);
 
