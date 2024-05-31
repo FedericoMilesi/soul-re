@@ -36,10 +36,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_DisplayControllerStatus);
 
 void GAMEPAD_Process(GameTracker *gameTracker)
 {
-    GAMEPAD_GetData(gameTracker->controlData);
+    GAMEPAD_GetData((long(*)[5])gameTracker->controlData);
 
-    GAMEPAD_Commands(gameTracker->controlCommand, gameTracker->controlData, 0);
-    GAMEPAD_Commands(gameTracker->controlCommand, gameTracker->controlData, 1);
+    GAMEPAD_Commands((long(*)[5])gameTracker->controlCommand, (long(*)[5])gameTracker->controlData, 0);
+    GAMEPAD_Commands((long(*)[5])gameTracker->controlCommand, (long(*)[5])gameTracker->controlData, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_SaveControllers);
