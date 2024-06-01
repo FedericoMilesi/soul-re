@@ -3,7 +3,6 @@
 void RELMOD_InitModulePointers(intptr_t baseaddr, int *relocs)
 {
     unsigned int *rel_addr;
-    int temp; // not from decls.h
 
     while (*relocs != -1)
     {
@@ -12,9 +11,7 @@ void RELMOD_InitModulePointers(intptr_t baseaddr, int *relocs)
         switch ((*relocs++ & 0x3))
         {
         case 0:
-            temp = *rel_addr;
-
-            if (temp >= 0)
+            if ((int)*rel_addr >= 0)
             {
                 *rel_addr += baseaddr;
             }

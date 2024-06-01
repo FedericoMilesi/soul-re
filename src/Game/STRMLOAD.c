@@ -90,7 +90,7 @@ void STREAM_QueueNonblockingLoads(char *fileName, unsigned char memType, void *r
 
     currentEntry->loadEntry.memType = memType;
 
-    currentEntry->relocateBinary = (char)relocateBinary;
+    currentEntry->relocateBinary = relocateBinary;
 
     if (memType == 0)
     {
@@ -112,7 +112,7 @@ void LOAD_LoadToAddress(char *fileName, void *loadAddr, long relocateBinary)
 
     currentEntry->status = 1;
 
-    currentEntry->relocateBinary = (char)relocateBinary;
+    currentEntry->relocateBinary = relocateBinary;
 
     currentEntry->mempackUsed = 0;
 

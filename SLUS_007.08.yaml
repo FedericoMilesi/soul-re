@@ -196,11 +196,14 @@ segments:
       - [0x0BD0BC, data, LIBS]
 
       - [0x0BFD9C, .sdata, Game/DEBUG]
-      - [0x0C0BA0, sdata]
+      - [0x0C0BA0, .sdata, Game/CAMERA]
+      - [0x0C0C08, sdata]
       - [0x0C0D6C, .sdata, Game/COLLIDE]
       - [0x0C0DDC, sdata]
       - [0x0C1010, .sdata, Game/INSTANCE]
       - [0x0C10C8, sdata]
+      - [0x0C1714, .sdata, Game/GENERIC]
+      - [0x0C1720, sdata]
       - [0x0C186C, .sdata, Game/VM]
       - [0x0C1874, sdata]
       - [0x0C229C, .sdata, Game/MONSTER/HUMAN]
@@ -208,7 +211,9 @@ segments:
       - [0x0C2348, .sdata, Game/MONSTER/MONTABLE]
       - [0x0C2368, sdata]
 
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: KAIN2}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: 800D20AC}
+      - {start: 0x0C28AC, type: .sbss, vram: 0x800D3664, name: Game/GENERIC}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D3670, name: 800D3670}
 
       - {start: 0x0C28AC, type: .bss, vram: 0x800D75BC, name: Game/SOUND}
       - {start: 0x0C28AC, type: .bss, vram: 0x800DA984, name: Game/STRMLOAD}

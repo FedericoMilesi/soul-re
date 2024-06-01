@@ -257,7 +257,7 @@ void SoulReaverPost(Instance *instance, unsigned long message, unsigned long dat
         instance->flags |= 0x800;
         break;
     case 0x800103:
-        reaverData->CurrentReaver = (short)data;
+        reaverData->CurrentReaver = data;
 
         if ((short)data == 6)
         {
@@ -276,7 +276,7 @@ void SoulReaverPost(Instance *instance, unsigned long message, unsigned long dat
         INSTANCE_Broadcast(instance, 32, 0x800028, SetObjectAbsorbData(instance, 0, 60));
         break;
     case 0x800107:
-        reaverData->ReaverTargetScale = (short)data;
+        reaverData->ReaverTargetScale = data;
         break;
     case 0x800010:
     {

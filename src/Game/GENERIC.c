@@ -4,8 +4,56 @@
 #include "Game/STATE.h"
 #include "Game/SCRIPT.h"
 #include "Game/SAVEINFO.h"
+#include "Game/G2/ANMG2ILF.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/GENERIC", GenericInit);
+void GenericInit(Instance *instance, GameTracker *gameTracker)
+{
+    Object *object;
+    Spline *spline;
+    static G2AnimInterpInfo crap;
+
+    (void)gameTracker;
+    object = instance->object;
+    spline = NULL;
+
+    if (instance->intro != NULL)
+    {
+        if (instance->intro->multiSpline != NULL)
+        {
+            spline = instance->intro->multiSpline->positional;
+        }
+    }
+
+    if (spline == NULL)
+    {
+        instance->zAccl = -10;
+        instance->maxXVel = 100;
+        instance->maxYVel = 100;
+        instance->maxZVel = 100;
+    }
+
+    if (object != NULL)
+    {
+        if (object->numAnims != 0)
+        {
+            if (!(object->oflags2 & 0x40000000))
+            {
+                G2EmulationInstanceSetTotalSections(instance, 1);
+
+                G2EmulationInstanceSetStartAndEndSegment(instance, 0, 0, (object->modelList[instance->currentModel]->numSegments - 1));
+
+                G2EmulationInstanceSetAnimation(instance, 0, 0, 0, 0);
+
+                G2EmulationInstanceSetMode(instance, 0, 0);
+
+                if (*((long long *)object->name) == *((long long *)"ariel___"))
+                {
+                    G2AnimSection_SetInterpInfo(&instance->anim.section[0], &crap);
+                }
+            }
+        }
+    }
+}
 
 void GenericCollide()
 {

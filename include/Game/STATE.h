@@ -487,5 +487,7 @@ void G2EmulationInstancePlayAnimation(Instance *instance);
 intptr_t SetPositionData(int x, int y, int z);
 void *CIRC_Alloc(int size);
 void InitMessageQueue(MessageQueue *In);
+void G2EmulationInstanceSetTotalSections(Instance *instance, short Total);
+void G2EmulationInstanceSetStartAndEndSegment(Instance *instance, int CurrentSection, short Start, short End);
 
 #endif

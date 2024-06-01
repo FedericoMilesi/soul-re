@@ -253,7 +253,7 @@ int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags)
         useBlock = VRAM_GetOpenBlock();
 
         useBlock->next = NULL;
-        useBlock->flags = (unsigned char)flags;
+        useBlock->flags = flags;
         useBlock->time = 0;
         useBlock->ID = 0;
 
@@ -272,7 +272,7 @@ int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags)
         useBlock = VRAM_GetOpenBlock();
 
         useBlock->next = NULL;
-        useBlock->flags = (unsigned char)flags;
+        useBlock->flags = flags;
         useBlock->time = 0;
         useBlock->ID = 0;
 
@@ -297,7 +297,7 @@ int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags)
         useBlock = VRAM_GetOpenBlock();
 
         useBlock->next = NULL;
-        useBlock->flags = (unsigned char)flags;
+        useBlock->flags = flags;
         useBlock->time = 0;
         useBlock->ID = 0;
 
