@@ -307,9 +307,127 @@ void CAMERA_SplineHelpMove(Camera *camera)
     }
 }
 
-/*TODO: migrate to CAMERA_SplineProcess*/
-static short D_800D03FC = 0; // hold_flag
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineProcess);
+void CAMERA_SplineProcess(Camera *camera)
+{
+    SVector camPos;
+    SVector sv;
+    short targetFocusDistance;
+    MultiSpline *posSpline;
+    short smooth;
+    short dist_smooth;
+    static short hold_flag = 0;
+    Rotation targetFocusRotation;
+
+    posSpline = camera->data.Cinematic.posSpline;
+
+    targetFocusRotation.x = camera->targetFocusRotation.x;
+    targetFocusRotation.y = 0;
+    targetFocusRotation.z = camera->targetFocusRotation.z;
+
+    CAMERA_SetFocus(camera, &camera->targetFocusPoint);
+
+    targetFocusDistance = camera->targetFocusDistance;
+
+    if (posSpline != NULL)
+    {
+        CAMERA_CalcPosition(&camera->targetPos, &camera->targetFocusPoint, &targetFocusRotation, targetFocusDistance);
+
+        if (camera->mode == 4)
+        {
+            CAMERA_SplineGetNearestPoint2(camera, posSpline->positional, (SVector *)&camera->targetPos, &camera->data.Cinematic.splinecam_currkey, &camPos);
+        }
+        else
+        {
+            CAMERA_SplineGetNearestPoint(posSpline->positional, (SVector *)&camera->targetPos, &camera->data.Cinematic.splinecam_currkey, &camPos);
+        }
+
+        camera->maxVel = 512;
+
+        CriticalDampPosition(5, &camera->focusPoint, &camera->targetFocusPoint, &camera->focusPointVel, &camera->focusPointAccl, camera->maxVel);
+
+        if (camera->forced_movement == 1)
+        {
+            hold_flag = 1;
+        }
+        else if (CAMERA_FocusInstanceMoved(camera) != 0)
+        {
+            if (hold_flag != 0)
+            {
+                camera->always_rotate_flag = 1;
+            }
+
+            hold_flag = 0;
+        }
+
+        if ((camera->forced_movement != 1) && (hold_flag == 0) && (camera->rotState != 3))
+        {
+            CAMERA_CalcRotation(&targetFocusRotation, &camera->focusPoint, (Position *)&camPos);
+
+            SET_SVEC3(&sv, &camera->focusPoint, (Position *)&camPos);
+
+            targetFocusDistance = (short)CAMERA_LengthSVector(&sv);
+
+            camera->targetFocusRotation.z = targetFocusRotation.z;
+        }
+
+        smooth = 64;
+
+        if (camera->always_rotate_flag != 0)
+        {
+            dist_smooth = 128;
+        }
+        else
+        {
+            smooth = 80;
+            dist_smooth = 64;
+        }
+
+        camera->focusRotation.y = targetFocusRotation.y;
+
+        camera->x_rot_change = camera->focusRotation.x;
+
+        CriticalDampAngle(1, &camera->focusRotation.x, targetFocusRotation.x, &camera->focusRotVel.x, &camera->focusRotAccl.x, 64);
+
+        camera->x_rot_change = CAMERA_SignedAngleDifference(camera->x_rot_change, camera->focusRotation.x);
+
+        if (camera->rotState == 3)
+        {
+            targetFocusRotation.z = camera->targetFocusRotation.z;
+        }
+
+        CriticalDampAngle(5, &camera->focusRotation.z, targetFocusRotation.z, &camera->focusRotVel.z, &camera->focusRotAccl.z, smooth);
+
+        if ((camera->forced_movement == 1) || (camera->always_rotate_flag != 0) || (hold_flag != 0))
+        {
+            CAMERA_CalcPosition(&camera->targetPos, &camera->focusPoint, &camera->focusRotation, camera->targetFocusDistance);
+
+            camera->data.Follow.hit = CAMERA_DoCameraCollision2(camera, &camera->targetPos, 1);
+
+            if (camera->data.Follow.hit != 0)
+            {
+                targetFocusDistance = camera->collisionTargetFocusDistance;
+            }
+        }
+
+        CriticalDampValue(5, &camera->focusDistance, targetFocusDistance, &camera->focusDistanceVel, &camera->focusDistanceAccl, dist_smooth);
+
+        if (CAMERA_AngleDifference(camera->focusRotation.z, targetFocusRotation.z) < 32)
+        {
+            camera->always_rotate_flag = 0;
+
+            camera->rotState = 0;
+        }
+
+        CAMERA_CalcFollowPosition(camera, &camera->focusRotation);
+
+        if ((camera->mode == 4) && (!(camera->flags & 0x10000)))
+        {
+            CAMERA_SplineHelpMove(camera);
+        }
+
+        CAMERA_CalculateLead(camera);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ShakeCamera);
 

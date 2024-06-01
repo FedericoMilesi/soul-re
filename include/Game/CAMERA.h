@@ -438,6 +438,12 @@ void CAMERA_SplineProcess(Camera *camera);
 void CAMERA_ShakeCamera(Camera *camera);
 void CAMERA_SplineGetNearestPoint2(Camera *camera, Spline *spline, SVector *point, int *currkey, SVector *ret_dpoint);
 void CAMERA_CalcRotation(Rotation *rotation, Position *target, Position *position);
+void CAMERA_SetFocus(Camera *camera, Position *targetfocusPoint);
+void CAMERA_SplineGetNearestPoint(Spline *spline, SVector *point, int *currkey, SVector *ret_dpoint);
+void CriticalDampPosition(long dampMode, Position *position, Position *targetPos, SVector *vel, SVector *accl, int smooth);
+long CAMERA_DoCameraCollision2(Camera *camera, Position *targetCamPos, int simpleflag);
+void CAMERA_CalcFollowPosition(Camera *camera, Rotation *rotation);
+void CAMERA_CalculateLead(Camera *camera);
 
 extern int CameraCenterDelay;
 Camera theCamera;
