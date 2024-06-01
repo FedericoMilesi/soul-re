@@ -6,5 +6,6 @@
 
 void G2Anim_SwitchToKeylist(G2Anim *anim, G2AnimKeylist *keylist, int keylistID);
 short G2AnimSection_NextKeyframe(G2AnimSection *section);
+void G2AnimSection_SetInterpInfo(G2AnimSection *section, G2AnimInterpInfo *newInfoPtr);
 
 #endif

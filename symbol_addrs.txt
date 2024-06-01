@@ -271,6 +271,7 @@ mainMenuFadeInTime             = 0x800D0B5C; // type:s16
 mainMenuFading                 = 0x800D0B5E; // type:s16
 identityMatrix                 = 0x800D0CFC; // type:u8 size:18
 gTimerEnabled                  = 0x800D0D60; // type:s32
+D_800D0F14                     = 0x800D0F14; // type:asciz
 gSramFullAlarm                 = 0x800D0F20; // type:s32
 gSramFullMsgCnt                = 0x800D0F24; // type:s32
 objectOneShotTriggerTbl        = 0x800D0F28; // type:u8 size:12
