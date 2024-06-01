@@ -6,9 +6,19 @@
 #include "Game/STREAM.h"
 #include "Game/COLLIDE.h"
 
-EXTERN STATIC short panic_count;
+long camera_modeToIndex[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0};
 
-EXTERN STATIC short CameraLookStickyFlag;
+static short shorten_count = 0;
+
+static short shorten_flag = 0;
+
+static short camera_still = 0;
+
+static long roll_target = 0;
+
+static long current_roll_amount = 0;
+
+static int roll_inc = 0;
 
 EXTERN STATIC short Camera_lookHeight;
 
@@ -17,12 +27,6 @@ EXTERN STATIC short Camera_lookDist;
 EXTERN STATIC short CenterFlag;
 
 EXTERN STATIC short combat_cam_angle;
-
-EXTERN STATIC short shorten_count;
-
-EXTERN STATIC short shorten_flag;
-
-EXTERN STATIC short camera_still;
 
 EXTERN STATIC Rotation splinecam_helprot;
 
@@ -175,12 +179,20 @@ void CAMERA_update_dist_debounced(Camera *camera, short dist)
     }
 }
 
+/*TODO: migrate to CAMERA_dampgetline*/
+static short D_800D03F0 = 0; // target_angle
+static short D_800D03F2 = 0; // angle_vel
+static short D_800D03F4 = 0; // angle_accl
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_dampgetline);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ACNoForcedMovement);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_AbsoluteCollision);
 
+/*TODO: migrate to CAMERA_update_z_damped*/
+static short D_800D03F6 = 0; // upvel
+static short D_800D03F8 = 0; // upaccl
+static short D_800D03FA = 0; // upmaxVel
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_update_z_damped);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CombatCamDist);
@@ -295,6 +307,8 @@ void CAMERA_SplineHelpMove(Camera *camera)
     }
 }
 
+/*TODO: migrate to CAMERA_SplineProcess*/
+static short D_800D03FC = 0; // hold_flag
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineProcess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ShakeCamera);
@@ -436,6 +450,7 @@ void CAMERA_StartLookaroundMode(Camera *camera)
     CAMERA_SetLookFocusAndBase(camera->focusInstance, &camera->targetFocusPoint);
 }
 
+static short CameraLookStickyFlag = 0;
 void CAMERA_StartSwimThrowMode(Camera *camera)
 {
     CameraLookStickyFlag = 0x1;
@@ -1005,8 +1020,50 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateLead);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFollowPosition);
 
-void CAMERA_SetupColInfo(Camera *camera, CameraCollisionInfo *colInfo, Position *targetCamPos);
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetupColInfo);
+void CAMERA_SetupColInfo(Camera *camera, CameraCollisionInfo *colInfo, Position *targetCamPos)
+{
+    static short toggle = 0;
+    if (camera->mode == 6)
+    {
+        SET_SVEC((SVector *)&camera->focusSphere.position, &camera->targetFocusPoint);
+    }
+    else
+    {
+        SET_SVEC((SVector *)&camera->focusSphere.position, &camera->real_focuspoint);
+    }
+
+    SET_SVEC((SVector *)&camera->posSphere.position, targetCamPos);
+
+    colInfo->start = &camera->focusSphere;
+    colInfo->end = &camera->posSphere;
+
+    if (camera->data.Follow.tface == NULL)
+    {
+        colInfo->cldLines = 6;
+
+        if (toggle != 0)
+        {
+            colInfo->cldLines = 14;
+        }
+        else
+        {
+            colInfo->cldLines = 22;
+        }
+    }
+    else
+    {
+        colInfo->cldLines = 30;
+    }
+
+    if (toggle != 0)
+    {
+        toggle = 0;
+    }
+    else
+    {
+        toggle = 1;
+    }
+}
 
 void CAMERA_DoPanicCheck(Camera *camera, CameraCollisionInfo *tmpcolInfo, Rotation *rotation, short *best_z, short *max_dist)
 {
@@ -1026,6 +1083,7 @@ void CAMERA_DoPanicCheck(Camera *camera, CameraCollisionInfo *tmpcolInfo, Rotati
     }
 }
 
+static short panic_count = 0;
 void CAMERA_Panic(Camera *camera, short min_dist)
 {
     Position targetCamPos;
@@ -1108,6 +1166,8 @@ void CAMERA_Panic(Camera *camera, short min_dist)
     }
 }
 
+/*TODO: migrate to CAMERA_DoCameraCollision2*/
+static long D_800D0404 = 0; // collisiontimeDown
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_DoCameraCollision2);
 
 int CAMERA_FocusInstanceMoved(Camera *camera)
