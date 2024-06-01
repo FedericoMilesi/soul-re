@@ -122,9 +122,9 @@ void MATH3D_Normalize(Normal *normal)
 
     if (length != 0)
     {
-        normal->x = (short)((normal->x << 14) / length);
-        normal->y = (short)((normal->y << 14) / length);
-        normal->z = (short)((normal->z << 14) / length);
+        normal->x = ((normal->x << 14) / length);
+        normal->y = ((normal->y << 14) / length);
+        normal->z = ((normal->z << 14) / length);
     }
 }
 
@@ -328,7 +328,7 @@ short MATH3D_AngleBetweenVectors(SVector *vector1, SVector *vector2)
         projection_length = -4096;
     }
 
-    return (short)ratan2(MATH3D_FastSqrt0(16777216 - projection_length * projection_length), projection_length);
+    return ratan2(MATH3D_FastSqrt0(16777216 - projection_length * projection_length), projection_length);
 }
 
 void MATH3D_RotMatAboutVec(SVector *vec, MATRIX *mat, short angle)
@@ -340,10 +340,10 @@ void MATH3D_RotMatAboutVec(SVector *vec, MATRIX *mat, short angle)
 
     if (angle != 0)
     {
-        length = MATH3D_FastSqrt0(MATH3D_SquareLength(0, (int)vec->y, (int)vec->z) + 2048);
+        length = MATH3D_FastSqrt0(MATH3D_SquareLength(0, vec->y, vec->z) + 2048);
 
-        rot_angs.vx = -(short)ratan2(vec->y, vec->z);
-        rot_angs.vy = (short)ratan2(vec->x, length);
+        rot_angs.vx = -ratan2(vec->y, vec->z);
+        rot_angs.vy = ratan2(vec->x, length);
         rot_angs.vz = 0;
 
         RotMatrix(&rot_angs, &mat1);
@@ -487,7 +487,7 @@ int MATH3D_ConeDetect(SVector *pos, int arc, int elevation)
     x = pos->x;
     y = -pos->y;
 
-    if (((short)MATH3D_FastAtan2(abs(x), y) < arc) && ((short)MATH3D_FastAtan2(abs(pos->z), MATH3D_LengthXY(x, y)) < elevation))
+    if ((MATH3D_FastAtan2(abs(x), y) < arc) && (MATH3D_FastAtan2(abs(pos->z), MATH3D_LengthXY(x, y)) < elevation))
     {
         return 1;
     }

@@ -546,7 +546,7 @@ void INSTANCE_ProcessIntro(Instance *instance)
             {
                 if (command->command == 18)
                 {
-                    instance->currentModel = (short)command->parameter[0];
+                    instance->currentModel = command->parameter[0];
                 }
 
                 command += command->numParameters + 1;
@@ -1010,9 +1010,9 @@ int INSTANCE_SetStatsData(Instance *instance, Instance *checkee, Vector *checkPo
     {
         delta = (SVECTOR *)getScratchAddr(0);
 
-        delta->vx = (short)checkPoint->x - instance->position.x;
-        delta->vy = (short)checkPoint->y - instance->position.y;
-        delta->vz = (short)checkPoint->z - instance->position.z;
+        delta->vx = checkPoint->x - instance->position.x;
+        delta->vy = checkPoint->y - instance->position.y;
+        delta->vz = checkPoint->z - instance->position.z;
 
         ApplyMatrixSV(mat, delta, (SVECTOR *)&data->relativePosition);
 

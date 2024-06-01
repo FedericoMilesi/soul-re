@@ -47,7 +47,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_InstanceSplineProcess);
 
 void SCRIPT_FadeOutProcess(Instance *instance)
 {
-    instance->fadeValue += (short)(gameTrackerX.timeMult / 32);
+    instance->fadeValue += (gameTrackerX.timeMult / 32);
 
     if (instance->fadeValue >= 4096)
     {

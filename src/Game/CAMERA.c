@@ -230,9 +230,9 @@ void CAMERA_NearestPointOnLineVec(SVector *linePoint, SVector *start, SVector *l
         t = -t / dpv.x;
     }
 
-    linePoint->x = start->x + (short)((line->x * t) >> 12);
-    linePoint->y = start->y + (short)((line->y * t) >> 12);
-    linePoint->z = start->z + (short)((line->z * t) >> 12);
+    linePoint->x = start->x + ((line->x * t) >> 12);
+    linePoint->y = start->y + ((line->y * t) >> 12);
+    linePoint->z = start->z + ((line->z * t) >> 12);
 }
 
 int CAMERA_CheckPoint(int linePoint, int linept1, int linept2)
@@ -399,8 +399,8 @@ void CAMERA_CenterCamera(Camera *camera)
 {
     if ((camera->instance_mode & 0x2000000))
     {
-        int tmp1 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z + 1024));
-        int tmp2 = (short)CAMERA_AngleDifference(camera->focusRotation.z, (short)(camera->focusInstance->rotation.z - 1024));
+        int tmp1 = CAMERA_AngleDifference(camera->focusRotation.z, (camera->focusInstance->rotation.z + 1024));
+        int tmp2 = CAMERA_AngleDifference(camera->focusRotation.z, (camera->focusInstance->rotation.z - 1024));
 
         if (tmp1 < tmp2)
         {

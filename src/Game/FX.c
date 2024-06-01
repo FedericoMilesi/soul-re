@@ -125,7 +125,7 @@ FXParticle *FX_GetParticle(Instance *instance, short startSegment)
 
         particle->instance = instance;
 
-        particle->startSegment = (char)startSegment;
+        particle->startSegment = startSegment;
 
         particle->texture = NULL;
 
@@ -387,7 +387,7 @@ FXParticle *FX_BloodCone(Instance *instance, short startSegment, long time)
         currentParticle->startColor = 0x021800FF;
         currentParticle->endColor = 0;
 
-        currentParticle->lifeTime = (short)time;
+        currentParticle->lifeTime = time;
         currentParticle->primLifeTime = 10;
 
         FX_InsertGeneralEffect(currentParticle);
@@ -787,9 +787,9 @@ FXForceFieldEffect *FX_StartFField(Instance *instance, int size, Position *offse
         SET_SVEC(&field->offset, offset);
 
         field->size_diff = size_diff;
-        field->size_change = (short)size_change;
+        field->size_change = size_change;
         field->deg = 0;
-        field->deg_change = (short)deg_change;
+        field->deg_change = deg_change;
         field->start_fade = 4096;
         field->end_fade = 0;
         field->color = color;
