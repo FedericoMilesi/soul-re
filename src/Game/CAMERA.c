@@ -179,11 +179,26 @@ void CAMERA_update_dist_debounced(Camera *camera, short dist)
     }
 }
 
-/*TODO: migrate to CAMERA_dampgetline*/
-static short D_800D03F0 = 0; // target_angle
-static short D_800D03F2 = 0; // angle_vel
-static short D_800D03F4 = 0; // angle_accl
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_dampgetline);
+short CAMERA_dampgetline(short angle)
+{
+    static short target_angle = 0;
+    static short angle_vel = 0;
+    static short angle_accl = 0;
+
+    CriticalDampAngle(1, &target_angle, angle, &angle_vel, &angle_accl, 1024);
+
+    if (target_angle > 2048)
+    {
+        target_angle -= 4096;
+    }
+
+    if ((abs(target_angle) < 32) && (abs(angle) > 31))
+    {
+        target_angle = angle < 0 ? -32 : 32;
+    }
+
+    return target_angle;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ACNoForcedMovement);
 
