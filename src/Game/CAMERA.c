@@ -225,7 +225,23 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_QueryMode);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetMaxVel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetTarget);
+void CAMERA_SetTarget(Camera *camera, Position *pos)
+{
+    SVector sv;
+    long len;
+
+    CAMERA_CalcRotation(&camera->targetFocusRotation, pos, &camera->core.position);
+
+    SET_SVEC3(&sv, pos, &camera->core.position);
+
+    len = CAMERA_LengthSVector(&sv);
+
+    camera->focusDistance = (short)len;
+
+    camera->targetFocusDistance = (short)len;
+
+    camera->collisionTargetFocusDistance = (short)len;
+}
 
 void CAMERA_CalcPosition(Position *position, Position *base, Rotation *rotation, short distance);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcPosition);
