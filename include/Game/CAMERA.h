@@ -446,6 +446,11 @@ void CAMERA_CalcFollowPosition(Camera *camera, Rotation *rotation);
 void CAMERA_CalculateLead(Camera *camera);
 void CAMERA_Normalize(SVector *svector);
 void CAMERA_CalcPosition(Position *position, Position *base, Rotation *rotation, short distance);
+SVector *SplineGetNextPointDC(Spline *spline, SplineDef *def);
+void CAMERA_SetMaxVel(Camera *camera);
+void CAMERA_UpdateFocusRoll(Camera *camera);
+long CAMERA_ACNoForcedMovement(Camera *camera, CameraCollisionInfo *colInfo);
+long CAMERA_ACForcedMovement(Camera *camera, CameraCollisionInfo *colInfo);
 
 extern int CameraCenterDelay;
 Camera theCamera;

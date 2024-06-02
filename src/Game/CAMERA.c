@@ -354,7 +354,54 @@ short CAMERA_dampgetline(short angle)
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ACNoForcedMovement);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_AbsoluteCollision);
+long CAMERA_AbsoluteCollision(Camera *camera, CameraCollisionInfo *colInfo)
+{
+    long hit;
+
+    hit = 0;
+
+    if ((gameTrackerX.debugFlags & 0x10000))
+    {
+        return hit;
+    }
+
+    camera->focusRotation.x &= 0xFFF;
+
+    if ((((camera->flags & 0x10000)) || ((camera->instance_mode & 0x24000000)) || ((camera->flags & 0x2000))
+        || (camera->rotState != 0) || (camera->always_rotate_flag != 0)) && (!(camera->lock & 0x1)))
+    {
+        if ((camera->flags & 0x10000))
+        {
+            if ((colInfo->flags & 0x18))
+            {
+                camera->collisionTargetFocusDistance = (short)colInfo->lenCenterToExtend - 150;
+
+                if (400 > camera->collisionTargetFocusDistance)
+                {
+                    camera->collisionTargetFocusDistance = 400;
+                }
+            }
+            else
+            {
+                hit = CAMERA_ACNoForcedMovement(camera, colInfo);
+            }
+        }
+        else
+        {
+            camera->collisionTargetFocusDistance = (short)colInfo->lenCenterToExtend;
+        }
+    }
+    else if ((camera->forced_movement != 0) || (camera->last_forced_movement != 0))
+    {
+        hit = CAMERA_ACForcedMovement(camera, colInfo);
+    }
+    else
+    {
+        hit = CAMERA_ACNoForcedMovement(camera, colInfo);
+    }
+
+    return hit;
+}
 
 /*TODO: migrate to CAMERA_update_z_damped*/
 static short D_800D03F6 = 0; // upvel
