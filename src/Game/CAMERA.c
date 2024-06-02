@@ -481,7 +481,22 @@ long CAMERA_LengthSVector(SVector *sv)
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetValue);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_AngleDifference);
+short CAMERA_AngleDifference(short angle0, short angle1)
+{
+    angle0 &= 0xFFF;
+    angle1 &= 0xFFF;
+
+    if ((angle1 - angle0) > 2048)
+    {
+        angle0 |= 0x1000;
+    }
+    else if ((angle0 - angle1) > 2048)
+    {
+        angle1 |= 0x1000;
+    }
+
+    return (MAX(angle0, angle1) - MIN(angle0, angle1));
+}
 
 short CAMERA_SignedAngleDifference(short angle0, short angle1)
 {

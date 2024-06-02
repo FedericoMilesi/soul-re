@@ -3,6 +3,14 @@
 
 /*TODO: Remove LIBS/ when adding PSYQ headers*/
 
+#ifndef MIN
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#endif
+
+#ifndef MAX
+#define MAX(a,b) (((a)>(b))?(a):(b))
+#endif
+
 #define getScratchAddr(offset)  ((unsigned long *)(0x1f800000+(offset)*4))
 
 int rand();
