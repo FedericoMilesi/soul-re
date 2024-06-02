@@ -147,8 +147,49 @@ void CAMERA_CreateNewFocuspoint(Camera *camera)
     SET_SVEC2((SVector *)&camera->focusPoint, &camera->core.position, (Position *)&sv);
 }
 
-void CAMERA_SaveMode(Camera *camera, long mode);
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SaveMode);
+void CAMERA_SaveMode(Camera *camera, long mode)
+{
+    long i;
+
+    if (++camera->stack >= 3)
+    {
+        camera->stack = 2;
+
+        for (i = 0; i < 2; i++)
+        {
+            camera->savedMode[i] = camera->savedMode[i + 1];
+            camera->savedCinematic[i] = camera->savedCinematic[i + 1];
+        }
+    }
+
+    camera->savedMode[camera->stack] = mode;
+
+    if ((mode == 2) || (mode == 5) || (mode == 4))
+    {
+        camera->savedCinematic[camera->stack].position = camera->core.position;
+
+        camera->savedCinematic[camera->stack].focusPoint = camera->focusPoint;
+
+        camera->savedCinematic[camera->stack].targetPos = camera->targetPos;
+        camera->savedCinematic[camera->stack].targetFocusPoint = camera->targetFocusPoint;
+
+        camera->savedCinematic[camera->stack].focusRotation = camera->focusRotation;
+        camera->savedCinematic[camera->stack].targetFocusRotation = camera->targetFocusRotation;
+
+        camera->savedCinematic[camera->stack].focusPointVel = camera->focusPointVel;
+        camera->savedCinematic[camera->stack].focusPointAccl = camera->focusPointAccl;
+
+        camera->savedCinematic[camera->stack].maxVel = camera->maxVel;
+
+        camera->savedCinematic[camera->stack].focusDistance = camera->focusDistance;
+        camera->savedCinematic[camera->stack].targetFocusDistance = camera->targetFocusDistance;
+
+        camera->savedCinematic[camera->stack].posSpline = camera->data.Cinematic.posSpline;
+        camera->savedCinematic[camera->stack].targetSpline = camera->data.Cinematic.targetSpline;
+
+        camera->savedCinematic[camera->stack].level = gameTrackerX.level;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_RestoreMode);
 
