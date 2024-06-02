@@ -380,7 +380,51 @@ void CAMERA_Save(Camera *camera, long save)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Restore);
+void CAMERA_Restore(Camera *camera, long restore)
+{
+    if ((restore & 0x7))
+    {
+        if ((restore & 0x1))
+        {
+            if (camera->targetStack >= 0)
+            {
+                camera->distanceState = 3;
+
+                camera->signalFocusDistance = (short)camera->savedTargetFocusDistance[camera->targetStack];
+
+                if (camera->targetStack >= 0)
+                {
+                    camera->targetStack -= 1;
+                }
+            }
+        }
+
+        if ((restore & 0x2))
+        {
+            camera->tiltState = 3;
+
+            camera->signalRot.x = camera->savedfocusRotation.x;
+        }
+
+        if ((restore & 0x4))
+        {
+            camera->rotState = 3;
+
+            camera->forced_movement = 0;
+
+            camera->always_rotate_flag = 1;
+
+            camera->signalRot.z = camera->savedfocusRotation.z;
+
+            camera->teleportZRot = camera->signalRot.z;
+        }
+    }
+
+    if ((restore & 0x100))
+    {
+        CAMERA_RestoreMode(camera);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", SplineGetNextPointDC);
 
