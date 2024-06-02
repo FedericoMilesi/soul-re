@@ -7,6 +7,7 @@
 #include "Game/MONSTER/VWRAITH.h"
 #include "Game/MONSTER/WORSHIP.h"
 #include "Game/MONSTER/HUMAN.h"
+#include "Game/SAVEINFO.h"
 
 static MonsterFunctionTable DefaultFunctionTable = {
     MON_DefaultInit,

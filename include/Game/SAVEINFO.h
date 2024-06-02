@@ -64,5 +64,6 @@ long SAVE_HasSavedIntro(Intro *intro, long currentStreamID);
 void SAVE_DoInstanceDeadDead(Instance *instance);
 
 extern GlobalSaveTracker *GlobalSave;
+extern char monVersion[];
 
 #endif
