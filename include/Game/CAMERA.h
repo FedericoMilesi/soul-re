@@ -451,6 +451,8 @@ void CAMERA_SetMaxVel(Camera *camera);
 void CAMERA_UpdateFocusRoll(Camera *camera);
 long CAMERA_ACNoForcedMovement(Camera *camera, CameraCollisionInfo *colInfo);
 long CAMERA_ACForcedMovement(Camera *camera, CameraCollisionInfo *colInfo);
+void CAMERA_Restore(Camera *camera, long restore);
+void CAMERA_ChangeToUnderWater(Camera *camera, Instance *instance);
 
 extern int CameraCenterDelay;
 Camera theCamera;

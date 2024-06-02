@@ -33,6 +33,8 @@ EXTERN STATIC Rotation splinecam_helprot;
 
 EXTERN STATIC short combat_cam_weight;
 
+EXTERN STATIC long cameraMode;
+
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
 
@@ -191,7 +193,155 @@ void CAMERA_SaveMode(Camera *camera, long mode)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_RestoreMode);
+void CAMERA_RestoreMode(Camera *camera)
+{
+    long mode;
+    short temp; // not from decls.h
+
+    if (camera->stack >= 0)
+    {
+        mode = camera->savedMode[camera->stack];
+
+        if (camera->mode == 5)
+        {
+            if (camera->smooth != 0)
+            {
+                camera->smooth = 8;
+            }
+            else
+            {
+                camera->flags |= 0x1000;
+            }
+        }
+
+        switch (mode)
+        {
+        case 0:
+        case 12:
+        case 13:
+        case 16:
+            CAMERA_SetProjDistance(camera, 320);
+
+            if (camera->mode == 5)
+            {
+                camera->focusInstance = gameTrackerX.playerInstance;
+
+                camera->focusOffset.x = 0;
+                camera->focusOffset.y = 0;
+                camera->focusOffset.z = 352;
+
+                CAMERA_Restore(camera, 7);
+            }
+
+            cameraMode = mode;
+
+            if (mode == 12)
+            {
+                gameTrackerX.gameFlags &= ~0x40;
+            }
+            else
+            {
+                gameTrackerX.gameFlags |= 0x40;
+            }
+
+            camera->mode = (short)mode;
+
+            camera->targetFocusDistance = (short)camera->focusDistanceList[camera_modeToIndex[(short)mode]][camera->presetIndex];
+
+            camera->data.Follow.stopTimer = 0xE5A20000;
+
+            camera->focusRotVel.z = 0;
+
+            if (mode == 16)
+            {
+                camera->flags |= 0x2000;
+            }
+            else
+            {
+                camera->flags &= ~0x2000;
+            }
+
+            break;
+        case 2:
+        case 4:
+        case 5:
+            CAMERA_SetProjDistance(camera, 320);
+
+            camera->core.position = camera->savedCinematic[camera->stack].position;
+
+            camera->focusPoint = camera->savedCinematic[camera->stack].focusPoint;
+
+            camera->targetPos = camera->savedCinematic[camera->stack].targetPos;
+
+            camera->targetFocusPoint = camera->savedCinematic[camera->stack].targetFocusPoint;
+            camera->targetFocusDistance = camera->savedCinematic[camera->stack].targetFocusDistance;
+            camera->targetFocusRotation = camera->savedCinematic[camera->stack].targetFocusRotation;
+
+            if ((camera->smooth == 0) && (camera->mode != 6))
+            {
+                camera->focusDistance = camera->savedCinematic[camera->stack].focusDistance;
+                camera->focusRotation = camera->savedCinematic[camera->stack].focusRotation;
+            }
+            else
+            {
+                camera->always_rotate_flag = 1;
+            }
+
+            camera->focusPointVel = camera->savedCinematic[camera->stack].focusPointVel;
+            camera->focusPointAccl = camera->savedCinematic[camera->stack].focusPointAccl;
+
+            camera->maxVel = (short)camera->savedCinematic[camera->stack].maxVel;
+
+            camera->data.Cinematic.posSpline = camera->savedCinematic[camera->stack].posSpline;
+            camera->data.Cinematic.targetSpline = camera->savedCinematic[camera->stack].targetSpline;
+
+            camera->mode = (short)mode;
+
+            if ((INSTANCE_Query(camera->focusInstance, 9) & 0x50))
+            {
+                CAMERA_ChangeToUnderWater(camera, camera->focusInstance);
+            }
+
+            break;
+        case 6:
+            if ((camera->mode == 4) || (camera->mode == 5) || (camera->mode == 2))
+            {
+                temp = (short)camera->savedTargetFocusDistance[camera->targetStack];
+
+                camera->focusDistance = temp;
+
+                camera->targetFocusDistance = temp;
+
+                if (camera->targetStack >= 0)
+                {
+                    camera->targetStack--;
+                }
+
+                camera->flags |= 0x800;
+            }
+
+            camera->lookTimer = 4;
+
+            camera->mode = (short)mode;
+
+            camera->targetFocusDistance = 2000;
+            break;
+        case 1:
+        case 3:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 14:
+        case 15:
+        default:
+            camera->mode = (short)mode;
+        }
+
+        camera->stack--;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Save);
 
