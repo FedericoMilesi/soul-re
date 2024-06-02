@@ -35,6 +35,8 @@ EXTERN STATIC short combat_cam_weight;
 
 EXTERN STATIC long cameraMode;
 
+EXTERN STATIC short combat_cam_debounce;
+
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
 
@@ -503,7 +505,37 @@ short CAMERA_SignedAngleDifference(short angle0, short angle1)
     return AngleDiff(angle1, angle0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_QueryMode);
+unsigned long CAMERA_QueryMode(Camera *camera)
+{
+    unsigned long mode;
+
+    mode = INSTANCE_Query(camera->focusInstance, 10);
+
+    if (camera->focusInstance == gameTrackerX.playerInstance)
+    {
+        if ((mode & 0x2000000))
+        {
+            combat_cam_debounce = 1;
+        }
+        else if (combat_cam_debounce > 0)
+        {
+            combat_cam_debounce--;
+
+            mode |= 0x2000000;
+        }
+    }
+    else
+    {
+        mode &= ~0x2000000;
+    }
+
+    if (WARPGATE_IsWarpgateActive() != 0)
+    {
+        mode |= 0x80000000;
+    }
+
+    return mode;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetMaxVel);
 
