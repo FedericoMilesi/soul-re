@@ -572,7 +572,15 @@ void CAMERA_Unlock(Camera *camera, long unlock)
     camera->lock &= ~unlock;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetSmoothValue);
+void CAMERA_SetSmoothValue(Camera *camera, long smooth)
+{
+    camera->smooth = (short)smooth;
+
+    if ((smooth == 0) && ((camera->mode == 12) || (camera->mode == 13) || (camera->mode == 16)))
+    {
+        camera->focusPoint = camera->targetFocusPoint;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetTimer);
 
