@@ -582,7 +582,12 @@ void CAMERA_SetSmoothValue(Camera *camera, long smooth)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetTimer);
+void CAMERA_SetTimer(Camera *camera, long time)
+{
+    (void)time;
+
+    CAMERA_Save(camera, -1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust_tilt);
 
