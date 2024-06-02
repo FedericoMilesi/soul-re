@@ -71,6 +71,4 @@ void MON_TerrainImpaleDeath(Instance *instance);
 void MON_PetrifiedEntry(Instance *instance);
 void MON_Petrified(Instance *instance);
 
-extern char monVersion[];
-
 #endif

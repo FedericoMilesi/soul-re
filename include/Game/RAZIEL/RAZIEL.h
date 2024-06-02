@@ -14,8 +14,4 @@ void RAZIEL_SetLookAround(Instance *instance);
 void RAZIEL_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *gameTracker);
 long RAZIEL_OkToLookAround(Instance *playerInstance);
 
-extern unsigned long debugRazielFlags1;
-extern unsigned long debugRazielFlags2;
-extern unsigned long debugRazielFlags3;
-
 #endif

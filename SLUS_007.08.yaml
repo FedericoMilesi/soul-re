@@ -179,7 +179,9 @@ segments:
 
       - [0x0B8890, .data, Game/DEBUG]
       - [0x0BA7C0, data, Game/FONT]
-      - [0x0BA9F4, data]
+      - [0x0BA9F4, data, Game/GAMELOOP]
+      - [0x0BAA1C, data]
+      - [0x0BCBF8, data, Game/STREAM]
       - [0x0BCC5C, .data, Game/MONSTER/HUMAN]
       - [0x0BCCA4, data, Game/MONSTER/MISSILE]
       - [0x0BCCAC, data, Game/MONSTER/MONMSG]
@@ -197,23 +199,99 @@ segments:
 
       - [0x0BFD9C, .sdata, Game/DEBUG]
       - [0x0C0BA0, .sdata, Game/CAMERA]
-      - [0x0C0C08, sdata]
+      - [0x0C0C08, sdata, Game/SIGNAL]
       - [0x0C0D6C, .sdata, Game/COLLIDE]
-      - [0x0C0DDC, sdata]
+      - [0x0C0DDC, sdata] # HASM_1/DRAW
+      - [0x0C0E38, sdata, Game/FONT]
+      - [0x0C0F0C, sdata, Game/GAMELOOP]
+      - [0x0C0FC0, sdata, Game/GAMEPAD]
       - [0x0C1010, .sdata, Game/INSTANCE]
-      - [0x0C10C8, sdata]
+      - [0x0C10C8, sdata, Game/LIGHT3D]
+      - [0x0C1124, sdata, Game/LOAD3D]
+      - [0x0C119C, sdata, Game/PSX/MAIN]
+      - [0x0C14FC, sdata, Game/MATH3D]
+      - [0x0C1510, sdata, Game/PIPE3D]
+      - [0x0C1524, sdata] # Unused
+      - [0x0C1560, sdata, Game/TIMER]
+      - [0x0C1564, sdata] # Unused
+      - [0x0C16A8, sdata, Game/OBTABLE]
+      - [0x0C16C0, sdata] # Unused
       - [0x0C1714, .sdata, Game/GENERIC]
-      - [0x0C1720, sdata]
+      - [0x0C1720, sdata, Game/SOUND]
+      - [0x0C17D4, sdata, Game/SPLINE]
+      - [0x0C17FC, sdata, Game/FX]
       - [0x0C186C, .sdata, Game/VM]
-      - [0x0C1874, sdata]
+      - [0x0C1874, sdata, Game/MEMPACK]
+      - [0x0C1958, sdata, Game/PSX/AADLIB]
+      - [0x0C1A1C, sdata, Game/PSX/AADSEQEV]
+      - [0x0C1BBC, sdata, Game/PSX/AADSFX] 
+      - [0x0C1BE8, sdata] # Game/PSX/AADVOICE?
+      - [0x0C1E94, sdata, Game/STREAM]
+      - [0x0C2178, sdata, Game/STRMLOAD]
+      - [0x0C21F0, sdata, Game/EVENT]
+      - [0x0C2210, sdata, Game/PHYSOBS]
+      - [0x0C221C, sdata, Game/RAZCNTRL]
+      - [0x0C2250, sdata, Game/STATE]
+      - [0x0C2270, sdata, Game/VRAM]
+      - [0x0C2274, sdata, Game/PSX/SUPPORT]
+      - [0x0C2278, sdata, Game/PHYSICS]
+      - [0x0C2288, sdata, Game/GLYPH]
       - [0x0C229C, .sdata, Game/MONSTER/HUMAN]
-      - [0x0C22E8, sdata]
+      - [0x0C22E8, sdata, Game/MONSTER/MONSENSE]
+      - [0x0C2330, sdata, Game/MONSTER/MONSTER]
       - [0x0C2348, .sdata, Game/MONSTER/MONTABLE]
-      - [0x0C2368, sdata]
+      - [0x0C2368, sdata, Game/MONSTER/SLUAGH]
+      - [0x0C2390, sdata, Game/MONSTER/SOUL]
+      - [0x0C23B0, sdata, Game/MONSTER/VWRAITH]
+      - [0x0C23D0, sdata, Game/MONSTER/WORSHIP]
+      - [0x0C23F0, sdata, Game/MONSTER/MBMISS]
+      - [0x0C2408, sdata, Game/G2/QUATG2]
+      - [0x0C2418, sdata, Game/PLAN/PLANCOLL]
+      - [0x0C2430, sdata] # Game/RAZIEL/* include C files?
+      - [0x0C25C4, sdata, Game/UNDRWRLD]
+      - [0x0C25D8, sdata, Game/SAVEINFO]
+      - [0x0C26B0, sdata, Game/VOICEXA]
+      - [0x0C26DC, sdata, Game/LOCAL/LOCALSTR]
+      - [0x0C26FC, sdata, Game/MENU/MENU]
+      - [0x0C2750, sdata] # Unused
+      - [0x0C2790, sdata, Game/MENU/MENUDEFS]
+      - [0x0C2804, sdata, Game/MENU/MENUFACE]
 
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: 800D20AC}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: Game/DEBUG}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D20FC, name: Game/CAMERA}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D26F8, name: Game/COLLIDE}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D271C, name: 800D271C} # HASM_1/DRAW
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D277C, name: Game/FONT}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D2FA4, name: Game/GAMELOOP}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D2FF8, name: Game/GAMEPAD}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D310C, name: Game/LIGHT3D}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D311C, name: Game/LOAD3D}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D31D0, name: Game/PSX/MAIN}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D3664, name: Game/GENERIC}
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D3670, name: 800D3670}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D3670, name: Game/SOUND}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D3910, name: Game/SPLINE}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D3948, name: Game/FX}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D3C88, name: Game/MEMPACK}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D3C9C, name: Game/PSX/AADLIB}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D3CAC, name: Game/STREAM}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D40D8, name: Game/STRMLOAD}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D40E8, name: Game/EVENT}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D47E0, name: Game/STATE}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D57E0, name: Game/VRAM}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D61E4, name: Game/PHYSICS}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D626C, name: Game/REAVER}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D6270, name: Game/GLYPH}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D62B4, name: Game/MONSTER/MONSENSE}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D6380, name: 800D6380} # Game/G2/* include C files?
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D6B30, name: Game/PSX/PSX_G2/MAINVM}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D6B38, name: Game/PLAN/PLANAPI}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D6B88, name: 800D6B88} # Game/RAZIEL/* include C files?
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D7364, name: Game/UNDRWRLD}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D7374, name: Game/SAVEINFO}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D7488, name: Game/VOICEXA}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D75B0, name: Game/LOCAL/LOCALSTR}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D75B4, name: Game/MENU/MENUDEFS}
+      - {start: 0x0C28AC, type: sbss, vram: 0x800D75B8, name: Game/MENU/MENUFACE}
 
       - {start: 0x0C28AC, type: .bss, vram: 0x800D75BC, name: Game/SOUND}
       - {start: 0x0C28AC, type: .bss, vram: 0x800DA984, name: Game/STRMLOAD}

@@ -46,4 +46,8 @@ typedef struct GameCheat {
     short cheatStage;
 } GameCheat;
 
+extern unsigned long debugRazielFlags1;
+extern unsigned long debugRazielFlags2;
+extern unsigned long debugRazielFlags3;
+
 #endif
