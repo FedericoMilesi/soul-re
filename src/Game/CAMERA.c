@@ -432,7 +432,30 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetMode);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Initialize);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetInstanceFocus);
+void CAMERA_SetInstanceFocus(Camera *camera, Instance *instance)
+{
+    camera->focusInstance = instance;
+
+    camera->flags |= 0x800;
+
+    camera->newFocusInstancePos = instance->position;
+
+    if (instance->object != NULL)
+    {
+        if (instance == gameTrackerX.playerInstance)
+        {
+            camera->focusOffset.x = 0;
+            camera->focusOffset.y = 0;
+            camera->focusOffset.z = 352;
+        }
+        else
+        {
+            camera->focusOffset.x = 0;
+            camera->focusOffset.y = 0;
+            camera->focusOffset.z = 512;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetZRotation);
 
