@@ -457,7 +457,22 @@ void CAMERA_SetInstanceFocus(Camera *camera, Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetZRotation);
+void CAMERA_SetZRotation(Camera *camera, short zrot)
+{
+    camera->core.rotation.z = zrot;
+
+    camera->focusRotation.z = zrot;
+
+    camera->targetRotation.z = zrot;
+
+    camera->targetFocusRotation.z = zrot;
+
+    camera->rotationAccl.z = 0;
+    camera->rotationVel.z = 0;
+
+    camera->rotationAccl.z = 0;
+    camera->rotationVel.z = 0;
+}
 
 long CAMERA_LengthSVector(SVector *sv)
 {
