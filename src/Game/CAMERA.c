@@ -5,6 +5,7 @@
 #include "Game/MATH3D.h"
 #include "Game/STREAM.h"
 #include "Game/COLLIDE.h"
+#include "Game/LIGHT3D.h"
 
 long camera_modeToIndex[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0};
 
@@ -109,7 +110,29 @@ void CAMERA_SetViewVolume(Camera *camera)
     CAMERA_CalcVVClipInfo(camera);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetProjDistance);
+void CAMERA_SetProjDistance(Camera *camera, long distance)
+{
+    Level *level;
+    int i;
+
+    SetGeomScreen(distance);
+
+    camera->core.projDistance = distance;
+
+    CAMERA_CalculateViewVolumeNormals(camera);
+
+    for (i = 0; i < 16; i++)
+    {
+        if (StreamTracker.StreamList[i].used == 2)
+        {
+            level = StreamTracker.StreamList[i].level;
+
+            SetFogNearFar(level->fogNear, level->fogFar, camera->core.projDistance);
+
+            LIGHT_CalcDQPTable(level);
+        }
+    }
+}
 
 void CAMERA_CreateNewFocuspoint(Camera *camera);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CreateNewFocuspoint);

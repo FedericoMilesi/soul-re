@@ -298,6 +298,50 @@ typedef struct Level {
     struct LightGroup *razielSpectralLightGroup;
 } Level;
 
+// size: 0x40
+typedef struct _StreamUnit {
+    // offset: 0000
+    long StreamUnitID;
+    // offset: 0004
+    short used;
+    // offset: 0006
+    short flags;
+    // offset: 0008 (392 bytes)
+    struct Level *level;
+    // offset: 000C (16 bytes)
+    char baseAreaName[16];
+    // offset: 001C
+    short toSignal;
+    // offset: 001E
+    short fromSignal;
+    // offset: 0020
+    long FrameCount;
+    // offset: 0024 (12 bytes)
+    short eventVariables[6];
+    // offset: 0030
+    long FogColor;
+    // offset: 0034
+    short UnitFogFar;
+    // offset: 0036
+    short UnitFogNear;
+    // offset: 0038
+    short TargetFogFar;
+    // offset: 003A
+    short TargetFogNear;
+    // offset: 003C
+    short sfxFileHandle;
+    // offset: 003E
+    short pad;
+} StreamUnit;
+
+// size: 0x400
+typedef struct STracker {
+    // offset: 0000 (1024 bytes)
+    struct _StreamUnit StreamList[16];
+} STracker;
+
+STracker StreamTracker;
+
 Level *STREAM_GetLevelWithID(long id);
 void STREAM_RelocateInstance(Instance *instance, SVector *offset);
 void MORPH_SetupInstanceFlags(Instance *instance);
