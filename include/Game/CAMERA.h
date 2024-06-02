@@ -444,6 +444,7 @@ void CriticalDampPosition(long dampMode, Position *position, Position *targetPos
 long CAMERA_DoCameraCollision2(Camera *camera, Position *targetCamPos, int simpleflag);
 void CAMERA_CalcFollowPosition(Camera *camera, Rotation *rotation);
 void CAMERA_CalculateLead(Camera *camera);
+void CAMERA_Normalize(SVector *svector);
 
 extern int CameraCenterDelay;
 Camera theCamera;

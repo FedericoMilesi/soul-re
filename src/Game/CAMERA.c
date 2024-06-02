@@ -35,8 +35,70 @@ EXTERN STATIC short combat_cam_weight;
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
 
-void CAMERA_CalculateViewVolumeNormals(Camera *camera);
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateViewVolumeNormals);
+void CAMERA_CalculateViewVolumeNormals(Camera *camera)
+{
+    short projDistance;
+    Normal n0;
+    Normal n1;
+    Normal n2;
+    Normal n3;
+    int x1;
+    int x2;
+    int y1;
+    int y2;
+
+    projDistance = camera->core.projDistance;
+
+    x1 = (camera->core.leftX - 160) << 4;
+    x2 = (camera->core.rightX - 160) << 4;
+
+    y1 = (camera->core.topY - 120) << 4;
+    y2 = (camera->core.bottomY - 120) << 4;
+
+    n0.x = x1;
+    n0.y = y1;
+    n0.z = (projDistance << 16) >> 12;
+
+    n1.x = x2;
+    n1.y = y1;
+    n1.z = (projDistance << 16) >> 12;
+
+    n2.x = x1;
+    n2.y = y2;
+    n2.z = (projDistance << 16) >> 12;
+
+    n3.x = x2;
+    n3.y = y2;
+    n3.z = (projDistance << 16) >> 12;
+
+    camera->core.viewVolumeNormal[0].x = 0;
+    camera->core.viewVolumeNormal[0].y = 0;
+    camera->core.viewVolumeNormal[0].z = 4096;
+
+    camera->core.viewVolumeNormal[1].x = (((n0.y * n1.z) - (n0.z * n1.y)) >> 12);
+    camera->core.viewVolumeNormal[1].y = -(((n0.x * n1.z) - (n0.z * n1.x)) >> 12);
+    camera->core.viewVolumeNormal[1].z = (((n0.x * n1.y) - (n0.y * n1.x)) >> 12);
+
+    CAMERA_Normalize((SVector *)&camera->core.viewVolumeNormal[1]);
+
+    camera->core.viewVolumeNormal[2].x = (((n2.y * n0.z) - (n2.z * n0.y)) >> 12);
+    camera->core.viewVolumeNormal[2].y = -(((n2.x * n0.z) - (n2.z * n0.x)) >> 12);
+    camera->core.viewVolumeNormal[2].z = (((n2.x * n0.y) - (n2.y * n0.x)) >> 12);
+
+    CAMERA_Normalize((SVector *)&camera->core.viewVolumeNormal[2]);
+
+    camera->core.viewVolumeNormal[3].x = (((n1.y * n3.z) - (n1.z * n3.y)) >> 12);
+    camera->core.viewVolumeNormal[3].y = -(((n1.x * n3.z) - (n1.z * n3.x)) >> 12);
+    camera->core.viewVolumeNormal[3].z = (((n1.x * n3.y) - (n1.y * n3.x)) >> 12);
+
+    CAMERA_Normalize((SVector *)&camera->core.viewVolumeNormal[3]);
+
+    camera->core.viewVolumeNormal[4].x = (((n3.y * n2.z) - (n3.z * n2.y)) >> 12);
+    camera->core.viewVolumeNormal[4].y = -(((n3.x * n2.z) - (n3.z * n2.x)) >> 12);
+    camera->core.viewVolumeNormal[4].z = (((n3.x * n2.y) - (n3.y * n2.x)) >> 12);
+
+    CAMERA_Normalize((SVector *)&camera->core.viewVolumeNormal[4]);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcVVClipInfo);
 
