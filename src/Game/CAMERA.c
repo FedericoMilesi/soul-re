@@ -343,7 +343,42 @@ void CAMERA_RestoreMode(Camera *camera)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Save);
+void CAMERA_Save(Camera *camera, long save)
+{
+    int i;
+
+    if ((save & 0x1))
+    {
+        camera->targetStack++;
+
+        if (camera->targetStack == 3)
+        {
+            camera->targetStack = 2;
+
+            for (i = 0; i < 2; i++)
+            {
+                camera->savedTargetFocusDistance[i] = camera->savedTargetFocusDistance[i + 1];
+            }
+        }
+
+        camera->savedTargetFocusDistance[camera->targetStack] = camera->targetFocusDistance;
+    }
+
+    if ((save & 0x2))
+    {
+        camera->savedfocusRotation.x = camera->targetFocusRotation.x;
+    }
+
+    if ((save & 0x4))
+    {
+        camera->savedfocusRotation.z = camera->focusRotation.z;
+    }
+
+    if ((save & 0x100))
+    {
+        CAMERA_SaveMode(camera, camera->mode);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Restore);
 
