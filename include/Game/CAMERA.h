@@ -445,6 +445,7 @@ long CAMERA_DoCameraCollision2(Camera *camera, Position *targetCamPos, int simpl
 void CAMERA_CalcFollowPosition(Camera *camera, Rotation *rotation);
 void CAMERA_CalculateLead(Camera *camera);
 void CAMERA_Normalize(SVector *svector);
+void CAMERA_CalcPosition(Position *position, Position *base, Rotation *rotation, short distance);
 
 extern int CameraCenterDelay;
 Camera theCamera;

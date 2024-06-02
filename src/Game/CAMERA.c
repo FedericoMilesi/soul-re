@@ -134,8 +134,18 @@ void CAMERA_SetProjDistance(Camera *camera, long distance)
     }
 }
 
-void CAMERA_CreateNewFocuspoint(Camera *camera);
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CreateNewFocuspoint);
+void CAMERA_CreateNewFocuspoint(Camera *camera)
+{
+    SVector sv;
+
+    camera->focusRotation.x = camera->actual_x_rot;
+
+    CAMERA_CalcPosition(&camera->targetPos, &camera->core.position, &camera->focusRotation, camera->focusDistance);
+
+    SET_SVEC3(&sv, &camera->core.position, &camera->targetPos);
+
+    SET_SVEC2((SVector *)&camera->focusPoint, &camera->core.position, (Position *)&sv);
+}
 
 void CAMERA_SaveMode(Camera *camera, long mode);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SaveMode);
