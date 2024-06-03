@@ -930,7 +930,136 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CombatCamDist);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GenericCameraProcess);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CinematicProcess);
+void CAMERA_CinematicProcess(Camera *camera)
+{
+    SVector *camPos;
+    SVector *camTarget;
+    MultiSpline *posSpline;
+    MultiSpline *targetSpline;
+
+    camPos = NULL;
+
+    posSpline = camera->data.Cinematic.posSpline;
+
+    targetSpline = camera->data.Cinematic.targetSpline;
+
+    camTarget = NULL;
+
+    if (camera->posState == 0)
+    {
+        if (targetSpline == NULL)
+        {
+            CAMERA_SetFocus(camera, &camera->targetFocusPoint);
+        }
+
+        if (posSpline != NULL)
+        {
+            camPos = SplineGetNextPointDC(posSpline->positional, &posSpline->curPositional);
+
+            if (camPos != NULL)
+            {
+                if (camera->data.Cinematic.splinePointAhead == 0)
+                {
+                    SET_SVEC((SVector *)&camera->core.position, (Position *)camPos);
+                }
+                else
+                {
+                    SET_SVEC((SVector *)&camera->core.position, (Position *)&camera->data.Cinematic.lastSplinePos);
+                }
+            }
+
+            if (camera->data.Cinematic.splinePointAhead != 0)
+            {
+                CAMERA_SetTarget(camera, (Position *)camPos);
+
+                SET_SVEC((SVector *)&camera->data.Cinematic.lastSplinePos, (Position *)camPos);
+            }
+            else if (targetSpline != NULL)
+            {
+                camTarget = SplineGetNextPointDC(targetSpline->positional, &targetSpline->curPositional);
+
+                if (camTarget != NULL)
+                {
+                    SET_SVEC((SVector *)&camera->targetFocusPoint, (Position *)camTarget);
+
+                    CAMERA_SetTarget(camera, (Position *)camTarget);
+                }
+            }
+            else
+            {
+                CAMERA_SetMaxVel(camera);
+
+                CriticalDampPosition(1, &camera->focusPoint, &camera->targetFocusPoint, &camera->focusPointVel, &camera->focusPointAccl, (short)(camera->maxVel * 2));
+            }
+
+            SET_SVEC((SVector *)&camera->targetPos, &camera->core.position);
+
+            if (posSpline != NULL)
+            {
+                if ((camera->data.Cinematic.targetSpline != NULL) || (camera->data.Cinematic.splinePointAhead != 0))
+                {
+                    CAMERA_SetMaxVel(camera);
+
+                    CriticalDampPosition(1, &camera->focusPoint, &camera->targetFocusPoint, &camera->focusPointVel, &camera->focusPointAccl, (short)(camera->maxVel * 2));
+                }
+            }
+        }
+
+        CAMERA_CalcRotation(&camera->focusRotation, &camera->focusPoint, &camera->core.position);
+
+        if ((camPos == NULL) & (camTarget == NULL))
+        {
+            camera->data.Cinematic.cinema_done = 1;
+        }
+    }
+    else
+    {
+        CriticalDampPosition(4, &camera->core.position, &camera->targetPos, &camera->positionVel, &camera->positionAccl, (short)(-camera->smooth));
+
+        if (camera->data.Cinematic.targetSpline != NULL)
+        {
+            CriticalDampPosition(4, &camera->focusPoint, &camera->targetFocusPoint, &camera->focusPointVel, &camera->focusPointAccl, (short)(-camera->smooth));
+
+            CAMERA_SetTarget(camera, &camera->focusPoint);
+
+            if ((ABS(camera->core.position.x - camera->targetPos.x) < 9) &&
+                (ABS(camera->core.position.y - camera->targetPos.y) < 9) &&
+                (ABS(camera->core.position.z - camera->targetPos.z) < 9) &&
+                (ABS(camera->focusPoint.x - camera->targetFocusPoint.x) < 9) &&
+                (ABS(camera->focusPoint.y - camera->targetFocusPoint.y) < 9) &&
+                (ABS(camera->focusPoint.z - camera->targetFocusPoint.z) < 9))
+            {
+                camera->posState = 0;
+            }
+        }
+        else
+        {
+            CAMERA_SetFocus(camera, &camera->targetFocusPoint);
+
+            CriticalDampPosition(4, &camera->focusPoint, &camera->targetFocusPoint, &camera->focusPointVel, &camera->focusPointAccl, (short)(-camera->smooth));
+
+            CAMERA_SetTarget(camera, &camera->focusPoint);
+
+
+            if ((ABS(camera->core.position.x - camera->targetPos.x) < 9) &&
+                (ABS(camera->core.position.y - camera->targetPos.y) < 9) &&
+                (ABS(camera->core.position.z - camera->targetPos.z) < 9))
+            {
+                camera->posState = 0;
+            }
+        }
+    }
+
+    CAMERA_CalcRotation(&camera->targetRotation, &camera->focusPoint, &camera->core.position);
+
+    SET_SVEC((SVector *)&camera->core.rotation, (Position *)&camera->targetRotation);
+
+    camera->actual_x_rot = camera->core.rotation.x;
+
+    camera->lagZ = camera->core.rotation.z;
+
+    CAMERA_UpdateFocusRoll(camera);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GetDistSq);
 
