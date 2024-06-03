@@ -589,7 +589,19 @@ void CAMERA_SetTimer(Camera *camera, long time)
     CAMERA_Save(camera, -1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust_tilt);
+void CAMERA_Adjust_tilt(Camera *camera, long tilt)
+{
+    camera->tiltState = 3;
+
+    camera->signalRot.x = tilt & 0xFFF;
+
+    if (camera->smooth == 0)
+    {
+        camera->tilt = 0;
+
+        camera->actual_x_rot = camera->tfaceTilt = camera->focusRotation.x = camera->targetRotation.x = camera->targetFocusRotation.x = camera->signalRot.x;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust_distance);
 
