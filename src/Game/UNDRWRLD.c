@@ -22,7 +22,7 @@ void UNDERWORLD_UpdatePlayer(Intro *playerIntro, Instance *instance)
 {
     SVector offset;
 
-    SET_SVEC3(&offset, &playerIntro->position, &instance->position);
+    SUB_VEC(&offset, &playerIntro->position, &instance->position);
 
     STREAM_RelocateInstance(instance, &offset);
 }
