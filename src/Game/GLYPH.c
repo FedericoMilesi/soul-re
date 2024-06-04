@@ -1,6 +1,30 @@
 #include "common.h"
 #include "Game/CAMERA.h"
 
+EXTERN STATIC short HUD_Captured;
+
+EXTERN STATIC short HUD_Count;
+
+EXTERN STATIC short HUD_Count_Overall;
+
+EXTERN STATIC short HUD_Pos_vel;
+
+EXTERN STATIC short HUD_Position;
+
+EXTERN STATIC short HUD_Rot_vel;
+
+EXTERN STATIC short HUD_Rotation;
+
+EXTERN STATIC short HUD_State;
+
+EXTERN STATIC short HUD_Wait;
+
+EXTERN STATIC int warpDraw;
+
+EXTERN STATIC int glowdeg;
+
+int hud_warp_arrow_flash;
+
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
 
 void GlyphCollide(void)
@@ -66,7 +90,28 @@ void HUD_Damp(short *val, short target, short *vel, short max)
     CriticalDampValue(1, val, target, vel, &accl, max);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HUD_Init);
+void HUD_Init()
+{
+    HUD_Rotation = 0;
+
+    HUD_Rot_vel = 0;
+    HUD_Pos_vel = 0;
+
+    HUD_State = 0;
+
+    HUD_Wait = 0;
+
+    HUD_Position = -1000;
+
+    HUD_Count = 0;
+    HUD_Count_Overall = 0;
+
+    warpDraw = 0;
+
+    glowdeg = 0;
+
+    hud_warp_arrow_flash = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HUD_Setup_Chit_Count);
 
