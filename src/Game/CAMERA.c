@@ -783,7 +783,31 @@ void CAMERA_CalcRotation(Rotation *rotation, Position *target, Position *positio
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFSRotation);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Relocate);
+void CAMERA_Relocate(Camera *camera, SVector *offset, int streamSignalFlag)
+{
+    if ((streamSignalFlag != 0) || (camera->mode != 5))
+    {
+        camera->core.position.x += offset->x;
+        camera->core.position.y += offset->y;
+        camera->core.position.z += offset->z;
+
+        camera->focusPoint.x += offset->x;
+        camera->focusPoint.y += offset->y;
+        camera->focusPoint.z += offset->z;
+
+        camera->targetPos.x += offset->x;
+        camera->targetPos.y += offset->y;
+        camera->targetPos.z += offset->z;
+
+        camera->targetFocusPoint.x += offset->x;
+        camera->targetFocusPoint.y += offset->y;
+        camera->targetFocusPoint.z += offset->z;
+
+        camera->newFocusInstancePos.x += offset->x;
+        camera->newFocusInstancePos.y += offset->y;
+        camera->newFocusInstancePos.z += offset->z;
+    }
+}
 
 TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colInfo, int secondcheck_flag);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SphereToSphereWithLines);
