@@ -1508,7 +1508,24 @@ void CAMERA_SplineProcess(Camera *camera)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ShakeCamera);
+void CAMERA_ShakeCamera(Camera *camera)
+{
+    if (camera->shake > 0)
+    {
+        camera->core.position.x += (camera_shakeOffset[(camera->shakeFrame & 0xF)].x * camera->shakeScale) >> 12;
+        camera->core.position.y += (camera_shakeOffset[(camera->shakeFrame & 0xF)].y * camera->shakeScale) >> 12;
+        camera->core.position.z += (camera_shakeOffset[(camera->shakeFrame & 0xF)].z * camera->shakeScale) >> 12;
+
+        camera->shake -= gameTrackerX.timeMult;
+
+        if (camera->shake < 0)
+        {
+            camera->shake = 0;
+        }
+
+        camera->shakeFrame++;
+    }
+}
 
 void CAMERA_Process(Camera *camera)
 {
