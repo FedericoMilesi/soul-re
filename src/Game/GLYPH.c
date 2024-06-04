@@ -113,7 +113,12 @@ void HUD_Init()
     hud_warp_arrow_flash = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HUD_Setup_Chit_Count);
+void HUD_Setup_Chit_Count(int chits)
+{
+    HUD_Count_Overall = chits;
+
+    HUD_Count = chits % 5;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HUD_Update);
 
