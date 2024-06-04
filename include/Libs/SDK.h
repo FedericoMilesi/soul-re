@@ -17,6 +17,49 @@
 
 #define getScratchAddr(offset)  ((unsigned long *)(0x1f800000+(offset)*4))
 
+// GTE macros
+
+#define gte_SetRotMatrix(r0) __asm__ ( \
+        "lw    $12, 0(%0);" \
+        "lw    $13, 4(%0);" \
+        "ctc2    $12, $0;" \
+        "ctc2    $13, $1;" \
+        "lw    $12, 8(%0);" \
+        "lw    $13, 12(%0);" \
+        "lw    $14, 16(%0);" \
+        "ctc2    $12, $2;" \
+        "ctc2    $13, $3;" \
+        "ctc2    $14, $4" \
+        : : "r"(r0) \
+        : "$12", "$13", "$14" \
+    )
+
+#define gte_ldv0(r0) __asm__ ( \
+        "lwc2    $0, 0(%0);" \
+        "lwc2    $1, 4(%0)" \
+        : : "r"(r0) \
+    )
+
+#define gte_nmvmva(sf, mx, v, cv, lm) __asm__ ( \
+        "nop;" \
+        "nop;" \
+        ".word %0" \
+        : : "g"(0x4A400012 | ((sf) & 0x1) << 19 | ((mx) & 0x3) << 17 | ((v) & 0x3) << 15 | ((cv) & 0x3) << 13 | ((lm) & 0x1) << 10) \
+    )
+
+#define gte_mvmva(sf, mx, v, cv, lm) __asm__ ( \
+        ".word %0" \
+        : : "g"(0x4A400012 | ((sf) & 0x1) << 19 | ((mx) & 0x3) << 17 | ((v) & 0x3) << 15 | ((cv) & 0x3) << 13 | ((lm) & 0x1) << 10) \
+    )
+
+#define gte_stlvnl(r0) __asm__ ( \
+        "swc2    $25, 0(%0);" \
+        "swc2    $26, 4(%0);" \
+        "swc2    $27, 8(%0)" \
+        : : "r"(r0) \
+        : "memory" \
+    )
+
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);
