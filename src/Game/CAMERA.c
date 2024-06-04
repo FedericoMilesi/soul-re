@@ -6,6 +6,7 @@
 #include "Game/STREAM.h"
 #include "Game/COLLIDE.h"
 #include "Game/LIGHT3D.h"
+#include "Game/GAMEPAD.h"
 
 long camera_modeToIndex[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0};
 
@@ -652,7 +653,56 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ChangeTo);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetShake);
+void CAMERA_SetShake(Camera *camera, long shake, long scale)
+{
+    int shock;
+    int duration;
+    int temp, temp2; // not from decls.h
+
+    camera->shakeFrame = 0;
+
+    if (camera->shake == 0)
+    {
+        camera->shake = shake << 12;
+        camera->shakeScale = (short)scale;
+    }
+    else
+    {
+        temp = camera->shake;
+
+        if (temp < (shake << 12))
+        {
+            temp = shake << 12;
+        }
+
+        camera->shake = temp;
+
+        temp2 = camera->shakeScale;
+
+        if (temp2 < scale)
+        {
+            temp2 = scale;
+        }
+
+        camera->shakeScale = (short)temp2;
+    }
+
+    shock = (short)camera->shakeScale >> 1;
+
+    if (shock >= 256)
+    {
+        shock = 255;
+    }
+
+    duration = camera->shake;
+
+    if (duration < 16384)
+    {
+        duration = 16384;
+    }
+
+    GAMEPAD_Shock1(shock, duration);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", Decouple_AngleMoveToward);
 
