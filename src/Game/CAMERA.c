@@ -603,7 +603,26 @@ void CAMERA_Adjust_tilt(Camera *camera, long tilt)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust_distance);
+void CAMERA_Adjust_distance(Camera *camera, long dist)
+{
+    camera->signalFocusDistance = (short)dist;
+
+    camera->distanceState = 3;
+
+    if (camera->maxFocusDistance < (short)dist)
+    {
+        camera->signalFocusDistance = (short)camera->maxFocusDistance;
+    }
+    else if ((short)dist < camera->minFocusDistance)
+    {
+        camera->signalFocusDistance = (short)camera->minFocusDistance;
+    }
+
+    if (camera->smooth == 0)
+    {
+        camera->collisionTargetFocusDistance = camera->targetFocusDistance = camera->focusDistance = camera->signalFocusDistance;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust_rotation);
 
