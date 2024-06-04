@@ -1040,7 +1040,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetLookFocusAndDistance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_LookProcess);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Normalize);
+void CAMERA_Normalize(SVector *svector)
+{
+    long len;
+
+    len = CAMERA_LengthSVector(svector);
+
+    if (len != 0)
+    {
+        svector->x = (short)((svector->x << 12) / len);
+        svector->y = (short)((svector->y << 12) / len);
+        svector->z = (short)((svector->z << 12) / len);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_HandleTransitions);
 
