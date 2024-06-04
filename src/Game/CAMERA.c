@@ -749,7 +749,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CriticalDampPosition);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CriticalDampAngle);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcZRotation);
+short CAMERA_CalcZRotation(Position *target, Position *position)
+{
+    SVector onPlane;
+    SVector sv;
+
+    SET_SVEC3(&onPlane, position, target);
+
+    sv.x = onPlane.x;
+    sv.y = onPlane.y;
+    sv.z = 0;
+
+    CAMERA_LengthSVector(&sv);
+
+    return (ratan2(onPlane.y, onPlane.x) + 1024) & 0xFFF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcRotation);
 
