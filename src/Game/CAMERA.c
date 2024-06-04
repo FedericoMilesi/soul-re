@@ -1056,7 +1056,19 @@ void CAMERA_Relocate(Camera *camera, SVector *offset, int streamSignalFlag)
 TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colInfo, int secondcheck_flag);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SphereToSphereWithLines);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcTilt);
+long CAMERA_CalcTilt(Normal *normal, short zRot)
+{
+    MATRIX matrix;
+    VECTOR newNormal;
+
+    MATH3D_SetUnityMatrix(&matrix);
+
+    RotMatrixZ(-zRot, &matrix);
+
+    ApplyMatrix(&matrix, (SVECTOR *)normal, &newNormal);
+
+    return -(short)ratan2(newNormal.vy, newNormal.vz);
+}
 
 void CAMERA_SetLookFocusAndBase(Instance *focusInstance, Position *focusPoint);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetLookFocusAndBase);

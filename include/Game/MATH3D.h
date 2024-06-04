@@ -86,5 +86,6 @@ long MATH3D_FastSqrt0(long square);
 long MATH3D_LengthXYZ(long x, long y, long z);
 unsigned long MATH3D_SquareLength(long x, long y, long z);
 short AngleDiff(short current, short destination);
+void MATH3D_SetUnityMatrix(MATRIX *mat);
 
 #endif
