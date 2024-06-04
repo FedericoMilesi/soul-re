@@ -948,7 +948,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CriticalDampValue);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CriticalDampPosition);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CriticalDampAngle);
+void CriticalDampAngle(long dampMode, short *currentVal, short target, short *vel, short *accl, int smooth)
+{
+    short current;
+    short temp; // not from decls.h
+
+    temp = smooth;
+
+    target &= 0xFFF;
+
+    current = *currentVal & 0xFFF;
+
+    if ((target - current) >= 2048)
+    {
+        current += 4096;
+    }
+    else if ((current - target) > 2048)
+    {
+        target |= 0x1000;
+    }
+
+    CriticalDampValue(dampMode, &current, target, vel, accl, temp);
+
+    current &= 0xFFF;
+
+    *currentVal = current;
+}
 
 short CAMERA_CalcZRotation(Position *target, Position *position)
 {
