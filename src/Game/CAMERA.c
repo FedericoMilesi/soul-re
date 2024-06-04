@@ -1036,7 +1036,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcTilt);
 void CAMERA_SetLookFocusAndBase(Instance *focusInstance, Position *focusPoint);
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetLookFocusAndBase);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetLookFocusAndDistance);
+void CAMERA_SetLookFocusAndDistance(Camera *camera, VECTOR *focuspoint, int distance)
+{
+    camera->targetFocusPoint.x = (short)focuspoint->vx;
+    camera->targetFocusPoint.y = (short)focuspoint->vy;
+    camera->targetFocusPoint.z = (short)focuspoint->vz;
+
+    Camera_lookDist = distance;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_LookProcess);
 
