@@ -258,5 +258,7 @@ void GAMELOOP_SetGameTime(long timeOfDay);
 int GAMELOOP_GetTimeOfDay();
 
 GameTracker gameTrackerX;
+extern long playerCameraMode;
+extern long cameraMode;
 
 #endif

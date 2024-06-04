@@ -11,6 +11,10 @@
 #define MAX(a,b) (((a)>(b))?(a):(b))
 #endif
 
+#ifndef ABS
+#define ABS(a) ((a) < 0 ? -(a) : (a))
+#endif
+
 #define getScratchAddr(offset)  ((unsigned long *)(0x1f800000+(offset)*4))
 
 int rand();

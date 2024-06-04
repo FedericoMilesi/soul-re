@@ -16,7 +16,7 @@ void SCRIPT_CombineEulerAngles(Rotation *combinedRotation, Rotation *inputRotati
 
     G2EulerAngles_FromMatrix(&ea, (G2Matrix *)&rotMatrix1, 21);
 
-    SET_ROT((Rotation *)combinedRotation, (Position *)&ea);
+    SET_VEC((SVector *)combinedRotation, (Position *)&ea);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_InstanceSplineInit);

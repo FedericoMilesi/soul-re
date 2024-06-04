@@ -99,4 +99,7 @@ typedef struct MultiSpline {
     struct MATRIX curRotMatrix;
 } MultiSpline;
 
+unsigned long SplineGetOffsetNext(Spline *spline, SplineDef *def, long fracOffset);
+unsigned long SplineGetData(Spline *spline, SplineDef *def, void *p);
+
 #endif

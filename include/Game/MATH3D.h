@@ -5,7 +5,7 @@
 
 #define abs_diff(a,b) ( a-b<0?b-a:a-b )
 
-#define SET_SVEC(A, B) {\
+#define SET_VEC(A, B) {\
 short _x0;\
 short _y0;\
 short _z0;\
@@ -25,7 +25,7 @@ _v->y = _y0;\
 _v->z = _z0;\
 }
 
-#define SET_SVEC2(A, B, C) {\
+#define ADD_SVEC(A, B, C) {\
 short _x0;\
 short _y0;\
 short _z0;\
@@ -53,7 +53,7 @@ _v->y = _y0 + _y1;\
 _v->z = _z0 + _z1;\
 }
 
-#define SET_SVEC3(A, B, C) {\
+#define SUB_VEC(A, B, C) {\
 short _x0;\
 short _y0;\
 short _z0;\
@@ -79,26 +79,6 @@ _z1 = _v1->z;\
 _v->x = _x0 - _x1;\
 _v->y = _y0 - _y1;\
 _v->z = _z0 - _z1;\
-}
-
-#define SET_ROT(A, B) {\
-short _x0;\
-short _y0;\
-short _z0;\
-Rotation *_v;\
-Position *_v0;\
-\
-_v0 = B;\
-_v = A;\
-\
-_x0 = _v0->x;\
-_y0 = _v0->y;\
-_z0 = _v0->z;\
-\
-\
-_v->x = _x0;\
-_v->y = _y0;\
-_v->z = _z0;\
 }
 
 long MATH3D_LengthXY(long x, long y);

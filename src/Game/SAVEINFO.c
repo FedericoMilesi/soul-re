@@ -78,6 +78,3 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_LoadSaveGame);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_SizeOfFreeSpace);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", __SN_ENTRY_POINT);
-
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", __main);
