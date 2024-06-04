@@ -733,7 +733,15 @@ void CAMERA_SetShake(Camera *camera, long shake, long scale)
     GAMEPAD_Shock1(shock, duration);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", Decouple_AngleMoveToward);
+void Decouple_AngleMoveToward(short *current_ptr, short destination, short step)
+{
+    if (gameTrackerX.timeMult != 4096)
+    {
+        step = (short)((step * gameTrackerX.timeMult) >> 12);
+    }
+
+    AngleMoveToward(current_ptr, destination, step);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CriticalDampValue);
 
