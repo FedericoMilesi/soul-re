@@ -482,6 +482,7 @@ long CAMERA_ACForcedMovement(Camera *camera, CameraCollisionInfo *colInfo);
 void CAMERA_Restore(Camera *camera, long restore);
 void CAMERA_ChangeToUnderWater(Camera *camera, Instance *instance);
 int WARPGATE_IsWarpgateActive();
+void CAMERA_Adjust_rotation(Camera *camera, long rotation);
 
 extern int CameraCenterDelay;
 Camera theCamera;

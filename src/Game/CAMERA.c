@@ -649,7 +649,33 @@ void CAMERA_Adjust_roll(long roll_degrees, int frames)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust);
+void CAMERA_Adjust(Camera *camera, long adjust)
+{
+    SVector dv;
+    CameraKey *temp; // not from decls.h
+
+    temp = camera->cameraKey;
+
+    if (temp != NULL)
+    {
+        if ((adjust & 0x1))
+        {
+            SET_SVEC3(&dv, (Position *)temp, (Position *)&temp->tx);
+
+            CAMERA_Adjust_distance(camera, CAMERA_LengthSVector(&dv));
+        }
+
+        if ((adjust & 0x2))
+        {
+            CAMERA_Adjust_tilt(camera, temp->rx);
+        }
+
+        if ((adjust & 0x4))
+        {
+            CAMERA_Adjust_rotation(camera, temp->rz);
+        }
+    }
+}
 
 void CAMERA_ChangeTo(Camera *camera, CameraKey *cameraKey)
 {
