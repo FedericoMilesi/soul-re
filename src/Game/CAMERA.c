@@ -1082,7 +1082,90 @@ void CAMERA_SetLookFocusAndDistance(Camera *camera, VECTOR *focuspoint, int dist
     Camera_lookDist = distance;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_LookProcess);
+void CAMERA_LookProcess(Camera *camera)
+{
+    Instance *focusInstance;
+    int smooth;
+    int distance;
+    long dampMode;
+
+    camera->targetFocusPoint.x += camera->focusInstanceVelVec.x;
+    camera->targetFocusPoint.y += camera->focusInstanceVelVec.y;
+    camera->targetFocusPoint.z += camera->focusInstanceVelVec.z;
+
+    focusInstance = camera->focusInstance;
+
+    if (camera->focusDistance <= Camera_lookDist)
+    {
+        distance = Camera_lookDist;
+    }
+    else
+    {
+        distance = camera->focusDistance;
+    }
+
+    CAMERA_CalcPosition(&camera->targetPos, &camera->focusPoint, &camera->focusRotation, distance);
+
+    camera->data.Follow.hit = CAMERA_DoCameraCollision2(camera, &camera->targetPos, 1);
+
+    if (camera->data.Follow.hit != 0)
+    {
+        smooth = 512;
+
+        dampMode = 5;
+
+        distance = camera->collisionTargetFocusDistance;
+
+        if (distance > Camera_lookDist)
+        {
+            distance = Camera_lookDist;
+        }
+    }
+    else
+    {
+        distance = Camera_lookDist;
+
+        smooth = 128;
+
+        dampMode = 1;
+    }
+
+    if (((camera->instance_mode & 0x20000)) && (distance < 550))
+    {
+        distance = 550;
+    }
+
+    if ((camera->flags & 0x800))
+    {
+        camera->focusDistance = camera->targetFocusDistance;
+
+        SET_VEC((SVector *)&camera->focusPoint, &camera->targetFocusPoint);
+    }
+    else
+    {
+        CriticalDampValue(dampMode, &camera->focusDistance, distance, &camera->focusDistanceVel, &camera->focusDistanceAccl, smooth);
+        CriticalDampPosition(0, &camera->focusPoint, &camera->targetFocusPoint, &camera->focusPointVel, &camera->focusPointAccl, camera->maxVel);
+    }
+
+    camera->targetFocusRotation.x = camera->lookRot.x;
+    camera->targetFocusRotation.y = camera->lookRot.y;
+    camera->targetFocusRotation.z = (camera->lookRot.z + focusInstance->rotation.z + 2048) & 0xFFF;
+
+    CriticalDampAngle(1, &camera->focusRotation.z, camera->targetFocusRotation.z, &camera->focusRotVel.z, &camera->focusRotAccl.z, 64);
+    CriticalDampAngle(1, &camera->focusRotation.x, camera->targetFocusRotation.x, &camera->focusRotVel.x, &camera->focusRotAccl.x, 64);
+
+    CAMERA_CalcPosition(&camera->targetPos, &camera->focusPoint, &camera->focusRotation, camera->focusDistance);
+
+    SET_VEC((SVector *)&camera->core.position, &camera->targetPos);
+    SET_VEC((SVector *)&camera->targetRotation, (Position *)&camera->focusRotation);
+    SET_VEC((SVector *)&camera->core.rotation, (Position *)&camera->targetRotation);
+
+    camera->distanceState = 0;
+
+    camera->lagZ = camera->core.rotation.z;
+
+    CAMERA_CalculateLead(camera);
+}
 
 void CAMERA_Normalize(SVector *svector)
 {
