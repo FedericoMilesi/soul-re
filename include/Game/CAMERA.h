@@ -100,6 +100,34 @@ typedef struct _SavedCinematic {
     struct Level *level;
 } SavedCinematic;
 
+// size: 0x18
+typedef struct _CameraKey {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short z;
+    // offset: 0006
+    short id;
+    // offset: 0008
+    short rx;
+    // offset: 000A
+    short ry;
+    // offset: 000C
+    short rz;
+    // offset: 000E
+    short flags;
+    // offset: 0010
+    short tx;
+    // offset: 0012
+    short ty;
+    // offset: 0014
+    short tz;
+    // offset: 0016
+    short pad;
+} CameraKey;
+
 // size: 0x4C4
 typedef struct Camera {
     // offset: 0000 (224 bytes)

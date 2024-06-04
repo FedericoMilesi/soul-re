@@ -651,7 +651,10 @@ void CAMERA_Adjust_roll(long roll_degrees, int frames)
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ChangeTo);
+void CAMERA_ChangeTo(Camera *camera, CameraKey *cameraKey)
+{
+    camera->cameraKey = cameraKey;
+}
 
 void CAMERA_SetShake(Camera *camera, long shake, long scale)
 {
