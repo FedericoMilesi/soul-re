@@ -6,6 +6,7 @@
 #include "Game/STREAM.h"
 #include "Game/COLLIDE.h"
 #include "Game/LIGHT3D.h"
+#include "Game/SPLINE.h"
 #include "Game/GAMEPAD.h"
 
 long camera_modeToIndex[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0};
@@ -22,21 +23,39 @@ static long current_roll_amount = 0;
 
 static int roll_inc = 0;
 
-EXTERN STATIC short Camera_lookHeight;
+static MATRIX wcTransformX;
 
-EXTERN STATIC short Camera_lookDist;
+static MATRIX wcTransform2X;
 
-EXTERN STATIC short CenterFlag;
+static MATRIX cwTransform2X;
 
-EXTERN STATIC short combat_cam_angle;
+static short combat_cam_distance;
 
-EXTERN STATIC Rotation splinecam_helprot;
+static short combat_cam_angle;
 
-EXTERN STATIC short combat_cam_weight;
+static short combat_cam_weight;
 
-EXTERN STATIC long cameraMode;
+static short combat_cam_debounce;
 
-EXTERN STATIC short combat_cam_debounce;
+static short CenterFlag;
+
+static SVector camera_shakeOffset[16];
+
+static SVector camera_plane;
+
+static SVector left_point;
+
+static SVector right_point;
+
+static short hitline_rot;
+
+static long ACE_amount;
+
+static Rotation splinecam_helprot;
+
+static short Camera_lookHeight;
+
+static short Camera_lookDist;
 
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
@@ -429,11 +448,139 @@ void CAMERA_Restore(Camera *camera, long restore)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", SplineGetNextPointDC);
+SVector *SplineGetNextPointDC(Spline *spline, SplineDef *def)
+{
+    static SVector point;
+
+    if (SplineGetOffsetNext(spline, def, gameTrackerX.timeMult) != 0)
+    {
+        if (SplineGetData(spline, def, &point) != 0)
+        {
+            return &point;
+        }
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetMode);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Initialize);
+void CAMERA_Initialize(Camera *camera)
+{
+    long i;
+
+    memset(camera, 0, sizeof(Camera));
+
+    for (i = 0; i < 16; i++)
+    {
+        camera_shakeOffset[i].x = (rand() % 0x100) - 128;
+        camera_shakeOffset[i].y = (rand() % 0x100) - 128;
+        camera_shakeOffset[i].z = (rand() % 0x100) - 128;
+    }
+
+    camera->core.rotation.x = 4039;
+    camera->targetRotation.x = 4039;
+    camera->focusRotation.x = 4039;
+    camera->targetFocusRotation.x = 4039;
+
+    camera->focusDistanceList[0][0] = 1500;
+    camera->focusDistanceList[0][1] = 2250;
+    camera->focusDistanceList[0][2] = 3200;
+    camera->focusDistanceList[1][0] = 1500;
+    camera->focusDistanceList[1][1] = 2000;
+    camera->focusDistanceList[1][2] = 2600;
+    camera->focusDistanceList[2][0] = 1200;
+    camera->focusDistanceList[2][1] = 1600;
+    camera->focusDistanceList[2][2] = 2000;
+    camera->focusDistance = camera->targetFocusDistance = camera->focusDistanceList[0][1];
+
+    camera->tiltList[0][0] = 4039;
+    camera->tiltList[0][1] = 4039;
+    camera->tiltList[0][2] = 4039;
+    camera->tiltList[1][0] = 4039;
+    camera->tiltList[1][1] = 4039;
+    camera->tiltList[1][2] = 4039;
+    camera->tiltList[2][0] = 4039;
+    camera->tiltList[2][1] = 4039;
+    camera->tiltList[2][2] = 4039;
+
+    camera->smallBaseSphere.radiusSquared = 78400;
+    camera->focusSphere.radiusSquared = 78400;
+    camera->posSphere.radiusSquared = 78400;
+    camera->smallBaseSphere.radius = 280;
+    camera->focusSphere.radius = 280;
+    camera->posSphere.radius = 280;
+
+    camera->core.projDistance = 320;
+    camera->core.nearPlane = 50;
+    camera->core.farPlane = 12000;
+    camera->core.bottomY = 240;
+    camera->core.wcTransform = &wcTransformX;
+    camera->core.wcTransform2 = &wcTransform2X;
+    camera->core.cwTransform2 = &cwTransform2X;
+    camera->smooth = 16;
+    camera->core.leftX = 0;
+    camera->core.rightX = 320;
+    camera->core.topY = 0;
+    camera->maxVel = 200;
+    camera->always_rotate_flag = 0;
+    camera->follow_flag = 0;
+    camera->real_focuspoint = camera->focusPoint;
+    camera->focuspoint_fallz = camera->focusPoint.z;
+    camera->Spline01 = NULL;
+    camera->Spline00 = NULL;
+    shorten_count = 0;
+    shorten_flag = 0;
+    camera->maxFocusDistance = 4096;
+    camera->minFocusDistance = 512;
+    camera->flags |= 0x800;
+
+    if (camera->focusInstance != NULL)
+    {
+        CAMERA_EndLook(camera);
+    }
+
+    camera->presetIndex = 1;
+    camera->mode = 0;
+
+    CAMERA_SetMode(camera, playerCameraMode);
+
+    camera->maxXYDist = 3000;
+    camera->minXYDist = 0;
+    camera->rotDirection = 1;
+
+    camera->core.screenScale.z = 4096;
+    camera->core.screenScale.y = 4096;
+    camera->core.screenScale.x = 4096;
+
+    camera->stack = -1;
+    camera->targetStack = -1;
+
+    camera->flags |= 0x8000;
+
+    for (i = 0; i < 3; i++)
+    {
+        camera->savedMode[i] = 0;
+    }
+
+    camera->core.projDistance = 320;
+
+    CAMERA_SetProjDistance(camera, 320);
+
+    camera->data.Cinematic.cinema_done = 0;
+
+    Camera_lookHeight = 512;
+    Camera_lookDist = 650;
+    CameraCenterDelay = 10;
+    CenterFlag = -1;
+    combat_cam_distance = 3000;
+    roll_target = 0;
+    current_roll_amount = 0;
+    roll_inc = 0;
+    combat_cam_angle = 0;
+    combat_cam_weight = 4096;
+    combat_cam_debounce = 0;
+}
 
 void CAMERA_SetInstanceFocus(Camera *camera, Instance *instance)
 {
@@ -538,7 +685,44 @@ unsigned long CAMERA_QueryMode(Camera *camera)
     return mode;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetMaxVel);
+void CAMERA_SetMaxVel(Camera *camera)
+{
+    long extraVel;
+    long targetMaxVel;
+    SVector cam_dist;
+    static long maxVelAccl;
+    static long maxVelVel;
+
+    SUB_VEC(&cam_dist, &camera->focusPoint, &camera->targetFocusPoint);
+
+    extraVel = camera->focusDistance / 100;
+
+    if (extraVel < 20)
+    {
+        extraVel = 20;
+    }
+
+    if (camera->forced_movement != 0)
+    {
+        extraVel += extraVel * 4;
+    }
+
+    targetMaxVel = ((short)CAMERA_LengthSVector(&cam_dist) + extraVel - camera->maxVel) >> 2;
+
+    targetMaxVel -= maxVelVel;
+
+    maxVelVel += targetMaxVel;
+
+    maxVelAccl = targetMaxVel;
+    (void)maxVelAccl;
+
+    camera->maxVel += (short)maxVelVel;
+
+    if (camera->maxVel <= 0)
+    {
+        camera->maxVel = 1;
+    }
+}
 
 void CAMERA_SetTarget(Camera *camera, Position *pos)
 {
