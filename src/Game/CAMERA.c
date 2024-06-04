@@ -607,7 +607,27 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust_distance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust_rotation);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust_roll);
+void CAMERA_Adjust_roll(long roll_degrees, int frames)
+{
+    int temp; // not from decls.h
+
+    temp = roll_degrees & 0xFFF;
+
+    if (frames == 0)
+    {
+        current_roll_amount = temp * 4096;
+
+        roll_target = current_roll_amount;
+
+        roll_inc = 0;
+    }
+    else
+    {
+        roll_inc = (CAMERA_SignedAngleDifference(temp, (current_roll_amount / 4096)) * 4096) / frames;
+
+        roll_target = temp * 4096;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust);
 
