@@ -60,6 +60,28 @@ static short Camera_lookDist;
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
 
+static inline int GetSecondCheckFlag(Camera *camera)
+{
+    if ((camera->flags & 0x10000))
+    {
+        return 0;
+    }
+
+    if ((camera->real_focuspoint.z - camera->targetFocusPoint.z) >= 0)
+    {
+        if ((camera->real_focuspoint.z - camera->targetFocusPoint.z) < 5)
+        {
+            return 0;
+        }
+    }
+    else if ((camera->targetFocusPoint.z - camera->real_focuspoint.z) < 5)
+    {
+        return 0;
+    }
+
+    return 1;
+}
+
 void CAMERA_CalculateViewVolumeNormals(Camera *camera)
 {
     short projDistance;
@@ -2519,9 +2541,215 @@ void CAMERA_Panic(Camera *camera, short min_dist)
     }
 }
 
-/*TODO: migrate to CAMERA_DoCameraCollision2*/
-static long D_800D0404 = 0; // collisiontimeDown
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_DoCameraCollision2);
+long CAMERA_DoCameraCollision2(Camera *camera, Position *targetCamPos, int simpleflag)
+{
+    int secondcheck_flag;
+    long hit;
+    CameraCollisionInfo colInfo;
+    static int collisiontimeDown = 0;
+    int speed;
+    int angle1;
+    int angle2;
+
+    hit = 0;
+
+    CAMERA_SetupColInfo(camera, &colInfo, targetCamPos);
+
+    secondcheck_flag = GetSecondCheckFlag(camera);
+
+    camera->data.Follow.tface = CAMERA_SphereToSphereWithLines(camera, &colInfo, secondcheck_flag);
+
+    if (((camera->instance_mode & 0x2000000)) && (colInfo.numCollided > 0) && (colInfo.lenCenterToExtend < 600))
+    {
+        CenterFlag = -1;
+
+        if ((colInfo.numCollided != 1) || (!(colInfo.flags & 0x6)))
+        {
+            if (combat_cam_weight < 4096)
+            {
+                combat_cam_weight += 144;
+
+                if (combat_cam_weight > 4095)
+                {
+                    combat_cam_weight = 4096;
+                }
+
+                if (combat_cam_weight < 3900)
+                {
+                    return 1;
+                }
+            }
+        }
+    }
+
+    if ((!(camera->flags & 0x12000)) && (camera->instance_xyvel == 0) && (secondcheck_flag == 0)
+    && (camera->always_rotate_flag == 0) && (camera->forced_movement == 0) && (colInfo.numCollided > 0)
+    && ((colInfo.numCollided == 4) || (camera_still != 0)) && (colInfo.lenCenterToExtend < 400))
+    {
+        panic_count++;
+
+        if ((((gameTrackerX.controlCommand[0][0] & 0x1)) && ((short)panic_count > 10))
+        || ((!(gameTrackerX.controlCommand[0][0] & 0x1)) && ((short)panic_count > 1)))
+        {
+            CAMERA_Panic(camera, (short)colInfo.lenCenterToExtend);
+        }
+    }
+    else
+    {
+        panic_count = 0;
+    }
+
+    if ((camera->data.Follow.tface != NULL) && (secondcheck_flag != 0))
+    {
+        SET_VEC((SVector *)&camera->focusSphere.position, &camera->targetFocusPoint);
+
+        camera->data.Follow.tface = CAMERA_SphereToSphereWithLines(camera, &colInfo, 0);
+    }
+
+    if (simpleflag != 0)
+    {
+        if (camera->data.Follow.tface != NULL)
+        {
+            if ((camera->mode == 4) || (camera->mode == 2) || (camera->mode == 6))
+            {
+                camera->collisionTargetFocusDistance = colInfo.lengthList[colInfo.line];
+            }
+
+            return 1;
+        }
+
+        return 0;
+    }
+
+    if (collisiontimeDown > 0)
+    {
+        collisiontimeDown--;
+    }
+
+    if (camera->always_rotate_flag != 0)
+    {
+        colInfo.numCollided = 4;
+    }
+
+    if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x24000000)) || (((camera->flags & 0x2000))
+        && (!(camera->instance_mode & 0x2000000))) || (camera->always_rotate_flag != 0))
+    {
+        if (camera->data.Follow.tface != NULL)
+        {
+            hit = CAMERA_AbsoluteCollision(camera, &colInfo);
+
+            collisiontimeDown = 30;
+        }
+        else
+        {
+            camera->collisionTargetFocusDistance = camera->targetFocusDistance;
+        }
+
+        if ((camera->flags & 0x10000))
+        {
+            if ((AngleDiff(camera->collisionTargetFocusRotation.z, camera->targetFocusRotation.z) << 16) >= 0)
+            {
+                speed = AngleDiff(camera->collisionTargetFocusRotation.z, camera->targetFocusRotation.z);
+            }
+            else
+            {
+                speed = -AngleDiff(camera->collisionTargetFocusRotation.z, camera->targetFocusRotation.z);
+            }
+
+            if (!(colInfo.flags & 0x6))
+            {
+                CAMERA_dampgetline(0);
+            }
+
+            if ((speed < 1024) || ((colInfo.flags & 0x6)))
+            {
+                speed /= 16;
+
+                if (speed < 8)
+                {
+                    speed = 8;
+                }
+
+                if (speed > 32)
+                {
+                    speed = 32;
+                }
+            }
+            else
+            {
+                speed = 64;
+            }
+
+            Decouple_AngleMoveToward(&camera->collisionTargetFocusRotation.z, camera->targetFocusRotation.z, speed);
+
+            return hit;
+        }
+        else
+        {
+            Decouple_AngleMoveToward(&camera->collisionTargetFocusRotation.z, camera->targetFocusRotation.z, 64);
+
+            return hit;
+        }
+    }
+
+    if (camera->data.Follow.tface != NULL)
+    {
+        hit = CAMERA_AbsoluteCollision(camera, &colInfo);
+
+        collisiontimeDown = 30;
+
+        camera->targetFocusRotation.z = camera->collisionTargetFocusRotation.z;
+    }
+    else
+    {
+        CAMERA_dampgetline(0);
+
+        if ((camera->mode == 13) && (camera->instance_xyvel > 0))
+        {
+            if (CAMERA_AngleDifference(camera->collisionTargetFocusRotation.z, camera->focusRotation.z) < 5)
+            {
+                camera->collisionTargetFocusRotation.z = camera->targetFocusRotation.z;
+
+                if (collisiontimeDown == 0)
+                {
+                    camera->collision_lastPush = 0;
+                }
+            }
+            else
+            {
+                angle1 = CAMERA_SignedAngleDifference(camera->collisionTargetFocusRotation.z, camera->focusRotation.z);
+                angle2 = CAMERA_SignedAngleDifference(camera->targetFocusRotation.z, camera->focusRotation.z);
+
+                if (((angle1 < 0) && (angle2 < 0)) || ((angle1 > 0) && (angle2 > 0)))
+                {
+                    if (abs(angle2) > abs(angle1))
+                    {
+                        camera->collisionTargetFocusRotation.z = camera->targetFocusRotation.z;
+                    }
+                }
+            }
+        }
+        else if (collisiontimeDown == 0)
+        {
+            Decouple_AngleMoveToward(&camera->collisionTargetFocusRotation.z, camera->targetFocusRotation.z, 64);
+
+            camera->collision_lastPush = 0;
+        }
+
+        if ((camera->instance_mode & 0x2000000))
+        {
+            collisiontimeDown = 0;
+
+            camera->collisionTargetFocusDistance = combat_cam_distance;
+        }
+        else
+        {
+            camera->collisionTargetFocusDistance = camera->targetFocusDistance;
+        }
+    }
+
+    return hit;
+}
 
 int CAMERA_FocusInstanceMoved(Camera *camera)
 {
