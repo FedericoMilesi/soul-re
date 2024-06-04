@@ -765,7 +765,21 @@ short CAMERA_CalcZRotation(Position *target, Position *position)
     return (ratan2(onPlane.y, onPlane.x) + 1024) & 0xFFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcRotation);
+void CAMERA_CalcRotation(Rotation *rotation, Position *target, Position *position)
+{
+    SVector sv;
+    SVector onPlane;
+
+    SET_SVEC3(&sv, position, target);
+
+    onPlane.x = sv.x;
+    onPlane.y = sv.y;
+    onPlane.z = 0;
+
+    rotation->x = (short)-ratan2(sv.z, CAMERA_LengthSVector(&onPlane));
+    rotation->y = 0;
+    rotation->z = (short)ratan2(sv.y, sv.x) + 1024;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFSRotation);
 
