@@ -809,7 +809,24 @@ void CAMERA_Adjust_distance(Camera *camera, long dist)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_Adjust_rotation);
+void CAMERA_Adjust_rotation(Camera *camera, long rotation)
+{
+    if (CAMERA_AngleDifference((short)rotation, camera->targetFocusRotation.z))
+    {
+        camera->rotState = 3;
+        camera->forced_movement = 0;
+        camera->signalRot.z = rotation & 0xFFF;
+
+        if (!camera->smooth)
+        {
+            camera->teleportZRot = camera->focusRotation.z = camera->targetFocusRotation.z = camera->signalRot.z;
+            camera->collisionTargetFocusRotation.z = camera->signalRot.z;
+        }
+
+        camera->lastModTime = gameTrackerX.frameCount;
+        camera->always_rotate_flag = 1;
+    }
+}
 
 void CAMERA_Adjust_roll(long roll_degrees, int frames)
 {
