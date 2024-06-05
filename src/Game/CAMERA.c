@@ -1590,7 +1590,20 @@ void CAMERA_CinematicProcess(Camera *camera)
     CAMERA_UpdateFocusRoll(camera);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GetDistSq);
+int CAMERA_GetDistSq(SVector *point1, SVector *point2)
+{
+    Vector d;
+
+    d.x = point1->x - point2->x;
+    d.y = point1->y - point2->y;
+    d.z = point1->z - point2->z;
+
+    gte_ldlvl(&d);
+    gte_nsqr0();
+    gte_stlvnl(&d);
+
+    return d.x + d.y + d.z;
+}
 
 void CAMERA_NearestPointOnLineVec(SVector *linePoint, SVector *start, SVector *line, Position *point)
 {
