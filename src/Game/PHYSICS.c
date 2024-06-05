@@ -437,4 +437,32 @@ void PHYSICS_GenericLineCheck(Instance *instance, MATRIX *transMat, MATRIX *rotM
     PHYSICS_GenericLineCheckMask(instance, transMat, rotMat, cInfo);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_GenericLineCheckMask);
+void PHYSICS_GenericLineCheckMask(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo)
+{
+    SVECTOR *startVec;
+    SVECTOR *endVec;
+    VECTOR outVec;
+
+    startVec = cInfo->oldPoint;
+    endVec = cInfo->newPoint;
+
+    gte_SetRotMatrix(&rotMat->m[0][0]);
+    gte_ldv0(&startVec->vx);
+    gte_nrtv0();
+    gte_stlvnl(&outVec);
+
+    startVec->vx = (short)(transMat->t[0] + outVec.vx);
+    startVec->vy = (short)(transMat->t[1] + outVec.vy);
+    startVec->vz = (short)(transMat->t[2] + outVec.vz);
+
+    gte_SetRotMatrix(&rotMat->m[0][0]);
+    gte_ldv0(&endVec->vx);
+    gte_nrtv0();
+    gte_stlvnl(&outVec);
+
+    endVec->vx = (short)(transMat->t[0] + outVec.vx);
+    endVec->vy = (short)(transMat->t[1] + outVec.vy);
+    endVec->vz = (short)(transMat->t[2] + outVec.vz);
+
+    PHYSICS_CheckLineInWorldMask(instance, cInfo);
+}

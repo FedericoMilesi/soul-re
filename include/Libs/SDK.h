@@ -60,6 +60,8 @@
         : "memory" \
     )
 
+#define gte_nrtv0() gte_nmvmva(1, 0, 0, 3, 0)
+
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);
