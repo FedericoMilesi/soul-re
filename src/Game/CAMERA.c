@@ -1109,8 +1109,16 @@ long CAMERA_CalcTilt(Normal *normal, short zRot)
     return -(short)ratan2(newNormal.vy, newNormal.vz);
 }
 
-void CAMERA_SetLookFocusAndBase(Instance *focusInstance, Position *focusPoint);
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetLookFocusAndBase);
+void CAMERA_SetLookFocusAndBase(Instance *focusInstance, Position *focusPoint)
+{
+    Position lookFocus;
+
+    lookFocus.x = focusInstance->position.x;
+    lookFocus.y = focusInstance->position.y;
+    lookFocus.z = focusInstance->position.z + 512;
+
+    *focusPoint = lookFocus;
+}
 
 void CAMERA_SetLookFocusAndDistance(Camera *camera, VECTOR *focuspoint, int distance)
 {
