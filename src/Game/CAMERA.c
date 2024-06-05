@@ -1228,7 +1228,82 @@ void CAMERA_Normalize(SVector *svector)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_HandleTransitions);
+void CAMERA_HandleTransitions(Camera *camera)
+{
+    if (camera->rotState == 3)
+    {
+        camera->collisionTargetFocusRotation.z = camera->targetFocusRotation.z = camera->signalRot.z;
+
+        if ((camera->forced_movement != 1) || ((camera->lock & 0x4)))
+        {
+            if (CAMERA_AngleDifference(camera->targetFocusRotation.z, camera->focusRotation.z) < 4)
+            {
+                camera->rotState = 0;
+
+                camera->focusRotVel.z = 0;
+                camera->focusRotAccl.z = 0;
+            }
+        }
+        else
+        {
+            camera->rotState = 0;
+
+            camera->focusRotVel.z = 0;
+            camera->focusRotAccl.z = 0;
+        }
+    }
+
+    if (camera->tiltState == 3)
+    {
+        camera->targetFocusRotation.x = camera->signalRot.x;
+
+        if ((camera->forced_movement != 3) || ((camera->lock & 0x2)))
+        {
+            if (CAMERA_AngleDifference(camera->focusRotation.x, camera->signalRot.x) < 4)
+            {
+                camera->tiltState = 0;
+
+                camera->focusRotVel.x = 0;
+                camera->focusRotAccl.x = 0;
+            }
+        }
+        else
+        {
+            camera->tiltState = 0;
+
+            camera->focusRotVel.x = 0;
+            camera->focusRotAccl.x = 0;
+        }
+    }
+
+    if (camera->distanceState == 3)
+    {
+        if ((camera->forced_movement != 2) || ((camera->lock & 0x1)))
+        {
+            if (ABS(camera->targetFocusDistance - camera->signalFocusDistance) < 4)
+            {
+                camera->distanceState = 0;
+
+                camera->focusDistanceVel = 0;
+                camera->focusDistanceAccl = 0;
+            }
+        }
+        else
+        {
+            camera->distanceState = 0;
+
+            camera->focusDistanceVel = 0;
+            camera->focusDistanceAccl = 0;
+        }
+
+        camera->targetFocusDistance = camera->signalFocusDistance;
+    }
+
+    if ((camera->posState == 3) && ((camera->mode != 5) || ((camera->flags & 0x1000))))
+    {
+        camera->posState = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFocusOffset);
 
