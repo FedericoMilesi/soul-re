@@ -2593,7 +2593,98 @@ void CAMERA_FollowGoBehindPlayer(Camera *camera)
     Decouple_AngleMoveToward(&camera->targetFocusRotation.z, focusInstance->rotation.z + 2048, camera->rotationVel.z);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalculateLead);
+void CAMERA_CalculateLead(Camera *camera)
+{
+    short lead_target;
+    short lead_smooth;
+
+    if ((!(camera->flags & 0x10000)) && (camera->mode != 6) && (!(camera->instance_mode & 0x3002043)))
+    {
+        int speedxy;
+        short angle;
+
+        speedxy = camera->instance_xyvel;
+
+        angle = CAMERA_SignedAngleDifference((camera->focusInstance->rotation.z + 2048), camera->core.rotation.z);
+
+        if (speedxy >= 23)
+        {
+            camera->lead_timer++;
+        }
+        else if (camera->instance_prev_xyvel == 0)
+        {
+            camera->lead_timer = 0;
+        }
+
+        if (speedxy >= 23)
+        {
+            int calc;
+
+            lead_target = 0;
+            lead_smooth = 3;
+
+            if ((abs(angle) > 400) && (abs(angle) < 1600))
+            {
+                if (camera->lead_timer > 35)
+                {
+                    calc = ((camera->lead_timer - 35) * 3) + 35;
+                }
+                else
+                {
+                    calc = camera->lead_timer;
+                }
+
+                if (angle > 0)
+                {
+                    if (calc < 80)
+                    {
+                        lead_target = calc;
+                    }
+                    else
+                    {
+                        lead_target = 80;
+                    }
+                }
+                else
+                {
+                    if (calc < 80)
+                    {
+                        lead_target = -calc;
+                    }
+                    else
+                    {
+                        lead_target = -80;
+                    }
+                }
+
+                if (CAMERA_AngleDifference(lead_target, camera->lead_angle) > 80)
+                {
+                    lead_smooth = 12;
+                }
+                else
+                {
+                    lead_smooth = 8;
+                }
+            }
+        }
+        else
+        {
+            lead_target = 0;
+            lead_smooth = 3;
+        }
+    }
+    else
+    {
+        camera->lead_timer = 0;
+
+        lead_target = 0;
+        lead_smooth = 3;
+    }
+
+    CriticalDampAngle(1, &camera->lead_angle, lead_target, &camera->lead_vel, &camera->lead_accl, lead_smooth);
+
+    camera->core.rotation.z = (camera->core.rotation.z + camera->lead_angle) & 0xFFF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFollowPosition);
 
