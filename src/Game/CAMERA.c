@@ -1238,7 +1238,29 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcIntersectAngle);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GetLineAngle);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ACForcedMovement);
+long CAMERA_ACForcedMovement(Camera *camera, CameraCollisionInfo *colInfo)
+{
+    //short dp; unused
+    Normal normal;
+    SVector sv;
+
+    COLLIDE_GetNormal(colInfo->tfaceList[colInfo->line]->normal, (short *)colInfo->tfaceTerrain[colInfo->line]->normalList, (SVector *)&normal);
+
+    SUB_VEC(&sv, &colInfo->start->position, &colInfo->end->position);
+
+    CAMERA_Normalize(&sv);
+
+    if (((sv.x * normal.x) + (sv.y * normal.y) + (sv.z * normal.z)) != 0)
+    {
+        camera->collisionTargetFocusDistance = (short)colInfo->lenCenterToExtend;
+    }
+    else
+    {
+        camera->collisionTargetFocusDistance = (short)colInfo->lenCenterToExtend;
+    }
+
+    return 0;
+}
 
 void CAMERA_update_dist_debounced(Camera *camera, short dist)
 {
