@@ -781,8 +781,48 @@ void CAMERA_SetTarget(Camera *camera, Position *pos)
     camera->collisionTargetFocusDistance = (short)len;
 }
 
-void CAMERA_CalcPosition(Position *position, Position *base, Rotation *rotation, short distance);
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcPosition);
+void CAMERA_CalcPosition(Position *position, Position *base, Rotation *rotation, short distance)
+{
+    SVECTOR sv;
+    VECTOR v;
+    MATRIX matrix;
+    Vector vectorPos;
+    short _x1;
+    short _y1;
+    short _z1;
+    Vector *_v1;
+
+    distance = -distance;
+
+    sv.vx = 0;
+    sv.vy = distance;
+    sv.vz = 0;
+
+    MATH3D_SetUnityMatrix(&matrix);
+
+    RotMatrixX(rotation->x, &matrix);
+    RotMatrixY(rotation->y, &matrix);
+    RotMatrixZ(rotation->z, &matrix);
+
+    gte_SetRotMatrix(&matrix);
+    gte_ldv0(&sv);
+    gte_nrtv0();
+    gte_stlvnl(&v);
+
+    vectorPos.x = v.vx + base->x;
+    vectorPos.y = v.vy + base->y;
+    vectorPos.z = v.vz + base->z;
+
+    _v1 = &vectorPos;
+
+    _x1 = (short)_v1->x;
+    _y1 = (short)_v1->y;
+    _z1 = (short)_v1->z;
+
+    position->x = _x1;
+    position->y = _y1;
+    position->z = _z1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetFocus);
 

@@ -89,6 +89,8 @@ int GetRCnt(int);
 void ClearOTagR(unsigned long *, int);
 void RotMatrix(SVECTOR *, MATRIX *);
 long ratan2(long y, long x);
+MATRIX *RotMatrixX(long r, MATRIX *m);
+MATRIX *RotMatrixY(long r, MATRIX *m);
 MATRIX *RotMatrixZ(long r, MATRIX *m);
 MATRIX *RotMatrixZYX(SVECTOR *r, MATRIX *m);
 MATRIX *MulMatrix2(MATRIX *m0, MATRIX *m1);
