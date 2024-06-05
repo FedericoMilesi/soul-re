@@ -1232,7 +1232,34 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_HandleTransitions);
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFocusOffset);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFocusOffsetForSwim);
+void CAMERA_CalcFocusOffsetForSwim(SVector *offset, Camera *camera)
+{
+    Vector adjustedOffset;
+    SVector temp;
+    Instance *focusInstance;
+    short _x1;
+    short _y1;
+    short _z1;
+    Vector *_v1;
+
+    focusInstance = camera->focusInstance;
+
+    temp.x = camera->focusOffset.x;
+    temp.y = camera->focusOffset.y;
+    temp.z = camera->focusOffset.z;
+
+    ApplyMatrix(&focusInstance->matrix[1], (SVECTOR *)&temp, (VECTOR *)&adjustedOffset);
+
+    _v1 = &adjustedOffset;
+
+    _x1 = (short)_v1->x;
+    _y1 = (short)_v1->y;
+    _z1 = (short)_v1->z;
+
+    offset->x = _x1;
+    offset->y = _y1;
+    offset->z = _z1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcIntersectAngle);
 
