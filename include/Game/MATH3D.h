@@ -81,6 +81,23 @@ _v->y = _y0 - _y1;\
 _v->z = _z0 - _z1;\
 }
 
+#define hasm_sqrlen1( r0, r1, r2 ) __asm__ (		\
+	"mtc2	%0, $9;"					\
+	"mtc2	%1, $10;"					\
+	"mtc2	%2, $11;"					\
+    "nop"					\
+	:							\
+	: "r"( r0 ), "r"( r1 ), "r"( r2 ) )
+
+#define hasm_sqrlen2(r0, r1, r2) __asm__ (				\
+	"mfc2	%0, $25;"					\
+	"mfc2	%1, $26;"					\
+	"mfc2	%2, $27;"					\
+    "add	%0, %0, %1;"					\
+    "add	%0, %0, %2"					\
+	:							\
+	: "r"( r0 ), "r"( r1 ), "r"( r2 ) )
+
 long MATH3D_LengthXY(long x, long y);
 long MATH3D_FastSqrt0(long square);
 long MATH3D_LengthXYZ(long x, long y, long z);

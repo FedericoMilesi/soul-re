@@ -502,4 +502,11 @@ void MATH3D_CrossProduct(SVector *t, SVector *r, SVector *s)
     t->z = ((r->x * s->y) - (r->y * s->x)) >> 12;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_SquareLength);
+unsigned long MATH3D_SquareLength(long x, long y, long z)
+{
+    hasm_sqrlen1(x, y, z);
+    gte_sqr0();
+    hasm_sqrlen2(x, y, z);
+
+    return x;
+}

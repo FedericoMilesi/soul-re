@@ -78,6 +78,13 @@
 
 #define gte_nsqr0() gte_nsqr(0)
 
+#define gte_sqr(sf) __asm__ ( \
+        ".word %0" \
+        : : "g"(0x4AA00428 | ((sf) & 0x1) << 19) \
+    )
+
+#define gte_sqr0() gte_sqr(0)
+
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);
