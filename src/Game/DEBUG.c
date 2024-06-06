@@ -690,4 +690,10 @@ void DEBUG_ProcessSecondController(void)
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ProcessCheat);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_DoAreaProtection);
+void DEBUG_DoAreaProtection()
+{
+    while (checkagain() != 0)
+    {
+
+    }
+}
