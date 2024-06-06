@@ -1,5 +1,7 @@
 #include "common.h"
+#include "Game/GLYPH.h"
 #include "Game/CAMERA.h"
+#include "Game/GAMELOOP.h"
 
 EXTERN STATIC short HUD_Captured;
 
@@ -31,7 +33,24 @@ void GlyphCollide(void)
 {
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphProcess);
+void GlyphProcess(Instance *instance, GameTracker *gameTracker)
+{
+    GlyphData *data;
+
+    (void)gameTracker;
+
+    data = (GlyphData *)instance->extraData;
+
+    data->process(instance, 0, 0);
+
+    instance->oldPos = instance->parent->position;
+
+    instance->position = instance->oldPos;
+
+    instance->currentStreamUnitID = instance->parent->currentStreamUnitID;
+
+    instance->flags |= 0xC00;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphQuery);
 
