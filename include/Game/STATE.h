@@ -489,5 +489,6 @@ void *CIRC_Alloc(int size);
 void InitMessageQueue(MessageQueue *In);
 void G2EmulationInstanceSetTotalSections(Instance *instance, short Total);
 void G2EmulationInstanceSetStartAndEndSegment(Instance *instance, int CurrentSection, short Start, short End);
+intptr_t SetControlSaveDataData(long length, void *data);
 
 #endif

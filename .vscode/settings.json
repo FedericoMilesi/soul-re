@@ -23,6 +23,9 @@
         "math3d.h": "c",
         "common.h": "c",
         "types.h": "c",
-        "stream.h": "c"
+        "stream.h": "c",
+        "quatg2.h": "c",
+        "obtable.h": "c",
+        "strmload.h": "c"
     }
 }

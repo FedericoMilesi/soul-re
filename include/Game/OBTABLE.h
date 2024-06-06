@@ -4,6 +4,24 @@
 #include "common.h"
 #include "Game/VRAM.h"
 
+// size: 0x24
+typedef struct _ObjectTracker {
+    // offset: 0000 (16 bytes)
+    char name[16];
+    // offset: 0010 (76 bytes)
+    struct Object *object;
+    // offset: 0014
+    short objectStatus;
+    // offset: 0016
+    short numInUse;
+    // offset: 0018
+    void *vramBlock;
+    // offset: 001C
+    char numObjectsUsing;
+    // offset: 001D (7 bytes)
+    char objectsUsing[7];
+} ObjectTracker;
+
 // size: 0x4
 typedef struct ObjectEffect {
     // offset: 0000
@@ -80,5 +98,6 @@ void OBTABLE_GetInstanceQueryFunc(Instance *instance);
 void OBTABLE_GetInstanceProcessFunc(Instance *instance);
 void OBTABLE_GetInstanceCollideFunc(Instance *instance);
 void OBTABLE_InstanceInit(Instance *instance);
+void OBTABLE_InitAnimPointers(ObjectTracker *objectTracker);
 
 #endif

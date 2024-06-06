@@ -4,6 +4,34 @@
 #include "common.h"
 #include "Game/MONSTER/MONAPI.h"
 
+// size: 0xC
+typedef struct SavedIntroSpline {
+    // offset: 0000
+    unsigned char savedID;
+    // offset: 0001
+    unsigned char shiftedSaveSize;
+    // offset: 0002
+    short introUniqueID;
+    // offset: 0004
+    short splineFlags;
+    // offset: 0006
+    short splineKeyFrame;
+    // offset: 0008
+    short splineClipBeg;
+    // offset: 000A
+    short splineClipEnd;
+} SavedIntroSpline;
+
+// size: 0x4
+typedef struct SavedIntroSmall {
+    // offset: 0000
+    unsigned char savedID;
+    // offset: 0001
+    unsigned char shiftedSaveSize;
+    // offset: 0002
+    short introUniqueID;
+} SavedIntroSmall;
+
 // size: 0x78
 typedef struct _GlobalSaveTracker {
     // offset: 0000
@@ -62,6 +90,8 @@ void SAVE_MarkDeadDead(Instance *instance);
 long SAVE_IsIntroDeadDead(Intro *intro);
 long SAVE_HasSavedIntro(Intro *intro, long currentStreamID);
 void SAVE_DoInstanceDeadDead(Instance *instance);
+SavedIntroSmall *SAVE_GetSavedSmallIntro(Instance *instance);
+SavedIntroSpline *SAVE_GetIntroSpline(Instance *instance);
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];
