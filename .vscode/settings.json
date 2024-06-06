@@ -22,6 +22,7 @@
     "files.associations": {
         "math3d.h": "c",
         "common.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "stream.h": "c"
     }
 }

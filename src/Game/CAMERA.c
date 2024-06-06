@@ -8,6 +8,7 @@
 #include "Game/LIGHT3D.h"
 #include "Game/SPLINE.h"
 #include "Game/GAMEPAD.h"
+#include "Game/MEMPACK.h"
 
 long camera_modeToIndex[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0};
 
@@ -80,6 +81,70 @@ static inline int GetSecondCheckFlag(Camera *camera)
     }
 
     return 1;
+}
+
+static inline void CAMERA_Add_Vec_To_Pos(Position *dest, Position *pos, Vector *vec)
+{
+    short x, y, z;
+
+    x = pos->x;
+    y = pos->y;
+    z = pos->z;
+
+    x += (short)vec->x;
+    y += (short)vec->y;
+    z += (short)vec->z;
+
+    dest->x = x;
+    dest->y = y;
+    dest->z = z;
+}
+
+static inline void CAMERA_Sub_Vec_From_Pos(Position *dest, Position *pos, Vector *vec)
+{
+    short x, y, z;
+
+    x = pos->x;
+    y = pos->y;
+    z = pos->z;
+
+    x -= (short)vec->x;
+    y -= (short)vec->y;
+    z -= (short)vec->z;
+
+    dest->x = x;
+    dest->y = y;
+    dest->z = z;
+}
+
+static inline void CAMERA_Add_Pos_To_Vec(Position *dest, Vector *vec, Position *pos)
+{
+    short x, y, z;
+
+    x = (short)vec->x;
+    y = (short)vec->y;
+    z = (short)vec->z;
+
+    x += pos->x;
+    y += pos->y;
+    z += pos->z;
+
+    dest->x = x;
+    dest->y = y;
+    dest->z = z;
+}
+
+static inline void CAMERA_Copy_Vec_To_SVec(SVector *SVec, Vector *vec)
+{
+    short x, y, z;
+
+    x = (short)vec->x;
+    y = (short)vec->y;
+    z = (short)vec->z;
+
+    SVec->x = x;
+    SVec->y = y;
+    SVec->z = z;
 }
 
 void CAMERA_CalculateViewVolumeNormals(Camera *camera)
@@ -1132,8 +1197,384 @@ void CAMERA_Relocate(Camera *camera, SVector *offset, int streamSignalFlag)
     }
 }
 
-TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colInfo, int secondcheck_flag);
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SphereToSphereWithLines);
+TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colInfo, int secondcheck_flag)
+{
+    long minLength;
+    SVector sv;
+    SVector startPt[5];
+    SVector endPt[5];
+    SVector startLine;
+    Vector adjStartLine;
+    SVector endLine;
+    Vector adjEndLine;
+    Vector CamLineNormalized;
+    Rotation rotation;
+    MATRIX matrix;
+    TFace *result;
+    long i;
+    long init;
+    Level *level;
+    //Instance *focusInstance; // unused
+    Vector ACE_vect;
+    LCollideInfo lcol;
+    int ACE_force;
+    int in_warpRoom;
+    int flag;
+    short backface_flag;
+    PCollideInfo pCollideInfo;
+    int n;
+    Level *thislevel;
+
+    minLength = 0;
+
+    result = NULL;
+
+    init = 1;
+
+    ACE_force = 0;
+
+    level = STREAM_GetLevelWithID(camera->focusInstance->currentStreamUnitID);
+
+    if ((level != NULL) && (MEMPACK_MemoryValidFunc((char *)level) != 0))
+    {
+        colInfo->line = -1;
+
+        colInfo->flags = 0;
+
+        colInfo->numCollided = 0;
+
+        startLine.x = 0;
+        startLine.z = 0;
+
+        endLine.x = 0;
+        endLine.z = 0;
+
+        CAMERA_CalcFSRotation(camera, &rotation, &colInfo->end->position, &colInfo->start->position);
+
+        if ((camera->flags & 0x10000))
+        {
+            colInfo->start->position.x += (short)((colInfo->end->position.x - colInfo->start->position.x) >> 5);
+            colInfo->start->position.y += (short)((colInfo->end->position.y - colInfo->start->position.y) >> 5);
+            colInfo->start->position.z += (short)((colInfo->end->position.z - colInfo->start->position.z) >> 5);
+        }
+
+        MATH3D_SetUnityMatrix(&matrix);
+
+        RotMatrixZ(rotation.z + 1024, &matrix);
+
+        if ((!(camera->flags & 0x10000)) && (!(camera->instance_mode & 0x4000000)) && (camera->mode != 6))
+        {
+            startLine.y = 4096;
+
+            ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&ACE_vect);
+
+            ACE_amount = ((ACE_vect.x * camera->focusInstanceVelVec.x) + (ACE_vect.y * camera->focusInstanceVelVec.y)
+            + (ACE_vect.z * camera->focusInstanceVelVec.z)) >> 12;
+
+            if ((camera->always_rotate_flag != 0) || (camera->forced_movement != 0))
+            {
+                if (camera->forced_movement != 0)
+                {
+                    if (camera->rotDirection <= 0)
+                    {
+                        if (camera->rotDirection < 0)
+                        {
+                            ACE_force = -72;
+                        }
+                    }
+                    else
+                    {
+                        ACE_force = 72;
+                    }
+                }
+                else
+                {
+                    ACE_force = -72;
+
+                    if ((CAMERA_SignedAngleDifference(camera->focusRotation.z, camera->targetFocusRotation.z) << 16) < 0)
+                    {
+                        ACE_force = 72;
+                    }
+                }
+
+                if (ACE_amount > 0)
+                {
+                    if (ACE_force > 0)
+                    {
+                        ACE_force -= ACE_amount;
+
+                        if (ACE_force < 0)
+                        {
+                            ACE_force = 0;
+                        }
+                    }
+                }
+                else if (ACE_force < 0)
+                {
+                    ACE_force -= ACE_amount;
+
+                    if (ACE_force > 0)
+                    {
+                        ACE_force = 0;
+                    }
+                }
+            }
+        }
+        else
+        {
+            ACE_amount = 0;
+        }
+
+        startLine.y = 32;
+        endLine.y = 290;
+
+        if (ACE_amount > 0)
+        {
+            startLine.y += (short)ACE_amount;
+            endLine.y += (short)((ACE_amount * 5) + (ACE_amount / 2));
+        }
+        else
+        {
+            startLine.y -= (short)(ACE_amount * 2);
+        }
+
+        if (ACE_force > 0)
+        {
+            endLine.y += ACE_force * 5;
+        }
+
+        ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&adjStartLine);
+        ApplyMatrix(&matrix, (SVECTOR *)&endLine, (VECTOR *)&adjEndLine);
+
+        {
+            Vector *_v0;
+            Vector *_v1;
+            SVector *_v2;
+            SVector *_v3;
+
+            _v0 = &adjStartLine;
+            _v1 = &adjEndLine;
+            _v2 = &startPt[1];
+            _v3 = &endPt[1];
+
+            CAMERA_Add_Vec_To_Pos((Position *)_v2, &colInfo->start->position, _v0);
+            CAMERA_Add_Vec_To_Pos((Position *)_v3, &colInfo->end->position, _v1);
+        }
+
+        startLine.y = 32;
+        endLine.y = 290;
+
+        if (ACE_amount < 0)
+        {
+            startLine.y -= (short)ACE_amount;
+            endLine.y -= (short)((ACE_amount * 5) + (ACE_amount / 2));
+        }
+        else
+        {
+            startLine.y += (short)(ACE_amount * 2);
+        }
+
+        if (ACE_force < 0)
+        {
+            endLine.y -= ACE_force * 5;
+        }
+
+        ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&adjStartLine);
+        ApplyMatrix(&matrix, (SVECTOR *)&endLine, (VECTOR *)&adjEndLine);
+
+        {
+            Vector *_v0;
+            Vector *_v1;
+            SVector *_v2;
+            SVector *_v3;
+
+            _v0 = &adjStartLine;
+            _v1 = &adjEndLine;
+            _v2 = &startPt[2];
+            _v3 = &endPt[2];
+
+            CAMERA_Sub_Vec_From_Pos((Position *)_v2, &colInfo->start->position, _v0);
+            CAMERA_Sub_Vec_From_Pos((Position *)_v3, &colInfo->end->position, _v1);
+        }
+
+        endLine.y = 180;
+        startLine.y = 32;
+
+        MATH3D_SetUnityMatrix(&matrix);
+
+        RotMatrixX(rotation.x + 1024, &matrix);
+        RotMatrixZ(rotation.z, &matrix);
+
+        ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&adjStartLine);
+        ApplyMatrix(&matrix, (SVECTOR *)&endLine, (VECTOR *)&adjEndLine);
+
+        {
+            Vector *_v0;
+            Vector *_v1;
+            SVector *_v2;
+            SVector *_v3;
+
+            _v0 = &adjStartLine;
+            _v1 = &adjEndLine;
+            _v2 = &startPt[3];
+            _v3 = &endPt[3];
+
+            CAMERA_Add_Pos_To_Vec((Position *)_v2, _v0, &colInfo->start->position);
+            CAMERA_Add_Pos_To_Vec((Position *)_v3, _v1, &colInfo->end->position);
+        }
+
+        {
+            Vector *_v0;
+            Vector *_v1;
+            SVector *_v2;
+            SVector *_v3;
+
+            _v0 = &adjStartLine;
+            _v1 = &adjEndLine;
+            _v2 = &startPt[4];
+            _v3 = &endPt[4];
+
+            CAMERA_Sub_Vec_From_Pos((Position *)_v2, &colInfo->start->position, _v0);
+            CAMERA_Sub_Vec_From_Pos((Position *)_v3, &colInfo->end->position, _v1);
+        }
+
+        ADD_SVEC(&right_point, (Position *)&startPt[1], (Position *)&camera->focusInstanceVelVec);
+        ADD_SVEC(&left_point, (Position *)&startPt[2], (Position *)&camera->focusInstanceVelVec);
+
+        startLine.y = 4096;
+
+        ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&adjStartLine);
+
+        CAMERA_Copy_Vec_To_SVec(&camera_plane, &adjStartLine);
+
+        startLine.y = 0;
+        startLine.z = 4096;
+
+        ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&CamLineNormalized);
+
+        SET_VEC(&startPt[0], &colInfo->start->position);
+        SET_VEC(&endPt[0], &colInfo->end->position);
+
+        colInfo->lenCenterToExtend = (int)camera->targetFocusDistance;
+
+        in_warpRoom = (unsigned int)STREAM_GetStreamUnitWithID(level->streamUnitID)->flags & 0x1;
+
+        for (i = 0; i < 5; i++)
+        {
+            if ((colInfo->cldLines & (1 << i)))
+            {
+                if ((i == 1) || (i == 2))
+                {
+                    flag = 1;
+                }
+                else
+                {
+                    flag = 0;
+                }
+
+                backface_flag = 0;
+
+                pCollideInfo.collideType = 1;
+
+                pCollideInfo.newPoint = (SVECTOR *)&endPt[i];
+                pCollideInfo.oldPoint = (SVECTOR *)&startPt[i];
+
+                pCollideInfo.instance = NULL;
+
+                colInfo->tfaceList[i] = COLLIDE_PointAndTerrainFunc(level->terrain, &pCollideInfo, flag, &backface_flag, 208, 32, &lcol);
+                colInfo->tfaceTerrain[i] = level->terrain;
+
+                if (colInfo->tfaceList[i] == NULL)
+                {
+                    StreamUnit *streamUnit = StreamTracker.StreamList;
+
+                    for (n = 0; n < 16; n++, streamUnit++)
+                    {
+                        thislevel = streamUnit->level;
+
+                        if ((streamUnit->used == 2) && (thislevel != level) && (MEMPACK_MemoryValidFunc((char *)thislevel) != 0)
+                        && ((in_warpRoom == 0) || (!(streamUnit->flags & 0x1))))
+                        {
+                            colInfo->tfaceList[i] = COLLIDE_PointAndTerrainFunc(thislevel->terrain, &pCollideInfo, flag, &backface_flag, 208, 32, &lcol);
+
+                            if (colInfo->tfaceList[i] != NULL)
+                            {
+                                colInfo->tfaceTerrain[i] = thislevel->terrain;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                colInfo->bspTree[i] = lcol.curTree;
+
+                if (colInfo->tfaceList[i] != NULL)
+                {
+                    if (secondcheck_flag != 0)
+                    {
+                        return colInfo->tfaceList[i];
+                    }
+
+                    colInfo->numCollided++;
+
+                    SUB_VEC(&sv, (Position *)&startPt[i], (Position *)&endPt[i]);
+
+                    colInfo->lengthList[i] = (short)(((sv.x * CamLineNormalized.x) + (sv.y * CamLineNormalized.y) + (sv.z * CamLineNormalized.z)) >> 12);
+
+                    if ((backface_flag == 0) || (colInfo->lengthList[i] >= 100))
+                    {
+                        colInfo->lengthList[i] -= 100;
+
+                        if (colInfo->lengthList[i] < 220)
+                        {
+                            colInfo->lengthList[i] = 220;
+                        }
+
+                        if ((init != 0) || ((int)colInfo->lengthList[i] < minLength))
+                        {
+                            colInfo->line = i;
+
+                            minLength = (int)colInfo->lengthList[i];
+
+                            init = 0;
+
+                            colInfo->lenCenterToExtend = minLength;
+
+                            result = colInfo->tfaceList[i];
+                        }
+
+                        colInfo->flags |= (1 << i);
+                    }
+                }
+                else
+                {
+                    SUB_VEC(&sv, (Position *)&startPt[i], (Position *)&endPt[i]);
+
+                    colInfo->lengthList[i] = (short)(((sv.x * CamLineNormalized.x) + (sv.y * CamLineNormalized.y) + (sv.z * CamLineNormalized.z)) >> 12);
+                }
+            }
+        }
+
+        if (colInfo->line == 2)
+        {
+            hitline_rot = CAMERA_CalcZRotation((Position *)&startPt[2], (Position *)&endPt[2]);
+        }
+        else if (colInfo->line == 1)
+        {
+            hitline_rot = CAMERA_CalcZRotation((Position *)&startPt[1], (Position *)&endPt[1]);
+        }
+        else if ((colInfo->flags & 0x4))
+        {
+            hitline_rot = CAMERA_CalcZRotation((Position *)&startPt[2], (Position *)&endPt[2]);
+        }
+        else if ((colInfo->flags & 0x2))
+        {
+            hitline_rot = CAMERA_CalcZRotation((Position *)&startPt[1], (Position *)&endPt[1]);
+        }
+    }
+
+    return result;
+}
 
 long CAMERA_CalcTilt(Normal *normal, short zRot)
 {

@@ -346,5 +346,6 @@ Level *STREAM_GetLevelWithID(long id);
 void STREAM_RelocateInstance(Instance *instance, SVector *offset);
 void MORPH_SetupInstanceFlags(Instance *instance);
 void STREAM_SetInstancePosition(Instance *instance, evPositionData *data);
+StreamUnit *STREAM_GetStreamUnitWithID(long id);
 
 #endif
