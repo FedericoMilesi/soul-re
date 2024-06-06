@@ -660,7 +660,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ReloadCurrentLevel);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_LevelSelectNew);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_SetViewVram);
+void DEBUG_SetViewVram()
+{
+    gameTrackerX.gameMode = 7;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_EndViewVram);
 
