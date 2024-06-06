@@ -2686,7 +2686,159 @@ void CAMERA_CalculateLead(Camera *camera)
     camera->core.rotation.z = (camera->core.rotation.z + camera->lead_angle) & 0xFFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFollowPosition);
+void CAMERA_CalcFollowPosition(Camera *camera, Rotation *rotation)
+{
+    Instance *focusInstance;
+
+    focusInstance = camera->focusInstance;
+
+    CAMERA_CalcPosition(&camera->targetPos, &camera->focusPoint, rotation, camera->focusDistance);
+
+    camera->core.position = camera->targetPos;
+
+    SET_VEC((SVector *)&camera->core.rotation, (Position *)rotation);
+
+    if (!(camera->flags & 0x10000))
+    {
+        short target_rotx;
+        int hypotXY;
+        int smooth;
+        int diff;
+        Vector dpv;
+        int zdiff;
+
+        camera->actual_x_rot -= camera->x_rot_change;
+
+        dpv.x = camera->real_focuspoint.x - camera->targetPos.x;
+        dpv.y = camera->real_focuspoint.y - camera->targetPos.y;
+        dpv.z = 0;
+
+        gte_ldlvl(&dpv);
+        gte_nsqr0();
+        gte_stlvnl(&dpv);
+
+        hypotXY = MATH3D_FastSqrt0(dpv.x + dpv.y);
+
+        diff = ratan2(camera->real_focuspoint.z - camera->targetPos.z, hypotXY);
+
+        target_rotx = diff;
+
+        if ((camera->instance_mode & 0x1038))
+        {
+            int velz;
+
+            velz = camera->focusInstanceVelVec.z;
+
+            if (focusInstance->shadowPosition.z != focusInstance->position.z)
+            {
+                if (velz < 0)
+                {
+                    if (velz < -260)
+                    {
+                        velz = -520 - velz;
+
+                        if (velz > 0)
+                        {
+                            velz = 0;
+                        }
+                    }
+                    {
+                        int ground;
+                        int pos;
+
+                        pos = camera->real_focuspoint.z + (velz * 2);
+
+                        ground = focusInstance->shadowPosition.z + 352;
+
+                        if (pos < ground)
+                        {
+                            ground -= camera->targetPos.z;
+                        }
+                        else
+                        {
+                            ground = pos - camera->targetPos.z;
+                        }
+
+                        target_rotx = (short)ratan2(ground, hypotXY);
+
+                        if (CAMERA_SignedAngleDifference(target_rotx, camera->actual_x_rot) > 0)
+                        {
+                            target_rotx = camera->actual_x_rot;
+                        }
+                    }
+                }
+                else
+                {
+                    target_rotx = camera->core.rotation.x;
+                }
+            }
+        }
+        else if (CAMERA_AngleDifference(target_rotx, camera->core.rotation.x) < 4)
+        {
+            target_rotx = camera->core.rotation.x;
+        }
+
+        if ((camera->flags & 0x1800))
+        {
+            camera->actual_x_rot = target_rotx;
+
+            camera->x_rot_change = 0;
+        }
+
+        zdiff = CAMERA_SignedAngleDifference(target_rotx, camera->actual_x_rot);
+
+        if ((camera->instance_mode & 0x2000))
+        {
+            if (zdiff >= 81)
+            {
+                smooth = (zdiff - 80) / 3;
+
+                if (smooth >= 4)
+                {
+                    if (smooth >= 25)
+                    {
+                        smooth = 24;
+                    }
+                }
+                else
+                {
+                    smooth = 4;
+                }
+            }
+            else
+            {
+                smooth = 24;
+
+                if (zdiff > 0)
+                {
+                    smooth = 4;
+                }
+            }
+        }
+        else
+        {
+            smooth = 24;
+        }
+
+        if (smooth != 0)
+        {
+            CriticalDampAngle(1, &camera->actual_x_rot, target_rotx, &camera->actual_vel_x, &camera->actual_acc_x, (short)smooth);
+        }
+        else
+        {
+            camera->actual_acc_x = 0;
+            camera->actual_vel_x = 0;
+        }
+
+        camera->core.rotation.x = camera->actual_x_rot;
+    }
+    else
+    {
+        camera->actual_x_rot = camera->core.rotation.x;
+    }
+
+    camera->lagZ = camera->core.rotation.z;
+}
 
 void CAMERA_SetupColInfo(Camera *camera, CameraCollisionInfo *colInfo, Position *targetCamPos)
 {
