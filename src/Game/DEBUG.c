@@ -531,7 +531,16 @@ void DEBUG_SetGameTime(long *var)
     GAMELOOP_SetGameTime(*var);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_KeepGameTime);
+void DEBUG_KeepGameTime(long *var)
+{
+    long curTOD;
+
+    (void)var;
+
+    curTOD = gameTrackerX.timeOfDay;
+
+    DEBUG_SetGameTime(&curTOD);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateFog);
 
