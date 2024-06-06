@@ -173,5 +173,6 @@ typedef struct _AnimSoundData_Type {
 void G2Anim_Restore(G2Anim *anim);
 void G2Anim_Free(G2Anim *anim);
 G2Bool G2Anim_SegmentHasActiveChannels(G2Anim *anim, int segNumber, unsigned short chanMask);
+void G2Anim_Init(G2Anim *anim, Model *modelData);
 
 #endif

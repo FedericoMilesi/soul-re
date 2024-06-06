@@ -153,6 +153,40 @@ typedef struct _HSphere {
     unsigned long radiusSquared;
 } HSphere;
 
+// size: 0xC
+typedef struct _HFace {
+    // offset: 0000
+    short v0;
+    // offset: 0002
+    short v1;
+    // offset: 0004
+    short v2;
+    // offset: 0006
+    unsigned char attr;
+    // offset: 0007
+    char pad;
+    // offset: 0008
+    unsigned short normal;
+    // offset: 000A
+    unsigned short n0;
+} HFace;
+
+// size: 0x18
+typedef struct _HInfo {
+    // offset: 0000
+    long numHFaces;
+    // offset: 0004 (12 bytes)
+    struct _HFace *hfaceList;
+    // offset: 0008
+    long numHSpheres;
+    // offset: 000C (20 bytes)
+    struct _HSphere *hsphereList;
+    // offset: 0010
+    long numHBoxes;
+    // offset: 0014 (28 bytes)
+    struct _HBox *hboxList;
+} HInfo;
+
 // size: 0x24
 typedef struct BSPTree {
     // offset: 0000 (44 bytes)

@@ -7,6 +7,9 @@
 #include "Game/MATH3D.h"
 #include "Game/LIGHT3D.h"
 #include "Game/PSX/SUPPORT.h"
+#include "Game/G2/ANIMG2.h"
+#include "Game/G2/ANMG2ILF.h"
+#include "Game/G2/INSTNCG2.h"
 #include "Game/G2/QUATG2.h"
 #include "Game/MONSTER/HUMAN.h"
 #include "Game/CAMERA.h"
@@ -979,7 +982,184 @@ void INSTANCE_BuildStaticShadow()
 {
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/INSTANCE", INSTANCE_DefaultInit);
+void INSTANCE_DefaultInit(Instance *instance, Object *object, int modelNum)
+{
+    int i;
+    int j;
+    int numHPrims;
+    int numModels;
+    HPrim *hprim;
+    Model **pModel;
+    HModel *hmodel;
+
+    memset(&instance->flags, 0, sizeof(Instance) - 20);
+
+    instance->object = object;
+
+    instance->data = object->data;
+
+    instance->currentModel = modelNum;
+
+    instance->cachedTFace = -1;
+    instance->cachedTFaceLevel = NULL;
+
+    if ((object->animList != NULL) && (!(object->oflags2 & 0x40000000)))
+    {
+        G2Anim_Init(&instance->anim, object->modelList[modelNum]);
+
+        G2Anim_SwitchToKeylist(&instance->anim, G2Instance_GetKeylist(instance, 0), 0);
+
+        G2Anim_SetCallback(&instance->anim, (void *)INSTANCE_DefaultAnimCallback, instance);
+    }
+
+    if ((object->oflags & 0x4000000))
+    {
+        instance->flags2 |= 0x4;
+    }
+
+    if ((object->oflags & 0x200))
+    {
+        instance->flags2 |= 0x40;
+    }
+
+    if ((object->oflags & 0x8))
+    {
+        instance->flags2 |= 0x8000000;
+    }
+
+    if (!(object->oflags & 0x1000800))
+    {
+        instance->flags |= 0x2000000;
+    }
+
+    if ((object->oflags & 0x20000000))
+    {
+        instance->flags2 |= 0x20;
+    }
+
+    numModels = object->numModels;
+
+    pModel = object->modelList;
+
+    numHPrims = 0;
+
+    for (i = numModels; i != 0; i--, pModel++)
+    {
+        Model *model;
+        Segment *seg;
+
+        model = *pModel;
+
+        seg = model->segmentList;
+
+        for (j = model->numSegments; j != 0; j--, seg++)
+        {
+            HInfo *hinfo;
+
+            hinfo = seg->hInfo;
+
+            if (hinfo != NULL)
+            {
+                numHPrims += hinfo->numHFaces + hinfo->numHSpheres + hinfo->numHBoxes;
+            }
+        }
+    }
+
+    if (numHPrims != 0)
+    {
+        instance->hModelList = (HModel *)MEMPACK_Malloc((instance->object->numModels + numHPrims) * sizeof(HModel), 14);
+
+        pModel = object->modelList;
+
+        hprim = (HPrim *)instance->hModelList + numModels;
+
+        hmodel = instance->hModelList;
+
+        for (i = numModels; i != 0; i--, pModel++, hmodel++)
+        {
+            Model *model;
+            Segment *seg;
+
+            model = pModel[0];
+
+            hmodel->numHPrims = 0;
+
+            hmodel->hPrimList = hprim;
+
+            seg = model->segmentList;
+
+            for (j = 0; j < model->numSegments; j++, seg++)
+            {
+                HInfo *hinfo;
+
+                hinfo = seg->hInfo;
+
+                if (hinfo != NULL)
+                {
+                    int k;
+                    HFace *hface;
+                    HSphere *hsphere;
+                    HBox *hbox;
+
+                    hface = hinfo->hfaceList;
+
+                    hsphere = hinfo->hsphereList;
+
+                    hbox = hinfo->hboxList;
+
+                    hmodel->numHPrims += hinfo->numHFaces + hinfo->numHSpheres + hinfo->numHBoxes;
+
+                    for (k = hinfo->numHFaces; k != 0; hprim++, hface++, k--)
+                    {
+                        hprim->hpFlags = 0x4D;
+                        hprim->withFlags = 0x24;
+
+                        hprim->type = 2;
+
+                        hprim->segment = j;
+
+                        hprim->data.hface = hface;
+                    }
+
+                    for (k = hinfo->numHSpheres; k != 0; hprim++, hsphere++, k--)
+                    {
+                        hprim->hpFlags = 0x2F;
+                        hprim->withFlags = 0x76;
+
+                        hprim->type = 1;
+
+                        hprim->segment = j;
+
+                        hprim->data.hsphere = hsphere;
+                    }
+
+                    for (k = hinfo->numHBoxes; k != 0; hprim++, hbox++, k--)
+                    {
+                        hprim->hpFlags = 0x1D;
+                        hprim->withFlags = 0x24;
+
+                        hprim->type = 5;
+
+                        hprim->segment = j;
+
+                        hprim->data.hbox = hbox;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        instance->hModelList = NULL;
+
+        instance->flags2 |= 0x40000;
+    }
+
+    if (instance->maxCheckDistance == 0)
+    {
+        instance->maxCheckDistance = 12000;
+    }
+}
 
 void INSTANCE_PlainDeath(Instance *instance)
 {

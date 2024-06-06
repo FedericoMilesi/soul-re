@@ -265,6 +265,30 @@ typedef struct _MFace {
     long color;
 } MFace;
 
+// size: 0x18
+typedef struct _Segment {
+    // offset: 0000
+    long flags;
+    // offset: 0004
+    short firstTri;
+    // offset: 0006
+    short lastTri;
+    // offset: 0008
+    short firstVertex;
+    // offset: 000A
+    short lastVertex;
+    // offset: 000C
+    short px;
+    // offset: 000E
+    short py;
+    // offset: 0010
+    short pz;
+    // offset: 0012
+    short parent;
+    // offset: 0014 (24 bytes)
+    struct _HInfo *hInfo;
+} Segment;
+
 // size: 0x38
 typedef struct _Model {
     // offset: 0000
