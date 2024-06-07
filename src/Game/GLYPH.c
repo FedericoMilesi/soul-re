@@ -52,7 +52,20 @@ void GlyphProcess(Instance *instance, GameTracker *gameTracker)
     instance->flags |= 0xC00;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphQuery);
+unsigned long GlyphQuery(Instance *instance, unsigned long query)
+{
+    (void)instance;
+
+    switch (query)
+    {
+    case 24:
+        return 0;
+    case 1:
+        break;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphPost);
 
