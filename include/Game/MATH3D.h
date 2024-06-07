@@ -5,40 +5,77 @@
 
 #define abs_diff(a,b) ( a-b<0?b-a:a-b )
 
-#define SET_VEC(A, B) {\
-short _x0;\
-short _y0;\
-short _z0;\
-SVector *_v;\
-Position *_v0;\
+#define COPY_VEC(TYPE, TDEST, DEST, TSRC, SRC) {\
+TYPE _x1;\
+TYPE _y1;\
+TYPE _z1;\
+TDEST *_v;\
+TSRC *_v1;\
 \
-_v0 = B;\
-_v = A;\
+_v1 = SRC;\
+_v = DEST;\
+\
+_x1 = _v1->x;\
+_y1 = _v1->y;\
+_z1 = _v1->z;\
+\
+_v->x = _x1;\
+_v->y = _y1;\
+_v->z = _z1;\
+}
+
+#define COPY_SVEC(TDEST, DEST, TSRC, SRC) COPY_VEC(short, TDEST, DEST, TSRC, SRC) 
+#define COPY_LVEC(TDEST, DEST, TSRC, SRC) COPY_VEC(long, TDEST, DEST, TSRC, SRC) 
+
+#define SUB_VEC(TYPE, TDEST, DEST, TSRC1, SRC1, TSRC2, SRC2) {\
+TYPE _x0;\
+TYPE _y0;\
+TYPE _z0;\
+TYPE _x1;\
+TYPE _y1;\
+TYPE _z1;\
+TDEST *_v;\
+TSRC1 *_v0;\
+TSRC2 *_v1;\
+\
+_v0 = SRC1;\
+_v1 = SRC2;\
+_v = DEST;\
 \
 _x0 = _v0->x;\
 _y0 = _v0->y;\
 _z0 = _v0->z;\
 \
+_x1 = _v1->x;\
+_y1 = _v1->y;\
+_z1 = _v1->z;\
+\
+_x0 -= _x1;\
+_y0 -= _y1;\
+_z0 -= _z1;\
 \
 _v->x = _x0;\
 _v->y = _y0;\
 _v->z = _z0;\
 }
 
-#define ADD_SVEC(A, B, C) {\
-short _x0;\
-short _y0;\
-short _z0;\
-short _x1;\
-short _y1;\
-short _z1;\
-SVector *_v;\
-Position *_v0;\
-Position *_v1;\
+#define SUB_SVEC(TDEST, DEST, TSRC1, SRC1, TSRC2, SRC2) SUB_VEC(short, TDEST, DEST, TSRC1, SRC1, TSRC2, SRC2)
+#define SUB_LVEC(TDEST, DEST, TSRC1, SRC1, TSRC2, SRC2) SUB_VEC(long, TDEST, DEST, TSRC1, SRC1, TSRC2, SRC2)
+
+#define ADD_VEC(TYPE, TDEST, DEST, TSRC1, SRC1, TSRC2, SRC2) {\
+TYPE _x0;\
+TYPE _y0;\
+TYPE _z0;\
+TYPE _x1;\
+TYPE _y1;\
+TYPE _z1;\
+TDEST *_v;\
+TSRC1 *_v0;\
+TSRC2 *_v1;\
 \
-_v0 = B;\
-_v1 = C;\
-_v = A;\
+_v0 = SRC1;\
+_v1 = SRC2;\
+_v = DEST;\
 \
 _x0 = _v0->x;\
 _y0 = _v0->y;\
@@ -48,38 +85,17 @@ _x1 = _v1->x;\
 _y1 = _v1->y;\
 _z1 = _v1->z;\
 \
-_v->x = _x0 + _x1;\
-_v->y = _y0 + _y1;\
-_v->z = _z0 + _z1;\
+_x0 += _x1;\
+_y0 += _y1;\
+_z0 += _z1;\
+\
+_v->x = _x0;\
+_v->y = _y0;\
+_v->z = _z0;\
 }
 
-#define SUB_VEC(A, B, C) {\
-short _x0;\
-short _y0;\
-short _z0;\
-short _x1;\
-short _y1;\
-short _z1;\
-SVector *_v;\
-Position *_v0;\
-Position *_v1;\
-\
-_v0 = B;\
-_v1 = C;\
-_v = A;\
-\
-_x0 = _v0->x;\
-_y0 = _v0->y;\
-_z0 = _v0->z;\
-\
-_x1 = _v1->x;\
-_y1 = _v1->y;\
-_z1 = _v1->z;\
-\
-_v->x = _x0 - _x1;\
-_v->y = _y0 - _y1;\
-_v->z = _z0 - _z1;\
-}
+#define ADD_SVEC(TDEST, DEST, TSRC1, SRC1, TSRC2, SRC2) ADD_VEC(short, TDEST, DEST, TSRC1, SRC1, TSRC2, SRC2)
+#define ADD_LVEC(TDEST, DEST, TSRC1, SRC1, TSRC2, SRC2) ADD_VEC(long, TDEST, DEST, TSRC1, SRC1, TSRC2, SRC2)
 
 #define hasm_sqrlen1( r0, r1, r2 ) __asm__ (		\
 	"mtc2	%0, $9;"					\

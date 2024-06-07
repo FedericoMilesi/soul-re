@@ -307,11 +307,11 @@ void SoulReaverPost(Instance *instance, unsigned long message, unsigned long dat
             {
                 pData->birthInstance->collideFunc = CollideReaverProjectile;
 
-                SET_VEC((SVector *)&pData->birthInstance->position, (Position *)&startPos);
+                COPY_SVEC(Position, &pData->birthInstance->position, SVector, (SVector *)&startPos);
 
                 INSTANCE_Post(pData->birthInstance, 0x800010, data);
 
-                SET_VEC((SVector *)&pData->birthInstance->position, (Position *)&startPos);
+                COPY_SVEC(Position, &pData->birthInstance->position, SVector, (SVector *)&startPos);
             }
         }
         break;

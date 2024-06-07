@@ -104,5 +104,6 @@ MATRIX *MulMatrix2(MATRIX *m0, MATRIX *m1);
 void SetBackColor(long rbk, long gbk, long bbk);
 void SetGeomScreen(long h);
 void SetFogNearFar(long a, long b, long h);
+int checkagain();
 
 #endif
