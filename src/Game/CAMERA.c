@@ -83,70 +83,6 @@ static inline int GetSecondCheckFlag(Camera *camera)
     return 1;
 }
 
-static inline void CAMERA_Add_Vec_To_Pos(Position *dest, Position *pos, Vector *vec)
-{
-    short x, y, z;
-
-    x = pos->x;
-    y = pos->y;
-    z = pos->z;
-
-    x += (short)vec->x;
-    y += (short)vec->y;
-    z += (short)vec->z;
-
-    dest->x = x;
-    dest->y = y;
-    dest->z = z;
-}
-
-static inline void CAMERA_Sub_Vec_From_Pos(Position *dest, Position *pos, Vector *vec)
-{
-    short x, y, z;
-
-    x = pos->x;
-    y = pos->y;
-    z = pos->z;
-
-    x -= (short)vec->x;
-    y -= (short)vec->y;
-    z -= (short)vec->z;
-
-    dest->x = x;
-    dest->y = y;
-    dest->z = z;
-}
-
-static inline void CAMERA_Add_Pos_To_Vec(Position *dest, Vector *vec, Position *pos)
-{
-    short x, y, z;
-
-    x = (short)vec->x;
-    y = (short)vec->y;
-    z = (short)vec->z;
-
-    x += pos->x;
-    y += pos->y;
-    z += pos->z;
-
-    dest->x = x;
-    dest->y = y;
-    dest->z = z;
-}
-
-static inline void CAMERA_Copy_Vec_To_SVec(SVector *SVec, Vector *vec)
-{
-    short x, y, z;
-
-    x = (short)vec->x;
-    y = (short)vec->y;
-    z = (short)vec->z;
-
-    SVec->x = x;
-    SVec->y = y;
-    SVec->z = z;
-}
-
 void CAMERA_CalculateViewVolumeNormals(Camera *camera)
 {
     short projDistance;
@@ -270,9 +206,9 @@ void CAMERA_CreateNewFocuspoint(Camera *camera)
 
     CAMERA_CalcPosition(&camera->targetPos, &camera->core.position, &camera->focusRotation, camera->focusDistance);
 
-    SUB_VEC(&sv, &camera->core.position, &camera->targetPos);
+    SUB_SVEC(SVector, &sv, Position, &camera->core.position, Position, &camera->targetPos);
 
-    ADD_SVEC((SVector *)&camera->focusPoint, &camera->core.position, (Position *)&sv);
+    ADD_SVEC(Position, &camera->focusPoint, Position, &camera->core.position, SVector, &sv);
 }
 
 void CAMERA_SaveMode(Camera *camera, long mode)
@@ -797,7 +733,7 @@ void CAMERA_SetMaxVel(Camera *camera)
     static long maxVelAccl;
     static long maxVelVel;
 
-    SUB_VEC(&cam_dist, &camera->focusPoint, &camera->targetFocusPoint);
+    SUB_SVEC(SVector, &cam_dist, Position, &camera->focusPoint, Position, &camera->targetFocusPoint);
 
     extraVel = camera->focusDistance / 100;
 
@@ -835,7 +771,7 @@ void CAMERA_SetTarget(Camera *camera, Position *pos)
 
     CAMERA_CalcRotation(&camera->targetFocusRotation, pos, &camera->core.position);
 
-    SUB_VEC(&sv, pos, &camera->core.position);
+    SUB_SVEC(SVector, &sv, Position, pos, Position, &camera->core.position);
 
     len = CAMERA_LengthSVector(&sv);
 
@@ -852,10 +788,6 @@ void CAMERA_CalcPosition(Position *position, Position *base, Rotation *rotation,
     VECTOR v;
     MATRIX matrix;
     Vector vectorPos;
-    short _x1;
-    short _y1;
-    short _z1;
-    Vector *_v1;
 
     distance = -distance;
 
@@ -878,15 +810,7 @@ void CAMERA_CalcPosition(Position *position, Position *base, Rotation *rotation,
     vectorPos.y = v.vy + base->y;
     vectorPos.z = v.vz + base->z;
 
-    _v1 = &vectorPos;
-
-    _x1 = (short)_v1->x;
-    _y1 = (short)_v1->y;
-    _z1 = (short)_v1->z;
-
-    position->x = _x1;
-    position->y = _y1;
-    position->z = _z1;
+    COPY_SVEC(Position, position, Vector, &vectorPos);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetFocus);
@@ -1005,7 +929,7 @@ void CAMERA_Adjust(Camera *camera, long adjust)
     {
         if ((adjust & 0x1))
         {
-            SUB_VEC(&dv, (Position *)temp, (Position *)&temp->tx);
+            SUB_SVEC(SVector, &dv, SVector, (SVector *)temp, SVector, (SVector *)&temp->tx);
 
             CAMERA_Adjust_distance(camera, CAMERA_LengthSVector(&dv));
         }
@@ -1124,7 +1048,7 @@ short CAMERA_CalcZRotation(Position *target, Position *position)
     SVector onPlane;
     SVector sv;
 
-    SUB_VEC(&onPlane, position, target);
+    SUB_SVEC(SVector, &onPlane, Position, position, Position, target);
 
     sv.x = onPlane.x;
     sv.y = onPlane.y;
@@ -1140,7 +1064,7 @@ void CAMERA_CalcRotation(Rotation *rotation, Position *target, Position *positio
     SVector sv;
     SVector onPlane;
 
-    SUB_VEC(&sv, position, target);
+    SUB_SVEC(SVector, &sv, Position, position, Position, target);
 
     onPlane.x = sv.x;
     onPlane.y = sv.y;
@@ -1159,8 +1083,8 @@ void CAMERA_CalcFSRotation(Camera *camera, Rotation *rotation, Position *target,
 
     (void)camera;
 
-    SUB_VEC(&sv, position, target);
-    SET_VEC(&sv2, (Position *)&sv);
+    SUB_SVEC(SVector, &sv, Position, position, Position, target);
+    COPY_SVEC(SVector, &sv2, SVector, &sv);
 
     onPlane.x = sv2.x;
     onPlane.y = sv2.y;
@@ -1253,9 +1177,9 @@ TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colIn
 
         if ((camera->flags & 0x10000))
         {
-            colInfo->start->position.x += (short)((colInfo->end->position.x - colInfo->start->position.x) >> 5);
-            colInfo->start->position.y += (short)((colInfo->end->position.y - colInfo->start->position.y) >> 5);
-            colInfo->start->position.z += (short)((colInfo->end->position.z - colInfo->start->position.z) >> 5);
+            colInfo->start->position.x += ((colInfo->end->position.x - colInfo->start->position.x) >> 5);
+            colInfo->start->position.y += ((colInfo->end->position.y - colInfo->start->position.y) >> 5);
+            colInfo->start->position.z += ((colInfo->end->position.z - colInfo->start->position.z) >> 5);
         }
 
         MATH3D_SetUnityMatrix(&matrix);
@@ -1346,20 +1270,8 @@ TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colIn
         ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&adjStartLine);
         ApplyMatrix(&matrix, (SVECTOR *)&endLine, (VECTOR *)&adjEndLine);
 
-        {
-            Vector *_v0;
-            Vector *_v1;
-            SVector *_v2;
-            SVector *_v3;
-
-            _v0 = &adjStartLine;
-            _v1 = &adjEndLine;
-            _v2 = &startPt[1];
-            _v3 = &endPt[1];
-
-            CAMERA_Add_Vec_To_Pos((Position *)_v2, &colInfo->start->position, _v0);
-            CAMERA_Add_Vec_To_Pos((Position *)_v3, &colInfo->end->position, _v1);
-        }
+        ADD_SVEC(SVector, &startPt[1], Position, &colInfo->start->position, Vector, &adjStartLine);
+        ADD_SVEC(SVector, &endPt[1], Position, &colInfo->end->position, Vector, &adjEndLine);
 
         startLine.y = 32;
         endLine.y = 290;
@@ -1382,20 +1294,8 @@ TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colIn
         ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&adjStartLine);
         ApplyMatrix(&matrix, (SVECTOR *)&endLine, (VECTOR *)&adjEndLine);
 
-        {
-            Vector *_v0;
-            Vector *_v1;
-            SVector *_v2;
-            SVector *_v3;
-
-            _v0 = &adjStartLine;
-            _v1 = &adjEndLine;
-            _v2 = &startPt[2];
-            _v3 = &endPt[2];
-
-            CAMERA_Sub_Vec_From_Pos((Position *)_v2, &colInfo->start->position, _v0);
-            CAMERA_Sub_Vec_From_Pos((Position *)_v3, &colInfo->end->position, _v1);
-        }
+        SUB_SVEC(SVector, &startPt[2], Position, &colInfo->start->position, Vector, &adjStartLine);
+        SUB_SVEC(SVector, &endPt[2], Position, &colInfo->end->position, Vector, &adjEndLine);
 
         endLine.y = 180;
         startLine.y = 32;
@@ -1408,52 +1308,30 @@ TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colIn
         ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&adjStartLine);
         ApplyMatrix(&matrix, (SVECTOR *)&endLine, (VECTOR *)&adjEndLine);
 
-        {
-            Vector *_v0;
-            Vector *_v1;
-            SVector *_v2;
-            SVector *_v3;
+        ADD_SVEC(SVector, &startPt[3], Vector, &adjStartLine, Position, &colInfo->start->position);
+        ADD_SVEC(SVector, &endPt[3], Vector, &adjEndLine, Position, &colInfo->end->position);
 
-            _v0 = &adjStartLine;
-            _v1 = &adjEndLine;
-            _v2 = &startPt[3];
-            _v3 = &endPt[3];
+        SUB_SVEC(SVector, &startPt[4], Position, &colInfo->start->position, Vector, &adjStartLine);
+        SUB_SVEC(SVector, &endPt[4], Position, &colInfo->end->position, Vector, &adjEndLine);
 
-            CAMERA_Add_Pos_To_Vec((Position *)_v2, _v0, &colInfo->start->position);
-            CAMERA_Add_Pos_To_Vec((Position *)_v3, _v1, &colInfo->end->position);
-        }
-
-        {
-            Vector *_v0;
-            Vector *_v1;
-            SVector *_v2;
-            SVector *_v3;
-
-            _v0 = &adjStartLine;
-            _v1 = &adjEndLine;
-            _v2 = &startPt[4];
-            _v3 = &endPt[4];
-
-            CAMERA_Sub_Vec_From_Pos((Position *)_v2, &colInfo->start->position, _v0);
-            CAMERA_Sub_Vec_From_Pos((Position *)_v3, &colInfo->end->position, _v1);
-        }
-
-        ADD_SVEC(&right_point, (Position *)&startPt[1], (Position *)&camera->focusInstanceVelVec);
-        ADD_SVEC(&left_point, (Position *)&startPt[2], (Position *)&camera->focusInstanceVelVec);
+        ADD_SVEC(SVector, &right_point, SVector, &startPt[1], SVector, &camera->focusInstanceVelVec);
+        ADD_SVEC(SVector, &left_point, SVector, &startPt[2], SVector, &camera->focusInstanceVelVec);
 
         startLine.y = 4096;
 
         ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&adjStartLine);
 
-        CAMERA_Copy_Vec_To_SVec(&camera_plane, &adjStartLine);
+        camera_plane.x = adjStartLine.x;
+        camera_plane.y = adjStartLine.y;
+        camera_plane.z = adjStartLine.z;
 
         startLine.y = 0;
         startLine.z = 4096;
 
         ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&CamLineNormalized);
 
-        SET_VEC(&startPt[0], &colInfo->start->position);
-        SET_VEC(&endPt[0], &colInfo->end->position);
+        COPY_SVEC(SVector, &startPt[0], Position, &colInfo->start->position);
+        COPY_SVEC(SVector, &endPt[0], Position, &colInfo->end->position);
 
         colInfo->lenCenterToExtend = (int)camera->targetFocusDistance;
 
@@ -1517,7 +1395,7 @@ TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colIn
 
                     colInfo->numCollided++;
 
-                    SUB_VEC(&sv, (Position *)&startPt[i], (Position *)&endPt[i]);
+                    SUB_SVEC(SVector, &sv, SVector, &startPt[i], SVector, &endPt[i]);
 
                     colInfo->lengthList[i] = (short)(((sv.x * CamLineNormalized.x) + (sv.y * CamLineNormalized.y) + (sv.z * CamLineNormalized.z)) >> 12);
 
@@ -1548,7 +1426,7 @@ TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colIn
                 }
                 else
                 {
-                    SUB_VEC(&sv, (Position *)&startPt[i], (Position *)&endPt[i]);
+                    SUB_SVEC(SVector, &sv, SVector, &startPt[i], SVector, &endPt[i]);
 
                     colInfo->lengthList[i] = (short)(((sv.x * CamLineNormalized.x) + (sv.y * CamLineNormalized.y) + (sv.z * CamLineNormalized.z)) >> 12);
                 }
@@ -1667,7 +1545,7 @@ void CAMERA_LookProcess(Camera *camera)
     {
         camera->focusDistance = camera->targetFocusDistance;
 
-        SET_VEC((SVector *)&camera->focusPoint, &camera->targetFocusPoint);
+        COPY_SVEC(Position, &camera->focusPoint, Position, &camera->targetFocusPoint);
     }
     else
     {
@@ -1684,9 +1562,9 @@ void CAMERA_LookProcess(Camera *camera)
 
     CAMERA_CalcPosition(&camera->targetPos, &camera->focusPoint, &camera->focusRotation, camera->focusDistance);
 
-    SET_VEC((SVector *)&camera->core.position, &camera->targetPos);
-    SET_VEC((SVector *)&camera->targetRotation, (Position *)&camera->focusRotation);
-    SET_VEC((SVector *)&camera->core.rotation, (Position *)&camera->targetRotation);
+    COPY_SVEC(Position, &camera->core.position, Position, &camera->targetPos);
+    COPY_SVEC(Rotation, &camera->targetRotation, Rotation, &camera->focusRotation);
+    COPY_SVEC(Rotation, &camera->core.rotation, Rotation, &camera->targetRotation);
 
     camera->distanceState = 0;
 
@@ -1793,10 +1671,6 @@ void CAMERA_CalcFocusOffsetForSwim(SVector *offset, Camera *camera)
     Vector adjustedOffset;
     SVector temp;
     Instance *focusInstance;
-    short _x1;
-    short _y1;
-    short _z1;
-    Vector *_v1;
 
     focusInstance = camera->focusInstance;
 
@@ -1806,15 +1680,7 @@ void CAMERA_CalcFocusOffsetForSwim(SVector *offset, Camera *camera)
 
     ApplyMatrix(&focusInstance->matrix[1], (SVECTOR *)&temp, (VECTOR *)&adjustedOffset);
 
-    _v1 = &adjustedOffset;
-
-    _x1 = (short)_v1->x;
-    _y1 = (short)_v1->y;
-    _z1 = (short)_v1->z;
-
-    offset->x = _x1;
-    offset->y = _y1;
-    offset->z = _z1;
+    COPY_SVEC(SVector, offset, Vector, &adjustedOffset);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcIntersectAngle);
@@ -1829,7 +1695,7 @@ long CAMERA_ACForcedMovement(Camera *camera, CameraCollisionInfo *colInfo)
 
     COLLIDE_GetNormal(colInfo->tfaceList[colInfo->line]->normal, (short *)colInfo->tfaceTerrain[colInfo->line]->normalList, (SVector *)&normal);
 
-    SUB_VEC(&sv, &colInfo->start->position, &colInfo->end->position);
+    SUB_SVEC(SVector, &sv, Position, &colInfo->start->position, Position, &colInfo->end->position);
 
     CAMERA_Normalize(&sv);
 
@@ -1970,11 +1836,11 @@ void CAMERA_CinematicProcess(Camera *camera)
             {
                 if (camera->data.Cinematic.splinePointAhead == 0)
                 {
-                    SET_VEC((SVector *)&camera->core.position, (Position *)camPos);
+                    COPY_SVEC(Position, &camera->core.position, SVector, camPos);
                 }
                 else
                 {
-                    SET_VEC((SVector *)&camera->core.position, (Position *)&camera->data.Cinematic.lastSplinePos);
+                    COPY_SVEC(Position, &camera->core.position, SVector, &camera->data.Cinematic.lastSplinePos);
                 }
             }
 
@@ -1982,7 +1848,7 @@ void CAMERA_CinematicProcess(Camera *camera)
             {
                 CAMERA_SetTarget(camera, (Position *)camPos);
 
-                SET_VEC((SVector *)&camera->data.Cinematic.lastSplinePos, (Position *)camPos);
+                COPY_SVEC(SVector, &camera->data.Cinematic.lastSplinePos, SVector, camPos);
             }
             else if (targetSpline != NULL)
             {
@@ -1990,7 +1856,7 @@ void CAMERA_CinematicProcess(Camera *camera)
 
                 if (camTarget != NULL)
                 {
-                    SET_VEC((SVector *)&camera->targetFocusPoint, (Position *)camTarget);
+                    COPY_SVEC(Position, &camera->targetFocusPoint, SVector, camTarget);
 
                     CAMERA_SetTarget(camera, (Position *)camTarget);
                 }
@@ -2002,7 +1868,7 @@ void CAMERA_CinematicProcess(Camera *camera)
                 CriticalDampPosition(1, &camera->focusPoint, &camera->targetFocusPoint, &camera->focusPointVel, &camera->focusPointAccl, (short)(camera->maxVel * 2));
             }
 
-            SET_VEC((SVector *)&camera->targetPos, &camera->core.position);
+            COPY_SVEC(Position, &camera->targetPos, Position, &camera->core.position);
 
             if (posSpline != NULL)
             {
@@ -2062,7 +1928,7 @@ void CAMERA_CinematicProcess(Camera *camera)
 
     CAMERA_CalcRotation(&camera->targetRotation, &camera->focusPoint, &camera->core.position);
 
-    SET_VEC((SVector *)&camera->core.rotation, (Position *)&camera->targetRotation);
+    COPY_SVEC(Rotation, &camera->core.rotation, Rotation, &camera->targetRotation);
 
     camera->actual_x_rot = camera->core.rotation.x;
 
@@ -2246,7 +2112,7 @@ void CAMERA_SplineProcess(Camera *camera)
         {
             CAMERA_CalcRotation(&targetFocusRotation, &camera->focusPoint, (Position *)&camPos);
 
-            SUB_VEC(&sv, &camera->focusPoint, (Position *)&camPos);
+            SUB_SVEC(SVector, &sv, Position, &camera->focusPoint, SVector, &camPos);
 
             targetFocusDistance = (short)CAMERA_LengthSVector(&sv);
 
@@ -2362,7 +2228,7 @@ void CAMERA_Process(Camera *camera)
 
     camera->instance_mode = CAMERA_QueryMode(camera);
 
-    SUB_VEC(&camera->focusInstanceVelVec, &camera->newFocusInstancePos, &camera->oldFocusInstancePos);
+    SUB_SVEC(SVector, &camera->focusInstanceVelVec, Position, &camera->newFocusInstancePos, Position, &camera->oldFocusInstancePos);
 
     camera->instance_prev_xyvel = camera->instance_xyvel;
 
@@ -2915,7 +2781,7 @@ void CAMERA_UpdateFocusRotationX(Camera *camera, Instance *focusInstance)
     tfaceFlag = 0;
 
     if ((focusInstance->tface != NULL) && (((Level *)focusInstance->tfaceLevel)->terrain != NULL) && (focusInstance->tface->textoff != 0xFFFF)
-    && ((((TextureFT3 *)((char *)((Level *)focusInstance->tfaceLevel)->terrain->StartTextureList + focusInstance->tface->textoff))->attr & 0x8000))
+    && ((((TextureFT3 *)((char *)((Level *)focusInstance->tfaceLevel)->terrain->StartTextureList + focusInstance->tface->textoff))->attr & 0x8000)) /*TODO: FAKEMATCH?*/
     && (dist < 2912))
     {
         COLLIDE_GetNormal(focusInstance->tface->normal, (short *)((Level *)focusInstance->tfaceLevel)->terrain->normalList, (SVector *)&normal);
@@ -3137,7 +3003,7 @@ void CAMERA_CalcFollowPosition(Camera *camera, Rotation *rotation)
 
     camera->core.position = camera->targetPos;
 
-    SET_VEC((SVector *)&camera->core.rotation, (Position *)rotation);
+    COPY_SVEC(Rotation, &camera->core.rotation, Rotation, rotation);
 
     if (!(camera->flags & 0x10000))
     {
@@ -3286,14 +3152,14 @@ void CAMERA_SetupColInfo(Camera *camera, CameraCollisionInfo *colInfo, Position 
     static short toggle = 0;
     if (camera->mode == 6)
     {
-        SET_VEC((SVector *)&camera->focusSphere.position, &camera->targetFocusPoint);
+        COPY_SVEC(Position, &camera->focusSphere.position, Position, &camera->targetFocusPoint);
     }
     else
     {
-        SET_VEC((SVector *)&camera->focusSphere.position, &camera->real_focuspoint);
+        COPY_SVEC(Position, &camera->focusSphere.position, Position, &camera->real_focuspoint);
     }
 
-    SET_VEC((SVector *)&camera->posSphere.position, targetCamPos);
+    COPY_SVEC(Position, &camera->posSphere.position, Position, targetCamPos);
 
     colInfo->start = &camera->focusSphere;
     colInfo->end = &camera->posSphere;
@@ -3332,7 +3198,7 @@ void CAMERA_DoPanicCheck(Camera *camera, CameraCollisionInfo *tmpcolInfo, Rotati
 
     CAMERA_CalcPosition(&targetCamPos, &camera->focusPoint, rotation, camera->targetFocusDistance);
 
-    SET_VEC((SVector *)&camera->posSphere.position, &targetCamPos);
+    COPY_SVEC(Position, &camera->posSphere.position, Position, &targetCamPos);
 
     CAMERA_SphereToSphereWithLines(camera, tmpcolInfo, 0);
 
@@ -3455,7 +3321,7 @@ long CAMERA_DoCameraCollision2(Camera *camera, Position *targetCamPos, int simpl
             {
                 combat_cam_weight += 144;
 
-                if (combat_cam_weight > 4095)
+                if (combat_cam_weight >= 4096)
                 {
                     combat_cam_weight = 4096;
                 }
@@ -3474,8 +3340,8 @@ long CAMERA_DoCameraCollision2(Camera *camera, Position *targetCamPos, int simpl
     {
         panic_count++;
 
-        if ((((gameTrackerX.controlCommand[0][0] & 0x1)) && ((short)panic_count > 10))
-        || ((!(gameTrackerX.controlCommand[0][0] & 0x1)) && ((short)panic_count > 1)))
+        if ((((gameTrackerX.controlCommand[0][0] & 0x1)) && (panic_count > 10))
+        || ((!(gameTrackerX.controlCommand[0][0] & 0x1)) && (panic_count > 1)))
         {
             CAMERA_Panic(camera, (short)colInfo.lenCenterToExtend);
         }
@@ -3487,7 +3353,7 @@ long CAMERA_DoCameraCollision2(Camera *camera, Position *targetCamPos, int simpl
 
     if ((camera->data.Follow.tface != NULL) && (secondcheck_flag != 0))
     {
-        SET_VEC((SVector *)&camera->focusSphere.position, &camera->targetFocusPoint);
+        COPY_SVEC(Position, &camera->focusSphere.position, Position, &camera->targetFocusPoint);
 
         camera->data.Follow.tface = CAMERA_SphereToSphereWithLines(camera, &colInfo, 0);
     }

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/MATH3D.h"
 
 long dyna_clddyna[8] = {
     0x0C, 0x0D, 0x0E, 0x0F, 0x1C, 0x1D, 0x1E, 0x1F};
@@ -12,6 +13,18 @@ long dyna_cldstat[8] = {
 long collide_ignoreAttr = 0;
 
 long collide_acceptAttr = 0;
+
+long collide_t0;
+
+long collide_t1;
+
+SVector *collide_point0;
+
+SVector *collide_point1;
+
+SVector *collide_normal0;
+
+SVector *collide_normal1;
 
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal)
 {
@@ -338,9 +351,73 @@ long COLLIDE_WithinXYBounds(SVector *point, HBox *hbox)
     return temp;
 }
 
+void COLLIDE_LineWithBoxFace(short startDist, long lineDist, short planeDist, SVector *start, Vector *line, HBox *hbox, long (*collideBoundFunc)(), SVector *normal);
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_LineWithBoxFace);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_IntersectLineAndBox);
+long COLLIDE_IntersectLineAndBox(SVector *point0, SVector *normal0, SVector *point1, SVector *normal1, SVector *end, SVector *start, HBox *hbox)
+{
+    SVector normal;
+    Vector line;
+
+    collide_t0 = 4097;
+    collide_t1 = 4097;
+
+    collide_point0 = point0;
+    collide_point1 = point1;
+
+    collide_normal0 = normal0;
+    collide_normal1 = normal1;
+
+
+    SUB_LVEC(Vector, &line, SVector, end, SVector, start);
+    normal.x = -4096;
+    normal.y = 0;
+    normal.z = 0;
+
+    COLLIDE_LineWithBoxFace(-start->x, -line.x, -hbox->minX, start, &line, hbox, COLLIDE_WithinYZBounds, &normal);
+
+    normal.x = 4096;
+    normal.y = 0;
+    normal.z = 0;
+
+    COLLIDE_LineWithBoxFace(start->x, line.x, hbox->maxX, start, &line, hbox, COLLIDE_WithinYZBounds, &normal);
+
+    normal.x = 0;
+    normal.y = -4096;
+    normal.z = 0;
+
+    COLLIDE_LineWithBoxFace(-start->y, (short)-line.y, -hbox->minY, start, &line, hbox, COLLIDE_WithinXZBounds, &normal);
+
+    normal.x = 0;
+    normal.y = 4096;
+    normal.z = 0;
+
+    COLLIDE_LineWithBoxFace(start->y, line.y, hbox->maxY, start, &line, hbox, COLLIDE_WithinXZBounds, &normal);
+
+    normal.x = 0;
+    normal.y = 0;
+    normal.z = -4096;
+
+    COLLIDE_LineWithBoxFace(-start->z, (short)-line.z, -hbox->minZ, start, &line, hbox, COLLIDE_WithinXYBounds, &normal);
+
+    normal.x = 0;
+    normal.y = 0;
+    normal.z = 4096;
+
+    COLLIDE_LineWithBoxFace(start->z, line.z, hbox->maxZ, start, &line, hbox, COLLIDE_WithinXYBounds, &normal);
+
+    if (collide_t1 != 4097)
+    {
+        return 2;
+    }
+
+    if (collide_t0 != 4097)
+    {
+        return 1;
+    }
+
+    return 0;
+}
 
 TFace *COLLIDE_PointAndTerrain(Terrain *terrain, PCollideInfo *pcollideInfo, LCollideInfo *lcol)
 {

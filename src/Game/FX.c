@@ -198,7 +198,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Build);
 
 void FX_UpdatePos(FX_PRIM *fxPrim, SVector *offset, int spriteflag)
 {
-    ADD_SVEC((SVector *)&fxPrim->position, &fxPrim->position, (Position *)offset);
+    ADD_SVEC(Position, &fxPrim->position, Position, &fxPrim->position, SVector, offset);
 
     if ((spriteflag == 0) && ((fxPrim->flags & 0x10000)))
     {
@@ -784,7 +784,7 @@ FXForceFieldEffect *FX_StartFField(Instance *instance, int size, Position *offse
         field->continue_process = NULL;
         field->size = size;
 
-        SET_VEC(&field->offset, offset);
+        COPY_SVEC(SVector, &field->offset, Position, offset);
 
         field->size_diff = size_diff;
         field->size_change = size_change;
