@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/G2/INSTNCG2.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_BuildTransformsForList);
 
@@ -16,7 +17,10 @@ void G2Instance_BuildTransforms(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_RebuildTransforms);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_GetKeylist);
+G2AnimKeylist *G2Instance_GetKeylist(Instance *instance, int id)
+{
+    return instance->object->animList[id];
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_RebuildAnimatedTransforms);
 
