@@ -2,7 +2,17 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_BuildTransformsForList);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_BuildTransforms);
+void G2Instance_BuildTransforms(Instance *instance)
+{
+    if ((instance->object->animList != NULL) && (!(instance->object->oflags2 & 0x40000000)))
+    {
+        _G2Instance_BuildAnimatedTransforms(instance);
+    }
+    else
+    {
+        _G2Instance_BuildNonAnimatedTransforms(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_RebuildTransforms);
 
