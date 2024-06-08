@@ -9,5 +9,6 @@ void _G2Instance_BuildAnimatedTransforms(Instance *instance);
 void _G2Instance_BuildNonAnimatedTransforms(Instance *instance);
 void _G2Instance_RebuildAnimatedTransforms(Instance *instance);
 void _G2Instance_RebuildNonAnimatedTransforms(Instance *instance);
+void _G2Instance_BuildFacadeTransforms(Instance *instance, Segment *segment, MATRIX *segMatrix, MATRIX *matrixPool, long scale_flag);
 
 #endif

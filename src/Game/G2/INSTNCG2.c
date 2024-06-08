@@ -2,6 +2,7 @@
 #include "Game/G2/INSTNCG2.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MATH3D.h"
+#include "Game/SPLINE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_BuildTransformsForList);
 
@@ -80,7 +81,93 @@ void _G2Instance_BuildAnimatedTransforms(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_RebuildNonAnimatedTransforms);
+void _G2Instance_RebuildNonAnimatedTransforms(Instance *instance)
+{
+    VECTOR *scale;
+    MATRIX *introTransform;
+    MATRIX *segMatrix;
+    Model *model;
+    Segment *segment;
+    short scale_flag;
+    long i;
+
+    scale = (VECTOR *)getScratchAddr(10);
+
+    segMatrix = instance->matrix;
+
+    introTransform = (MATRIX *)getScratchAddr(14);
+
+    scale_flag = 0;
+
+    if (segMatrix != NULL)
+    {
+        model = instance->object->modelList[instance->currentModel];
+
+        segment = model->segmentList;
+
+        if ((instance->scale.x != 4096) || (instance->scale.y != 4096) || (instance->scale.z != 4096))
+        {
+            scale->vx = instance->scale.x;
+            scale->vy = instance->scale.y;
+            scale->vz = instance->scale.z;
+
+            scale_flag = 1;
+        }
+
+        for (i = 0; i < model->numSegments; segMatrix++, segment++, i++)
+        {
+            if (segment->lastTri != -1)
+            {
+                if ((segment->flags & 0x3))
+                {
+                    RotMatrix((SVECTOR *)&instance->rotation, introTransform);
+
+                    if (scale_flag != 0)
+                    {
+                        ScaleMatrix(introTransform, scale);
+                    }
+
+                    _G2Instance_BuildFacadeTransforms(instance, segment, segMatrix, introTransform, scale_flag);
+                }
+                else
+                {
+                    if (((instance->flags & 0x1)) && (instance->intro != NULL))
+                    {
+                        *segMatrix = instance->intro->multiSpline->curRotMatrix;
+                    }
+                    else if ((instance->rotation.z != 0) || (instance->rotation.x != 0) || (instance->rotation.y != 0))
+                    {
+                        RotMatrix((SVECTOR *)&instance->rotation, segMatrix);
+                    }
+                    else
+                    {
+                        MATH3D_SetUnityMatrix(segMatrix);
+                    }
+
+                    if (scale_flag != 0)
+                    {
+                        ScaleMatrix(segMatrix, scale);
+                    }
+
+                    segMatrix->t[0] = instance->position.x;
+                    segMatrix->t[1] = instance->position.y;
+                    segMatrix->t[2] = instance->position.z;
+                }
+            }
+
+            segMatrix->m[2][3] = scale_flag;
+        }
+
+        instance = instance->LinkChild;
+
+        while (instance != NULL)
+        {
+            G2Instance_BuildTransforms(instance);
+
+            instance = instance->LinkSibling;
+        }
+    }
+}
 
 void _G2Instance_BuildDeactivatedTransforms(Instance *instance)
 {

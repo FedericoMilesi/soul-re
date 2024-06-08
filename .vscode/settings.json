@@ -20,6 +20,7 @@
     "terminal.integrated.tabs.enableAnimation": false,
     "files.autoGuessEncoding": true,
     "files.associations": {
-        "math3d.h": "c"
+        "math3d.h": "c",
+        "instncg2.h": "c"
     }
 }
