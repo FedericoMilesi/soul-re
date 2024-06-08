@@ -3,6 +3,15 @@
 
 #include "common.h"
 
+typedef enum MATH3D_AXIS {
+    AXIS_X = 0,
+    AXIS_Y = 1,
+    AXIS_Z = 2,
+    AXIS_NEG_X = 3,
+    AXIS_NEG_Y = 4,
+    AXIS_NEG_Z = 5,
+} MATH3D_AXIS;
+
 #define abs_diff(a,b) ( a-b<0?b-a:a-b )
 
 #define COPY_VEC(TYPE, TDEST, DEST, TSRC, SRC) {\

@@ -112,6 +112,7 @@ MATRIX *RotMatrixX(long r, MATRIX *m);
 MATRIX *RotMatrixY(long r, MATRIX *m);
 MATRIX *RotMatrixZ(long r, MATRIX *m);
 MATRIX *RotMatrixZYX(SVECTOR *r, MATRIX *m);
+MATRIX *MulMatrix0(MATRIX *m0, MATRIX *m1, MATRIX *m2);
 MATRIX *MulMatrix2(MATRIX *m0, MATRIX *m1);
 void SetBackColor(long rbk, long gbk, long bbk);
 void SetGeomScreen(long h);
@@ -121,5 +122,8 @@ void PopMatrix();
 void SetTransMatrix(MATRIX *m);
 void SetRotMatrix(MATRIX *m);
 void PushMatrix();
+int rcos(int);
+int rsin(int);
+void ScaleMatrix(MATRIX *, VECTOR *);
 
 #endif

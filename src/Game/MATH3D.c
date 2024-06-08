@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/MATH3D.h"
 #include "Game/G2/QUATG2.h"
+#include "Game/HASM.h"
 
 void MATH3D_Sort3VectorCoords(long *a, long *b, long *c)
 {
@@ -477,7 +478,60 @@ int MATH3D_veclen2(int ix, int iy)
     return (((ix - (ix >> 5)) - (ix >> 7)) + (temp >> 2)) + (temp >> 6);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MATH3D", MATH3D_RotateAxisToVector);
+void MATH3D_RotateAxisToVector(MATRIX *dest, MATRIX *src, SVector *vec, MATH3D_AXIS axis)
+{
+    MATRIX xform;
+    G2Quat rot;
+    long len;
+    int theta;
+    int sintheta;
+    int px;
+    int py;
+    int pz;
+
+    if ((unsigned int)axis >= AXIS_NEG_X)
+    {
+        axis = (MATH3D_AXIS)((unsigned int)axis - AXIS_NEG_X);
+
+        px = -src->m[0][(unsigned int)axis];
+        py = -src->m[1][(unsigned int)axis];
+        pz = -src->m[2][(unsigned int)axis];
+    }
+    else
+    {
+        px = src->m[0][(unsigned int)axis];
+        py = src->m[1][(unsigned int)axis];
+        pz = src->m[2][(unsigned int)axis];
+    }
+
+    rot.x = ((py * vec->z) - (pz * vec->y)) / 4096;
+    rot.y = ((pz * vec->x) - (px * vec->z)) / 4096;
+    rot.z = ((px * vec->y) - (py * vec->x)) / 4096;
+
+    sintheta = MATH3D_racos_S(((px * vec->x) + (py * vec->y) + (pz * vec->z)) / 4096) / 2;
+
+    len = MATH3D_SquareLength(rot.x, rot.y, rot.z);
+
+    if (len <= 0)
+    {
+        len = 4096;
+    }
+    else
+    {
+        len = MATH3D_FastSqrt0(len);
+    }
+
+    theta = rsin(sintheta);
+
+    rot.x = (short)(rot.x * theta / len);
+    rot.y = (short)(rot.y * theta / len);
+    rot.z = (short)(rot.z * theta / len);
+    rot.w = rcos(sintheta);
+
+    G2Quat_ToMatrix_S(&rot, (G2Matrix *)&xform);
+
+    MulMatrix0(src, &xform, dest);
+}
 
 int MATH3D_ConeDetect(SVector *pos, int arc, int elevation)
 {
