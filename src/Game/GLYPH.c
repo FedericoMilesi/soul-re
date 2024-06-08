@@ -25,6 +25,10 @@ EXTERN STATIC int warpDraw;
 
 EXTERN STATIC int glowdeg;
 
+EXTERN STATIC SVector HUD_Cap_Pos;
+
+EXTERN STATIC SVector HUD_Cap_Vel;
+
 int hud_warp_arrow_flash;
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
@@ -113,7 +117,24 @@ INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphTrigger);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", MANNA_Pickup);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HEALTHU_Pickup);
+void HEALTHU_Pickup(Instance *instance)
+{
+    ApplyMatrixSV(theCamera.core.wcTransform2, (SVECTOR *)&instance->position, (SVECTOR *)&HUD_Cap_Pos);
+
+    HUD_Cap_Pos.x += (short)theCamera.core.wcTransform2->t[0];
+    HUD_Cap_Pos.y += (short)theCamera.core.wcTransform2->t[1];
+    HUD_Cap_Pos.z += (short)theCamera.core.wcTransform2->t[2];
+
+    HUD_Cap_Vel.z = 0;
+    HUD_Cap_Vel.y = 0;
+    HUD_Cap_Vel.x = 0;
+
+    INSTANCE_KillInstance(instance);
+
+    HUD_Captured = 1;
+
+    HUD_State = 1;
+}
 
 void HUD_Damp(short *val, short target, short *vel, short max)
 {
