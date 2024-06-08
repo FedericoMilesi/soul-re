@@ -8,5 +8,6 @@ G2AnimKeylist *G2Instance_GetKeylist(Instance *instance, int id);
 void _G2Instance_BuildAnimatedTransforms(Instance *instance);
 void _G2Instance_BuildNonAnimatedTransforms(Instance *instance);
 void _G2Instance_RebuildAnimatedTransforms(Instance *instance);
+void _G2Instance_RebuildNonAnimatedTransforms(Instance *instance);
 
 #endif

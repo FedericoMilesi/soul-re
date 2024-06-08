@@ -16,7 +16,17 @@ void G2Instance_BuildTransforms(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_RebuildTransforms);
+void G2Instance_RebuildTransforms(Instance *instance)
+{
+    if ((instance->object->animList != NULL) && (!(instance->object->oflags2 & 0x40000000)))
+    {
+        _G2Instance_RebuildAnimatedTransforms(instance);
+    }
+    else
+    {
+        _G2Instance_RebuildNonAnimatedTransforms(instance);
+    }
+}
 
 G2AnimKeylist *G2Instance_GetKeylist(Instance *instance, int id)
 {
