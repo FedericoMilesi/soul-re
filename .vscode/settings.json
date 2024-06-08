@@ -26,6 +26,7 @@
         "stream.h": "c",
         "quatg2.h": "c",
         "obtable.h": "c",
-        "strmload.h": "c"
+        "strmload.h": "c",
+        "mempack.h": "c"
     }
 }

@@ -1,7 +1,19 @@
 #include "common.h"
 #include "Game/G2/POOLMMG2.h"
+#include "Game/MEMPACK.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/POOLMMG2", G2PoolMem_InitPool);
+void G2PoolMem_InitPool(void *voidPool, int blockCount, int blockSize)
+{
+    ((G2PoolMemPool *)voidPool)->blockPool = (G2PoolMem *)MEMPACK_Malloc(blockCount * blockSize, 25);
+
+    ((G2PoolMemPool *)voidPool)->stack = (unsigned short *)MEMPACK_Malloc(blockCount * 2, 25);
+
+    ((G2PoolMemPool *)voidPool)->blockSize = blockSize;
+
+    ((G2PoolMemPool *)voidPool)->stackSize = blockCount;
+
+    G2PoolMem_ResetPool(voidPool);
+}
 
 void G2PoolMem_ResetPool(void *voidPool)
 {
