@@ -9,6 +9,7 @@
 #include "Game/SPLINE.h"
 #include "Game/GAMEPAD.h"
 #include "Game/MEMPACK.h"
+#include "Game/HASM.h"
 
 long camera_modeToIndex[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0};
 
@@ -1706,7 +1707,33 @@ void CAMERA_CalcFocusOffsetForSwim(SVector *offset, Camera *camera)
     COPY_SVEC(SVector, offset, Vector, &adjustedOffset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcIntersectAngle);
+short CAMERA_CalcIntersectAngle(SVector *linept, SVector *vertex0, SVector *vertex1, short *high, short *low)
+{
+    SVector point;
+    short zrot;
+    long camera_plane_d;
+
+    camera_plane_d = ((camera_plane.x * linept->x) + (camera_plane.y * linept->y) + (camera_plane.z * linept->z)) >> 12;
+
+    if (COLLIDE_IntersectLineAndPlane_S(&point, (Position *)vertex0, (Position *)vertex1, &camera_plane, camera_plane_d) != 0)
+    {
+        zrot = CAMERA_SignedAngleDifference(CAMERA_CalcZRotation((Position *)linept, (Position *)&point), hitline_rot);
+
+        if (zrot < *low)
+        {
+            *low = zrot;
+        }
+
+        if (*high < zrot)
+        {
+            *high = zrot;
+        }
+
+        return zrot;
+    }
+
+    return -9999;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GetLineAngle);
 
