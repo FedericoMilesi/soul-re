@@ -3,7 +3,27 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/POOLMMG2", G2PoolMem_InitPool);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/POOLMMG2", G2PoolMem_ResetPool);
+void G2PoolMem_ResetPool(void *voidPool)
+{
+    G2PoolMemPool *pool;
+    int blockIndex;
+
+    pool = (G2PoolMemPool *)voidPool;
+
+    blockIndex = 0;
+
+    pool->stackTop = 0;
+
+    if (pool->stackSize != 0)
+    {
+        do
+        {
+            pool->stack[blockIndex] = blockIndex;
+
+            blockIndex++;
+        } while (blockIndex < pool->stackSize);
+    }
+}
 
 void *G2PoolMem_Allocate(void *voidPool)
 {
