@@ -21,6 +21,7 @@
     "files.autoGuessEncoding": true,
     "files.associations": {
         "math3d.h": "c",
-        "instncg2.h": "c"
+        "instncg2.h": "c",
+        "camera.h": "c"
     }
 }

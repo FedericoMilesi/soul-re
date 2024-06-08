@@ -1138,7 +1138,7 @@ TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colIn
     long i;
     long init;
     Level *level;
-    //Instance *focusInstance; // unused
+    //Instance *focusInstance; unused
     Vector ACE_vect;
     LCollideInfo lcol;
     int ACE_force;

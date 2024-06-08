@@ -3,6 +3,9 @@
 #include "Game/GAMELOOP.h"
 #include "Game/MATH3D.h"
 #include "Game/SPLINE.h"
+#include "Game/CAMERA.h"
+#include "Game/G2/ANIMG2.h"
+#include "Game/G2/ANMCTRLR.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_BuildTransformsForList);
 
