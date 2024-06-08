@@ -54,6 +54,14 @@ typedef struct _G2SVector3_Type {
     short z;
 } G2SVector3;
 
+// size: 0x4
+typedef struct _G2AnimAlphaTable_Type {
+    // offset: 0000
+    unsigned short size;
+    // offset: 0004
+    long data[1];
+}G2AnimAlphaTable;
+
 // size: 0xC
 typedef struct _G2AnimInterpInfo_Type {
     // offset: 0000
