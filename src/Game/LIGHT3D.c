@@ -1,5 +1,32 @@
 #include "common.h"
 
+long depthQFogStart; // not from decls.h
+
+long depthQBlendStart; // not from decls.h
+
+static inline int LIGHT3D_FixedDivision(long a, long b)
+{
+    long r;
+
+    r = (a << 12) / (a - b);
+
+    return r;
+}
+
+static inline void LIGHT3D_FogCalc(long a, Level *level)
+{
+    int r;
+
+    r = (a * level->fogFar) / (a - level->fogFar);
+
+    if (level->holdFogNear == level->fogNear)
+    {
+        level->holdFogNear = r;
+    }
+
+    level->fogNear = r;
+}
+
 INCLUDE_ASM("asm/nonmatchings/Game/LIGHT3D", LIGHT_GetLightMatrix);
 
 INCLUDE_ASM("asm/nonmatchings/Game/LIGHT3D", LIGHT_PresetInstanceLight);
@@ -24,4 +51,43 @@ void LIGHT_Restore()
 {
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/LIGHT3D", LIGHT_CalcDQPTable);
+void LIGHT_CalcDQPTable(Level *level)
+{
+    long dqa;
+    long limit;
+
+    if (level->fogFar != level->fogNear)
+    {
+        dqa = -((level->fogFar * level->fogNear) / (level->fogFar - level->fogNear));
+
+        limit = 40958;
+
+        if (dqa > limit)
+        {
+            dqa = limit;
+
+            LIGHT3D_FogCalc(limit, level);
+        }
+
+        if (dqa < -limit)
+        {
+            dqa = -limit;
+
+            LIGHT3D_FogCalc(-limit, level);
+        }
+
+        depthQFogStart = (4096 * -dqa) / LIGHT3D_FixedDivision(level->fogFar, level->fogNear);
+
+        if ((level->backColorR != 0) || (level->backColorG != 0))
+        {
+            depthQBlendStart = depthQFogStart;
+        }
+        else
+        {
+            depthQBlendStart = 65535;
+        }
+
+        level->depthQFogStart = depthQFogStart;
+        level->depthQBlendStart = depthQBlendStart;
+    }
+}
