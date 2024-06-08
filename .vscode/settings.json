@@ -29,6 +29,7 @@
         "strmload.h": "c",
         "mempack.h": "c",
         "gameloop.h": "c",
-        "instncg2.h": "c"
+        "instncg2.h": "c",
+        "sdk.h": "c"
     }
 }

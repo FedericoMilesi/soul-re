@@ -85,6 +85,18 @@
 
 #define gte_sqr0() gte_sqr(0)
 
+#define gte_nrtps() __asm__ ( \
+        "nop;" \
+        "nop;" \
+        ".word 0x4A180001" \
+    )
+
+#define gte_stsxy(r0) __asm__ ( \
+        "swc2    $14, 0(%0)" \
+        : : "r"(r0) \
+        : "memory" \
+    )
+
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);
@@ -105,5 +117,9 @@ void SetBackColor(long rbk, long gbk, long bbk);
 void SetGeomScreen(long h);
 void SetFogNearFar(long a, long b, long h);
 int checkagain();
+void PopMatrix();
+void SetTransMatrix(MATRIX *m);
+void SetRotMatrix(MATRIX *m);
+void PushMatrix();
 
 #endif

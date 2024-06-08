@@ -33,7 +33,7 @@ int hud_warp_arrow_flash;
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
 
-void GlyphCollide(void)
+void GlyphCollide()
 {
 }
 
@@ -87,7 +87,25 @@ INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphCost);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphDefaultProcess);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HUD_GetPlayerScreenPt);
+void HUD_GetPlayerScreenPt(DVECTOR *center)
+{
+    Position position;
+
+    PushMatrix();
+
+    SetRotMatrix(theCamera.core.wcTransform);
+    SetTransMatrix(theCamera.core.wcTransform);
+
+    position = gameTrackerX.playerInstance->position;
+
+    position.z += 448;
+
+    gte_ldv0(&position);
+    gte_nrtps();
+    gte_stsxy(center);
+
+    PopMatrix();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphDrawMenu);
 
