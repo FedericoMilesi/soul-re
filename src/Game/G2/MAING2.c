@@ -10,6 +10,6 @@ G2Bool MainG2_InitEngine(void *appData, unsigned int screenWidth, unsigned int s
     return !G2FALSE;
 }
 
-void MainG2_ShutDownEngine(void)
+void MainG2_ShutDownEngine()
 {
 }
