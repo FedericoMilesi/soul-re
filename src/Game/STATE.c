@@ -2,6 +2,7 @@
 #include "Game/STATE.h"
 #include "Game/G2/ANIMG2.h"
 #include "Game/G2/ANMG2ILF.h"
+#include "Game/MEMPACK.h"
 
 static char circBuf[4096];
 
@@ -678,7 +679,79 @@ intptr_t SetShadowSegmentData(unsigned long total)
     return (intptr_t)Ptr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInit);
+void G2EmulationInit()
+{
+    G2AlphaTables[0] = NULL;
+
+    if (G2AlphaTables[1] == NULL)
+    {
+        G2AlphaTables[1] = (G2AnimAlphaTable *)MEMPACK_Malloc(18, 25);
+
+        G2AlphaTables[1]->size = 4;
+
+        G2AlphaTables[1]->data[0] = 0;
+        G2AlphaTables[1]->data[1] = 256;
+        G2AlphaTables[1]->data[2] = 1024;
+        G2AlphaTables[1]->data[3] = 4096;
+    }
+
+    if (G2AlphaTables[2] == NULL)
+    {
+        G2AlphaTables[2] = (G2AnimAlphaTable *)MEMPACK_Malloc(18, 25);
+
+        G2AlphaTables[2]->size = 4;
+
+        G2AlphaTables[2]->data[0] = 0;
+        G2AlphaTables[2]->data[1] = 3072;
+        G2AlphaTables[2]->data[2] = 3840;
+        G2AlphaTables[2]->data[3] = 4096;
+    }
+
+    if (G2AlphaTables[3] == NULL)
+    {
+        G2AlphaTables[3] = (G2AnimAlphaTable *)MEMPACK_Malloc(6, 25);
+
+        G2AlphaTables[3]->size = 1;
+
+        G2AlphaTables[3]->data[0] = 4096;
+    }
+
+    if (G2AlphaTables[4] == NULL)
+    {
+        G2AlphaTables[4] = (G2AnimAlphaTable *)MEMPACK_Malloc(18, 25);
+
+        G2AlphaTables[4]->size = 4;
+
+        G2AlphaTables[4]->data[0] = 0;
+        G2AlphaTables[4]->data[1] = 256;
+        G2AlphaTables[4]->data[2] = 3840;
+        G2AlphaTables[4]->data[3] = 4096;
+    }
+
+    if (G2AlphaTables[5] == NULL)
+    {
+        G2AlphaTables[5] = (G2AnimAlphaTable *)MEMPACK_Malloc(18, 25);
+
+        G2AlphaTables[5]->size = 4;
+
+        G2AlphaTables[5]->data[0] = 0;
+        G2AlphaTables[5]->data[1] = 128;
+        G2AlphaTables[5]->data[2] = 512;
+        G2AlphaTables[5]->data[3] = 4096;
+    }
+
+    if (G2AlphaTables[6] == NULL)
+    {
+        G2AlphaTables[6] = (G2AnimAlphaTable *)MEMPACK_Malloc(18, 25);
+
+        G2AlphaTables[6]->size = 4;
+
+        G2AlphaTables[6]->data[0] = 0;
+        G2AlphaTables[6]->data[1] = 3584;
+        G2AlphaTables[6]->data[2] = 3968;
+        G2AlphaTables[6]->data[3] = 4096;
+    }
+}
 
 void G2EmulationInstancePlayAnimation(Instance *instance)
 {
