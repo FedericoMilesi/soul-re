@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/G2/INSTNCG2.h"
+#include "Game/GAMELOOP.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_BuildTransformsForList);
 
@@ -39,7 +40,34 @@ void G2Instance_ClearMatrices(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_BuildAnimatedTransforms);
+void _G2Instance_BuildAnimatedTransforms(Instance *instance)
+{
+    MATRIX *rootMatrix;
+    Model *model;
+
+    if (((instance->flags2 & 0x10000000)) && (((instance->flags2 & 0x4000000)) || (((instance->flags2 & 0x20000000)) && ((instance->flags & 0x800)))))
+    {
+        G2Instance_ClearMatrices(instance);
+
+        return;
+    }
+
+    model = instance->object->modelList[instance->currentModel];
+
+    rootMatrix = (MATRIX *)GAMELOOP_GetMatrices(model->numSegments + 1);
+
+    if (rootMatrix == NULL)
+    {
+        instance->matrix = NULL;
+    }
+    else
+    {
+        instance->oldMatrix = instance->matrix;
+        instance->matrix = &rootMatrix[1];
+
+        _G2Instance_RebuildAnimatedTransforms(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_RebuildNonAnimatedTransforms);
 

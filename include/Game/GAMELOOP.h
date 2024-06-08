@@ -256,6 +256,7 @@ typedef struct GameTracker {
 
 void GAMELOOP_SetGameTime(long timeOfDay);
 int GAMELOOP_GetTimeOfDay();
+MATRIX *GAMELOOP_GetMatrices(int numMatrices);
 
 GameTracker gameTrackerX;
 extern long playerCameraMode;
