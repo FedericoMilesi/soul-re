@@ -1664,7 +1664,30 @@ void CAMERA_HandleTransitions(Camera *camera)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CalcFocusOffset);
+void CAMERA_CalcFocusOffset(SVector *offset, Camera *camera)
+{
+    Vector adjustedOffset;
+    SVector temp;
+    Instance *focusInstance;
+
+    focusInstance = camera->focusInstance;
+
+    temp.x = camera->focusOffset.x;
+    temp.y = camera->focusOffset.y;
+    temp.z = camera->focusOffset.z;
+
+    if ((int)camera->instance_mode < 0)
+    {
+        temp.z += 256;
+    }
+
+    gte_SetRotMatrix(focusInstance->matrix);
+    gte_ldv0(&temp);
+    gte_nrtv0();
+    gte_stlvnl(&adjustedOffset);
+
+    COPY_SVEC(SVector, offset, Vector, &adjustedOffset);
+}
 
 void CAMERA_CalcFocusOffsetForSwim(SVector *offset, Camera *camera)
 {
