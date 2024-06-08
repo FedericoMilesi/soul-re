@@ -686,7 +686,7 @@ static char D_800D028C[] = " CAM TILT %d DIST %d\n";
 static char D_800D02A4[] = "Loading From CD: In Queue(%d)\n";
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_DisplayStatus);
 
-void DEBUG_DrawShrinkCels(void)
+void DEBUG_DrawShrinkCels()
 {
 }
 
@@ -722,7 +722,7 @@ static long D_800D0398 = 0;
 static long D_800D039C = 0;
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ViewVram);
 
-void DEBUG_CaptureScreen(void)
+void DEBUG_CaptureScreen()
 {
 }
 
@@ -730,7 +730,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_PageFlip);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FatalError);
 
-void DEBUG_ProcessSecondController(void)
+void DEBUG_ProcessSecondController()
 {
 }
 
