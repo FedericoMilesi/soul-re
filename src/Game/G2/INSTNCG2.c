@@ -24,7 +24,20 @@ G2AnimKeylist *G2Instance_GetKeylist(Instance *instance, int id)
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_RebuildAnimatedTransforms);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_ClearMatrices);
+void G2Instance_ClearMatrices(Instance *instance)
+{
+    instance->oldMatrix = instance->matrix;
+    instance->matrix = NULL;
+
+    instance = instance->LinkChild;
+
+    while (instance != NULL)
+    {
+        G2Instance_ClearMatrices(instance);
+
+        instance = instance->LinkSibling;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_BuildAnimatedTransforms);
 
