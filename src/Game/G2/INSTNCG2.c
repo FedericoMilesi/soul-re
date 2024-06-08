@@ -7,7 +7,48 @@
 #include "Game/G2/ANIMG2.h"
 #include "Game/G2/ANMCTRLR.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_BuildTransformsForList);
+void G2Instance_BuildTransformsForList(Instance *listHead)
+{
+    Instance *instance;
+
+    instance = listHead;
+
+    while (instance != NULL)
+    {
+        if (instance->LinkParent == NULL)
+        {
+            if (((instance->flags2 & 0x1)) || (((instance->flags & 0x100000)) && (instance->oldPos.x == instance->position.x)
+                && (instance->oldPos.y == instance->position.y) && (instance->oldPos.z == instance->position.z)
+                && (instance->oldRotation.x == instance->rotation.x) && (instance->oldRotation.y == instance->rotation.y)
+                && (instance->oldRotation.z == instance->rotation.z) && (instance->matrix != NULL)
+                && (((instance->object->animList == NULL)) || ((instance->object->oflags2 & 0x40000000))
+                    || (!(instance->anim.flags & 0x1)))))
+            {
+                _G2Instance_BuildDeactivatedTransforms(instance);
+            }
+            else
+            {
+                G2Instance_BuildTransforms(instance);
+            }
+        }
+
+        instance = instance->next;
+    }
+
+    instance = listHead;
+
+    while (instance != NULL)
+    {
+        if ((instance->rebuildCallback != NULL) && (instance->rebuildCallback(instance) != G2FALSE))
+        {
+            G2Anim_UpdateStoredFrame(&instance->anim);
+
+            G2Instance_RebuildTransforms(instance);
+        }
+
+        instance = instance->next;
+    }
+}
 
 void G2Instance_BuildTransforms(Instance *instance)
 {
