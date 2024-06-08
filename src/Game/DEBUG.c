@@ -528,6 +528,16 @@ static int cem_item_leading = 0x10;
 
 DISPENV disp[2];
 
+short debugOrgFogFar;
+
+short debugOrgFogNear;
+
+unsigned char debugOrgFogRed;
+
+unsigned char debugOrgFogGrn;
+
+unsigned char debugOrgFogBlu;
+
 void DEBUG_SetGameTime(long *var)
 {
     GAMELOOP_SetGameTime(*var);
@@ -580,7 +590,19 @@ void DEBUG_FillUpHealth(long *var)
     RAZIEL_DebugManaFillUp();
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FogLoad);
+void DEBUG_FogLoad()
+{
+    StreamUnit *currentUnit;
+
+    currentUnit = FindStreamUnitFromLevel(gameTrackerX.level);
+
+    debugOrgFogFar = debugFogFar = currentUnit->TargetFogFar;
+    debugOrgFogNear = debugFogNear = currentUnit->TargetFogNear;
+
+    debugOrgFogBlu = debugFogBlu = (currentUnit->FogColor >> 16) & 0xFF;
+    debugOrgFogGrn = debugFogGrn = (currentUnit->FogColor >> 8) & 0xFF;
+    debugOrgFogRed = debugFogRed = (currentUnit->FogColor >> 0) & 0xFF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FogRestore);
 
