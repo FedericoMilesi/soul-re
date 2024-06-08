@@ -18,5 +18,8 @@
         }
     },
     "terminal.integrated.tabs.enableAnimation": false,
-    "files.autoGuessEncoding": true
+    "files.autoGuessEncoding": true,
+    "files.associations": {
+        "math3d.h": "c"
+    }
 }

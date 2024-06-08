@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/G2/INSTNCG2.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MATH3D.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", G2Instance_BuildTransformsForList);
 
@@ -112,4 +113,106 @@ void _G2Instance_BuildNonAnimatedTransforms(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_BuildFacadeTransforms);
+void _G2Instance_BuildFacadeTransforms(Instance *instance, Segment *segment, MATRIX *segMatrix, MATRIX *matrixPool, long scale_flag)
+{
+    Position *cameraPos;
+    SVECTOR *segmentPos;
+    SVECTOR *segmentRot;
+    VECTOR *scale;
+
+    segmentPos = (SVECTOR *)getScratchAddr(2);
+    segmentRot = (SVECTOR *)getScratchAddr(4);
+
+    scale = (VECTOR *)getScratchAddr(10);
+
+    cameraPos = (Position *)getScratchAddr(0);
+
+    if ((segment->pz != 0) || (segment->px != 0) || (segment->py != 0))
+    {
+        ApplyMatrixSV(matrixPool, (SVECTOR *)&segment->px, segmentPos);
+
+        segmentPos->vx += instance->position.x;
+        segmentPos->vy += instance->position.y;
+        segmentPos->vz += instance->position.z;
+    }
+    else
+    {
+        segmentPos->vx = instance->position.x;
+        segmentPos->vy = instance->position.y;
+        segmentPos->vz = instance->position.z;
+    }
+
+    segMatrix->t[0] = segmentPos->vx;
+    segMatrix->t[1] = segmentPos->vy;
+    segMatrix->t[2] = segmentPos->vz;
+
+    if ((segment->flags & 0x1))
+    {
+        SVECTOR *zvec;
+        SVECTOR *camWorldPos;
+        SVECTOR *camLocPos;
+        long sqrt;
+
+        zvec = (SVECTOR *)getScratchAddr(22);
+
+        camWorldPos = (SVECTOR *)getScratchAddr(24);
+
+        camLocPos = (SVECTOR *)getScratchAddr(26);
+
+        zvec->vx = matrixPool->m[0][2];
+        zvec->vy = matrixPool->m[1][2];
+        zvec->vz = matrixPool->m[2][2];
+
+        sqrt = MATH3D_FastSqrt(16777216 - (zvec->vx * zvec->vx));
+
+        segmentRot->vx = -MATH3D_FastAtan2(zvec->vy, zvec->vz);
+        segmentRot->vy = MATH3D_FastAtan2(zvec->vx, (sqrt >> 12));
+        segmentRot->vz = 0;
+
+        RotMatrix(segmentRot, (MATRIX *)getScratchAddr(28));
+
+        TransposeMatrix((MATRIX *)getScratchAddr(28), (MATRIX *)getScratchAddr(14));
+
+        camWorldPos->vx = cameraPos->x - segmentPos->vx;
+        camWorldPos->vy = cameraPos->y - segmentPos->vy;
+        camWorldPos->vz = cameraPos->z - segmentPos->vz;
+
+        ApplyMatrixSV((MATRIX *)getScratchAddr(14), camWorldPos, camLocPos);
+
+        MATH3D_SetUnityMatrix(segMatrix);
+
+        if (scale_flag != 0)
+        {
+            ScaleMatrix(segMatrix, scale);
+        }
+
+        segmentRot->vz = MATH3D_FastAtan2(camLocPos->vy, camLocPos->vx) + 1024;
+
+        RotMatrixZ(segmentRot->vz, segMatrix);
+        RotMatrixY(segmentRot->vy, segMatrix);
+        RotMatrixX(segmentRot->vx, segMatrix);
+    }
+    else if ((segment->flags & 0x2))
+    {
+        VECTOR *xy;
+
+        xy = (VECTOR *)getScratchAddr(6);
+
+        xy->vx = cameraPos->x - segmentPos->vx;
+        xy->vy = cameraPos->y - segmentPos->vy;
+        xy->vz = cameraPos->z - segmentPos->vz;
+
+        segmentRot->vx = MATH3D_FastAtan2(MATH3D_LengthXY(xy->vx, xy->vy), xy->vz) + 3072;
+        segmentRot->vz = MATH3D_FastAtan2(xy->vy, xy->vx) + 1024;
+
+        MATH3D_SetUnityMatrix(segMatrix);
+
+        if (scale_flag != 0)
+        {
+            ScaleMatrix(segMatrix, scale);
+        }
+
+        RotMatrixX(segmentRot->vx, segMatrix);
+        RotMatrixZ(segmentRot->vz, segMatrix);
+    }
+}
