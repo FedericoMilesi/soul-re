@@ -82,7 +82,73 @@ void _G2Instance_BuildAnimatedTransforms(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_RebuildNonAnimatedTransforms);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_BuildDeactivatedTransforms);
+void _G2Instance_BuildDeactivatedTransforms(Instance *instance)
+{
+    MATRIX *segMatrix;
+    MATRIX *startOldMatrix;
+    int numMatrices;
+    Model *model;
+
+    if (((instance->flags2 & 0x10000000)) && (((instance->flags2 & 0x4000000)) || (((instance->flags2 & 0x20000000)) && ((instance->flags & 0x800)))))
+    {
+        G2Instance_ClearMatrices(instance);
+        return;
+    }
+
+    if (instance->matrix == NULL)
+    {
+        G2Instance_BuildTransforms(instance);
+        return;
+    }
+
+    model = instance->object->modelList[instance->currentModel];
+
+    if ((instance->object->animList != NULL) && (!(instance->object->oflags2 & 0x40000000)))
+    {
+        numMatrices = model->numSegments + 1;
+    }
+    else
+    {
+        numMatrices = model->numSegments;
+    }
+
+    segMatrix = GAMELOOP_GetMatrices(numMatrices);
+
+    if (segMatrix == NULL)
+    {
+        instance->matrix = NULL;
+        return;
+    }
+
+    startOldMatrix = instance->matrix;
+
+    instance->oldMatrix = startOldMatrix;
+
+    if ((instance->object->animList != NULL) && (startOldMatrix--, (!(instance->object->oflags2 & 0x40000000))))
+    {
+        instance->matrix = &segMatrix[1];
+    }
+    else
+    {
+        startOldMatrix = instance->oldMatrix;
+
+        instance->matrix = segMatrix;
+    }
+
+    if (instance->oldMatrix != NULL)
+    {
+        memcpy(segMatrix, startOldMatrix, numMatrices * sizeof(MATRIX));
+    }
+
+    instance = instance->LinkChild;
+
+    while (instance != NULL)
+    {
+        G2Instance_BuildTransforms(instance);
+
+        instance = instance->LinkSibling;
+    }
+}
 
 void _G2Instance_BuildNonAnimatedTransforms(Instance *instance)
 {
