@@ -500,7 +500,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndHBox);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_Instance1SpheresToInstance2);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_Instances);
+void COLLIDE_Instances(Instance *instance1, Instance *instance2)
+{
+    long lx;
+    long ly;
+    long lz;
+    long mrmr;
+
+    if ((instance1 != instance2) && (INSTANCE_Linked(instance1, instance2) == 0))
+    {
+        lx = (instance1->position.x - instance2->position.x) >> 1;
+        ly = (instance1->position.y - instance2->position.y) >> 1;
+        lz = (instance1->position.z - instance2->position.z) >> 1;
+
+        mrmr = (instance1->object->modelList[instance1->currentModel]->maxRad + instance2->object->modelList[instance2->currentModel]->maxRad) >> 1;
+
+        hasm_sqrlen1((short)lx, (short)ly, (short)lz);
+        gte_sqr0();
+        hasm_sqrlen2(lx, ly, lz);
+
+        if (((unsigned long)lx < (unsigned long)(mrmr * mrmr)) && (instance1->matrix != NULL) && (instance1->oldMatrix != NULL) && (instance2->matrix != NULL) && (instance2->oldMatrix != NULL))
+        {
+            COLLIDE_Instance1SpheresToInstance2(instance1, instance2, 1);
+            COLLIDE_Instance1SpheresToInstance2(instance2, instance1, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceList);
 

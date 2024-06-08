@@ -282,5 +282,6 @@ void COLLIDE_SegmentCollisionOn(Instance *instance, int segment);
 void COLLIDE_UpdateAllTransforms(Instance *instance, SVECTOR *offset);
 void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level);
 long COLLIDE_GetNormal(short nNum, short *nrmlArray, SVector *nrml);
+void COLLIDE_Instance1SpheresToInstance2(Instance *instance1, Instance *instance2, long sphereToSphere);
 
 #endif

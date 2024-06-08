@@ -269,5 +269,6 @@ void INSTANCE_LinkToParent(Instance *instance, Instance *parent, int node);
 void INSTANCE_KillInstance(Instance *instance);
 void INSTANCE_Broadcast(Instance *sender, long whatAmIMask, int Message, intptr_t Data);
 void INSTANCE_PlainDeath(Instance *instance);
+int INSTANCE_Linked(Instance *instance1, Instance *instance2);
 
 #endif
