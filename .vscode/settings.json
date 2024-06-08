@@ -18,18 +18,5 @@
         }
     },
     "terminal.integrated.tabs.enableAnimation": false,
-    "files.autoGuessEncoding": true,
-    "files.associations": {
-        "math3d.h": "c",
-        "common.h": "c",
-        "types.h": "c",
-        "stream.h": "c",
-        "quatg2.h": "c",
-        "obtable.h": "c",
-        "strmload.h": "c",
-        "mempack.h": "c",
-        "gameloop.h": "c",
-        "instncg2.h": "c",
-        "sdk.h": "c"
-    }
+    "files.autoGuessEncoding": true
 }

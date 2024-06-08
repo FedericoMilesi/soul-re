@@ -232,7 +232,7 @@ segments:
       - [0x0C21F0, sdata, Game/EVENT]
       - [0x0C2210, sdata, Game/PHYSOBS]
       - [0x0C221C, sdata, Game/RAZCNTRL]
-      - [0x0C2250, sdata, Game/STATE]
+      - [0x0C2250, .sdata, Game/STATE]
       - [0x0C2270, sdata, Game/VRAM]
       - [0x0C2274, sdata, Game/PSX/SUPPORT]
       - [0x0C2278, sdata, Game/PHYSICS]
@@ -282,7 +282,7 @@ segments:
       - {start: 0x0C28AC, type: comm, vram: 0x800D3CB0, name: Game/STREAM}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D40D8, name: Game/STRMLOAD}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D40E8, name: Game/EVENT}
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D47E0, name: Game/STATE}
+      - {start: 0x0C28AC, type: .sbss, vram: 0x800D47E0, name: Game/STATE}
       - {start: 0x0C28AC, type: comm, vram: 0x800D57E0, name: Game/VRAM}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D61E4, name: Game/PHYSICS}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D626C, name: Game/REAVER}

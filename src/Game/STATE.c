@@ -1,10 +1,12 @@
 #include "common.h"
 #include "Game/STATE.h"
+#include "Game/G2/ANIMG2.h"
 #include "Game/G2/ANMG2ILF.h"
 
-EXTERN STATIC char circBuf[4096];
+static char circBuf[4096];
 
-EXTERN STATIC void *circWhere;
+static G2AnimAlphaTable *G2AlphaTables[7] = {0};
+static void *circWhere = circBuf;
 
 static inline void STATE_ConfigThrowFields(evObjectThrowData *Ptr, SVector *angularVel, long spinType)
 {
@@ -104,7 +106,27 @@ void EnMessageQueueData(MessageQueue *In, int ID, int Data)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", CIRC_Alloc);
+void *CIRC_Alloc(int size)
+{
+    void *ret;
+
+    size = (size + 3) & ~3;
+
+    if ((circBuf + sizeof(circBuf)) < ((char *)circWhere + size))
+    {
+        ret = circBuf;
+
+        circWhere = circBuf + size;
+    }
+    else
+    {
+        ret = (char *)circWhere;
+
+        circWhere = (char *)circWhere + size;
+    }
+
+    return ret;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetCollideInfoData);
 
