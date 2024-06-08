@@ -542,7 +542,21 @@ void DEBUG_KeepGameTime(long *var)
     DEBUG_SetGameTime(&curTOD);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_UpdateFog);
+void DEBUG_UpdateFog(long *var)
+{
+    StreamUnit *currentUnit;
+
+    (void)var;
+
+    currentUnit = FindStreamUnitFromLevel(gameTrackerX.level);
+
+    gameTrackerX.level->holdFogFar = currentUnit->TargetFogFar = gameTrackerX.level->fogFar = (unsigned short)debugFogFar;
+    gameTrackerX.level->holdFogNear = currentUnit->TargetFogNear = gameTrackerX.level->fogNear = (unsigned short)debugFogNear;
+
+    *(int *)&gameTrackerX.level->backColorR = currentUnit->FogColor = (debugFogBlu << 16) | (debugFogGrn << 8) | debugFogRed;
+
+    LIGHT_CalcDQPTable(gameTrackerX.level);
+}
 
 void DEBUG_UpdateHealth(long *var)
 {
