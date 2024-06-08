@@ -604,7 +604,17 @@ void DEBUG_FogLoad()
     debugOrgFogRed = debugFogRed = (currentUnit->FogColor >> 0) & 0xFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FogRestore);
+void DEBUG_FogRestore()
+{
+    debugFogFar = debugOrgFogFar;
+    debugFogNear = debugOrgFogNear;
+
+    debugFogRed = debugOrgFogRed;
+    debugFogGrn = debugOrgFogGrn;
+    debugFogBlu = debugOrgFogBlu;
+
+    DEBUG_UpdateFog(NULL);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_SendCinematicSwitch);
 
