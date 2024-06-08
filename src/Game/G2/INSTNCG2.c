@@ -124,15 +124,26 @@ void _G2Instance_BuildDeactivatedTransforms(Instance *instance)
 
     instance->oldMatrix = startOldMatrix;
 
-    if ((instance->object->animList != NULL) && (startOldMatrix--, (!(instance->object->oflags2 & 0x40000000))))
+    if (instance->object->animList != NULL)
     {
-        instance->matrix = &segMatrix[1];
+        startOldMatrix--;
+
+        if (!(instance->object->oflags2 & 0x40000000))
+        {
+            instance->matrix = &segMatrix[1];
+        }
+        else
+        {
+            startOldMatrix = instance->oldMatrix;
+
+            instance->matrix = segMatrix;
+        }
     }
     else
     {
-        startOldMatrix = instance->oldMatrix;
-
         instance->matrix = segMatrix;
+
+        startOldMatrix = instance->oldMatrix;
     }
 
     if (instance->oldMatrix != NULL)
