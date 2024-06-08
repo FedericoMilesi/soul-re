@@ -83,6 +83,33 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_RebuildNonAnimatedT
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_BuildDeactivatedTransforms);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_BuildNonAnimatedTransforms);
+void _G2Instance_BuildNonAnimatedTransforms(Instance *instance)
+{
+    MATRIX *segMatrix;
+    Model *model;
+
+    if (((instance->flags2 & 0x10000000)) && (((instance->flags2 & 0x4000000)) || (((instance->flags2 & 0x20000000)) && ((instance->flags & 0x800)))))
+    {
+        G2Instance_ClearMatrices(instance);
+    }
+    else
+    {
+        model = instance->object->modelList[instance->currentModel];
+
+        segMatrix = GAMELOOP_GetMatrices(model->numSegments);
+
+        if (segMatrix == NULL)
+        {
+            instance->matrix = NULL;
+        }
+        else
+        {
+            instance->oldMatrix = instance->matrix;
+            instance->matrix = segMatrix;
+
+            _G2Instance_RebuildNonAnimatedTransforms(instance);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_BuildFacadeTransforms);
