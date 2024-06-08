@@ -526,6 +526,8 @@ static int cem_line_width = 0xF0;
 static int cem_line_leading = 0xC;
 static int cem_item_leading = 0x10;
 
+DISPENV disp[2];
+
 void DEBUG_SetGameTime(long *var)
 {
     GAMELOOP_SetGameTime(*var);
@@ -679,7 +681,12 @@ void DEBUG_SetViewVram()
     gameTrackerX.gameMode = 7;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_EndViewVram);
+void DEBUG_EndViewVram(GameTracker *gameTracker)
+{
+    (void)gameTracker;
+    SetDefDispEnv(&disp[0], 0, 0, 512, 240);
+    SetDefDispEnv(&disp[1], 0, 256, 512, 240);
+}
 
 /*Unused*/ short AXIS_LENGTH = 0x012C;
 /*Unused*/ static char D_800D02C8[] = "hub";

@@ -97,6 +97,34 @@
         : "memory" \
     )
 
+// size: 0x8
+typedef struct RECT {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short w;
+    // offset: 0006
+    short h;
+} RECT;
+
+// size: 0x14
+typedef struct DISPENV {
+    // offset: 0000 (8 bytes)
+    struct RECT disp;
+    // offset: 0008 (8 bytes)
+    struct RECT screen;
+    // offset: 0010
+    unsigned char isinter;
+    // offset: 0011
+    unsigned char isrgb24;
+    // offset: 0012
+    unsigned char pad0;
+    // offset: 0013
+    unsigned char pad1;
+} DISPENV;
+
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);
@@ -125,5 +153,6 @@ void PushMatrix();
 int rcos(int);
 int rsin(int);
 void ScaleMatrix(MATRIX *, VECTOR *);
+DISPENV *SetDefDispEnv(DISPENV *env, int x, int y, int w, int h);
 
 #endif
