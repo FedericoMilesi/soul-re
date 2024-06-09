@@ -23,5 +23,7 @@ void G2Anim_SetNoLooping(G2Anim *anim);
 int G2AnimKeylist_GetKeyframeCount(G2AnimKeylist *keylist);
 int G2AnimSection_GetKeyframeNumber(G2AnimSection *section);
 int G2AnimSection_GetStoredKeyframeNumber(G2AnimSection *section);
+G2AnimKeylist *G2Anim_GetKeylist(G2Anim *anim);
+G2Bool G2AnimSection_IsInInterpolation(G2AnimSection *section);
 
 #endif

@@ -1073,7 +1073,27 @@ int G2EmulationInstanceQueryLastFrame(Instance *instance, int CurrentSection)
     return G2AnimSection_GetStoredKeyframeNumber(&instance->anim.section[CurrentSection & 0xFF]);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceQueryPassedFrame);
+int G2EmulationInstanceQueryPassedFrame(Instance *instance, int CurrentSection, int frame)
+{
+    G2AnimSection *animSection;
+    short temp; // not from decls.h
+
+    animSection = &instance->anim.section[CurrentSection & 0xFF];
+
+    if (G2AnimSection_IsInInterpolation(animSection) == G2FALSE)
+    {
+        if (frame != 0)
+        {
+            temp = frame * G2Anim_GetKeylist(&instance->anim)->s0TailTime;
+
+            return (animSection->storedTime < temp) && (animSection->elapsedTime >= temp);
+        }
+
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationQueryFrame);
 
