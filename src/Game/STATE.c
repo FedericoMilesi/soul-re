@@ -130,7 +130,16 @@ void *CIRC_Alloc(int size)
     return ret;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", SetCollideInfoData);
+intptr_t SetCollideInfoData(CollideInfo *srcCI)
+{
+    CollideInfo *Ptr;
+
+    Ptr = (CollideInfo *)CIRC_Alloc(sizeof(CollideInfo));
+
+    *Ptr = *srcCI;
+
+    return (intptr_t)Ptr;
+}
 
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames)
 {
