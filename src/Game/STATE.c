@@ -1130,7 +1130,16 @@ int G2EmulationQueryMode(CharacterState *In, int CurrentSection)
     return G2EmulationInstanceQueryMode(In->CharacterInstance, CurrentSection);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceSetStartAndEndSegment);
+void G2EmulationInstanceSetStartAndEndSegment(Instance *instance, int CurrentSection, short Start, short End)
+{
+    G2AnimSection *animSection;
+
+    animSection = &instance->anim.section[CurrentSection & 0xFF];
+
+    animSection->firstSeg = (unsigned char)Start;
+
+    animSection->segCount = (End - Start) + 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSetStartAndEndSegment);
 
