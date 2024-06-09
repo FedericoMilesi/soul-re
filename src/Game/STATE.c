@@ -1063,7 +1063,10 @@ int G2EmulationQueryAnimation(CharacterState *In, int CurrentSection)
     return G2EmulationInstanceQueryAnimation(In->CharacterInstance, CurrentSection);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceQueryFrame);
+int G2EmulationInstanceQueryFrame(Instance *instance, int CurrentSection)
+{
+    return G2AnimSection_GetKeyframeNumber(&instance->anim.section[CurrentSection & 0xFF]);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceQueryLastFrame);
 
