@@ -1100,7 +1100,30 @@ int G2EmulationQueryFrame(CharacterState *In, int CurrentSection)
     return G2EmulationInstanceQueryFrame(In->CharacterInstance, CurrentSection);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceQueryMode);
+int G2EmulationInstanceQueryMode(Instance *instance, int CurrentSection)
+{
+    G2AnimSection *animSection;
+    int temp; // not from decls.h
+
+    animSection = &instance->anim.section[CurrentSection & 0xFF];
+
+    temp = 0;
+
+    if (!(animSection->flags & 0x1))
+    {
+        if (!(animSection->flags & 0x2))
+        {
+            temp = 1;
+            (void)temp;
+
+            return 1;
+        }
+
+        return 2;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationQueryMode);
 
