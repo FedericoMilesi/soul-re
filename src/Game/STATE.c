@@ -1058,7 +1058,10 @@ int G2EmulationInstanceQueryAnimation(Instance *instance, int CurrentSection)
     return animSection->keylistID;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationQueryAnimation);
+int G2EmulationQueryAnimation(CharacterState *In, int CurrentSection)
+{
+    return G2EmulationInstanceQueryAnimation(In->CharacterInstance, CurrentSection);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceQueryFrame);
 
