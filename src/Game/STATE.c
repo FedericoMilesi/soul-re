@@ -1177,7 +1177,17 @@ void G2EmulationInstanceInitSection(Instance *instance, int CurrentSection, void
     animSection->callbackData = data;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSetInterpController_Vector);
+void G2EmulationSetInterpController_Vector(Instance *instance, long segment, long type, G2SVector3 *vec, int Frames, int Data)
+{
+    int temp, temp2; // not from decls.h
+
+    temp = segment & 0xFF;
+
+    temp2 = type & 0xFF;
+
+    G2Anim_SetInterpController_Vector(&instance->anim, temp, temp2, vec, (short)(Frames * 100));
+    G2Anim_SetControllerCallbackData(&instance->anim, temp, temp2, (void *)Data);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", StateSwitchStateDataDefault);
 

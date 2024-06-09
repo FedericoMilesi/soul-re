@@ -186,5 +186,7 @@ void G2Anim_UpdateStoredFrame(G2Anim *anim);
 void G2Anim_GetSegChannelValue(G2Anim *anim, int segIndex, unsigned short *valueTable, unsigned short channelMask);
 void G2Anim_BuildTransforms(G2Anim *anim);
 G2AnimSection *G2Anim_AddSection(G2Anim *anim, int firstSegID, int segCount);
+void G2Anim_SetInterpController_Vector(G2Anim *anim, int segNumber, int type, G2SVector3 *vector, int duration);
+void G2Anim_SetControllerCallbackData(G2Anim *anim, int segNumber, int type, void *callbackData);
 
 #endif
