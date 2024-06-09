@@ -986,7 +986,19 @@ void G2EmulationSwitchAnimationCharacter(CharacterState *In, int NewAnim, int Ne
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceSetAnimation);
+void G2EmulationInstanceSetAnimation(Instance *instance, int CurrentSection, int NewAnim, int NewFrame, int Frames)
+{
+    G2AnimSection *animSection;
+    G2AnimKeylist *keylist;
+
+    animSection = &instance->anim.section[CurrentSection & 0xFF];
+
+    keylist = G2Instance_GetKeylist(instance, NewAnim);
+
+    G2AnimSection_SetAlphaTable(animSection, NULL);
+
+    G2AnimSection_InterpToKeylistFrame(animSection, keylist, NewAnim, NewFrame, (short)(Frames * 100));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSetAnimation);
 
