@@ -1146,7 +1146,19 @@ void G2EmulationSetStartAndEndSegment(CharacterState *In, int CurrentSection, sh
     G2EmulationInstanceSetStartAndEndSegment(In->CharacterInstance, CurrentSection, Start, End);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceSetTotalSections);
+void G2EmulationInstanceSetTotalSections(Instance *instance, short Total)
+{
+    G2Anim *anim;
+
+    anim = &instance->anim;
+
+    while (anim->sectionCount < Total)
+    {
+        G2Anim_AddSection(anim, 0, 0);
+    }
+
+    G2Anim_SetCallback(anim, (void *)INSTANCE_DefaultAnimCallback, instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSetTotalSections);
 

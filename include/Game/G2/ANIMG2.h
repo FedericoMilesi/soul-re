@@ -185,5 +185,6 @@ void G2Anim_Init(G2Anim *anim, Model *modelData);
 void G2Anim_UpdateStoredFrame(G2Anim *anim);
 void G2Anim_GetSegChannelValue(G2Anim *anim, int segIndex, unsigned short *valueTable, unsigned short channelMask);
 void G2Anim_BuildTransforms(G2Anim *anim);
+G2AnimSection *G2Anim_AddSection(G2Anim *anim, int firstSegID, int segCount);
 
 #endif
