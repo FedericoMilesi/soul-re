@@ -857,7 +857,16 @@ void G2EmulationSwitchAnimation(CharacterState *In, int CurrentSection, int NewA
     G2EmulationInstanceSwitchAnimation(In->CharacterInstance, CurrentSection, NewAnim, NewFrame, Frames, Mode);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSwitchAnimationAlpha);
+void G2EmulationSwitchAnimationAlpha(CharacterState *In, int CurrentSection, int NewAnim, int NewFrame, int Frames, int Mode, int AlphaTable)
+{
+    G2AnimSection *animSection;
+
+    animSection = &In->CharacterInstance->anim.section[CurrentSection & 0xFF];
+
+    G2EmulationInstanceSwitchAnimation(In->CharacterInstance, CurrentSection, NewAnim, NewFrame, Frames, Mode);
+
+    G2AnimSection_SetAlphaTable(animSection, G2AlphaTables[AlphaTable]);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSwitchAnimationSync);
 
