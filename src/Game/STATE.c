@@ -1095,7 +1095,10 @@ int G2EmulationInstanceQueryPassedFrame(Instance *instance, int CurrentSection, 
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationQueryFrame);
+int G2EmulationQueryFrame(CharacterState *In, int CurrentSection)
+{
+    return G2EmulationInstanceQueryFrame(In->CharacterInstance, CurrentSection);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceQueryMode);
 
