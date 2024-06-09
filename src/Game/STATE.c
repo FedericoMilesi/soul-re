@@ -872,7 +872,42 @@ INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSwitchAnimationSync);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceToInstanceSwitchAnimationCharacter);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSwitchAnimationCharacter);
+void G2EmulationSwitchAnimationCharacter(CharacterState *In, int NewAnim, int NewFrame, int Frames, int Mode)
+{
+    Instance *instance;
+    G2AnimKeylist *keylist;
+
+    if (NewAnim < 0)
+    {
+        NewAnim = 0;
+    }
+
+    instance = In->CharacterInstance;
+
+    keylist = G2Instance_GetKeylist(instance, NewAnim);
+
+    G2Anim_SetAlphaTable(&instance->anim, NULL);
+
+    G2Anim_InterpToKeylistFrame(&instance->anim, keylist, NewAnim, NewFrame, (short)(100 * Frames));
+
+    if (Mode == 0)
+    {
+        G2Anim_SetPaused(&instance->anim);
+    }
+    else
+    {
+        G2Anim_SetUnpaused(&instance->anim);
+
+        if (Mode == 2)
+        {
+            G2Anim_SetLooping(&instance->anim);
+        }
+        else
+        {
+            G2Anim_SetNoLooping(&instance->anim);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceSetAnimation);
 

@@ -14,5 +14,11 @@ void G2AnimSection_SetPaused(G2AnimSection *section);
 void G2AnimSection_SetUnpaused(G2AnimSection *section);
 void G2AnimSection_SetLooping(G2AnimSection *section);
 void G2AnimSection_SetNoLooping(G2AnimSection *section);
+void G2Anim_SetAlphaTable(G2Anim *anim, G2AnimAlphaTable *table);
+void G2Anim_InterpToKeylistFrame(G2Anim *anim, G2AnimKeylist *keylist, int keylistID, int targetFrame, int duration);
+void G2Anim_SetPaused(G2Anim *anim);
+void G2Anim_SetUnpaused(G2Anim *anim);
+void G2Anim_SetLooping(G2Anim *anim);
+void G2Anim_SetNoLooping(G2Anim *anim);
 
 #endif
