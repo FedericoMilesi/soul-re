@@ -1010,7 +1010,30 @@ void G2EmulationSetAnimation(CharacterState *In, int CurrentSection, int NewAnim
     G2EmulationInstanceSetAnimation(In->CharacterInstance, CurrentSection, NewAnim, NewFrame, Frames);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceSetMode);
+void G2EmulationInstanceSetMode(Instance *instance, int CurrentSection, int Mode)
+{
+    G2AnimSection *animSection;
+
+    animSection = &instance->anim.section[CurrentSection & 0xFF];
+
+    if (Mode == 0)
+    {
+        G2AnimSection_SetPaused(animSection);
+    }
+    else
+    {
+        G2AnimSection_SetUnpaused(animSection);
+
+        if (Mode == 1)
+        {
+            G2AnimSection_SetNoLooping(animSection);
+        }
+        else
+        {
+            G2AnimSection_SetLooping(animSection);
+        }
+    }
+}
 
 void G2EmulationSetMode(CharacterState *In, int CurrentSection, int Mode)
 {
