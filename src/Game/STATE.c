@@ -1189,7 +1189,16 @@ void G2EmulationSetInterpController_Vector(Instance *instance, long segment, lon
     G2Anim_SetControllerCallbackData(&instance->anim, temp, temp2, (void *)Data);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", StateSwitchStateDataDefault);
+void StateSwitchStateDataDefault(CharacterState *In, int CurrentSection, void (*NewProcess)(), int Data)
+{
+    void(*process)();
+
+    process = In->SectionList[CurrentSection].Process;
+
+    StateSwitchStateData(In, CurrentSection, NewProcess, Data);
+
+    process(In, CurrentSection, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", StateSwitchStateCharacterDataDefault);
 
