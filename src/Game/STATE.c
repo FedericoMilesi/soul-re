@@ -1224,6 +1224,26 @@ void StateSwitchStateData(CharacterState *In, int CurrentSection, void (*NewProc
     EnMessageQueueData(&In->SectionList[CurrentSection].Event, 0x100004, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", StateSwitchStateCharacterData);
+void StateSwitchStateCharacterData(CharacterState *In, void (*NewProcess)(), int Data)
+{
+    int i;
+
+    for (i = 0; i < In->TotalSections; i++)
+    {
+        PurgeMessageQueue(&In->SectionList[i].Event);
+
+        EnMessageQueueData(&In->SectionList[i].Event, 0x100004, 0);
+
+        In->SectionList[i].Process(In, i, 0);
+
+        PurgeMessageQueue(&In->SectionList[i].Event);
+
+        EnMessageQueueData(&In->SectionList[i].Event, 0x100001, Data);
+
+        In->SectionList[i].Process = NewProcess;
+
+        In->SectionList[i].Process(In, i, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", StateGovernState);
