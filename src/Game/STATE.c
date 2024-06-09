@@ -1160,7 +1160,12 @@ void G2EmulationInstanceSetTotalSections(Instance *instance, short Total)
     G2Anim_SetCallback(anim, (void *)INSTANCE_DefaultAnimCallback, instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSetTotalSections);
+void G2EmulationSetTotalSections(CharacterState *In, short Total)
+{
+    In->TotalSections = Total;
+
+    G2EmulationInstanceSetTotalSections(In->CharacterInstance, Total);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceInitSection);
 
