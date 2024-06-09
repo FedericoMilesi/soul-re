@@ -1049,7 +1049,14 @@ void G2EmulationInstanceSetAnimSpeed(Instance *instance, int CurrentSection, int
     animSection->speedAdjustment = speed;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceQueryAnimation);
+int G2EmulationInstanceQueryAnimation(Instance *instance, int CurrentSection)
+{
+    G2AnimSection *animSection;
+
+    animSection = &instance->anim.section[CurrentSection & 0xFF];
+
+    return animSection->keylistID;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationQueryAnimation);
 
