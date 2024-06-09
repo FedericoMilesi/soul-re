@@ -1000,7 +1000,15 @@ void G2EmulationInstanceSetAnimation(Instance *instance, int CurrentSection, int
     G2AnimSection_InterpToKeylistFrame(animSection, keylist, NewAnim, NewFrame, (short)(Frames * 100));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSetAnimation);
+void G2EmulationSetAnimation(CharacterState *In, int CurrentSection, int NewAnim, int NewFrame, int Frames)
+{
+    if (NewAnim < 0)
+    {
+        NewAnim = 0;
+    }
+
+    G2EmulationInstanceSetAnimation(In->CharacterInstance, CurrentSection, NewAnim, NewFrame, Frames);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceSetMode);
 
