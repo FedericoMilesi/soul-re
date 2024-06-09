@@ -1246,4 +1246,33 @@ void StateSwitchStateCharacterData(CharacterState *In, void (*NewProcess)(), int
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", StateGovernState);
+void StateGovernState(CharacterState *In, int Frames)
+{
+    State *pSectionA;
+    State *pSectionB;
+    G2AnimSection *animSectionA;
+    G2AnimSection *animSectionB;
+    G2AnimKeylist *keylist;
+    int keylistID;
+    int i;
+
+    for (i = 1; i < 3; i++)
+    {
+        pSectionA = &In->SectionList[i - 1];
+        pSectionB = &In->SectionList[i];
+
+        if (pSectionA->Process == pSectionB->Process)
+        {
+            animSectionA = &In->CharacterInstance->anim.section[(i - 1) & 0xFF];
+            animSectionB = &In->CharacterInstance->anim.section[i & 0xFF];
+
+            if ((animSectionA->keylistID == animSectionB->keylistID) && (G2AnimSection_IsInInterpolation(animSectionA) == G2FALSE) && (G2AnimSection_IsInInterpolation(animSectionB) == G2FALSE) && (G2AnimSection_GetKeyframeNumber(animSectionA) != G2AnimSection_GetKeyframeNumber(animSectionB)))
+            {
+                keylist = animSectionA->keylist;
+                keylistID = animSectionA->keylistID;
+
+                G2AnimSection_InterpToKeylistFrame(animSectionB, keylist, keylistID, (G2AnimSection_GetKeyframeNumber(animSectionA) + Frames) % G2AnimKeylist_GetKeyframeCount(keylist), (short)(Frames * 100));
+            }
+        }
+    }
+}
