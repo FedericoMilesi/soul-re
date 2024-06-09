@@ -3,6 +3,7 @@
 #include "Game/G2/ANIMG2.h"
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/MEMPACK.h"
+#include "Game/G2/INSTNCG2.h"
 
 static char circBuf[4096];
 
@@ -771,7 +772,37 @@ void G2EmulatePlayAnimation(CharacterState *In)
     G2EmulationInstancePlayAnimation(In->CharacterInstance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceToInstanceSwitchAnimation);
+void G2EmulationInstanceToInstanceSwitchAnimation(Instance *instance, Instance *host, int CurrentSection, int NewAnim, int NewFrame, int Frames, int Mode)
+{
+    G2AnimSection *animSection;
+    G2AnimKeylist *keylist;
+
+    animSection = &instance->anim.section[CurrentSection];
+
+    keylist = G2Instance_GetKeylist(host, NewAnim);
+
+    G2AnimSection_SetAlphaTable(animSection, NULL);
+
+    G2AnimSection_InterpToKeylistFrame(animSection, keylist, NewAnim, NewFrame, (short)(Frames * 100));
+
+    if (Mode == 0)
+    {
+        G2AnimSection_SetPaused(animSection);
+    }
+    else
+    {
+        G2AnimSection_SetUnpaused(animSection);
+
+        if (Mode == 2)
+        {
+            G2AnimSection_SetLooping(animSection);
+        }
+        else
+        {
+            G2AnimSection_SetNoLooping(animSection);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceSwitchAnimation);
 

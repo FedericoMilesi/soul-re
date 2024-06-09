@@ -7,6 +7,12 @@
 void G2Anim_SwitchToKeylist(G2Anim *anim, G2AnimKeylist *keylist, int keylistID);
 short G2AnimSection_NextKeyframe(G2AnimSection *section);
 void G2AnimSection_SetInterpInfo(G2AnimSection *section, G2AnimInterpInfo *newInfoPtr);
-void G2Anim_SetCallback(struct _G2Anim_Type *anim, long (*callback)(), void *data);
+void G2Anim_SetCallback(G2Anim *anim, long (*callback)(), void *data);
+void G2AnimSection_SetAlphaTable(G2AnimSection *section, G2AnimAlphaTable *table);
+void G2AnimSection_InterpToKeylistFrame(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, int targetFrame, int duration);
+void G2AnimSection_SetPaused(G2AnimSection *section);
+void G2AnimSection_SetUnpaused(G2AnimSection *section);
+void G2AnimSection_SetLooping(G2AnimSection *section);
+void G2AnimSection_SetNoLooping(G2AnimSection *section);
 
 #endif
