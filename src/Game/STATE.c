@@ -1141,7 +1141,10 @@ void G2EmulationInstanceSetStartAndEndSegment(Instance *instance, int CurrentSec
     animSection->segCount = (End - Start) + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSetStartAndEndSegment);
+void G2EmulationSetStartAndEndSegment(CharacterState *In, int CurrentSection, short Start, short End)
+{
+    G2EmulationInstanceSetStartAndEndSegment(In->CharacterInstance, CurrentSection, Start, End);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceSetTotalSections);
 
