@@ -1200,7 +1200,15 @@ void StateSwitchStateDataDefault(CharacterState *In, int CurrentSection, void (*
     process(In, CurrentSection, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", StateSwitchStateCharacterDataDefault);
+void StateSwitchStateCharacterDataDefault(CharacterState *In, void (*NewProcess)(), int Data)
+{
+    int i;
+
+    for (i = 0; i < In->TotalSections; i++)
+    {
+        StateSwitchStateDataDefault(In, i, NewProcess, Data);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", StateSwitchStateData);
 
