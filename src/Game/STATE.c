@@ -1167,7 +1167,15 @@ void G2EmulationSetTotalSections(CharacterState *In, short Total)
     G2EmulationInstanceSetTotalSections(In->CharacterInstance, Total);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceInitSection);
+void G2EmulationInstanceInitSection(Instance *instance, int CurrentSection, void *callback, void *data)
+{
+    G2AnimSection *animSection;
+
+    animSection = &instance->anim.section[CurrentSection & 0xFF];
+
+    animSection->callback = (void *)callback;
+    animSection->callbackData = data;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSetInterpController_Vector);
 
