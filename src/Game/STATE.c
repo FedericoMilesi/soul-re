@@ -1012,7 +1012,10 @@ void G2EmulationSetAnimation(CharacterState *In, int CurrentSection, int NewAnim
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceSetMode);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSetMode);
+void G2EmulationSetMode(CharacterState *In, int CurrentSection, int Mode)
+{
+    G2EmulationInstanceSetMode(In->CharacterInstance, CurrentSection, Mode);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceSetAnimSpeed);
 
