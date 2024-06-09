@@ -870,7 +870,34 @@ void G2EmulationSwitchAnimationAlpha(CharacterState *In, int CurrentSection, int
 
 INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSwitchAnimationSync);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationInstanceToInstanceSwitchAnimationCharacter);
+void G2EmulationInstanceToInstanceSwitchAnimationCharacter(Instance *instance, Instance *host, int NewAnim, int NewFrame, int Frames, int Mode)
+{
+    G2AnimKeylist *keylist1;
+
+    keylist1 = G2Instance_GetKeylist(host, NewAnim);
+
+    G2Anim_SetAlphaTable(&instance->anim, NULL);
+
+    G2Anim_InterpToKeylistFrame(&instance->anim, keylist1, NewAnim, NewFrame, (short)(Frames * 100));
+
+    if (Mode == 0)
+    {
+        G2Anim_SetPaused(&instance->anim);
+    }
+    else
+    {
+        G2Anim_SetUnpaused(&instance->anim);
+
+        if (Mode == 2)
+        {
+            G2Anim_SetLooping(&instance->anim);
+        }
+        else
+        {
+            G2Anim_SetNoLooping(&instance->anim);
+        }
+    }
+}
 
 void G2EmulationSwitchAnimationCharacter(CharacterState *In, int NewAnim, int NewFrame, int Frames, int Mode)
 {
