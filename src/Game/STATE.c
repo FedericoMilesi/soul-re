@@ -868,7 +868,57 @@ void G2EmulationSwitchAnimationAlpha(CharacterState *In, int CurrentSection, int
     G2AnimSection_SetAlphaTable(animSection, G2AlphaTables[AlphaTable]);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STATE", G2EmulationSwitchAnimationSync);
+void G2EmulationSwitchAnimationSync(CharacterState *In, int SlaveSectionID, int MasterSectionID, int Frames)
+{
+    Instance *instance;
+    G2AnimSection *masterAnimSection;
+    G2AnimSection *slaveAnimSection;
+    G2AnimKeylist *keylist;
+    int keylistID;
+    State *masterSection;
+    State *slaveSection;
+    int targetFrame;
+
+    instance = In->CharacterInstance;
+
+    masterAnimSection = &instance->anim.section[MasterSectionID & 0xFF];
+    slaveAnimSection = &instance->anim.section[SlaveSectionID & 0xFF];
+
+    masterSection = &In->SectionList[MasterSectionID];
+    slaveSection = &In->SectionList[SlaveSectionID];
+
+    keylist = masterAnimSection->keylist;
+    keylistID = masterAnimSection->keylistID;
+
+    targetFrame = (G2AnimSection_GetKeyframeNumber(masterAnimSection) + Frames) % G2AnimKeylist_GetKeyframeCount(keylist);
+
+    G2AnimSection_SetAlphaTable(slaveAnimSection, NULL);
+
+    G2AnimSection_InterpToKeylistFrame(slaveAnimSection, keylist, keylistID, targetFrame, (short)(Frames * 100));
+
+    if (!(masterAnimSection->flags & 0x2))
+    {
+        G2AnimSection_SetNoLooping(slaveAnimSection);
+    }
+    else
+    {
+        G2AnimSection_SetLooping(slaveAnimSection);
+    }
+
+    if (!(masterAnimSection->flags & 0x1))
+    {
+        G2AnimSection_SetUnpaused(slaveAnimSection);
+    }
+    else
+    {
+        G2AnimSection_SetPaused(slaveAnimSection);
+    }
+
+    StateSwitchStateData(In, SlaveSectionID, masterSection->Process, 0);
+
+    slaveSection->Data1 = masterSection->Data1;
+    slaveSection->Data2 = masterSection->Data2;
+}
 
 void G2EmulationInstanceToInstanceSwitchAnimationCharacter(Instance *instance, Instance *host, int NewAnim, int NewFrame, int Frames, int Mode)
 {

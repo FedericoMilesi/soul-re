@@ -20,5 +20,7 @@ void G2Anim_SetPaused(G2Anim *anim);
 void G2Anim_SetUnpaused(G2Anim *anim);
 void G2Anim_SetLooping(G2Anim *anim);
 void G2Anim_SetNoLooping(G2Anim *anim);
+int G2AnimKeylist_GetKeyframeCount(G2AnimKeylist *keylist);
+int G2AnimSection_GetKeyframeNumber(G2AnimSection *section);
 
 #endif

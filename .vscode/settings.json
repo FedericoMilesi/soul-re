@@ -23,6 +23,7 @@
         "math3d.h": "c",
         "instncg2.h": "c",
         "camera.h": "c",
-        "anmg2ilf.h": "c"
+        "anmg2ilf.h": "c",
+        "state.h": "c"
     }
 }
