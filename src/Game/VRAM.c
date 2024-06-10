@@ -6,11 +6,13 @@ int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags);
 int VRAM_DeleteFreeVram(short x, short y, short w, short h);
 void VRAM_DeleteFreeBlock(BlockVramEntry *block);
 
-EXTERN BlockVramEntry *usedVramBlocks;
+BlockVramEntry *usedVramBlocks;
 
-EXTERN BlockVramEntry *openVramBlocks;
+BlockVramEntry *openVramBlocks;
 
-EXTERN BlockVramEntry vramBlockList[90];
+BlockVramEntry vramBlockList[90];
+
+long numOfBlocksUsed;
 
 void VRAM_PrintVramBlock()
 {
@@ -35,7 +37,24 @@ void VRAM_PrintInfo()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_InitVramBlockCache);
+void VRAM_InitVramBlockCache()
+{
+    int i;
+
+    openVramBlocks = NULL;
+    usedVramBlocks = NULL;
+
+    numOfBlocksUsed = 0;
+
+    for (i = 89; i >= 0; i--)
+    {
+        vramBlockList[i].flags = 0;
+    }
+
+    VRAM_InsertFreeVram(512, 240 + 16, 512, 240 + 16, 1);
+
+    VRAM_InitMorphPalettes();
+}
 
 void VRAM_EnableTerrainArea()
 {
