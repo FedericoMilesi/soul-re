@@ -127,7 +127,16 @@ int _GlyphIsGlyphUsable(int glyph)
     return (1 << (glyph + 17)) & INSTANCE_Query(gameTrackerX.playerInstance, 19);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphIsAnyGlyphSet);
+int _GlyphIsAnyGlyphSet()
+{
+    unsigned long abilities;
+
+    abilities = INSTANCE_Query(gameTrackerX.playerInstance, 36);
+
+    abilities |= debugRazielFlags3;
+
+    return abilities & 0x1FC0000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphCost);
 
