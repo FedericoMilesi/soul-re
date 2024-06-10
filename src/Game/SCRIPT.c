@@ -2,6 +2,8 @@
 #include "Game/MATH3D.h"
 #include "Game/GAMELOOP.h"
 #include "Game/G2/QUATG2.h"
+#include "Game/SPLINE.h"
+#include "Game/SCRIPT.h"
 
 void SCRIPT_CombineEulerAngles(Rotation *combinedRotation, Rotation *inputRotation1, Rotation *inputRotation2)
 {
@@ -23,7 +25,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_InstanceSplineInit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPTCountFramesInSpline);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", ScriptGetPosSpline);
+Spline *ScriptGetPosSpline(Instance *instance)
+{
+    MultiSpline *multi;
+
+    multi = SCRIPT_GetMultiSpline(instance, NULL, NULL);
+
+    if (multi != NULL)
+    {
+        return multi->positional;
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", ScriptGetRotSpline);
 
