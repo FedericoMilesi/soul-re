@@ -104,7 +104,24 @@ MultiSpline *SCRIPT_GetMultiSpline(Instance *instance, unsigned long *isParent, 
     return multi;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_GetPosSplineDef);
+SplineDef *SCRIPT_GetPosSplineDef(Instance *instance, MultiSpline *multi, unsigned long isParent, unsigned long isClass)
+{
+    SplineDef *splineDef;
+
+    if ((isParent != 0) || (isClass != 0))
+    {
+        splineDef = (SplineDef *)&instance->work0;
+
+        return splineDef;
+    }
+
+    if (multi == NULL)
+    {
+        return NULL;
+    }
+
+    return &multi->curPositional;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_GetRotSplineDef);
 
