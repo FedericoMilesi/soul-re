@@ -39,7 +39,19 @@ Spline *ScriptGetPosSpline(Instance *instance)
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", ScriptGetRotSpline);
+RSpline *ScriptGetRotSpline(Instance *instance)
+{
+    MultiSpline *multi;
+
+    multi = SCRIPT_GetMultiSpline(instance, NULL, NULL);
+
+    if (multi != NULL)
+    {
+        return multi->rotational;
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_GetSplineFrameNumber);
 
