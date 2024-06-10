@@ -275,8 +275,20 @@ void VRAM_DeleteUsedBlock(BlockVramEntry *block)
     }
 }
 
-BlockVramEntry *VRAM_GetOpenBlock();
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_GetOpenBlock);
+BlockVramEntry *VRAM_GetOpenBlock()
+{
+    int i;
+
+    for (i = 0; i < 90; i++)
+    {
+        if (vramBlockList[i].flags == 0)
+        {
+            return &vramBlockList[i];
+        }
+    }
+
+    return NULL;
+}
 
 int VRAM_DeleteFreeVram(short x, short y, short w, short h)
 {
