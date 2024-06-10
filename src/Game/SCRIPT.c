@@ -53,7 +53,17 @@ RSpline *ScriptGetRotSpline(Instance *instance)
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_GetSplineFrameNumber);
+int SCRIPT_GetSplineFrameNumber(Instance *instance, SplineDef *splineDef)
+{
+    if (ScriptGetPosSpline(instance) != NULL)
+    {
+        return SplineGetFrameNumber(ScriptGetPosSpline(instance), splineDef);
+    }
+    else
+    {
+        return SplineGetFrameNumber((Spline *)ScriptGetRotSpline(instance), splineDef);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_GetMultiSpline);
 
