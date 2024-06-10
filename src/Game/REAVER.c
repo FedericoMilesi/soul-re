@@ -126,7 +126,64 @@ void SoulReaverProcess(Instance *instance, GameTracker *gameTracker)
     _SoulReaverAnimate(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/REAVER", CollideReaverProjectile);
+void CollideReaverProjectile(Instance *instance, GameTracker *gameTracker)
+{
+    CollideInfo *collideInfo;
+    Instance *target;
+    long type;
+    long reavType;
+    Level *level;
+    Instance *inst;
+
+    collideInfo = instance->collideInfo;
+
+    target = collideInfo->inst1;
+
+    type = *(int *)((int)instance->extraData + 4) + -2; // extraData needs parsing to the correct struct
+
+    reavType = 0;
+
+    if ((collideInfo->type0 == 1) && (collideInfo->type1 == 1))
+    {
+        switch (type)
+        {
+        case 1:
+        case 2:
+            reavType = 4096;
+            break;
+        case 6:
+            level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+            reavType = 32;
+
+            if ((level != NULL) && (instance->position.z < level->waterZLevel))
+            {
+                return;
+            }
+
+            break;
+        }
+
+        if (reavType != 0)
+        {
+            INSTANCE_Post(target, 0x1000021, SetMonsterHitData(instance, NULL, reavType, 0, 0));
+            INSTANCE_Post(target, 0x400000, SetFXHitData(instance, 1, 50, reavType));
+        }
+    }
+
+    if ((unsigned char)collideInfo->type1 != 3)
+    {
+        inst = collideInfo->inst1;
+
+        inst->flags |= 0x4;
+    }
+    else
+    {
+        COLLIDE_SetBSPTreeFlag(collideInfo, 2048);
+    }
+
+    CollidePhysicalObject(instance, gameTracker);
+}
 
 unsigned long SoulReaverQuery(Instance *instance, unsigned long query)
 {
