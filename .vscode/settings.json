@@ -18,18 +18,5 @@
         }
     },
     "terminal.integrated.tabs.enableAnimation": false,
-    "files.autoGuessEncoding": true,
-    "files.associations": {
-        "math3d.h": "c",
-        "instncg2.h": "c",
-        "camera.h": "c",
-        "anmg2ilf.h": "c",
-        "state.h": "c",
-        "spline.h": "c",
-        "script.h": "c",
-        "quatg2.h": "c",
-        "hasm.h": "c",
-        "vram.h": "c",
-        "glyph.h": "c"
-    }
+    "files.autoGuessEncoding": true
 }

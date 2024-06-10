@@ -79,7 +79,145 @@ G2AnimKeylist *G2Instance_GetKeylist(Instance *instance, int id)
     return instance->object->animList[id];
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/INSTNCG2", _G2Instance_RebuildAnimatedTransforms);
+void _G2Instance_RebuildAnimatedTransforms(Instance *instance)
+{
+    Model *model;
+    G2Matrix *rootMatrix;
+    Rotation pre_facade_rot;
+    G2Matrix *segMatrix;
+    G2Matrix seg1RotMatrix;
+    G2Matrix seg2RotMatrix;
+    G2SVector3 rotVector;
+    long otx;
+    long oty;
+    long otz;
+    long segIndex;
+    int temp, temp2; // not from decls.h
+
+    (void)segMatrix;
+    rootMatrix = (G2Matrix *)instance->matrix;
+
+    if (rootMatrix != NULL)
+    {
+        model = instance->object->modelList[instance->currentModel];
+
+        rootMatrix--;
+
+        if ((instance->object->oflags & 0x4))
+        {
+            temp = theCamera.core.position.x - instance->position.x;
+            temp2 = theCamera.core.position.y - instance->position.y;
+
+            pre_facade_rot = instance->rotation;
+
+            instance->rotation.x = 0;
+            instance->rotation.y = 0;
+            instance->rotation.z = MATH3D_FastAtan2(temp2, temp) + 3072;
+        }
+
+        if (((instance->flags & 0x1)) && (instance->intro != NULL))
+        {
+            *rootMatrix = *(G2Matrix *)&instance->intro->multiSpline->curRotMatrix;
+        }
+        else if (instance->LinkParent != NULL)
+        {
+            G2Anim_UpdateStoredFrame(&instance->anim);
+
+            G2Anim_GetSegChannelValue(&instance->anim, 1, (unsigned short *)&rotVector, 0x7);
+
+            RotMatrixZYX((SVECTOR *)&rotVector, (MATRIX *)&seg1RotMatrix);
+
+            G2Anim_GetSegChannelValue(&instance->anim, 2, (unsigned short *)&rotVector, 0x7);
+
+            RotMatrixZYX((SVECTOR *)&rotVector, (MATRIX *)&seg2RotMatrix);
+
+            MulMatrix2((MATRIX *)&seg1RotMatrix, (MATRIX *)&seg2RotMatrix);
+
+            TransposeMatrix((MATRIX *)&seg2RotMatrix, (MATRIX *)rootMatrix);
+
+            *instance->matrix = instance->LinkParent->matrix[instance->ParentLinkNode];
+
+            MulMatrix2(instance->matrix, (MATRIX *)rootMatrix);
+
+            instance->position.x = (short)instance->matrix->t[0];
+            instance->position.y = (short)instance->matrix->t[1];
+            instance->position.z = (short)instance->matrix->t[2];
+        }
+        else
+        {
+            RotMatrix((SVECTOR *)&instance->rotation, (MATRIX *)rootMatrix);
+        }
+
+        if ((instance->scale.x != 4096) || (instance->scale.y != 4096) || (instance->scale.z != 4096))
+        {
+            VECTOR *ins_scale;
+
+            ins_scale = (VECTOR *)getScratchAddr(8);
+
+            ins_scale->vx = instance->scale.x;
+            ins_scale->vy = instance->scale.y;
+            ins_scale->vz = instance->scale.z;
+
+            ScaleMatrix((MATRIX *)rootMatrix, ins_scale);
+
+            rootMatrix->scaleFlag = 1;
+        }
+
+        rootMatrix->trans.x = instance->position.x;
+        rootMatrix->trans.y = instance->position.y;
+        rootMatrix->trans.z = instance->position.z;
+
+        instance->anim.segMatrices = (G2Matrix *)instance->matrix;
+
+        G2Anim_BuildTransforms(&instance->anim);
+
+        if (instance->LinkParent != NULL)
+        {
+            MATRIX *tv; // not from decls.h
+            G2LVector3 *ts; // not from decls.h
+
+            tv = instance->matrix;
+
+            otx = instance->matrix[0].t[0] - instance->matrix[3].t[0];
+            oty = instance->matrix[0].t[1] - instance->matrix[3].t[1];
+            otz = instance->matrix[0].t[2] - instance->matrix[3].t[2];
+
+            for (segIndex = 0; segIndex < model->numSegments; segIndex++, tv++)
+            {
+                if (G2Anim_IsControllerActive(&instance->anim, segIndex, 32) != G2FALSE)
+                {
+                    break;
+                }
+
+                tv->t[0] += otx;
+                tv->t[1] += oty;
+                tv->t[2] += otz;
+            }
+
+            ts = (G2LVector3 *)&instance->matrix->t;
+
+            rootMatrix->trans = *ts;
+        }
+
+        instance->position.x = (short)rootMatrix->trans.x;
+        instance->position.y = (short)rootMatrix->trans.y;
+        instance->position.z = (short)rootMatrix->trans.z;
+
+        if ((instance->object->oflags & 0x4))
+        {
+            instance->rotation = pre_facade_rot;
+        }
+
+        instance = instance->LinkChild;
+
+        while (instance != NULL)
+        {
+            G2Instance_BuildTransforms(instance);
+
+            instance = instance->LinkSibling;
+        }
+    }
+}
 
 void G2Instance_ClearMatrices(Instance *instance)
 {

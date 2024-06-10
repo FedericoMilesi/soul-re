@@ -139,7 +139,7 @@ void CollideReaverProjectile(Instance *instance, GameTracker *gameTracker)
 
     target = collideInfo->inst1;
 
-    type = *(int *)((int)instance->extraData + 4) + -2; // extraData needs parsing to the correct struct
+    type = *(int *)((intptr_t)instance->extraData + 4) + -2; // extraData needs parsing to the correct struct
 
     reavType = 0;
 
