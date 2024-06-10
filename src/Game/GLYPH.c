@@ -103,7 +103,14 @@ void _GlyphSwitchProcess(Instance *instance, void (*process)())
     data->process(instance, 0, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphIsGlyphOpen);
+int GlyphIsGlyphOpen(Instance *instance)
+{
+    GlyphData *data;
+
+    data = (GlyphData *)instance->extraData;
+
+    return data->glyph_open;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphIsGlyphSet);
 
