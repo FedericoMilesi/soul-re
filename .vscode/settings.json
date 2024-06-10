@@ -24,6 +24,7 @@
         "font.h": "c",
         "gameloop.h": "c",
         "vram.h": "c",
-        "obtable.h": "c"
+        "obtable.h": "c",
+        "undrwrld.h": "c"
     }
 }

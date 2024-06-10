@@ -6,7 +6,30 @@ INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_StartProcess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_RotateScreenStep);
 
-INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_DoUV);
+void UNDERWORLD_DoUV(unsigned char *uv, UW_ScreenXY *p0, int tx)
+{
+    int u;
+
+    u = p0->sx - tx;
+
+    if (u >= 256)
+    {
+        uv[0] = -1;
+    }
+    else
+    {
+        uv[0] = u;
+    }
+
+    if (p0->sy >= 256)
+    {
+        uv[1] = -1;
+    }
+    else
+    {
+        uv[1] = (unsigned char)p0->sy;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_Poly);
 
