@@ -10,5 +10,7 @@ int SCRIPT_GetSplineFrameNumber(Instance *instance, SplineDef *splineDef);
 void ScriptKillInstance(Instance *instance, int effect);
 void SCRIPT_InstanceSplineSet(Instance *instance, short frameNum, SplineDef *splineDef, SplineDef *rsplineDef, SplineDef *ssplineDef);
 short SCRIPTCountFramesInSpline(Instance *instance);
+SplineDef *SCRIPT_GetRotSplineDef(Instance *instance, MultiSpline *multi, unsigned long isParent, unsigned long isClass);
+SplineDef *SCRIPT_GetScaleSplineDef(Instance *instance, MultiSpline *multi, unsigned long isParent, unsigned long isClass);
 
 #endif

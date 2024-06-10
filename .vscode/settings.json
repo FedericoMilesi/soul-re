@@ -25,6 +25,9 @@
         "camera.h": "c",
         "anmg2ilf.h": "c",
         "state.h": "c",
-        "spline.h": "c"
+        "spline.h": "c",
+        "script.h": "c",
+        "quatg2.h": "c",
+        "hasm.h": "c"
     }
 }

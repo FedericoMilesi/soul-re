@@ -16,5 +16,6 @@ typedef struct _G2Quat_Type {
 } G2Quat;
 
 void G2EulerAngles_FromMatrix(G2EulerAngles *euler, G2Matrix *matrix, long order);
+void G2Quat_ToEuler(G2Quat *quat, G2EulerAngles *euler, int order);
 
 #endif

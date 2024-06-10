@@ -102,5 +102,7 @@ typedef struct MultiSpline {
 unsigned long SplineGetOffsetNext(Spline *spline, SplineDef *def, long fracOffset);
 unsigned long SplineGetData(Spline *spline, SplineDef *def, void *p);
 unsigned short SplineGetFrameNumber(Spline *spline, SplineDef *def);
+G2Quat *SplineGetFirstRot(RSpline *rspline, SplineDef *def);
+SVector *SplineGetFirstPoint(Spline *spline, SplineDef *def);
 
 #endif
