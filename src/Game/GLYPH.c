@@ -71,7 +71,17 @@ unsigned long GlyphQuery(Instance *instance, unsigned long query)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphPost);
+void GlyphPost(Instance *instance, unsigned long message, unsigned long messageData)
+{
+    GlyphData *data;
+
+    data = (GlyphData *)instance->extraData;
+
+    if (message != 0x100007)
+    {
+        EnMessageQueueData(&data->messages, message, messageData);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphSwitchProcess);
 
