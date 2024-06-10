@@ -492,5 +492,6 @@ void G2EmulationInstanceSetStartAndEndSegment(Instance *instance, int CurrentSec
 intptr_t SetControlSaveDataData(long length, void *data);
 void StateSwitchStateData(CharacterState *In, int CurrentSection, void (*NewProcess)(), int Data);
 void PurgeMessageQueue(MessageQueue *In);
+Message *PeekMessageQueue(MessageQueue *In);
 
 #endif

@@ -41,4 +41,6 @@ typedef struct _GlyphTuneData {
     long color_array[28];
 } GlyphTuneData;
 
+void _GlyphSelectProcess(Instance *instance, int data1, int data2);
+
 #endif

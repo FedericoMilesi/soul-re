@@ -4,6 +4,7 @@
 #include "Game/GAMELOOP.h"
 #include "Game/STATE.h"
 #include "Game/DEBUG.h"
+#include "Game/SOUND.h"
 
 EXTERN STATIC short HUD_Captured;
 
@@ -143,7 +144,33 @@ int _GlyphCost(GlyphTuneData *glyphtunedata, int glyphNum)
     return (unsigned char)glyphtunedata->glyph_costs[glyphNum - 1];
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphDefaultProcess);
+void _GlyphDefaultProcess(Instance *instance, int data1, int data2)
+{
+    Message *Ptr;
+    GlyphData *data;
+
+    (void)data1;
+    (void)data2;
+
+    data = (GlyphData *)instance->extraData;
+
+    while (Ptr = PeekMessageQueue(&data->messages))
+    {
+        if (Ptr != NULL)
+        {
+            switch (Ptr->ID)
+            {
+            case 0x80000010:
+                _GlyphSwitchProcess(instance, &_GlyphSelectProcess);
+
+                SndPlayVolPan(17, 127, 64, 0);
+                break;
+            }
+
+            DeMessageQueue(&data->messages);
+        }
+    }
+}
 
 void HUD_GetPlayerScreenPt(DVECTOR *center)
 {

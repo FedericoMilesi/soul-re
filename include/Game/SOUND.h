@@ -36,5 +36,6 @@ typedef struct gSoundData {
 unsigned long SOUND_Play3dSound(Position *position, int sfxToneID, int pitch, int maxVolume, int minVolDist);
 void SOUND_ProcessInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl, Position *position, int livesInOnePlace, int inSpectral, int hidden, int burning, long *triggerFlags);
 void SOUND_EndInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl);
+unsigned long SndPlayVolPan(unsigned int sample, unsigned short vol, unsigned short pan, short pitch);
 
 #endif
