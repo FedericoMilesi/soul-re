@@ -122,7 +122,10 @@ int _GlyphIsGlyphSet(int glyph)
     return (1 << (glyph + 17)) & abilities;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphIsGlyphUsable);
+int _GlyphIsGlyphUsable(int glyph)
+{
+    return (1 << (glyph + 17)) & INSTANCE_Query(gameTrackerX.playerInstance, 19);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphIsAnyGlyphSet);
 
