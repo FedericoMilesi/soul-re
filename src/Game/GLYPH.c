@@ -3,6 +3,7 @@
 #include "Game/CAMERA.h"
 #include "Game/GAMELOOP.h"
 #include "Game/STATE.h"
+#include "Game/DEBUG.h"
 
 EXTERN STATIC short HUD_Captured;
 
@@ -112,7 +113,14 @@ int GlyphIsGlyphOpen(Instance *instance)
     return data->glyph_open;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphIsGlyphSet);
+int _GlyphIsGlyphSet(int glyph)
+{
+    unsigned long abilities;
+
+    abilities = INSTANCE_Query(gameTrackerX.playerInstance, 36) | debugRazielFlags3;
+
+    return (1 << (glyph + 17)) & abilities;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphIsGlyphUsable);
 
