@@ -5,6 +5,7 @@
 typedef unsigned long uintptr_t;
 typedef long intptr_t;
 typedef unsigned long size_t;
+typedef	unsigned long u_long;
 #define NULL (void*)0
 #else
 #include <stdint.h>

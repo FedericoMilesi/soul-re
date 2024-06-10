@@ -154,5 +154,9 @@ int rcos(int);
 int rsin(int);
 void ScaleMatrix(MATRIX *, VECTOR *);
 DISPENV *SetDefDispEnv(DISPENV *env, int x, int y, int w, int h);
+u_long *BreakDraw(void);
+int DrawSync(int mode);
+int LoadImage(RECT *rect, u_long *p);
+void DrawOTag(u_long *p);
 
 #endif

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/VRAM.h"
 #include "Game/MEMPACK.h"
+#include "Game/GAMELOOP.h"
 
 int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags);
 int VRAM_DeleteFreeVram(short x, short y, short w, short h);
@@ -469,7 +470,108 @@ BlockVramEntry *VRAM_InsertionSort(BlockVramEntry *rootNode, BlockVramEntry *new
 
 INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_RearrangeVramsLayer);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_TransferBufferToVram);
+void VRAM_TransferBufferToVram(void *dataPtr, long dataSize, short status, void *data1, void *data2)
+{
+    VramBuffer *vramControl;
+    RECT rect;
+    long *nextOTag;
+    long *drawTimerReturn;
+    short temp, temp2, temp3; // not from decls.h
+
+    nextOTag = (long *)BreakDraw();
+
+    DrawSync(0);
+
+    drawTimerReturn = gameTrackerX.drawTimerReturn;
+
+    gameTrackerX.drawTimerReturn = NULL;
+
+    vramControl = (VramBuffer *)data1;
+
+    if (vramControl != NULL)
+    {
+        if (!(vramControl->flags & 0x1))
+        {
+            vramControl->flags |= 0x1;
+
+            dataPtr = (char *)dataPtr + 36; // sizeof?
+            dataSize -= 36;
+        }
+
+        if (vramControl->lengthOfLeftOverData != 0)
+        {
+            temp = (vramControl->w * 2) - vramControl->lengthOfLeftOverData;
+
+            if (dataSize < temp)
+            {
+                memcpy((char *)vramControl->lineOverFlow + vramControl->lengthOfLeftOverData, dataPtr, dataSize);
+
+                vramControl->lengthOfLeftOverData += (short)dataSize;
+
+                dataSize = 0;
+            }
+            else
+            {
+                memcpy((char *)vramControl->lineOverFlow + vramControl->lengthOfLeftOverData, dataPtr, temp);
+
+                dataPtr = (char *)dataPtr + temp;
+                dataSize -= temp;
+
+                vramControl->lengthOfLeftOverData += temp;
+
+                rect.x = vramControl->x;
+                rect.y = vramControl->y + vramControl->yOffset;
+                rect.w = vramControl->w;
+                rect.h = 1;
+
+                vramControl->yOffset++;
+
+                LoadImage(&rect, (u_long *)vramControl->lineOverFlow);
+
+                vramControl->lengthOfLeftOverData = 0;
+            }
+        }
+
+        if (dataSize > 0)
+        {
+            temp2 = (short)(dataSize / (vramControl->w * 2));
+            temp3 = vramControl->w * (temp2 << 1);
+
+            rect.x = vramControl->x;
+            rect.y = vramControl->y + vramControl->yOffset;
+            rect.w = vramControl->w;
+            rect.h = temp2;
+
+            LoadImage(&rect, (u_long *)dataPtr);
+
+            vramControl->yOffset += temp2;
+
+            dataSize -= temp3;
+            dataPtr = (char *)dataPtr + temp3;
+
+            if (dataSize > 0)
+            {
+                memcpy((char *)vramControl->lineOverFlow + vramControl->lengthOfLeftOverData, dataPtr, dataSize);
+
+                vramControl->lengthOfLeftOverData += (short)dataSize;
+            }
+        }
+
+        if ((status == 1) && (data2 != NULL) && (((ObjectTracker *)data2)->objectStatus == 4))
+        {
+            ((ObjectTracker *)data2)->objectStatus = 2;
+        }
+    }
+
+    DrawSync(0);
+
+    gameTrackerX.drawTimerReturn = drawTimerReturn;
+
+    if ((nextOTag != 0) && ((int)nextOTag != -1))
+    {
+        DrawOTag((u_long *)nextOTag);
+    }
+}
 
 void VRAM_LoadReturn(void *dataPtr, void *data1, void *data2)
 {

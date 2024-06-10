@@ -101,6 +101,7 @@ DEPENDS := $(OBJECTS:=.d)
 $(BUILD_DIR)/src/Game/G2/QUATG2.c.o: CFLAGS += -funsigned-char
 $(BUILD_DIR)/src/Game/G2/INSTNCG2.c.o: CFLAGS += -fno-builtin
 $(BUILD_DIR)/src/Game/MONSTER/MONAPI.c.o: CFLAGS += -fno-builtin
+$(BUILD_DIR)/src/Game/VRAM.c.o: CFLAGS += -fno-builtin
 
 all: $(EXE)
 

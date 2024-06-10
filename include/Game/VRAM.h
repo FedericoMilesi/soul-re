@@ -46,6 +46,26 @@ typedef struct _BlockVramEntry {
     } udata;
 } BlockVramEntry;
 
+// size: 0x14
+typedef struct VramBuffer {
+    // offset: 0000
+    long flags;
+    // offset: 0004
+    short x;
+    // offset: 0006
+    short y;
+    // offset: 0008
+    short w;
+    // offset: 000A
+    short h;
+    // offset: 000C
+    short yOffset;
+    // offset: 000E
+    short lengthOfLeftOverData;
+    // offset: 0010
+    short *lineOverFlow;
+} VramBuffer;
+
 void VRAM_LoadReturn(void *dataPtr, void *data1, void *data2);
 void VRAM_ClearVramBlock(BlockVramEntry *block);
 BlockVramEntry *VRAM_CheckVramSlot(short *x, short *y, short w, short h, int type, int startY);
