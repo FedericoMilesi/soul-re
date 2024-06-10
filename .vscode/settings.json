@@ -28,6 +28,7 @@
         "spline.h": "c",
         "script.h": "c",
         "quatg2.h": "c",
-        "hasm.h": "c"
+        "hasm.h": "c",
+        "vram.h": "c"
     }
 }

@@ -48,5 +48,7 @@ typedef struct _BlockVramEntry {
 
 void VRAM_LoadReturn(void *dataPtr, void *data1, void *data2);
 void VRAM_ClearVramBlock(BlockVramEntry *block);
+BlockVramEntry *VRAM_CheckVramSlot(short *x, short *y, short w, short h, int type, int startY);
+void VRAM_RearrangeVramsLayer(long whichLayer);
 
 #endif

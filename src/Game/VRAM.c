@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/VRAM.h"
 #include "Game/MEMPACK.h"
 
 int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags);
@@ -374,7 +375,44 @@ void VRAM_LoadReturn(void *dataPtr, void *data1, void *data2)
     MEMPACK_Free((char *)data1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_GetObjectVramSpace);
+long VRAM_GetObjectVramSpace(VramSize *vramSize, ObjectTracker *objectTracker)
+{
+    RECT rect;
+    long result;
+    BlockVramEntry *lastVramBlockUsed;
+
+    result = 1;
+
+    rect.x = vramSize->x + 512;
+    rect.y = vramSize->y;
+    rect.w = vramSize->w;
+    rect.h = vramSize->h;
+
+    lastVramBlockUsed = VRAM_CheckVramSlot(&rect.x, &rect.y, rect.w, rect.h, 2, 256);
+
+    if (lastVramBlockUsed == NULL)
+    {
+        VRAM_RearrangeVramsLayer(result);
+
+        lastVramBlockUsed = VRAM_CheckVramSlot(&rect.x, &rect.y, rect.w, rect.h, 2, 256);
+
+        if (lastVramBlockUsed == NULL)
+        {
+            result = 0;
+
+            VRAM_PrintInfo();
+        }
+    }
+
+    objectTracker->vramBlock = lastVramBlockUsed;
+
+    if (lastVramBlockUsed != NULL)
+    {
+        lastVramBlockUsed->udata.streamObject = objectTracker;
+    }
+
+    return result;
+}
 
 void VRAM_InitMorphPalettes()
 {
