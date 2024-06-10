@@ -181,7 +181,45 @@ int VRAM_InsertFreeBlock(BlockVramEntry *block)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_DeleteFreeBlock);
+void VRAM_DeleteFreeBlock(BlockVramEntry *block)
+{
+    BlockVramEntry *next;
+    BlockVramEntry *prev;
+
+    next = openVramBlocks;
+    prev = NULL;
+
+    if (block != NULL)
+    {
+        while (block != next)
+        {
+            if (next != NULL)
+            {
+                prev = next;
+                next = prev->next;
+
+                if (block != next)
+                {
+                    continue;
+                }
+            }
+
+            if (block != next)
+            {
+                return;
+            }
+        }
+
+        if (prev == NULL)
+        {
+            openVramBlocks = block->next;
+        }
+        else
+        {
+            prev->next = block->next;
+        }
+    }
+}
 
 void VRAM_InsertUsedBlock(BlockVramEntry *block)
 {
