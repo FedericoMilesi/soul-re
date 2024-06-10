@@ -2,6 +2,7 @@
 #include "Game/GLYPH.h"
 #include "Game/CAMERA.h"
 #include "Game/GAMELOOP.h"
+#include "Game/STATE.h"
 
 EXTERN STATIC short HUD_Captured;
 
@@ -83,7 +84,24 @@ void GlyphPost(Instance *instance, unsigned long message, unsigned long messageD
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphSwitchProcess);
+void _GlyphSwitchProcess(Instance *instance, void (*process)())
+{
+    GlyphData *data;
+
+    data = (GlyphData *)instance->extraData;
+
+    PurgeMessageQueue(&data->messages);
+
+    EnMessageQueueData(&data->messages, 0x100004, 0);
+
+    data->process(instance, 0, 0);
+
+    EnMessageQueueData(&data->messages, 0x100001, 0);
+
+    data->process = process;
+
+    data->process(instance, 0, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphIsGlyphOpen);
 
