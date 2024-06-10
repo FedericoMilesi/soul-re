@@ -82,7 +82,7 @@ void EnMessageQueue(MessageQueue *In, Message *Element)
     EnMessageQueueData(In, Element->ID, Element->Data);
 }
 
-void EnMessageQueueData(MessageQueue *In, int ID, int Data)
+void EnMessageQueueData(MessageQueue *In, int ID, intptr_t Data)
 {
     int i;
 
@@ -1186,7 +1186,7 @@ void G2EmulationInstanceInitSection(Instance *instance, int CurrentSection, void
     animSection->callbackData = data;
 }
 
-void G2EmulationSetInterpController_Vector(Instance *instance, long segment, long type, G2SVector3 *vec, int Frames, int Data)
+void G2EmulationSetInterpController_Vector(Instance *instance, long segment, long type, G2SVector3 *vec, int Frames, intptr_t Data)
 {
     int temp, temp2; // not from decls.h
 
@@ -1198,7 +1198,7 @@ void G2EmulationSetInterpController_Vector(Instance *instance, long segment, lon
     G2Anim_SetControllerCallbackData(&instance->anim, temp, temp2, (void *)Data);
 }
 
-void StateSwitchStateDataDefault(CharacterState *In, int CurrentSection, void (*NewProcess)(), int Data)
+void StateSwitchStateDataDefault(CharacterState *In, int CurrentSection, void (*NewProcess)(), intptr_t Data)
 {
     void(*process)();
 
@@ -1209,7 +1209,7 @@ void StateSwitchStateDataDefault(CharacterState *In, int CurrentSection, void (*
     process(In, CurrentSection, 0);
 }
 
-void StateSwitchStateCharacterDataDefault(CharacterState *In, void (*NewProcess)(), int Data)
+void StateSwitchStateCharacterDataDefault(CharacterState *In, void (*NewProcess)(), intptr_t Data)
 {
     int i;
 
@@ -1219,7 +1219,7 @@ void StateSwitchStateCharacterDataDefault(CharacterState *In, void (*NewProcess)
     }
 }
 
-void StateSwitchStateData(CharacterState *In, int CurrentSection, void (*NewProcess)(), int Data)
+void StateSwitchStateData(CharacterState *In, int CurrentSection, void (*NewProcess)(), intptr_t Data)
 {
     PurgeMessageQueue(&In->SectionList[CurrentSection].Event);
 
@@ -1233,7 +1233,7 @@ void StateSwitchStateData(CharacterState *In, int CurrentSection, void (*NewProc
     EnMessageQueueData(&In->SectionList[CurrentSection].Event, 0x100004, 0);
 }
 
-void StateSwitchStateCharacterData(CharacterState *In, void (*NewProcess)(), int Data)
+void StateSwitchStateCharacterData(CharacterState *In, void (*NewProcess)(), intptr_t Data)
 {
     int i;
 

@@ -154,7 +154,7 @@ void _GlyphDefaultProcess(Instance *instance, int data1, int data2)
 
     data = (GlyphData *)instance->extraData;
 
-    while (Ptr = PeekMessageQueue(&data->messages))
+    while ((Ptr = PeekMessageQueue(&data->messages)))
     {
         if (Ptr != NULL)
         {

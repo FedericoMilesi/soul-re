@@ -474,7 +474,7 @@ typedef struct __CharacterState {
 } CharacterState;
 
 Message *DeMessageQueue(MessageQueue *In);
-void EnMessageQueueData(MessageQueue *In, int ID, int Data);
+void EnMessageQueueData(MessageQueue *In, int ID, intptr_t Data);
 intptr_t SetMonsterHitData(Instance *Sender, Instance *lastHit, int Power, int knockBackDistance, int knockBackFrames);
 intptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type);
 intptr_t SetObjectData(int x, int y, int PathNumber, Instance *Force, int node);
@@ -490,7 +490,7 @@ void InitMessageQueue(MessageQueue *In);
 void G2EmulationInstanceSetTotalSections(Instance *instance, short Total);
 void G2EmulationInstanceSetStartAndEndSegment(Instance *instance, int CurrentSection, short Start, short End);
 intptr_t SetControlSaveDataData(long length, void *data);
-void StateSwitchStateData(CharacterState *In, int CurrentSection, void (*NewProcess)(), int Data);
+void StateSwitchStateData(CharacterState *In, int CurrentSection, void (*NewProcess)(), intptr_t Data);
 void PurgeMessageQueue(MessageQueue *In);
 Message *PeekMessageQueue(MessageQueue *In);
 
