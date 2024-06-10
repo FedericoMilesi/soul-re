@@ -65,7 +65,44 @@ int SCRIPT_GetSplineFrameNumber(Instance *instance, SplineDef *splineDef)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_GetMultiSpline);
+MultiSpline *SCRIPT_GetMultiSpline(Instance *instance, unsigned long *isParent, unsigned long *isClass)
+{
+    MultiSpline *multi;
+
+    multi = NULL;
+
+    if (isParent != NULL)
+    {
+        *isParent = 0;
+    }
+
+    if (isClass != NULL)
+    {
+        *isClass = 0;
+    }
+
+    if ((instance != NULL) && (instance->intro != NULL) && (instance->intro->multiSpline != NULL))
+    {
+        multi = instance->intro->multiSpline;
+
+        if (((instance->flags & 0x100002) == 0x2) && (isParent != NULL))
+        {
+            *isParent = 1;
+        }
+    }
+
+    if ((multi == NULL) && (instance->object->modelList[0] != NULL))
+    {
+        multi = instance->object->modelList[0]->multiSpline;
+
+        if (isClass != NULL)
+        {
+            *isClass = 1;
+        }
+    }
+
+    return multi;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_GetPosSplineDef);
 
