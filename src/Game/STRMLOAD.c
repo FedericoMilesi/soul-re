@@ -4,17 +4,17 @@
 
 static LoadQueueEntry LoadQueue[40];
 
-EXTERN STATIC int numLoads;
-
 EXTERN STATIC int loadFromHead;
 
-EXTERN STATIC LoadQueueEntry *loadFree;
-
-EXTERN STATIC LoadQueueEntry *loadHead;
-
-EXTERN STATIC LoadQueueEntry *loadTail;
-
 EXTERN STATIC int gCurDir;
+
+static LoadQueueEntry *loadFree;
+
+static LoadQueueEntry *loadHead;
+
+static LoadQueueEntry *loadTail;
+
+static int numLoads;
 
 void STREAM_NextLoadFromHead()
 {
@@ -48,7 +48,25 @@ void STREAM_InitLoader(char *bigFileName, char *voiceFileName)
     LoadQueue[39].next = NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_RemoveQueueHead);
+void STREAM_RemoveQueueHead()
+{
+    LoadQueueEntry *entry;
+
+    entry = loadHead;
+
+    loadHead = entry->next;
+
+    if (loadHead == NULL)
+    {
+        loadTail = NULL;
+    }
+
+    entry->next = loadFree;
+
+    numLoads--;
+
+    loadFree = entry;
+}
 
 void STREAM_RemoveQueueEntry(LoadQueueEntry *entry, LoadQueueEntry *prev);
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_RemoveQueueEntry);
