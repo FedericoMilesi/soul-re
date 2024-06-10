@@ -2,7 +2,18 @@
 #define _OBTABLE_H_
 
 #include "common.h"
-#include "Game/VRAM.h"
+
+// size: 0x8
+typedef struct VramSize {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short w;
+    // offset: 0006
+    short h;
+} VramSize;
 
 // size: 0x24
 typedef struct _ObjectTracker {

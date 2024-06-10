@@ -1,17 +1,7 @@
 #ifndef _VRAM_H_
 #define _VRAM_H_
 
-// size: 0x8
-typedef struct VramSize {
-    // offset: 0000
-    short x;
-    // offset: 0002
-    short y;
-    // offset: 0004
-    short w;
-    // offset: 0006
-    short h;
-} VramSize;
+#include "Game/OBTABLE.h"
 
 // size: 0x1C
 typedef struct _BlockVramEntry {
@@ -71,5 +61,6 @@ void VRAM_ClearVramBlock(BlockVramEntry *block);
 BlockVramEntry *VRAM_CheckVramSlot(short *x, short *y, short w, short h, int type, int startY);
 void VRAM_RearrangeVramsLayer(long whichLayer);
 void VRAM_InitMorphPalettes();
+void AdjustVramCoordsObject(int oldx, int oldy, int newx, int newy, Object *object);
 
 #endif

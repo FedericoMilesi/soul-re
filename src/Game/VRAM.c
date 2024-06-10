@@ -2,6 +2,7 @@
 #include "Game/VRAM.h"
 #include "Game/MEMPACK.h"
 #include "Game/GAMELOOP.h"
+#include "Game/FONT.h"
 
 int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags);
 int VRAM_DeleteFreeVram(short x, short y, short w, short h);
@@ -14,6 +15,11 @@ BlockVramEntry *openVramBlocks;
 BlockVramEntry vramBlockList[90];
 
 long numOfBlocksUsed;
+
+static inline long VRAM_GetDispPage()
+{
+    return (gameTrackerX.gameData.asmData.dispPage ^ 1) << 8;
+}
 
 void VRAM_PrintVramBlock()
 {
@@ -468,7 +474,154 @@ BlockVramEntry *VRAM_InsertionSort(BlockVramEntry *rootNode, BlockVramEntry *new
     return rootNode;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VRAM", VRAM_RearrangeVramsLayer);
+void VRAM_RearrangeVramsLayer(long whichLayer)
+{
+    BlockVramEntry *vblock;
+    BlockVramEntry *sortedBlocks;
+    BlockVramEntry *curBlock;
+    BlockVramEntry *savedVramBlocksPTR[48];
+    BlockVramEntry savedVramBlocks[48];
+    RECT vramLoc;
+    long numBlocks;
+    long d;
+    short x;
+    short y;
+    short dispYPos;
+    int startY;
+
+    numBlocks = 0;
+
+    if ((gameTrackerX.gameFlags & 0x8000000))
+    {
+        GAMELOOP_Set_Pause_Redraw();
+    }
+
+    for (vblock = usedVramBlocks; vblock != NULL; vblock = vblock->next)
+    {
+        if ((whichLayer == 0) && (vblock->y < 256))
+        {
+            savedVramBlocksPTR[numBlocks] = vblock;
+            savedVramBlocks[numBlocks] = *vblock;
+
+            numBlocks++;
+        }
+
+        if ((whichLayer != 0) && (vblock->y >= 256))
+        {
+            savedVramBlocksPTR[numBlocks] = vblock;
+            savedVramBlocks[numBlocks] = *vblock;
+
+            numBlocks++;
+        }
+    }
+
+    if (numBlocks > 0)
+    {
+        if (whichLayer == 0)
+        {
+            vramLoc.x = 512;
+            vramLoc.y = 0;
+            vramLoc.w = 512;
+            vramLoc.h = 256;
+
+            startY = vramLoc.y;
+        }
+        else
+        {
+            vramLoc.x = 512;
+            vramLoc.y = 256;
+            vramLoc.w = 512;
+            vramLoc.h = 256;
+
+            startY = vramLoc.y;
+        }
+
+        do
+        {
+            while (CheckVolatile(gameTrackerX.drawTimerReturn) != 0);
+        } while (CheckVolatile(gameTrackerX.reqDisp) != 0);
+
+        sortedBlocks = NULL;
+
+        dispYPos = VRAM_GetDispPage();
+
+        MoveImage(&vramLoc, 0, dispYPos);
+
+        DrawSync(0);
+
+        for (d = 0; d < numBlocks; d++)
+        {
+            VRAM_ClearVramBlock(savedVramBlocksPTR[d]);
+
+            savedVramBlocks[d].next = NULL;
+            savedVramBlocks[d].area = savedVramBlocks[d].w * savedVramBlocks[d].h;
+
+            sortedBlocks = VRAM_InsertionSort(sortedBlocks, &savedVramBlocks[d]);
+        }
+
+        for (curBlock = sortedBlocks; curBlock != NULL; curBlock = curBlock->next)
+        {
+            vramLoc.x = curBlock->x;
+            vramLoc.y = curBlock->y;
+            vramLoc.w = curBlock->w;
+            vramLoc.h = curBlock->h;
+
+            vramLoc.x -= 512;
+
+            if (whichLayer == 0)
+            {
+                vramLoc.y += dispYPos;
+            }
+            else
+            {
+                vramLoc.y = (vramLoc.y - 256) + dispYPos;
+            }
+
+            x = curBlock->x;
+            y = curBlock->y;
+
+            vblock = VRAM_CheckVramSlot(&x, &y, vramLoc.w, vramLoc.h, curBlock->type, (short)startY);
+
+            if (vblock == NULL)
+            {
+                VRAM_PrintInfo();
+                VRAM_PrintVramBlock(curBlock);
+            }
+
+            MoveImage(&vramLoc, x, y);
+
+            DrawSync(0);
+
+            switch (curBlock->type)
+            {
+            case 1:
+                break;
+            case 2:
+                AdjustVramCoordsObject(curBlock->x, curBlock->y, x, y, ((curBlock->udata).streamObject)->object);
+
+                curBlock->udata.streamObject->vramBlock = vblock;
+
+                vblock->udata = curBlock->udata;
+                break;
+            case 3:
+                fontTracker.font_vramX = x;
+                fontTracker.font_vramY = y;
+
+                fontTracker.font_tpage = getTPage(0, 0, x, y);
+
+                fontTracker.font_vramU = (x & 63) << 2;
+                fontTracker.font_vramV = y & 255;
+
+                fontTracker.font_clut = getClut(x, y + 126);
+
+                SpecialFogClut = getClut(x, y + 127);
+                break;
+            }
+        }
+    }
+
+    DrawSync(0);
+}
 
 void VRAM_TransferBufferToVram(void *dataPtr, long dataSize, short status, void *data1, void *data2)
 {

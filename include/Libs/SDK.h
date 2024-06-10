@@ -17,6 +17,13 @@
 
 #define getScratchAddr(offset)  ((unsigned long *)(0x1f800000+(offset)*4))
 
+#define getTPage(tp, abr, x, y) 					\
+	 ((((tp)&0x3)<<7)|(((abr)&0x3)<<5)|(((y)&0x100)>>4)|(((x)&0x3ff)>>6)| \
+	 (((y)&0x200)<<2))
+
+#define getClut(x, y) \
+	(((y)<<6)|(((x)>>4)&0x3f))
+
 // GTE macros
 
 #define gte_SetRotMatrix(r0) __asm__ ( \
@@ -158,5 +165,6 @@ u_long *BreakDraw(void);
 int DrawSync(int mode);
 int LoadImage(RECT *rect, u_long *p);
 void DrawOTag(u_long *p);
+int MoveImage(RECT *rect, int x, int y);
 
 #endif
