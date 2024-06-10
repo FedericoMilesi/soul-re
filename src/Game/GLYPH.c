@@ -138,7 +138,10 @@ int _GlyphIsAnyGlyphSet()
     return abilities & 0x1FC0000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphCost);
+int _GlyphCost(GlyphTuneData *glyphtunedata, int glyphNum)
+{
+    return (unsigned char)glyphtunedata->glyph_costs[glyphNum - 1];
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphDefaultProcess);
 

@@ -29,6 +29,7 @@
         "script.h": "c",
         "quatg2.h": "c",
         "hasm.h": "c",
-        "vram.h": "c"
+        "vram.h": "c",
+        "glyph.h": "c"
     }
 }
