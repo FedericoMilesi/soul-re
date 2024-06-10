@@ -142,7 +142,24 @@ SplineDef *SCRIPT_GetRotSplineDef(Instance *instance, MultiSpline *multi, unsign
     return &multi->curRotational;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_GetScaleSplineDef);
+SplineDef *SCRIPT_GetScaleSplineDef(Instance *instance, MultiSpline *multi, unsigned long isParent, unsigned long isClass)
+{
+    SplineDef *splineDef;
+
+    if ((isParent != 0) || (isClass != 0))
+    {
+        splineDef = (SplineDef *)&instance->work4;
+
+        return splineDef;
+    }
+
+    if (multi == NULL)
+    {
+        return NULL;
+    }
+
+    return &multi->curScaling;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_RelativisticSpline);
 
