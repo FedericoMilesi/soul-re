@@ -48,7 +48,23 @@ int FindObjectName(char *name)
     return -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", FindObjectInTracker);
+ObjectTracker *FindObjectInTracker(Object *object)
+{
+    int i;
+    ObjectTracker *otr;
+
+    otr = gameTrackerX.GlobalObjects;
+
+    for (i = 0; i < 48; i++, otr++)
+    {
+        if ((otr->objectStatus != 0) && (otr->object == object))
+        {
+            return otr;
+        }
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", FindStreamUnitFromLevel);
 
