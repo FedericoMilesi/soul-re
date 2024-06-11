@@ -1,6 +1,12 @@
 #include "common.h"
 #include "Game/UNDRWRLD.h"
 #include "Game/MATH3D.h"
+#include "Game/GAMELOOP.h"
+
+static inline int UNDRWRLD_GetDispPage()
+{
+    return gameTrackerX.gameData.asmData.dispPage;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_StartProcess);
 
@@ -35,7 +41,29 @@ INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_Poly);
 
 INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_DisplayFrame);
 
-INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_SetupSource);
+void UNDERWORLD_SetupSource()
+{
+    RECT rect;
+    DR_STP stp;
+
+    SetDrawStp(&stp, 1);
+
+    DrawPrim(&stp);
+
+    rect.x = 0;
+    rect.y = UNDRWRLD_GetDispPage() << 8;
+    rect.w = 512;
+    rect.h = 240;
+
+    MoveImage(&rect, 0, (UNDRWRLD_GetDispPage() ^ 1) << 8);
+
+    SetDrawStp(&stp, 0);
+
+    DrawPrim(&stp);
+    DrawSync(0);
+
+    PutDrawEnv(&draw[UNDRWRLD_GetDispPage()]);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_InitDisplayProcess);
 

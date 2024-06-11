@@ -132,6 +132,48 @@ typedef struct DISPENV {
     unsigned char pad1;
 } DISPENV;
 
+// size: 0x40
+typedef struct DR_ENV {
+    // offset: 0000
+    unsigned long tag;
+    // offset: 0004 (60 bytes)
+    unsigned long code[15];
+} DR_ENV;
+
+// size: 0x5C
+typedef struct DRAWENV {
+    // offset: 0000 (8 bytes)
+    struct RECT clip;
+    // offset: 0008 (4 bytes)
+    short ofs[2];
+    // offset: 000C (8 bytes)
+    struct RECT tw;
+    // offset: 0014
+    unsigned short tpage;
+    // offset: 0016
+    unsigned char dtd;
+    // offset: 0017
+    unsigned char dfe;
+    // offset: 0018
+    unsigned char isbg;
+    // offset: 0019
+    unsigned char r0;
+    // offset: 001A
+    unsigned char g0;
+    // offset: 001B
+    unsigned char b0;
+    // offset: 001C (64 bytes)
+    struct DR_ENV dr_env;
+} DRAWENV;
+
+// size: 0xC
+typedef struct DR_STP {
+    // offset: 0000
+    unsigned long tag;
+    // offset: 0004 (8 bytes)
+    unsigned long code[2];
+} DR_STP;
+
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);
@@ -166,5 +208,8 @@ int DrawSync(int mode);
 int LoadImage(RECT *rect, u_long *p);
 void DrawOTag(u_long *p);
 int MoveImage(RECT *rect, int x, int y);
+void SetDrawStp(DR_STP *p, int pbw);
+void DrawPrim(void *p);
+DRAWENV *PutDrawEnv(DRAWENV *env);
 
 #endif

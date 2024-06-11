@@ -262,5 +262,6 @@ void GAMELOOP_Set_Pause_Redraw();
 GameTracker gameTrackerX;
 extern long playerCameraMode;
 extern long cameraMode;
+DRAWENV draw[2];
 
 #endif
