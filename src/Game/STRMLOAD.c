@@ -68,8 +68,28 @@ void STREAM_RemoveQueueHead()
     loadFree = entry;
 }
 
-void STREAM_RemoveQueueEntry(LoadQueueEntry *entry, LoadQueueEntry *prev);
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_RemoveQueueEntry);
+void STREAM_RemoveQueueEntry(LoadQueueEntry *entry, LoadQueueEntry *prev)
+{
+    if (loadTail == entry)
+    {
+        loadTail = prev;
+    }
+
+    if (prev == NULL)
+    {
+        loadHead = entry->next;
+    }
+    else
+    {
+        prev->next = entry->next;
+    }
+
+    entry->next = loadFree;
+
+    loadFree = entry;
+
+    numLoads--;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_AddQueueEntryToTail);
 
