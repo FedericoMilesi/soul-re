@@ -202,7 +202,21 @@ int STREAM_TryAndDumpANonResidentObject()
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", InsertGlobalObject);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetObjectTracker);
+ObjectTracker *STREAM_GetObjectTracker(char *name)
+{
+    int i;
+
+    i = InsertGlobalObject(name, &gameTrackerX);
+
+    if (i == -1)
+    {
+        return NULL;
+    }
+    else
+    {
+        return &gameTrackerX.GlobalObjects[i];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", LoadLevelObjects);
 
