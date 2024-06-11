@@ -2,6 +2,12 @@
 #include "Game/GAMELOOP.h"
 #include "Game/PHYSOBS.h"
 #include "Game/STATE.h"
+#include "Game/MONSTER/MONLIB.h"
+
+typedef struct Dummy {
+    char pad[40];
+    int unknown;
+} Dummy; // not from types.h
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Message);
 
@@ -15,7 +21,27 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_SplitProcess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_CommonPostProcess);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_CommonPostProcess2);
+void WCBEGG_CommonPostProcess2(Instance *instance, GameTracker *gameTracker)
+{
+    //PhysObData *data; unused
+    int time;
+    Dummy *temp; // not from decls.h
+
+    temp = (Dummy *)instance->extraData; // extraData needs parsing to the correct struct
+
+    time = 3960;
+
+    if ((long)MON_GetTime(instance) >= (temp->unknown + time))
+    {
+        INSTANCE_UnlinkFromParent(instance);
+
+        INSTANCE_KillInstance(instance);
+    }
+    else
+    {
+        ProcessPhysicalObject(instance, gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_ExplodeCollide);
 
