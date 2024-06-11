@@ -20,7 +20,7 @@ void WCBEGG_CommonPostProcess(Instance *instance, GameTracker *gameTracker)
     //PhysObData *data; unused
     Dummy *temp; // not from decls.h
 
-    temp = (Dummy *)instance->extraData;
+    temp = (Dummy *)instance->extraData; // extraData needs parsing to the correct struct
 
     INSTANCE_Post(gameTrackerX.playerInstance, 0x40003, SetActionPlayHostAnimationData(gameTrackerX.playerInstance, instance, 6, 0, 0, 2));
 
