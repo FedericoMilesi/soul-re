@@ -175,7 +175,10 @@ void STREAM_NoMonsters()
     STREAM_DumpSomeMonsters();
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_YesMonsters);
+void STREAM_YesMonsters()
+{
+    gameTrackerX.gameFlags &= ~0x4000000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsMonster);
 
