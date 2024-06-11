@@ -313,7 +313,27 @@ void STREAM_DumpLoadingObjects()
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpObject);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsObjectInAnyUnit);
+int STREAM_IsObjectInAnyUnit(ObjectTracker *tracker)
+{
+    int d;
+    unsigned char *objlist;
+
+    for (d = 0; d < 16; d++)
+    {
+        if ((StreamTracker.StreamList[d].used == 2) && (StreamTracker.StreamList[d].level != NULL))
+        {
+            for (objlist = (unsigned char *)StreamTracker.StreamList[d].level->objectNameList; *objlist != 255; objlist += 16)
+            {
+                if (strcmpi(&tracker->name, (char *)objlist) == 0)
+                {
+                    return 1;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RemoveAllObjectsNotInUse);
 
