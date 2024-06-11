@@ -493,5 +493,6 @@ intptr_t SetControlSaveDataData(long length, void *data);
 void StateSwitchStateData(CharacterState *In, int CurrentSection, void (*NewProcess)(), intptr_t Data);
 void PurgeMessageQueue(MessageQueue *In);
 Message *PeekMessageQueue(MessageQueue *In);
+intptr_t SetActionPlayHostAnimationData(Instance *instance, Instance *host, int newAnim, int newFrame, int frames, int mode);
 
 #endif

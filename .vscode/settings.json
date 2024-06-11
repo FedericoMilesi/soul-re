@@ -27,6 +27,8 @@
         "obtable.h": "c",
         "undrwrld.h": "c",
         "strmload.h": "c",
-        "monlib.h": "c"
+        "monlib.h": "c",
+        "state.h": "c",
+        "montable.h": "c"
     }
 }
