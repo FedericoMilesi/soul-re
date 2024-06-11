@@ -51,5 +51,7 @@ typedef struct _LoadQueueEntry {
 
 void LOAD_AbortDirectoryChange(char *name);
 void LOAD_AbortFileLoad(char *fileName, void *retFunc);
+LoadQueueEntry *STREAM_AddQueueEntryToHead();
+LoadQueueEntry *STREAM_AddQueueEntryToTail();
 
 #endif

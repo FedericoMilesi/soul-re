@@ -25,6 +25,7 @@
         "gameloop.h": "c",
         "vram.h": "c",
         "obtable.h": "c",
-        "undrwrld.h": "c"
+        "undrwrld.h": "c",
+        "strmload.h": "c"
     }
 }

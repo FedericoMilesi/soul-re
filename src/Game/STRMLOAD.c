@@ -108,8 +108,44 @@ int STREAM_IsCdBusy(long *numberInQueue)
 int STREAM_PollLoadQueue();
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_PollLoadQueue);
 
-LoadQueueEntry *STREAM_SetUpQueueEntry(char *fileName, void *retFunc, void *retData, void *retData2, void **retPointer, int fromhead);
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_SetUpQueueEntry);
+LoadQueueEntry *STREAM_SetUpQueueEntry(char *fileName, void *retFunc, void *retData, void *retData2, void **retPointer, int fromhead)
+{
+    LoadQueueEntry *currentEntry;
+
+    currentEntry = (fromhead != 0) ? STREAM_AddQueueEntryToHead() : STREAM_AddQueueEntryToTail();
+
+    strcpy(currentEntry->loadEntry.fileName, fileName);
+
+    currentEntry->loadEntry.fileHash = LOAD_HashName(fileName);
+    currentEntry->loadEntry.dirHash = LOAD_GetSearchDirectory();
+
+    currentEntry->loadEntry.posInFile = 0;
+
+    currentEntry->loadEntry.checksumType = 1;
+
+    if (LOAD_GetSearchDirectory() != 0)
+    {
+        currentEntry->loadEntry.dirHash = LOAD_GetSearchDirectory();
+
+        LOAD_SetSearchDirectory(0);
+    }
+    else
+    {
+        currentEntry->loadEntry.dirHash = gCurDir;
+    }
+
+    currentEntry->loadEntry.retFunc = retFunc;
+    currentEntry->loadEntry.retData = retData;
+    currentEntry->loadEntry.retData2 = retData2;
+    currentEntry->loadEntry.retPointer = retPointer;
+
+    if (retPointer != NULL)
+    {
+        *(long *)retPointer = 0xFAFBFCFD;
+    }
+
+    return currentEntry;
+}
 
 void STREAM_QueueNonblockingLoads(char *fileName, unsigned char memType, void *retFunc, void *retData, void *retData2, void **retPointer, long relocateBinary)
 {
