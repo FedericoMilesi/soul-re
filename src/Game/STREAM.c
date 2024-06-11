@@ -279,7 +279,21 @@ long STREAM_IsAnInstanceUsingObject(Object *object)
     return ret;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_StreamLoadObjectAbort);
+void STREAM_StreamLoadObjectAbort(void *loadData, void *data, void *data2)
+{
+    ObjectTracker *objectTracker;
+
+    (void)data2;
+
+    objectTracker = (ObjectTracker *)data;
+
+    if (loadData != NULL)
+    {
+        MEMPACK_Free((char *)loadData);
+    }
+
+    objectTracker->objectStatus = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpLoadingObjects);
 
