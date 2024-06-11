@@ -295,7 +295,21 @@ void STREAM_StreamLoadObjectAbort(void *loadData, void *data, void *data2)
     objectTracker->objectStatus = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpLoadingObjects);
+void STREAM_DumpLoadingObjects()
+{
+    int i;
+    ObjectTracker *tracker;
+
+    tracker = gameTrackerX.GlobalObjects;
+
+    for (i = 0; i < 48; i++, tracker++)
+    {
+        if (tracker->objectStatus == 1)
+        {
+            STREAM_DumpObject(tracker);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpObject);
 
