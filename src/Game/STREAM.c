@@ -218,7 +218,40 @@ ObjectTracker *STREAM_GetObjectTracker(char *name)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", LoadLevelObjects);
+void LoadLevelObjects(StreamUnit *stream)
+{
+    int objlist_pos;
+    char name[20];
+    Level *level;
+    int i;
+
+    STREAM_NextLoadAsNormal();
+
+    objlist_pos = 0;
+
+    while (((unsigned char *)stream->level->objectNameList)[objlist_pos] != 255)
+    {
+        strcpy(name, (char *)stream->level->objectNameList + objlist_pos);
+
+        InsertGlobalObject(name, &gameTrackerX);
+
+        objlist_pos += 16;
+    }
+
+    level = stream->level;
+
+    for (i = 0; i < level->numIntros; i++)
+    {
+        if (FindObjectName(level->introList[i].name) != -1)
+        {
+            level->introList[i].flags &= ~0x4000;
+        }
+        else
+        {
+            level->introList[i].flags |= 0x4000;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsAnInstanceUsingObject);
 
