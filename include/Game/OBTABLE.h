@@ -110,5 +110,6 @@ void OBTABLE_GetInstanceProcessFunc(Instance *instance);
 void OBTABLE_GetInstanceCollideFunc(Instance *instance);
 void OBTABLE_InstanceInit(Instance *instance);
 void OBTABLE_InitAnimPointers(ObjectTracker *objectTracker);
+void OBTABLE_RemoveObjectEntry(Object *object);
 
 #endif

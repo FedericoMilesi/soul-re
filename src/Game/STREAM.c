@@ -1,6 +1,10 @@
 #include "common.h"
 #include "Game/STRMLOAD.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MEMPACK.h"
+#include "Game/INSTANCE.h"
+#include "Game/OBTABLE.h"
+#include "Game/PSX/AADLIB.h"
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FillOutFileNames);
@@ -87,7 +91,48 @@ StreamUnit *FindStreamUnitFromLevel(Level *level)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadObjectReturn);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpMonster);
+void STREAM_DumpMonster(ObjectTracker *dumpee)
+{
+    Object *object;
+    Instance *instance;
+
+    object = dumpee->object;
+
+    if (dumpee->vramBlock != NULL)
+    {
+        VRAM_ClearVramBlock((BlockVramEntry *)dumpee->vramBlock);
+    }
+
+    OBTABLE_RemoveObjectEntry(object);
+
+    if (((object->oflags2 & 0x800000)) && (object->sfxFileHandle != 0))
+    {
+        aadFreeDynamicSfx(object->sfxFileHandle);
+    }
+
+    instance = gameTrackerX.instanceList->first;
+
+    if (instance != NULL)
+    {
+        Instance *next;
+
+        while (instance != NULL)
+        {
+            next = instance->next;
+
+            if (object == instance->object)
+            {
+                INSTANCE_ReallyRemoveInstance(gameTrackerX.instanceList, instance, 0);
+            }
+
+            instance = next;
+        }
+    }
+
+    MEMPACK_Free((char *)object);
+
+    dumpee->object = NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_InList);
 

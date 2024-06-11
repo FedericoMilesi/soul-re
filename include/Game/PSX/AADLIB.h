@@ -2,5 +2,6 @@
 #define _AADLIB_H_
 
 int aadIsSfxLoaded(unsigned int toneID);
+int aadFreeDynamicSfx(int handle);
 
 #endif

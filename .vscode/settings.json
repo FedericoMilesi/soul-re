@@ -31,6 +31,8 @@
         "state.h": "c",
         "montable.h": "c",
         "physobs.h": "c",
-        "mbmiss.h": "c"
+        "mbmiss.h": "c",
+        "instance.h": "c",
+        "aadlib.h": "c"
     }
 }
