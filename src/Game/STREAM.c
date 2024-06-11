@@ -15,7 +15,19 @@ void STREAM_AbortAreaLoad(char *baseAreaName)
     LOAD_AbortFileLoad(vramName, (void *)VRAM_LoadReturn);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_Init);
+void STREAM_Init()
+{
+    int i;
+
+    for (i = 0; i < 16; i++)
+    {
+        StreamTracker.StreamList[i].used = 0;
+
+        StreamTracker.StreamList[i].flags = 0;
+
+        StreamTracker.StreamList[i].StreamUnitID = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", FindObjectName);
 
