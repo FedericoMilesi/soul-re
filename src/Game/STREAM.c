@@ -134,7 +134,20 @@ void STREAM_DumpMonster(ObjectTracker *dumpee)
     dumpee->object = NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_InList);
+int STREAM_InList(char *name, char **nameList)
+{
+    char **mon;
+
+    for (mon = nameList; *mon != NULL; mon++)
+    {
+        if (strcmpi(name, *mon) == 0)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsSpecialMonster);
 
