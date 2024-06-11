@@ -253,7 +253,31 @@ void LoadLevelObjects(StreamUnit *stream)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsAnInstanceUsingObject);
+long STREAM_IsAnInstanceUsingObject(Object *object)
+{
+    Instance *instance;
+    Instance *next;
+    long ret;
+
+    instance = gameTrackerX.instanceList->first;
+
+    ret = 0;
+
+    while (instance != NULL)
+    {
+        next = instance->next;
+
+        if (instance->object == object)
+        {
+            ret = 1;
+            break;
+        }
+
+        instance = next;
+    }
+
+    return ret;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_StreamLoadObjectAbort);
 
