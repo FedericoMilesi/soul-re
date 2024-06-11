@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/STRMLOAD.h"
+#include "Game/GAMELOOP.h"
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FillOutFileNames);
@@ -29,7 +30,23 @@ void STREAM_Init()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", FindObjectName);
+int FindObjectName(char *name)
+{
+    int i;
+    ObjectTracker *otr;
+
+    otr = gameTrackerX.GlobalObjects;
+
+    for (i = 0; i < 48; i++, otr++)
+    {
+        if ((otr->objectStatus != 0) && (strcmpi(otr->name, name) == 0))
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", FindObjectInTracker);
 
