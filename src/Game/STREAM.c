@@ -168,7 +168,12 @@ void STREAM_DumpSomeMonsters()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_NoMonsters);
+void STREAM_NoMonsters()
+{
+    gameTrackerX.gameFlags |= 0x4000000;
+
+    STREAM_DumpSomeMonsters();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_YesMonsters);
 
