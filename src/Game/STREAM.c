@@ -182,7 +182,23 @@ void STREAM_YesMonsters()
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsMonster);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_TryAndDumpANonResidentObject);
+int STREAM_TryAndDumpANonResidentObject()
+{
+    ObjectTracker *otr;
+    int i;
+
+    otr = gameTrackerX.GlobalObjects;
+
+    for (i = 0; i < 48; i++, otr++)
+    {
+        if (STREAM_TryAndDumpNonResident(otr) != 0)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", InsertGlobalObject);
 
