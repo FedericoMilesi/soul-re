@@ -2,6 +2,17 @@
 #include "Game/UNDRWRLD.h"
 #include "Game/MATH3D.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MEMPACK.h"
+
+EXTERN STATIC UW_ScreenXY *ScreenMorphArray;
+
+EXTERN STATIC long UW_angle;
+
+EXTERN STATIC long UW_scalex;
+
+EXTERN STATIC long UW_scalexInc;
+
+EXTERN STATIC long UW_angleInc;
 
 static inline int UNDRWRLD_GetDispPage()
 {
@@ -65,7 +76,39 @@ void UNDERWORLD_SetupSource()
     PutDrawEnv(&draw[UNDRWRLD_GetDispPage()]);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_InitDisplayProcess);
+void UNDERWORLD_InitDisplayProcess()
+{
+    int row;
+    int col;
+
+    do
+    {
+        while (CheckVolatile(gameTrackerX.drawTimerReturn) != 0);
+    } while (CheckVolatile(gameTrackerX.reqDisp) != 0);
+
+    ScreenMorphArray = (UW_ScreenXY *)MEMPACK_Malloc(sizeof(UW_ScreenXY[3][3]), 24);
+
+    for (row = 0; row < 3; row++)
+    {
+        for (col = 0; col < 3; col++)
+        {
+            UW_ScreenXY *p;
+
+            p = ScreenMorphArray + col + (row * 3);
+
+            p->sx = (col * 254) + 1;
+            p->sy = (row * 119) + 1;
+        }
+    }
+
+    UW_scalex = 4096;
+    UW_scalexInc = 32;
+
+    UW_angle = 0;
+    UW_angleInc = 8;
+
+    UNDERWORLD_SetupSource();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_LoadLevel);
 
