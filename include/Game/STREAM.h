@@ -349,5 +349,6 @@ void STREAM_SetInstancePosition(Instance *instance, evPositionData *data);
 StreamUnit *STREAM_GetStreamUnitWithID(long id);
 ObjectTracker *STREAM_GetObjectTracker(char *name);
 StreamUnit *FindStreamUnitFromLevel(Level *level);
+int STREAM_IsSpecialMonster(char *name);
 
 #endif

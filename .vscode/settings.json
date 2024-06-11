@@ -33,6 +33,7 @@
         "physobs.h": "c",
         "mbmiss.h": "c",
         "instance.h": "c",
-        "aadlib.h": "c"
+        "aadlib.h": "c",
+        "stream.h": "c"
     }
 }

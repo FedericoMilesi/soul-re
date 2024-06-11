@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/STREAM.h"
 #include "Game/STRMLOAD.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MEMPACK.h"
@@ -151,7 +152,21 @@ int STREAM_InList(char *name, char **nameList)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsSpecialMonster);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpSomeMonsters);
+void STREAM_DumpSomeMonsters()
+{
+    ObjectTracker *otr;
+    int i;
+
+    otr = gameTrackerX.GlobalObjects;
+
+    for (i = 0; i < 48; i++, otr++)
+    {
+        if (((otr->objectStatus == 2) && (otr->object != NULL)) && (STREAM_IsSpecialMonster((char *)otr) != 0))
+        {
+            STREAM_DumpMonster(otr);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_NoMonsters);
 
