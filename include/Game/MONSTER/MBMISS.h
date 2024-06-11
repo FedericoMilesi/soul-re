@@ -9,5 +9,6 @@ typedef struct Dummy {
 } Dummy; // not from types.h
 
 void WCBEGG_CommonPostProcess2(Instance *instance, GameTracker *gameTracker);
+void WCBEGG_Process(Instance *instance, GameTracker *gameTracker);
 
 #endif

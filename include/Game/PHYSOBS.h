@@ -62,5 +62,6 @@ typedef struct PhysObWeaponProperties {
 evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint, int type);
 void CollidePhysicalObject(Instance *instance, GameTracker *gameTracker);
 void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker);
+void PhysicalObjectPost(Instance *instance, unsigned long Message, unsigned long Data);
 
 #endif

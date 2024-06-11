@@ -5,7 +5,27 @@
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MBMISS.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Message);
+void WCBEGG_Message(Instance *instance, unsigned long message, unsigned long data)
+{
+    //PhysObData *pod; unused
+    Dummy *temp; // not from decls.h
+
+    if (message == 0x800002)
+    {
+        if (instance->processFunc != WCBEGG_Process)
+        {
+            return;
+        }
+
+        temp = (Dummy *)instance->extraData; // extraData needs parsing to the correct struct
+
+        temp->unknown = MON_GetTime(instance);
+
+        G2EmulationInstanceSwitchAnimationAlpha(instance, 0, 1, 0, 0, 2, 0);
+    }
+
+    PhysicalObjectPost(instance, message, data);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_ShouldIgniteEgg);
 

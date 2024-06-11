@@ -29,6 +29,8 @@
         "strmload.h": "c",
         "monlib.h": "c",
         "state.h": "c",
-        "montable.h": "c"
+        "montable.h": "c",
+        "physobs.h": "c",
+        "mbmiss.h": "c"
     }
 }

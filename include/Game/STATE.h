@@ -494,5 +494,6 @@ void StateSwitchStateData(CharacterState *In, int CurrentSection, void (*NewProc
 void PurgeMessageQueue(MessageQueue *In);
 Message *PeekMessageQueue(MessageQueue *In);
 intptr_t SetActionPlayHostAnimationData(Instance *instance, Instance *host, int newAnim, int newFrame, int frames, int mode);
+void G2EmulationInstanceSwitchAnimationAlpha(Instance *instance, int CurrentSection, int NewAnim, int NewFrame, int Frames, int Mode, int AlphaTable);
 
 #endif
