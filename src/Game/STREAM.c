@@ -66,7 +66,24 @@ ObjectTracker *FindObjectInTracker(Object *object)
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", FindStreamUnitFromLevel);
+StreamUnit *FindStreamUnitFromLevel(Level *level)
+{
+    StreamUnit *ret;
+    long i;
+
+    ret = NULL;
+
+    for (i = 0; i < 16; i++)
+    {
+        if ((StreamTracker.StreamList[i].used == 2) && (StreamTracker.StreamList[i].level == level))
+        {
+            ret = &StreamTracker.StreamList[i];
+            break;
+        }
+    }
+
+    return ret;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadObjectReturn);
 
