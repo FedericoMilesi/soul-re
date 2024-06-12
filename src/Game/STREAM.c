@@ -537,7 +537,26 @@ int STREAM_IsMorphInProgress()
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetWaterZLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_SetMainFog);
+void STREAM_SetMainFog(StreamUnit *streamUnit)
+{
+    Level *level;
+
+    level = streamUnit->level;
+
+    if (gameTrackerX.gameData.asmData.MorphType != 0)
+    {
+        streamUnit->UnitFogNear = level->spectralFogNear;
+        streamUnit->UnitFogFar = level->spectralFogFar;
+    }
+    else
+    {
+        streamUnit->UnitFogNear = level->holdFogNear;
+        streamUnit->UnitFogFar = level->holdFogFar;
+    }
+
+    streamUnit->TargetFogNear = streamUnit->UnitFogNear;
+    streamUnit->TargetFogFar = streamUnit->UnitFogFar;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_SetStreamFog);
 
