@@ -535,7 +535,32 @@ int STREAM_IsMorphInProgress()
     return gameTrackerX.gameData.asmData.MorphTime != 1000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetWaterZLevel);
+long STREAM_GetWaterZLevel(Level *level, Instance *instance)
+{
+    int waterZLevel;
+
+    if ((instance->flags2 & 0x8000000))
+    {
+        if ((!(instance->object->oflags2 & 0x2000000)) && (gameTrackerX.gameData.asmData.MorphTime != 1000))
+        {
+            waterZLevel = level->waterZLevel;
+        }
+        else
+        {
+            waterZLevel = -32767;
+        }
+    }
+    else if ((!(instance->object->oflags2 & 0x2000000)) && (gameTrackerX.gameData.asmData.MorphTime != 1000))
+    {
+        waterZLevel = -32767;
+    }
+    else
+    {
+        waterZLevel = level->waterZLevel;
+    }
+
+    return waterZLevel;
+}
 
 void STREAM_SetMainFog(StreamUnit *streamUnit)
 {
