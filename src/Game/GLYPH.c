@@ -194,7 +194,12 @@ void HUD_GetPlayerScreenPt(DVECTOR *center)
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphDrawMenu);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphTime);
+long GlyphTime(int time)
+{
+    time *= time;
+
+    return time / 4096;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", ShrinkGlyphMenu);
 
