@@ -211,5 +211,6 @@ int MoveImage(RECT *rect, int x, int y);
 void SetDrawStp(DR_STP *p, int pbw);
 void DrawPrim(void *p);
 DRAWENV *PutDrawEnv(DRAWENV *env);
+int VSyncCallback(void (*f)(void));
 
 #endif
