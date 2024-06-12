@@ -583,7 +583,31 @@ void STREAM_SetMainFog(StreamUnit *streamUnit)
     streamUnit->TargetFogFar = streamUnit->UnitFogFar;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_SetStreamFog);
+void STREAM_SetStreamFog(StreamUnit *streamUnit, short fogNear, short fogFar)
+{
+    short unitFogFar;
+    int unitFogHold;
+
+    unitFogFar = FindStreamUnitFromLevel(gameTrackerX.level)->UnitFogFar;
+
+    if (fogFar < unitFogFar)
+    {
+        unitFogFar = fogFar;
+    }
+
+    unitFogHold = unitFogFar - 2000;
+
+    streamUnit->TargetFogFar = unitFogFar;
+    streamUnit->UnitFogFar = unitFogFar;
+
+    if (fogNear < unitFogHold)
+    {
+        unitFogHold = fogNear;
+    }
+
+    streamUnit->TargetFogNear = unitFogHold;
+    streamUnit->UnitFogNear = unitFogHold;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_ConnectStream);
 
