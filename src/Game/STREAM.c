@@ -481,7 +481,54 @@ StreamUnit *STREAM_GetStreamUnitWithID(long id)
     return retUnit;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_CalculateWaterLevel);
+void STREAM_CalculateWaterLevel(Level *level)
+{
+    Terrain *terrain;
+    int i;
+    TFace *tface;
+    long waterZLevel;
+
+    waterZLevel = -32767;
+
+    if (level->waterZLevel == 0)
+    {
+        if ((level->unitFlags & 0x1))
+        {
+            level->waterZLevel = 32767;
+        }
+        else
+        {
+            terrain = level->terrain;
+
+            tface = (TFace *)terrain->faceList;
+
+            for (i = terrain->numFaces; i > 0; i--, tface++)
+            {
+                if (((tface->attr & 0x8)) && (terrain->vertexList[tface->face.v0].vertex.z == terrain->vertexList[tface->face.v1].vertex.z)
+                && (terrain->vertexList[tface->face.v0].vertex.z == terrain->vertexList[tface->face.v2].vertex.z))
+                {
+                    if (waterZLevel == -32767)
+                    {
+                        waterZLevel = terrain->vertexList[tface->face.v0].vertex.z;
+                    }
+                    else if (waterZLevel != terrain->vertexList[tface->face.v0].vertex.z)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (waterZLevel == -32767)
+            {
+                level->waterZLevel = -32767;
+            }
+            else
+            {
+                level->waterZLevel = waterZLevel + level->terrain->BSPTreeArray[0].globalOffset.z;
+            }
+        }
+    }
+}
 
 int STREAM_IsMorphInProgress()
 {

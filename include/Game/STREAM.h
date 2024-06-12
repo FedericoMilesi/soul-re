@@ -62,6 +62,32 @@ typedef struct TextureFT3 {
     unsigned short attr;
 } TextureFT3;
 
+// size: 0x6
+typedef struct _Vertex {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short z;
+} Vertex;
+
+// size: 0xC
+typedef struct _TVertex {
+    // offset: 0000 (6 bytes)
+    struct _Vertex vertex;
+    // offset: 0006
+    unsigned short rgb15;
+    // offset: 0008
+    unsigned char r0;
+    // offset: 0009
+    unsigned char g0;
+    // offset: 000A
+    unsigned char b0;
+    // offset: 000B
+    unsigned char code;
+} TVertex;
+
 // size: 0x54
 typedef struct _Terrain {
     // offset: 0000
