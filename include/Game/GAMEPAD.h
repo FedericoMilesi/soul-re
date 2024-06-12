@@ -4,6 +4,10 @@
 #include "common.h"
 #include "Game/GAMELOOP.h"
 
+extern ControllerPacket readGPBuffer1;
+
+extern ControllerPacket readGPBuffer2;
+
 void GAMEPAD_Shock1(int motor1_speed, int motor1_time);
 void GAMEPAD_Process(GameTracker *gameTracker);
 void GAMEPAD_GetData(long(*data)[5]);

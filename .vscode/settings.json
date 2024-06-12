@@ -34,6 +34,7 @@
         "mbmiss.h": "c",
         "instance.h": "c",
         "aadlib.h": "c",
-        "stream.h": "c"
+        "stream.h": "c",
+        "common.h": "c"
     }
 }

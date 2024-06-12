@@ -174,6 +174,62 @@ typedef struct DR_STP {
     unsigned long code[2];
 } DR_STP;
 
+typedef unsigned short PadData;
+
+typedef struct
+{
+    unsigned short buttons;
+    signed char xOffset;
+    signed char yOffset;
+}
+MouseData;
+
+typedef struct
+{
+    unsigned short digitalButtons;               /* Bit mask of plain keys. */
+    char centralTwist;                           /* Analogue twisting thing.*/
+    char buttonI;                                /* The I analogue button.  */
+    char buttonII;                               /* The II analogue button. */
+    char topLeft;                                /* The analogue tl button. */
+}
+NegconData;
+
+typedef struct
+{
+    unsigned char transStatus;  /* 0xff = no pad, bad pad, bad transmission */
+    unsigned char dataFormat;            /* Top 4 bits = type of controller */
+
+    union                                         /* Controller data union. */                   /* Controller data union. */
+    {
+        PadData    pad;                                 /* Plain pad.       */
+        NegconData negcon;                              /* Namco controller.*/
+    }
+    data;
+}
+TapCtrllerData;
+
+typedef struct
+{
+    TapCtrllerData ctrllers[4];               /* Just 4 controller packets. */
+}
+MultiTapData;
+
+typedef struct
+{
+    unsigned char transStatus;  /* 0xff = no pad, bad pad, bad transmission */
+    unsigned char dataFormat;            /* Top 4 bits = type of controller */
+    /* Bottom 4 == shorts of data written */
+    union                                         /* Controller data union. */
+    {
+        PadData      pad;                               /* Plain pad.       */
+        MouseData    mouse;                             /* Mouse.           */
+        NegconData   negcon;                            /* Namco controller.*/
+        MultiTapData tap;                               /* 4-way multi-tap. */
+    }
+    data;
+}
+ControllerPacket;
+
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);

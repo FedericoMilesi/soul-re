@@ -2,6 +2,7 @@
 #include "Game/OBTABLE.h"
 #include "Game/PSX/MAIN.h"
 #include "Game/CINEMA/CINEPSX.h"
+#include "Game/GAMEPAD.h"
 
 extern int StCdIntrFlag;
 
@@ -21,7 +22,17 @@ int CINE_CDIntrQuery()
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CINEMA/CINEPSX", CINE_Pad);
+unsigned short CINE_Pad(int pad)
+{
+    if (pad != 0)
+    {
+        return readGPBuffer2.data.pad;
+    }
+    else
+    {
+        return readGPBuffer1.data.pad;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CINEMA/CINEPSX", CINE_Play);
 
