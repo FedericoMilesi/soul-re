@@ -443,7 +443,24 @@ void RemoveAllObjects(GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetLevelWithID);
+Level *STREAM_GetLevelWithID(long id)
+{
+    Level *retLevel;
+    long i;
+
+    retLevel = NULL;
+
+    for (i = 0; i < 16; i++)
+    {
+        if ((StreamTracker.StreamList[i].used == 2) && (StreamTracker.StreamList[i].StreamUnitID == id))
+        {
+            retLevel = StreamTracker.StreamList[i].level;
+            break;
+        }
+    }
+
+    return retLevel;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetStreamUnitWithID);
 
