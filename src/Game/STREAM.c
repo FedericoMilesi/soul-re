@@ -483,7 +483,10 @@ StreamUnit *STREAM_GetStreamUnitWithID(long id)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_CalculateWaterLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsMorphInProgress);
+int STREAM_IsMorphInProgress()
+{
+    return gameTrackerX.gameData.asmData.MorphTime != 1000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetWaterZLevel);
 
