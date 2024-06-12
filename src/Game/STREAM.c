@@ -462,7 +462,24 @@ Level *STREAM_GetLevelWithID(long id)
     return retLevel;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetStreamUnitWithID);
+StreamUnit *STREAM_GetStreamUnitWithID(long id)
+{
+    StreamUnit *retUnit;
+    long i;
+
+    retUnit = NULL;
+
+    for (i = 0; i < 16; i++)
+    {
+        if ((StreamTracker.StreamList[i].used == 2) && (StreamTracker.StreamList[i].StreamUnitID == id))
+        {
+            retUnit = &StreamTracker.StreamList[i];
+            break;
+        }
+    }
+
+    return retUnit;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_CalculateWaterLevel);
 
