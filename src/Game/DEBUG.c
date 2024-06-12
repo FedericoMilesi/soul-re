@@ -616,7 +616,19 @@ void DEBUG_FogRestore()
     DEBUG_UpdateFog(NULL);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_SendCinematicSwitch);
+void DEBUG_SendCinematicSwitch()
+{
+    gameTrackerX.debugFlags2 ^= 0x200;
+
+    if ((gameTrackerX.debugFlags2 & 0x200))
+    {
+        INSTANCE_Broadcast(NULL, 0xE, 0x4000E, 1);
+    }
+    else
+    {
+        INSTANCE_Broadcast(NULL, 0xE, 0x4000E, 0);
+    }
+}
 
 void DEBUG_SendMoveTo()
 {
