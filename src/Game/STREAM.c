@@ -611,7 +611,25 @@ void STREAM_SetStreamFog(StreamUnit *streamUnit, short fogNear, short fogFar)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_ConnectStream);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_StreamLoadLevelAbort);
+void STREAM_StreamLoadLevelAbort(void *loadData, void *data, void *data2)
+{
+    StreamUnit *streamUnit;
+
+    (void)data;
+
+    streamUnit = (StreamUnit *)data2;
+
+    if (loadData != NULL)
+    {
+        MEMPACK_Free((char *)loadData);
+    }
+
+    streamUnit->level = NULL;
+
+    streamUnit->used = 0;
+
+    streamUnit->flags = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DoObjectLoadAndDump);
 
