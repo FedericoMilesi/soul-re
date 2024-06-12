@@ -429,7 +429,19 @@ void STREAM_RemoveAllObjectsNotInUse()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RemoveAllObjects);
+void RemoveAllObjects(GameTracker *gameTracker)
+{
+    int i;
+    ObjectTracker *tracker;
+
+    for (i = 0, tracker = &gameTracker->GlobalObjects[i]; i < 48; i++, tracker++)
+    {
+        if (tracker->objectStatus != 0)
+        {
+            STREAM_DumpObject(tracker);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetLevelWithID);
 
