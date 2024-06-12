@@ -335,7 +335,99 @@ int STREAM_IsObjectInAnyUnit(ObjectTracker *tracker)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RemoveAllObjectsNotInUse);
+void STREAM_RemoveAllObjectsNotInUse()
+{
+    int i;
+    int abort;
+    ObjectTracker *tracker;
+    ObjectTracker *trackerList;
+
+    trackerList = gameTrackerX.GlobalObjects;
+
+    for (tracker = trackerList, i = 0; i < 48; i++, tracker++)
+    {
+        Object *object;
+
+        if (tracker->objectStatus == 2)
+        {
+            object = tracker->object;
+
+            if ((!(object->oflags & 0x2000000)) && (STREAM_IsObjectInAnyUnit(tracker) == 0)
+            && (STREAM_IsAnInstanceUsingObject(object) == 0))
+            {
+                tracker->objectStatus = 3;
+            }
+        }
+    }
+
+    do
+    {
+        abort = 1;
+
+        for (tracker = trackerList, i = 0; i < 48; i++, tracker++)
+        {
+            if (tracker->objectStatus == 3)
+            {
+                int j;
+
+                for (j = 0; j < (char)tracker->numObjectsUsing; j++)
+                {
+                    if (trackerList[(int)tracker->objectsUsing[j]].objectStatus != 3)
+                    {
+                        tracker->objectStatus = 2;
+
+                        abort = 0;
+                        break;
+                    }
+                }
+            }
+        }
+    } while (abort == 0);
+
+    for (tracker = trackerList, i = 0; i < 48; i++, tracker++)
+    {
+        if (tracker->objectStatus == 3)
+        {
+            int j;
+            ObjectTracker *otr;
+
+            for (otr = trackerList, j = 0; j < 48; j++, otr++)
+            {
+                if ((otr->objectStatus == 1) || (otr->objectStatus == 2) || (otr->objectStatus == 4))
+                {
+                    int k;
+
+                    for (k = 0; k < (char)otr->numObjectsUsing; k++)
+                    {
+                        if ((char)otr->objectsUsing[k] == i)
+                        {
+                            int l;
+
+                            otr->numObjectsUsing--;
+
+                            for (l = k; l < (char)otr->numObjectsUsing; l++)
+                            {
+                                otr->objectsUsing[l] = otr->objectsUsing[l + 1];
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            STREAM_DumpObject(tracker);
+        }
+    }
+
+    for (tracker = trackerList, i = 0; i < 48; i++, tracker++)
+    {
+        if ((tracker->objectStatus == 1) && (STREAM_IsObjectInAnyUnit(tracker) == 0) && ((char)tracker->numObjectsUsing == 0))
+        {
+            STREAM_DumpObject(tracker);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RemoveAllObjects);
 
