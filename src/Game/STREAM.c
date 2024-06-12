@@ -631,7 +631,22 @@ void STREAM_StreamLoadLevelAbort(void *loadData, void *data, void *data2)
     streamUnit->flags = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DoObjectLoadAndDump);
+void STREAM_DoObjectLoadAndDump(StreamUnit *streamUnit)
+{
+    int i;
+
+    (void)streamUnit;
+
+    for (i = 0; i < 16; i++)
+    {
+        if (StreamTracker.StreamList[i].used == 1)
+        {
+            return;
+        }
+    }
+
+    STREAM_RemoveAllObjectsNotInUse();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FinishLoad);
 
