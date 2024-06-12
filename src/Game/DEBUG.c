@@ -618,7 +618,11 @@ void DEBUG_FogRestore()
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_SendCinematicSwitch);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_SendMoveTo);
+void DEBUG_SendMoveTo()
+{
+    INSTANCE_Broadcast(NULL, 0xE, 0x4000C, SetPositionData((gameTrackerX.playerInstance->position.x + (rand() & 2047)) - 1024,
+        (gameTrackerX.playerInstance->position.y + (rand() & 2047)) - 1024, gameTrackerX.playerInstance->position.z));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", process_cheat_codes);
 
