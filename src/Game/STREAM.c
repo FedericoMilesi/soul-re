@@ -734,7 +734,32 @@ void STREAM_StreamLoadLevelReturn(void *loadData, void *data, void *data2)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_UpdateLevelPointer);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_WhichUnitPointerIsIn);
+StreamUnit *STREAM_WhichUnitPointerIsIn(void *pointer)
+{
+    int i;
+    int size;
+    Level *level;
+
+    for (i = 0; i < 16; i++)
+    {
+        if (StreamTracker.StreamList[i].used == 2)
+        {
+            level = StreamTracker.StreamList[i].level;
+
+            if (level != NULL)
+            {
+                size = MEMPACK_Size((char *)level);
+
+                if ((level <= (Level *)pointer) && (((char *)level + size) >= (char *)pointer))
+                {
+                    return &StreamTracker.StreamList[i];
+                }
+            }
+        }
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_UpdateObjectPointer);
 
