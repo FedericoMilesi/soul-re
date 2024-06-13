@@ -855,14 +855,25 @@ void STREAM_DumpAllUnitsNotNeeded()
 
     for (i = 0; i < 16; i++)
     {
-        if ((StreamTracker.StreamList[i].used != 0) && (StreamTracker.StreamList[i].FrameCount != gameTrackerX.displayFrameCount))
+        if ((StreamTracker.StreamList[i].used != 0) && (StreamTracker.StreamList[i].FrameCount != (long)gameTrackerX.displayFrameCount))
         {
             STREAM_DumpUnit(&StreamTracker.StreamList[i], 1);
         }
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpAllLevels);
+void STREAM_DumpAllLevels(long IDNoRemove, int DoSave)
+{
+    int i;
+
+    for (i = 0; i < 16; i++)
+    {
+        if ((StreamTracker.StreamList[i].used != 0) && (StreamTracker.StreamList[i].StreamUnitID != IDNoRemove))
+        {
+            STREAM_DumpUnit(&StreamTracker.StreamList[i], DoSave);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadCurrentWarpRoom);
 
