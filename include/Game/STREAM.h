@@ -379,5 +379,6 @@ int STREAM_IsSpecialMonster(char *name);
 int STREAM_TryAndDumpNonResident(ObjectTracker *otr);
 void STREAM_DumpObject(ObjectTracker *objectTracker);
 void STREAM_FinishLoad(StreamUnit *streamUnit);
+void STREAM_DumpUnit(StreamUnit *streamUnit, long doSave);
 
 #endif

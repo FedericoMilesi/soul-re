@@ -849,7 +849,18 @@ void STREAM_MarkUnitNeeded(long streamID)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpUnit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpAllUnitsNotNeeded);
+void STREAM_DumpAllUnitsNotNeeded()
+{
+    int i;
+
+    for (i = 0; i < 16; i++)
+    {
+        if ((StreamTracker.StreamList[i].used != 0) && (StreamTracker.StreamList[i].FrameCount != gameTrackerX.displayFrameCount))
+        {
+            STREAM_DumpUnit(&StreamTracker.StreamList[i], 1);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpAllLevels);
 
