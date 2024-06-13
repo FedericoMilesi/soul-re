@@ -670,7 +670,58 @@ void STREAM_LoadLevelReturn(void *loadData, void *data, void *data2)
     STREAM_FinishLoad(((StreamUnit *)data2));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_StreamLoadLevelReturn);
+void STREAM_StreamLoadLevelReturn(void *loadData, void *data, void *data2)
+{
+    Level *level;
+    StreamUnit *streamUnit;
+
+    (void)data;
+
+    GetRCnt(0xF2000000);
+
+    gameTimer;
+
+    level = (Level *)loadData;
+
+    streamUnit = (StreamUnit *)data2;
+
+    streamUnit->StreamUnitID = level->streamUnitID;
+
+    if (streamUnit->used == 3)
+    {
+        streamUnit->used = 0;
+
+        streamUnit->flags = 0;
+
+        MEMPACK_Free((char *)streamUnit->level);
+
+        streamUnit->level = NULL;
+
+        return;
+    }
+
+    if (gameTrackerX.gameData.asmData.MorphType != 0)
+    {
+        STREAM_SetStreamFog(streamUnit, level->spectralFogNear, level->spectralFogFar);
+    }
+    else
+    {
+        STREAM_SetStreamFog(streamUnit, level->holdFogNear, level->holdFogFar);
+    }
+
+    STREAM_FinishLoad(streamUnit);
+
+    if ((gameTrackerX.playerInstance != NULL) && (level->streamUnitID == gameTrackerX.playerInstance->currentStreamUnitID))
+    {
+        strcpy(gameTrackerX.baseAreaName, level->worldName);
+
+        STREAM_SetMainFog(streamUnit);
+
+        gameTrackerX.StreamUnitID = level->streamUnitID;
+
+        gameTrackerX.level = level;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_UpdateLevelPointer);
 
