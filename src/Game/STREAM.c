@@ -729,7 +729,22 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_WhichUnitPointerIsIn);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_UpdateObjectPointer);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_UpdateInstanceCollisionInfo);
+void STREAM_UpdateInstanceCollisionInfo(HModel *oldHModel, HModel *newHModel)
+{
+    Instance *instance;
+
+    instance = gameTrackerX.instanceList->first;
+
+    while (instance != NULL)
+    {
+        if (instance->hModelList == oldHModel)
+        {
+            instance->hModelList = newHModel;
+        }
+
+        instance = instance->next;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadMainVram);
 
