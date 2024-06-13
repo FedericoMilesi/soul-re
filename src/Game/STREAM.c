@@ -6,6 +6,7 @@
 #include "Game/INSTANCE.h"
 #include "Game/OBTABLE.h"
 #include "Game/PSX/AADLIB.h"
+#include "Game/TIMER.h"
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FillOutFileNames);
@@ -650,7 +651,24 @@ void STREAM_DoObjectLoadAndDump(StreamUnit *streamUnit)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FinishLoad);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadLevelReturn);
+void STREAM_LoadLevelReturn(void *loadData, void *data, void *data2)
+{
+    (void)data;
+
+    GetRCnt(0xF2000000);
+
+    gameTimer;
+
+    ((StreamUnit *)data2)->StreamUnitID = ((Level *)loadData)->streamUnitID;
+
+    gameTrackerX.StreamUnitID = ((Level *)loadData)->streamUnitID;
+
+    gameTrackerX.level = (Level *)loadData;
+
+    STREAM_SetMainFog(((StreamUnit *)data2));
+
+    STREAM_FinishLoad(((StreamUnit *)data2));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_StreamLoadLevelReturn);
 

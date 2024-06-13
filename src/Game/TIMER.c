@@ -1,6 +1,5 @@
 #include "common.h"
-
-EXTERN volatile int gameTimer;
+#include "Game/TIMER.h"
 
 unsigned long TIMER_GetTimeMS()
 {

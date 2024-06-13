@@ -378,5 +378,6 @@ StreamUnit *FindStreamUnitFromLevel(Level *level);
 int STREAM_IsSpecialMonster(char *name);
 int STREAM_TryAndDumpNonResident(ObjectTracker *otr);
 void STREAM_DumpObject(ObjectTracker *objectTracker);
+void STREAM_FinishLoad(StreamUnit *streamUnit);
 
 #endif
