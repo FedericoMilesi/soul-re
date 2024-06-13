@@ -98,5 +98,6 @@ typedef struct LightInstance {
 
 void LIGHT_GetAmbient(ColorType *color, Instance *instance);
 void LIGHT_CalcDQPTable(Level *level);
+void LIGHT_Restore(LightInfo *lightInfo);
 
 #endif

@@ -7,6 +7,7 @@
 #include "Game/OBTABLE.h"
 #include "Game/PSX/AADLIB.h"
 #include "Game/TIMER.h"
+#include "Game/LIGHT3D.h"
 
 long CurrentWarpNumber;
 
@@ -773,7 +774,30 @@ void STREAM_MoveIntoNewStreamUnit()
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RemoveIntroducedLights);
+void RemoveIntroducedLights(Level *level)
+{
+    int i;
+
+    LIGHT_Restore(gameTrackerX.lightInfo);
+
+    gameTrackerX.lightInfo->numSavedColors = 0;
+
+    for (i = 0; i < level->numSpotLights; i++)
+    {
+        if ((level->spotLightList[i].flags & 0x10))
+        {
+            LIST_DeleteFunc(&level->spotLightList[i].node);
+        }
+    }
+
+    for (i = 0; i < level->numPointLights; i++)
+    {
+        if ((level->pointLightList[i].flags & 0x10))
+        {
+            LIST_DeleteFunc(&level->pointLightList[i].node);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RemoveInstancesWithIDInInstanceList);
 
