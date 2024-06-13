@@ -36,6 +36,7 @@
         "aadlib.h": "c",
         "stream.h": "c",
         "common.h": "c",
-        "light3d.h": "c"
+        "light3d.h": "c",
+        "saveinfo.h": "c"
     }
 }

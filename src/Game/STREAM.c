@@ -8,6 +8,7 @@
 #include "Game/PSX/AADLIB.h"
 #include "Game/TIMER.h"
 #include "Game/LIGHT3D.h"
+#include "Game/SAVEINFO.h"
 
 long CurrentWarpNumber;
 
@@ -799,7 +800,38 @@ void RemoveIntroducedLights(Level *level)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RemoveInstancesWithIDInInstanceList);
+void STREAM_RemoveInstancesWithIDInInstanceList(InstanceList *list, long id, Level *level)
+{
+    Instance *instance;
+    Instance *next;
+
+    instance = list->first;
+
+    while (instance != NULL)
+    {
+        next = instance->next;
+
+        if (instance->currentStreamUnitID == id)
+        {
+            SAVE_Instance(instance, level);
+
+            INSTANCE_ReallyRemoveInstance(list, instance, 0);
+
+            instance = next;
+        }
+        else
+        {
+            if (instance->birthStreamUnitID == id)
+            {
+                SAVE_Instance(instance, level);
+
+                instance->intro = NULL;
+            }
+
+            instance = next;
+        }
+    }
+}
 
 void STREAM_MarkUnitNeeded(long streamID)
 {

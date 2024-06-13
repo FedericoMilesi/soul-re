@@ -92,6 +92,7 @@ long SAVE_HasSavedIntro(Intro *intro, long currentStreamID);
 void SAVE_DoInstanceDeadDead(Instance *instance);
 SavedIntroSmall *SAVE_GetSavedSmallIntro(Instance *instance);
 SavedIntroSpline *SAVE_GetIntroSpline(Instance *instance);
+void SAVE_Instance(Instance *instance, Level *level);
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];
