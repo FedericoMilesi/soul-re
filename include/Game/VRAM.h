@@ -62,5 +62,6 @@ BlockVramEntry *VRAM_CheckVramSlot(short *x, short *y, short w, short h, int typ
 void VRAM_RearrangeVramsLayer(long whichLayer);
 void VRAM_InitMorphPalettes();
 void AdjustVramCoordsObject(int oldx, int oldy, int newx, int newy, Object *object);
+void VRAM_TransferBufferToVram(void *dataPtr, long dataSize, short status, void *data1, void *data2);
 
 #endif

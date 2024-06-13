@@ -11,8 +11,11 @@
 #include "Game/SAVEINFO.h"
 #include "Game/EVENT.h"
 #include "Game/PLAN/PLANAPI.h"
+#include "Game/VRAM.h"
 
 long CurrentWarpNumber;
+
+short M_TrackClutUpdate;
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FillOutFileNames);
@@ -752,7 +755,38 @@ void STREAM_UpdateInstanceCollisionInfo(HModel *oldHModel, HModel *newHModel)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadMainVram);
+void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit)
+{
+    char dramName[80];
+    char vramName[80];
+    VramBuffer *vramBuffer;
+    Level *level;
+
+    (void)baseAreaName;
+
+    level = streamUnit->level;
+
+    STREAM_FillOutFileNames(gameTracker->baseAreaName, dramName, vramName, NULL);
+
+    vramBuffer = (VramBuffer *)MEMPACK_Malloc((level->vramSize.w << 1) + 20, 35);
+
+    vramBuffer->lineOverFlow = (short *)(vramBuffer + 1);
+
+    vramBuffer->flags = 0;
+
+    vramBuffer->x = level->vramSize.x + 512;
+    vramBuffer->y = level->vramSize.y;
+    vramBuffer->w = level->vramSize.w;
+    vramBuffer->h = level->vramSize.h;
+
+    M_TrackClutUpdate = 0;
+
+    vramBuffer->yOffset = 0;
+
+    vramBuffer->lengthOfLeftOverData = 0;
+
+    LOAD_NonBlockingBufferedLoad(vramName, (void *)VRAM_TransferBufferToVram, vramBuffer, NULL);
+}
 
 void STREAM_MoveIntoNewStreamUnit()
 {

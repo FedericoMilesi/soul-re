@@ -39,6 +39,7 @@
         "light3d.h": "c",
         "saveinfo.h": "c",
         "mempack.h": "c",
-        "event.h": "c"
+        "event.h": "c",
+        "planapi.h": "c"
     }
 }
