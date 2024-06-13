@@ -54,5 +54,6 @@ void LOAD_AbortFileLoad(char *fileName, void *retFunc);
 LoadQueueEntry *STREAM_AddQueueEntryToHead();
 LoadQueueEntry *STREAM_AddQueueEntryToTail();
 void STREAM_NextLoadAsNormal();
+void LOAD_NonBlockingBinaryLoad(char *fileName, void *retFunc, void *retData, void *retData2, void **retPointer, int memType);
 
 #endif

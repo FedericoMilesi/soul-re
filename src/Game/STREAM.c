@@ -775,7 +775,117 @@ void STREAM_MoveIntoNewStreamUnit()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadLevel);
+StreamUnit *STREAM_LoadLevel(char *baseAreaName, StreamUnitPortal *streamPortal, int loadnext)
+{
+    int i;
+    long streamID;
+    StreamUnit *streamUnit;
+    Level *level;
+    char dramName[80];
+
+    (void)loadnext;
+
+    streamID = -1;
+
+    if (streamPortal != NULL)
+    {
+        streamID = streamPortal->streamID;
+    }
+
+    for (i = 0; i < 16; i++)
+    {
+        streamUnit = &StreamTracker.StreamList[i];
+
+        if ((streamUnit->used != 0) && (strcmpi(streamUnit->baseAreaName, baseAreaName) == 0))
+        {
+            if (streamUnit->used == 3)
+            {
+                streamUnit->used = 1;
+                break;
+            }
+            else if (streamUnit->used != 1)
+            {
+                streamUnit->FrameCount = 0;
+
+                if (streamPortal == NULL)
+                {
+                    strcpy(gameTrackerX.baseAreaName, baseAreaName);
+
+                    STREAM_SetMainFog(streamUnit);
+
+                    gameTrackerX.StreamUnitID = streamUnit->StreamUnitID;
+
+                    gameTrackerX.level = streamUnit->level;
+                }
+                else
+                {
+                    level = streamUnit->level;
+
+                    STREAM_ConnectStream(streamUnit);
+
+                    if (gameTrackerX.gameData.asmData.MorphType != 0)
+                    {
+                        STREAM_SetStreamFog(streamUnit, (short)level->spectralFogNear, (short)level->spectralFogFar);
+                    }
+                    else
+                    {
+                        STREAM_SetStreamFog(streamUnit, (short)level->holdFogNear, (short)level->holdFogFar);
+                    }
+                }
+
+                break;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    if (i == 16)
+    {
+        for (i = 0; i < 16; i++)
+        {
+            streamUnit = &StreamTracker.StreamList[i];
+
+            if (streamUnit->used == 0)
+            {
+                STREAM_FillOutFileNames(baseAreaName, dramName, NULL, NULL);
+
+                streamUnit->used = 1;
+
+                strcpy(streamUnit->baseAreaName, baseAreaName);
+
+                streamUnit->StreamUnitID = streamID;
+
+                streamUnit->FrameCount = 0;
+
+                streamUnit->flags = 0;
+
+                if (streamPortal == NULL)
+                {
+                    strcpy(gameTrackerX.baseAreaName, baseAreaName);
+
+                    gameTrackerX.StreamUnitID = streamUnit->StreamUnitID;
+
+                    LOAD_NonBlockingBinaryLoad(dramName, (void *)STREAM_LoadLevelReturn, NULL, streamUnit, (void **)&streamUnit->level, 2);
+
+                    break;
+                }
+                else
+                {
+                    streamPortal->toStreamUnit = NULL;
+
+                    LOAD_NonBlockingBinaryLoad(dramName, (void *)STREAM_StreamLoadLevelReturn, NULL, streamUnit, (void **)&streamUnit->level, 2);
+
+                    break;
+                }
+            }
+        }
+    }
+
+    return streamUnit;
+}
 
 void RemoveIntroducedLights(Level *level)
 {

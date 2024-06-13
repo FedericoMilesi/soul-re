@@ -414,5 +414,6 @@ void STREAM_FinishLoad(StreamUnit *streamUnit);
 void STREAM_DumpUnit(StreamUnit *streamUnit, long doSave);
 long WARPGATE_IsUnitWarpRoom(StreamUnit *streamUnit);
 void WARPGATE_RemoveFromArray(StreamUnit *streamUnit);
+void STREAM_ConnectStream(StreamUnit *streamUnit);
 
 #endif
