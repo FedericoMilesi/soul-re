@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/G2/ANMCTRLR.h"
 
 EXTERN STATIC int AlgoControlFlag;
 
