@@ -801,7 +801,19 @@ void RemoveIntroducedLights(Level *level)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RemoveInstancesWithIDInInstanceList);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_MarkUnitNeeded);
+void STREAM_MarkUnitNeeded(long streamID)
+{
+    int i;
+
+    for (i = 0; i < 16; i++)
+    {
+        if ((StreamTracker.StreamList[i].used != 0) && (streamID == StreamTracker.StreamList[i].StreamUnitID))
+        {
+            StreamTracker.StreamList[i].FrameCount = gameTrackerX.displayFrameCount;
+            break;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpUnit);
 
