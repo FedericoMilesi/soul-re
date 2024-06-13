@@ -8,6 +8,8 @@
 #include "Game/PSX/AADLIB.h"
 #include "Game/TIMER.h"
 
+long CurrentWarpNumber;
+
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FillOutFileNames);
 
@@ -748,7 +750,26 @@ void STREAM_UpdateInstanceCollisionInfo(HModel *oldHModel, HModel *newHModel)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadMainVram);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_MoveIntoNewStreamUnit);
+void STREAM_MoveIntoNewStreamUnit()
+{
+    gameTrackerX.playerInstance->cachedTFace = -1;
+    gameTrackerX.playerInstance->cachedTFaceLevel = NULL;
+
+    gameTrackerX.playerInstance->currentStreamUnitID = gameTrackerX.moveRazielToStreamID;
+
+    INSTANCE_UpdateFamilyStreamUnitID(gameTrackerX.playerInstance);
+
+    GAMELOOP_StreamLevelLoadAndInit(gameTrackerX.S_baseAreaName, &gameTrackerX, gameTrackerX.toSignal, gameTrackerX.fromSignal);
+
+    gameTrackerX.SwitchToNewStreamUnit = 0;
+
+    if (gameTrackerX.SwitchToNewWarpIndex != -1)
+    {
+        SndPlayVolPan(388, 127, 64, 0);
+
+        CurrentWarpNumber = gameTrackerX.SwitchToNewWarpIndex;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadLevel);
 
