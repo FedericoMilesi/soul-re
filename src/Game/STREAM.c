@@ -9,6 +9,8 @@
 #include "Game/TIMER.h"
 #include "Game/LIGHT3D.h"
 #include "Game/SAVEINFO.h"
+#include "Game/EVENT.h"
+#include "Game/PLAN/PLANAPI.h"
 
 long CurrentWarpNumber;
 
@@ -847,7 +849,86 @@ void STREAM_MarkUnitNeeded(long streamID)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpUnit);
+void STREAM_DumpUnit(StreamUnit *streamUnit, long doSave)
+{
+    int i;
+    int j;
+    int numportals;
+
+    for (i = 0; i < 16; i++)
+    {
+        if (StreamTracker.StreamList[i].used == 2)
+        {
+            StreamUnitPortal *p; // not from decls.h
+
+            numportals = *(long *)StreamTracker.StreamList[i].level->terrain->StreamUnits;
+
+            p = (StreamUnitPortal *)((long *)StreamTracker.StreamList[i].level->terrain->StreamUnits + 1);
+
+            for (j = 0; j < numportals; j++, p++)
+            {
+                if (p->toStreamUnit == streamUnit)
+                {
+                    p->toStreamUnit = NULL;
+                }
+            }
+        }
+    }
+
+    if ((streamUnit->used == 1) || (streamUnit->used == 3))
+    {
+        char dramName[80];
+
+        STREAM_FillOutFileNames(streamUnit->baseAreaName, dramName, NULL, NULL);
+
+        LOAD_AbortFileLoad(dramName, (void *)STREAM_StreamLoadLevelAbort);
+
+        streamUnit->used = 0;
+
+        streamUnit->flags = 0;
+        return;
+    }
+
+    if (WARPGATE_IsUnitWarpRoom(streamUnit) != 0)
+    {
+        WARPGATE_RemoveFromArray(streamUnit);
+    }
+
+    EVENT_RemoveStreamToInstanceList(streamUnit);
+
+    for (i = 0; i < streamUnit->level->NumberOfSFXMarkers; i++)
+    {
+        SFXMkr *sfxMkr;
+
+        sfxMkr = &streamUnit->level->SFXMarkerList[i];
+
+        SOUND_EndInstanceSounds(sfxMkr->soundData, sfxMkr->sfxTbl);
+    }
+
+    if (streamUnit->sfxFileHandle != 0)
+    {
+        aadFreeDynamicSfx(streamUnit->sfxFileHandle);
+    }
+
+    PLANAPI_DeleteNodeFromPoolByUnit(streamUnit->StreamUnitID);
+
+    STREAM_RemoveInstancesWithIDInInstanceList(gameTrackerX.instanceList, streamUnit->StreamUnitID, streamUnit->level);
+
+    if (doSave != 0)
+    {
+        EVENT_SaveEventsFromLevel(streamUnit->StreamUnitID, streamUnit->level);
+
+        SAVE_CreatedSavedLevel(streamUnit->StreamUnitID, streamUnit->level);
+    }
+
+    MEMPACK_Free((char *)streamUnit->level);
+
+    streamUnit->level = NULL;
+
+    streamUnit->used = 0;
+
+    streamUnit->flags = 0;
+}
 
 void STREAM_DumpAllUnitsNotNeeded()
 {

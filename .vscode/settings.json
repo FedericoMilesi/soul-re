@@ -37,6 +37,8 @@
         "stream.h": "c",
         "common.h": "c",
         "light3d.h": "c",
-        "saveinfo.h": "c"
+        "saveinfo.h": "c",
+        "mempack.h": "c",
+        "event.h": "c"
     }
 }

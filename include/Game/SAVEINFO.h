@@ -82,6 +82,20 @@ typedef struct _MonsterSaveInfo {
     // unsigned int causeOfDeath;
 } MonsterSaveInfo;
 
+// size: 0x8
+typedef struct SavedLevel {
+    // offset: 0000
+    unsigned char savedID;
+    // offset: 0001
+    unsigned char shiftedSaveSize;
+    // offset: 0002
+    short areaID;
+    // offset: 0004
+    short waterZ;
+    // offset: 0006
+    short numberBSPTreesSaved;
+} SavedLevel;
+
 void SAVE_DebugSaveGame();
 void SAVE_LoadSaveGame();
 void SAVE_LoadSaveGame();
@@ -93,6 +107,7 @@ void SAVE_DoInstanceDeadDead(Instance *instance);
 SavedIntroSmall *SAVE_GetSavedSmallIntro(Instance *instance);
 SavedIntroSpline *SAVE_GetIntroSpline(Instance *instance);
 void SAVE_Instance(Instance *instance, Level *level);
+SavedLevel *SAVE_CreatedSavedLevel(long areaID, Level *level);
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];

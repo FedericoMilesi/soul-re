@@ -366,6 +366,38 @@ typedef struct STracker {
     struct _StreamUnit StreamList[16];
 } STracker;
 
+// size: 0x5C
+typedef struct StreamUnitPortal {
+    // offset: 0000 (16 bytes)
+    char tolevelname[16];
+    // offset: 0010
+    long MSignalID;
+    // offset: 0014
+    long streamID;
+    // offset: 0018
+    short minx;
+    // offset: 001A
+    short miny;
+    // offset: 001C
+    short minz;
+    // offset: 001E
+    short flags;
+    // offset: 0020
+    short maxx;
+    // offset: 0022
+    short maxy;
+    // offset: 0024
+    short maxz;
+    // offset: 0026
+    short pad2;
+    // offset: 0028 (64 bytes)
+    struct _StreamUnit *toStreamUnit;
+    // offset: 002C (24 bytes)
+    struct _SVector t1[3];
+    // offset: 0044 (24 bytes)
+    struct _SVector t2[3];
+} StreamUnitPortal;
+
 STracker StreamTracker;
 
 Level *STREAM_GetLevelWithID(long id);
@@ -380,5 +412,7 @@ int STREAM_TryAndDumpNonResident(ObjectTracker *otr);
 void STREAM_DumpObject(ObjectTracker *objectTracker);
 void STREAM_FinishLoad(StreamUnit *streamUnit);
 void STREAM_DumpUnit(StreamUnit *streamUnit, long doSave);
+long WARPGATE_IsUnitWarpRoom(StreamUnit *streamUnit);
+void WARPGATE_RemoveFromArray(StreamUnit *streamUnit);
 
 #endif

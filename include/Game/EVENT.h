@@ -39,8 +39,28 @@ typedef struct SoundObject {
     } data;
 } SoundObject;
 
+// size: 0x24
+typedef struct _SFXMkr {
+    // offset: 0000
+    unsigned char *soundData;
+    // offset: 0004
+    long uniqueID;
+    // offset: 0008 (12 bytes)
+    struct SoundInstance sfxTbl[4];
+    // offset: 0014 (6 bytes)
+    struct _Position pos;
+    // offset: 001A
+    short pad;
+    // offset: 001C
+    long livesInOnePlace;
+    // offset: 0020
+    long inSpectral;
+} SFXMkr;
+
 void EVENT_Init();
 void EVENT_AddInstanceToInstanceList(Instance *instance);
 void EVENT_RemoveInstanceFromInstanceList(Instance *instance);
+void EVENT_SaveEventsFromLevel(long levelID, Level *level);
+void EVENT_RemoveStreamToInstanceList(StreamUnit *stream);
 
 #endif
