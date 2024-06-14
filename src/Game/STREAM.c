@@ -1352,7 +1352,20 @@ void WARPGATE_RelocateLoadedWarpRooms(StreamUnit *mainUnit, StreamUnitPortal *st
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_GetWarpRoomIndex);
+long WARPGATE_GetWarpRoomIndex(char *name)
+{
+    int i;
+
+    for (i = 0; i < 14; i++)
+    {
+        if (strcmpi(WarpRoomArray[i].name, name) == 0)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_UpdateAddToArray);
 
