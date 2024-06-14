@@ -3,6 +3,7 @@
 #include "Game/MATH3D.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MEMPACK.h"
+#include "Game/STREAM.h"
 
 EXTERN STATIC UW_ScreenXY *ScreenMorphArray;
 
@@ -14,12 +15,30 @@ EXTERN STATIC long UW_scalexInc;
 
 EXTERN STATIC long UW_angleInc;
 
+extern char D_800D1DC8[];
+
 static inline int UNDRWRLD_GetDispPage()
 {
     return gameTrackerX.gameData.asmData.dispPage;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_StartProcess);
+void UNDERWORLD_StartProcess()
+{
+    INSTANCE_Post(gameTrackerX.playerInstance, 0x40001, 0);
+
+    STREAM_DumpAllLevels(gameTrackerX.playerInstance->currentStreamUnitID, 1);
+
+    UNDERWORLD_InitDisplayProcess();
+
+    UNDERWORLD_LoadLevel(D_800D1DC8, &gameTrackerX);
+
+    if (ScreenMorphArray != NULL)
+    {
+        MEMPACK_Free((char *)ScreenMorphArray);
+
+        ScreenMorphArray = NULL;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_RotateScreenStep);
 
