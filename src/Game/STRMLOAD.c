@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/LOAD3D.h"
 #include "Game/STRMLOAD.h"
+#include "Game/DEBUG.h"
 
 static LoadQueueEntry LoadQueue[40];
 
@@ -17,6 +18,8 @@ static LoadQueueEntry *loadTail;
 static int numLoads;
 
 extern char D_800D19E8[];
+
+extern char D_800D1980[];
 
 void STREAM_NextLoadFromHead()
 {
@@ -95,7 +98,41 @@ void STREAM_RemoveQueueEntry(LoadQueueEntry *entry, LoadQueueEntry *prev)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_AddQueueEntryToTail);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_AddQueueEntryToHead);
+LoadQueueEntry *STREAM_AddQueueEntryToHead()
+{
+    LoadQueueEntry *entry;
+
+    entry = loadFree;
+
+    if (entry == NULL)
+    {
+        DEBUG_FatalError(D_800D1980);
+    }
+
+    loadFree = entry->next;
+
+    if ((loadHead == NULL) || (loadHead->status == 1) || (loadHead->status == 5) || (loadHead->status == 10) || (loadHead->status == 8))
+    {
+        entry->next = loadHead;
+
+        loadHead = entry;
+    }
+    else
+    {
+        entry->next = loadHead->next;
+
+        loadHead->next = entry;
+    }
+
+    if (loadTail == NULL)
+    {
+        loadTail = entry;
+    }
+
+    numLoads++;
+
+    return entry;
+}
 
 int STREAM_IsCdBusy(long *numberInQueue)
 {

@@ -42,6 +42,7 @@
         "event.h": "c",
         "planapi.h": "c",
         "fx.h": "c",
-        "glyph.h": "c"
+        "glyph.h": "c",
+        "debug.h": "c"
     }
 }

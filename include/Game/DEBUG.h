@@ -50,4 +50,6 @@ extern unsigned long debugRazielFlags1;
 extern unsigned long debugRazielFlags2;
 extern unsigned long debugRazielFlags3;
 
+void DEBUG_FatalError(char *fmt);
+
 #endif
