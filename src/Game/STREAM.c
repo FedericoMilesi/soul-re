@@ -1442,7 +1442,10 @@ int WARPGATE_IsWarpgateActive()
     return WarpGateLoadInfo.loading != 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsWarpgateUsable);
+int WARPGATE_IsWarpgateUsable()
+{
+    return (WarpGateLoadInfo.loading == 4) && (WarpGateLoadInfo.blocked == 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsWarpgateReady);
 
