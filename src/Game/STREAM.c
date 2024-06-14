@@ -1422,7 +1422,15 @@ void WARPGATE_StartUsingWarpgate()
     WarpGateLoadInfo.warpgate_in_use = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_EndUsingWarpgate);
+void WARPGATE_EndUsingWarpgate()
+{
+    if (WarpGateLoadInfo.warpgate_in_use == 1)
+    {
+        SndPlayVolPan(386, 127, 64, 0);
+    }
+
+    WarpGateLoadInfo.warpgate_in_use = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsWarpgateInUse);
 
