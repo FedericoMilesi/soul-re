@@ -1379,7 +1379,13 @@ void WARPGATE_UpdateAddToArray(StreamUnit *streamUnit)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_RemoveFromArray);
+void WARPGATE_RemoveFromArray(StreamUnit *streamUnit)
+{
+    if (WARPGATE_GetWarpRoomIndex(streamUnit->baseAreaName) == -1)
+    {
+        CurrentWarpNumber = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_Init);
 
