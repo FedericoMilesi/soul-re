@@ -28,8 +28,43 @@ WarpGateLoadInformation WarpGateLoadInfo;
 
 extern char D_800D1954[];
 
-void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName);
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FillOutFileNames);
+extern char D_800D17B0[];
+
+extern char D_800D17BC[];
+
+extern char D_800D17D8[];
+
+extern char D_800D17F4[];
+
+void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName)
+{
+    char text[16];
+    char *number;
+
+    strcpy(text, baseAreaName);
+
+    number = strpbrk(text, D_800D17B0);
+
+    if (number != 0)
+    {
+        *number = 0;
+    }
+
+    if (dramName != NULL)
+    {
+        sprintf(dramName, D_800D17BC, text, baseAreaName);
+    }
+
+    if (vramName != NULL)
+    {
+        sprintf(vramName, D_800D17D8, text, baseAreaName);
+    }
+
+    if (sfxName != NULL)
+    {
+        sprintf(sfxName, D_800D17F4, text, baseAreaName);
+    }
+}
 
 void STREAM_AbortAreaLoad(char *baseAreaName)
 {
