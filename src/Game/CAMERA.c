@@ -2058,7 +2058,51 @@ int CAMERA_CheckIfPointOnLine(SVector *linePoint, SVector *linept1, SVector *lin
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_FindLinePoint);
+int CAMERA_FindLinePoint(Position *point, SVector *linept1, SVector *linept2, int targetdistsq, SVector *results)
+{
+    SVector outPoint;
+    SVector line;
+    int calc;
+    int hits;
+
+    hits = 0;
+
+    SUB_SVEC(SVector, &line, SVector, linept2, SVector, linept1);
+
+    CAMERA_NearestPointOnLineVec(&outPoint, linept1, &line, point);
+
+    calc = targetdistsq - CAMERA_GetDistSq(&outPoint, (SVector *)point);
+
+    if (calc > 0)
+    {
+        SVector linePoint;
+        int n;
+
+        calc = MATH3D_FastSqrt0(calc);
+
+        CAMERA_Normalize(&line);
+
+        for (n = 0; n < 2; n++)
+        {
+            linePoint.x = outPoint.x + ((line.x * calc) / 4096);
+            linePoint.y = outPoint.y + ((line.y * calc) / 4096);
+            linePoint.z = outPoint.z + ((line.z * calc) / 4096);
+
+            if (CAMERA_CheckIfPointOnLine(&linePoint, linept1, linept2) != 0)
+            {
+                COPY_SVEC(SVector, &results[hits], SVector, &linePoint);
+
+                hits++;
+            }
+
+            line.x = -line.x;
+            line.y = -line.y;
+            line.z = -line.z;
+        }
+    }
+
+    return hits;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineGetNearestPoint2);
 
