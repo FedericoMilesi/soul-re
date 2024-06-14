@@ -1454,7 +1454,34 @@ int WARPGATE_IsWarpgateReady()
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsWarpgateSpectral);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsObjectOnWarpSide);
+int WARPGATE_IsObjectOnWarpSide(Instance *instance)
+{
+    int side;
+    int temp, temp2; // not from decls.h
+
+    if (WarpGateLoadInfo.warpFaceInstance != NULL)
+    {
+        side = ~(WarpGateLoadInfo.warpFaceInstance->position.y - theCamera.core.position.y);
+
+        temp = side < 0;
+
+        temp2 = temp;
+
+        if ((WarpGateLoadInfo.warpFaceInstance->position.y - instance->position.y) < 0)
+        {
+            if (temp == 1)
+            {
+                return 1;
+            }
+        }
+        else if (temp2 == 0)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsItActive);
 
