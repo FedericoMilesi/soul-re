@@ -1460,7 +1460,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsItActive);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsUnitWarpRoom);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_FixUnit);
+void WARPGATE_FixUnit(StreamUnit *streamUnit)
+{
+    if (WARPGATE_IsUnitWarpRoom(streamUnit) != 0)
+    {
+        WARPGATE_IsItActive(streamUnit);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_MarkWarpUnitsNeeded);
 
