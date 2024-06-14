@@ -1338,7 +1338,19 @@ void STREAM_LoadCurrentWarpRoom(StreamUnitPortal *streamPortal, StreamUnit *main
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_RelocateLoadedWarpRooms);
+void WARPGATE_RelocateLoadedWarpRooms(StreamUnit *mainUnit, StreamUnitPortal *streamPortal)
+{
+    int i;
+
+    for (i = 0; i < 16; i++)
+    {
+        if ((StreamTracker.StreamList[i].used == 2) && (&StreamTracker.StreamList[i] != mainUnit)
+        && ((StreamTracker.StreamList[i].flags & 0x1)))
+        {
+            STREAM_LoadLevel(StreamTracker.StreamList[i].baseAreaName, streamPortal, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_GetWarpRoomIndex);
 
