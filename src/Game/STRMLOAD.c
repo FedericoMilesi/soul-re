@@ -16,6 +16,8 @@ static LoadQueueEntry *loadTail;
 
 static int numLoads;
 
+extern char D_800D19E8[];
+
 void STREAM_NextLoadFromHead()
 {
     loadFromHead = 1;
@@ -242,7 +244,21 @@ long *LOAD_ReadFile(char *fileName, unsigned char memType)
     return (long *)loadAddr;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_ChangeDirectory);
+void LOAD_ChangeDirectory(char *name)
+{
+    LoadQueueEntry *currentEntry;
+
+    currentEntry = STREAM_AddQueueEntryToTail();
+
+    gCurDir = LOAD_HashUnit(name);
+
+    currentEntry->loadEntry.dirHash = gCurDir;
+    currentEntry->loadEntry.fileHash = 0;
+
+    currentEntry->status = 10;
+
+    sprintf(&currentEntry->loadEntry.fileName, D_800D19E8, name);
+}
 
 void LOAD_AbortDirectoryChange(char *name)
 {
