@@ -1367,7 +1367,17 @@ long WARPGATE_GetWarpRoomIndex(char *name)
     return -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_UpdateAddToArray);
+void WARPGATE_UpdateAddToArray(StreamUnit *streamUnit)
+{
+    int i;
+
+    i = WARPGATE_GetWarpRoomIndex(streamUnit->baseAreaName);
+
+    if (i != -1)
+    {
+        WarpRoomArray[i].streamUnit = streamUnit;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_RemoveFromArray);
 
