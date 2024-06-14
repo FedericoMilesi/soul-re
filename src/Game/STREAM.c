@@ -1483,7 +1483,43 @@ int WARPGATE_IsObjectOnWarpSide(Instance *instance)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsItActive);
+void WARPGATE_IsItActive(StreamUnit *streamUnit)
+{
+    Level *level;
+    int d;
+    int temp; // not from decls.h
+
+    level = streamUnit->level;
+
+    streamUnit->flags |= 0x1;
+
+    if (level->PuzzleInstances == NULL)
+    {
+        return;
+    }
+
+    for (d = 0; d < level->PuzzleInstances->numPuzzles; d++)
+    {
+        temp = level->PuzzleInstances->eventInstances[d]->eventNumber;
+
+        if (temp != 1)
+        {
+            continue;
+        }
+
+        if ((gameTrackerX.streamFlags & 0x400000))
+        {
+            *level->PuzzleInstances->eventInstances[d]->eventVariables = temp;
+        }
+
+        if (*level->PuzzleInstances->eventInstances[d]->eventVariables == temp)
+        {
+            streamUnit->flags |= 0x8;
+        }
+
+        break;
+    }
+}
 
 long WARPGATE_IsUnitWarpRoom(StreamUnit *streamUnit)
 {

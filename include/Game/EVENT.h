@@ -3,6 +3,34 @@
 
 #include "common.h"
 
+// size: 0x1C
+typedef struct Event {
+    // offset: 0000
+    short eventNumber;
+    // offset: 0002
+    short numInstances;
+    // offset: 0004
+    unsigned char numActions;
+    // offset: 0005
+    unsigned char processingPuppetShow;
+    // offset: 0006 (10 bytes)
+    short eventVariables[5];
+    // offset: 0010 (2 bytes)
+    struct EventBasicObject **instanceList;
+    // offset: 0014 (8 bytes)
+    struct ScriptPCode **conditionalList;
+    // offset: 0018 (8 bytes)
+    struct ScriptPCode **actionList;
+} Event;
+
+// size: 0x8
+typedef struct EventPointers {
+    // offset: 0000
+    long numPuzzles;
+    // offset: 0004 (4 bytes)
+    struct Event *eventInstances[1];
+} EventPointers;
+
 // size: 0xC
 typedef struct EventAliasCommandStruct {
     // offset: 0000
