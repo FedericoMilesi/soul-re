@@ -1603,7 +1603,24 @@ long WARPGATE_IncrementIndex()
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_CalcWarpFade);
+void WARPGATE_CalcWarpFade(int timeInc)
+{
+    WarpGateLoadInfo.warpFaceInstance->fadeValue = WarpGateLoadInfo.fadeValue;
+
+    WarpGateLoadInfo.curTime += timeInc;
+
+    WarpGateLoadInfo.fadeValue = 4096 - (short)((WarpGateLoadInfo.curTime << 12) / WarpGateLoadInfo.maxTime);
+
+    if (WarpGateLoadInfo.fadeValue >= 4097)
+    {
+        WarpGateLoadInfo.fadeValue = 4096;
+    }
+
+    if (WarpGateLoadInfo.fadeValue < 0)
+    {
+        WarpGateLoadInfo.fadeValue = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_DecrementIndex);
 
