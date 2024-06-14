@@ -1387,7 +1387,30 @@ void WARPGATE_RemoveFromArray(StreamUnit *streamUnit)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_Init);
+void WARPGATE_Init()
+{
+    int n;
+
+    WarpGateLoadInfo.fadeValue = 4096;
+
+    WarpGateLoadInfo.warpgate_in_use = 0;
+
+    WarpGateLoadInfo.loading = 0;
+
+    WarpGateLoadInfo.blocked = 0;
+
+    WarpGateLoadInfo.curTime = 0;
+    WarpGateLoadInfo.maxTime = 61440;
+
+    WarpGateLoadInfo.warpFaceInstance = NULL;
+
+    CurrentWarpNumber = 0;
+
+    for (n = 13; n >= 0; n--)
+    {
+        WarpRoomArray[n].streamUnit = NULL;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_StartUsingWarpgate);
 
