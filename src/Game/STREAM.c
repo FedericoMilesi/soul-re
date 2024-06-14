@@ -26,6 +26,8 @@ WarpRoom WarpRoomArray[14];
 
 WarpGateLoadInformation WarpGateLoadInfo;
 
+extern char D_800D1954[];
+
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FillOutFileNames);
 
@@ -1453,7 +1455,10 @@ int WARPGATE_IsWarpgateReady()
     return WarpGateLoadInfo.loading == 4;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsWarpgateSpectral);
+int WARPGATE_IsWarpgateSpectral()
+{
+    return strcmpi(WarpRoomArray[CurrentWarpNumber].name, D_800D1954) == 0;
+}
 
 int WARPGATE_IsObjectOnWarpSide(Instance *instance)
 {
