@@ -14,6 +14,8 @@
 #include "Game/VRAM.h"
 #include "Game/FX.h"
 #include "Game/RELMOD.h"
+#include "Game/SPLINE.h"
+#include "Game/CAMERA.h"
 
 long CurrentWarpNumber;
 
@@ -734,7 +736,108 @@ void STREAM_StreamLoadLevelReturn(void *loadData, void *data, void *data2)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_UpdateLevelPointer);
+void STREAM_UpdateLevelPointer(Level *oldLevel, Level *newLevel, long sizeOfLevel)
+{
+    long i;
+    long offset;
+    GameTracker *gameTracker;
+
+    offset = (int)newLevel - (int)oldLevel;
+
+    for (i = 0; i < 16; i++)
+    {
+        if ((StreamTracker.StreamList[i].used == 2) && (StreamTracker.StreamList[i].level == oldLevel))
+        {
+            StreamTracker.StreamList[i].level = newLevel;
+            break;
+        }
+    }
+
+    gameTracker = &gameTrackerX;
+
+    if (gameTrackerX.level == oldLevel)
+    {
+        gameTrackerX.level = newLevel;
+    }
+
+    {
+        Instance *instance;
+
+        instance = gameTracker->instanceList->first;
+
+        while (instance != NULL)
+        {
+            i = (int)oldLevel + sizeOfLevel;
+
+            if (IN_BOUNDS(instance->intro, oldLevel, i) != 0)
+            {
+                instance->intro = (Intro *)OFFSET_DATA(instance->intro, offset);
+            }
+
+            if (IN_BOUNDS(instance->introData, oldLevel, i) != 0)
+            {
+                instance->introData = (void *)OFFSET_DATA(instance->introData, offset);
+            }
+
+            if (IN_BOUNDS(instance->tface, oldLevel, i) != 0)
+            {
+                instance->tface = (TFace *)OFFSET_DATA(instance->tface, offset);
+            }
+
+            if (IN_BOUNDS(instance->waterFace, oldLevel, i) != 0)
+            {
+                instance->waterFace = (TFace *)OFFSET_DATA(instance->waterFace, offset);
+            }
+
+            if (IN_BOUNDS(instance->waterFaceTerrain, oldLevel, i) != 0)
+            {
+                instance->waterFaceTerrain = (Terrain *)OFFSET_DATA(instance->waterFaceTerrain, offset);
+            }
+
+            if (IN_BOUNDS(instance->oldTFace, oldLevel, i) != 0)
+            {
+                instance->oldTFace = (TFace *)OFFSET_DATA(instance->oldTFace, offset);
+            }
+
+            if (IN_BOUNDS(instance->tfaceLevel, oldLevel, i) != 0)
+            {
+                instance->tfaceLevel = (void *)OFFSET_DATA(instance->tfaceLevel, offset);
+            }
+
+            if (IN_BOUNDS(instance->cachedTFaceLevel, oldLevel, i) != 0)
+            {
+                instance->cachedTFaceLevel = (void *)OFFSET_DATA(instance->cachedTFaceLevel, offset);
+            }
+
+            instance = instance->next;
+        }
+    }
+
+    if (IN_BOUNDS(theCamera.data.Cinematic.posSpline, oldLevel, (int)oldLevel + sizeOfLevel) != 0)
+    {
+        theCamera.data.Cinematic.posSpline = (MultiSpline *)OFFSET_DATA(theCamera.data.Cinematic.posSpline, offset);
+    }
+
+    if (IN_BOUNDS(theCamera.data.Cinematic.targetSpline, oldLevel, (int)oldLevel + sizeOfLevel) != 0)
+    {
+        theCamera.data.Cinematic.targetSpline = (MultiSpline *)OFFSET_DATA(theCamera.data.Cinematic.targetSpline, offset);
+    }
+
+    for (i = 0; i <= theCamera.stack; i++)
+    {
+        if (IN_BOUNDS(theCamera.savedCinematic[i].posSpline, oldLevel, (int)oldLevel + sizeOfLevel) != 0)
+        {
+            theCamera.savedCinematic[i].posSpline = (MultiSpline *)OFFSET_DATA(theCamera.savedCinematic[i].posSpline, offset);
+        }
+
+        if (IN_BOUNDS(theCamera.savedCinematic[i].targetSpline, oldLevel, (int)oldLevel + sizeOfLevel) != 0)
+        {
+            theCamera.savedCinematic[i].targetSpline = (MultiSpline *)OFFSET_DATA(theCamera.savedCinematic[i].targetSpline, offset);
+        }
+    }
+
+    EVENT_UpdateResetSignalArrayAndWaterMovement(oldLevel, newLevel, sizeOfLevel);
+}
 
 StreamUnit *STREAM_WhichUnitPointerIsIn(void *pointer)
 {

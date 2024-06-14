@@ -62,5 +62,6 @@ void EVENT_AddInstanceToInstanceList(Instance *instance);
 void EVENT_RemoveInstanceFromInstanceList(Instance *instance);
 void EVENT_SaveEventsFromLevel(long levelID, Level *level);
 void EVENT_RemoveStreamToInstanceList(StreamUnit *stream);
+void EVENT_UpdateResetSignalArrayAndWaterMovement(Level *oldLevel, Level *newLevel, long sizeOfLevel);
 
 #endif
