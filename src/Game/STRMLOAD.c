@@ -96,7 +96,36 @@ void STREAM_RemoveQueueEntry(LoadQueueEntry *entry, LoadQueueEntry *prev)
     numLoads--;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_AddQueueEntryToTail);
+LoadQueueEntry *STREAM_AddQueueEntryToTail()
+{
+    LoadQueueEntry *entry;
+
+    entry = loadFree;
+
+    if (entry == NULL)
+    {
+        DEBUG_FatalError(D_800D1980);
+    }
+
+    loadFree = entry->next;
+
+    entry->next = NULL;
+
+    if (loadTail != NULL)
+    {
+        loadTail->next = entry;
+    }
+    else
+    {
+        loadHead = entry;
+    }
+
+    loadTail = entry;
+
+    numLoads++;
+
+    return entry;
+}
 
 LoadQueueEntry *STREAM_AddQueueEntryToHead()
 {
