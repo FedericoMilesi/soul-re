@@ -40,6 +40,7 @@
         "saveinfo.h": "c",
         "mempack.h": "c",
         "event.h": "c",
-        "planapi.h": "c"
+        "planapi.h": "c",
+        "fx.h": "c"
     }
 }

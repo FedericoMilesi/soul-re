@@ -21,6 +21,10 @@ long CurrentWarpNumber;
 
 short M_TrackClutUpdate;
 
+WarpRoom WarpRoomArray[14];
+
+WarpGateLoadInformation WarpGateLoadInfo;
+
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FillOutFileNames);
 
@@ -1315,7 +1319,24 @@ void STREAM_DumpAllLevels(long IDNoRemove, int DoSave)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadCurrentWarpRoom);
+void STREAM_LoadCurrentWarpRoom(StreamUnitPortal *streamPortal, StreamUnit *mainStreamUnit)
+{
+    if (strcmpi(mainStreamUnit->level->worldName, WarpRoomArray[CurrentWarpNumber].name) == 0)
+    {
+        WarpGateLoadInfo.loading = 3;
+
+        WarpGateLoadInfo.curTime = WarpGateLoadInfo.maxTime;
+    }
+
+    WarpRoomArray[CurrentWarpNumber].streamUnit = STREAM_LoadLevel(WarpRoomArray[CurrentWarpNumber].name, streamPortal, 0);
+
+    if (WarpRoomArray[CurrentWarpNumber].streamUnit != NULL)
+    {
+        streamPortal->toStreamUnit = WarpRoomArray[CurrentWarpNumber].streamUnit;
+
+        WarpRoomArray[CurrentWarpNumber].streamUnit->flags |= 0x1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_RelocateLoadedWarpRooms);
 

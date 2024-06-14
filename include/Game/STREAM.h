@@ -401,6 +401,32 @@ typedef struct StreamUnitPortal {
     struct _SVector t2[3];
 } StreamUnitPortal;
 
+// size: 0x14
+typedef struct WarpRoom {
+    // offset: 0000 (16 bytes)
+    char name[16];
+    // offset: 0010 (64 bytes)
+    struct _StreamUnit *streamUnit;
+} WarpRoom;
+
+// size: 0x14
+typedef struct WarpGateLoadInformation {
+    // offset: 0000
+    int warpgate_in_use;
+    // offset: 0004
+    char loading;
+    // offset: 0005
+    char blocked;
+    // offset: 0006
+    short fadeValue;
+    // offset: 0008
+    long curTime;
+    // offset: 000C
+    long maxTime;
+    // offset: 0010 (668 bytes)
+    struct _Instance *warpFaceInstance;
+} WarpGateLoadInformation;
+
 STracker StreamTracker;
 
 Level *STREAM_GetLevelWithID(long id);
