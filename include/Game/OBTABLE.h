@@ -111,5 +111,8 @@ void OBTABLE_GetInstanceCollideFunc(Instance *instance);
 void OBTABLE_InstanceInit(Instance *instance);
 void OBTABLE_InitAnimPointers(ObjectTracker *objectTracker);
 void OBTABLE_RemoveObjectEntry(Object *object);
+void OBTABLE_RelocateObjectTune(Object *object, long offset);
+void OBTABLE_RelocateInstanceObject(Instance *instance, long offset);
+void OBTABLE_ChangeObjectAccessPointers(Object *oldObject, Object *newObject);
 
 #endif

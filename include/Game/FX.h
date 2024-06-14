@@ -490,5 +490,6 @@ void FX_SoulReaverBlade(Instance *instance, unsigned long **drawot);
 TextureMT3 *FX_GetTextureObject(Object *object, int modelnum, int texnum);
 void FX_InsertGeneralEffect(void *ptr);
 FXParticle *FX_GetParticle(Instance *instance, short startSegment);
+void FX_RelocateFXPointers(Object *oldObject, Object *newObject, long sizeOfObject);
 
 #endif

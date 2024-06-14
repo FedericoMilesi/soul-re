@@ -12,6 +12,8 @@
 #include "Game/EVENT.h"
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/VRAM.h"
+#include "Game/FX.h"
+#include "Game/RELMOD.h"
 
 long CurrentWarpNumber;
 
@@ -761,7 +763,92 @@ StreamUnit *STREAM_WhichUnitPointerIsIn(void *pointer)
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_UpdateObjectPointer);
+void STREAM_UpdateObjectPointer(Object *oldObject, Object *newObject, long sizeOfObject)
+{
+    long i;
+    long d;
+    GameTracker *gameTracker;
+    long offset;
+    ObjectTracker *otr;
+
+    gameTracker = &gameTrackerX;
+
+    offset = (int)newObject - (int)oldObject;
+
+    otr = FindObjectInTracker(oldObject);
+
+    if (otr != NULL)
+    {
+        otr->object = newObject;
+
+        for (i = 0; i < otr->numObjectsUsing; i++)
+        {
+            int j;
+            Object *object;
+
+            object = gameTracker->GlobalObjects[(int)otr->objectsUsing[i]].object;
+
+            if (object != NULL)
+            {
+                for (j = 0; j < object->numAnims; j++)
+                {
+                    if (IN_BOUNDS(object->animList[j], oldObject, (int)oldObject + sizeOfObject) != 0)
+                    {
+                        object->animList[j] = (G2AnimKeylist *)OFFSET_DATA(object->animList[j], offset);
+                    }
+                }
+            }
+        }
+
+        OBTABLE_ChangeObjectAccessPointers(oldObject, newObject);
+
+        if (((newObject->oflags & 0x8000000)) && (newObject->relocList != NULL) && (newObject->relocModule != NULL))
+        {
+            RELMOD_RelocModulePointers((int)newObject->relocModule, offset, (int *)newObject->relocList);
+        }
+
+        {
+            Instance *instance;
+
+            instance = gameTracker->instanceList->first;
+
+            while (instance != NULL)
+            {
+                if (instance->object == oldObject)
+                {
+                    instance->object = newObject;
+
+                    if (instance->hModelList != NULL)
+                    {
+                        for (i = 0; i < instance->object->numModels; i++)
+                        {
+                            for (d = 0; d < instance->hModelList[i].numHPrims; d++)
+                            {
+                                instance->hModelList[i].hPrimList[d].data.hsphere = (HSphere *)OFFSET_DATA(instance->hModelList[i].hPrimList[d].data.hsphere, offset);
+                            }
+                        }
+                    }
+
+                    OBTABLE_RelocateInstanceObject(instance, offset);
+                }
+
+                if (IN_BOUNDS(instance->data, oldObject, (int)oldObject + sizeOfObject) != 0)
+                {
+                    instance->data = (void *)OFFSET_DATA(instance->data, offset);
+                }
+
+                instance = instance->next;
+            }
+        }
+    }
+
+    OBTABLE_RelocateObjectTune(newObject, offset);
+
+    if ((newObject->oflags2 & 0x20000000))
+    {
+        FX_RelocateFXPointers(oldObject, newObject, sizeOfObject);
+    }
+}
 
 void STREAM_UpdateInstanceCollisionInfo(HModel *oldHModel, HModel *newHModel)
 {

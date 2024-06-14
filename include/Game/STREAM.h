@@ -4,6 +4,9 @@
 #include "common.h"
 #include "Game/STATE.h"
 
+#define OFFSET_DATA(x, offset) (((x) == 0) ? 0 : ((uintptr_t)(x) + offset))
+#define IN_BOUNDS(x, level, max) (((uintptr_t)(level) <= (uintptr_t)(x)) && ((uintptr_t)(x) <= (uintptr_t)(max)))
+
 // size: 0x4C
 typedef struct Intro {
     // offset: 0000 (16 bytes)
