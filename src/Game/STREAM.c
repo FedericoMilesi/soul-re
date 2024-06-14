@@ -1556,7 +1556,18 @@ void WARPGATE_FixUnit(StreamUnit *streamUnit)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_MarkWarpUnitsNeeded);
+void STREAM_MarkWarpUnitsNeeded()
+{
+    int i;
+
+    for (i = 0; i < 16; i++)
+    {
+        if ((StreamTracker.StreamList[i].flags & 0x1))
+        {
+            StreamTracker.StreamList[i].FrameCount = gameTrackerX.displayFrameCount;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IncrementIndex);
 
