@@ -1458,7 +1458,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsObjectOnWarpSide);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsItActive);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IsUnitWarpRoom);
+long WARPGATE_IsUnitWarpRoom(StreamUnit *streamUnit)
+{
+    Level *level;
+    long isWarpRoom;
+    StreamUnitPortal *streamPortal;
+    long numPortals;
+    long d;
+
+    level = streamUnit->level;
+
+    isWarpRoom = 0;
+
+    numPortals = *(long *)level->terrain->StreamUnits;
+
+    streamPortal = (StreamUnitPortal *)((long *)level->terrain->StreamUnits + 1);
+
+    for (d = 0; d < numPortals; d++, streamPortal++)
+    {
+        if ((streamPortal->flags & 0x1))
+        {
+            isWarpRoom = 1;
+        }
+    }
+
+    return isWarpRoom;
+}
 
 void WARPGATE_FixUnit(StreamUnit *streamUnit)
 {
