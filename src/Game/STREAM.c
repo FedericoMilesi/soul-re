@@ -1622,7 +1622,48 @@ void WARPGATE_CalcWarpFade(int timeInc)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_DecrementIndex);
+long WARPGATE_DecrementIndex()
+{
+    long result;
+
+    result = 1;
+
+    if (WarpGateLoadInfo.loading == 4)
+    {
+        SndPlayVolPan(387, 127, 64, 0);
+
+        WarpGateLoadInfo.loading = 1;
+
+        WarpGateLoadInfo.curTime = 0;
+
+        WarpGateLoadInfo.warpFaceInstance->fadeValue = 4096;
+
+        WarpGateLoadInfo.warpFaceInstance = NULL;
+
+        WarpRoomArray[CurrentWarpNumber].streamUnit = NULL;
+
+        CurrentWarpNumber--;
+
+        if (CurrentWarpNumber < 0)
+        {
+            CurrentWarpNumber = 13;
+        }
+
+        if (strcmpi(gameTrackerX.baseAreaName, WarpRoomArray[CurrentWarpNumber].name) == 0)
+        {
+            CurrentWarpNumber--;
+
+            if (CurrentWarpNumber < 0)
+            {
+                CurrentWarpNumber = 13;
+            }
+        }
+
+        hud_warp_arrow_flash = 8192;
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", PreloadAllConnectedUnits);
 
