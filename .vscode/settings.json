@@ -41,6 +41,7 @@
         "mempack.h": "c",
         "event.h": "c",
         "planapi.h": "c",
-        "fx.h": "c"
+        "fx.h": "c",
+        "glyph.h": "c"
     }
 }

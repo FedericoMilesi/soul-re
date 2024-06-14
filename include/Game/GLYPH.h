@@ -43,4 +43,6 @@ typedef struct _GlyphTuneData {
 
 void _GlyphSelectProcess(Instance *instance, int data1, int data2);
 
+int hud_warp_arrow_flash;
+
 #endif

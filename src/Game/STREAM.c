@@ -16,6 +16,7 @@
 #include "Game/RELMOD.h"
 #include "Game/SPLINE.h"
 #include "Game/CAMERA.h"
+#include "Game/GLYPH.h"
 
 long CurrentWarpNumber;
 
@@ -1569,7 +1570,38 @@ void STREAM_MarkWarpUnitsNeeded()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_IncrementIndex);
+long WARPGATE_IncrementIndex()
+{
+    long result;
+
+    result = 1;
+
+    if (WarpGateLoadInfo.loading == 4)
+    {
+        SndPlayVolPan(387, 127, 64, 0);
+
+        WarpGateLoadInfo.loading = 1;
+
+        WarpGateLoadInfo.curTime = 0;
+
+        WarpGateLoadInfo.warpFaceInstance->fadeValue = 4096;
+
+        WarpGateLoadInfo.warpFaceInstance = NULL;
+
+        WarpRoomArray[CurrentWarpNumber].streamUnit = NULL;
+
+        CurrentWarpNumber = (CurrentWarpNumber + 1) % 14;
+
+        if (strcmpi(gameTrackerX.baseAreaName, WarpRoomArray[CurrentWarpNumber].name) == 0)
+        {
+            CurrentWarpNumber = (CurrentWarpNumber + 1) % 14;
+        }
+
+        hud_warp_arrow_flash = -8192;
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_CalcWarpFade);
 

@@ -32,8 +32,6 @@ EXTERN STATIC SVector HUD_Cap_Pos;
 
 EXTERN STATIC SVector HUD_Cap_Vel;
 
-int hud_warp_arrow_flash;
-
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
 
 void GlyphCollide()
