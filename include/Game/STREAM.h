@@ -446,5 +446,6 @@ void WARPGATE_RemoveFromArray(StreamUnit *streamUnit);
 void STREAM_ConnectStream(StreamUnit *streamUnit);
 void STREAM_DumpAllLevels(long IDNoRemove, int DoSave);
 void STREAM_PackVRAMObject(ObjectTracker *objectTracker);
+int STREAM_IsMonster(char *name);
 
 #endif

@@ -18,6 +18,7 @@
 #include "Game/CAMERA.h"
 #include "Game/GLYPH.h"
 #include "Game/LOAD3D.h"
+#include "Game/DEBUG.h"
 
 long CurrentWarpNumber;
 
@@ -38,6 +39,12 @@ extern char D_800D17D8[];
 extern char D_800D17F4[];
 
 extern char D_800D1810[];
+
+extern char D_800D18E4[];
+
+extern char D_800D1910[];
+
+extern char D_800D1928[];
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName)
 {
@@ -306,7 +313,65 @@ int STREAM_TryAndDumpANonResidentObject()
     return -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", InsertGlobalObject);
+int InsertGlobalObject(char *name, GameTracker *gameTracker)
+{
+    char string[64];
+    char vramname[64];
+    int i;
+    ObjectTracker *otr;
+
+    i = -1;
+
+    if (((!(gameTrackerX.gameFlags & 0x4000000)) || (STREAM_IsSpecialMonster(name) == 0)) && ((!(gameTracker->debugFlags2 & 0x8000)) || (STREAM_IsMonster(name) == 0)))
+    {
+        otr = gameTracker->GlobalObjects;
+
+        for (i = 0; i < 48; i++, otr++)
+        {
+            if ((otr->objectStatus != 0) && (strcmpi(otr->name, name) == 0))
+            {
+                break;
+            }
+        }
+
+        if (i == 48)
+        {
+            otr = gameTracker->GlobalObjects;
+
+            for (i = 0; i < 48; i++, otr++)
+            {
+                if (otr->objectStatus == 0)
+                {
+                    break;
+                }
+            }
+
+            if (i == 48)
+            {
+                i = STREAM_TryAndDumpANonResidentObject();
+
+                if (i == -1)
+                {
+                    DEBUG_FatalError(D_800D18E4, 48);
+                }
+            }
+
+            sprintf(string, D_800D1910, name, name);
+            sprintf(vramname, D_800D1928, name, name);
+
+            strcpy(otr->name, name);
+
+            otr->objectStatus = 1;
+
+            LOAD_NonBlockingBinaryLoad(string, (void *)STREAM_LoadObjectReturn, (void *)otr, NULL, (void **)&otr->object, 1);
+
+            otr->numInUse = 0;
+            otr->numObjectsUsing = 0;
+        }
+    }
+
+    return i;
+}
 
 ObjectTracker *STREAM_GetObjectTracker(char *name)
 {

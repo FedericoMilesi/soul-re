@@ -44,6 +44,7 @@
         "fx.h": "c",
         "glyph.h": "c",
         "debug.h": "c",
-        "relmod.h": "c"
+        "relmod.h": "c",
+        "spline.h": "c"
     }
 }
