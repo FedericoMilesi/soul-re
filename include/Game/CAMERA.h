@@ -486,6 +486,7 @@ void CAMERA_Adjust_rotation(Camera *camera, long rotation);
 void AngleMoveToward(short *current_ptr, short destination, short step);
 void CAMERA_Adjust(Camera *camera, long adjust);
 void CAMERA_ChangeTo(Camera *camera, CameraKey *cameraKey);
+void CAMERA_Lock(Camera *camera, long lock);
 
 extern int CameraCenterDelay;
 Camera theCamera;
