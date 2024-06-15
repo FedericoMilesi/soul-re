@@ -2162,7 +2162,21 @@ void PreloadAllConnectedUnits(StreamUnit *streamUnit, SVector *offset)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateCameras);
+void RelocateCameras(CameraKey *cameraList, long numCameras, SVector *offset)
+{
+    int i;
+
+    for (i = 0; i < numCameras; i++)
+    {
+        cameraList[i].x += offset->x;
+        cameraList[i].y += offset->y;
+        cameraList[i].z += offset->z;
+
+        cameraList[i].tx += offset->x;
+        cameraList[i].ty += offset->y;
+        cameraList[i].tz += offset->z;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateSavedCameras);
 
