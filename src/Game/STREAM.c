@@ -17,6 +17,7 @@
 #include "Game/SPLINE.h"
 #include "Game/CAMERA.h"
 #include "Game/GLYPH.h"
+#include "Game/LOAD3D.h"
 
 long CurrentWarpNumber;
 
@@ -35,6 +36,8 @@ extern char D_800D17BC[];
 extern char D_800D17D8[];
 
 extern char D_800D17F4[];
+
+extern char D_800D1810[];
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName)
 {
@@ -146,7 +149,54 @@ StreamUnit *FindStreamUnitFromLevel(Level *level)
     return ret;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_LoadObjectReturn);
+void STREAM_LoadObjectReturn(void *loadData, void *data, void *data2)
+{
+    Object *object;
+    ObjectTracker *objectTracker;
+
+    (void)data2;
+
+    GetRCnt(0xF2000000);
+
+    object = (Object *)loadData;
+
+    objectTracker = (ObjectTracker *)data;
+
+    gameTimer;
+
+    if (((object->oflags & 0x8000000)) && (object->relocList != NULL) && (object->relocModule != NULL))
+    {
+        RELMOD_InitModulePointers((int)object->relocModule, (int *)object->relocList);
+    }
+
+    STREAM_PackVRAMObject(objectTracker);
+
+    OBTABLE_InitAnimPointers(objectTracker);
+    OBTABLE_InitObjectWithID(object);
+
+    if ((object->oflags2 & 0x800000))
+    {
+        char objDsfxFileName[64];
+
+        sprintf(objDsfxFileName, D_800D1810, objectTracker->name, objectTracker->name);
+
+        object->sfxFileHandle = 0;
+
+        if (LOAD_DoesFileExist(objDsfxFileName) != 0)
+        {
+            object->sfxFileHandle = aadLoadDynamicSfx(objectTracker->name, 0, 0);
+        }
+    }
+
+    if (objectTracker->vramBlock == NULL)
+    {
+        objectTracker->objectStatus = 2;
+    }
+    else
+    {
+        objectTracker->objectStatus = 4;
+    }
+}
 
 void STREAM_DumpMonster(ObjectTracker *dumpee)
 {

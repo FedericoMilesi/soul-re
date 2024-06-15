@@ -8,5 +8,6 @@ long LOAD_HashUnit(char *name);
 void LOAD_InitCdLoader(char *bigFileName, char *voiceFileName);
 long LOAD_GetSearchDirectory();
 void LOAD_SetSearchDirectory(long id);
+long LOAD_DoesFileExist(char *fileName);
 
 #endif

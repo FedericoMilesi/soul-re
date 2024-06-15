@@ -43,6 +43,7 @@
         "planapi.h": "c",
         "fx.h": "c",
         "glyph.h": "c",
-        "debug.h": "c"
+        "debug.h": "c",
+        "relmod.h": "c"
     }
 }
