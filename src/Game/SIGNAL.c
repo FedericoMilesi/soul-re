@@ -21,7 +21,14 @@ long SIGNAL_HandleCameraAdjust(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCamera);
+long SIGNAL_HandleCamera(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    CAMERA_ChangeTo(&theCamera, signal->data.cameraKey);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_RelocateCamera);
 
