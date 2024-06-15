@@ -482,7 +482,50 @@ void STREAM_DumpLoadingObjects()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpObject);
+void STREAM_DumpObject(ObjectTracker *objectTracker)
+{
+    Object *object;
+    char dramName[64];
+
+    object = objectTracker->object;
+
+    if (objectTracker->objectStatus == 1)
+    {
+        sprintf(dramName, D_800D1910, objectTracker->name, objectTracker->name);
+
+        LOAD_AbortFileLoad(dramName, (void *)STREAM_StreamLoadObjectAbort);
+    }
+    else if (object != NULL)
+    {
+        if (!(object->oflags & 0x2000000))
+        {
+            if (objectTracker->vramBlock != NULL)
+            {
+                VRAM_ClearVramBlock((BlockVramEntry *)objectTracker->vramBlock);
+            }
+
+            if (((object->oflags2 & 0x800000)) && (object->sfxFileHandle != 0))
+            {
+                aadFreeDynamicSfx(object->sfxFileHandle);
+            }
+
+            OBTABLE_RemoveObjectEntry(object);
+
+            MEMPACK_Free((char *)object);
+
+            objectTracker->objectStatus = 0;
+        }
+
+        if (object == NULL)
+        {
+            objectTracker->objectStatus = 0;
+        }
+    }
+    else
+    {
+        objectTracker->objectStatus = 0;
+    }
+}
 
 int STREAM_IsObjectInAnyUnit(ObjectTracker *tracker)
 {
