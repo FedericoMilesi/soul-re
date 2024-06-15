@@ -19,6 +19,7 @@
 #include "Game/GLYPH.h"
 #include "Game/LOAD3D.h"
 #include "Game/DEBUG.h"
+#include "Game/SIGNAL.h"
 
 long CurrentWarpNumber;
 
@@ -1025,7 +1026,67 @@ void STREAM_DoObjectLoadAndDump(StreamUnit *streamUnit)
     STREAM_RemoveAllObjectsNotInUse();
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_FinishLoad);
+void STREAM_FinishLoad(StreamUnit *streamUnit)
+{
+    Level *level;
+    char sfxName[80];
+
+    STREAM_FillOutFileNames(streamUnit->baseAreaName, NULL, NULL, sfxName);
+
+    level = streamUnit->level;
+
+    level->morphLastStep = -1;
+
+    streamUnit->sfxFileHandle = 0;
+
+    if (LOAD_DoesFileExist(sfxName) != 0)
+    {
+        streamUnit->sfxFileHandle = aadLoadDynamicSfx(streamUnit->baseAreaName, streamUnit->StreamUnitID, 1);
+    }
+
+    LoadLevelObjects(streamUnit);
+
+    streamUnit->FogColor = *(long *)&level->backColorR;
+
+    level->fogFar = streamUnit->TargetFogFar;
+    level->fogNear = streamUnit->TargetFogNear;
+
+    LIGHT_CalcDQPTable(level);
+
+    STREAM_CalculateWaterLevel(level);
+
+    if (gameTrackerX.gameData.asmData.MorphType == 1)
+    {
+        MORPH_UpdateNormals(level);
+    }
+
+    STREAM_ConnectStream(streamUnit);
+
+    streamUnit->used = 2;
+
+    STREAM_DoObjectLoadAndDump(streamUnit);
+
+    EVENT_LoadEventsForLevel(streamUnit->StreamUnitID, level);
+
+    PLANAPI_InitPlanMkrList(streamUnit);
+
+    if (level->startUnitLoadedSignal != NULL)
+    {
+        level->startUnitLoadedSignal->flags |= 0x1;
+
+        SIGNAL_HandleSignal(gameTrackerX.playerInstance, &level->startUnitLoadedSignal->signalList[0], 0);
+
+        EVENT_AddSignalToReset(level->startUnitLoadedSignal);
+    }
+
+    SAVE_IntroForStreamID(streamUnit);
+
+    SAVE_UpdateLevelWithSave(streamUnit);
+
+    EVENT_AddStreamToInstanceList(streamUnit);
+
+    WARPGATE_FixUnit(streamUnit);
+}
 
 void STREAM_LoadLevelReturn(void *loadData, void *data, void *data2)
 {

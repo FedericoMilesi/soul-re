@@ -108,6 +108,8 @@ SavedIntroSmall *SAVE_GetSavedSmallIntro(Instance *instance);
 SavedIntroSpline *SAVE_GetIntroSpline(Instance *instance);
 void SAVE_Instance(Instance *instance, Level *level);
 SavedLevel *SAVE_CreatedSavedLevel(long areaID, Level *level);
+void SAVE_IntroForStreamID(StreamUnit *streamUnit);
+void SAVE_UpdateLevelWithSave(StreamUnit *streamUnit);
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];

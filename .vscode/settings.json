@@ -45,6 +45,11 @@
         "glyph.h": "c",
         "debug.h": "c",
         "relmod.h": "c",
-        "spline.h": "c"
+        "spline.h": "c",
+        "compare": "cpp",
+        "type_traits": "cpp",
+        "cmath": "cpp",
+        "limits": "cpp",
+        "new": "cpp"
     }
 }
