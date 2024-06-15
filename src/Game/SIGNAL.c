@@ -54,7 +54,14 @@ long SIGNAL_HandleCameraLock(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraUnlock);
+long SIGNAL_HandleCameraUnlock(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    CAMERA_Unlock(&theCamera, signal->data.cameraUnlock);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraSmooth);
 
