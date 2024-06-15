@@ -488,6 +488,7 @@ void CAMERA_Adjust(Camera *camera, long adjust);
 void CAMERA_ChangeTo(Camera *camera, CameraKey *cameraKey);
 void CAMERA_Lock(Camera *camera, long lock);
 void CAMERA_Unlock(Camera *camera, long unlock);
+void CAMERA_SetSmoothValue(Camera *camera, long smooth);
 
 extern int CameraCenterDelay;
 Camera theCamera;
