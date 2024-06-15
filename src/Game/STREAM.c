@@ -2087,7 +2087,78 @@ long WARPGATE_DecrementIndex()
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", PreloadAllConnectedUnits);
+void PreloadAllConnectedUnits(StreamUnit *streamUnit, SVector *offset)
+{
+    int i;
+    char text[16];
+    int numportals;
+    char *commapos;
+    StreamUnitPortal *stream;
+
+    gameTrackerX.displayFrameCount++;
+
+    numportals = *(long *)streamUnit->level->terrain->StreamUnits;
+
+    stream = (StreamUnitPortal *)((long *)streamUnit->level->terrain->StreamUnits + 1);
+
+    for (i = 0; i < numportals; i++)
+    {
+        strcpy(text, stream[i].tolevelname);
+
+        commapos = strchr(text, ',');
+
+        if (commapos != NULL)
+        {
+            *commapos = 0;
+        }
+
+        if (strcmpi(text, D_800D1940) == 0)
+        {
+            STREAM_MarkWarpUnitsNeeded();
+        }
+        else
+        {
+            STREAM_MarkUnitNeeded(stream[i].streamID);
+        }
+    }
+
+    STREAM_MarkUnitNeeded(streamUnit->StreamUnitID);
+
+    STREAM_DumpAllUnitsNotNeeded();
+
+    RelocateLevelWithInstances(streamUnit->level, offset);
+
+    MEMPACK_DoGarbageCollection();
+
+    numportals = *(long *)streamUnit->level->terrain->StreamUnits;
+
+    for (i = 0; i < numportals; i++)
+    {
+        stream = (StreamUnitPortal *)((long *)streamUnit->level->terrain->StreamUnits + 1) + i;
+
+        strcpy(text, stream->tolevelname);
+
+        commapos = strchr(text, ',');
+
+        if (commapos != NULL)
+        {
+            *commapos = 0;
+
+            if (strcmpi(text, D_800D1940) == 0)
+            {
+                stream->flags |= 0x1;
+
+                stream->toStreamUnit = NULL;
+
+                WARPGATE_RelocateLoadedWarpRooms(streamUnit, stream);
+            }
+            else
+            {
+                STREAM_LoadLevel(text, stream, 1);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateLevel);
 

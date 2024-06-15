@@ -31,5 +31,6 @@ char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType);
 void MEMPACK_Free(char *address);
 long MEMPACK_MemoryValidFunc(char *address);
 unsigned long MEMPACK_Size(char *address);
+void MEMPACK_DoGarbageCollection();
 
 #endif

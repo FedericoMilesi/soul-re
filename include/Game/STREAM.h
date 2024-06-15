@@ -451,5 +451,6 @@ void WARPGATE_UpdateAddToArray(StreamUnit *streamUnit);
 void RelocateLevel(Level *level, SVector *offset);
 void MORPH_UpdateNormals(Level *BaseLevel);
 void WARPGATE_FixUnit(StreamUnit *streamUnit);
+void RelocateLevelWithInstances(Level *level, SVector *offset);
 
 #endif
