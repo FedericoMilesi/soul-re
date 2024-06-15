@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/SIGNAL.h"
 #include "Game/CAMERA.h"
+#include "Game/STREAM.h"
 
 long SIGNAL_HandleLightGroup(Instance *instance, Signal *signal)
 {
@@ -30,7 +31,10 @@ long SIGNAL_HandleCamera(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_RelocateCamera);
+void SIGNAL_RelocateCamera(Signal *signal, long offset)
+{
+    signal->data.cameraKey = (CameraKey *)OFFSET_DATA(signal->data.cameraKey, offset);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraMode);
 
