@@ -72,7 +72,14 @@ long SIGNAL_HandleCameraSmooth(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraTimer);
+long SIGNAL_HandleCameraTimer(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    CAMERA_SetTimer(&theCamera, signal->data.cameraTimer);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraSave);
 
