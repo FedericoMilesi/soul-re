@@ -484,6 +484,7 @@ void CAMERA_ChangeToUnderWater(Camera *camera, Instance *instance);
 int WARPGATE_IsWarpgateActive();
 void CAMERA_Adjust_rotation(Camera *camera, long rotation);
 void AngleMoveToward(short *current_ptr, short destination, short step);
+void CAMERA_Adjust(Camera *camera, long adjust);
 
 extern int CameraCenterDelay;
 Camera theCamera;

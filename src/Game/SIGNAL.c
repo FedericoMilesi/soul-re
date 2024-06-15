@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/SIGNAL.h"
+#include "Game/CAMERA.h"
 
 long SIGNAL_HandleLightGroup(Instance *instance, Signal *signal)
 {
@@ -11,7 +12,14 @@ long SIGNAL_HandleLightGroup(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraAdjust);
+long SIGNAL_HandleCameraAdjust(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    CAMERA_Adjust(&theCamera, signal->data.cameraAdjust);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCamera);
 
