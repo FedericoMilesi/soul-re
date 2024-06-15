@@ -46,6 +46,10 @@ extern char D_800D1910[];
 
 extern char D_800D1928[];
 
+extern char D_800D1940[];
+
+extern char D_800D194C[];
+
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName)
 {
     char text[16];
@@ -823,7 +827,166 @@ void STREAM_SetStreamFog(StreamUnit *streamUnit, short fogNear, short fogFar)
     streamUnit->UnitFogNear = unitFogHold;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_ConnectStream);
+void STREAM_ConnectStream(StreamUnit *streamUnit)
+{
+    StreamUnit *mainUnit;
+    StreamUnitPortal *streamPortal;
+    int numportals;
+    StreamUnitPortal *streamPortal2;
+    int numportals2;
+    int i;
+    int j;
+    char text[16];
+    char *commapos;
+    int signalID;
+
+    WARPGATE_UpdateAddToArray(streamUnit);
+
+    if (gameTrackerX.StreamUnitID != streamUnit->StreamUnitID)
+    {
+        mainUnit = STREAM_GetStreamUnitWithID(gameTrackerX.StreamUnitID);
+
+        numportals2 = *(long *)streamUnit->level->terrain->StreamUnits;
+
+        streamPortal2 = (StreamUnitPortal *)((long *)streamUnit->level->terrain->StreamUnits + 1);
+
+        for (j = 0; j < numportals2; j++, streamPortal2++)
+        {
+            StreamUnit *connectStream;
+
+            strcpy(text, streamPortal2->tolevelname);
+
+            commapos = strchr(text, ',');
+
+            if (commapos != NULL)
+            {
+                *commapos = 0;
+
+                signalID = atoi(commapos + 1);
+            }
+            else
+            {
+                signalID = 0;
+            }
+
+            connectStream = STREAM_GetStreamUnitWithID(streamPortal2->streamID);
+
+            if ((strcmpi(text, D_800D1940) == 0) && (WARPGATE_IsUnitWarpRoom(mainUnit) != 0))
+            {
+                connectStream = mainUnit;
+            }
+
+            streamPortal2->toStreamUnit = connectStream;
+
+            if ((connectStream == NULL) || (connectStream != mainUnit))
+            {
+                continue;
+            }
+
+            numportals = *(long *)mainUnit->level->terrain->StreamUnits;
+
+            streamPortal = (StreamUnitPortal *)((long *)mainUnit->level->terrain->StreamUnits + 1);
+
+            for (i = 0; i < numportals; i++, streamPortal++)
+            {
+                if (signalID == streamPortal->MSignalID)
+                {
+                    SVector offset;
+
+                    offset.x = streamPortal->minx - streamPortal2->minx;
+                    offset.y = streamPortal->miny - streamPortal2->miny;
+                    offset.z = streamPortal->minz - streamPortal2->minz;
+
+                    RelocateLevel(streamUnit->level, &offset);
+                    break;
+                }
+            }
+        }
+
+        {
+            long d;
+            StreamUnit *connectStream;
+
+            connectStream = StreamTracker.StreamList;
+
+            for (d = 0; d < 16; d++, connectStream++)
+            {
+                if ((connectStream->used == 2) && (connectStream != streamUnit))
+                {
+                    numportals2 = *(long *)connectStream->level->terrain->StreamUnits;
+
+                    streamPortal2 = (StreamUnitPortal *)((long *)connectStream->level->terrain->StreamUnits + 1);
+
+                    for (j = 0; j < numportals2; j++, streamPortal2++)
+                    {
+                        long hookedUp;
+
+                        hookedUp = 0;
+
+                        strcpy(text, streamPortal2->tolevelname);
+
+                        commapos = strchr(text, ',');
+
+                        if (commapos != NULL)
+                        {
+                            *commapos = 0;
+
+                            signalID = atoi(commapos + 1);
+                        }
+                        else
+                        {
+                            signalID = 0;
+                        }
+
+                        if (streamPortal2->streamID == streamUnit->StreamUnitID)
+                        {
+                            streamPortal2->toStreamUnit = streamUnit;
+
+                            hookedUp = 1;
+                        }
+                        else if ((strcmpi(text, D_800D1940) == 0) && (WARPGATE_IsUnitWarpRoom(streamUnit) != 0))
+                        {
+                            streamPortal2->toStreamUnit = streamUnit;
+
+                            hookedUp = 1;
+                        }
+
+                        if ((hookedUp == 1) && (connectStream == mainUnit))
+                        {
+                            numportals = *(long *)streamUnit->level->terrain->StreamUnits;
+
+                            streamPortal = (StreamUnitPortal *)((long *)streamUnit->level->terrain->StreamUnits + 1);
+
+                            for (i = 0; i < numportals; i++, streamPortal++)
+                            {
+                                if (signalID == streamPortal->MSignalID)
+                                {
+                                    SVector offset;
+
+                                    offset.x = streamPortal2->minx - streamPortal->minx;
+                                    offset.y = streamPortal2->miny - streamPortal->miny;
+                                    offset.z = streamPortal2->minz - streamPortal->minz;
+
+                                    RelocateLevel(streamUnit->level, &offset);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (i = 0; i < streamUnit->level->numIntros; i++)
+        {
+            if (strcmpi(streamUnit->level->introList[i].name, D_800D194C) == 0)
+            {
+                streamUnit->level->introList[i].flags |= 0x8;
+                break;
+            }
+        }
+    }
+}
 
 void STREAM_StreamLoadLevelAbort(void *loadData, void *data, void *data2)
 {

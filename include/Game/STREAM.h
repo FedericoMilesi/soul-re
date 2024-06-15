@@ -447,5 +447,7 @@ void STREAM_ConnectStream(StreamUnit *streamUnit);
 void STREAM_DumpAllLevels(long IDNoRemove, int DoSave);
 void STREAM_PackVRAMObject(ObjectTracker *objectTracker);
 int STREAM_IsMonster(char *name);
+void WARPGATE_UpdateAddToArray(StreamUnit *streamUnit);
+void RelocateLevel(Level *level, SVector *offset);
 
 #endif
