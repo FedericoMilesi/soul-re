@@ -102,6 +102,8 @@ $(BUILD_DIR)/src/Game/G2/QUATG2.c.o: CFLAGS += -funsigned-char
 $(BUILD_DIR)/src/Game/G2/INSTNCG2.c.o: CFLAGS += -fno-builtin
 $(BUILD_DIR)/src/Game/MONSTER/MONAPI.c.o: CFLAGS += -fno-builtin
 $(BUILD_DIR)/src/Game/VRAM.c.o: CFLAGS += -fno-builtin
+$(BUILD_DIR)/src/Game/STREAM.c.o: CFLAGS += -fno-builtin
+$(BUILD_DIR)/src/Game/SIGNAL.c.o: CFLAGS += -fno-builtin
 $(BUILD_DIR)/src/Game/CINEMA/CINEPSX.c.o: CFLAGS += -G0
 
 all: $(EXE)

@@ -4,6 +4,7 @@
 #include "Game/GAMELOOP.h"
 #include "Game/MEMPACK.h"
 #include "Game/STREAM.h"
+#include "Game/HASM.h"
 
 EXTERN STATIC UW_ScreenXY *ScreenMorphArray;
 
