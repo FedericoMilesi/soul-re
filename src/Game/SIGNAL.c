@@ -36,7 +36,14 @@ void SIGNAL_RelocateCamera(Signal *signal, long offset)
     signal->data.cameraKey = (CameraKey *)OFFSET_DATA(signal->data.cameraKey, offset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraMode);
+long SIGNAL_HandleCameraMode(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    CAMERA_SetMode(&theCamera, signal->data.cameraMode);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraLock);
 
