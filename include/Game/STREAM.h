@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "Game/STATE.h"
+#include "Game/VM.h"
 
 #define OFFSET_DATA(x, offset) (((x) == 0) ? 0 : ((uintptr_t)(x) + offset))
 #define IN_BOUNDS(x, level, max) (((uintptr_t)(level) <= (uintptr_t)(x)) && ((uintptr_t)(x) <= (uintptr_t)(max)))
@@ -452,5 +453,12 @@ void RelocateLevel(Level *level, SVector *offset);
 void MORPH_UpdateNormals(Level *BaseLevel);
 void WARPGATE_FixUnit(StreamUnit *streamUnit);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
+void RelocateTerrain(Terrain *terrain, SVector *offset);
+void RelocateVMObjects(VMObject *vobjectlist, long numvmobjs, SVector *offset);
+//void RelocateBGObjects(BGObject *BGObjList, long numBGObjs, SVector *offset);
+//void RelocateCameras(CameraKey *cameraList, long numCameras, SVector *offset);
+//void RelocateSavedCameras(Camera *camera, Level *level, SVector *offset);
+//void RelocatePlanMarkers(PlanMkr *planMkrList, int numPlanMkrs, SVector *offset);
+//void RelocateSFXMarkers(SFXMkr *sfxMkrList, int numSFXMkrs, SVector *offset);
 
 #endif

@@ -20,6 +20,7 @@
 #include "Game/LOAD3D.h"
 #include "Game/DEBUG.h"
 #include "Game/SIGNAL.h"
+#include "Game/MATH3D.h"
 
 long CurrentWarpNumber;
 
@@ -2160,7 +2161,31 @@ void PreloadAllConnectedUnits(StreamUnit *streamUnit, SVector *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateLevel);
+void RelocateLevel(Level *level, SVector *offset)
+{
+    int curTree;
+
+    RelocateTerrain(level->terrain, offset);
+    RelocateVMObjects(level->vmobjectList, level->numVMObjects, offset);
+    RelocateBGObjects(level->bgObjectList, level->numBGObjects, offset);
+    RelocateCameras((CameraKey *)level->cameraList, level->numCameras, offset);
+    RelocateSavedCameras(&theCamera, level, offset);
+
+    level->deathZ += offset->z;
+
+    RelocatePlanMarkers(level->PlanMarkerList, level->NumberOfPlanMarkers, offset);
+    RelocateSFXMarkers(level->SFXMarkerList, level->NumberOfSFXMarkers, offset);
+
+    if ((level->waterZLevel != -32767) && (level->waterZLevel != 32767))
+    {
+        level->waterZLevel += offset->z;
+    }
+
+    for (curTree = 0; curTree < level->terrain->numBSPTrees; curTree++)
+    {
+        ADD_SVEC(Position, &level->terrain->BSPTreeArray[curTree].globalOffset, Position, &level->terrain->BSPTreeArray[curTree].globalOffset, SVector, offset);
+    }
+}
 
 void RelocateCameras(CameraKey *cameraList, long numCameras, SVector *offset)
 {

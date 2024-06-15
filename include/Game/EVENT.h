@@ -86,6 +86,36 @@ typedef struct _SFXMkr {
     long inSpectral;
 } SFXMkr;
 
+// size: 0x18
+typedef struct _BGObject {
+    // offset: 0000
+    short flags;
+    // offset: 0002
+    short numFaces;
+    // offset: 0004 (8 bytes)
+    struct _BVertex *vertexList;
+    // offset: 0008 (12 bytes)
+    struct _BFace *faceList;
+    // offset: 000C
+    short x;
+    // offset: 000E
+    short y;
+    // offset: 0010
+    short z;
+    // offset: 0012
+    short radius;
+    // offset: 0014
+    long numVertices;
+} BGObject;
+
+// size: 0x8
+typedef struct _PlanMkr {
+    // offset: 0000 (6 bytes)
+    struct _Position pos;
+    // offset: 0006
+    short id;
+} PlanMkr;
+
 void EVENT_Init();
 void EVENT_AddInstanceToInstanceList(Instance *instance);
 void EVENT_RemoveInstanceFromInstanceList(Instance *instance);
