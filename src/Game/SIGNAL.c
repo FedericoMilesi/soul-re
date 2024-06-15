@@ -1,6 +1,15 @@
 #include "common.h"
+#include "Game/SIGNAL.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleLightGroup);
+long SIGNAL_HandleLightGroup(Instance *instance, Signal *signal)
+{
+    if (instance != NULL)
+    {
+        instance->lightGroup = signal->data.misc[0].size.c[0];
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraAdjust);
 
