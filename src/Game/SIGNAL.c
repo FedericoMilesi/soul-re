@@ -81,7 +81,14 @@ long SIGNAL_HandleCameraTimer(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraSave);
+long SIGNAL_HandleCameraSave(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    CAMERA_Save(&theCamera, signal->data.cameraSave);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraRestore);
 
