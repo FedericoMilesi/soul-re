@@ -314,7 +314,13 @@ long SIGNAL_HandleSetCameraDistance(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleEnd);
+long SIGNAL_HandleEnd(Instance *instance, Signal *signal)
+{
+    (void)instance;
+    (void)signal;
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", COLLIDE_HandleSignal);
 
