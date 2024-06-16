@@ -240,7 +240,21 @@ short SplineMultiIsWhere(MultiSpline *multi)
     return where;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetFirstRot);
+G2Quat *SplineGetFirstRot(RSpline *rspline, SplineDef *def)
+{
+    if (rspline == NULL)
+    {
+        return NULL;
+    }
+
+    def->fracCurr = 0;
+
+    def->currkey = 0;
+
+    def->denomFlag = 0;
+
+    return &rspline->key->q;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetFirstPoint);
 
