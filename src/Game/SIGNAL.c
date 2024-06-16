@@ -99,7 +99,14 @@ long SIGNAL_HandleCameraRestore(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraValue);
+long SIGNAL_HandleCameraValue(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    CAMERA_SetValue(&theCamera, signal->data.cameraValue.index, signal->data.cameraValue.value);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleStreamLevel);
 
