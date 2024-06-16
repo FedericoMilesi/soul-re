@@ -216,7 +216,29 @@ short SplineIsWhere(Spline *spline, SplineDef *def)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineMultiIsWhere);
+short SplineMultiIsWhere(MultiSpline *multi)
+{
+    short where;
+
+    where = 0;
+
+    if (multi->positional != NULL)
+    {
+        where = SplineIsWhere(multi->positional, &multi->curPositional);
+    }
+
+    if ((multi->rotational != NULL) && (where == 0))
+    {
+        where = SplineIsWhere((Spline *)multi->rotational, &multi->curRotational);
+    }
+
+    if ((multi->scaling != NULL) && (where == 0))
+    {
+        where = SplineIsWhere(multi->scaling, &multi->curScaling);
+    }
+
+    return where;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetFirstRot);
 
