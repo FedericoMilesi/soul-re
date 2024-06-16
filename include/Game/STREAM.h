@@ -4,6 +4,7 @@
 #include "common.h"
 #include "Game/STATE.h"
 #include "Game/VM.h"
+#include "Game/SPLINE.h"
 
 #define OFFSET_DATA(x, offset) (((x) == 0) ? 0 : ((uintptr_t)(x) + offset))
 #define IN_BOUNDS(x, level, max) (((uintptr_t)(level) <= (uintptr_t)(x)) && ((uintptr_t)(x) <= (uintptr_t)(max)))
@@ -460,5 +461,7 @@ void RelocateVMObjects(VMObject *vobjectlist, long numvmobjs, SVector *offset);
 //void RelocateSavedCameras(Camera *camera, Level *level, SVector *offset);
 //void RelocatePlanMarkers(PlanMkr *planMkrList, int numPlanMkrs, SVector *offset);
 //void RelocateSFXMarkers(SFXMkr *sfxMkrList, int numSFXMkrs, SVector *offset);
+void RelocateStreamPortals(StreamUnitPortal *StreamUnitList, int NumStreamUnits, SVector *offset);
+void STREAM_AdjustMultiSpline(MultiSpline *multi, SVector *offset);
 
 #endif

@@ -2227,7 +2227,24 @@ void RelocateLevelWithInstances(Level *level, SVector *offset)
     RelocatePlanPool((PlanningNode *)gameTrackerX.planningPool, offset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateTerrain);
+void RelocateTerrain(Terrain *terrain, SVector *offset)
+{
+    int i;
+
+    for (i = 0; i < terrain->numIntros; i++)
+    {
+        terrain->introList[i].position.x += offset->x;
+        terrain->introList[i].position.y += offset->y;
+        terrain->introList[i].position.z += offset->z;
+
+        if (terrain->introList[i].multiSpline != NULL)
+        {
+            STREAM_AdjustMultiSpline(terrain->introList[i].multiSpline, offset);
+        }
+    }
+
+    RelocateStreamPortals((StreamUnitPortal *)((long *)terrain->StreamUnits + 1), *(long *)terrain->StreamUnits, offset);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateVMObjects);
 
