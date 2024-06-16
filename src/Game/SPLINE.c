@@ -256,7 +256,21 @@ G2Quat *SplineGetFirstRot(RSpline *rspline, SplineDef *def)
     return &rspline->key->q;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetFirstPoint);
+SVector *SplineGetFirstPoint(Spline *spline, SplineDef *def)
+{
+    if (spline == NULL)
+    {
+        return NULL;
+    }
+
+    def->fracCurr = 0;
+
+    def->currkey = 0;
+
+    def->denomFlag = 0;
+
+    return (SVector *)&spline->key->point;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNextPoint);
 
