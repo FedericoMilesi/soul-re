@@ -399,7 +399,25 @@ void SIGNAL_HandleSignal(Instance *instance, Signal *signal, int dontForceDoSign
     COLLIDE_HandleSignal(instance, signal, 1, dontForceDoSignal);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_RelocateSignal);
+MultiSignal *SIGNAL_RelocateSignal(MultiSignal *multiSignal, long offset)
+{
+    int i;
+    Signal *signal;
+
+    signal = multiSignal->signalList;
+
+    for (i = 0; i < multiSignal->numSignals; i++)
+    {
+        if (signalInfoList[signal->id & 0x7FFFFFFF].signalRelocateFunc != NULL)
+        {
+            signalInfoList[signal->id & 0x7FFFFFFF].signalRelocateFunc(signal, offset);
+        }
+
+        signal = (Signal *)((char *)signal + ((signalInfoList[signal->id & 0x7FFFFFFF].length + 1) * 4));
+    }
+
+    return (MultiSignal *)&signal->data.callSignal;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_FindSignal);
 
