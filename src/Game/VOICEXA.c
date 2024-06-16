@@ -1,9 +1,52 @@
 #include "common.h"
 #include "Game/VOICEXA.h"
+#include "Game/GAMELOOP.h"
+
+extern char D_800D1EB0[];
 
 XAVoiceTracker voiceTracker;
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_Init);
+void VOICEXA_Init()
+{
+    int i;
+    CdlFILE fp;
+    XAVoiceTracker *vt;
+    char fileName[32];
+
+    vt = &voiceTracker;
+
+    if ((gameTrackerX.debugFlags & 0x80000))
+    {
+        vt->voiceStatus = 0;
+        vt->cdStatus = 0;
+
+        vt->reqIn = 0;
+        vt->reqOut = 0;
+        vt->reqsQueued = 0;
+
+        vt->cdCmdIn = 0;
+        vt->cdCmdOut = 0;
+        vt->cdCmdsQueued = 0;
+
+        vt->voiceCmdIn = 0;
+        vt->voiceCmdOut = 0;
+        vt->voiceCmdsQueued = 0;
+
+        for (i = 0; i < 30; i++)
+        {
+            sprintf(&fileName[0], D_800D1EB0, i);
+
+            if (CdSearchFile(&fp, &fileName[0]) == 0)
+            {
+                vt->xaFileInfo[i].startPos = 0;
+            }
+            else
+            {
+                vt->xaFileInfo[i].startPos = CdPosToInt(&fp.pos);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", putCdCommand);
 

@@ -293,5 +293,7 @@ void DrawPrim(void *p);
 DRAWENV *PutDrawEnv(DRAWENV *env);
 int VSyncCallback(void (*f)(void));
 CdlCB CdSyncCallback(CdlCB func);
+int CdPosToInt(CdlLOC *p);
+CdlFILE *CdSearchFile(CdlFILE *fp, char *name);
 
 #endif
