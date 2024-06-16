@@ -5,6 +5,8 @@
 #include "Game/LIGHT3D.h"
 #include "Game/GAMELOOP.h"
 
+SignalInfo signalInfoList[27];
+
 extern char D_800D0410[];
 
 long SIGNAL_HandleLightGroup(Instance *instance, Signal *signal)
@@ -351,7 +353,46 @@ long SIGNAL_IsThisStreamAWarpGate(Signal *signal)
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_IsStreamSignal);
+long SIGNAL_IsStreamSignal(Signal *signal, long *isWarpGate)
+{
+    long done;
+    long result;
+    long signalNumber;
+
+    result = 0;
+
+    done = 0;
+
+    *isWarpGate = 0;
+
+    do
+    {
+        signalNumber = signal->id & 0x7FFFFFFF;
+
+        if (signalNumber == 15)
+        {
+            done = 1;
+        }
+        else if (signalNumber == 18)
+        {
+            done = 1;
+
+            result = 1;
+
+            if (SIGNAL_IsThisStreamAWarpGate(signal) != 0)
+            {
+                *isWarpGate = 1;
+            }
+        }
+
+        if (done == 0)
+        {
+            signal = (Signal *)((char *)signal + ((signalInfoList[signalNumber].length + 1) * 4));
+        }
+    } while (done == 0);
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleSignal);
 

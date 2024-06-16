@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-typedef struct Signal 
+typedef struct Signal
 {
     long id; // size=0, offset=0
     union {
@@ -14,7 +14,7 @@ typedef struct Signal
                 char c[4]; // size=4, offset=0
             } size; // size=4, offset=0
         } misc[3]; // size=12, offset=0
-        struct _CameraKey* cameraKey; // size=24, offset=0
+        struct _CameraKey *cameraKey; // size=24, offset=0
         struct {
             short x; // size=0, offset=0
             short y; // size=0, offset=2
@@ -50,41 +50,41 @@ typedef struct Signal
         } cameraShake; // size=8, offset=0
         long cameraSave; // size=0, offset=0
         long cameraRestore; // size=0, offset=0
-        struct _BGObject* bgObject; // size=24, offset=0
+        struct _BGObject *bgObject; // size=24, offset=0
         long value[2]; // size=8, offset=0
         struct {
             long action; // size=0, offset=0
             long value[2]; // size=8, offset=4
         } sound; // size=12, offset=0
-        void* intro; // size=0, offset=0
+        void *intro; // size=0, offset=0
         long deathZ; // size=0, offset=0
         struct {
-            void* intro; // size=0, offset=0
-            void* data; // size=0, offset=4
+            void *intro; // size=0, offset=0
+            void *data; // size=0, offset=4
         } dsignal; // size=8, offset=0
-        void* mirror; // size=0, offset=0
+        void *mirror; // size=0, offset=0
         long fogNear; // size=0, offset=0
         long fogFar; // size=0, offset=0
         struct {
-            void* intro; // size=0, offset=0
+            void *intro; // size=0, offset=0
             long frame; // size=0, offset=4
         } gotoFrame; // size=8, offset=0
         struct {
-            void* intro; // size=0, offset=0
+            void *intro; // size=0, offset=0
             long model; // size=0, offset=4
         } changeModel; // size=8, offset=0
-        void* vmObject; // size=0, offset=0
+        void *vmObject; // size=0, offset=0
         struct {
             unsigned char target; // size=0, offset=0
             unsigned char source1; // size=0, offset=1
             unsigned char source2; // size=0, offset=2
             unsigned char pad; // size=0, offset=3
-            struct Signal* gotoLabel; // size=0, offset=4
+            struct Signal *gotoLabel; // size=0, offset=4
         } logic; // size=8, offset=0
-        void* callSignal; // size=0, offset=0
+        void *callSignal; // size=0, offset=0
         struct _SVector offset; // size=8, offset=0
-        struct Signal* gotoLabel; // size=0, offset=0
-        struct Signal* gosubLabel; // size=0, offset=0
+        struct Signal *gotoLabel; // size=0, offset=0
+        struct Signal *gosubLabel; // size=0, offset=0
         struct {
             long timer; // size=0, offset=0
             long action; // size=0, offset=4
@@ -92,8 +92,8 @@ typedef struct Signal
         struct {
             short index; // size=0, offset=0
             short z; // size=0, offset=2
-            struct _MultiSignal* upSignal; // size=0, offset=4
-            struct _MultiSignal* downSignal; // size=0, offset=8
+            struct _MultiSignal *upSignal; // size=0, offset=4
+            struct _MultiSignal *downSignal; // size=0, offset=8
         } zSignal; // size=12, offset=0
         struct {
             long currentnum; // size=0, offset=0
@@ -107,11 +107,11 @@ typedef struct Signal
             char flags; // size=0, offset=4
             char timeToLive; // size=0, offset=5
             short dummy2; // size=0, offset=6
-            struct Object* object; // size=0, offset=8
+            struct Object *object; // size=0, offset=8
         } shards; // size=12, offset=0
         struct {
             long index; // size=0, offset=0
-            void* intro; // size=0, offset=4
+            void *intro; // size=0, offset=4
         } cameraSpline; // size=8, offset=0
         struct {
             short type; // size=0, offset=0
@@ -120,11 +120,11 @@ typedef struct Signal
         long voiceSitId; // size=0, offset=0
         struct {
             long time; // size=0, offset=0
-            void* intro; // size=0, offset=4
+            void *intro; // size=0, offset=4
         } introFX; // size=8, offset=0
         struct {
-            void* intro; // size=0, offset=0
-            struct Signal* gotoLabel; // size=0, offset=4
+            void *intro; // size=0, offset=0
+            struct Signal *gotoLabel; // size=0, offset=4
         } introActive; // size=8, offset=0
         struct {
             char world[9]; // size=9, offset=0
@@ -132,7 +132,7 @@ typedef struct Signal
         } levelChange; // size=18, offset=0
         long blendStart; // size=0, offset=0
         struct {
-            struct Signal* signal; // size=0, offset=0
+            struct Signal *signal; // size=0, offset=0
             long times; // size=0, offset=4
         } setTimes; // size=8, offset=0
         struct {
@@ -146,7 +146,7 @@ typedef struct Signal
             short y; // size=0, offset=2
             short time; // size=0, offset=4
             short index; // size=0, offset=6
-            char* text; // size=0, offset=8
+            char *text; // size=0, offset=8
         } print; // size=12, offset=0
         long slideAngle; // size=0, offset=0
     } data; // size=24, offset=4
@@ -154,15 +154,27 @@ typedef struct Signal
 
 // size: 0x388
 typedef struct _MultiSignal {
-	// offset: 0000
-	long numSignals;
-	// offset: 0004
-	short signalNum;
-	// offset: 0006
-	short flags;
-	// offset: 0008 (896 bytes)
-	struct Signal signalList[32];
+    // offset: 0000
+    long numSignals;
+    // offset: 0004
+    short signalNum;
+    // offset: 0006
+    short flags;
+    // offset: 0008 (896 bytes)
+    struct Signal signalList[32];
 } MultiSignal;
+
+// size: 0xC
+typedef struct SignalInfo {
+    // offset: 0000
+    long (*signalHandleFunc)();
+    // offset: 0004
+    short length;
+    // offset: 0006
+    short onlyPlayer;
+    // offset: 0008
+    void (*signalRelocateFunc)();
+} SignalInfo;
 
 void SIGNAL_HandleSignal(Instance *instance, Signal *signal, int dontForceDoSignal);
 
