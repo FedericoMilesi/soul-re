@@ -453,6 +453,16 @@ MultiSignal *SIGNAL_FindSignal(Level *level, long id)
     return msignal;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_OutOfWater);
+void SIGNAL_OutOfWater(Instance *instance)
+{
+    Level *level;
+
+    level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+    if ((level != NULL) && (level->startGoingOutOfWaterSignal != NULL))
+    {
+        SIGNAL_HandleSignal(instance, &level->startGoingOutOfWaterSignal->signalList[0], 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_InWater);
