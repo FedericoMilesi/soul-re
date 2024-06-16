@@ -221,7 +221,18 @@ long SIGNAL_HandleCameraSpline(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleScreenWipe);
+long SIGNAL_HandleScreenWipe(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    gameTrackerX.wipeTime = signal->data.screenWipe.time;
+
+    gameTrackerX.maxWipeTime = (signal->data.screenWipe.time < 0) ? -signal->data.screenWipe.time : signal->data.screenWipe.time;
+
+    gameTrackerX.wipeType = signal->data.screenWipe.type;
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleBlendStart);
 
