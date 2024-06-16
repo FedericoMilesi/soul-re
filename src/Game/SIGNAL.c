@@ -253,7 +253,19 @@ long SIGNAL_HandleScreenWipeColor(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleSetSlideAngle);
+long SIGNAL_HandleSetSlideAngle(Instance *instance, Signal *signal)
+{
+    int temp; // not from decls.h
+
+    temp = signal->data.slideAngle;
+
+    if (instance != NULL)
+    {
+        INSTANCE_Post(instance, 0x4000005, temp);
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleResetSlideAngle);
 
