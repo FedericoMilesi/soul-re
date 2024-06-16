@@ -254,6 +254,50 @@ typedef struct CdlFILE {
     char name[16];
 } CdlFILE;
 
+// size: 0x4
+typedef struct CdlFILTER {
+    // offset: 0000
+    unsigned char file;
+    // offset: 0001
+    unsigned char chan;
+    // offset: 0002
+    unsigned short pad;
+} CdlFILTER;
+
+// size: 0x4
+typedef struct SpuVolume {
+    // offset: 0000
+    short left;
+    // offset: 0002
+    short right;
+} SpuVolume;
+
+// size: 0xC
+typedef struct SpuExtAttr {
+    // offset: 0000 (4 bytes)
+    struct SpuVolume volume;
+    // offset: 0004
+    long reverb;
+    // offset: 0008
+    long mix;
+} SpuExtAttr;
+
+// size: 0x28
+typedef struct SpuCommonAttr {
+    // offset: 0000
+    unsigned long mask;
+    // offset: 0004 (4 bytes)
+    struct SpuVolume mvol;
+    // offset: 0008 (4 bytes)
+    struct SpuVolume mvolmode;
+    // offset: 000C (4 bytes)
+    struct SpuVolume mvolx;
+    // offset: 0010 (12 bytes)
+    struct SpuExtAttr cd;
+    // offset: 001C (12 bytes)
+    struct SpuExtAttr ext;
+} SpuCommonAttr;
+
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);
@@ -297,5 +341,6 @@ int CdPosToInt(CdlLOC *p);
 CdlFILE *CdSearchFile(CdlFILE *fp, char *name);
 int CdControl(u_char com, u_char *param, u_char *result);
 CdlCB CdSyncCallback(CdlCB func);
+void SpuSetCommonAttr(SpuCommonAttr *attr);
 
 #endif

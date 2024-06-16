@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/VOICEXA.h"
 #include "Game/GAMELOOP.h"
+#include "Game/PSX/AADLIB.h"
 
 extern char D_800D1EB0[];
 
@@ -146,7 +147,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", processVoiceCommands);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", voiceCmdPlay);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", voiceCmdStop);
+void voiceCmdStop(XAVoiceTracker *vt, short cmdParam)
+{
+    SpuCommonAttr spuattr;
+
+    (void)cmdParam;
+
+    if (vt->voiceStatus != 0)
+    {
+        putCdCommand(vt, 9, 0, NULL);
+
+        spuattr.mask = 0x2200;
+
+        spuattr.cd.mix = 0;
+        spuattr.ext.mix = 0;
+
+        SpuSetCommonAttr(&spuattr);
+
+        aadStartMusicMasterVolFade(gameTrackerX.sound.gMusicVol, 1, NULL);
+    }
+}
 
 void voiceCmdPause(XAVoiceTracker *vt, short cmdParam)
 {

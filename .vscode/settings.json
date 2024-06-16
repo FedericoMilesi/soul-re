@@ -20,6 +20,8 @@
     "terminal.integrated.tabs.enableAnimation": false,
     "files.autoGuessEncoding": true,
     "files.associations": {
-        "sdk.h": "c"
+        "sdk.h": "c",
+        "gameloop.h": "c",
+        "aadlib.h": "c"
     }
 }
