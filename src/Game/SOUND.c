@@ -97,7 +97,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Play3dSound);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Update3dSound);
 
-void SOUND_HandleGlobalValueSignal(void)
+void SOUND_HandleGlobalValueSignal()
 {
 }
 
@@ -127,7 +127,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_MusicOn);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SfxOff);
 
-void SOUND_SfxOn(void)
+void SOUND_SfxOn()
 {
 }
 
