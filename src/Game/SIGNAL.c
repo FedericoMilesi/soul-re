@@ -129,7 +129,22 @@ long SIGNAL_HandleFogNear(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleFogFar);
+long SIGNAL_HandleFogFar(Instance *instance, Signal *signal)
+{
+    Level *level;
+
+    (void)instance;
+
+    level = STREAM_GetLevelWithID(gameTrackerX.playerInstance->currentStreamUnitID);
+
+    level->fogFar = (unsigned short)signal->data.fogFar;
+
+    SetFogNearFar(level->fogNear, level->fogFar, theCamera.core.projDistance);
+
+    LIGHT_CalcDQPTable(level);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraShake);
 
