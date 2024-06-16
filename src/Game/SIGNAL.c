@@ -465,4 +465,14 @@ void SIGNAL_OutOfWater(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_InWater);
+void SIGNAL_InWater(Instance *instance)
+{
+    Level *level;
+
+    level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+    if ((level != NULL) && (level->startGoingIntoWaterSignal != NULL))
+    {
+        SIGNAL_HandleSignal(instance, &level->startGoingIntoWaterSignal->signalList[0], 0);
+    }
+}
