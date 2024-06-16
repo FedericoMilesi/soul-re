@@ -185,7 +185,10 @@ long SIGNAL_HandleStartPlayerControl(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_RelocateCameraSpline);
+void SIGNAL_RelocateCameraSpline(Signal *signal, long offset)
+{
+    signal->data.cameraSpline.intro = (void *)OFFSET_DATA(signal->data.cameraSpline.intro, offset);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraSpline);
 
