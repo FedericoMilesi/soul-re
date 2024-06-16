@@ -483,7 +483,99 @@ unsigned long SplineGetOffsetNext(Spline *spline, SplineDef *def, long fracOffse
     return movedSplineOk;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetPrev);
+unsigned long SplineGetOffsetPrev(Spline *spline, SplineDef *def, long fracOffset)
+{
+    unsigned long movedSplineOk;
+    unsigned long isRot;
+    int count;
+
+    movedSplineOk = 0;
+
+    if ((spline != NULL) && (def != NULL))
+    {
+        SplineSetDefDenom(spline, def, 0);
+
+        isRot = spline->type == 1;
+
+        if (def->currkey < spline->numkeys)
+        {
+            movedSplineOk = 1;
+
+            if (isRot != 0)
+            {
+                count = ((RSpline *)spline)->key[def->currkey].count;
+            }
+            else
+            {
+                count = spline->key[def->currkey].count;
+            }
+
+            if (count <= 0)
+            {
+                count = 1;
+            }
+
+            def->fracCurr -= fracOffset;
+
+            while (def->fracCurr < 0)
+            {
+                if (def->currkey <= 0)
+                {
+                    if (((spline->flags & 0x4)) || ((spline->flags & 0x2)))
+                    {
+                        def->currkey = spline->numkeys - 1;
+
+                        if (isRot != 0)
+                        {
+                            count = ((RSpline *)spline)->key[def->currkey].count;
+                        }
+                        else
+                        {
+                            count = spline->key[def->currkey].count;
+                        }
+
+                        if (count <= 0)
+                        {
+                            count = 1;
+                        }
+
+                        def->fracCurr += count << 12;
+                    }
+                    else
+                    {
+                        movedSplineOk = 0;
+
+                        def->currkey = 0;
+
+                        def->fracCurr = 0;
+                    }
+                }
+                else
+                {
+                    def->currkey--;
+
+                    if (isRot != 0)
+                    {
+                        count = ((RSpline *)spline)->key[def->currkey].count;
+                    }
+                    else
+                    {
+                        count = spline->key[def->currkey].count;
+                    }
+
+                    if (count <= 0)
+                    {
+                        count = 1;
+                    }
+
+                    def->fracCurr += count << 12;
+                }
+            }
+        }
+    }
+
+    return movedSplineOk;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetNextPoint);
 
