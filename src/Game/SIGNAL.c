@@ -174,7 +174,16 @@ long SIGNAL_HandleStopPlayerControl(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleStartPlayerControl);
+long SIGNAL_HandleStartPlayerControl(Instance *instance, Signal *signal)
+{
+    (void)instance;
+    (void)signal;
+
+    gameTrackerX.gameFlags &= ~0x80;
+    gameTrackerX.gameFlags &= ~0x10;
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_RelocateCameraSpline);
 
