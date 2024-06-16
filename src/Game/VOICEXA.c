@@ -98,7 +98,29 @@ void VOICEXA_CdSyncCallback(unsigned char status, unsigned char *result)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", processCdCommands);
+void processCdCommands(XAVoiceTracker *vt)
+{
+    CdCommand *cmd;
+
+    if (vt->cdStatus == 2)
+    {
+        vt->cdStatus = 1;
+
+        cmd = &vt->cdCmdQueue[vt->cdCmdOut];
+
+        CdControl(cmd->cdCommand, cmd->cdCmdParam, vt->cdResult);
+    }
+    else if ((vt->cdCmdsQueued != 0) && (vt->cdStatus != 1))
+    {
+        vt->cdStatus = 1;
+
+        cmd = &vt->cdCmdQueue[vt->cdCmdOut];
+
+        vt->prevCallback = CdSyncCallback((void *)VOICEXA_CdSyncCallback);
+
+        CdControl(cmd->cdCommand, cmd->cdCmdParam, vt->cdResult);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", putVoiceCommand);
 
