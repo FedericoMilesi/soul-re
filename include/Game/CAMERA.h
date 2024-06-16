@@ -493,6 +493,7 @@ void CAMERA_SetTimer(Camera *camera, long time);
 void CAMERA_Save(Camera *camera, long save);
 void CAMERA_SetValue(Camera *camera, long index, long value);
 void CAMERA_SetShake(Camera *camera, long shake, long scale);
+void CAMERA_Adjust_tilt(Camera *camera, long tilt);
 
 extern int CameraCenterDelay;
 Camera theCamera;

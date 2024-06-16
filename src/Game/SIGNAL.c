@@ -279,7 +279,26 @@ long SIGNAL_HandleResetSlideAngle(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleSetCameraTilt);
+long SIGNAL_HandleSetCameraTilt(Instance *instance, Signal *signal)
+{
+    long tilt;
+
+    tilt = signal->data.cameraAdjust;
+
+    if (instance != NULL)
+    {
+        tilt = -tilt % 360;
+
+        if (tilt < 0)
+        {
+            tilt += 360;
+        }
+
+        CAMERA_Adjust_tilt(&theCamera, (tilt << 12) / 360);
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleSetCameraDistance);
 
