@@ -230,6 +230,30 @@ typedef struct
 }
 ControllerPacket;
 
+typedef void (*CdlCB)();
+
+// size: 0x4
+typedef struct CdlLOC {
+    // offset: 0000
+    unsigned char minute;
+    // offset: 0001
+    unsigned char second;
+    // offset: 0002
+    unsigned char sector;
+    // offset: 0003
+    unsigned char track;
+} CdlLOC;
+
+// size: 0x18
+typedef struct CdlFILE {
+    // offset: 0000 (4 bytes)
+    struct CdlLOC pos;
+    // offset: 0004
+    unsigned long size;
+    // offset: 0008 (16 bytes)
+    char name[16];
+} CdlFILE;
+
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);
@@ -268,5 +292,6 @@ void SetDrawStp(DR_STP *p, int pbw);
 void DrawPrim(void *p);
 DRAWENV *PutDrawEnv(DRAWENV *env);
 int VSyncCallback(void (*f)(void));
+CdlCB CdSyncCallback(CdlCB func);
 
 #endif
