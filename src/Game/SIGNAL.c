@@ -2,6 +2,8 @@
 #include "Game/SIGNAL.h"
 #include "Game/CAMERA.h"
 #include "Game/STREAM.h"
+#include "Game/LIGHT3D.h"
+#include "Game/GAMELOOP.h"
 
 long SIGNAL_HandleLightGroup(Instance *instance, Signal *signal)
 {
@@ -110,7 +112,22 @@ long SIGNAL_HandleCameraValue(Instance *instance, Signal *signal)
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleStreamLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleFogNear);
+long SIGNAL_HandleFogNear(Instance *instance, Signal *signal)
+{
+    Level *level;
+
+    (void)instance;
+
+    level = STREAM_GetLevelWithID(gameTrackerX.playerInstance->currentStreamUnitID);
+
+    level->fogNear = (unsigned short)signal->data.fogNear;
+
+    SetFogNearFar(level->fogNear, level->fogFar, theCamera.core.projDistance);
+
+    LIGHT_CalcDQPTable(level);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleFogFar);
 
