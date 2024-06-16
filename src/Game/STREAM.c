@@ -2203,7 +2203,21 @@ void RelocateCameras(CameraKey *cameraList, long numCameras, SVector *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateSavedCameras);
+void RelocateSavedCameras(Camera *camera, Level *level, SVector *offset)
+{
+    int i;
+
+    for (i = 0; camera->stack >= i; i++)
+    {
+        if ((camera->savedMode[i] == 5) && (camera->savedCinematic[i].level == level))
+        {
+            ADD_SVEC(Position, &camera->savedCinematic[i].position, Position, &camera->savedCinematic[i].position, SVector, offset);
+            ADD_SVEC(Position, &camera->savedCinematic[i].focusPoint, Position, &camera->savedCinematic[i].focusPoint, SVector, offset);
+            ADD_SVEC(Position, &camera->savedCinematic[i].targetPos, Position, &camera->savedCinematic[i].targetPos, SVector, offset);
+            ADD_SVEC(Position, &camera->savedCinematic[i].targetFocusPoint, Position, &camera->savedCinematic[i].targetFocusPoint, SVector, offset);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateLevelWithInstances);
 
