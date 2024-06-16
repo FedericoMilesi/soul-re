@@ -48,7 +48,28 @@ void VOICEXA_Init()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", putCdCommand);
+void putCdCommand(XAVoiceTracker *vt, unsigned char cdCommand, int numParams, unsigned char *params)
+{
+    int i;
+
+    vt->cdCmdQueue[vt->cdCmdIn].cdCommand = cdCommand;
+
+    for (i = 0; i < numParams; i++)
+    {
+        vt->cdCmdQueue[vt->cdCmdIn].cdCmdParam[i] = params[i];
+    }
+
+    if (vt->cdCmdsQueued < 7)
+    {
+        vt->cdCmdsQueued++;
+        vt->cdCmdIn++;
+
+        if (vt->cdCmdIn == 8)
+        {
+            vt->cdCmdIn = 0;
+        }
+    }
+}
 
 void VOICEXA_CdSyncCallback(unsigned char status, unsigned char *result)
 {
