@@ -1,5 +1,7 @@
 #include "common.h"
 #include "Game/SPLINE.h"
+#include "Game/MATH3D.h"
+#include "Game/PSX/PSX_G2/QUATVM.h"
 
 void _SplineS2Pos(vecS *p, long s, SplineKey *key, SplineKey *key2)
 {
@@ -278,7 +280,66 @@ INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetPreviousPoint);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNearestPoint);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetData);
+unsigned long SplineGetData(Spline *spline, SplineDef *def, void *p)
+{
+    unsigned long gotDataOk;
+    unsigned long isRot;
+    int count;
+    G2Quat quat;
+    G2EulerAngles ea;
+
+    gotDataOk = 0;
+
+    if ((spline != NULL) && (def != NULL))
+    {
+        isRot = spline->type == 1;
+
+        if ((def->currkey < spline->numkeys) && (def->currkey >= 0))
+        {
+            SplineSetDefDenom(spline, def, 0);
+
+            gotDataOk = 1;
+
+            if (spline->type == 1)
+            {
+                count = ((RSpline *)spline)->key[def->currkey].count;
+            }
+            else
+            {
+                count = spline->key[def->currkey].count;
+            }
+
+            if ((count != 0) && (def->fracCurr != 0))
+            {
+                if (isRot != 0)
+                {
+                    G2Quat_Slerp_VM(def->fracCurr / count, &((RSpline *)spline)->key[def->currkey].q, &((RSpline *)spline)->key[def->currkey + 1].q, &quat, 0);
+                }
+                else
+                {
+                    _SplineS2Pos((vecS *)p, (def->fracCurr * 8) / count, &spline->key[def->currkey], &spline->key[def->currkey] + 1);
+                }
+            }
+            else if (isRot != 0)
+            {
+                quat = ((RSpline *)spline)->key[def->currkey].q;
+            }
+            else
+            {
+                COPY_SVEC(vecS, p, vecS, &spline->key[def->currkey].point);
+            }
+
+            if (isRot != 0)
+            {
+                G2Quat_ToEuler(&quat, &ea, 21);
+
+                *(G2EulerAngles *)p = ea;
+            }
+        }
+    }
+
+    return gotDataOk;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetQuatData);
 
