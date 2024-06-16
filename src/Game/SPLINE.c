@@ -111,7 +111,91 @@ unsigned short SplineGetFrameNumber(Spline *spline, SplineDef *def)
     return frame & 0xFFFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineSetDef2FrameNumber);
+short SplineSetDef2FrameNumber(Spline *spline, SplineDef *def, unsigned short frame_number)
+{
+    unsigned long isRot;
+    short status;
+    SplineKey *key;
+    SplineRotKey *rkey;
+    unsigned short frame;
+    short deltaFrame;
+    int temp; // not from decls.h
+
+    status = 0;
+
+    frame = 0;
+
+    def->currkey = 0;
+
+    def->fracCurr = 0;
+
+    if ((spline == NULL) || (def == NULL))
+    {
+        status = -1;
+    }
+    else
+    {
+        rkey = (SplineRotKey *)spline->key;
+
+        isRot = spline->type == 1;
+
+        key = (SplineKey *)rkey;
+
+        while (frame < frame_number)
+        {
+            if (def->currkey < spline->numkeys)
+            {
+                deltaFrame = frame_number - frame;
+
+                if (deltaFrame < ((isRot != 0) ? rkey->count : key->count))
+                {
+                    def->fracCurr = deltaFrame << 12;
+                    break;
+                }
+                else
+                {
+                    temp = frame;
+
+                    if (isRot != 0)
+                    {
+                        temp += rkey->count;
+
+                        frame = temp;
+                    }
+                    else
+                    {
+                        temp += key->count;
+
+                        frame = temp;
+                    }
+
+                    def->currkey = (def->currkey + 1) % spline->numkeys;
+
+                    key += 1;
+
+                    if (def->currkey != 0)
+                    {
+                        rkey += 1;
+                    }
+                    else
+                    {
+                        rkey = (SplineRotKey *)spline->key;
+
+                        key = (SplineKey *)rkey;
+                    }
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        def->denomFlag = 0;
+    }
+
+    return status;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineIsWhere);
 
