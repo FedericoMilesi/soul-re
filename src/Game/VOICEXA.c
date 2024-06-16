@@ -122,7 +122,25 @@ void processCdCommands(XAVoiceTracker *vt)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", putVoiceCommand);
+void putVoiceCommand(XAVoiceTracker *vt, unsigned char voiceCmd, unsigned char nextVoiceStatus, int voiceCmdParam)
+{
+    vt->voiceCmdQueue[vt->voiceCmdIn].voiceCmd = voiceCmd;
+
+    vt->voiceCmdQueue[vt->voiceCmdIn].nextVoiceStatus = nextVoiceStatus;
+
+    vt->voiceCmdQueue[vt->voiceCmdIn].voiceCmdParam = voiceCmdParam;
+
+    if (vt->voiceCmdsQueued < 15)
+    {
+        vt->voiceCmdsQueued++;
+        vt->voiceCmdIn++;
+
+        if (vt->voiceCmdIn == 16)
+        {
+            vt->voiceCmdIn = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", processVoiceCommands);
 
