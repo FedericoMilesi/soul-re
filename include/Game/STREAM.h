@@ -450,18 +450,8 @@ void STREAM_DumpAllLevels(long IDNoRemove, int DoSave);
 void STREAM_PackVRAMObject(ObjectTracker *objectTracker);
 int STREAM_IsMonster(char *name);
 void WARPGATE_UpdateAddToArray(StreamUnit *streamUnit);
-void RelocateLevel(Level *level, SVector *offset);
 void MORPH_UpdateNormals(Level *BaseLevel);
 void WARPGATE_FixUnit(StreamUnit *streamUnit);
-void RelocateLevelWithInstances(Level *level, SVector *offset);
-void RelocateTerrain(Terrain *terrain, SVector *offset);
-void RelocateVMObjects(VMObject *vobjectlist, long numvmobjs, SVector *offset);
-//void RelocateBGObjects(BGObject *BGObjList, long numBGObjs, SVector *offset);
-//void RelocateCameras(CameraKey *cameraList, long numCameras, SVector *offset);
-//void RelocateSavedCameras(Camera *camera, Level *level, SVector *offset);
-//void RelocatePlanMarkers(PlanMkr *planMkrList, int numPlanMkrs, SVector *offset);
-//void RelocateSFXMarkers(SFXMkr *sfxMkrList, int numSFXMkrs, SVector *offset);
-void RelocateStreamPortals(StreamUnitPortal *StreamUnitList, int NumStreamUnits, SVector *offset);
 void STREAM_AdjustMultiSpline(MultiSpline *multi, SVector *offset);
 
 #endif

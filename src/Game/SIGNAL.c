@@ -4,6 +4,8 @@
 #include "Game/STREAM.h"
 #include "Game/LIGHT3D.h"
 #include "Game/GAMELOOP.h"
+#include "Game/PSX/SUPPORT.h"
+#include "Libs/STRING.h"
 
 SignalInfo signalInfoList[27];
 

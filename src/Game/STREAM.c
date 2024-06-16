@@ -22,6 +22,8 @@
 #include "Game/SIGNAL.h"
 #include "Game/MATH3D.h"
 #include "Game/PLAN/PLAN.h"
+#include "Game/PSX/SUPPORT.h"
+#include "Libs/STRING.h"
 
 long CurrentWarpNumber;
 
@@ -52,6 +54,19 @@ extern char D_800D1928[];
 extern char D_800D1940[];
 
 extern char D_800D194C[];
+
+void RelocateLevel(Level *level, SVector *offset);
+void RelocateLevelWithInstances(Level *level, SVector *offset);
+void RelocateTerrain(Terrain *terrain, SVector *offset);
+void RelocateVMObjects(VMObject *vobjectlist, long numvmobjs, SVector *offset);
+void RelocateCameras(CameraKey *cameraList, long numCameras, SVector *offset);
+void RelocateBGObjects(BGObject *BGObjList, long numBGObjs, SVector *offset);
+void RelocateSavedCameras(Camera *camera, Level *level, SVector *offset);
+void RelocatePlanMarkers(PlanMkr *planMkrList, int numPlanMkrs, SVector *offset);
+void RelocateSFXMarkers(SFXMkr *sfxMkrList, int numSFXMkrs, SVector *offset);
+void RelocateInstances(SVector *offset);
+void RelocatePlanPool(PlanningNode *planPool, SVector *offset);
+void RelocateStreamPortals(StreamUnitPortal *StreamUnitList, int NumStreamUnits, SVector *offset);
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName)
 {
@@ -180,7 +195,7 @@ void STREAM_LoadObjectReturn(void *loadData, void *data, void *data2)
 
     if (((object->oflags & 0x8000000)) && (object->relocList != NULL) && (object->relocModule != NULL))
     {
-        RELMOD_InitModulePointers((int)object->relocModule, (int *)object->relocList);
+        RELMOD_InitModulePointers((intptr_t)object->relocModule, (int *)object->relocList);
     }
 
     STREAM_PackVRAMObject(objectTracker);
@@ -545,7 +560,7 @@ int STREAM_IsObjectInAnyUnit(ObjectTracker *tracker)
         {
             for (objlist = (unsigned char *)StreamTracker.StreamList[d].level->objectNameList; *objlist != 255; objlist += 16)
             {
-                if (strcmpi(&tracker->name, (char *)objlist) == 0)
+                if (strcmpi(tracker->name, (char *)objlist) == 0)
                 {
                     return 1;
                 }
@@ -1168,7 +1183,7 @@ void STREAM_UpdateLevelPointer(Level *oldLevel, Level *newLevel, long sizeOfLeve
     long offset;
     GameTracker *gameTracker;
 
-    offset = (int)newLevel - (int)oldLevel;
+    offset = (intptr_t)newLevel - (intptr_t)oldLevel;
 
     for (i = 0; i < 16; i++)
     {
@@ -1193,7 +1208,7 @@ void STREAM_UpdateLevelPointer(Level *oldLevel, Level *newLevel, long sizeOfLeve
 
         while (instance != NULL)
         {
-            i = (int)oldLevel + sizeOfLevel;
+            i = (intptr_t)oldLevel + sizeOfLevel;
 
             if (IN_BOUNDS(instance->intro, oldLevel, i) != 0)
             {
@@ -1239,24 +1254,24 @@ void STREAM_UpdateLevelPointer(Level *oldLevel, Level *newLevel, long sizeOfLeve
         }
     }
 
-    if (IN_BOUNDS(theCamera.data.Cinematic.posSpline, oldLevel, (int)oldLevel + sizeOfLevel) != 0)
+    if (IN_BOUNDS(theCamera.data.Cinematic.posSpline, oldLevel, (intptr_t)oldLevel + sizeOfLevel) != 0)
     {
         theCamera.data.Cinematic.posSpline = (MultiSpline *)OFFSET_DATA(theCamera.data.Cinematic.posSpline, offset);
     }
 
-    if (IN_BOUNDS(theCamera.data.Cinematic.targetSpline, oldLevel, (int)oldLevel + sizeOfLevel) != 0)
+    if (IN_BOUNDS(theCamera.data.Cinematic.targetSpline, oldLevel, (intptr_t)oldLevel + sizeOfLevel) != 0)
     {
         theCamera.data.Cinematic.targetSpline = (MultiSpline *)OFFSET_DATA(theCamera.data.Cinematic.targetSpline, offset);
     }
 
     for (i = 0; i <= theCamera.stack; i++)
     {
-        if (IN_BOUNDS(theCamera.savedCinematic[i].posSpline, oldLevel, (int)oldLevel + sizeOfLevel) != 0)
+        if (IN_BOUNDS(theCamera.savedCinematic[i].posSpline, oldLevel, (intptr_t)oldLevel + sizeOfLevel) != 0)
         {
             theCamera.savedCinematic[i].posSpline = (MultiSpline *)OFFSET_DATA(theCamera.savedCinematic[i].posSpline, offset);
         }
 
-        if (IN_BOUNDS(theCamera.savedCinematic[i].targetSpline, oldLevel, (int)oldLevel + sizeOfLevel) != 0)
+        if (IN_BOUNDS(theCamera.savedCinematic[i].targetSpline, oldLevel, (intptr_t)oldLevel + sizeOfLevel) != 0)
         {
             theCamera.savedCinematic[i].targetSpline = (MultiSpline *)OFFSET_DATA(theCamera.savedCinematic[i].targetSpline, offset);
         }
@@ -1302,7 +1317,7 @@ void STREAM_UpdateObjectPointer(Object *oldObject, Object *newObject, long sizeO
 
     gameTracker = &gameTrackerX;
 
-    offset = (int)newObject - (int)oldObject;
+    offset = (intptr_t)newObject - (intptr_t)oldObject;
 
     otr = FindObjectInTracker(oldObject);
 
@@ -1321,7 +1336,7 @@ void STREAM_UpdateObjectPointer(Object *oldObject, Object *newObject, long sizeO
             {
                 for (j = 0; j < object->numAnims; j++)
                 {
-                    if (IN_BOUNDS(object->animList[j], oldObject, (int)oldObject + sizeOfObject) != 0)
+                    if (IN_BOUNDS(object->animList[j], oldObject, (intptr_t)oldObject + sizeOfObject) != 0)
                     {
                         object->animList[j] = (G2AnimKeylist *)OFFSET_DATA(object->animList[j], offset);
                     }
@@ -1333,7 +1348,7 @@ void STREAM_UpdateObjectPointer(Object *oldObject, Object *newObject, long sizeO
 
         if (((newObject->oflags & 0x8000000)) && (newObject->relocList != NULL) && (newObject->relocModule != NULL))
         {
-            RELMOD_RelocModulePointers((int)newObject->relocModule, offset, (int *)newObject->relocList);
+            RELMOD_RelocModulePointers((intptr_t)newObject->relocModule, offset, (int *)newObject->relocList);
         }
 
         {
@@ -1361,7 +1376,7 @@ void STREAM_UpdateObjectPointer(Object *oldObject, Object *newObject, long sizeO
                     OBTABLE_RelocateInstanceObject(instance, offset);
                 }
 
-                if (IN_BOUNDS(instance->data, oldObject, (int)oldObject + sizeOfObject) != 0)
+                if (IN_BOUNDS(instance->data, oldObject, (intptr_t)oldObject + sizeOfObject) != 0)
                 {
                     instance->data = (void *)OFFSET_DATA(instance->data, offset);
                 }

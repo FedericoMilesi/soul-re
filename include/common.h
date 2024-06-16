@@ -8,6 +8,7 @@ typedef unsigned long size_t;
 typedef	unsigned long u_long;
 #define NULL (void*)0
 #else
+#include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>

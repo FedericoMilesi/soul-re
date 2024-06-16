@@ -7,5 +7,6 @@
 void G2Quat_ToMatrix_S(G2Quat *quat, G2Matrix *matrix);
 short MATH3D_racos_S(long a);
 long COLLIDE_IntersectLineAndPlane_S(SVector *planePoint, Position *oldPos, Position *position, SVector *normal, long z);
+int CheckVolatile(void *);
 
 #endif

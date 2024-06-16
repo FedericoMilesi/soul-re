@@ -3,6 +3,7 @@
 #include "Game/MEMPACK.h"
 #include "Game/GAMELOOP.h"
 #include "Game/FONT.h"
+#include "Game/HASM.h"
 
 int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags);
 int VRAM_DeleteFreeVram(short x, short y, short w, short h);
@@ -720,7 +721,7 @@ void VRAM_TransferBufferToVram(void *dataPtr, long dataSize, short status, void 
 
     gameTrackerX.drawTimerReturn = drawTimerReturn;
 
-    if ((nextOTag != 0) && ((int)nextOTag != -1))
+    if ((nextOTag != 0) && ((intptr_t)nextOTag != -1))
     {
         DrawOTag((u_long *)nextOTag);
     }

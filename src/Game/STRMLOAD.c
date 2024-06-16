@@ -2,6 +2,7 @@
 #include "Game/LOAD3D.h"
 #include "Game/STRMLOAD.h"
 #include "Game/DEBUG.h"
+#include "Game/PSX/SUPPORT.h"
 
 static LoadQueueEntry LoadQueue[40];
 
@@ -323,7 +324,7 @@ void LOAD_ChangeDirectory(char *name)
 
     currentEntry->status = 10;
 
-    sprintf(&currentEntry->loadEntry.fileName, D_800D19E8, name);
+    sprintf(&currentEntry->loadEntry.fileName[0], D_800D19E8, name);
 }
 
 void LOAD_AbortDirectoryChange(char *name)
