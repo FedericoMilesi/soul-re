@@ -5,6 +5,8 @@
 #include "Game/LIGHT3D.h"
 #include "Game/GAMELOOP.h"
 
+extern char D_800D0410[];
+
 long SIGNAL_HandleLightGroup(Instance *instance, Signal *signal)
 {
     if (instance != NULL)
@@ -324,7 +326,30 @@ long SIGNAL_HandleEnd(Instance *instance, Signal *signal)
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", COLLIDE_HandleSignal);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_IsThisStreamAWarpGate);
+long SIGNAL_IsThisStreamAWarpGate(Signal *signal)
+{
+    long result;
+    char areaName[32];
+    char *commapos;
+
+    result = 0;
+
+    strcpy(areaName, signal->data.StreamLevel.toname);
+
+    commapos = strchr(areaName, ',');
+
+    if (commapos != NULL)
+    {
+        *commapos = 0;
+    }
+
+    if (strcmpi(areaName, D_800D0410) == 0)
+    {
+        result = 1;
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_IsStreamSignal);
 
