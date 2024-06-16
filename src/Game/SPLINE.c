@@ -3,6 +3,8 @@
 #include "Game/MATH3D.h"
 #include "Game/PSX/PSX_G2/QUATVM.h"
 
+extern char D_800D0FD8[];
+
 void _SplineS2Pos(vecS *p, long s, SplineKey *key, SplineKey *key2)
 {
     long s2;
@@ -400,7 +402,86 @@ unsigned long SplineGetNext(Spline *spline, SplineDef *def)
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetPrev);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetNext);
+unsigned long SplineGetOffsetNext(Spline *spline, SplineDef *def, long fracOffset)
+{
+    unsigned long movedSplineOk;
+    unsigned long isRot;
+    int count;
+
+    movedSplineOk = 0;
+
+    if ((spline != NULL) && (def != NULL))
+    {
+        isRot = spline->type == 1;
+
+        if (def->currkey < spline->numkeys)
+        {
+            movedSplineOk = 1;
+
+            if (isRot != 0)
+            {
+                count = ((RSpline *)spline)->key[def->currkey].count;
+            }
+            else
+            {
+                count = spline->key[def->currkey].count;
+            }
+
+            if (count <= 0)
+            {
+                count = 1;
+            }
+
+            SplineSetDefDenom(spline, def, 0);
+
+            def->fracCurr += fracOffset;
+
+            while (count < (def->fracCurr >> 12))
+            {
+                def->currkey++;
+
+                def->fracCurr -= count << 12;
+
+                if ((spline->numkeys - 1) < def->currkey)
+                {
+                    if (((spline->flags & 0x4)) || ((spline->flags & 0x2)))
+                    {
+                        def->currkey = 0;
+                    }
+                    else
+                    {
+                        def->currkey = spline->numkeys - 1;
+
+                        movedSplineOk = 0;
+                    }
+                }
+
+                if ((spline->numkeys - 1) >= def->currkey)
+                {
+                    if (isRot != 0)
+                    {
+                        count = ((RSpline *)spline)->key[def->currkey].count;
+                    }
+                    else
+                    {
+                        count = spline->key[def->currkey].count;
+                    }
+
+                    if (count <= 0)
+                    {
+                        count = 1;
+                    }
+                }
+            }
+        }
+        else
+        {
+            printf(D_800D0FD8, def->currkey, spline->numkeys);
+        }
+    }
+
+    return movedSplineOk;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetPrev);
 
