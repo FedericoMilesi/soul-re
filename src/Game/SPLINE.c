@@ -197,7 +197,24 @@ short SplineSetDef2FrameNumber(Spline *spline, SplineDef *def, unsigned short fr
     return status;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineIsWhere);
+short SplineIsWhere(Spline *spline, SplineDef *def)
+{
+    short curr;
+
+    curr = (short)(def->fracCurr >> 12);
+
+    if ((curr == 0) && (def->currkey == 0))
+    {
+        return -1;
+    }
+
+    if ((curr == (spline->numkeys - 1)) && (def->currkey == 0))
+    {
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineMultiIsWhere);
 
