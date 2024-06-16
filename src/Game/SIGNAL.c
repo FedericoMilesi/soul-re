@@ -234,7 +234,13 @@ long SIGNAL_HandleScreenWipe(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleBlendStart);
+long SIGNAL_HandleBlendStart(Instance *instance, Signal *signal)
+{
+    (void)instance;
+    (void)signal;
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleScreenWipeColor);
 
