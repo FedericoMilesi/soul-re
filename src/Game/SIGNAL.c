@@ -300,7 +300,19 @@ long SIGNAL_HandleSetCameraTilt(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleSetCameraDistance);
+long SIGNAL_HandleSetCameraDistance(Instance *instance, Signal *signal)
+{
+    int temp; // not from decls.h
+
+    temp = signal->data.cameraAdjust;
+
+    if (instance != NULL)
+    {
+        CAMERA_Adjust_distance(&theCamera, temp);
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleEnd);
 
