@@ -21,6 +21,7 @@
 #include "Game/DEBUG.h"
 #include "Game/SIGNAL.h"
 #include "Game/MATH3D.h"
+#include "Game/PLAN/PLAN.h"
 
 long CurrentWarpNumber;
 
@@ -2219,7 +2220,12 @@ void RelocateSavedCameras(Camera *camera, Level *level, SVector *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateLevelWithInstances);
+void RelocateLevelWithInstances(Level *level, SVector *offset)
+{
+    RelocateLevel(level, offset);
+    RelocateInstances(offset);
+    RelocatePlanPool((PlanningNode *)gameTrackerX.planningPool, offset);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateTerrain);
 
