@@ -267,7 +267,17 @@ long SIGNAL_HandleSetSlideAngle(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleResetSlideAngle);
+long SIGNAL_HandleResetSlideAngle(Instance *instance, Signal *signal)
+{
+    (void)signal;
+
+    if (instance != NULL)
+    {
+        INSTANCE_Post(instance, 0x4000006, 0);
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleSetCameraTilt);
 
