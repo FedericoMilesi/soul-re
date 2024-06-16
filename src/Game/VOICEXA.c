@@ -150,7 +150,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", voiceCmdStop);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", voiceCmdPause);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", voiceCmdResume);
+void voiceCmdResume(XAVoiceTracker *vt, short cmdParam)
+{
+    (void)cmdParam;
+
+    if (vt->voiceStatus == 3)
+    {
+        putCdCommand(vt, 27, 4, (unsigned char *)&vt->currentPos);
+    }
+}
 
 void voiceCmdNull()
 {
