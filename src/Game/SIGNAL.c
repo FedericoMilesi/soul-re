@@ -164,7 +164,15 @@ long SIGNAL_HandleCallSignal(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleStopPlayerControl);
+long SIGNAL_HandleStopPlayerControl(Instance *instance, Signal *signal)
+{
+    (void)instance;
+    (void)signal;
+
+    gameTrackerX.gameFlags |= 0x90;
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleStartPlayerControl);
 
