@@ -77,7 +77,39 @@ void SplineSetDefDenom(Spline *spline, SplineDef *def, int denomFlag)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetFrameNumber);
+unsigned short SplineGetFrameNumber(Spline *spline, SplineDef *def)
+{
+    unsigned short frame;
+    unsigned int i;
+    SplineKey *key;
+    SplineDef temp;
+
+    if ((spline == NULL) || (def == NULL))
+    {
+        frame = 0xFFFF;
+    }
+    else
+    {
+        key = spline->key;
+
+        temp = *def;
+
+        frame = 0;
+
+        for (i = 0; i < (unsigned)def->currkey; i++, key++)
+        {
+            frame += key->count;
+        }
+
+        temp.currkey = i;
+
+        SplineSetDefDenom(spline, &temp, 0);
+
+        frame += (unsigned short)(temp.fracCurr >> 12);
+    }
+
+    return frame & 0xFFFF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineSetDef2FrameNumber);
 
