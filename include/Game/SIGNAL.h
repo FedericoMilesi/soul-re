@@ -177,5 +177,6 @@ typedef struct SignalInfo {
 } SignalInfo;
 
 void SIGNAL_HandleSignal(Instance *instance, Signal *signal, int dontForceDoSignal);
+void COLLIDE_HandleSignal(Instance *instance, Signal *signal, long numSignals, int dontForceDoSignal);
 
 #endif

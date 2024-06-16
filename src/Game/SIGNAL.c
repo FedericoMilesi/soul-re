@@ -394,7 +394,10 @@ long SIGNAL_IsStreamSignal(Signal *signal, long *isWarpGate)
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleSignal);
+void SIGNAL_HandleSignal(Instance *instance, Signal *signal, int dontForceDoSignal)
+{
+    COLLIDE_HandleSignal(instance, signal, 1, dontForceDoSignal);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_RelocateSignal);
 
