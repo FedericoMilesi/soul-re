@@ -146,7 +146,14 @@ long SIGNAL_HandleFogFar(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraShake);
+long SIGNAL_HandleCameraShake(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    CAMERA_SetShake(&theCamera, signal->data.cameraShake.time, signal->data.cameraShake.scale);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCallSignal);
 
