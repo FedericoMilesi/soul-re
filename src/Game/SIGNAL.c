@@ -155,7 +155,14 @@ long SIGNAL_HandleCameraShake(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCallSignal);
+long SIGNAL_HandleCallSignal(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    SIGNAL_HandleSignal(instance, ((MultiSignal *)(signal->data.callSignal))->signalList, 0);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleStopPlayerControl);
 

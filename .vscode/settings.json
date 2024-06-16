@@ -51,6 +51,7 @@
         "cmath": "cpp",
         "limits": "cpp",
         "new": "cpp",
-        "camera.h": "c"
+        "camera.h": "c",
+        "signal.h": "c"
     }
 }
