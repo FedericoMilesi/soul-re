@@ -282,7 +282,60 @@ INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetData);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetQuatData);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNext);
+unsigned long SplineGetNext(Spline *spline, SplineDef *def)
+{
+    unsigned long movedSplineOk;
+    int count;
+    int temp; // not from decls.h
+
+    movedSplineOk = 0;
+
+    if ((spline != NULL) && (def != NULL))
+    {
+        temp = spline->type == 1;
+
+        if (def->currkey < spline->numkeys)
+        {
+            movedSplineOk = 1;
+
+            if (temp != 0)
+            {
+                count = ((RSpline *)spline)->key[def->currkey].count;
+            }
+            else
+            {
+                count = spline->key[def->currkey].count;
+            }
+
+            SplineSetDefDenom(spline, def, 0);
+
+            def->fracCurr += 4096;
+
+            if ((short)(def->fracCurr >> 12) >= count)
+            {
+                def->currkey++;
+
+                def->fracCurr = 0;
+
+                if ((spline->numkeys - 1) < def->currkey)
+                {
+                    movedSplineOk = 0;
+
+                    if (((spline->flags & 0x4)) || ((spline->flags & 0x2)))
+                    {
+                        def->currkey = 0;
+                    }
+                    else
+                    {
+                        def->currkey = spline->numkeys - 1;
+                    }
+                }
+            }
+        }
+    }
+
+    return movedSplineOk;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetPrev);
 
