@@ -419,7 +419,39 @@ MultiSignal *SIGNAL_RelocateSignal(MultiSignal *multiSignal, long offset)
     return (MultiSignal *)&signal->data.callSignal;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_FindSignal);
+MultiSignal *SIGNAL_FindSignal(Level *level, long id)
+{
+    int i;
+    Signal *signal;
+    MultiSignal *msignal;
+    //long signalNumber; unused
+
+    msignal = level->SignalListStart;
+
+    while (msignal < level->SignalListEnd)
+    {
+        signal = msignal->signalList;
+
+        if (id == msignal->signalNum)
+        {
+            break;
+        }
+
+        for (i = 0; i < msignal->numSignals; i++)
+        {
+            signal = (Signal *)((char *)signal + (signalInfoList[signal->id & 0x7FFFFFFF].length + 1) * 4);
+        }
+
+        msignal = (MultiSignal *)&signal->data.callSignal;
+    }
+
+    if (msignal == level->SignalListEnd)
+    {
+        msignal = NULL;
+    }
+
+    return msignal;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_OutOfWater);
 
