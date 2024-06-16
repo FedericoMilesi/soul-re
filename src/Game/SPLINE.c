@@ -41,7 +41,41 @@ void _SplineS2Pos(vecS *p, long s, SplineKey *key, SplineKey *key2)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineSetDefDenom);
+void SplineSetDefDenom(Spline *spline, SplineDef *def, int denomFlag)
+{
+    unsigned long denom;
+
+    if (def->denomFlag != denomFlag)
+    {
+        if (def->fracCurr != 0)
+        {
+            if (spline->type == 1)
+            {
+                denom = ((RSpline *)spline)->key[def->currkey].count;
+            }
+            else
+            {
+                denom = spline->key[def->currkey].count;
+            }
+
+            if (denom == 0)
+            {
+                denom = 1;
+            }
+
+            if (denomFlag != 0)
+            {
+                def->fracCurr = (def->fracCurr * denom) >> 15;
+            }
+            else
+            {
+                def->fracCurr = (def->fracCurr << 15) / denom;
+            }
+        }
+
+        def->denomFlag = denomFlag;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetFrameNumber);
 
