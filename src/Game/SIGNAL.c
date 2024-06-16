@@ -190,7 +190,36 @@ void SIGNAL_RelocateCameraSpline(Signal *signal, long offset)
     signal->data.cameraSpline.intro = (void *)OFFSET_DATA(signal->data.cameraSpline.intro, offset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleCameraSpline);
+long SIGNAL_HandleCameraSpline(Instance *instance, Signal *signal)
+{
+    (void)instance;
+
+    switch (signal->data.cameraSpline.index)
+    {
+    case 0:
+        if (signal->data.cameraSpline.intro != NULL)
+        {
+            theCamera.Spline00 = ((Intro *)signal->data.cameraSpline.intro)->multiSpline;
+        }
+        else
+        {
+            theCamera.Spline00 = NULL;
+        }
+
+        break;
+    case 1:
+        if ((Intro *)signal->data.cameraSpline.intro != NULL)
+        {
+            theCamera.Spline01 = ((Intro *)signal->data.cameraSpline.intro)->multiSpline;
+        }
+        else
+        {
+            theCamera.Spline01 = NULL;
+        }
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleScreenWipe);
 
