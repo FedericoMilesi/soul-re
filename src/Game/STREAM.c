@@ -2331,7 +2331,24 @@ void RelocatePlanMarkers(PlanMkr *planMkrList, int numPlanMkrs, SVector *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateSFXMarkers);
+void RelocateSFXMarkers(SFXMkr *sfxMkrList, int numSFXMkrs, SVector *offset)
+{
+    int i;
+    short ox;
+    short oy;
+    short oz;
+
+    ox = offset->x;
+    oy = offset->y;
+    oz = offset->z;
+
+    for (i = numSFXMkrs; i != 0; i--, sfxMkrList++)
+    {
+        sfxMkrList->pos.x += ox;
+        sfxMkrList->pos.y += oy;
+        sfxMkrList->pos.z += oz;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_AdjustMultiSpline);
 
