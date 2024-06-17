@@ -3,7 +3,7 @@
 #include "Game/MATH3D.h"
 #include "Game/PSX/PSX_G2/QUATVM.h"
 
-extern char D_800D0FD8[];
+long FRAC_BITS = 15;
 
 void _SplineS2Pos(vecS *p, long s, SplineKey *key, SplineKey *key2)
 {
@@ -476,7 +476,7 @@ unsigned long SplineGetOffsetNext(Spline *spline, SplineDef *def, long fracOffse
         }
         else
         {
-            printf(D_800D0FD8, def->currkey, spline->numkeys);
+            printf("def->currkey=%d spline->numkeys=%d\n", def->currkey, spline->numkeys);
         }
     }
 
