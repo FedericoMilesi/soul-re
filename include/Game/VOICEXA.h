@@ -78,4 +78,6 @@ typedef struct XAVoiceTracker {
     struct XAFileInfo xaFileInfo[30];
 } XAVoiceTracker;
 
+int VOICEXA_FinalStatus(XAVoiceTracker *vt);
+
 #endif

@@ -198,7 +198,27 @@ INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_FinalStatus);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_Pause);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_Resume);
+void VOICEXA_Resume()
+{
+    XAVoiceTracker *vt;
+    int finalStatus;
+
+    vt = &voiceTracker;
+
+    finalStatus = VOICEXA_FinalStatus(vt);
+
+    if ((gameTrackerX.debugFlags & 0x80000))
+    {
+        if (finalStatus == 3)
+        {
+            putVoiceCommand(vt, 3, 1, 0);
+        }
+        else if (finalStatus == 4)
+        {
+            putVoiceCommand(vt, 4, 0, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_Tick);
 

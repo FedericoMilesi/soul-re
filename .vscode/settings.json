@@ -22,6 +22,7 @@
     "files.associations": {
         "sdk.h": "c",
         "gameloop.h": "c",
-        "aadlib.h": "c"
+        "aadlib.h": "c",
+        "voicexa.h": "c"
     }
 }
