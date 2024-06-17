@@ -2408,7 +2408,21 @@ void STREAM_SetInstancePosition(Instance *instance, evPositionData *data)
     STREAM_OffsetInstancePosition(instance, &offset, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateInstances);
+void RelocateInstances(SVector *offset)
+{
+    Instance *instance;
+
+    instance = gameTrackerX.instanceList->first;
+
+    while (instance != NULL)
+    {
+        STREAM_RelocateInstance(instance, offset);
+
+        instance = instance->next;
+    }
+
+    FX_Relocate(offset);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateStreamPortals);
 
