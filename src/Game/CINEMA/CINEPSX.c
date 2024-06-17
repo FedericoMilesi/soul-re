@@ -3,6 +3,9 @@
 #include "Game/PSX/MAIN.h"
 #include "Game/CINEMA/CINEPSX.h"
 #include "Game/GAMEPAD.h"
+#include "Game/SAVEINFO.h"
+#include "Game/LOAD3D.h"
+#include "Game/STRMLOAD.h"
 
 extern int StCdIntrFlag;
 
@@ -34,9 +37,50 @@ unsigned short CINE_Pad(int pad)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CINEMA/CINEPSX", CINE_Play);
+void CINE_Play(char *strfile, unsigned short mask, int buffers)
+{
+    if (the_cine_table != NULL)
+    {
+        if (the_cine_table->versionID == monVersion)
+        {
+            the_cine_table->play(strfile, mask, buffers);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CINEMA/CINEPSX", CINE_Load);
+            LOAD_InitCdStreamMode();
+        }
+        else
+        {
+            printf("CINEMA : Version number is wrong. Not playing the cinematics.\n");
+        }
+    }
+}
+
+int CINE_Load()
+{
+    ObjectTracker *tracker;
+    int attempts;
+
+    attempts = 0;
+    tracker = STREAM_GetObjectTracker("cinemax");
+
+    while (attempts < 400 && tracker->objectStatus != 2)
+    {
+        STREAM_PollLoadQueue();
+        VSync(0);
+        attempts++;
+    }
+
+    if (attempts >= 400)
+    {
+        printf("cinema timeout\n");
+        return 0;
+    }
+    else
+    {
+        the_cine_tracker = tracker;
+        the_cine_table = (cinema_fn_table_t *)tracker->object->relocModule;
+        return 1;
+    }
+}
 
 int CINE_Loaded()
 {
@@ -57,4 +101,16 @@ void CINE_Unload()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CINEMA/CINEPSX", CINE_PlayIngame);
+void CINE_PlayIngame(int number)
+{
+    char movie_name[24];
+
+    sprintf(movie_name, "\\CHRONO%d.STR;1", number);
+
+    if (CINE_Load() != 0)
+    {
+        CINE_Play(movie_name, 0, 2);
+
+        CINE_Unload();
+    }
+}
