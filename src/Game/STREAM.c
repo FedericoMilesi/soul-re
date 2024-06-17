@@ -311,29 +311,32 @@ void STREAM_YesMonsters()
     gameTrackerX.gameFlags &= ~0x4000000;
 }
 
-/*TODO: migrate to STREAM_IsMonster*/
-static char *D_800CC410[] = { //monnames
-    "skinner",
-    "morlock",
-    "wallcr",
-    "ronin",
-    "aluka",
-    "sluagh",
-    "vwraith",
-    "vlgra",
-    "vlgrb",
-    "vlgrc",
-    "hunter",
-    "wrshp",
-    "roninbss",
-    "skinbos",
-    "priests",
-    "alukabss",
-    "morboss",
-    "soul",
-    NULL,
-};
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsMonster);
+int STREAM_IsMonster(char *name)
+{
+    static char *monnames[] = {
+        "skinner",
+        "morlock",
+        "wallcr",
+        "ronin",
+        "aluka",
+        "sluagh",
+        "vwraith",
+        "vlgra",
+        "vlgrb",
+        "vlgrc",
+        "hunter",
+        "wrshp",
+        "roninbss",
+        "skinbos",
+        "priests",
+        "alukabss",
+        "morboss",
+        "soul",
+        NULL,
+    };
+
+    return STREAM_InList(name, monnames);
+}
 
 int STREAM_TryAndDumpANonResidentObject()
 {

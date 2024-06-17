@@ -295,8 +295,18 @@ int LOAD_IsXAInQueue()
     return 0;
 }
 
-static char D_800D19E0[] = "voice";
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_PlayXA);
+void LOAD_PlayXA(int number)
+{
+    LoadQueueEntry *currentEntry;
+
+    currentEntry = STREAM_AddQueueEntryToTail();
+
+    currentEntry->status = 8;
+
+    currentEntry->loadEntry.fileHash = number;
+
+    memcpy(currentEntry->loadEntry.fileName, "voice", sizeof("voice"));
+}
 
 long *LOAD_ReadFile(char *fileName, unsigned char memType)
 {
