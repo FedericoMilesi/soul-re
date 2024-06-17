@@ -321,5 +321,6 @@ void COLLIDE_UpdateAllTransforms(Instance *instance, SVECTOR *offset);
 void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level);
 long COLLIDE_GetNormal(short nNum, short *nrmlArray, SVector *nrml);
 void COLLIDE_Instance1SpheresToInstance2(Instance *instance1, Instance *instance2, long sphereToSphere);
+void COLLIDE_MoveAllTransforms(Instance *instance, Position *offset);
 
 #endif

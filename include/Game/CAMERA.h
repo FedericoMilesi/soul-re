@@ -495,6 +495,7 @@ void CAMERA_SetValue(Camera *camera, long index, long value);
 void CAMERA_SetShake(Camera *camera, long shake, long scale);
 void CAMERA_Adjust_tilt(Camera *camera, long tilt);
 void CAMERA_Adjust_distance(Camera *camera, long dist);
+void CAMERA_Relocate(Camera *camera, SVector *offset, int streamSignalFlag);
 
 extern int CameraCenterDelay;
 Camera theCamera;

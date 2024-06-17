@@ -24,6 +24,7 @@
 #include "Game/PLAN/PLAN.h"
 #include "Game/PSX/SUPPORT.h"
 #include "Libs/STRING.h"
+#include "Game/COLLIDE.h"
 
 long CurrentWarpNumber;
 
@@ -2372,7 +2373,29 @@ void STREAM_RelocateInstance(Instance *instance, SVector *offset)
     INSTANCE_Post(instance, 0x100008, (int)offset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_OffsetInstancePosition);
+void STREAM_OffsetInstancePosition(Instance *instance, SVector *offset, int streamSignalFlag)
+{
+    instance->position.x += offset->x;
+    instance->position.y += offset->y;
+    instance->position.z += offset->z;
+
+    instance->oldPos.x += offset->x;
+    instance->oldPos.y += offset->y;
+    instance->oldPos.z += offset->z;
+
+    instance->shadowPosition.x += offset->x;
+    instance->shadowPosition.y += offset->y;
+    instance->shadowPosition.z += offset->z;
+
+    COLLIDE_UpdateAllTransforms(instance, (SVECTOR *)offset);
+
+    COLLIDE_MoveAllTransforms(instance, (Position *)offset);
+
+    if (instance == theCamera.focusInstance)
+    {
+        CAMERA_Relocate(&theCamera, offset, streamSignalFlag);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_SetInstancePosition);
 

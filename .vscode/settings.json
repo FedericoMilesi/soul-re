@@ -26,6 +26,8 @@
         "voicexa.h": "c",
         "strmload.h": "c",
         "undrwrld.h": "c",
-        "stream.h": "c"
+        "stream.h": "c",
+        "collide.h": "c",
+        "camera.h": "c"
     }
 }
