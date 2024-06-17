@@ -2261,7 +2261,17 @@ void RelocateTerrain(Terrain *terrain, SVector *offset)
     RelocateStreamPortals((StreamUnitPortal *)((long *)terrain->StreamUnits + 1), *(long *)terrain->StreamUnits, offset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateVMObjects);
+void RelocateVMObjects(VMObject *vobjectlist, long numvmobjs, SVector *offset)
+{
+    int i;
+
+    for (i = 0; i < numvmobjs; i++)
+    {
+        vobjectlist[i].position.x += offset->x;
+        vobjectlist[i].position.y += offset->y;
+        vobjectlist[i].position.z += offset->z;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateBGObjects);
 
