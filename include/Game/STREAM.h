@@ -456,5 +456,6 @@ void STREAM_AdjustMultiSpline(MultiSpline *multi, SVector *offset);
 StreamUnit *STREAM_LoadLevel(char *baseAreaName, StreamUnitPortal *streamPortal, int loadnext);
 //void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit);
 void PreloadAllConnectedUnits(StreamUnit *streamUnit, SVector *offset);
+void STREAM_OffsetInstancePosition(Instance *instance, SVector *offset, int streamSignalFlag);
 
 #endif

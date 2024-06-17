@@ -2365,7 +2365,12 @@ void STREAM_AdjustMultiSpline(MultiSpline *multi, SVector *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RelocateInstance);
+void STREAM_RelocateInstance(Instance *instance, SVector *offset)
+{
+    STREAM_OffsetInstancePosition(instance, offset, 1);
+
+    INSTANCE_Post(instance, 0x100008, (int)offset);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_OffsetInstancePosition);
 
