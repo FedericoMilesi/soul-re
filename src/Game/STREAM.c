@@ -2350,7 +2350,20 @@ void RelocateSFXMarkers(SFXMkr *sfxMkrList, int numSFXMkrs, SVector *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_AdjustMultiSpline);
+void STREAM_AdjustMultiSpline(MultiSpline *multi, SVector *offset)
+{
+    int i;
+
+    if (multi->positional != NULL)
+    {
+        for (i = 0; i < multi->positional->numkeys; i++)
+        {
+            multi->positional->key[i].point.x += offset->x;
+            multi->positional->key[i].point.y += offset->y;
+            multi->positional->key[i].point.z += offset->z;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RelocateInstance);
 
