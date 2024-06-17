@@ -12,7 +12,7 @@
 
 void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit); /*TODO*/
 
-EXTERN STATIC UW_ScreenXY *ScreenMorphArray;
+static UW_ScreenXY *ScreenMorphArray = 0;
 
 EXTERN STATIC long UW_angle;
 
@@ -21,10 +21,6 @@ EXTERN STATIC long UW_scalex;
 EXTERN STATIC long UW_scalexInc;
 
 EXTERN STATIC long UW_angleInc;
-
-extern char D_800D1DC8[];
-
-extern char D_800D1DD0[];
 
 short RENDER_currentStreamUnitID;
 
@@ -41,7 +37,7 @@ void UNDERWORLD_StartProcess()
 
     UNDERWORLD_InitDisplayProcess();
 
-    UNDERWORLD_LoadLevel(D_800D1DC8, &gameTrackerX);
+    UNDERWORLD_LoadLevel("under1", &gameTrackerX);
 
     if (ScreenMorphArray != NULL)
     {
@@ -168,7 +164,7 @@ StreamUnit *UNDERWORLD_LoadLevel(char *baseAreaName, GameTracker *gameTracker)
         SIGNAL_HandleSignal(gameTracker->playerInstance, streamUnit->level->startUnitMainSignal->signalList, 0);
     }
 
-    STREAM_LoadMainVram(gameTracker, D_800D1DC8, streamUnit);
+    STREAM_LoadMainVram(gameTracker, "under1", streamUnit);
 
     INSTANCE_Post(gameTracker->playerInstance, 0x40001, streamUnit->level->streamUnitID);
 
@@ -180,7 +176,7 @@ StreamUnit *UNDERWORLD_LoadLevel(char *baseAreaName, GameTracker *gameTracker)
 
     for (i = 0; i < streamUnit->level->numIntros; i++)
     {
-        if (strcmpi(streamUnit->level->introList[i].name, D_800D1DD0) == 0)
+        if (strcmpi(streamUnit->level->introList[i].name, "raziel") == 0)
         {
             streamUnit->level->introList[i].flags |= 0x8;
             break;

@@ -249,7 +249,7 @@ segments:
       - [0x0C2408, .sdata, Game/G2/QUATG2]
       - [0x0C2418, sdata, Game/PLAN/PLANCOLL]
       - [0x0C2430, sdata] # Game/RAZIEL/* include C files?
-      - [0x0C25C4, sdata, Game/UNDRWRLD]
+      - [0x0C25C4, .sdata, Game/UNDRWRLD]
       - [0x0C25D8, sdata, Game/SAVEINFO]
       - [0x0C26B0, .sdata, Game/VOICEXA]
       - [0x0C26DC, sdata, Game/LOCAL/LOCALSTR]
