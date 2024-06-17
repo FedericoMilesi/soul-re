@@ -86,6 +86,32 @@ typedef struct _SFXMkr {
     long inSpectral;
 } SFXMkr;
 
+// size: 0x8
+typedef struct _BVertex {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short z;
+    // offset: 0006
+    short pad;
+} BVertex;
+
+// size: 0xC
+typedef struct _BFace {
+    // offset: 0000
+    short v0;
+    // offset: 0002
+    short v1;
+    // offset: 0004
+    short v2;
+    // offset: 0006
+    short pad;
+    // offset: 0008 (12 bytes)
+    struct TextureFT3 *texture;
+} BFace;
+
 // size: 0x18
 typedef struct _BGObject {
     // offset: 0000

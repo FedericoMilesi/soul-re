@@ -2273,7 +2273,21 @@ void RelocateVMObjects(VMObject *vobjectlist, long numvmobjs, SVector *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateBGObjects);
+void RelocateBGObjects(BGObject *BGObjList, long numBGObjs, SVector *offset)
+{
+    int i;
+    int d;
+
+    for (i = 0; i < numBGObjs; i++)
+    {
+        for (d = 0; d < BGObjList[i].numVertices; d++)
+        {
+            BGObjList[i].vertexList[d].x += offset->x;
+            BGObjList[i].vertexList[d].y += offset->y;
+            BGObjList[i].vertexList[d].z += offset->z;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocatePlanPool);
 
