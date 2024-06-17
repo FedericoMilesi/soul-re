@@ -2424,7 +2424,36 @@ void RelocateInstances(SVector *offset)
     FX_Relocate(offset);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateStreamPortals);
+void RelocateStreamPortals(StreamUnitPortal *StreamUnitList, int NumStreamUnits, SVector *offset)
+{
+    int i;
+    int d;
+
+    for (i = 0; i < NumStreamUnits; i++)
+    {
+        StreamUnitList[i].maxx += offset->x;
+        StreamUnitList[i].maxy += offset->y;
+        StreamUnitList[i].maxz += offset->z;
+
+        StreamUnitList[i].minx += offset->x;
+        StreamUnitList[i].miny += offset->y;
+        StreamUnitList[i].minz += offset->z;
+
+        for (d = 0; d < 3; d++)
+        {
+            StreamUnitList[i].t1[d].x += offset->x;
+            StreamUnitList[i].t1[d].y += offset->y;
+            StreamUnitList[i].t1[d].z += offset->z;
+        }
+
+        for (d = 0; d < 3; d++)
+        {
+            StreamUnitList[i].t2[d].x += offset->x;
+            StreamUnitList[i].t2[d].y += offset->y;
+            StreamUnitList[i].t2[d].z += offset->z;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_PackVRAMObject);
 
