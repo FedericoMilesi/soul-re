@@ -3,7 +3,13 @@
 #include "Game/GAMELOOP.h"
 #include "Game/PSX/AADLIB.h"
 
-extern char D_800D1EB0[];
+typedef void (*voiceCmd)(XAVoiceTracker *vt, short voiceIndex);
+
+void voiceCmdPlay(XAVoiceTracker *vt, short voiceIndex);
+void voiceCmdStop(XAVoiceTracker *vt, short cmdParam);
+void voiceCmdPause(XAVoiceTracker *vt, short cmdParam);
+void voiceCmdResume(XAVoiceTracker *vt, short cmdParam);
+void voiceCmdNull(XAVoiceTracker *vt, short cmdParam);
 
 XAVoiceTracker voiceTracker;
 
@@ -35,7 +41,7 @@ void VOICEXA_Init()
 
         for (i = 0; i < 30; i++)
         {
-            sprintf(&fileName[0], D_800D1EB0, i);
+            sprintf(&fileName[0], "\\VOICE\\VOICE%02d.XA;1", i);
 
             if (CdSearchFile(&fp, &fileName[0]) == 0)
             {
@@ -143,6 +149,7 @@ void putVoiceCommand(XAVoiceTracker *vt, unsigned char voiceCmd, unsigned char n
     }
 }
 
+static voiceCmd voiceCmdTbl[5] = {voiceCmdPlay, voiceCmdStop, voiceCmdPause, voiceCmdResume, voiceCmdNull};
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", processVoiceCommands);
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", voiceCmdPlay);
@@ -188,8 +195,10 @@ void voiceCmdResume(XAVoiceTracker *vt, short cmdParam)
     }
 }
 
-void voiceCmdNull()
+void voiceCmdNull(struct XAVoiceTracker *vt, short cmdParam)
 {
+    (void)vt;
+    (void)cmdParam;
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_Play);
