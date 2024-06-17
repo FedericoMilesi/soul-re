@@ -2312,7 +2312,24 @@ void RelocatePlanPool(PlanningNode *planPool, SVector *offset)
     poolManagementData->playerPosAtLastPlanMkrUpdate.z += oz;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocatePlanMarkers);
+void RelocatePlanMarkers(PlanMkr *planMkrList, int numPlanMkrs, SVector *offset)
+{
+    int i;
+    short ox;
+    short oy;
+    short oz;
+
+    ox = offset->x;
+    oy = offset->y;
+    oz = offset->z;
+
+    for (i = numPlanMkrs; i != 0; i--, planMkrList++)
+    {
+        planMkrList->pos.x += ox;
+        planMkrList->pos.y += oy;
+        planMkrList->pos.z += oz;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateSFXMarkers);
 
