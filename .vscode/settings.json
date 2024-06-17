@@ -18,18 +18,5 @@
         }
     },
     "terminal.integrated.tabs.enableAnimation": false,
-    "files.autoGuessEncoding": true,
-    "files.associations": {
-        "sdk.h": "c",
-        "gameloop.h": "c",
-        "aadlib.h": "c",
-        "voicexa.h": "c",
-        "strmload.h": "c",
-        "undrwrld.h": "c",
-        "stream.h": "c",
-        "collide.h": "c",
-        "camera.h": "c",
-        "fx.h": "c",
-        "vram.h": "c"
-    }
+    "files.autoGuessEncoding": true
 }

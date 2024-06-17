@@ -182,7 +182,7 @@ segments:
       - [0x0BA7C0, data, Game/FONT]
       - [0x0BA9F4, data, Game/GAMELOOP]
       - [0x0BAA1C, data]
-      - [0x0BCBF8, data, Game/STREAM]
+      - [0x0BCBF8, .data, Game/STREAM]
       - [0x0BCC5C, .data, Game/MONSTER/HUMAN]
       - [0x0BCCA4, data, Game/MONSTER/MISSILE]
       - [0x0BCCAC, data, Game/MONSTER/MONMSG]
@@ -227,7 +227,7 @@ segments:
       - [0x0C1A1C, sdata, Game/PSX/AADSEQEV]
       - [0x0C1BBC, sdata, Game/PSX/AADSFX] 
       - [0x0C1BE8, sdata] # Game/PSX/AADVOICE?
-      - [0x0C1E94, sdata, Game/STREAM]
+      - [0x0C1E94, .sdata, Game/STREAM]
       - [0x0C2178, sdata, Game/STRMLOAD]
       - [0x0C21F0, sdata, Game/EVENT]
       - [0x0C2210, sdata, Game/PHYSOBS]

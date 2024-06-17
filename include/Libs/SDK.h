@@ -15,6 +15,10 @@
 #define ABS(a) ((a) < 0 ? -(a) : (a))
 #endif
 
+#ifndef kabs
+#define kabs(a) ((a) > 0 ? (a) : -(a))
+#endif
+
 #define getScratchAddr(offset)  ((unsigned long *)(0x1f800000+(offset)*4))
 
 #define getTPage(tp, abr, x, y) 					\
@@ -37,6 +41,17 @@
         "ctc2    $12, $2;" \
         "ctc2    $13, $3;" \
         "ctc2    $14, $4" \
+        : : "r"(r0) \
+        : "$12", "$13", "$14" \
+    )
+
+#define gte_SetTransMatrix(r0) __asm__ ( \
+        "lw    $12, 20(%0);" \
+        "lw    $13, 24(%0);" \
+        "ctc2    $12, $5;" \
+        "lw    $14, 28(%0);" \
+        "ctc2    $13, $6;" \
+        "ctc2    $14, $7" \
         : : "r"(r0) \
         : "$12", "$13", "$14" \
     )

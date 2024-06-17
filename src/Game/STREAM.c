@@ -26,37 +26,28 @@
 #include "Libs/STRING.h"
 #include "Game/COLLIDE.h"
 
-long CurrentWarpNumber;
-
 short M_TrackClutUpdate;
-
-WarpRoom WarpRoomArray[14];
 
 WarpGateLoadInformation WarpGateLoadInfo;
 
-extern char D_800D1954[];
+long CurrentWarpNumber = 0;
 
-extern char D_800D17B0[];
-
-extern char D_800D17BC[];
-
-extern char D_800D17D8[];
-
-extern char D_800D17F4[];
-
-extern char D_800D1810[];
-
-extern char D_800D18E4[];
-
-extern char D_800D1910[];
-
-extern char D_800D1928[];
-
-extern char D_800D1940[];
-
-extern char D_800D194C[];
-
-extern char D_800D1928[];
+WarpRoom WarpRoomArray[14] = {
+    { "under3", NULL },
+    { "clfpil3", NULL },
+    { "huba8", NULL },
+    { "out10", NULL },
+    { "city6", NULL },
+    { "cathy58", NULL },
+    { "cathy62", NULL },
+    { "stone15", NULL },
+    { "add6", NULL },
+    { "aluka43", NULL },
+    { "fill3", NULL },
+    { "hubb4", NULL },
+    { "oracle1", NULL },
+    { "chrono17", NULL },
+};
 
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
@@ -78,7 +69,7 @@ void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName,
 
     strcpy(text, baseAreaName);
 
-    number = strpbrk(text, D_800D17B0);
+    number = strpbrk(text, "0123456789");
 
     if (number != 0)
     {
@@ -87,17 +78,17 @@ void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName,
 
     if (dramName != NULL)
     {
-        sprintf(dramName, D_800D17BC, text, baseAreaName);
+        sprintf(dramName, "\\kain2\\area\\%s\\bin\\%s.drm", text, baseAreaName);
     }
 
     if (vramName != NULL)
     {
-        sprintf(vramName, D_800D17D8, text, baseAreaName);
+        sprintf(vramName, "\\kain2\\area\\%s\\bin\\%s.crm", text, baseAreaName);
     }
 
     if (sfxName != NULL)
     {
-        sprintf(sfxName, D_800D17F4, text, baseAreaName);
+        sprintf(sfxName, "\\kain2\\area\\%s\\bin\\%s.snf", text, baseAreaName);
     }
 }
 
@@ -210,7 +201,7 @@ void STREAM_LoadObjectReturn(void *loadData, void *data, void *data2)
     {
         char objDsfxFileName[64];
 
-        sprintf(objDsfxFileName, D_800D1810, objectTracker->name, objectTracker->name);
+        sprintf(objDsfxFileName, "\\kain2\\sfx\\object\\%s\\%s.snf", objectTracker->name, objectTracker->name);
 
         object->sfxFileHandle = 0;
 
@@ -288,6 +279,8 @@ int STREAM_InList(char *name, char **nameList)
     return 0;
 }
 
+/*TODO: migrate to STREAM_IsSpecialMonster*/
+static char *D_800CC3F8[] = {"wallcr", "aluka", "ronin", "sluagh", "vwraith", NULL}; //mon
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsSpecialMonster);
 
 void STREAM_DumpSomeMonsters()
@@ -318,6 +311,28 @@ void STREAM_YesMonsters()
     gameTrackerX.gameFlags &= ~0x4000000;
 }
 
+/*TODO: migrate to STREAM_IsMonster*/
+static char *D_800CC410[] = { //monnames
+    "skinner",
+    "morlock",
+    "wallcr",
+    "ronin",
+    "aluka",
+    "sluagh",
+    "vwraith",
+    "vlgra",
+    "vlgrb",
+    "vlgrc",
+    "hunter",
+    "wrshp",
+    "roninbss",
+    "skinbos",
+    "priests",
+    "alukabss",
+    "morboss",
+    "soul",
+    NULL,
+};
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsMonster);
 
 int STREAM_TryAndDumpANonResidentObject()
@@ -337,6 +352,8 @@ int STREAM_TryAndDumpANonResidentObject()
 
     return -1;
 }
+
+static char D_800D18C4[] = "LOW MEMORY: Dumping monster %s\n";
 
 int InsertGlobalObject(char *name, GameTracker *gameTracker)
 {
@@ -377,12 +394,12 @@ int InsertGlobalObject(char *name, GameTracker *gameTracker)
 
                 if (i == -1)
                 {
-                    DEBUG_FatalError(D_800D18E4, 48);
+                    DEBUG_FatalError("The Object tracker is full MAX_OBJECTS=%d.\n", 48);
                 }
             }
 
-            sprintf(string, D_800D1910, name, name);
-            sprintf(vramname, D_800D1928, name, name);
+            sprintf(string, "\\kain2\\object\\%s\\%s.drm", name, name);
+            sprintf(vramname, "\\kain2\\object\\%s\\%s.crm", name, name);
 
             strcpy(otr->name, name);
 
@@ -516,7 +533,7 @@ void STREAM_DumpObject(ObjectTracker *objectTracker)
 
     if (objectTracker->objectStatus == 1)
     {
-        sprintf(dramName, D_800D1910, objectTracker->name, objectTracker->name);
+        sprintf(dramName, "\\kain2\\object\\%s\\%s.drm", objectTracker->name, objectTracker->name);
 
         LOAD_AbortFileLoad(dramName, (void *)STREAM_StreamLoadObjectAbort);
     }
@@ -892,7 +909,7 @@ void STREAM_ConnectStream(StreamUnit *streamUnit)
 
             connectStream = STREAM_GetStreamUnitWithID(streamPortal2->streamID);
 
-            if ((strcmpi(text, D_800D1940) == 0) && (WARPGATE_IsUnitWarpRoom(mainUnit) != 0))
+            if ((strcmpi(text, "warpgate") == 0) && (WARPGATE_IsUnitWarpRoom(mainUnit) != 0))
             {
                 connectStream = mainUnit;
             }
@@ -965,7 +982,7 @@ void STREAM_ConnectStream(StreamUnit *streamUnit)
 
                             hookedUp = 1;
                         }
-                        else if ((strcmpi(text, D_800D1940) == 0) && (WARPGATE_IsUnitWarpRoom(streamUnit) != 0))
+                        else if ((strcmpi(text, "warpgate") == 0) && (WARPGATE_IsUnitWarpRoom(streamUnit) != 0))
                         {
                             streamPortal2->toStreamUnit = streamUnit;
 
@@ -1000,7 +1017,7 @@ void STREAM_ConnectStream(StreamUnit *streamUnit)
 
         for (i = 0; i < streamUnit->level->numIntros; i++)
         {
-            if (strcmpi(streamUnit->level->introList[i].name, D_800D194C) == 0)
+            if (strcmpi(streamUnit->level->introList[i].name, "raziel") == 0)
             {
                 streamUnit->level->introList[i].flags |= 0x8;
                 break;
@@ -1894,7 +1911,7 @@ int WARPGATE_IsWarpgateReady()
 
 int WARPGATE_IsWarpgateSpectral()
 {
-    return strcmpi(WarpRoomArray[CurrentWarpNumber].name, D_800D1954) == 0;
+    return strcmpi(WarpRoomArray[CurrentWarpNumber].name, "under3") == 0;
 }
 
 int WARPGATE_IsObjectOnWarpSide(Instance *instance)
@@ -2132,7 +2149,7 @@ void PreloadAllConnectedUnits(StreamUnit *streamUnit, SVector *offset)
             *commapos = 0;
         }
 
-        if (strcmpi(text, D_800D1940) == 0)
+        if (strcmpi(text, "warpgate") == 0)
         {
             STREAM_MarkWarpUnitsNeeded();
         }
@@ -2164,7 +2181,7 @@ void PreloadAllConnectedUnits(StreamUnit *streamUnit, SVector *offset)
         {
             *commapos = 0;
 
-            if (strcmpi(text, D_800D1940) == 0)
+            if (strcmpi(text, "warpgate") == 0)
             {
                 stream->flags |= 0x1;
 
@@ -2372,7 +2389,7 @@ void STREAM_RelocateInstance(Instance *instance, SVector *offset)
 {
     STREAM_OffsetInstancePosition(instance, offset, 1);
 
-    INSTANCE_Post(instance, 0x100008, (int)offset);
+    INSTANCE_Post(instance, 0x100008, (intptr_t)offset);
 }
 
 void STREAM_OffsetInstancePosition(Instance *instance, SVector *offset, int streamSignalFlag)
@@ -2475,7 +2492,7 @@ void STREAM_PackVRAMObject(ObjectTracker *objectTracker)
             AdjustVramCoordsObject(512, 0, vramBlock->x, vramBlock->y, objectTracker->object);
         }
 
-        sprintf(fileName, D_800D1928, objectTracker->name, objectTracker->name);
+        sprintf(fileName, "\\kain2\\object\\%s\\%s.crm", objectTracker->name, objectTracker->name);
 
         vramBuffer = (VramBuffer *)MEMPACK_Malloc((vramBlock->w << 1) + sizeof(VramBuffer), 35);
 
@@ -2542,9 +2559,197 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", GetPlaneDist);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", CalcVert);
 
+int AddClippedTri(SVECTOR *iv, RECT *cliprect, int *minz);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", AddClippedTri);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetClipRect);
+int STREAM_GetClipRect(StreamUnitPortal *portal, RECT *rect)
+{
+    int v1x;
+    int v1y;
+    int v1z;
+    int v2x;
+    int v2y;
+    int v2z;
+    int nx;
+    int ny;
+    int nz;
+    int nx2;
+    int ny2;
+    int nz2;
+    int len;
+    int side;
+    int side2;
+    int retval;
+    int horizontal_flag;
+    int fullscreen_flag;
+    int minz;
+    int minz2;
+
+    fullscreen_flag = 0;
+    horizontal_flag = 0;
+
+    if (portal->t1[0].z == portal->t1[1].z)
+    {
+        horizontal_flag = (portal->t1[0].z == portal->t1[2].z);
+    }
+
+    v1y = portal->t1[0].y - portal->t1[1].y;
+    v2z = portal->t1[0].z - portal->t1[2].z;
+    v1z = portal->t1[0].z - portal->t1[1].z;
+    v2y = portal->t1[0].y - portal->t1[2].y;
+    v1x = portal->t1[0].x - portal->t1[1].x;
+    v2x = portal->t1[0].x - portal->t1[2].x;
+
+    nx = ((v1y * v2z) - (v2y * v1z)) >> 12;
+    ny = ((v2x * v1z) - (v1x * v2z)) >> 12;
+    nz = ((v1x * v2y) - (v2x * v1y)) >> 12;
+
+    side = -(((portal->t1[0].x - theCamera.core.position.x) * nx) +
+             ((portal->t1[0].y - theCamera.core.position.y) * ny) +
+             ((portal->t1[0].z - theCamera.core.position.z) * nz));
+
+    len = MATH3D_FastSqrt((nx * nx) + (ny * ny) + (nz * nz));
+
+    if (kabs(side) < len)
+    {
+        v1y = portal->t2[0].y - portal->t2[1].y;
+        v2z = portal->t2[0].z - portal->t2[2].z;
+        v1z = portal->t2[0].z - portal->t2[1].z;
+        v2y = portal->t2[0].y - portal->t2[2].y;
+        v2x = portal->t2[0].x - portal->t2[2].x;
+        v1x = portal->t2[0].x - portal->t2[1].x;
+
+        nx2 = ((v1y * v2z) - (v2y * v1z)) >> 12;
+        ny2 = ((v2x * v1z) - (v1x * v2z)) >> 12;
+        nz2 = ((v1x * v2y) - (v2x * v1y)) >> 12;
+
+        side2 = -(((portal->t2[0].x - theCamera.core.position.x) * nx2) +
+                  ((portal->t2[0].y - theCamera.core.position.y) * ny2) +
+                  ((portal->t2[0].z - theCamera.core.position.z) * nz2));
+
+        MATH3D_FastSqrt((nx2 * nx2) + (ny2 * ny2) + (nz2 * nz2));
+
+        if (side < side2)
+        {
+            side = side2;
+            nx = nx2;
+            ny = ny2;
+            nz = nz2;
+        }
+    }
+
+    if (memcmp(portal->tolevelname, "warpgate", sizeof("warpgate") - 1) != 0)
+    {
+        if (kabs(side) < len)
+        {
+            int dot;
+
+            dot = -((((theCamera.focusInstance->matrix + 1)->t[0] - theCamera.core.position.x) * nx) +
+                    (((theCamera.focusInstance->matrix + 1)->t[1] - theCamera.core.position.y) * ny) +
+                    (((theCamera.focusInstance->matrix + 1)->t[2] - theCamera.core.position.z) * nz));
+
+            if (dot > 0 && horizontal_flag == 0)
+            {
+                fullscreen_flag = 1;
+            }
+        }
+    }
+
+    if (side < -1024)
+    {
+        if (fullscreen_flag == 0)
+        {
+            return 0;
+        }
+    }
+
+    rect->w += rect->x;
+    rect->h += rect->y;
+
+    gte_SetRotMatrix(theCamera.core.wcTransform);
+    gte_SetTransMatrix(theCamera.core.wcTransform);
+
+    retval = AddClippedTri((SVECTOR *)&portal->t1[0], rect, &minz);
+    retval |= AddClippedTri((SVECTOR *)&portal->t2[0], rect, &minz2);
+
+    if (retval == 0)
+    {
+        rect->w -= rect->x;
+        rect->h -= rect->y;
+
+        return 0;
+    }
+    else
+    {
+        if (minz2 < minz)
+        {
+            minz = minz2;
+        }
+
+        if (fullscreen_flag != 0)
+        {
+            if (minz < 64)
+            {
+                rect->x = 0;
+                rect->y = 0;
+                rect->w = SCREEN_WIDTH;
+                rect->h = SCREEN_HEIGHT;
+
+                return 1;
+            }
+        }
+
+        if (rect->x < 0)
+        {
+            rect->x = 0;
+        }
+
+        if (rect->y < 0)
+        {
+            rect->y = 0;
+        }
+
+        if (rect->w >= 513)
+        {
+            rect->w = SCREEN_WIDTH;
+        }
+
+        if (rect->h >= 241)
+        {
+            rect->h = SCREEN_HEIGHT;
+        }
+
+        rect->w -= rect->x;
+        rect->h -= rect->y;
+
+        if (horizontal_flag != 0)
+        {
+            if (kabs(side) < len)
+            {
+                if (nz > 0)
+                {
+                    rect->h = SCREEN_HEIGHT - rect->y;
+                }
+                else
+                {
+                    rect->h = rect->y + rect->h;
+                    rect->y = 0;
+                }
+            }
+        }
+
+        if (rect->w <= 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return (rect->h > 0);
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", GetFogColor);
 
@@ -2564,6 +2769,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_UnHideCloudCoverInUnit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RenderWarpGate);
 
+/*TODO: migrate to WARPGATE_RenderWarpUnit*/
+static char D_800D195C[] = "Looking at warp unit =%s\n";
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_RenderWarpUnit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpNonResidentObjects);

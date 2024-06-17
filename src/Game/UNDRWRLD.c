@@ -8,6 +8,9 @@
 #include "Game/MATH3D.h"
 #include "Game/COLLIDE.h"
 #include "Game/STRMLOAD.h"
+#include "Game/PSX/SUPPORT.h"
+
+void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit); /*TODO*/
 
 EXTERN STATIC UW_ScreenXY *ScreenMorphArray;
 
