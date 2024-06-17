@@ -5,6 +5,9 @@
 #include "Game/MEMPACK.h"
 #include "Game/STREAM.h"
 #include "Game/HASM.h"
+#include "Game/MATH3D.h"
+#include "Game/COLLIDE.h"
+#include "Game/STRMLOAD.h"
 
 EXTERN STATIC UW_ScreenXY *ScreenMorphArray;
 
@@ -17,6 +20,10 @@ EXTERN STATIC long UW_scalexInc;
 EXTERN STATIC long UW_angleInc;
 
 extern char D_800D1DC8[];
+
+extern char D_800D1DD0[];
+
+short RENDER_currentStreamUnitID;
 
 static inline int UNDRWRLD_GetDispPage()
 {
@@ -130,7 +137,96 @@ void UNDERWORLD_InitDisplayProcess()
     UNDERWORLD_SetupSource();
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_LoadLevel);
+StreamUnit *UNDERWORLD_LoadLevel(char *baseAreaName, GameTracker *gameTracker)
+{
+    SVector offset;
+    StreamUnit *streamUnit;
+    long i;
+    long UW_time;
+
+    UW_time = gameTrackerX.vblCount;
+
+    while (STREAM_PollLoadQueue() != 0)
+    {
+        UW_time = UNDERWORLD_RotateScreenStep(UW_time);
+    }
+
+    LOAD_ChangeDirectory(baseAreaName);
+
+    streamUnit = STREAM_LoadLevel(baseAreaName, NULL, 0);
+
+    while (STREAM_PollLoadQueue() != 0)
+    {
+        UW_time = UNDERWORLD_RotateScreenStep(UW_time);
+    }
+
+    if (streamUnit->level->startUnitMainSignal != NULL)
+    {
+        SIGNAL_HandleSignal(gameTracker->playerInstance, streamUnit->level->startUnitMainSignal->signalList, 0);
+    }
+
+    STREAM_LoadMainVram(gameTracker, D_800D1DC8, streamUnit);
+
+    INSTANCE_Post(gameTracker->playerInstance, 0x40001, streamUnit->level->streamUnitID);
+
+    COPY_SVEC(SVector, &offset, Position, &streamUnit->level->terrain->BSPTreeArray->bspRoot->sphere.position);
+
+    offset.x = -offset.x;
+    offset.y = -offset.y;
+    offset.z = -offset.z;
+
+    for (i = 0; i < streamUnit->level->numIntros; i++)
+    {
+        if (strcmpi(streamUnit->level->introList[i].name, D_800D1DD0) == 0)
+        {
+            streamUnit->level->introList[i].flags |= 0x8;
+            break;
+        }
+    }
+
+    gameTrackerX.playerInstance->currentStreamUnitID = gameTracker->StreamUnitID;
+
+    UNDERWORLD_UpdatePlayer(&streamUnit->level->introList[i], gameTrackerX.playerInstance);
+
+    UW_time = UNDERWORLD_RotateScreenStep(UW_time);
+
+    PreloadAllConnectedUnits(streamUnit, &offset);
+
+    RENDER_currentStreamUnitID = (int)gameTracker->StreamUnitID;
+
+    gameTracker->wipeType = 10;
+
+    gameTracker->maxWipeTime = 30;
+    gameTracker->wipeTime = 30;
+
+    while (STREAM_PollLoadQueue() != 0)
+    {
+        UW_time = UNDERWORLD_RotateScreenStep(UW_time);
+    }
+
+    {
+        POLY_F4 poly;
+        DR_TPAGE tpage;
+
+        setDrawTPage(&tpage, 1, 1, 320);
+        setPolyF4(&poly);
+        setXY4(&poly, 0, 0, 512, 0, 0, 240, 512, 240);
+        setRGB0(&poly, 8, 8, 8);
+        setcode(&poly, 42);
+
+        for (i = 0; i < 30; i++)
+        {
+            VSync(0);
+
+            DrawPrim(&tpage);
+            DrawPrim(&poly);
+        }
+
+        DrawSync(0);
+    }
+
+    return streamUnit;
+}
 
 void UNDERWORLD_UpdatePlayer(Intro *playerIntro, Instance *instance)
 {

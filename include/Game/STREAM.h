@@ -453,5 +453,8 @@ void WARPGATE_UpdateAddToArray(StreamUnit *streamUnit);
 void MORPH_UpdateNormals(Level *BaseLevel);
 void WARPGATE_FixUnit(StreamUnit *streamUnit);
 void STREAM_AdjustMultiSpline(MultiSpline *multi, SVector *offset);
+StreamUnit *STREAM_LoadLevel(char *baseAreaName, StreamUnitPortal *streamPortal, int loadnext);
+//void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit);
+void PreloadAllConnectedUnits(StreamUnit *streamUnit, SVector *offset);
 
 #endif

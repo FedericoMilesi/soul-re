@@ -187,6 +187,44 @@ typedef struct _HInfo {
     struct _HBox *hboxList;
 } HInfo;
 
+// size: 0x8
+typedef struct _Sphere_noSq {
+    // offset: 0000 (6 bytes)
+    struct _Position position;
+    // offset: 0006
+    unsigned short radius;
+} Sphere_noSq;
+
+// size: 0x2C
+typedef struct _BSPNode {
+    // offset: 0000 (8 bytes)
+    struct _Sphere_noSq sphere;
+    // offset: 0008
+    short a;
+    // offset: 000A
+    short b;
+    // offset: 000C
+    short c;
+    // offset: 000E
+    short flags;
+    // offset: 0010
+    long d;
+    // offset: 0014
+    void *front;
+    // offset: 0018
+    void *back;
+    // offset: 001C (8 bytes)
+    struct _Sphere_noSq spectralSphere;
+    // offset: 0024
+    short front_spectral_error;
+    // offset: 0026
+    short back_spectral_error;
+    // offset: 0028
+    short front_material_error;
+    // offset: 002A
+    short back_material_error;
+} BSPNode;
+
 // size: 0x24
 typedef struct BSPTree {
     // offset: 0000 (44 bytes)

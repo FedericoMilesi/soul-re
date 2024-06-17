@@ -298,6 +298,84 @@ typedef struct SpuCommonAttr {
     struct SpuExtAttr ext;
 } SpuCommonAttr;
 
+// Prim drawing
+
+typedef struct {
+    u_long	tag;
+    u_char	r0, g0, b0, code;
+    short	x0, y0;
+    short	x1, y1;
+    short	x2, y2;
+    short	x3, y3;
+} POLY_F4;				/* Flat Quadrangle */
+
+typedef	struct {
+    u_long	tag;
+    u_long	code[1];
+} DR_TPAGE;				/* Drawing TPage */
+
+typedef struct {
+    unsigned	addr : 24;
+    unsigned 	len : 8;
+    u_char		r0, g0, b0, code;
+} P_TAG;
+
+#define setcode(p, _code)	(((P_TAG *)(p))->code = (u_char)(_code))
+
+#define setlen( p, _len) 	(((P_TAG *)(p))->len  = (u_char)(_len))
+
+#define _get_mode(dfe, dtd, tpage)	\
+		((0xe1000000)|((dtd)?0x0200:0)| \
+		((dfe)?0x0400:0)|((tpage)&0x9ff))
+
+#define setDrawTPage(p, dfe, dtd, tpage)	\
+	setlen(p, 1),	\
+	((u_long *)(p))[1] = _get_mode(dfe, dtd, tpage)
+
+/*
+ * Set Primitive Colors
+ */
+#define setRGB0(p,_r0,_g0,_b0)						\
+	(p)->r0 = _r0,(p)->g0 = _g0,(p)->b0 = _b0
+
+#define setRGB1(p,_r1,_g1,_b1)						\
+	(p)->r1 = _r1,(p)->g1 = _g1,(p)->b1 = _b1
+
+#define setRGB2(p,_r2,_g2,_b2)						\
+	(p)->r2 = _r2,(p)->g2 = _g2,(p)->b2 = _b2
+
+#define setRGB3(p,_r3,_g3,_b3)						\
+	(p)->r3 = _r3,(p)->g3 = _g3,(p)->b3 = _b3
+
+ /*
+  * Set Primitive Screen Points
+  */
+#define setXY0(p,_x0,_y0)						\
+	(p)->x0 = (_x0), (p)->y0 = (_y0)				\
+
+#define setXY2(p,_x0,_y0,_x1,_y1)					\
+	(p)->x0 = (_x0), (p)->y0 = (_y0),				\
+	(p)->x1 = (_x1), (p)->y1 = (_y1)
+
+#define setXY3(p,_x0,_y0,_x1,_y1,_x2,_y2)				\
+	(p)->x0 = (_x0), (p)->y0 = (_y0),				\
+	(p)->x1 = (_x1), (p)->y1 = (_y1),				\
+	(p)->x2 = (_x2), (p)->y2 = (_y2)
+
+#define setXY4(p,_x0,_y0,_x1,_y1,_x2,_y2,_x3,_y3) 			\
+	(p)->x0 = (_x0), (p)->y0 = (_y0),				\
+	(p)->x1 = (_x1), (p)->y1 = (_y1),				\
+	(p)->x2 = (_x2), (p)->y2 = (_y2),				\
+	(p)->x3 = (_x3), (p)->y3 = (_y3)
+
+#define setXYWH(p,_x0,_y0,_w,_h)					\
+	(p)->x0 = (_x0),      (p)->y0 = (_y0),				\
+	(p)->x1 = (_x0)+(_w), (p)->y1 = (_y0),				\
+	(p)->x2 = (_x0),      (p)->y2 = (_y0)+(_h),			\
+	(p)->x3 = (_x0)+(_w), (p)->y3 = (_y0)+(_h)
+
+#define setPolyF4(p)	setlen(p, 5),  setcode(p, 0x28)
+
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);
@@ -342,5 +420,6 @@ CdlFILE *CdSearchFile(CdlFILE *fp, char *name);
 int CdControl(u_char com, u_char *param, u_char *result);
 CdlCB CdSyncCallback(CdlCB func);
 void SpuSetCommonAttr(SpuCommonAttr *attr);
+int VSync(int mode);
 
 #endif

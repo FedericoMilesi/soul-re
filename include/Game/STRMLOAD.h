@@ -56,5 +56,7 @@ LoadQueueEntry *STREAM_AddQueueEntryToTail();
 void STREAM_NextLoadAsNormal();
 void LOAD_NonBlockingBinaryLoad(char *fileName, void *retFunc, void *retData, void *retData2, void **retPointer, int memType);
 void LOAD_NonBlockingBufferedLoad(char *fileName, void *retFunc, void *retData, void *retData2);
+int STREAM_PollLoadQueue();
+void LOAD_ChangeDirectory(char *name);
 
 #endif

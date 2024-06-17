@@ -23,6 +23,9 @@
         "sdk.h": "c",
         "gameloop.h": "c",
         "aadlib.h": "c",
-        "voicexa.h": "c"
+        "voicexa.h": "c",
+        "strmload.h": "c",
+        "undrwrld.h": "c",
+        "stream.h": "c"
     }
 }
