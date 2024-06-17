@@ -182,7 +182,7 @@ segments:
       - [0x0BA7C0, data, Game/FONT]
       - [0x0BA9F4, data, Game/GAMELOOP]
       - [0x0BAA1C, data]
-      - [0x0BCBF8, data, Game/STREAM]
+      - [0x0BCBF8, .data, Game/STREAM]
       - [0x0BCC5C, .data, Game/MONSTER/HUMAN]
       - [0x0BCCA4, data, Game/MONSTER/MISSILE]
       - [0x0BCCAC, data, Game/MONSTER/MONMSG]
@@ -200,7 +200,7 @@ segments:
 
       - [0x0BFD9C, .sdata, Game/DEBUG]
       - [0x0C0BA0, .sdata, Game/CAMERA]
-      - [0x0C0C08, sdata, Game/SIGNAL]
+      - [0x0C0C08, .sdata, Game/SIGNAL]
       - [0x0C0D6C, .sdata, Game/COLLIDE]
       - [0x0C0DDC, sdata] # HASM_1/DRAW
       - [0x0C0E38, sdata, Game/FONT]
@@ -219,7 +219,7 @@ segments:
       - [0x0C16C0, sdata] # Unused
       - [0x0C1714, .sdata, Game/GENERIC]
       - [0x0C1720, sdata, Game/SOUND]
-      - [0x0C17D4, sdata, Game/SPLINE]
+      - [0x0C17D4, .sdata, Game/SPLINE]
       - [0x0C17FC, sdata, Game/FX]
       - [0x0C186C, .sdata, Game/VM]
       - [0x0C1874, sdata, Game/MEMPACK]
@@ -227,8 +227,8 @@ segments:
       - [0x0C1A1C, sdata, Game/PSX/AADSEQEV]
       - [0x0C1BBC, sdata, Game/PSX/AADSFX] 
       - [0x0C1BE8, sdata] # Game/PSX/AADVOICE?
-      - [0x0C1E94, sdata, Game/STREAM]
-      - [0x0C2178, sdata, Game/STRMLOAD]
+      - [0x0C1E94, .sdata, Game/STREAM]
+      - [0x0C2178, .sdata, Game/STRMLOAD]
       - [0x0C21F0, sdata, Game/EVENT]
       - [0x0C2210, sdata, Game/PHYSOBS]
       - [0x0C221C, .sdata, Game/RAZCNTRL]
@@ -249,9 +249,9 @@ segments:
       - [0x0C2408, .sdata, Game/G2/QUATG2]
       - [0x0C2418, sdata, Game/PLAN/PLANCOLL]
       - [0x0C2430, sdata] # Game/RAZIEL/* include C files?
-      - [0x0C25C4, sdata, Game/UNDRWRLD]
+      - [0x0C25C4, .sdata, Game/UNDRWRLD]
       - [0x0C25D8, sdata, Game/SAVEINFO]
-      - [0x0C26B0, sdata, Game/VOICEXA]
+      - [0x0C26B0, .sdata, Game/VOICEXA]
       - [0x0C26DC, sdata, Game/LOCAL/LOCALSTR]
       - [0x0C26FC, sdata, Game/MENU/MENU]
       - [0x0C2750, sdata] # Unused

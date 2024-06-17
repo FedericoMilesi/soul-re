@@ -6,9 +6,9 @@
 
 static LoadQueueEntry LoadQueue[40];
 
-EXTERN STATIC int loadFromHead;
+static int loadFromHead = 0;
 
-EXTERN STATIC int gCurDir;
+static int gCurDir = 0;
 
 static LoadQueueEntry *loadFree;
 
@@ -17,10 +17,6 @@ static LoadQueueEntry *loadHead;
 static LoadQueueEntry *loadTail;
 
 static int numLoads;
-
-extern char D_800D19E8[];
-
-extern char D_800D1980[];
 
 void STREAM_NextLoadFromHead()
 {
@@ -105,7 +101,7 @@ LoadQueueEntry *STREAM_AddQueueEntryToTail()
 
     if (entry == NULL)
     {
-        DEBUG_FatalError(D_800D1980);
+        DEBUG_FatalError("CD ERROR: too many queue entries\n");
     }
 
     loadFree = entry->next;
@@ -136,7 +132,7 @@ LoadQueueEntry *STREAM_AddQueueEntryToHead()
 
     if (entry == NULL)
     {
-        DEBUG_FatalError(D_800D1980);
+        DEBUG_FatalError("CD ERROR: too many queue entries\n");
     }
 
     loadFree = entry->next;
@@ -174,6 +170,9 @@ int STREAM_IsCdBusy(long *numberInQueue)
     return numLoads;
 }
 
+static char D_800D19A4[] = "%s status %d\n";
+static char D_800D19B4[] = "(%d)";
+static char D_800D19BC[] = "Could not read directory hash %d\n";
 int STREAM_PollLoadQueue();
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_PollLoadQueue);
 
@@ -259,9 +258,7 @@ void LOAD_LoadToAddress(char *fileName, void *loadAddr, long relocateBinary)
 
     currentEntry->mempackUsed = 0;
 
-    while (STREAM_PollLoadQueue() != 0)
-    {
-    }
+    while (STREAM_PollLoadQueue() != 0);
 }
 
 void LOAD_NonBlockingBinaryLoad(char *fileName, void *retFunc, void *retData, void *retData2, void **retPointer, int memType)
@@ -298,7 +295,18 @@ int LOAD_IsXAInQueue()
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", LOAD_PlayXA);
+void LOAD_PlayXA(int number)
+{
+    LoadQueueEntry *currentEntry;
+
+    currentEntry = STREAM_AddQueueEntryToTail();
+
+    currentEntry->status = 8;
+
+    currentEntry->loadEntry.fileHash = number;
+
+    memcpy(currentEntry->loadEntry.fileName, "voice", sizeof("voice"));
+}
 
 long *LOAD_ReadFile(char *fileName, unsigned char memType)
 {
@@ -324,7 +332,7 @@ void LOAD_ChangeDirectory(char *name)
 
     currentEntry->status = 10;
 
-    sprintf(&currentEntry->loadEntry.fileName[0], D_800D19E8, name);
+    sprintf(&currentEntry->loadEntry.fileName[0], "dir %s", name);
 }
 
 void LOAD_AbortDirectoryChange(char *name)
