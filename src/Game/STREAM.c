@@ -2289,7 +2289,28 @@ void RelocateBGObjects(BGObject *BGObjList, long numBGObjs, SVector *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocatePlanPool);
+void RelocatePlanPool(PlanningNode *planPool, SVector *offset)
+{
+    int i;
+    short ox;
+    short oy;
+    short oz;
+
+    ox = offset->x;
+    oy = offset->y;
+    oz = offset->z;
+
+    for (i = PLANAPI_NumNodesInPool(planPool); i != 0; i--, planPool++)
+    {
+        planPool->pos.x += ox;
+        planPool->pos.y += oy;
+        planPool->pos.z += oz;
+    }
+
+    poolManagementData->playerPosAtLastPlanMkrUpdate.x += ox;
+    poolManagementData->playerPosAtLastPlanMkrUpdate.y += oy;
+    poolManagementData->playerPosAtLastPlanMkrUpdate.z += oz;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocatePlanMarkers);
 
