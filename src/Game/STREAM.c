@@ -56,6 +56,8 @@ extern char D_800D1940[];
 
 extern char D_800D194C[];
 
+extern char D_800D1928[];
+
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
 void RelocateTerrain(Terrain *terrain, SVector *offset);
@@ -2455,7 +2457,48 @@ void RelocateStreamPortals(StreamUnitPortal *StreamUnitList, int NumStreamUnits,
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_PackVRAMObject);
+void STREAM_PackVRAMObject(ObjectTracker *objectTracker)
+{
+    VramSize *vramSize;
+    VramBuffer *vramBuffer;
+    char fileName[64];
+    BlockVramEntry *vramBlock;
+
+    vramSize = &objectTracker->object->vramSize;
+
+    if ((vramSize->x != -1) && (VRAM_GetObjectVramSpace(vramSize, objectTracker) != 0))
+    {
+        vramBlock = (BlockVramEntry *)objectTracker->vramBlock;
+
+        if (vramBlock != NULL)
+        {
+            AdjustVramCoordsObject(512, 0, vramBlock->x, vramBlock->y, objectTracker->object);
+        }
+
+        sprintf(fileName, D_800D1928, objectTracker->name, objectTracker->name);
+
+        vramBuffer = (VramBuffer *)MEMPACK_Malloc((vramBlock->w << 1) + sizeof(VramBuffer), 35);
+
+        vramBuffer->lineOverFlow = (short *)(vramBuffer + 1);
+
+        vramBuffer->flags = 0;
+
+        vramBuffer->x = vramBlock->x;
+        vramBuffer->y = vramBlock->y;
+        vramBuffer->w = vramBlock->w;
+        vramBuffer->h = vramBlock->h;
+
+        vramBuffer->yOffset = 0;
+
+        vramBuffer->lengthOfLeftOverData = 0;
+
+        LOAD_NonBlockingBufferedLoad(fileName, (void *)VRAM_TransferBufferToVram, vramBuffer, objectTracker);
+    }
+    else
+    {
+        objectTracker->vramBlock = NULL;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_SetupInstanceFlags);
 

@@ -29,6 +29,7 @@
         "stream.h": "c",
         "collide.h": "c",
         "camera.h": "c",
-        "fx.h": "c"
+        "fx.h": "c",
+        "vram.h": "c"
     }
 }
