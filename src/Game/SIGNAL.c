@@ -5,11 +5,11 @@
 #include "Game/LIGHT3D.h"
 #include "Game/GAMELOOP.h"
 #include "Game/PSX/SUPPORT.h"
+#include "Game/SOUND.h"
+#include "Game/SAVEINFO.h"
 #include "Libs/STRING.h"
 
-SignalInfo signalInfoList[27];
-
-extern char D_800D0410[];
+void (*HandleGlobalValueSignal[1])() = {SOUND_HandleGlobalValueSignal};
 
 long SIGNAL_HandleLightGroup(Instance *instance, Signal *signal)
 {
@@ -116,7 +116,112 @@ long SIGNAL_HandleCameraValue(Instance *instance, Signal *signal)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", SIGNAL_HandleStreamLevel);
+long SIGNAL_HandleStreamLevel(Instance *instance, Signal *signal)
+{
+    char areaName[16];
+    int signalnum;
+    char *commapos;
+    long newStreamID;
+    static int lastTimeCrossed = 0;
+    long doingWarpRoom;
+
+    signalnum = -1;
+    doingWarpRoom = 0;
+
+    strcpy(areaName, &signal->data.StreamLevel.toname[0]);
+
+    commapos = (char *)strchr(areaName, ',');
+
+    if (commapos != NULL)
+    {
+        signalnum = atoi(commapos + 1);
+
+        commapos[0] = 0;
+    }
+
+    if (strcmpi(areaName, "warpgate") == 0)
+    {
+        StreamUnit *curStreamUnit;
+
+        curStreamUnit = STREAM_GetStreamUnitWithID(instance->currentStreamUnitID);
+
+        if ((gameTrackerX.currentTime - lastTimeCrossed) < 101U)
+        {
+            return 1;
+        }
+
+        if (!(curStreamUnit->flags & 8))
+        {
+            return 1;
+        }
+
+        newStreamID = WarpRoomArray[CurrentWarpNumber].streamUnit->StreamUnitID;
+
+        strcpy(areaName, (char *)&WarpRoomArray[CurrentWarpNumber]);
+
+        doingWarpRoom = 1;
+
+        if ((WarpRoomArray[CurrentWarpNumber].streamUnit == NULL) || (!(WarpRoomArray[CurrentWarpNumber].streamUnit->flags & 8)))
+        {
+            return 1;
+        }
+    }
+    else
+    {
+        newStreamID = signal->data.StreamLevel.streamID;
+    }
+
+    if (instance->currentStreamUnitID != newStreamID)
+    {
+        if (instance == gameTrackerX.playerInstance)
+        {
+            gameTrackerX.SwitchToNewStreamUnit = 1;
+            lastTimeCrossed = (int)gameTrackerX.currentTime;
+
+            strcpy(gameTrackerX.S_baseAreaName, areaName);
+
+            gameTrackerX.toSignal = signalnum;
+            gameTrackerX.fromSignal = (short)signal->data.StreamLevel.currentnum;
+            gameTrackerX.moveRazielToStreamID = newStreamID;
+
+            if (doingWarpRoom != 0)
+            {
+                if ((gameTrackerX.gameData.asmData.MorphType == 0) && (strcmpi(areaName, "under3") == 0))
+                {
+                    INSTANCE_Post(gameTrackerX.playerInstance, 0x10002001, 0);
+                }
+
+                gameTrackerX.SwitchToNewWarpIndex = (short)WARPGATE_GetWarpRoomIndex(gameTrackerX.baseAreaName);
+                return 1;
+            }
+
+            gameTrackerX.SwitchToNewWarpIndex = -1;
+            return 1;
+        }
+
+        if (instance->LinkParent == NULL)
+        {
+            if (STREAM_GetLevelWithID(newStreamID) == 0)
+            {
+                SAVE_Instance(instance, STREAM_GetLevelWithID(instance->currentStreamUnitID));
+
+                instance->flags |= 0x20;
+            }
+            else
+            {
+                instance->cachedTFace = -1;
+                instance->cachedTFaceLevel = NULL;
+                instance->currentStreamUnitID = newStreamID;
+
+                INSTANCE_UpdateFamilyStreamUnitID(instance);
+            }
+        }
+
+        return 1;
+    }
+
+    return 1;
+}
 
 long SIGNAL_HandleFogNear(Instance *instance, Signal *signal)
 {
@@ -328,6 +433,38 @@ long SIGNAL_HandleEnd(Instance *instance, Signal *signal)
     return 0;
 }
 
+/*Unused*/ long SignalEndGame = 0;
+
+SignalInfo signalInfoList[27] = {
+    { SIGNAL_HandleLightGroup, 1, 0, NULL },
+    { SIGNAL_HandleCameraAdjust, 1, 1, NULL },
+    { SIGNAL_HandleCameraMode, 1, 1, NULL },
+    { SIGNAL_HandleCamera, 1, 1, SIGNAL_RelocateCamera },
+    { SIGNAL_HandleCameraTimer, 1, 1, NULL },
+    { SIGNAL_HandleCameraSmooth, 1, 1, NULL },
+    { SIGNAL_HandleCameraValue, 2, 1, NULL },
+    { SIGNAL_HandleCameraLock, 1, 1, NULL },
+    { SIGNAL_HandleCameraUnlock, 1, 1, NULL },
+    { SIGNAL_HandleCameraSave, 1, 1, NULL },
+    { SIGNAL_HandleCameraRestore, 1, 1, NULL },
+    { SIGNAL_HandleFogNear, 1, 1, NULL },
+    { SIGNAL_HandleFogFar, 1, 1, NULL },
+    { SIGNAL_HandleCameraShake, 2, 1, NULL },
+    { SIGNAL_HandleCallSignal, 1, 1, NULL },
+    { SIGNAL_HandleEnd, 0, 0, NULL },
+    { SIGNAL_HandleStopPlayerControl, 0, 1, NULL },
+    { SIGNAL_HandleStartPlayerControl, 0, 1, NULL },
+    { SIGNAL_HandleStreamLevel, 6, 0, NULL },
+    { SIGNAL_HandleCameraSpline, 2, 1, SIGNAL_RelocateCameraSpline },
+    { SIGNAL_HandleScreenWipe, 1, 1, NULL },
+    { SIGNAL_HandleBlendStart, 1, 1, NULL },
+    { SIGNAL_HandleScreenWipeColor, 1, 1, NULL },
+    { SIGNAL_HandleSetSlideAngle, 1, 1, NULL },
+    { SIGNAL_HandleResetSlideAngle, 0, 1, NULL },
+    { SIGNAL_HandleSetCameraTilt, 1, 1, NULL },
+    { SIGNAL_HandleSetCameraDistance, 1, 1, NULL },
+};
+
 INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", COLLIDE_HandleSignal);
 
 long SIGNAL_IsThisStreamAWarpGate(Signal *signal)
@@ -347,7 +484,7 @@ long SIGNAL_IsThisStreamAWarpGate(Signal *signal)
         *commapos = 0;
     }
 
-    if (strcmpi(areaName, D_800D0410) == 0)
+    if (strcmpi(areaName, "warpgate") == 0)
     {
         result = 1;
     }

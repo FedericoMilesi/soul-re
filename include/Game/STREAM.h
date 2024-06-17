@@ -430,6 +430,8 @@ typedef struct WarpGateLoadInformation {
 } WarpGateLoadInformation;
 
 STracker StreamTracker;
+WarpRoom WarpRoomArray[14];
+long CurrentWarpNumber;
 
 Level *STREAM_GetLevelWithID(long id);
 void STREAM_RelocateInstance(Instance *instance, SVector *offset);
@@ -457,5 +459,6 @@ StreamUnit *STREAM_LoadLevel(char *baseAreaName, StreamUnitPortal *streamPortal,
 //void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit);
 void PreloadAllConnectedUnits(StreamUnit *streamUnit, SVector *offset);
 void STREAM_OffsetInstancePosition(Instance *instance, SVector *offset, int streamSignalFlag);
+long WARPGATE_GetWarpRoomIndex(char *name);
 
 #endif

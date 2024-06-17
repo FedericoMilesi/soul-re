@@ -200,7 +200,7 @@ segments:
 
       - [0x0BFD9C, .sdata, Game/DEBUG]
       - [0x0C0BA0, .sdata, Game/CAMERA]
-      - [0x0C0C08, sdata, Game/SIGNAL]
+      - [0x0C0C08, .sdata, Game/SIGNAL]
       - [0x0C0D6C, .sdata, Game/COLLIDE]
       - [0x0C0DDC, sdata] # HASM_1/DRAW
       - [0x0C0E38, sdata, Game/FONT]
