@@ -2397,7 +2397,16 @@ void STREAM_OffsetInstancePosition(Instance *instance, SVector *offset, int stre
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_SetInstancePosition);
+void STREAM_SetInstancePosition(Instance *instance, evPositionData *data)
+{
+    SVector offset;
+
+    offset.x = data->x - instance->position.x;
+    offset.y = data->y - instance->position.y;
+    offset.z = data->z - instance->position.z;
+
+    STREAM_OffsetInstancePosition(instance, &offset, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", RelocateInstances);
 
