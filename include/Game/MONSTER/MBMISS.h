@@ -65,5 +65,6 @@ void WCBEGG_ExplodeCollide(Instance *instance, GameTracker *gameTracker);
 void WCBEGG_ExplodeProcess(Instance *instance, GameTracker *gameTracker);
 void WCBEGG_SplitProcess(Instance *instance, GameTracker *gameTracker);
 void WCBEGG_CommonPostProcess(Instance *instance, GameTracker *gameTracker);
+void WCBEGG_Collide(Instance *instance, GameTracker *gameTracker);
 
 #endif

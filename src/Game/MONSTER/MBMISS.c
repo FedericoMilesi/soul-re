@@ -70,7 +70,59 @@ int WCBEGG_ShouldIgniteEgg(Instance *egg, walbossAttributes *wa)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Process);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_ExplodeProcess);
+void WCBEGG_ExplodeProcess(Instance *instance, GameTracker *gameTracker)
+{
+    PhysObData *data;
+    int currentTime;
+    int time;
+    Object *walboss;
+    walbossAttributes *wa;
+
+    (void)time;
+
+    data = instance->extraData;
+
+    currentTime = MON_GetTime(instance);
+
+    if ((instance->collideFunc == WCBEGG_Collide) && (instance->LinkParent == gameTrackerX.playerInstance))
+    {
+        instance->collideFunc = WCBEGG_ExplodeCollide;
+    }
+
+    walboss = OBTABLE_FindObject(D_800D1BFC);
+
+    if (walboss != NULL)
+    {
+        wa = (walbossAttributes *)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
+
+        if (currentTime >= (((Dummy *)data)->unknown + 330)) // data needs parsing to the correct struct
+        {
+            if (gameTrackerX.playerInstance == instance->LinkParent)
+            {
+                INSTANCE_Post(gameTrackerX.playerInstance, 0x40005, wa->razielStunTime * 33);
+
+                INSTANCE_UnlinkFromParent(instance);
+
+                data->Mode = (data->Mode | 0x1001) & ~0x4000;
+
+                instance->processFunc = WCBEGG_CommonPostProcess;
+            }
+            else
+            {
+                instance->processFunc = WCBEGG_CommonPostProcess2;
+            }
+
+            INSTANCE_Post(instance, 0x800029, 0);
+        }
+
+        ProcessPhysicalObject(instance, gameTracker);
+        return;
+    }
+
+    INSTANCE_UnlinkFromParent(instance);
+
+    INSTANCE_KillInstance(instance);
+}
 
 void WCBEGG_SplitProcess(Instance *instance, GameTracker *gameTracker)
 {
