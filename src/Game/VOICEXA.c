@@ -203,7 +203,28 @@ void voiceCmdNull(struct XAVoiceTracker *vt, short cmdParam)
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_Play);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_FinalStatus);
+int VOICEXA_FinalStatus(XAVoiceTracker *vt)
+{
+    int tailIndex;
+
+    if (vt->voiceCmdsQueued == 0)
+    {
+        return vt->voiceStatus;
+    }
+
+    tailIndex = vt->voiceCmdIn;
+
+    if (tailIndex == 0)
+    {
+        tailIndex = 15;
+    }
+    else
+    {
+        tailIndex--;
+    }
+
+    return vt->voiceCmdQueue[tailIndex].nextVoiceStatus;
+}
 
 void VOICEXA_Pause()
 {
