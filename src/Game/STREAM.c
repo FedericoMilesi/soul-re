@@ -2578,7 +2578,19 @@ void MORPH_SetupInstanceFlags(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_SetupInstanceListFlags);
+void MORPH_SetupInstanceListFlags()
+{
+    Instance *instance;
+
+    instance = gameTrackerX.instanceList->first;
+
+    while (instance != NULL)
+    {
+        MORPH_SetupInstanceFlags(instance);
+
+        instance = instance->next;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_InMorphInstanceListFlags);
 
