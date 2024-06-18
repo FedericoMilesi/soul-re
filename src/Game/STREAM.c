@@ -2611,7 +2611,25 @@ void MORPH_InMorphInstanceListFlags()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_InMorphDoFadeValues);
+void MORPH_InMorphDoFadeValues()
+{
+    int fade1;
+    int fade2;
+
+    fade1 = (gameTrackerX.gameData.asmData.MorphTime << 12) / 1000;
+    fade2 = 4096 - fade1;
+
+    if (gameTrackerX.gameData.asmData.MorphType == 0)
+    {
+        gameTrackerX.spectral_fadeValue = fade1;
+        gameTrackerX.material_fadeValue = fade2;
+    }
+    else
+    {
+        gameTrackerX.spectral_fadeValue = fade2;
+        gameTrackerX.material_fadeValue = fade1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_UpdateTimeMult);
 
