@@ -2520,7 +2520,63 @@ void STREAM_PackVRAMObject(ObjectTracker *objectTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_SetupInstanceFlags);
+void MORPH_SetupInstanceFlags(Instance *instance)
+{
+    if ((instance->object->oflags & 0x80000))
+    {
+        return;
+    }
+
+    switch (gameTrackerX.gameData.asmData.MorphType)
+    {
+    case 0:
+        if (!(instance->flags2 & 0x8000000))
+        {
+            instance->flags2 &= ~0x10000000;
+            instance->flags2 &= ~0x4000000;
+            break;
+        }
+
+        instance->flags2 |= 0x10000000;
+
+        if (MEMPACK_MemoryValidFunc((char *)instance->object) == 0)
+        {
+            break;
+        }
+
+        if (((instance->object->oflags2 & 0x2000000)) || ((instance->LinkParent != NULL) && ((instance->LinkParent->object->oflags2 & 0x2000000))))
+        {
+            INSTANCE_Post(instance, 0x40026, 0);
+
+            instance->flags2 |= 0x4000000;
+        }
+
+        break;
+    default:
+        if ((instance->flags2 & 0x8000000))
+        {
+            instance->flags2 &= ~0x10000000;
+            instance->flags2 &= ~0x4000000;
+            break;
+        }
+
+        instance->flags2 |= 0x10000000;
+
+        if (MEMPACK_MemoryValidFunc((char *)instance->object) == 0)
+        {
+            break;
+        }
+
+        if (((instance->object->oflags2 & 0x2000000)) || ((instance->LinkParent != NULL) && ((instance->LinkParent->object->oflags2 & 0x2000000))))
+        {
+            INSTANCE_Post(instance, 0x40026, 0);
+
+            instance->flags2 |= 0x4000000;
+        }
+
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_SetupInstanceListFlags);
 
