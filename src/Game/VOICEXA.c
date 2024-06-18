@@ -201,7 +201,38 @@ void voiceCmdNull(struct XAVoiceTracker *vt, short cmdParam)
     (void)cmdParam;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_Play);
+void VOICEXA_Play(int voiceIndex, int queueRequests)
+{
+    XAVoiceTracker *vt;
+    XAFileInfo *file;
+
+    vt = &voiceTracker;
+
+    file = &vt->xaFileInfo[voiceIndex >> 4];
+
+    if (((gameTrackerX.debugFlags & 0x80000)) && (file->startPos != 0) && ((unsigned)gameTrackerX.sound.gVoiceOn != 0))
+    {
+        if (queueRequests != 0)
+        {
+            vt->requestQueue[vt->reqIn] = voiceIndex;
+
+            if (vt->reqsQueued < 3)
+            {
+                vt->reqsQueued++;
+                vt->reqIn++;
+
+                if ((vt->reqIn & 0xFF) == 4)
+                {
+                    vt->reqIn = 0;
+                }
+            }
+        }
+        else
+        {
+            putVoiceCommand(vt, 0, 1, voiceIndex);
+        }
+    }
+}
 
 int VOICEXA_FinalStatus(XAVoiceTracker *vt)
 {
