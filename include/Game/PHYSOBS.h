@@ -59,6 +59,70 @@ typedef struct PhysObWeaponProperties {
     struct PhysObWeaponAttributes WeaponAttributes;
 } PhysObWeaponProperties;
 
+// size: 0x48
+typedef struct PhysObData {
+    // offset: 0000
+    long Mode;
+    // offset: 0004
+    short xForce;
+    // offset: 0006
+    short yForce;
+    // offset: 0008 (668 bytes)
+    struct _Instance *Force;
+    // offset: 000C
+    short LinkNode;
+    // offset: 000E
+    short px;
+    // offset: 0010
+    short py;
+    // offset: 0012
+    short pz;
+    // offset: 0014
+    short rx1;
+    // offset: 0016
+    short ry1;
+    // offset: 0018
+    short rz1;
+    // offset: 001A
+    short Segment1;
+    // offset: 001C
+    short rx2;
+    // offset: 001E
+    short ry2;
+    // offset: 0020
+    short rz2;
+    // offset: 0022
+    short Segment2;
+    // offset: 0024
+    short Steps;
+    // offset: 0026
+    short Step;
+    // offset: 0028
+    short PathNumber;
+    // offset: 002A
+    short Pad1;
+    // offset: 002C (24 bytes)
+    struct _HInfo *RightCollision;
+    // offset: 0030 (24 bytes)
+    struct _HInfo *LeftCollision;
+    // offset: 0034
+    short burnAmpl;
+    // offset: 0036
+    short throwFlags;
+    // offset: 0038
+    short initialXRot;
+    // offset: 003A
+    short xRotVel;
+    // offset: 003C
+    short yRotVel;
+    // offset: 003E
+    short zRotVel;
+    // offset: 0040 (668 bytes)
+    struct _Instance *throwingInstance;
+    // offset: 0044
+    int physObTimer;
+} PhysObData;
+
 evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint, int type);
 void CollidePhysicalObject(Instance *instance, GameTracker *gameTracker);
 void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker);

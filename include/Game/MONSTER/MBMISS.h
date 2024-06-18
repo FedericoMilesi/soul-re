@@ -11,5 +11,7 @@ typedef struct Dummy {
 void WCBEGG_CommonPostProcess2(Instance *instance, GameTracker *gameTracker);
 void WCBEGG_Process(Instance *instance, GameTracker *gameTracker);
 void WCBEGG_ExplodeCollide(Instance *instance, GameTracker *gameTracker);
+void WCBEGG_ExplodeProcess(Instance *instance, GameTracker *gameTracker);
+void WCBEGG_SplitProcess(Instance *instance, GameTracker *gameTracker);
 
 #endif

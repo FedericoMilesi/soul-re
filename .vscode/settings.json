@@ -22,6 +22,7 @@
     "files.associations": {
         "mbmiss.h": "c",
         "gameloop.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "physobs.h": "c"
     }
 }

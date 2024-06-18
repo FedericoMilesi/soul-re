@@ -76,7 +76,67 @@ void WCBEGG_CommonPostProcess2(Instance *instance, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_ExplodeCollide);
+void WCBEGG_ExplodeCollide(Instance *instance, GameTracker *gameTracker)
+{
+    CollideInfo *collideInfo;
+    HSphere *s1;
+    Instance *inst1;
+    PhysObData *data;
+    HSphere *temp; // not from decls.h
+
+    collideInfo = instance->collideInfo;
+
+    data = (PhysObData *)instance->extraData;
+
+    s1 = (unsigned char)collideInfo->type1;
+
+    temp = collideInfo->prim1;
+
+    if (((int)s1 == 1) && (temp->id == 8))
+    {
+        inst1 = collideInfo->inst1;
+
+        if ((inst1 != NULL) && (INSTANCE_Query(inst1, 1) == 0x10102))
+        {
+            if (instance->LinkParent == NULL)
+            {
+                if ((data->Mode & 0x10000))
+                {
+                    INSTANCE_Post(inst1, 0x1000017, 2);
+
+                    G2EmulationInstanceSwitchAnimationAlpha(instance, 0, 4, 0, 0, (int)s1, 0);
+
+                    instance->processFunc = WCBEGG_ExplodeProcess;
+                }
+                else
+                {
+                    G2EmulationInstanceSwitchAnimationAlpha(instance, 0, 3, 0, 0, (int)s1, 0);
+
+                    instance->processFunc = WCBEGG_SplitProcess;
+                }
+
+                data->Mode = (data->Mode | 0x1001) & ~0x4000;
+
+                instance->zVel = 0;
+                instance->yVel = 0;
+                instance->xVel = 0;
+
+                ((Dummy *)data)->unknown = MON_GetTime(instance); // data needs parsing to the correct struct
+            }
+
+            TurnOffCollisionPhysOb(instance, 7);
+            return;
+        }
+    }
+
+    CollidePhysicalObject(instance, gameTracker);
+
+    data->zRotVel = 0;
+    data->yRotVel = 0;
+    data->xRotVel = 0;
+
+    data->throwFlags &= ~0x1;
+}
 
 void WCBEGG_Collide(Instance *instance, GameTracker *gameTracker)
 {
