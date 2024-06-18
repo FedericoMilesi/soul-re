@@ -436,5 +436,6 @@ int CdControl(u_char com, u_char *param, u_char *result);
 CdlCB CdSyncCallback(CdlCB func);
 void SpuSetCommonAttr(SpuCommonAttr *attr);
 int VSync(int mode);
+CdlLOC *CdIntToPos(int i, CdlLOC *p);
 
 #endif

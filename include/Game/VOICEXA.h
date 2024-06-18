@@ -78,6 +78,11 @@ typedef struct XAVoiceTracker {
     struct XAFileInfo xaFileInfo[30];
 } XAVoiceTracker;
 
+// size: 0x2
+typedef struct XAVoiceListEntry {
+    unsigned short length;
+} XAVoiceListEntry;
+
 int VOICEXA_FinalStatus(XAVoiceTracker *vt);
 
 #endif

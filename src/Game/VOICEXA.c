@@ -13,6 +13,8 @@ void voiceCmdNull(XAVoiceTracker *vt, short cmdParam);
 
 XAVoiceTracker voiceTracker;
 
+XAVoiceListEntry *voiceList;
+
 void VOICEXA_Init()
 {
     int i;
@@ -152,7 +154,73 @@ void putVoiceCommand(XAVoiceTracker *vt, unsigned char voiceCmd, unsigned char n
 static voiceCmd voiceCmdTbl[5] = {voiceCmdPlay, voiceCmdStop, voiceCmdPause, voiceCmdResume, voiceCmdNull};
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", processVoiceCommands);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", voiceCmdPlay);
+void voiceCmdPlay(XAVoiceTracker *vt, short voiceIndex)
+{
+    CdlFILTER filter;
+    CdlLOC pos;
+    unsigned char mode;
+    SpuCommonAttr spuattr;
+    XAVoiceListEntry *voice;
+    XAFileInfo *file;
+
+    if (voiceList != NULL)
+    {
+        voice = &voiceList[voiceIndex];
+
+        vt->fileNum = voiceIndex >> 4;
+
+        file = &vt->xaFileInfo[vt->fileNum];
+
+        putCdCommand(vt, 9, 0, NULL);
+
+        filter.file = 1;
+
+        filter.chan = voiceIndex & 0xF;
+
+        putCdCommand(vt, 13, 4, (unsigned char *)&filter);
+
+        mode = 200;
+
+        putCdCommand(vt, 14, 1, &mode);
+
+        CdIntToPos(file->startPos, &vt->currentPos);
+
+        vt->endSector = (file->startPos - 150) + voice->length;
+
+        CdIntToPos(file->startPos, &pos);
+
+        putCdCommand(vt, 27, 4, (unsigned char *)&pos);
+
+        spuattr.mask = 0x3FCF;
+
+        spuattr.mvol.left = 16383;
+        spuattr.mvol.right = 16383;
+
+        spuattr.mvolmode.left = 0;
+        spuattr.mvolmode.right = 0;
+
+        spuattr.cd.reverb = 0;
+
+        spuattr.cd.mix = 1;
+
+        spuattr.ext.volume.left = 32767;
+        spuattr.ext.volume.right = 32767;
+
+        spuattr.ext.reverb = 0;
+
+        spuattr.ext.mix = 1;
+
+        spuattr.cd.volume.left = (short)(gameTrackerX.sound.gVoiceVol << 8);
+        spuattr.cd.volume.right = (short)(gameTrackerX.sound.gVoiceVol << 8);
+
+        SpuSetCommonAttr(&spuattr);
+
+        if (gameTrackerX.sound.gMusicVol > 60)
+        {
+            aadStartMusicMasterVolFade(60, -1, NULL);
+        }
+    }
+}
 
 void voiceCmdStop(XAVoiceTracker *vt, short cmdParam)
 {
