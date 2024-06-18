@@ -6,6 +6,9 @@
 #include "Game/MONSTER/MBMISS.h"
 #include "Game/PSX/SUPPORT.h"
 #include "Game/OBTABLE.h"
+#include "Game/MATH3D.h"
+
+extern char D_800D1BF0[];
 
 extern char D_800D1BFC[];
 
@@ -31,7 +34,39 @@ void WCBEGG_Message(Instance *instance, unsigned long message, unsigned long dat
     PhysicalObjectPost(instance, message, data);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_ShouldIgniteEgg);
+int WCBEGG_ShouldIgniteEgg(Instance *egg, walbossAttributes *wa)
+{
+    InstanceList *instanceList;
+    Instance *instance;
+
+    instanceList = gameTrackerX.instanceList;
+
+    if (!(INSTANCE_Query(egg, 3) & 0x10000))
+    {
+        instance = instanceList->first;
+
+        while (instance != NULL)
+        {
+            if (((INSTANCE_Query(instance, 1) & 0x20)) && (MATH3D_LengthXYZ(instance->position.x - egg->position.x,
+                instance->position.y - egg->position.y, instance->position.z - egg->position.z) < wa->eggIgniteDist))
+            {
+                if ((INSTANCE_Query(instance, 3) & 0x10000))
+                {
+                    return 1;
+                }
+
+                if (strcmpi(instance->object->name, D_800D1BF0) == 0)
+                {
+                    return 1;
+                }
+            }
+
+            instance = instance->next;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Process);
 

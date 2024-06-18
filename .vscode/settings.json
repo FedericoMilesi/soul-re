@@ -24,6 +24,7 @@
         "gameloop.h": "c",
         "string.h": "c",
         "physobs.h": "c",
-        "obtable.h": "c"
+        "obtable.h": "c",
+        "math3d.h": "c"
     }
 }
