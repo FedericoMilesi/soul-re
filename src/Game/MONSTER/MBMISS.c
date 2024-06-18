@@ -5,6 +5,7 @@
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MBMISS.h"
 #include "Game/PSX/SUPPORT.h"
+#include "Game/OBTABLE.h"
 
 extern char D_800D1BFC[];
 
@@ -36,7 +37,52 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Process);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_ExplodeProcess);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_SplitProcess);
+void WCBEGG_SplitProcess(Instance *instance, GameTracker *gameTracker)
+{
+    PhysObData *data;
+    int currentTime;
+    int time;
+    Object *walboss;
+    walbossAttributes *wa;
+
+    data = (PhysObData *)instance->extraData;
+
+    currentTime = MON_GetTime(instance);
+
+    walboss = OBTABLE_FindObject(D_800D1BFC);
+
+    if (walboss != NULL)
+    {
+        wa = (walbossAttributes *)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
+
+        if (currentTime >= (((Dummy *)data)->unknown + 198)) // data needs parsing to the correct struct
+        {
+            if (gameTrackerX.playerInstance == instance->LinkParent)
+            {
+                time = wa->razielStunTime * 33;
+
+                INSTANCE_Post(gameTrackerX.playerInstance, 0x40005, time);
+
+                INSTANCE_UnlinkFromParent(instance);
+
+                data->Mode = (data->Mode | 0x1001) & ~0x4000;
+
+                instance->processFunc = WCBEGG_CommonPostProcess;
+            }
+            else
+            {
+                instance->processFunc = WCBEGG_CommonPostProcess2;
+            }
+        }
+
+        ProcessPhysicalObject(instance, gameTracker);
+        return;
+    }
+
+    INSTANCE_UnlinkFromParent(instance);
+
+    INSTANCE_KillInstance(instance);
+}
 
 void WCBEGG_CommonPostProcess(Instance *instance, GameTracker *gameTracker)
 {

@@ -115,5 +115,6 @@ void OBTABLE_RelocateObjectTune(Object *object, long offset);
 void OBTABLE_RelocateInstanceObject(Instance *instance, long offset);
 void OBTABLE_ChangeObjectAccessPointers(Object *oldObject, Object *newObject);
 void OBTABLE_InitObjectWithID(Object *object);
+Object *OBTABLE_FindObject(char *objectName);
 
 #endif
