@@ -2669,7 +2669,14 @@ void STREAM_MORPH_Relocate()
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", AddVertex);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", GetPlaneDist);
+int GetPlaneDist(int k, int j, int i, VECTOR *v)
+{
+    (void)i;
+
+    return (((v->vx >> 12) - (theCamera.core.position.x << 4)) * theCamera.core.vvNormalWorVecMat[k].m[j][0]) +
+        (((v->vy >> 12) - (theCamera.core.position.y << 4)) * theCamera.core.vvNormalWorVecMat[k].m[j][1]) +
+        (((v->vz >> 12) - (theCamera.core.position.z << 4)) * theCamera.core.vvNormalWorVecMat[k].m[j][2]);
+}
 
 void CalcVert(VECTOR *v, VECTOR *v1, VECTOR *v2, int dist1, int dist2, int k, int j)
 {
