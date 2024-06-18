@@ -2671,7 +2671,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", AddVertex);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", GetPlaneDist);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", CalcVert);
+void CalcVert(VECTOR *v, VECTOR *v1, VECTOR *v2, int dist1, int dist2, int k, int j)
+{
+    int diff;
+
+    (void)k;
+    (void)j;
+
+    diff = (dist1 - dist2) >> 12;
+
+    v->vx = (((v2->vx - v1->vx) >> 12) * (dist2 / diff)) + v2->vx;
+    v->vy = (((v2->vy - v1->vy) >> 12) * (dist2 / diff)) + v2->vy;
+    v->vz = (((v2->vz - v1->vz) >> 12) * (dist2 / diff)) + v2->vz;
+}
 
 int AddClippedTri(SVECTOR *iv, RECT *cliprect, int *minz);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", AddClippedTri);
