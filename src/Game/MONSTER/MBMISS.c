@@ -4,6 +4,9 @@
 #include "Game/STATE.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MBMISS.h"
+#include "Game/PSX/SUPPORT.h"
+
+extern char D_800D1BFC[];
 
 void WCBEGG_Message(Instance *instance, unsigned long message, unsigned long data)
 {
@@ -75,7 +78,22 @@ void WCBEGG_CommonPostProcess2(Instance *instance, GameTracker *gameTracker)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_ExplodeCollide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Collide);
+void WCBEGG_Collide(Instance *instance, GameTracker *gameTracker)
+{
+    CollideInfo *collideInfo;
+    Instance *inst1;
+
+    collideInfo = (CollideInfo *)instance->collideInfo;
+
+    if (((unsigned char)collideInfo->type1 != 1) || (inst1 = (Instance *)collideInfo->inst1, strcmpi(inst1->object->name, D_800D1BFC) != 0))
+    {
+        TurnOffCollisionPhysOb(instance, 7);
+
+        instance->collideFunc = WCBEGG_ExplodeCollide;
+    }
+
+    CollidePhysicalObject(instance, gameTracker);
+}
 
 long WALBOSC_AnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, Instance *instance)
 {
