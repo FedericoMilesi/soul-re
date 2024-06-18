@@ -251,4 +251,23 @@ void VOICEXA_Resume()
 
 INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_Tick);
 
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", VOICEXA_IsPlaying);
+int VOICEXA_IsPlaying()
+{
+    XAVoiceTracker *vt;
+
+    vt = &voiceTracker;
+
+    if (vt->voiceStatus == 2)
+    {
+        return 2;
+    }
+
+    if ((vt->voiceStatus == 1) || (vt->cdStatus != 0))
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
