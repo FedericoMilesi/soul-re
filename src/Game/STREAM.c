@@ -49,6 +49,10 @@ WarpRoom WarpRoomArray[14] = {
     { "chrono17", NULL },
 };
 
+TFace *MORPH_SavedFace;
+
+Level *MORPH_SavedLevel;
+
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
 void RelocateTerrain(Terrain *terrain, SVector *offset);
@@ -2657,7 +2661,11 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_UpdateTextures);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_Continue);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_MORPH_Relocate);
+void STREAM_MORPH_Relocate()
+{
+    MORPH_SavedFace = NULL;
+    MORPH_SavedLevel = NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", AddVertex);
 
