@@ -11,6 +11,7 @@
 #include "Game/MONSTER/MONSENSE.h"
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/G2/INSTNCG2.h"
+#include "Game/COLLIDE.h"
 
 typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int);
 
@@ -218,7 +219,211 @@ void SendHitObject(Instance *instance, Instance *hit, int type)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterCollide);
+void MonsterCollide(Instance *instance, GameTracker *gameTracker)
+{
+    CollideInfo *collideInfo;
+    MonsterVars *mv;
+
+    (void)gameTracker;
+
+    collideInfo = instance->collideInfo;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (instance->data == NULL)
+    {
+        return;
+    }
+
+    if ((unsigned char)collideInfo->type0 == 1)
+    {
+        HSphere *s0;
+
+        s0 = collideInfo->prim0;
+
+        if (s0->id == 9)
+        {
+            HSphere *s1;
+            MonsterAttackAttributes *temp; // not from decls.h
+
+            temp = mv->attackType;
+
+            if ((temp != NULL) && ((unsigned char)collideInfo->type1 == (unsigned char)collideInfo->type0))
+            {
+                s1 = collideInfo->prim1;
+
+                if (s1->id == 8)
+                {
+                    Instance *inst1;
+                    int power;
+
+                    power = temp->damage;
+
+                    inst1 = collideInfo->inst1;
+
+                    if ((mv->mvFlags & 0x20000000))
+                    {
+                        power *= 2;
+                    }
+
+                    MON_TurnOffWeaponSpheres(instance);
+
+                    INSTANCE_Post(inst1, 0x400000, SetFXHitData(instance, (unsigned char)collideInfo->segment, (power << 8) / 128, 256));
+                    INSTANCE_Post(inst1, 0x1000000, SetMonsterHitData(instance, NULL, power << 8, temp->knockBackDistance, temp->knockBackDuration));
+
+                    if (inst1 == mv->enemy->instance)
+                    {
+                        if ((mv->mvFlags & 0x10000000))
+                        {
+                            mv->enemy->mirFlags |= 0x1000;
+                        }
+
+                        mv->enemy->mirConditions |= 0x100;
+                    }
+                }
+            }
+        }
+        else
+        {
+            int move;
+
+            move = 1;
+
+            switch ((unsigned char)collideInfo->type1)
+            {
+            case 4:
+                break;
+            case 1:
+            {
+                HSphere *hsphere;
+
+                hsphere = collideInfo->prim1;
+
+                SendHitObject(instance, collideInfo->inst1, 1);
+
+                if (hsphere->id != 9)
+                {
+                    if ((instance->position.x == instance->oldPos.x) && (instance->position.y == instance->oldPos.y) && (instance->position.z == instance->oldPos.z))
+                    {
+                        move = 0;
+                    }
+                }
+                else
+                {
+                    move = 0;
+                }
+
+                break;
+            }
+            case 2:
+                SendHitObject(instance, collideInfo->inst1, 2);
+                break;
+            case 5:
+                if ((collideInfo->offset.z < -50) && (!(((MonsterAttributes *)instance->data)->whatAmI & 0x10004)))
+                {
+                    INSTANCE_Post(instance, 0x40017, 6);
+                }
+
+                SendHitObject(instance, collideInfo->inst1, 5);
+                break;
+            case 3:
+            {
+                BSPTree *bsp;
+
+                bsp = collideInfo->inst1;
+
+                if ((bsp->flags & 0xE0))
+                {
+                    MON_CheckTerrainAndRespond(instance, bsp, collideInfo->prim1);
+                }
+
+                if ((bsp->flags & 0x102))
+                {
+                    move = 0;
+                    break;
+                }
+
+                {
+                    evMonsterHitTerrainData *data;
+                    Level *level;
+                    Intro *impaler;
+                    TFace *tface;
+
+                    data = CIRC_Alloc(sizeof(evMonsterHitTerrainData));
+
+                    tface = collideInfo->prim1;
+
+                    level = collideInfo->level;
+
+                    data->faceFlags = (tface->textoff != 0xFFFF) ? ((TextureFT3 *)((char *)level->terrain->StartTextureList + tface->textoff))->attr : 0;
+
+                    data->tface = tface;
+
+                    data->bspFlags = bsp->flags;
+
+                    if ((!(INSTANCE_Query(instance, 1) & 0x4)) || (tface->textoff == 0xFFFF) || (!(((TextureFT3 *)((char *)level->terrain->StartTextureList + tface->textoff))->attr & 0x1000)))
+                    {
+                        impaler = MON_TestForTerrainImpale(instance, level->terrain);
+
+                        if (impaler != NULL)
+                        {
+                            INSTANCE_Post(instance, 0x100001C, impaler->UniqueID);
+
+                            collideInfo->offset.x = 0;
+                            collideInfo->offset.y = 0;
+                        }
+                        else if (COLLIDE_FindCollisionFaceNormal(collideInfo, &data->normal) != 0)
+                        {
+                            collideInfo->offset.x += data->normal.x >> 10;
+                            collideInfo->offset.y += data->normal.y >> 10;
+
+                            INSTANCE_Post(instance, 0x1000007, (int)data);
+                        }
+
+                        {
+                            CollideInfo parentCI;
+
+                            mv->mvFlags |= 0x8;
+
+                            if (instance->LinkParent != NULL)
+                            {
+                                parentCI = *collideInfo;
+
+                                if (parentCI.inst0 == instance)
+                                {
+                                    parentCI.inst0 = instance->LinkParent;
+                                }
+
+                                if (parentCI.inst1 == instance)
+                                {
+                                    parentCI.inst1 = instance->LinkParent;
+                                }
+
+                                INSTANCE_Post(instance->LinkParent, 0x200004, SetCollideInfoData(&parentCI));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        move = 0;
+                    }
+                }
+
+                break;
+            }
+            }
+
+            if (move != 0)
+            {
+                instance->position.x += collideInfo->offset.x;
+                instance->position.y += collideInfo->offset.y;
+                instance->position.z += collideInfo->offset.z;
+
+                COLLIDE_UpdateAllTransforms(instance, (SVECTOR *)&collideInfo->offset);
+            }
+        }
+    }
+}
 
 void MonsterAdditionalCollide(Instance *instance, GameTracker *gameTracker)
 {

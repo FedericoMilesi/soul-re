@@ -311,6 +311,18 @@ typedef struct evCollideInstanceStatsData {
     long zDelta;
 } evCollideInstanceStatsData;
 
+// size: 0x10
+typedef struct evMonsterHitTerrainData {
+    // offset: 0000 (12 bytes)
+    struct _TFace *tface;
+    // offset: 0004 (8 bytes)
+    struct _Normal normal;
+    // offset: 000C
+    short faceFlags;
+    // offset: 000E
+    short bspFlags;
+} evMonsterHitTerrainData;
+
 TFace *COLLIDE_PointAndTerrainFunc(Terrain *terrain, PCollideInfo *pCollideInfo, int Flags, short *Backface_Flag, long ignoreAttr, long acceptAttr, LCollideInfo *lcolinfo);
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);
@@ -322,5 +334,6 @@ void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level);
 long COLLIDE_GetNormal(short nNum, short *nrmlArray, SVector *nrml);
 void COLLIDE_Instance1SpheresToInstance2(Instance *instance1, Instance *instance2, long sphereToSphere);
 void COLLIDE_MoveAllTransforms(Instance *instance, Position *offset);
+long COLLIDE_FindCollisionFaceNormal(CollideInfo *collideInfo, Normal *normal);
 
 #endif

@@ -30,5 +30,7 @@ void MON_TurnOnAllSpheres(Instance *instance);
 void MON_AnimInit(Instance *instance);
 int MON_ValidUnit(Instance *instance, unsigned long unitId);
 int MON_ValidPosition(Instance *instance);
+Intro *MON_TestForTerrainImpale(Instance *instance, Terrain *terrain);
+void MON_CheckTerrainAndRespond(Instance *instance, BSPTree *bsp, TFace *tface);
 
 #endif

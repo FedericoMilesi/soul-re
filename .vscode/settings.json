@@ -27,6 +27,8 @@
         "obtable.h": "c",
         "math3d.h": "c",
         "missile.h": "c",
-        "state.h": "c"
+        "state.h": "c",
+        "collide.h": "c",
+        "monlib.h": "c"
     }
 }

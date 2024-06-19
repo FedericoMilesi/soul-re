@@ -261,6 +261,38 @@ typedef struct _MonsterSubAttributes {
     short downOnGroundOffset;
 } MonsterSubAttributes;
 
+// size: 0x20
+typedef struct _MonsterAttackAttributes {
+    // offset: 0000
+    short attackRange;
+    // offset: 0002
+    short attackHeight;
+    // offset: 0004
+    short knockBackDistance;
+    // offset: 0006
+    char knockBackDuration;
+    // offset: 0007
+    char damage;
+    // offset: 0008
+    char sphereSegment;
+    // offset: 0009
+    char sphereOnFrame;
+    // offset: 000A
+    char sphereOnAnim;
+    // offset: 000B
+    char sphereOffFrame;
+    // offset: 000C
+    char sphereOffAnim;
+    // offset: 000D
+    char turnFrames;
+    // offset: 000E
+    char numAnims;
+    // offset: 000F (12 bytes)
+    char attackProbability[12];
+    // offset: 001B (5 bytes)
+    char animList[5];
+} MonsterAttackAttributes;
+
 // size: 0x50
 typedef struct _MonsterAttributes {
     // offset: 0000
