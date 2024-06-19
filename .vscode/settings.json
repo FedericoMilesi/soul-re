@@ -25,6 +25,8 @@
         "string.h": "c",
         "physobs.h": "c",
         "obtable.h": "c",
-        "math3d.h": "c"
+        "math3d.h": "c",
+        "missile.h": "c",
+        "state.h": "c"
     }
 }

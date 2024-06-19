@@ -74,7 +74,7 @@ void WCBEGG_Process(Instance *instance, GameTracker *gameTracker)
     int time;
     int lastTime;
     int timeBetween;
-    int birthTime;
+    //int birthTime; unused
     Object *walboss;
     walbossAttributes *wa;
 

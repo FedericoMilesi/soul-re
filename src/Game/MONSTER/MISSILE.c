@@ -3,6 +3,7 @@
 #include "Game/PHYSOBS.h"
 #include "Game/MONSTER/MISSILE.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/STATE.h"
 
 void MISSILE_Process(Instance *instance, GameTracker *gameTracker)
 {
@@ -28,7 +29,35 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MISSILE", MISSILE_Find);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MISSILE", MISSILE_Birth);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MISSILE", MISSILE_Fire);
+Instance *MISSILE_Fire(Instance *instance, MonsterMissile *missiledef, void *target, int type)
+{
+    Instance *miss;
+
+    miss = MISSILE_Birth(instance, missiledef);
+
+    if (miss != NULL)
+    {
+        int spin;
+        SVector rotVel;
+
+        spin = 1;
+
+        if (missiledef->type == 3)
+        {
+            spin = 2;
+
+            rotVel.x = 273;
+            rotVel.y = 0;
+            rotVel.z = 0;
+        }
+
+        INSTANCE_Post(miss, 0x800010, SetObjectThrowData(target, &rotVel, type & 0xFFFF, spin, missiledef->speed, 0, 0, 0));
+
+        miss->work2 = MON_GetTime(miss) + 5000;
+    }
+
+    return miss;
+}
 
 Instance *MISSILE_FireAtInstance(Instance *instance, MonsterMissile *missiledef, Instance *target)
 {
