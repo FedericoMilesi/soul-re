@@ -29,6 +29,7 @@
         "missile.h": "c",
         "state.h": "c",
         "collide.h": "c",
-        "monlib.h": "c"
+        "monlib.h": "c",
+        "generic.h": "c"
     }
 }

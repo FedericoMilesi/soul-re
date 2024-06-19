@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "Game/MONSTER/MONAPI.h"
+#include "Game/SAVEINFO.h"
 
 unsigned long MON_GetTime(Instance *instance);
 void MON_PlayRandomIdle(Instance *instance, int mode);
@@ -32,5 +33,6 @@ int MON_ValidUnit(Instance *instance, unsigned long unitId);
 int MON_ValidPosition(Instance *instance);
 Intro *MON_TestForTerrainImpale(Instance *instance, Terrain *terrain);
 void MON_CheckTerrainAndRespond(Instance *instance, BSPTree *bsp, TFace *tface);
+void MON_SetUpSaveInfo(Instance *instance, MonsterSaveInfo *saveData);
 
 #endif

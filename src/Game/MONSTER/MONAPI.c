@@ -12,6 +12,7 @@
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/G2/INSTNCG2.h"
 #include "Game/COLLIDE.h"
+#include "Game/GENERIC.h"
 
 typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int);
 
@@ -435,7 +436,156 @@ void MonsterAdditionalCollide(Instance *instance, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterQuery);
+uintptr_t MonsterQuery(Instance *instance, unsigned long query)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+    uintptr_t ret;
+    evShadowSegmentData *shadowData;
+    MonsterSaveInfo *saveInfo;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    ret = 0;
+
+    if (ma == NULL)
+    {
+        return ret;
+    }
+
+    switch (query)
+    {
+    case 38:
+        shadowData = (evShadowSegmentData *)SetShadowSegmentData(2);
+
+        shadowData->shadowSegments[0] = ma->leftFootSegment;
+        shadowData->shadowSegments[1] = ma->rightFootSegment;
+
+        ret = (intptr_t)shadowData;
+        break;
+    case 0:
+        if ((mv->mvFlags & 0x200))
+        {
+            ret = 0x40000000;
+            break;
+        }
+
+        if (instance->currentMainState == MONSTER_STATE_PETRIFIED)
+        {
+            ret = 0x12000000;
+            break;
+        }
+
+        ret = 0;
+
+        if (!(mv->mvFlags & 0x200000))
+        {
+            if (((mv->mvFlags & 0x10)) || (mv->enemy == NULL) || (instance->currentMainState == MONSTER_STATE_SURPRISED))
+            {
+                if (mv->subAttr->grabable != 0)
+                {
+                    ret |= 0x90000000;
+                }
+                else
+                {
+                    ret |= 0x10000000;
+                }
+            }
+        }
+        else
+        {
+            ret = 0x4000000;
+        }
+
+        if ((mv->mvFlags & 0x100))
+        {
+            ret |= 0x20000000;
+        }
+
+        break;
+    case 1:
+        ret = ma->whatAmI;
+        break;
+    case 2:
+        ret = (intptr_t)mv->subAttr->physAbility;
+        break;
+    case 9:
+        if ((mv->mvFlags & 0x400))
+        {
+            ret = 16;
+        }
+        else
+        {
+            ret = 32;
+        }
+
+        break;
+    case 10:
+        ret = mv->mode;
+        break;
+    case 13:
+        if (instance->matrix != NULL)
+        {
+            ret = (intptr_t)&instance->matrix[1];
+        }
+        else
+        {
+            ret = 0;
+        }
+
+        break;
+    case 12:
+        if (instance->matrix != NULL)
+        {
+            ret = (intptr_t)&instance->matrix[ma->headSegment];
+        }
+        else
+        {
+            ret = 0;
+        }
+
+        break;
+    case 15:
+        ret = (intptr_t)ma->neckSegment;
+        break;
+    case 25:
+        ret = (intptr_t)mv->soulJuice;
+        break;
+    case 24:
+        saveInfo = (MonsterSaveInfo *)CIRC_Alloc(sizeof(MonsterSaveInfo));
+
+        MON_SetUpSaveInfo(instance, saveInfo);
+
+        ret = SetControlSaveDataData(sizeof(MonsterSaveInfo), saveInfo);
+        break;
+    case 33:
+        ret = mv->mvFlags >> 29;
+
+        ret &= 0x1;
+        break;
+    case 35:
+        ret = (intptr_t)PeekMessageQueue(&mv->messageQueue);
+        break;
+    case 47:
+        ret = 0;
+
+        if ((instance->currentMainState == MONSTER_STATE_THROWN) || (instance->currentMainState == MONSTER_STATE_IMPACT) || (instance->currentMainState == MONSTER_STATE_FALL) || (instance->currentMainState == MONSTER_STATE_GRABBED))
+        {
+            ret = 1;
+        }
+
+        break;
+    case 37:
+        ret = 1;
+        break;
+    default:
+        ret = GenericQuery(instance, query);
+    }
+
+    return ret;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterMessage);
 

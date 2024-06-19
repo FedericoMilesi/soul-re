@@ -3,10 +3,12 @@
 
 // size: 0x8
 typedef struct GenericTune {
-	// offset: 0000
-	long flags;
-	// offset: 0004
-	void *shatterData;
+    // offset: 0000
+    long flags;
+    // offset: 0004
+    void *shatterData;
 } GenericTune;
+
+unsigned long GenericQuery(Instance *instance, unsigned long query);
 
 #endif

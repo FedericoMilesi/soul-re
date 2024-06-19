@@ -58,7 +58,7 @@ typedef struct _GlobalSaveTracker {
     short CurrentBirthID;
 } GlobalSaveTracker;
 
-// size: 0x10
+/*// size: 0x10
 typedef struct _MonsterSaveInfo {
     // offset: 0000
     long mvFlags;
@@ -80,6 +80,19 @@ typedef struct _MonsterSaveInfo {
     // unsigned int animLooping;
     // offset: 0075 (3 bytes)
     // unsigned int causeOfDeath;
+} MonsterSaveInfo;*/
+
+typedef struct _MonsterSaveInfo {
+    long mvFlags; // size=0, offset=0
+    long auxFlags; // size=0, offset=4
+    short soulID; // size=0, offset=8
+    short soulJuice; // size=0, offset=10
+    unsigned int age : 3; // offset=12.0
+    unsigned int state : 6; // offset=12.3
+    unsigned int behaviorState : 5; // offset=13.1
+    unsigned int anim : 6; // offset=13.6
+    unsigned int animLooping : 1; // offset=14.4
+    unsigned int causeOfDeath : 3; // offset=14.5
 } MonsterSaveInfo;
 
 // size: 0x8
