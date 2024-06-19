@@ -68,7 +68,73 @@ int WCBEGG_ShouldIgniteEgg(Instance *egg, walbossAttributes *wa)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MBMISS", WCBEGG_Process);
+void WCBEGG_Process(Instance *instance, GameTracker *gameTracker)
+{
+    PhysObData *data;
+    int time;
+    int lastTime;
+    int timeBetween;
+    int birthTime;
+    Object *walboss;
+    walbossAttributes *wa;
+
+    data = instance->extraData;
+
+    time = MON_GetTime(instance);
+
+    lastTime = time - gameTrackerX.lastLoopTime;
+
+    if ((instance->collideFunc == WCBEGG_Collide) && (instance->LinkParent == gameTrackerX.playerInstance))
+    {
+        instance->collideFunc = WCBEGG_ExplodeCollide;
+    }
+
+    walboss = OBTABLE_FindObject(D_800D1BFC);
+
+    if (walboss != NULL)
+    {
+        wa = (walbossAttributes *)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
+
+        timeBetween = ((Dummy *)data)->unknown + (wa->timeToEggThrob * 33); // data needs parsing to the correct struct
+
+        if ((lastTime < timeBetween) && (time >= timeBetween))
+        {
+            G2EmulationInstanceSwitchAnimationAlpha(instance, 0, 2, 0, 0, 2, 0);
+        }
+
+        timeBetween += wa->timeToEggExplode * 33;
+
+        if ((lastTime < timeBetween) && (time >= timeBetween))
+        {
+            if ((INSTANCE_Query(instance, 3) & 0x10000))
+            {
+                G2EmulationInstanceSwitchAnimationAlpha(instance, 0, 4, 0, 0, 1, 0);
+
+                instance->processFunc = WCBEGG_ExplodeProcess;
+            }
+            else
+            {
+                G2EmulationInstanceSwitchAnimationAlpha(instance, 0, 3, 0, 0, 1, 0);
+
+                instance->processFunc = WCBEGG_SplitProcess;
+            }
+
+            ((Dummy *)data)->unknown = MON_GetTime(instance);
+        }
+
+        if (WCBEGG_ShouldIgniteEgg(instance, wa) != 0)
+        {
+            INSTANCE_Post(instance, 0x800029, 1);
+        }
+
+        ProcessPhysicalObject(instance, gameTracker);
+        return;
+    }
+
+    INSTANCE_UnlinkFromParent(instance);
+
+    INSTANCE_KillInstance(instance);
+}
 
 void WCBEGG_ExplodeProcess(Instance *instance, GameTracker *gameTracker)
 {
