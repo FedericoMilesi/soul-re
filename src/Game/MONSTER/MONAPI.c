@@ -13,6 +13,7 @@
 #include "Game/G2/INSTNCG2.h"
 #include "Game/COLLIDE.h"
 #include "Game/GENERIC.h"
+#include "Game/MATH3D.h"
 
 typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int);
 
@@ -670,7 +671,45 @@ void MonsterMessage(Instance *instance, unsigned long message, unsigned long dat
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", AnimDistanceAndVel);
+void AnimDistanceAndVel(Object *object, MonsterAnimation *mAnim)
+{
+    G2Anim anim;
+    G2AnimSection *animSection;
+    G2AnimKeylist *keylist;
+    long total;
+
+    keylist = object->animList[(int)*mAnim->index];
+
+    G2Anim_Init(&anim, object->modelList[0]);
+
+    animSection = &anim.section[0];
+
+    animSection->firstSeg = 0;
+
+    animSection->segCount = (unsigned char)object->modelList[0]->numSegments;
+
+    animSection->callback = NULL;
+    animSection->callbackData = NULL;
+
+    G2AnimSection_SetInterpInfo(animSection, NULL);
+
+    G2AnimSection_SwitchToKeylistAtTime(animSection, keylist, *mAnim->index, 0);
+
+    if (G2Anim_SegmentHasActiveChannels(&anim, 0, 0x700) != G2FALSE)
+    {
+        G2SVector3 dist;
+
+        G2Anim_GetRootMotionOverInterval(&anim, 0, G2AnimKeylist_GetDuration(keylist), &dist);
+
+        total = (int)MATH3D_FastSqrt0((dist.x * dist.x) + (dist.y * dist.y) + (dist.z * dist.z));
+
+        mAnim->velocity = ((mAnim->playSpeed * 100) * (int)total) / (G2AnimKeylist_GetDuration(keylist) << 12);
+
+        mAnim->distance = (int)total;
+    }
+
+    G2Anim_Free(&anim);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", TranslateAnimList);
 

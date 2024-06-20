@@ -293,6 +293,31 @@ typedef struct _MonsterAttackAttributes {
     char animList[5];
 } MonsterAttackAttributes;
 
+typedef struct _MonsterAnim {
+    // offset: 0000
+    unsigned short velocity;
+    // offset: 0002
+    unsigned short distance;
+    // offset: 0004
+    unsigned short playSpeed;
+    // offset: 0006
+    unsigned char interpFrames;
+    // offset: 0007
+    unsigned char startFrame;
+    // offset: 0008
+    unsigned char interpOut;
+    // offset: 0009
+    unsigned char alphaTable;
+    // offset: 000A
+    unsigned char alphaTableOut;
+    // offset: 000B
+    unsigned char controllingSection;
+    // offset: 000C (3 bytes)
+    char index[3];
+    // offset: 000F
+    char pad;
+} MonsterAnimation;
+
 // size: 0x50
 typedef struct _MonsterAttributes {
     // offset: 0000

@@ -25,5 +25,7 @@ int G2AnimSection_GetKeyframeNumber(G2AnimSection *section);
 int G2AnimSection_GetStoredKeyframeNumber(G2AnimSection *section);
 G2AnimKeylist *G2Anim_GetKeylist(G2Anim *anim);
 G2Bool G2AnimSection_IsInInterpolation(G2AnimSection *section);
+short G2AnimKeylist_GetDuration(G2AnimKeylist *keylist);
+void G2Anim_GetRootMotionOverInterval(G2Anim *anim, short intervalStart, short intervalEnd, G2SVector3 *motionVector);
 
 #endif

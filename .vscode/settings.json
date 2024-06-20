@@ -30,6 +30,8 @@
         "state.h": "c",
         "collide.h": "c",
         "monlib.h": "c",
-        "generic.h": "c"
+        "generic.h": "c",
+        "anmg2ilf.h": "c",
+        "animg2.h": "c"
     }
 }
