@@ -558,6 +558,11 @@ typedef struct _MONAPI_Regenerator {
     short streamUnitID;
 } MONAPI_Regenerator;
 
+typedef struct Dummy3 {
+    char pad[24];
+    int unknown;
+} Dummy3; // not from types.h
+
 void MonsterProcess(Instance *instance, GameTracker *gameTracker);
 uintptr_t MonsterQuery(Instance *instance, unsigned long query);
 void MONAPI_ResetLookAround(Instance *instance);

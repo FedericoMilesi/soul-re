@@ -32,6 +32,8 @@
         "monlib.h": "c",
         "generic.h": "c",
         "anmg2ilf.h": "c",
-        "animg2.h": "c"
+        "animg2.h": "c",
+        "saveinfo.h": "c",
+        "montable.h": "c"
     }
 }

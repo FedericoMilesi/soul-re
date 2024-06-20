@@ -47,5 +47,6 @@ MonsterStateFunction *MONTABLE_GetStateFuncs(Instance *instance, int state);
 void *MONTABLE_GetCleanUpFunc(Instance *instance);
 void MONTABLE_SetQueryFunc(Instance *instance);
 void MONTABLE_SetMessageFunc(Instance *instance);
+void MONTABLE_SetupTablePointer(Object *object);
 
 #endif

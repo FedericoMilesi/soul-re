@@ -14,6 +14,7 @@
 #include "Game/COLLIDE.h"
 #include "Game/GENERIC.h"
 #include "Game/MATH3D.h"
+#include "Game/MONSTER/MONTABLE.h"
 
 typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int);
 
@@ -743,7 +744,74 @@ void TranslateAnimList(Object *object, MonsterAnimation *animList, int numAnims)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterTranslateAnim);
+void MonsterTranslateAnim(Object *object)
+{
+    MonsterAttributes *attributes;
+    int i;
+    void *relocModule;
+    MonsterAttackAttributes *attackAttr;
+    MonsterCombatAttributes *combatAttr;
+    int largest;
+    int j;
+    MonsterAttackAttributes *attack;
+
+    attributes = (MonsterAttributes *)object->data;
+
+    if (!(object->oflags2 & 0x10000000))
+    {
+        if ((object->oflags & 0x8000000))
+        {
+            relocModule = object->relocModule;
+
+            if ((relocModule == NULL) || ((char *)((Dummy3 *)relocModule)->unknown != monVersion)) // relocModule needs parsing to the correct struct
+            {
+                object->data = NULL;
+                return;
+            }
+        }
+        else
+        {
+            MONTABLE_SetupTablePointer(object);
+        }
+
+        if ((attributes != NULL) && (attributes->magicnum == 0xACE00065))
+        {
+            TranslateAnimList(object, attributes->animList, attributes->numAnims);
+
+            for (i = 0; i < attributes->numAttackAttributes; i++)
+            {
+                attackAttr = &attributes->attackAttributesList[i];
+
+                if ((attackAttr->sphereOnAnim >= attackAttr->numAnims) || (attackAttr->sphereOffAnim >= attackAttr->numAnims))
+                {
+                    object->data = NULL;
+                }
+            }
+
+            for (i = 0; i < attributes->numCombatAttributes; i++)
+            {
+                combatAttr = attributes->combatAttributesList[i];
+
+                if (combatAttr->combatRange == 0)
+                {
+                    largest = 0;
+
+                    for (j = 0; j < combatAttr->numAttacks; j++)
+                    {
+                        attack = &attributes->attackAttributesList[(int)combatAttr->attackList[j]];
+
+                        if (largest < attack->attackRange)
+                        {
+                            largest = attack->attackRange;
+                        }
+                    }
+
+                    combatAttr->combatRange = largest + 200;
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterRelocateTune);
 
