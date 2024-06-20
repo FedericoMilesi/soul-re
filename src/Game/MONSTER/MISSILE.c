@@ -27,7 +27,48 @@ void MISSILE_Collide(Instance *instance, GameTracker *gameTracker)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MISSILE", MISSILE_Find);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MISSILE", MISSILE_Birth);
+Instance *MISSILE_Birth(Instance *instance, MonsterMissile *missiledef)
+{
+    Instance *missile;
+
+    if (missiledef->type == 3)
+    {
+        missile = MISSILE_Find(instance, missiledef);
+
+        if (missile != NULL)
+        {
+            missile->processFunc = MISSILE_Process;
+            missile->collideFunc = MISSILE_Collide;
+
+            goto end;
+        }
+    }
+
+    missile = PHYSOB_BirthProjectile(instance, missiledef->segment, missiledef->graphic)->birthInstance;
+
+    if (missile != NULL)
+    {
+        missile->processFunc = MISSILE_Process;
+
+        if (instance->matrix == NULL)
+        {
+            return missile;
+        }
+        else
+        {
+            MATRIX *matrix;
+
+            matrix = &instance->matrix[missiledef->segment];
+
+            missile->position.x = matrix->t[0];
+            missile->position.y = matrix->t[1];
+            missile->position.z = matrix->t[2];
+        }
+    }
+
+end:
+    return missile;
+}
 
 Instance *MISSILE_Fire(Instance *instance, MonsterMissile *missiledef, void *target, int type)
 {

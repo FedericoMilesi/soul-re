@@ -36,5 +36,6 @@ typedef struct _MonsterMissile {
 Instance *MISSILE_Fire(Instance *instance, MonsterMissile *missiledef, void *target, int type);
 Instance *MISSILE_FireAtInstance(Instance *instance, MonsterMissile *missiledef, Instance *target);
 Instance *MISSILE_Birth(Instance *instance, MonsterMissile *missiledef);
+Instance *MISSILE_Find(Instance *instance, MonsterMissile *missiledef);
 
 #endif
