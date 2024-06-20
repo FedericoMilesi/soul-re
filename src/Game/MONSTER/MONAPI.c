@@ -940,7 +940,25 @@ void MONAPI_DeleteRegen(MONAPI_Regenerator *regen)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_ProcessGenerator);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_AddToGenerator);
+void MONAPI_AddToGenerator(Instance *instance)
+{
+    MonsterVars *mv;
+    MONAPI_Regenerator *regen;
+
+    if (GlobalSave->numRegens < 9)
+    {
+        mv = (MonsterVars *)instance->extraData;
+
+        regen = &GlobalSave->regenEntries[(int)GlobalSave->numRegens];
+
+        GlobalSave->numRegens++;
+
+        regen->regenTime = MON_GetTime(instance) + (mv->regenTime * 1000);
+
+        regen->introUniqueID = instance->introUniqueID;
+        regen->streamUnitID = instance->birthStreamUnitID;
+    }
+}
 
 void MONAPI_CheckGenerator(Instance *instance)
 {
