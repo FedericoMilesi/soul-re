@@ -318,6 +318,30 @@ typedef struct _MonsterAnim {
     char pad;
 } /*MonsterAnim*/ MonsterAnimation;
 
+// size: 0x4
+typedef struct _MonsterIdle {
+    // offset: 0000
+    char anim;
+    // offset: 0001
+    char alertMod;
+    // offset: 0002
+    char probability;
+    // offset: 0003
+    char pad;
+} MonsterIdle;
+
+// size: 0x8
+typedef struct _MonsterBehavior {
+    // offset: 0000
+    char alertness;
+    // offset: 0001
+    char idleFreq;
+    // offset: 0002
+    char numIdles;
+    // offset: 0003 (5 bytes)
+    char idleList[5];
+} MonsterBehavior;
+
 // size: 0x50
 typedef struct _MonsterAttributes {
     // offset: 0000

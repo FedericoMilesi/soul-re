@@ -15,6 +15,7 @@
 #include "Game/GENERIC.h"
 #include "Game/MATH3D.h"
 #include "Game/MONSTER/MONTABLE.h"
+#include "Game/MONSTER/MISSILE.h"
 
 typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int);
 
@@ -813,7 +814,68 @@ void MonsterTranslateAnim(Object *object)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterRelocateTune);
+void MonsterRelocateTune(Object *object, long offset)
+{
+    MonsterAttributes *attributes;
+
+    attributes = object->data;
+
+    if ((attributes != NULL) && (attributes->magicnum == 0xACE00065))
+    {
+        int i;
+        MonsterSubAttributes *subAttr;
+        MonsterSubAttributes **pSubAttr;
+        MonsterCombatAttributes **pCombatAttr;
+
+        attributes->tunData = (void *)OFFSET_DATA(attributes->tunData, offset);
+        attributes->auxAnimList = (char *)OFFSET_DATA(attributes->auxAnimList, offset);
+        attributes->ambientAnimList = (char *)OFFSET_DATA(attributes->ambientAnimList, offset);
+        attributes->subAttributesList = (MonsterSubAttributes **)OFFSET_DATA(attributes->subAttributesList, offset);
+        attributes->combatAttributesList = (MonsterCombatAttributes **)OFFSET_DATA(attributes->combatAttributesList, offset);
+        attributes->attackAttributesList = (MonsterAttackAttributes *)OFFSET_DATA(attributes->attackAttributesList, offset);
+        attributes->missileList = (MonsterMissile *)OFFSET_DATA(attributes->missileList, offset);
+        attributes->animList = (MonsterAnimation *)OFFSET_DATA(attributes->animList, offset);
+        attributes->idleList = (MonsterIdle *)OFFSET_DATA(attributes->idleList, offset);
+        attributes->behaviorList = (MonsterBehavior *)OFFSET_DATA(attributes->behaviorList, offset);
+        attributes->shatterList = (void *)OFFSET_DATA(attributes->shatterList, offset);
+
+        pSubAttr = attributes->subAttributesList;
+
+        for (i = 0; i < attributes->numSubAttributes; i++, pSubAttr++)
+        {
+            int j;
+            MonsterSubAttributes **oldSubAttr;
+
+            subAttr = *pSubAttr = (MonsterSubAttributes *)OFFSET_DATA(*pSubAttr, offset);
+
+            oldSubAttr = attributes->subAttributesList;
+
+            for (j = 0; j < i; j++, oldSubAttr++)
+            {
+                if (*oldSubAttr == subAttr)
+                {
+                    break;
+                }
+            }
+
+            if (j == i)
+            {
+                subAttr->animList = (char *)OFFSET_DATA(subAttr->animList, offset);
+                subAttr->senses = (MonsterSenses *)OFFSET_DATA(subAttr->senses, offset);
+                subAttr->combatAttributes = (MonsterCombatAttributes *)OFFSET_DATA(subAttr->combatAttributes, offset);
+                subAttr->allegiances = (MonsterAllegiances *)OFFSET_DATA(subAttr->allegiances, offset);
+                subAttr->behaviorList = (char *)OFFSET_DATA(subAttr->behaviorList, offset);
+            }
+        }
+
+        pCombatAttr = attributes->combatAttributesList;
+
+        for (i = attributes->numCombatAttributes; i != 0; i--, pCombatAttr++)
+        {
+            *pCombatAttr = (MonsterCombatAttributes *)OFFSET_DATA(*pCombatAttr, offset);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterRelocateInstanceObject);
 
