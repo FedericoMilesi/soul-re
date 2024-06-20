@@ -879,7 +879,30 @@ void MonsterRelocateTune(Object *object, long offset)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterRelocateInstanceObject);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_TurnHead);
+void MONAPI_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *gameTracker)
+{
+    (void)gameTracker;
+
+    if (*rotx < -768)
+    {
+        *rotx = -768;
+    }
+    else if (*rotx > 512)
+    {
+        *rotx = 512;
+    }
+
+    if (*rotz > 1024)
+    {
+        *rotz = 1024;
+    }
+    else if (*rotz < -1024)
+    {
+        *rotz = -1024;
+    }
+
+    MON_LookInDirection(instance, (unsigned short)*rotx * -1, *rotz);
+}
 
 void MONAPI_SetLookAround(Instance *instance)
 {

@@ -37,5 +37,6 @@ void MON_SetUpSaveInfo(Instance *instance, MonsterSaveInfo *saveData);
 void MON_GetSaveInfo(Instance *instance, MonsterSaveInfo *saveData);
 void MON_SwitchStateDoEntry(Instance *instance, MonsterState state);
 void MON_RelocateCoords(Instance *instance, SVector *offset);
+void MON_LookInDirection(Instance *instance, short tx, short tz);
 
 #endif
