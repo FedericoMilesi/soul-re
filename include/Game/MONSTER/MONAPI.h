@@ -316,7 +316,7 @@ typedef struct _MonsterAnim {
     char index[3];
     // offset: 000F
     char pad;
-} MonsterAnimation;
+} /*MonsterAnim*/ MonsterAnimation;
 
 // size: 0x50
 typedef struct _MonsterAttributes {

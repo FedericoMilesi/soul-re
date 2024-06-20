@@ -711,7 +711,37 @@ void AnimDistanceAndVel(Object *object, MonsterAnimation *mAnim)
     G2Anim_Free(&anim);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", TranslateAnimList);
+void TranslateAnimList(Object *object, MonsterAnimation *animList, int numAnims)
+{
+    int i;
+
+    if (animList != NULL)
+    {
+        MonsterAnimation *animPtr;
+
+        animPtr = animList;
+
+        for (i = 0; i < numAnims; i++, animPtr++)
+        {
+            int index;
+            G2AnimKeylist *keylist;
+
+            index = *animPtr->index;
+
+            keylist = object->animList[index];
+
+            if (index != -1)
+            {
+                AnimDistanceAndVel(object, animPtr);
+
+                if (animPtr->startFrame >= (G2AnimKeylist_GetDuration(keylist) / 100))
+                {
+                    animPtr->startFrame = G2AnimKeylist_GetKeyframeCount(keylist) - 1;
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterTranslateAnim);
 
