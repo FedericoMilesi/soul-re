@@ -34,5 +34,8 @@ int MON_ValidPosition(Instance *instance);
 Intro *MON_TestForTerrainImpale(Instance *instance, Terrain *terrain);
 void MON_CheckTerrainAndRespond(Instance *instance, BSPTree *bsp, TFace *tface);
 void MON_SetUpSaveInfo(Instance *instance, MonsterSaveInfo *saveData);
+void MON_GetSaveInfo(Instance *instance, MonsterSaveInfo *saveData);
+void MON_SwitchStateDoEntry(Instance *instance, MonsterState state);
+void MON_RelocateCoords(Instance *instance, SVector *offset);
 
 #endif

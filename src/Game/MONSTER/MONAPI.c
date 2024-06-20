@@ -587,7 +587,88 @@ uintptr_t MonsterQuery(Instance *instance, unsigned long query)
     return ret;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterMessage);
+void MonsterMessage(Instance *instance, unsigned long message, unsigned long data)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (mv != NULL)
+    {
+        switch (message)
+        {
+        case 0x40026:
+            PurgeMessageQueue(&mv->messageQueue);
+            break;
+        case 0x1000020:
+            if (mv->enemy != NULL)
+            {
+                mv->enemy->mirFlags &= ~0x1000;
+            }
+
+            break;
+        case 0x100007:
+            MON_GetSaveInfo(instance, (MonsterSaveInfo *)((evControlSaveDataData *)data)->data);
+            break;
+        }
+
+        if (!(instance->flags2 & 0x4000000))
+        {
+            switch (message)
+            {
+            case 0x1000024:
+                mv->mvFlags |= 0x40;
+                return;
+            case 0x200000:
+                MONSENSE_StartMonsterIRList(instance);
+                return;
+            case 0x200001:
+                MONSENSE_SenseInstance(instance, (evCollideInstanceStatsData *)data);
+                return;
+            case 0x100008:
+                MON_RelocateCoords(instance, (SVector *)data);
+                return;
+            case 0x4000A:
+                STREAM_SetInstancePosition(instance, (evPositionData *)data);
+                return;
+            case 0x4000B:
+                instance->rotation.x = ((evPositionData *)data)->x;
+                instance->rotation.y = ((evPositionData *)data)->y;
+                instance->rotation.z = ((evPositionData *)data)->z;
+                return;
+            case 0x4000E:
+                if (data != NULL)
+                {
+                    mv->mvFlags |= 0x4;
+                }
+                else
+                {
+                    mv->mvFlags &= ~0x4;
+                }
+
+                if ((instance->currentMainState == MONSTER_STATE_PURSUE) || (instance->currentMainState == MONSTER_STATE_WANDER) || (instance->currentMainState == MONSTER_STATE_PROJECTILE) || (instance->currentMainState == MONSTER_STATE_FLEE))
+                {
+                    MON_SwitchStateDoEntry(instance, MONSTER_STATE_IDLE);
+                }
+
+                return;
+            case 0x40013:
+                if (data != NULL)
+                {
+                    mv->mvFlags |= 0x80000;
+                }
+                else
+                {
+                    mv->mvFlags &= ~0x80000;
+                }
+
+                return;
+            }
+
+            EnMessageQueueData(&mv->messageQueue, message, data);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", AnimDistanceAndVel);
 
