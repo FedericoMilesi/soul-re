@@ -33,6 +33,14 @@ typedef struct _MonsterMissile {
     char animList[2];
 } MonsterMissile;
 
+// size: 0x2
+typedef struct MissileGraphics {
+    // offset: 0000
+    unsigned char object;
+    // offset: 0001
+    unsigned char model;
+} MissileGraphics;
+
 Instance *MISSILE_Fire(Instance *instance, MonsterMissile *missiledef, void *target, int type);
 Instance *MISSILE_FireAtInstance(Instance *instance, MonsterMissile *missiledef, Instance *target);
 Instance *MISSILE_Birth(Instance *instance, MonsterMissile *missiledef);

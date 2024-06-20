@@ -5,6 +5,10 @@
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/STATE.h"
 
+//static struct MissileGraphics MISSILE_objectTable[4];
+
+EXTERN STATIC MissileGraphics MISSILE_objectTable[];
+
 void MISSILE_Process(Instance *instance, GameTracker *gameTracker)
 {
     ProcessPhysicalObject(instance, gameTracker);
@@ -25,7 +29,27 @@ void MISSILE_Collide(Instance *instance, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MISSILE", MISSILE_Find);
+Instance *MISSILE_Find(Instance *instance, MonsterMissile *missiledef)
+{
+    Object *ob;
+    Instance *missile;
+
+    missile = instance->LinkChild;
+
+    ob = objectAccess[MISSILE_objectTable[missiledef->graphic].object].object;
+
+    while (missile != NULL)
+    {
+        if ((missile->ParentLinkNode == missiledef->segment) && (missile->object == ob))
+        {
+            return missile;
+        }
+
+        missile = missile->LinkSibling;
+    }
+
+    return NULL;
+}
 
 Instance *MISSILE_Birth(Instance *instance, MonsterMissile *missiledef)
 {
