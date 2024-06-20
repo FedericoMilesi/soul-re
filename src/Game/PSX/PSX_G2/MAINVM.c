@@ -1,3 +1,12 @@
 #include "common.h"
+#include "Game/PSX/PSX_G2/MAINVM.h"
+#include "Game/PSX/MAIN.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/PSX_G2/MAINVM", main);
+EXTERN STATIC G2AppDataVM _appDataVM;
+
+int main()
+{
+    ClearBss();
+
+    MainG2(&_appDataVM);
+}

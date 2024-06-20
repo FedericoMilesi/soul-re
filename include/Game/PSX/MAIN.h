@@ -3,5 +3,6 @@
 
 void MAIN_StartGame();
 void VblTick();
+int MainG2(void *appData);
 
 #endif
