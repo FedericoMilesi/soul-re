@@ -3,6 +3,7 @@
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/PHYSOBS.h"
 #include "Game/INSTANCE.h"
+#include "Game/MONSTER/MONTABLE.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -181,7 +182,21 @@ void MON_TurnOnAllSpheres(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SwitchState);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SwitchStateDoEntry);
+void MON_SwitchStateDoEntry(Instance *instance, MonsterState state)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    MON_SwitchState(instance, state);
+
+    if (mv != NULL)
+    {
+        (((MonsterStateFunction *)MONTABLE_GetStateFuncs(instance, instance->currentMainState))->entryFunction)(instance);
+
+        mv->mvFlags &= ~0x1;
+    }
+}
 
 int MON_TransNodeAnimation(Instance *instance)
 {
