@@ -111,7 +111,32 @@ void MON_TurnOnWeaponSphere(Instance *instance, int segment)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffBodySpheres);
+void MON_TurnOffBodySpheres(Instance *instance)
+{
+    MonsterVars *mv;
+    int i;
+    HPrim *hprim;
+    HModel *hmodel;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((mv->mvFlags & 0x8000))
+    {
+        hmodel = &instance->hModelList[instance->currentModel];
+
+        hprim = hmodel->hPrimList;
+
+        for (i = hmodel->numHPrims; i != 0; i--, hprim++)
+        {
+            if ((hprim->type == 1) && (hprim->data.hsphere->id == 8))
+            {
+                hprim->hpFlags &= ~0x1;
+            }
+        }
+
+        mv->mvFlags &= ~0x8000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnBodySpheres);
 
