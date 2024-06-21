@@ -138,7 +138,32 @@ void MON_TurnOffBodySpheres(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnBodySpheres);
+void MON_TurnOnBodySpheres(Instance *instance)
+{
+    MonsterVars *mv;
+    int i;
+    HPrim *hprim;
+    HModel *hmodel;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((!(mv->mvFlags & 0x8000)) && (instance->hModelList != NULL))
+    {
+        hmodel = &instance->hModelList[instance->currentModel];
+
+        hprim = hmodel->hPrimList;
+
+        for (i = hmodel->numHPrims; i != 0; i--, hprim++)
+        {
+            if ((hprim->type == 1) && (hprim->data.hsphere->id == 8))
+            {
+                hprim->hpFlags |= 0x1;
+            }
+        }
+
+        mv->mvFlags |= 0x8000;
+    }
+}
 
 void MON_TurnOffAllSpheres(Instance *instance)
 {
