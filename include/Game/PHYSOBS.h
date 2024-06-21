@@ -128,5 +128,6 @@ void CollidePhysicalObject(Instance *instance, GameTracker *gameTracker);
 void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker);
 void PhysicalObjectPost(Instance *instance, unsigned long Message, unsigned long Data);
 void TurnOffCollisionPhysOb(Instance *instance, int coll);
+void TurnOnCollisionPhysOb(Instance *instance, int coll);
 
 #endif

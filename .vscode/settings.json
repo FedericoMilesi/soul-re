@@ -38,6 +38,7 @@
         "poolmmg2.h": "c",
         "anmintrp.h": "c",
         "hasm.h": "c",
-        "quatg2.h": "c"
+        "quatg2.h": "c",
+        "instance.h": "c"
     }
 }

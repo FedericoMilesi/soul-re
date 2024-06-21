@@ -271,5 +271,6 @@ void INSTANCE_Broadcast(Instance *sender, long whatAmIMask, int Message, intptr_
 void INSTANCE_PlainDeath(Instance *instance);
 int INSTANCE_Linked(Instance *instance1, Instance *instance2);
 void INSTANCE_ReallyRemoveInstance(InstanceList *list, Instance *instance, long reset);
+Instance *INSTANCE_GetChildLinkedToSegment(Instance *instance, int segment);
 
 #endif

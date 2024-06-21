@@ -2,6 +2,7 @@
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/PHYSOBS.h"
+#include "Game/INSTANCE.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -69,7 +70,46 @@ void MON_TurnOnWeaponSpheres(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnWeaponSphere);
+void MON_TurnOnWeaponSphere(Instance *instance, int segment)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (instance->LinkChild != NULL)
+    {
+        Instance *weapon;
+
+        weapon = INSTANCE_GetChildLinkedToSegment(instance, segment);
+
+        if (weapon != NULL)
+        {
+            TurnOnCollisionPhysOb(weapon, 3);
+
+            mv->mvFlags |= 0x4000;
+        }
+    }
+    else if ((!(mv->mvFlags & 0x4000)) && (instance->hModelList != NULL))
+    {
+        int i;
+        HPrim *hprim;
+        HModel *hmodel;
+
+        hmodel = &instance->hModelList[instance->currentModel];
+
+        hprim = hmodel->hPrimList;
+
+        for (i = hmodel->numHPrims; i != 0; i--, hprim++)
+        {
+            if ((hprim->segment == segment) && (hprim->type == 1) && (hprim->data.hsphere->id == 9))
+            {
+                hprim->hpFlags |= 0x1;
+            }
+        }
+
+        mv->mvFlags |= 0x4000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffBodySpheres);
 
