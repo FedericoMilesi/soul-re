@@ -587,6 +587,12 @@ typedef struct Dummy3 {
     int unknown;
 } Dummy3; // not from types.h
 
+typedef struct Dummy4 {
+    char pad[12];
+    int unknown;
+    int unknown2;
+} Dummy4; // not from types.h
+
 void MonsterProcess(Instance *instance, GameTracker *gameTracker);
 uintptr_t MonsterQuery(Instance *instance, unsigned long query);
 void MONAPI_ResetLookAround(Instance *instance);

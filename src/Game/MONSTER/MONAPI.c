@@ -877,7 +877,43 @@ void MonsterRelocateTune(Object *object, long offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MonsterRelocateInstanceObject);
+void MonsterRelocateInstanceObject(Instance *instance, long offset)
+{
+    MonsterVars *mv;
+    Dummy4 *temp;  // not from decls.h
+    Dummy4 *temp2; // not from decls.h
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (mv != NULL)
+    {
+        mv->subAttr = (MonsterSubAttributes *)OFFSET_DATA(mv->subAttr, offset);
+        mv->attackType = (MonsterAttackAttributes *)OFFSET_DATA(mv->attackType, offset);
+        mv->anim = (MonsterAnimation *)OFFSET_DATA(mv->anim, offset);
+
+        if ((instance->object->oflags & 0x8000000))
+        {
+            temp = (Dummy4 *)instance->object->relocModule;
+
+            if ((uintptr_t)temp < (uintptr_t)temp->unknown)
+            {
+                instance->queryFunc = (void *)OFFSET_DATA(instance->queryFunc, offset);
+            }
+
+            temp2 = (Dummy4 *)instance->object->relocModule;
+
+            if ((uintptr_t)temp2 < (uintptr_t)temp2->unknown2)
+            {
+                instance->messageFunc = (void *)OFFSET_DATA(instance->messageFunc, offset);
+            }
+
+            if ((instance->collideFunc != MonsterCollide) && ((uintptr_t)instance->object->relocModule < (uintptr_t)instance->collideFunc))
+            {
+                instance->collideFunc = (void *)OFFSET_DATA(instance->collideFunc, offset);
+            }
+        }
+    }
+}
 
 void MONAPI_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *gameTracker)
 {
