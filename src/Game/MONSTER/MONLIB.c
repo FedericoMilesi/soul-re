@@ -1,8 +1,45 @@
 #include "common.h"
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/PHYSOBS.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffWeaponSpheres);
+void MON_TurnOffWeaponSpheres(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (instance->LinkChild != NULL)
+    {
+        Instance *weapon;
+
+        for (weapon = instance->LinkChild; weapon != NULL; weapon = weapon->LinkSibling)
+        {
+            TurnOffCollisionPhysOb(weapon, 3);
+        }
+    }
+
+    if ((mv->mvFlags & 0x4000))
+    {
+        int i;
+        HPrim *hprim;
+        HModel *hmodel;
+
+        hmodel = &instance->hModelList[instance->currentModel];
+
+        hprim = hmodel->hPrimList;
+
+        for (i = hmodel->numHPrims; i != 0; i--, hprim++)
+        {
+            if ((hprim->type == 1) && (hprim->data.hsphere->id == 9))
+            {
+                hprim->hpFlags &= ~0x1;
+            }
+        }
+
+        mv->mvFlags &= ~0x4000;
+    }
+}
 
 void MON_TurnOnWeaponSpheres(Instance *instance);
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnWeaponSpheres);
