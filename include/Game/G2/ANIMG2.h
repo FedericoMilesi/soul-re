@@ -189,5 +189,7 @@ G2AnimSection *G2Anim_AddSection(G2Anim *anim, int firstSegID, int segCount);
 void G2Anim_SetInterpController_Vector(G2Anim *anim, int segNumber, int type, G2SVector3 *vector, int duration);
 void G2Anim_SetControllerCallbackData(G2Anim *anim, int segNumber, int type, void *callbackData);
 void G2AnimSection_SwitchToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime);
+G2Anim *_G2AnimSection_GetAnim(G2AnimSection *section);
+void _G2AnimSection_UpdateStoredFrameFromData(G2AnimSection *section, G2Anim *anim);
 
 #endif

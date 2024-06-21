@@ -9,7 +9,150 @@ G2AnimInterpStateBlockPool _interpStateBlockPool;
 //static G2AnimSegValue _segValues[80];
 G2AnimSegValue _segValues[80];
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMINTRP", G2AnimSection_InterpToKeylistAtTime);
+// modified from decls.h
+void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime, short duration)
+{
+    G2Anim *anim;
+    G2AnimInterpInfo *interpInfo;
+    G2AnimInterpStateBlock *stateBlockList;
+    G2AnimQuatInfo *quatInfo;
+    unsigned long alarmFlags;
+    short elapsedTime;
+    int quatInfoChunkCount;
+    int segCount;
+
+    if (duration == 0)
+    {
+        G2AnimSection_SwitchToKeylistAtTime(section, keylist, keylistID, targetTime);
+    }
+    else
+    {
+        anim = _G2AnimSection_GetAnim(section);
+
+        interpInfo = section->interpInfo;
+
+        segCount = section->segCount;
+
+        if (interpInfo->stateBlockList != NULL)
+        {
+            _G2AnimSection_InterpStateToQuat(section);
+        }
+        else if (_G2Anim_AllocateInterpStateBlockList(section) == NULL)
+        {
+            G2AnimSection_SwitchToKeylistAtTime(section, keylist, keylistID, targetTime);
+            return;
+        }
+        else
+        {
+            section->interpInfo = NULL;
+
+            _G2AnimSection_UpdateStoredFrameFromData(section, anim);
+
+            section->interpInfo = interpInfo;
+
+            _G2AnimSection_SegValueToQuat(section, 0);
+        }
+
+        elapsedTime = section->elapsedTime;
+
+        alarmFlags = section->alarmFlags;
+
+        section->interpInfo = NULL;
+
+        G2AnimSection_SwitchToKeylistAtTime(section, keylist, keylistID, targetTime);
+
+        _G2AnimSection_UpdateStoredFrameFromData(section, anim);
+
+        section->interpInfo = interpInfo;
+
+        section->alarmFlags = alarmFlags;
+
+        section->elapsedTime = elapsedTime;
+
+        _G2AnimSection_SegValueToQuat(section, 1);
+
+        stateBlockList = interpInfo->stateBlockList;
+
+        quatInfoChunkCount = 4;
+
+        quatInfo = &stateBlockList->quatInfo[0];
+
+        if ((quatInfo->destTrans.x | quatInfo->destTrans.y | quatInfo->destTrans.z) == 0)
+        {
+            quatInfo->srcTrans.x = 0;
+            quatInfo->srcTrans.y = 0;
+            quatInfo->srcTrans.z = 0;
+        }
+
+        while (segCount > 0)
+        {
+            segCount--;
+
+            quatInfo->destScale.x -= quatInfo->srcScale.x;
+            quatInfo->destScale.y -= quatInfo->srcScale.y;
+            quatInfo->destScale.z -= quatInfo->srcScale.z;
+
+            quatInfo->destTrans.x -= quatInfo->srcTrans.x;
+            quatInfo->destTrans.y -= quatInfo->srcTrans.y;
+            quatInfo->destTrans.z -= quatInfo->srcTrans.z;
+
+            quatInfo++;
+
+            if (--quatInfoChunkCount == 0)
+            {
+                stateBlockList = stateBlockList->next;
+
+                quatInfoChunkCount = 4;
+
+                quatInfo = &stateBlockList->quatInfo[0];
+            }
+        }
+
+        interpInfo->targetTime = targetTime;
+
+        interpInfo->duration = duration;
+
+        if ((!(section->flags & 0x2)) && ((section->alarmFlags & 0x3)))
+        {
+            if (duration < ((elapsedTime % section->keylist->s0TailTime) + 1))
+            {
+                elapsedTime = duration;
+            }
+            else
+            {
+                elapsedTime = (elapsedTime % section->keylist->s0TailTime) + 1;
+            }
+
+            section->elapsedTime = elapsedTime;
+        }
+        else
+        {
+            section->elapsedTime = 0;
+        }
+
+        section->keylist = keylist;
+        section->keylistID = keylistID;
+
+        section->storedTime = -section->keylist->timePerKey;
+
+        if ((section->flags & 0x2))
+        {
+            G2AnimSection_SetLoopRangeAll(section);
+        }
+
+        G2AnimSection_ClearAlarm(section, 0x3);
+
+        section->flags &= 0x7F;
+
+        G2AnimSection_SetUnpaused(section);
+
+        section->swAlarmTable = NULL;
+
+        section->interpInfo = interpInfo;
+
+        anim->flags |= 0x1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMINTRP", _G2AnimSection_UpdateStoredFrameFromQuat);
 

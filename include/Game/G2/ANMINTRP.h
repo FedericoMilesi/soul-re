@@ -62,5 +62,8 @@ typedef struct _G2AnimInterpStateBlockPool_Type {
 } G2AnimInterpStateBlockPool;
 
 void _G2Anim_FreeInterpStateBlockList(G2AnimInterpStateBlock *block);
+void _G2AnimSection_SegValueToQuat(G2AnimSection *section, int zeroOne);
+G2AnimInterpStateBlock *_G2Anim_AllocateInterpStateBlockList(G2AnimSection *section);
+void _G2AnimSection_InterpStateToQuat(G2AnimSection *section);
 
 #endif

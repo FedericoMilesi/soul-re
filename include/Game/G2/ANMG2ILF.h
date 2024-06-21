@@ -27,5 +27,8 @@ G2AnimKeylist *G2Anim_GetKeylist(G2Anim *anim);
 G2Bool G2AnimSection_IsInInterpolation(G2AnimSection *section);
 short G2AnimKeylist_GetDuration(G2AnimKeylist *keylist);
 void G2Anim_GetRootMotionOverInterval(G2Anim *anim, short intervalStart, short intervalEnd, G2SVector3 *motionVector);
+void G2AnimSection_SetLoopRangeAll(G2AnimSection *section);
+void G2AnimSection_ClearAlarm(G2AnimSection *section, unsigned long flag);
+void G2AnimSection_SetUnpaused(G2AnimSection *section);
 
 #endif
