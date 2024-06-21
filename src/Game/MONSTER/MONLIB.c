@@ -4,6 +4,7 @@
 #include "Game/PHYSOBS.h"
 #include "Game/INSTANCE.h"
 #include "Game/MONSTER/MONTABLE.h"
+#include "Game/PLAN/ENMYPLAN.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -180,7 +181,49 @@ void MON_TurnOnAllSpheres(Instance *instance)
     MON_TurnOnBodySpheres(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SwitchState);
+void MON_SwitchState(Instance *instance, MonsterState state)
+{
+    MonsterVars *mv;
+    int temp; // not from decls.h
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((mv->mvFlags & 0x4000))
+    {
+        MON_TurnOffWeaponSpheres(instance);
+    }
+
+    if (!(mv->mvFlags & 0x1))
+    {
+        mv->previousMainState = (char)instance->currentMainState;
+    }
+
+    if ((state == MONSTER_STATE_GENERALDEATH) || (state == MONSTER_STATE_DEAD) || (state == MONSTER_STATE_IMPALEDEATH) || (state == MONSTER_STATE_GRABBED))
+    {
+        PurgeMessageQueue(&mv->messageQueue);
+    }
+    else if (state == MONSTER_STATE_MISSILEHIT)
+    {
+        PurgeMessageQueue(&mv->messageQueue);
+    }
+
+    instance->currentMainState = state;
+
+    mv->mvFlags |= 0x1;
+    mv->mvFlags &= ~0x1000;
+    mv->mvFlags &= ~0x20000;
+    mv->mvFlags &= ~0x40000000;
+    mv->mvFlags &= ~0x4000000;
+
+    temp = -1;
+
+    if ((char)mv->pathSlotID != temp)
+    {
+        ENMYPLAN_ReleasePlanningWorkspace((char)mv->pathSlotID);
+
+        mv->pathSlotID = temp;
+    }
+}
 
 void MON_SwitchStateDoEntry(Instance *instance, MonsterState state)
 {
