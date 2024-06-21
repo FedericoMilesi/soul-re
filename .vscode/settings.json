@@ -36,6 +36,8 @@
         "saveinfo.h": "c",
         "montable.h": "c",
         "poolmmg2.h": "c",
-        "anmintrp.h": "c"
+        "anmintrp.h": "c",
+        "hasm.h": "c",
+        "quatg2.h": "c"
     }
 }
