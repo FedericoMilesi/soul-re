@@ -34,6 +34,8 @@
         "anmg2ilf.h": "c",
         "animg2.h": "c",
         "saveinfo.h": "c",
-        "montable.h": "c"
+        "montable.h": "c",
+        "poolmmg2.h": "c",
+        "anmintrp.h": "c"
     }
 }
