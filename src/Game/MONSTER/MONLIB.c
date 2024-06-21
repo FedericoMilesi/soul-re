@@ -41,8 +41,33 @@ void MON_TurnOffWeaponSpheres(Instance *instance)
     }
 }
 
-void MON_TurnOnWeaponSpheres(Instance *instance);
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnWeaponSpheres);
+void MON_TurnOnWeaponSpheres(Instance *instance)
+{
+    MonsterVars *mv;
+    int i;
+    HPrim *hprim;
+    HModel *hmodel;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((!(mv->mvFlags & 0x4000)) && (instance->hModelList != NULL))
+    {
+        hmodel = &instance->hModelList[instance->currentModel];
+
+        hprim = hmodel->hPrimList;
+
+        for (i = hmodel->numHPrims; i != 0; i--, hprim++)
+        {
+            if ((hprim->type == 1) && (hprim->data.hsphere->id == 9))
+            {
+                hprim->hpFlags |= 0x1;
+                break;
+            }
+        }
+
+        mv->mvFlags |= 0x4000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnWeaponSphere);
 
