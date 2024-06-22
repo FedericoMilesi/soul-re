@@ -557,7 +557,21 @@ void MON_PlayRandomIdle(Instance *instance, int mode)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_PlayCombatIdle);
+void MON_PlayCombatIdle(Instance *instance, int mode)
+{
+    int anim;
+
+    if ((((MonsterVars *)instance->extraData)->mvFlags & 0x10))
+    {
+        anim = MONSTER_ANIM_STANCE_VULNERABLE;
+    }
+    else
+    {
+        anim = MONSTER_ANIM_STANCE_HEALTHY;
+    }
+
+    MON_PlayAnimIfNotPlaying(instance, (MonsterAnim)anim, mode);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetRandomPoint);
 
