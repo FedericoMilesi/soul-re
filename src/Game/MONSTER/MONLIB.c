@@ -8,6 +8,7 @@
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/STATE.h"
 #include "Game/MATH3D.h"
+#include "Game/PHYSICS.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -577,7 +578,20 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetRandomPoint);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetRandomDestinationInWorld);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_MoveForward);
+void MON_MoveForward(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    PhysicsSetVelFromRot(instance, &instance->rotation, mv->speed);
+
+    instance->xAccl = 0;
+    instance->yAccl = 0;
+    instance->zAccl = 0;
+
+    PhysicsMove(instance, &instance->position, gameTrackerX.timeMult);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnToPosition);
 

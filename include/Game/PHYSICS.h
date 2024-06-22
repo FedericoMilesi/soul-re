@@ -6,5 +6,6 @@
 
 void PHYSICS_CheckLineInWorldMask(Instance *instance, PCollideInfo *pcollideInfo);
 void PhysicsMove(Instance *instance, Position *position, long time);
+void PhysicsSetVelFromRot(Instance *instance, Rotation *rot, long magnitude);
 
 #endif
