@@ -39,5 +39,6 @@ void MON_SwitchStateDoEntry(Instance *instance, MonsterState state);
 void MON_RelocateCoords(Instance *instance, SVector *offset);
 void MON_LookInDirection(Instance *instance, short tx, short tz);
 long MON_AnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data);
+unsigned long MON_CheckTerrain(Instance *instance, BSPTree *bsp, TFace *tface);
 
 #endif

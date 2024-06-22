@@ -662,7 +662,27 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChangeBehavior);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_CheckEnvironment);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_CheckTerrainAndRespond);
+void MON_CheckTerrainAndRespond(Instance *instance, BSPTree *bsp, TFace *tface)
+{
+    unsigned long results;
+
+    results = MON_CheckTerrain(instance, bsp, tface);
+
+    if ((results & 0x10))
+    {
+        INSTANCE_Post(instance, 0x100000C, 0x10);
+    }
+
+    if ((results & 0x20))
+    {
+        INSTANCE_Post(instance, 0x100000C, 0x20);
+    }
+
+    if ((results & 0x40))
+    {
+        INSTANCE_Post(instance, 0x100000C, 0x40);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_CheckTerrain);
 
