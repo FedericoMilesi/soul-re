@@ -246,7 +246,22 @@ int MON_TransNodeAnimation(Instance *instance)
     return G2Anim_SegmentHasActiveChannels(&instance->anim, 0, 0x700);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetAnim);
+MonsterAnimation *MON_GetAnim(Instance *instance, char *animList, int index)
+{
+    int whichAnim;
+    MonsterAttributes *temp; // not from decls.h
+
+    whichAnim = animList[index];
+
+    if (whichAnim == -1)
+    {
+        return NULL;
+    }
+
+    temp = (MonsterAttributes *)instance->data;
+
+    return &temp->animList[whichAnim];
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_PlayAnimID);
 
