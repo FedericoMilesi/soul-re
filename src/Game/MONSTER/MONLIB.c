@@ -383,7 +383,33 @@ void MON_PlayAnimIfNotPlaying(Instance *instance, MonsterAnim animtype, int mode
     MON_PlayAnimFromListIfNotPlaying(instance, ((MonsterVars *)instance->extraData)->subAttr->animList, animtype, mode);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_AnimCallback);
+long MON_AnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data)
+{
+    Instance *instance;
+    MonsterVars *mv;
+
+    instance = (Instance *)data;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    switch (message)
+    {
+    case 1:
+        instance->flags2 |= 0x10;
+
+        mv->mvFlags &= ~0x4000000;
+        break;
+    case 2:
+        instance->flags2 |= 0x2;
+        break;
+    case 4:
+        break;
+    default:
+        INSTANCE_DefaultAnimCallback(anim, sectionID, message, messageDataA, messageDataB, instance);
+    }
+
+    return messageDataA;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_AnimInit);
 
