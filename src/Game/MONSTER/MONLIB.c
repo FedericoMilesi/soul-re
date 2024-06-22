@@ -373,7 +373,10 @@ void MON_PlayAnim(Instance *instance, MonsterAnim animtype, int mode)
     MON_PlayAnimFromList(instance, ((MonsterVars *)instance->extraData)->subAttr->animList, animtype, mode);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_AnimPlaying);
+int MON_AnimPlaying(Instance *instance, MonsterAnim animtype)
+{
+    return MON_AnimPlayingFromList(instance, ((MonsterVars *)instance->extraData)->subAttr->animList, animtype);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_PlayAnimIfNotPlaying);
 
