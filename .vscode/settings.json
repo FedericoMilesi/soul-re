@@ -39,6 +39,7 @@
         "anmintrp.h": "c",
         "hasm.h": "c",
         "quatg2.h": "c",
-        "instance.h": "c"
+        "instance.h": "c",
+        "enmyplan.h": "c"
     }
 }

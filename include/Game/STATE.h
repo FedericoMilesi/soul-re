@@ -498,5 +498,6 @@ void G2EmulationInstanceSwitchAnimationAlpha(Instance *instance, int CurrentSect
 intptr_t SetObjectThrowData(void *target, SVector *angularVel, unsigned short type, unsigned short spinType, int speed, int gravity, int zVel, int initialXRot);
 //intptr_t SetCollideInfoData(CollideInfo *srcCI);
 intptr_t SetShadowSegmentData(unsigned long total);
+void G2EmulationInstanceSetAnimSpeed(Instance *instance, int CurrentSection, int speed);
 
 #endif

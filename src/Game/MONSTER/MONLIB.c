@@ -5,6 +5,8 @@
 #include "Game/INSTANCE.h"
 #include "Game/MONSTER/MONTABLE.h"
 #include "Game/PLAN/ENMYPLAN.h"
+#include "Game/G2/ANMG2ILF.h"
+#include "Game/STATE.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -263,7 +265,66 @@ MonsterAnimation *MON_GetAnim(Instance *instance, char *animList, int index)
     return &temp->animList[whichAnim];
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_PlayAnimID);
+void MON_PlayAnimID(Instance *instance, int index, int mode)
+{
+    MonsterVars *mv;
+    MonsterAnimation *manim;
+    MonsterAttributes *ma;
+    int anim;
+    int anim0;
+    int i;
+    int interpFrames;
+    int alphaTable;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    manim = &ma->animList[index];
+
+    anim0 = *manim->index;
+
+    if ((anim0 < 0) || (anim0 >= instance->object->numAnims))
+    {
+        anim0 = 0;
+    }
+
+    G2Anim_SetCallback(&instance->anim, (void *)INSTANCE_DefaultAnimCallback, instance);
+
+    if ((mv->anim != NULL) && (mv->anim->interpOut != 0))
+    {
+        interpFrames = mv->anim->interpOut;
+
+        alphaTable = mv->anim->alphaTableOut;
+    }
+    else
+    {
+        interpFrames = manim->interpFrames;
+
+        alphaTable = manim->alphaTable;
+    }
+
+    for (i = 0; i < mv->subAttr->numSections; i++)
+    {
+        anim = manim->index[i];
+
+        if (anim == -1)
+        {
+            anim = anim0;
+        }
+
+        G2EmulationInstanceSwitchAnimationAlpha(instance, i, anim, manim->startFrame, interpFrames, mode, alphaTable);
+
+        G2EmulationInstanceSetAnimSpeed(instance, i, manim->playSpeed);
+    }
+
+    mv->anim = manim;
+
+    mv->mvFlags |= 0x4000000;
+
+    (instance->anim.section + manim->controllingSection)->callback = MON_AnimCallback;
+    (instance->anim.section + manim->controllingSection)->callbackData = instance;
+}
 
 void MON_PlayAnimFromList(Instance *instance, char *animList, int animtype, int mode)
 {
