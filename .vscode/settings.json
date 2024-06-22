@@ -41,6 +41,7 @@
         "quatg2.h": "c",
         "instance.h": "c",
         "enmyplan.h": "c",
-        "physics.h": "c"
+        "physics.h": "c",
+        "common.h": "c"
     }
 }

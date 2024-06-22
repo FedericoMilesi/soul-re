@@ -614,7 +614,44 @@ void MON_MoveToPosition(Instance *instance, Position *position, short turnSpeed)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_OnGround);
+int MON_OnGround(Instance *instance)
+{
+    MonsterVars *mv;
+    evPhysicsGravityData data;
+    int minUpper;
+    long xyDist;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    xyDist = MATH3D_LengthXY(instance->oldPos.x - instance->position.x, instance->oldPos.y - instance->position.y);
+
+    data.UpperOffset = instance->oldPos.z - instance->position.z;
+    data.LowerOffset = (short)xyDist;
+
+    minUpper = 400;
+
+    if ((mv->mvFlags & 0x2))
+    {
+        minUpper = 100;
+    }
+
+    if (data.UpperOffset < minUpper)
+    {
+        data.UpperOffset = minUpper;
+    }
+
+    if ((short)xyDist < 100)
+    {
+        data.LowerOffset = 100;
+    }
+
+    data.UpperOffset += mv->subAttr->upOnGroundOffset;
+    data.LowerOffset += mv->subAttr->downOnGroundOffset;
+
+    data.slipSlope = 3200;
+
+    return PhysicsCheckGravity(instance, (int)&data.UpperOffset, (!(mv->mvFlags & 0x800)) << 2);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ApplyPhysics);
 
