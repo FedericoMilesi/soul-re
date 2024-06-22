@@ -480,7 +480,82 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseEvadeMove);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseCombatMove);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_PlayRandomIdle);
+void MON_PlayRandomIdle(Instance *instance, int mode)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+    MonsterBehavior *behavior;
+    MonsterIdle *idle;
+    int chance;
+    int i;
+    char *idleIndex;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    idle = NULL;
+
+    chance = rand() % 100;
+
+    if ((mv->mvFlags & 0x4))
+    {
+        behavior = ma->behaviorList;
+
+        idle = &ma->idleList[(int)behavior->idleList[0]];
+    }
+    else
+    {
+        if (mv->subAttr->behaviorList != NULL)
+        {
+            i = mv->subAttr->behaviorList[mv->behaviorState];
+        }
+        else
+        {
+            i = -1;
+        }
+
+        if (i == -1)
+        {
+            behavior = ma->behaviorList;
+        }
+        else
+        {
+            behavior = &ma->behaviorList[i];
+        }
+
+        if (mv->behaviorState == 0)
+        {
+            idle = &ma->idleList[(int)((MonsterBehavior *)((int)behavior + mv->ambient))->idleList[0]];
+        }
+        else
+        {
+            for (i = behavior->numIdles, idleIndex = &behavior->idleList[0]; i != 0; i--, idleIndex++)
+            {
+                if (*idleIndex < 0)
+                {
+                    break;
+                }
+
+                idle = &ma->idleList[(int)*idleIndex];
+
+                if (chance < idle->probability)
+                {
+                    break;
+                }
+
+                chance -= idle->probability;
+            }
+        }
+    }
+
+    if (idle != NULL)
+    {
+        MON_PlayAnimIDIfNotPlaying(instance, idle->anim, mode);
+
+        mv->alertness = behavior->alertness;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_PlayCombatIdle);
 
