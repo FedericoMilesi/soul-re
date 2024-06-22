@@ -604,7 +604,15 @@ int MON_TurnToPosition(Instance *instance, Position *position, short turnspeed)
     return instance->rotation.z == temp;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_MoveToPosition);
+void MON_MoveToPosition(Instance *instance, Position *position, short turnSpeed)
+{
+    MON_TurnToPosition(instance, position, turnSpeed);
+
+    if (MON_TransNodeAnimation(instance) == 0)
+    {
+        MON_MoveForward(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_OnGround);
 
