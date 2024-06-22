@@ -356,7 +356,17 @@ int MON_AnimPlayingFromList(Instance *instance, char *animList, int animtype)
     return MON_AnimIDPlaying(instance, animList[animtype]);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_PlayAnimFromListIfNotPlaying);
+void MON_PlayAnimFromListIfNotPlaying(Instance *instance, char *animList, int animtype, int mode)
+{
+    int index;
+
+    index = animList[animtype];
+
+    if (MON_AnimIDPlaying(instance, index) == 0)
+    {
+        MON_PlayAnimID(instance, index, mode);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_PlayAnim);
 
