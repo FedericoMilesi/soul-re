@@ -7,6 +7,7 @@
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/STATE.h"
+#include "Game/MATH3D.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -413,7 +414,10 @@ long MON_AnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, lo
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_AnimInit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_FacingOffset);
+short MON_FacingOffset(Instance *instance, Instance *target)
+{
+    return MATH3D_AngleFromPosToPos(&target->position, &instance->position) - target->rotation.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_CheckConditions);
 
