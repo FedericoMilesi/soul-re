@@ -132,5 +132,6 @@ void MATH3D_SetUnityMatrix(MATRIX *mat);
 long MATH3D_FastSqrt(long square);
 short MATH3D_FastAtan2(long y, long x);
 short MATH3D_AngleFromPosToPos(Position *from, Position *to);
+void AngleMoveToward(short *current_ptr, short destination, short step);
 
 #endif

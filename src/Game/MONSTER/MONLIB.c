@@ -593,7 +593,16 @@ void MON_MoveForward(Instance *instance)
     PhysicsMove(instance, &instance->position, gameTrackerX.timeMult);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnToPosition);
+int MON_TurnToPosition(Instance *instance, Position *position, short turnspeed)
+{
+    short temp; // not from decls.h
+
+    temp = MATH3D_AngleFromPosToPos(&instance->position, position);
+
+    AngleMoveToward(&instance->rotation.z, temp, (short)((turnspeed * gameTrackerX.timeMult) / 4096));
+
+    return instance->rotation.z == temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_MoveToPosition);
 
