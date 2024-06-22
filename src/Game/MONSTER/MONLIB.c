@@ -653,7 +653,10 @@ int MON_OnGround(Instance *instance)
     return PhysicsCheckGravity(instance, (int)&data.UpperOffset, (!(mv->mvFlags & 0x800)) << 2);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ApplyPhysics);
+void MON_ApplyPhysics(Instance *instance)
+{
+    PhysicsMove(instance, &instance->position, gameTrackerX.timeMult);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChangeBehavior);
 
