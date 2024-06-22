@@ -331,8 +331,17 @@ void MON_PlayAnimFromList(Instance *instance, char *animList, int animtype, int 
     MON_PlayAnimID(instance, animList[animtype], mode);
 }
 
-int MON_AnimIDPlaying(Instance *instance, int index);
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_AnimIDPlaying);
+int MON_AnimIDPlaying(Instance *instance, int index)
+{
+    MonsterAttributes *ma;
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    return mv->anim == &ma->animList[index];
+}
 
 void MON_PlayAnimIDIfNotPlaying(Instance *instance, int index, int mode)
 {
