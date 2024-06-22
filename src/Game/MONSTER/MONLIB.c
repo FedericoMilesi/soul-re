@@ -412,7 +412,52 @@ long MON_AnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, lo
     return messageDataA;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_AnimInit);
+void MON_AnimInit(Instance *instance)
+{
+    MonsterVars *mv;
+    G2AnimSection *animSection;
+    int i;
+    int startSection;
+    int numSections;
+    int sectionEnd;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    numSections = mv->subAttr->numSections;
+
+    mv->anim = NULL;
+
+    G2EmulationInstanceSetTotalSections(instance, numSections);
+
+    startSection = 0;
+
+    for (i = 0; i < numSections; i++)
+    {
+        sectionEnd = mv->subAttr->sectionEnd[i];
+
+        animSection = &instance->anim.section[i];
+
+        if (sectionEnd == 0)
+        {
+            G2EmulationInstanceSetStartAndEndSegment(instance, i, startSection, (short)instance->object->modelList[instance->currentModel]->numSegments - 1);
+        }
+        else
+        {
+            G2EmulationInstanceSetStartAndEndSegment(instance, i, startSection, sectionEnd);
+
+            startSection = mv->subAttr->sectionEnd[i] + 1;
+        }
+
+        G2AnimSection_SetInterpInfo(animSection, &mv->interpInfo[i]);
+
+        G2EmulationInstanceSetAnimation(instance, i, 0, 0, 0);
+        G2EmulationInstanceSetMode(instance, i, 2);
+    }
+
+    G2EmulationInstanceInitSection(instance, 0, MON_AnimCallback, instance);
+
+    MON_PlayRandomIdle(instance, 2);
+}
 
 short MON_FacingOffset(Instance *instance, Instance *target)
 {
