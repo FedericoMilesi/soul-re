@@ -936,7 +936,287 @@ unsigned long MON_GetTime(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_BirthSoul);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ProcessIntro);
+void MON_ProcessIntro(Instance *instance)
+{
+    MonsterVars *mv;
+    long initialBehavior;
+    long triggeredBehavior;
+    long activeBehavior;
+    long guardRange;
+    long wanderRange;
+    long ambushRange;
+    long hitPoints;
+    int spectral;
+    long flags;
+    MonsterAttributes *ma;
+
+    initialBehavior = -1;
+    triggeredBehavior = -1;
+    activeBehavior = -1;
+
+    guardRange = 0;
+    wanderRange = 0;
+    ambushRange = 0;
+
+    spectral = 0;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    mv->age = ma->defaultAge;
+
+    mv->ambushArc = 2048;
+    mv->ambushElevation = 1024;
+
+    hitPoints = -1;
+
+    mv->auxFlags |= 0x80000000;
+
+    flags = 0;
+
+    if (instance->introData != NULL)
+    {
+        INICommand *command;
+
+        command = (INICommand *)instance->introData;
+
+        if (!(instance->flags & 0x2))
+        {
+            while (command->command != 0)
+            {
+                switch (command->command)
+                {
+                case 255:
+                {
+                    break;
+                }
+                case 1:
+                {
+                    initialBehavior = command->parameter[0];
+                    break;
+                }
+                case 2:
+                {
+                    triggeredBehavior = command->parameter[0];
+                    break;
+                }
+                case 3:
+                {
+                    spectral = 1;
+                    break;
+                }
+                case 22:
+                {
+                    ambushRange = command->parameter[0];
+                    break;
+                }
+                case 25:
+                {
+                    mv->ambushJumpType = (char)command->parameter[0];
+                    break;
+                }
+                case 23:
+                {
+                    mv->ambushArc = (short)((command->parameter[0] << 12) / 360);
+                    break;
+                }
+                case 24:
+                {
+                    mv->ambushElevation = (short)((command->parameter[0] << 12) / 360);
+                    break;
+                }
+                case 4:
+                {
+                    wanderRange = command->parameter[0];
+                    break;
+                }
+                case 5:
+                {
+                    guardRange = command->parameter[0];
+                    break;
+                }
+                case 6:
+                {
+                    mv->age = (unsigned char)command->parameter[0];
+                    break;
+                }
+                case 7:
+                {
+                    flags |= 0x100000;
+                    break;
+                }
+                case 8:
+                {
+                    hitPoints = command->parameter[0];
+                    break;
+                }
+                case 9:
+                {
+                    instance->flags2 |= 0x20000;
+
+                    flags |= 0x1000000;
+
+                    if (command->numParameters != 0)
+                    {
+                        mv->regenTime = (short)command->parameter[0];
+                    }
+                    else
+                    {
+                        mv->regenTime = 0;
+                    }
+
+                    break;
+                }
+                case 10:
+                {
+                    short *pmarker;
+                    long *param;
+                    int i;
+
+                    i = command->numParameters;
+
+                    pmarker = mv->patrolMarkers;
+
+                    param = command->parameter;
+
+                    for (; i != 0; i--)
+                    {
+                        *pmarker = (short)*param;
+
+                        param++;
+
+                        pmarker++;
+                    }
+
+                    *pmarker = 0;
+
+                    mv->currentMarker = mv->patrolMarkers;
+                    break;
+                }
+                case 12:
+                {
+                    mv->ambushMarker = (char)command->parameter[0];
+                    break;
+                }
+                case 13:
+                {
+                    mv->fleeMarker = (short)command->parameter[0];
+                    break;
+                }
+                case 14:
+                {
+                    int i;
+                    short *unit;
+
+                    unit = mv->validUnits;
+
+                    for (i = 0; i < command->numParameters; i++, unit++)
+                    {
+                        *unit = (short)command->parameter[i];
+                    }
+
+                    *unit = 0;
+                    break;
+                }
+                case 11:
+                {
+                    mv->ambient = (unsigned char)command->parameter[0];
+                    break;
+                }
+                case 15:
+                {
+                    mv->soulID = command->parameter[0];
+                    break;
+                }
+                case 16:
+                {
+                    mv->causeOfDeath = (unsigned char)command->parameter[0];
+
+                    if (mv->soulID == 0)
+                    {
+                        mv->soulID = ~0x80000000;
+                    }
+
+                    break;
+                }
+                case 17:
+                {
+                    mv->auxFlags &= ~0x80000000;
+                    break;
+                }
+                case 20:
+                {
+                    activeBehavior = command->parameter[0];
+                    break;
+                }
+                }
+
+                command = (INICommand *)&command->parameter[command->numParameters];
+            }
+        }
+    }
+
+    MON_SetDefaults(instance);
+
+    mv->mvFlags ^= flags;
+
+    if (initialBehavior != -1)
+    {
+        mv->initialBehavior = (char)initialBehavior;
+
+        mv->behaviorState = (char)initialBehavior;
+    }
+
+    if (triggeredBehavior != -1)
+    {
+        mv->triggeredBehavior = (char)triggeredBehavior;
+    }
+
+    if (activeBehavior != -1)
+    {
+        mv->activeBehavior = (char)activeBehavior;
+    }
+
+    if (hitPoints != -1)
+    {
+        mv->hitPoints = (short)(hitPoints << 8);
+    }
+
+    if (spectral != 0)
+    {
+        if ((instance->flags2 & 0x8000000))
+        {
+            instance->flags2 &= ~0x8000000;
+        }
+        else
+        {
+            instance->flags2 |= 0x8000000;
+        }
+    }
+
+    if (guardRange != 0)
+    {
+        mv->guardRange = (short)guardRange;
+    }
+
+    if (wanderRange != 0)
+    {
+        mv->wanderRange = (short)wanderRange;
+    }
+
+    if (ambushRange != 0)
+    {
+        mv->ambushRange = (short)ambushRange;
+    }
+
+    if ((mv->triggeredBehavior == 8) && (mv->initialBehavior != 4) && (mv->initialBehavior != 16))
+    {
+        mv->initialBehavior = 4;
+
+        mv->behaviorState = 4;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetDefaults);
 
