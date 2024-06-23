@@ -1421,7 +1421,55 @@ void MON_LookInDirection(Instance *instance, short tx, short tz)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_LookAtPos);
+void MON_LookAtPos(Instance *instance, Position *position)
+{
+    MonsterVars *mv;
+    short z;
+    char temp; // not from decls.h
+
+    temp = 0;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    z = AngleDiff(instance->rotation.z, MATH3D_AngleFromPosToPos(&instance->position, position));
+
+    if (z >= 797)
+    {
+        z = 796;
+    }
+    else if (z < -796)
+    {
+        z = -796;
+    }
+
+    if (z < mv->lookAngleZ)
+    {
+        mv->lookAngleZ -= 273;
+
+        if (mv->lookAngleZ < z)
+        {
+            mv->lookAngleZ = z;
+        }
+    }
+    else if (mv->lookAngleZ < z)
+    {
+        mv->lookAngleZ += 273;
+
+        if (z < mv->lookAngleZ)
+        {
+            mv->lookAngleZ = z;
+        }
+    }
+
+    if (z != 0) // garbage code for reodering
+    {
+        temp = -temp;
+    }
+
+    mv->lookAngleX = 0;
+
+    MON_LookInDirection(instance, 0, mv->lookAngleZ);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ProcessLookAt);
 
