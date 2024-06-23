@@ -1304,7 +1304,15 @@ void MON_SetDefaults(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetPlanSlot);
+void MON_GetPlanSlot(MonsterVars *mv)
+{
+    if (mv->pathSlotID != -1)
+    {
+        ENMYPLAN_ReleasePlanningWorkspace(mv->pathSlotID);
+    }
+
+    mv->pathSlotID = ENMYPLAN_GetInitializedPlanningWorkspaceFinal();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_DefaultPlanMovement);
 
