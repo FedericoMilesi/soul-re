@@ -887,7 +887,36 @@ void MON_CheckTerrainAndRespond(Instance *instance, BSPTree *bsp, TFace *tface)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_CheckTerrain);
+unsigned long MON_CheckTerrain(Instance *instance, BSPTree *bsp, TFace *tface)
+{
+    unsigned long rv;
+
+    rv = 0;
+
+    if (tface != NULL)
+    {
+        Level *level;
+
+        level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+        if ((!(bsp->flags & 0x8)) && (((level->unitFlags & 0x2)) || ((bsp->flags & 0x50))))
+        {
+            rv = 0x40;
+        }
+
+        if (((bsp->flags & 0x80)) || (instance->waterFace != NULL))
+        {
+            rv |= 0x10;
+        }
+
+        if ((bsp->flags & 0x20))
+        {
+            rv |= 0x20;
+        }
+    }
+
+    return rv;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_CheckPointSuitability);
 
