@@ -1471,7 +1471,44 @@ void MON_LookAtPos(Instance *instance, Position *position)
     MON_LookInDirection(instance, 0, mv->lookAngleZ);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ProcessLookAt);
+void MON_ProcessLookAt(Instance *instance)
+{
+    MonsterVars *mv;
+    int temp; // not from decls.h
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (mv->mode != 0x80000)
+    {
+        temp = mv->mvFlags;
+
+        if (temp < 0)
+        {
+            MON_EnableHeadMove(instance);
+
+            MON_LookAtPos(instance, &mv->lookAtPosData);
+        }
+        else if (mv->lookAtPos != NULL)
+        {
+            MON_EnableHeadMove(instance);
+
+            MON_LookAtPos(instance, mv->lookAtPos);
+
+            mv->lookAtPos = NULL;
+        }
+        else if ((mv->lookAngleX != 0) || (mv->lookAngleZ != 0))
+        {
+            AngleMoveToward(&mv->lookAngleX, 0, 100);
+            AngleMoveToward(&mv->lookAngleZ, 0, 100);
+
+            MON_LookInDirection(instance, mv->lookAngleX, mv->lookAngleZ);
+        }
+        else
+        {
+            MON_DisableHeadMove(instance);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TakeDamage);
 
