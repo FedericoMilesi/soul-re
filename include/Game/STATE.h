@@ -500,5 +500,7 @@ intptr_t SetObjectThrowData(void *target, SVector *angularVel, unsigned short ty
 intptr_t SetShadowSegmentData(unsigned long total);
 void G2EmulationInstanceSetAnimSpeed(Instance *instance, int CurrentSection, int speed);
 void G2EmulationInstanceInitSection(Instance *instance, int CurrentSection, void *callback, void *data);
+intptr_t SetPhysicsSwimData(int CheckDepth, SVector *iVelocity, int SwimDepth, int WadeDepth, int TreadDepth);
+intptr_t SetPhysicsDropHeightData(Position *offset, int dropOffset, int mode);
 
 #endif

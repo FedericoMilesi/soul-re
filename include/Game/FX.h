@@ -492,5 +492,6 @@ void FX_InsertGeneralEffect(void *ptr);
 FXParticle *FX_GetParticle(Instance *instance, short startSegment);
 void FX_RelocateFXPointers(Object *oldObject, Object *newObject, long sizeOfObject);
 void FX_Relocate(SVector *offset);
+void FX_UpdateInstanceWaterSplit(Instance *instance);
 
 #endif

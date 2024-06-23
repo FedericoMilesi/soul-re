@@ -8,5 +8,7 @@ void PHYSICS_CheckLineInWorldMask(Instance *instance, PCollideInfo *pcollideInfo
 void PhysicsMove(Instance *instance, Position *position, long time);
 void PhysicsSetVelFromRot(Instance *instance, Rotation *rot, long magnitude);
 int PhysicsCheckGravity(Instance *instance, int Data, short Mode);
+int PhysicsCheckSwim(Instance *instance, int Data, short Mode);
+int PhysicsCheckDropHeight(Instance *instance, int Data, int Mode);
 
 #endif

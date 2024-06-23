@@ -9,6 +9,7 @@
 #include "Game/STATE.h"
 #include "Game/MATH3D.h"
 #include "Game/PHYSICS.h"
+#include "Game/FX.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -660,7 +661,209 @@ void MON_ApplyPhysics(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChangeBehavior);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_CheckEnvironment);
+void MON_CheckEnvironment(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+    int inwater;
+    SVector Hack;
+    Position *temp; // not from decls.h
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    if (instance->currentMainState != MONSTER_STATE_TERRAINIMPALEDEATH)
+    {
+        Hack.z = 0;
+        Hack.y = 0;
+        Hack.x = 0;
+
+        instance->tface = NULL;
+        instance->tfaceLevel = NULL;
+
+        if (!(ma->whatAmI & 0x4))
+        {
+            inwater = PhysicsCheckSwim(instance, SetPhysicsSwimData(0, &Hack, 256, 160, 64), 1);
+        }
+        else
+        {
+            inwater = 0x20;
+        }
+
+        inwater &= 0x20;
+
+        if (inwater == 0)
+        {
+            if (!(mv->mvFlags & 0x400))
+            {
+                mv->mvFlags |= 0x400;
+                mv->mvFlags &= ~0x400000;
+
+                instance->maxXVel = 20;
+                instance->maxYVel = 20;
+                instance->maxZVel = 20;
+
+                instance->xVel = 0;
+                instance->yVel = 0;
+
+                do
+                {
+
+                } while (0); // garbage code for reordering 
+
+                SOUND_Play3dSound(&instance->position, 1, -200, 120, 10000);
+
+                instance->flags2 &= ~0x40;
+            }
+
+            if ((mv->avoidMask & 0x10))
+            {
+                INSTANCE_Post(instance, 0x100000C, 16);
+            }
+        }
+        else
+        {
+            int moveback;
+            int onground;
+
+            moveback = 0;
+
+            if ((mv->mvFlags & 0x400))
+            {
+                mv->mvFlags &= ~0x400;
+
+                instance->maxXVel = 400;
+                instance->maxYVel = 400;
+                instance->maxZVel = 400;
+
+                do
+                {
+
+                } while (0); // garbage code for reordering 
+
+                if ((instance->object->oflags & 0x200))
+                {
+                    instance->flags2 |= 0x40;
+                }
+            }
+
+            if (instance->LinkParent == NULL)
+            {
+                onground = MON_OnGround(instance);
+
+                if (onground != 0)
+                {
+                    if (!(mv->mvFlags & 0x2))
+                    {
+                        mv->mvFlags |= 0x2;
+                    }
+
+                    if ((mv->mvFlags & 0x1000))
+                    {
+                        int offset;
+                        int result;
+                        Position pos;
+
+                        offset = mv->anim->velocity * 8;
+
+                        if (offset < 100)
+                        {
+                            offset = 100;
+                        }
+
+                        pos.y = -offset;
+                        pos.x = 0;
+                        pos.z = offset / 2;
+
+                        if (!(mv->mvFlags & 0x10000))
+                        {
+                            offset = mv->subAttr->fallDistance;
+                        }
+
+                        result = PhysicsCheckDropHeight(instance, SetPhysicsDropHeightData(&pos, offset, 96), 1);
+
+                        if (!(result & mv->avoidMask))
+                        {
+                            if (result == 0)
+                            {
+                                INSTANCE_Post(instance, 0x4010080, 0);
+                            }
+                        }
+                        else
+                        {
+                            INSTANCE_Post(instance, 0x4010080, 0);
+                        }
+                    }
+
+                    if ((onground & 0x100000))
+                    {
+                        moveback = 1;
+                    }
+                }
+                else if ((mv->mvFlags & 0x2))
+                {
+                    int result;
+                    int offset;
+
+                    mv->mvFlags &= ~0x2;
+
+                    if (!(mv->mvFlags & 0x800))
+                    {
+                        offset = 320;
+
+                        if (!(mv->mvFlags & 0x10000))
+                        {
+                            offset = mv->subAttr->fallDistance;
+
+                            temp = &instance->position;
+                        }
+                        else
+                        {
+                            temp = &instance->position;
+                        }
+
+                        result = PhysicsCheckDropHeight(instance, SetPhysicsDropHeightData(temp, offset, 64), 1);
+
+                        if (((result & mv->avoidMask)) || (result == 0))
+                        {
+                            moveback = 1;
+                        }
+                    }
+                }
+
+                if (moveback != 0)
+                {
+                    int result;
+
+                    result = PhysicsCheckDropHeight(instance, SetPhysicsDropHeightData(&instance->oldPos, 100, 64), 1);
+
+                    if ((result != 0) && (!(result & mv->avoidMask)))
+                    {
+                        instance->position = instance->oldPos;
+
+                        mv->mvFlags |= 0x2;
+                    }
+                }
+
+                if ((!(mv->mvFlags & 0x802)) && (mv->mode != 0x100000))
+                {
+                    INSTANCE_Post(instance, 0x100000B, 0);
+                }
+            }
+
+            if (instance->tfaceLevel != NULL)
+            {
+                MON_CheckTerrainAndRespond(instance, &((Level *)(instance->tfaceLevel))->terrain->BSPTreeArray[instance->bspTree], instance->tface);
+            }
+        }
+
+        if ((ma->whatAmI != 0x10082) && (!(ma->whatAmI & 0x4)))
+        {
+            FX_UpdateInstanceWaterSplit(instance);
+        }
+    }
+}
 
 void MON_CheckTerrainAndRespond(Instance *instance, BSPTree *bsp, TFace *tface)
 {

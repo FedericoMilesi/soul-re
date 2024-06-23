@@ -42,6 +42,7 @@
         "instance.h": "c",
         "enmyplan.h": "c",
         "physics.h": "c",
-        "common.h": "c"
+        "common.h": "c",
+        "fx.h": "c"
     }
 }
