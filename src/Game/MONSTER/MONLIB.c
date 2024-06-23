@@ -1316,7 +1316,34 @@ void MON_GetPlanSlot(MonsterVars *mv)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_DefaultPlanMovement);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_DropAllObjects);
+void MON_DropAllObjects(Instance *instance)
+{
+    Instance *child;
+    Instance *next;
+
+    child = instance->LinkChild;
+
+    while (child != NULL)
+    {
+        next = child->LinkSibling;
+
+        do
+        {
+
+        } while (0); // garbage code for reordering 
+
+        if (child->ParentLinkNode == 3)
+        {
+            INSTANCE_Post(child, 0x800008, 2);
+        }
+        else
+        {
+            INSTANCE_Post(child, 0x800008, 1);
+        }
+
+        child = next;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_EnableHeadMove);
 
