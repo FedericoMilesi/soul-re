@@ -924,7 +924,7 @@ unsigned long MON_GetTime(Instance *instance)
 {
     if ((instance->object->oflags & 0x80000))
     {
-        return (unsigned long)gameTrackerX.currentTime;
+        return gameTrackerX.currentTime;
     }
     else if ((instance->flags2 & 0x8000000))
     {
