@@ -119,6 +119,60 @@
         : "memory" \
     )
 
+#define gte_ldsv(r0) __asm__ ( \
+        "lhu    $12, 0(%0);" \
+        "lhu    $13, 2(%0);" \
+        "lhu    $14, 4(%0);" \
+        "mtc2    $12, $9;" \
+        "mtc2    $13, $10;" \
+        "mtc2    $14, $11" \
+        : : "r"(r0) \
+        : "$12", "$13", "$14" \
+    )
+
+#define gte_lddp(r0) __asm__ ( \
+        "mtc2    %0, $8" \
+        : : "r"(r0) \
+    )
+
+#define gte_nlddp(r0) __asm__ ( \
+        "mtc2    %0, $8;" \
+        "nop;" \
+        "nop;" \
+        : : "r"(r0) \
+    )
+
+#define gte_gpl(sf) __asm__ ( \
+        ".word %0" \
+        : : "g"(0x4BA0003E | ((sf) & 0x1) << 19) \
+    )
+
+#define gte_gpl12() gte_gpl(1)
+
+// custom macro
+#define gte_ldlvnlsv( r0 ) __asm__ volatile (			\
+	"lhu	$12, 0( %0 );"					\
+	"lhu	$13, 2 ( %0 );"					\
+	"lhu	$14, 4 ( %0 );"					\
+	"mtc2	$12, $25;"					\
+	"mtc2	$13, $26;"					\
+	"mtc2	$14, $27"					\
+	:							\
+	: "r"( r0 )						\
+	: "$12", "$13", "$14" ) 
+
+// custom macro
+#define gte_stlvnlsv( r0 ) __asm__ volatile (			\
+	"mfc2	$12, $25;"					\
+	"mfc2	$13, $26;"					\
+	"mfc2	$14, $27;"					\
+	"sh	$12, 0( %0 );"					\
+	"sh	$13, 2( %0 );"					\
+	"sh	$14, 4( %0 )"					\
+	:							\
+	: "r"( r0 )						\
+	: "$12", "$13", "$14", "memory" )
+
 // size: 0x8
 typedef struct RECT {
     // offset: 0000

@@ -2,12 +2,26 @@
 #include "Game/G2/ANMINTRP.h"
 #include "Game/G2/POOLMMG2.h"
 #include "Game/HASM.h"
+#include "Game/PSX/PSX_G2/QUATVM.h"
 
 //static G2AnimInterpStateBlockPool _interpStateBlockPool;
 G2AnimInterpStateBlockPool _interpStateBlockPool;
 
 //static G2AnimSegValue _segValues[80];
 G2AnimSegValue _segValues[80];
+
+static inline void gte_process(G2Quat *dest, G2SVector3 *base, G2SVector3 *offset, long alpha)
+{
+    gte_ldlvnlsv(base);
+
+    gte_ldsv(offset);
+
+    gte_nlddp(alpha);
+
+    gte_gpl12();
+
+    gte_stlvnlsv(dest);
+}
 
 // modified from decls.h
 void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime, short duration)
@@ -156,7 +170,65 @@ void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMINTRP", _G2AnimSection_UpdateStoredFrameFromQuat);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMINTRP", _G2AnimSection_InterpStateToQuat);
+void _G2AnimSection_InterpStateToQuat(G2AnimSection *section)
+{
+    G2AnimInterpInfo *interpInfo;
+    G2AnimInterpStateBlock *stateBlockList;
+    G2AnimQuatInfo *quatInfo;
+    long alpha;
+    G2Quat newQuat;
+    int quatInfoChunkCount;
+    int segCount;
+
+    interpInfo = section->interpInfo;
+
+    alpha = (section->elapsedTime * 4096) / interpInfo->duration;
+
+    quatInfoChunkCount = 4;
+
+    segCount = section->segCount;
+
+    alpha = _G2AnimAlphaTable_GetValue(interpInfo->alphaTable, alpha);
+
+    stateBlockList = interpInfo->stateBlockList;
+
+    quatInfo = &stateBlockList->quatInfo[0];
+
+    while (segCount > 0)
+    {
+        G2Quat *source;
+        unsigned long zw;
+        unsigned long xy;
+
+        G2Quat_Slerp_VM(alpha, &quatInfo->srcQuat, &quatInfo->destQuat, &newQuat, 0);
+
+        source = &newQuat;
+
+        xy = GET_XY(newQuat);
+        zw = GETP_ZW(source);
+
+        SET_XY(quatInfo->srcQuat, xy);
+        SET_ZW(quatInfo->srcQuat, zw);
+
+        gte_process((G2Quat *)&quatInfo->srcScale, &quatInfo->srcScale, &quatInfo->destScale, alpha);
+        gte_process((G2Quat *)&quatInfo->srcTrans, &quatInfo->srcTrans, &quatInfo->destTrans, alpha);
+
+        segCount--;
+
+        quatInfoChunkCount--;
+
+        quatInfo++;
+
+        if (quatInfoChunkCount == 0)
+        {
+            stateBlockList = stateBlockList->next;
+
+            quatInfoChunkCount = 4;
+
+            quatInfo = stateBlockList->quatInfo;
+        }
+    }
+}
 
 void _G2AnimSection_SegValueToQuat(G2AnimSection *section, int zeroOne)
 {

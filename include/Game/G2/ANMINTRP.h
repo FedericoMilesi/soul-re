@@ -3,6 +3,16 @@
 
 #include "Game/G2/ANIMG2.h"
 
+#define GET_XY(a) *(long*)(&a.x);
+#define SET_XY(a, c) *(long*)(&a.x) = c;
+#define GET_ZW(b) *(long*)(&b.z);
+#define SET_ZW(b, c) *(long*)(&b.z) = c;
+
+#define GETP_XY(a) *(long*)(&a->x);
+#define SETP_XY(a, c) *(long*)(&a->x) = c;
+#define GETP_ZW(b) *(long*)(&b->z);
+#define SETP_ZW(b, c) *(long*)(&b->z) = c;
+
 // size: 0x18
 typedef struct _G2AnimSegValue_Type {
     // offset: 0000 (8 bytes)

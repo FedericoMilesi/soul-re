@@ -191,5 +191,6 @@ void G2Anim_SetControllerCallbackData(G2Anim *anim, int segNumber, int type, voi
 void G2AnimSection_SwitchToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime);
 G2Anim *_G2AnimSection_GetAnim(G2AnimSection *section);
 void _G2AnimSection_UpdateStoredFrameFromData(G2AnimSection *section, G2Anim *anim);
+long _G2AnimAlphaTable_GetValue(G2AnimAlphaTable *table, long trueAlpha);
 
 #endif

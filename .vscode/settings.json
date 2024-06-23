@@ -44,6 +44,7 @@
         "physics.h": "c",
         "common.h": "c",
         "fx.h": "c",
-        "anmctrlr.h": "c"
+        "anmctrlr.h": "c",
+        "quatvm.h": "c"
     }
 }
