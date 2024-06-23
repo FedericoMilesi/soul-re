@@ -3,6 +3,7 @@
 #include "Game/G2/POOLMMG2.h"
 #include "Game/HASM.h"
 #include "Game/PSX/PSX_G2/QUATVM.h"
+#include "Game/G2/ANMG2ILF.h"
 
 //static G2AnimInterpStateBlockPool _interpStateBlockPool;
 G2AnimInterpStateBlockPool _interpStateBlockPool;
