@@ -168,7 +168,76 @@ void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMINTRP", _G2AnimSection_UpdateStoredFrameFromQuat);
+void _G2AnimSection_UpdateStoredFrameFromQuat(G2AnimSection *section)
+{
+    G2AnimSegValue *segValue;
+    G2AnimInterpInfo *interpInfo;
+    G2AnimInterpStateBlock *stateBlockList;
+    G2AnimQuatInfo *quatInfo;
+    long alpha;
+    G2Quat newQuat;
+    int quatInfoChunkCount;
+    int segCount;
+
+    interpInfo = section->interpInfo;
+
+    alpha = (section->elapsedTime * 4096) / interpInfo->duration;
+
+    quatInfoChunkCount = 4;
+
+    segCount = section->segCount;
+
+    alpha = _G2AnimAlphaTable_GetValue(interpInfo->alphaTable, alpha);
+
+    stateBlockList = interpInfo->stateBlockList;
+
+    segValue = &_segValues[section->firstSeg];
+
+    quatInfo = stateBlockList->quatInfo;
+
+    while (segCount > 0)
+    {
+        G2Quat *source;
+        unsigned long zw;
+        unsigned long xy;
+
+        G2Quat_Slerp_VM(alpha, &quatInfo->srcQuat, &quatInfo->destQuat, &newQuat, 0);
+
+        source = &newQuat;
+
+        xy = GETP_XY(source);
+        zw = GETP_ZW(source);
+
+        SET_XY(segValue->rotQuat.quat, xy);
+        SET_ZW(segValue->rotQuat.quat, zw);
+
+        gte_process((G2Quat *)&segValue->scale, &quatInfo->srcScale, &quatInfo->destScale, alpha);
+        gte_process((G2Quat *)&segValue->trans, &quatInfo->srcTrans, &quatInfo->destTrans, alpha);
+
+        segCount--;
+
+        quatInfoChunkCount--;
+
+        quatInfo++;
+
+        if (quatInfoChunkCount == 0)
+        {
+            stateBlockList = stateBlockList->next;
+
+            quatInfoChunkCount = 4;
+
+            quatInfo = stateBlockList->quatInfo;
+        }
+
+        segValue->bIsQuat = 1;
+
+        segValue++;
+    }
+
+    section->storedTime = section->elapsedTime;
+
+    section->flags |= 0x80;
+}
 
 void _G2AnimSection_InterpStateToQuat(G2AnimSection *section)
 {
