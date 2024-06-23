@@ -1577,7 +1577,30 @@ void MON_RelocateCoords(Instance *instance, SVector *offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ValidUnit);
+int MON_ValidUnit(Instance *instance, unsigned long unitId)
+{
+    MonsterVars *mv;
+    short *unit;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    unit = (short *)&mv->validUnits;
+
+    if (*unit == 0)
+    {
+        return 1;
+    }
+
+    while (*unit != 0)
+    {
+        if ((unsigned short)unitId == (unsigned short)*unit++)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 int MON_ValidPosition(Instance *instance)
 {
