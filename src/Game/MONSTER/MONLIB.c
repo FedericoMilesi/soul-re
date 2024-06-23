@@ -1384,7 +1384,42 @@ void MON_DisableHeadMove(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_LookInDirection);
+void MON_LookInDirection(Instance *instance, short tx, short tz)
+{
+    G2SVector3 Rot;
+    MonsterAttributes *ma;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    if (ma->neckSegment != 0)
+    {
+        if (ma->spineSegment != ma->neckSegment)
+        {
+            Rot.y = 0;
+            Rot.x = (tx * 70) / 100;
+            Rot.z = (tz * 70) / 100;
+
+            G2Anim_SetController_Vector(&instance->anim, ma->neckSegment, 14, &Rot);
+
+            if (ma->spineSegment != 0)
+            {
+                Rot.y = 0;
+                Rot.x = (tx * 30) / 100;
+                Rot.z = (tz * 30) / 100;
+
+                G2Anim_SetController_Vector(&instance->anim, ma->spineSegment, 14, &Rot);
+            }
+        }
+        else
+        {
+            Rot.x = tx;
+            Rot.y = 0;
+            Rot.z = tz;
+
+            G2Anim_SetController_Vector(&instance->anim, ma->neckSegment, 14, &Rot);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_LookAtPos);
 
