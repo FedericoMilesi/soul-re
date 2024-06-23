@@ -1512,7 +1512,48 @@ void MON_ProcessLookAt(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TakeDamage);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetUpSaveInfo);
+void MON_SetUpSaveInfo(Instance *instance, MonsterSaveInfo *saveData)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    saveData->mvFlags = mv->mvFlags & ~0x440004;
+    saveData->auxFlags = mv->auxFlags & ~0x8000000;
+
+    saveData->age = mv->age;
+
+    saveData->state = instance->currentMainState;
+
+    saveData->behaviorState = mv->behaviorState;
+
+    saveData->causeOfDeath = mv->causeOfDeath;
+
+    if ((instance->currentMainState == MONSTER_STATE_DEAD) && (mv->causeOfDeath == 0))
+    {
+        saveData->soulJuice = mv->heldID;
+    }
+    else
+    {
+        saveData->soulJuice = mv->soulJuice;
+    }
+
+    saveData->soulID = mv->soulID;
+
+    if (mv->anim != NULL)
+    {
+        saveData->animLooping = instance->anim.section->flags >> 1;
+
+        saveData->anim = mv->anim - ma->animList;
+    }
+    else
+    {
+        saveData->anim = ma->numAnims;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetSaveInfo);
 
