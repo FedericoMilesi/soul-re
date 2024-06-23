@@ -10,6 +10,7 @@
 #include "Game/MATH3D.h"
 #include "Game/PHYSICS.h"
 #include "Game/FX.h"
+#include "Game/G2/ANMCTRLR.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -1345,7 +1346,26 @@ void MON_DropAllObjects(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_EnableHeadMove);
+void MON_EnableHeadMove(Instance *instance)
+{
+    MonsterAttributes *ma;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    if ((ma->neckSegment != 0) && (G2Anim_IsControllerActive(&instance->anim, ma->neckSegment, 14) == G2FALSE))
+    {
+        G2Anim_SetControllerAngleOrder(&instance->anim, ma->neckSegment, 14, 1);
+
+        G2Anim_EnableController(&instance->anim, ma->neckSegment, 14);
+
+        if (ma->spineSegment != ma->neckSegment)
+        {
+            G2Anim_SetControllerAngleOrder(&instance->anim, ma->spineSegment, 14, 1);
+
+            G2Anim_EnableController(&instance->anim, ma->spineSegment, 14);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_DisableHeadMove);
 
