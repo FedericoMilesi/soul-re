@@ -1218,7 +1218,91 @@ void MON_ProcessIntro(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetDefaults);
+void MON_SetDefaults(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+    MonsterSubAttributes *subAttr;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    if (mv->age >= ma->numSubAttributes)
+    {
+        mv->age = ma->numSubAttributes - 1;
+    }
+
+    subAttr = ma->subAttributesList[mv->age];
+
+    mv->subAttr = subAttr;
+
+    instance->currentModel = subAttr->modelNum;
+
+    instance->scale.x = instance->scale.y = instance->scale.z = subAttr->scale;
+
+    mv->behaviorState = subAttr->defInitialBehavior;
+
+    mv->initialBehavior = subAttr->defInitialBehavior;
+    mv->triggeredBehavior = subAttr->defTriggeredBehavior;
+
+    mv->wanderRange = subAttr->defWanderRange;
+    mv->guardRange = subAttr->defGuardRange;
+    mv->ambushRange = subAttr->defAmbushRange;
+
+    mv->soulJuice = 4096;
+
+    mv->alertness = 3;
+
+    mv->lastSideMove = 8;
+
+    if (subAttr->combatAttributes != NULL)
+    {
+        mv->hitPoints = subAttr->combatAttributes->hitPoints * 256;
+
+        if (subAttr->combatAttributes->missileAttack != -1)
+        {
+            mv->mvFlags |= 0x20;
+        }
+    }
+
+    if ((mv->age == 2) && ((ma->whatAmI & 0x2)))
+    {
+        mv->mvFlags |= 0x10000000;
+    }
+
+    if (subAttr->defSpectral != 0)
+    {
+        instance->flags2 |= 0x8000000;
+    }
+
+    mv->avoidMask = 0x100;
+
+    if (subAttr->waterVuln != 0)
+    {
+        mv->avoidMask = 0x110;
+    }
+
+    if (subAttr->fireVuln != 0)
+    {
+        mv->avoidMask |= 0x20;
+    }
+
+    if (subAttr->sunVuln != 0)
+    {
+        mv->avoidMask |= 0x40;
+    }
+
+    if (subAttr->soundVuln != 0)
+    {
+        mv->avoidMask |= 0x200;
+    }
+
+    if (subAttr->impaleVuln != 0)
+    {
+        mv->avoidMask |= 0x80;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetPlanSlot);
 
