@@ -1555,7 +1555,106 @@ void MON_SetUpSaveInfo(Instance *instance, MonsterSaveInfo *saveData)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetSaveInfo);
+void MON_GetSaveInfo(Instance *instance, MonsterSaveInfo *saveData)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    do
+    {
+
+    } while (0); // garbage code for reordering 
+
+    mv->age = saveData->age;
+
+    mv->subAttr = ma->subAttributesList[mv->age];
+
+    instance->currentModel = mv->subAttr->modelNum;
+
+    if (!(saveData->mvFlags & 0x8000))
+    {
+        MON_TurnOffBodySpheres(instance);
+    }
+    else
+    {
+        MON_TurnOnBodySpheres(instance);
+    }
+
+    mv->mvFlags = saveData->mvFlags | (mv->mvFlags & 0xC000);
+    mv->auxFlags = saveData->auxFlags | (mv->auxFlags & 0x8000000);
+
+    mv->behaviorState = saveData->behaviorState;
+
+    mv->causeOfDeath = saveData->causeOfDeath;
+
+    mv->soulID = saveData->soulID;
+
+    mv->soulJuice = saveData->soulJuice;
+
+    switch (saveData->state)
+    {
+    case 16:
+        instance->flags2 &= ~0x40;
+
+        mv->soulID = ~0x80000000;
+    case 23:
+        if (mv->causeOfDeath == 0)
+        {
+            mv->heldID = mv->soulJuice;
+
+            mv->soulJuice = 4096;
+
+            instance->flags2 |= 0x80;
+        }
+
+        instance->currentMainState = MONSTER_STATE_DEAD;
+        break;
+    case 10:
+    case 11:
+    case 12:
+    case 14:
+        instance->currentMainState = MONSTER_STATE_IDLE;
+        break;
+    case 6:
+    case 8:
+    case 9:
+    case 21:
+    case 28:
+        instance->currentMainState = MONSTER_STATE_COMBAT;
+        break;
+    default:
+        instance->currentMainState = saveData->state;
+    }
+
+    {
+        int mode;
+
+        mode = 1;
+
+        instance->position = instance->oldPos;
+
+        if (saveData->anim < ma->numAnims)
+        {
+            if (saveData->animLooping)
+            {
+                mode = 2;
+            }
+
+            if (instance->currentMainState == MONSTER_STATE_DEAD)
+            {
+                MON_PlayAnim(instance, MONSTER_ANIM_GENERALDEATH, 1);
+            }
+            else
+            {
+                MON_PlayAnimID(instance, saveData->anim, mode);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_KillMonster);
 
