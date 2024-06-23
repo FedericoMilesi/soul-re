@@ -1367,7 +1367,22 @@ void MON_EnableHeadMove(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_DisableHeadMove);
+void MON_DisableHeadMove(Instance *instance)
+{
+    MonsterAttributes *ma;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    if ((ma->neckSegment != 0) && (G2Anim_IsControllerActive(&instance->anim, ma->neckSegment, 14) != G2FALSE))
+    {
+        G2Anim_DisableController(&instance->anim, ma->neckSegment, 14);
+
+        if ((ma->spineSegment != 0) && (ma->spineSegment != ma->neckSegment))
+        {
+            G2Anim_DisableController(&instance->anim, ma->spineSegment, 14);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_LookInDirection);
 
