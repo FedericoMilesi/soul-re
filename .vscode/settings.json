@@ -45,6 +45,7 @@
         "common.h": "c",
         "fx.h": "c",
         "anmctrlr.h": "c",
-        "quatvm.h": "c"
+        "quatvm.h": "c",
+        "localstr.h": "c"
     }
 }
