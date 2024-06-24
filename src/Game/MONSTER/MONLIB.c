@@ -1841,7 +1841,24 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_BurnInAir);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_BirthMana);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SoulSucked);
+void MON_SoulSucked(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((mv->mvFlags & 0x200))
+    {
+        if (!(((MonsterAttributes *)instance->data)->whatAmI & 0x8))
+        {
+            mv->damageTimer = MON_GetTime(instance);
+        }
+
+        mv->soulID = 0;
+
+        MON_BirthMana(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetUpKnockBack);
 
