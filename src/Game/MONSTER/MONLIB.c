@@ -1839,7 +1839,27 @@ void MON_UnlinkFromRaziel(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_BurnInAir);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_BirthMana);
+void MON_BirthMana(Instance *instance)
+{
+    MonsterVars *mv;
+
+    if (instance->matrix != NULL)
+    {
+        mv = (MonsterVars *)instance->extraData;
+
+        if (mv->chance < 25)
+        {
+            int type;
+            MATRIX *mat;
+
+            type = ((rand() % 100) < 80) == 0;
+
+            mat = &instance->matrix[1];
+
+            PHYSOB_BirthCollectible(instance, mat->t[0], mat->t[1], mat->t[2], type, 10);
+        }
+    }
+}
 
 void MON_SoulSucked(Instance *instance)
 {
