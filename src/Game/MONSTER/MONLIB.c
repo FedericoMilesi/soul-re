@@ -1847,7 +1847,33 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetUpKnockBack);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_DoDrainEffects);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetFXHitData);
+void MON_SetFXHitData(Instance *instance, evFXHitData *data, int type, int amount)
+{
+    data->type = type;
+
+    data->amount = amount;
+
+    if (instance->matrix != NULL)
+    {
+        MATRIX *mat;
+
+        mat = &instance->matrix[((MonsterAttributes *)instance->data)->spineSegment];
+
+        data->location.x = mat->t[0];
+        data->location.y = mat->t[1];
+        data->location.z = mat->t[2];
+    }
+    else
+    {
+        data->location.x = instance->position.x;
+        data->location.y = instance->position.y;
+        data->location.z = instance->position.z + 256;
+    }
+
+    data->velocity.x = 0;
+    data->velocity.y = 0;
+    data->velocity.z = 0;
+}
 
 void MON_LaunchMonster(Instance *instance, int zDirection, int power, int loft)
 {
