@@ -1,6 +1,13 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_GetElapsedTime);
+short G2Anim_GetElapsedTime(G2Anim *anim)
+{
+    G2AnimSection *section;
+
+    section = &anim->section[anim->masterSection];
+
+    return section->elapsedTime;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_GetKeylist);
 
