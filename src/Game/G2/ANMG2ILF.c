@@ -9,7 +9,14 @@ short G2Anim_GetElapsedTime(G2Anim *anim)
     return section->elapsedTime;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_GetKeylist);
+G2AnimKeylist *G2Anim_GetKeylist(G2Anim *anim)
+{
+    G2AnimSection *section;
+
+    section = &anim->section[anim->masterSection];
+
+    return section->keylist;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_GetRootMotionOverInterval);
 
