@@ -1849,4 +1849,22 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_DoDrainEffects);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetFXHitData);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_LaunchMonster);
+void MON_LaunchMonster(Instance *instance, int zDirection, int power, int loft)
+{
+    instance->rotation.z = zDirection + 2048;
+    instance->rotation.x = 0;
+    instance->rotation.y = 0;
+
+    instance->xAccl = 0;
+    instance->yAccl = 0;
+    instance->zAccl = -8;
+
+    if (MON_SetVelocityTowardsImpalingObject(instance, 1) == 0)
+    {
+        PhysicsSetVelFromZRot(instance, zDirection, power);
+
+        instance->zVel = loft;
+    }
+
+    MON_SwitchState(instance, MONSTER_STATE_THROWN);
+}

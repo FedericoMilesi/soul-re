@@ -10,5 +10,6 @@ void PhysicsSetVelFromRot(Instance *instance, Rotation *rot, long magnitude);
 int PhysicsCheckGravity(Instance *instance, int Data, short Mode);
 int PhysicsCheckSwim(Instance *instance, int Data, short Mode);
 int PhysicsCheckDropHeight(Instance *instance, int Data, int Mode);
+void PhysicsSetVelFromZRot(Instance *instance, short angle, long magnitude);
 
 #endif

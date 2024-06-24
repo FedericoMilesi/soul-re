@@ -41,5 +41,6 @@ void MON_LookInDirection(Instance *instance, short tx, short tz);
 long MON_AnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data);
 unsigned long MON_CheckTerrain(Instance *instance, BSPTree *bsp, TFace *tface);
 void MON_SetDefaults(Instance *instance);
+int MON_SetVelocityTowardsImpalingObject(Instance *instance, int checkOrientation);
 
 #endif
