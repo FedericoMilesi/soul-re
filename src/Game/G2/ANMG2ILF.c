@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/G2/ANMG2ILF.h"
 
 short G2Anim_GetElapsedTime(G2Anim *anim)
 {
@@ -18,7 +19,14 @@ G2AnimKeylist *G2Anim_GetKeylist(G2Anim *anim)
     return section->keylist;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_GetRootMotionOverInterval);
+void G2Anim_GetRootMotionOverInterval(G2Anim *anim, short intervalStart, short intervalEnd, G2SVector3 *motionVector)
+{
+    short temp; // not from decls.h
+
+    temp = intervalEnd - intervalStart;
+
+    G2Anim_GetRootMotionFromTimeForDuration(anim, intervalStart, temp, motionVector);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_InterpToKeylistFrame);
 
