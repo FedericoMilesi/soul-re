@@ -39,7 +39,15 @@ void G2Anim_InterpToKeylistFrame(G2Anim *anim, G2AnimKeylist *keylist, int keyli
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SetAlphaTable);
+void G2Anim_SetAlphaTable(G2Anim *anim, G2AnimAlphaTable *table)
+{
+    int i;
+
+    for (i = 0; i < anim->sectionCount; i++)
+    {
+        G2AnimSection_SetAlphaTable(&anim->section[i], table);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SetCallback);
 
