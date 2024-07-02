@@ -63,7 +63,15 @@ void G2Anim_SetCallback(G2Anim *anim, long (*callback)(), void *data)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SetLooping);
+void G2Anim_SetLooping(G2Anim *anim)
+{
+    int i;
+
+    for (i = 0; i < anim->sectionCount; i++)
+    {
+        G2AnimSection_SetLooping(&anim->section[i]);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SetNoLooping);
 
