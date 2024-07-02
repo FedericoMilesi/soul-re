@@ -73,7 +73,15 @@ void G2Anim_SetLooping(G2Anim *anim)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SetNoLooping);
+void G2Anim_SetNoLooping(G2Anim *anim)
+{
+    int i;
+
+    for (i = 0; i < anim->sectionCount; i++)
+    {
+        G2AnimSection_SetNoLooping(&anim->section[i]);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SetPaused);
 
