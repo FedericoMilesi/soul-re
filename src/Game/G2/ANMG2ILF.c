@@ -49,7 +49,19 @@ void G2Anim_SetAlphaTable(G2Anim *anim, G2AnimAlphaTable *table)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SetCallback);
+void G2Anim_SetCallback(G2Anim *anim, long (*callback)(), void *data)
+{
+    int i;
+    G2AnimSection *section;
+
+    for (i = 0; i < anim->sectionCount; i++)
+    {
+        section = ((G2Anim *)&((G2AnimSection *)anim)[i])->section;
+
+        section->callback = (void *)callback;
+        section->callbackData = data;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SetLooping);
 
