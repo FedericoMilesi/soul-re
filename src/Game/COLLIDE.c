@@ -766,7 +766,53 @@ long COLLIDE_ClosestPointInBoxToPoint(Position *boxPoint, HBox *hbox, SVector *p
     return inside;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndPoint);
+long COLLIDE_SphereAndPoint(Sphere *sphere, SVector *point, SVector *normal)
+{
+    long len;
+    Vector *line;
+
+    line = (Vector *)getScratchAddr(0);
+
+    SUB_LVEC(Vector, line, Position, &sphere->position, SVector, point);
+
+    if ((unsigned long)((line->x * line->x) + (line->y * line->y) + (line->z * line->z)) < sphere->radiusSquared)
+    {
+        long a;
+        long b;
+        long c;
+
+        a = abs(line->x);
+        b = abs(line->y);
+        c = abs(line->z);
+
+        MATH3D_Sort3VectorCoords(&a, &b, &c);
+
+        len = (c * 30) + (b * 12) + (a * 9);
+
+        if ((len >> 5) != 0)
+        {
+            normal->x = (short)((line->x << 12) / (len >> 5));
+            normal->y = (short)((line->y << 12) / (len >> 5));
+            normal->z = (short)((line->z << 12) / (len >> 5));
+
+            line->x *= sphere->radius;
+            line->y *= sphere->radius;
+            line->z *= sphere->radius;
+
+            line->x = (line->x << 5) / len;
+            line->y = (line->y << 5) / len;
+            line->z = (line->z << 5) / len;
+
+            sphere->position.x = (short)(point->x + line->x);
+            sphere->position.y = (short)(point->y + line->y);
+            sphere->position.z = (short)(point->z + line->z);
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndHBox);
 
