@@ -93,7 +93,15 @@ void G2Anim_SetPaused(G2Anim *anim)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SetSpeedAdjustment);
+void G2Anim_SetSpeedAdjustment(G2Anim *anim, long adjustment)
+{
+    int i;
+
+    for (i = 0; i < anim->sectionCount; i++)
+    {
+        anim->section[i].speedAdjustment = adjustment;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SetUnpaused);
 
