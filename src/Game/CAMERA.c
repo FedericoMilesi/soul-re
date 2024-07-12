@@ -504,7 +504,213 @@ SVector *SplineGetNextPointDC(Spline *spline, SplineDef *def)
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetMode);
+void CAMERA_SetMode(Camera *camera, long mode)
+{
+    int oldMode;
+    SplineDef curPositional;
+    SVector sv;
+
+    oldMode = camera->mode;
+
+    if ((oldMode != mode) || ((mode < 12) || (mode >= 14)))
+    {
+        switch (camera->mode)
+        {
+        case 6:
+            CAMERA_EndLook(camera);
+
+            CAMERA_SaveMode(camera, camera->mode);
+
+            if (mode == 5)
+            {
+                CenterFlag = ~0;
+
+                camera->focusRotation.z = camera->targetFocusRotation.z;
+
+                CAMERA_Save(camera, 7);
+            }
+
+            break;
+        case 2:
+        case 4:
+            CAMERA_SaveMode(camera, camera->mode);
+            break;
+        case 5:
+            if (mode != 5)
+            {
+                CAMERA_SaveMode(camera, camera->mode);
+
+                COPY_SVEC(Rotation, &camera->targetFocusRotation, Rotation, &camera->core.rotation);
+                COPY_SVEC(Rotation, &camera->focusRotation, Rotation, &camera->core.rotation);
+
+                camera->actual_x_rot = camera->core.rotation.x;
+
+                SUB_SVEC(SVector, &sv, Position, &camera->focusPoint, Position, &camera->core.position);
+
+                camera->focusDistance = (short)CAMERA_LengthSVector(&sv);
+
+                roll_target = 0;
+
+                current_roll_amount = 0;
+
+                roll_inc = 0;
+            }
+
+            break;
+        case 12:
+        case 13:
+            CAMERA_SaveMode(camera, camera->mode);
+
+            if (mode == 5)
+            {
+                CAMERA_Save(camera, 7);
+            }
+
+            CAMERA_CreateNewFocuspoint(camera);
+        default:
+            break;
+        }
+
+        switch (mode)
+        {
+        case 2:
+        case 4:
+        case 5:
+            CAMERA_SetProjDistance(camera, 320);
+
+            camera->data.Cinematic.posSpline = camera->Spline00;
+            camera->data.Cinematic.targetSpline = camera->Spline01;
+
+            camera->data.Cinematic.cinema_done = 0;
+
+            camera->Spline00 = NULL;
+
+            camera->data.Cinematic.lastSplinePos.z = 0;
+            camera->data.Cinematic.lastSplinePos.y = 0;
+            camera->data.Cinematic.lastSplinePos.x = 0;
+
+            camera->Spline01 = NULL;
+
+            if (camera->data.Cinematic.posSpline != NULL)
+            {
+                *(int *)&camera->data.Cinematic.posSpline->curPositional.currkey = 0; // double-check
+            }
+
+            if (camera->data.Cinematic.targetSpline != NULL)
+            {
+                *(int *)&camera->data.Cinematic.targetSpline->curPositional.currkey = 0; // double-check
+            }
+
+            camera->mode = (short)mode;
+
+            if (camera->data.Cinematic.posSpline != NULL)
+            {
+                SVector *camPos;
+                SVector *targetPos;
+
+                if ((mode == 4) || (mode == 2))
+                {
+                    Position pos;
+
+                    splinecam_helprot.x = camera->focusRotation.x;
+                    splinecam_helprot.z = (camera->focusRotation.z + 2048) & 0xFFF;
+
+                    CAMERA_CalcPosition(&pos, &camera->targetFocusPoint, &splinecam_helprot, camera->targetFocusDistance);
+
+                    camPos = SplineGetNearestPoint(camera->data.Cinematic.posSpline->positional, (SVector *)&pos, &curPositional);
+
+                    CAMERA_CalcRotation(&splinecam_helprot, &camera->focusInstance->position, (Position *)&camPos);
+
+                    camera->data.Cinematic.splinecam_helpkey = curPositional.currkey;
+
+                    camPos = SplineGetNearestPoint(camera->data.Cinematic.posSpline->positional, (SVector *)&camera->core.position, &curPositional);
+
+                    camera->data.Cinematic.splinecam_currkey = curPositional.currkey;
+                }
+                else
+                {
+                    camPos = SplineGetFirstPoint(camera->data.Cinematic.posSpline->positional, &camera->data.Cinematic.posSpline->curPositional);
+                }
+
+                if (camPos != NULL)
+                {
+                    COPY_SVEC(Position, &camera->targetPos, SVector, camPos);
+
+                    if (mode == 5)
+                    {
+                        camera->posState = 3;
+                    }
+
+                    if (camera->data.Cinematic.targetSpline != NULL)
+                    {
+                        targetPos = SplineGetFirstPoint(camera->data.Cinematic.targetSpline->positional, &camera->data.Cinematic.targetSpline->curPositional);
+
+                        if (targetPos != NULL)
+                        {
+                            COPY_SVEC(Position, &camera->targetFocusPoint, SVector, targetPos);
+                        }
+                    }
+                }
+            }
+
+            camera->targetRotation = camera->focusRotation;
+
+            CenterFlag = ~0;
+
+            camera->tiltState = 0;
+
+            camera->lead_angle = 0;
+
+            camera->flags &= ~0x2000;
+            break;
+        case 12:
+        case 13:
+        case 16:
+            CAMERA_SetProjDistance(camera, 320);
+
+            if (mode == 16)
+            {
+                mode = 12;
+
+                camera->flags |= 0x2000;
+            }
+            else
+            {
+                camera->flags &= ~0x2000;
+            }
+
+            cameraMode = mode;
+
+            gameTrackerX.gameFlags &= ~0x40;
+
+            camera->mode = (short)mode;
+
+            camera->targetFocusDistance = (short)camera->focusDistanceList[camera_modeToIndex[(short)mode]][camera->presetIndex];
+
+            camera->smooth = 8;
+
+            camera->data.Follow.stopTimer = 0xE5A20000;
+
+            camera->focusRotVel.z = 0;
+
+            if ((oldMode == 5) && (camera->focusInstance != NULL))
+            {
+                CAMERA_SetFocus(camera, &camera->targetFocusPoint);
+            }
+
+            break;
+        case 0:
+        case 10:
+        case 11:
+            break;
+        default:
+            camera->mode = mode;
+        }
+
+        camera->collisionTargetFocusDistance = camera->targetFocusDistance;
+        camera->collisionTargetFocusRotation = camera->targetFocusRotation;
+    }
+}
 
 void CAMERA_Initialize(Camera *camera)
 {
@@ -1139,7 +1345,7 @@ TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colIn
     long i;
     long init;
     Level *level;
-    //Instance *focusInstance; unused
+    // Instance *focusInstance; unused
     Vector ACE_vect;
     LCollideInfo lcol;
     int ACE_force;
@@ -1193,8 +1399,7 @@ TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colIn
 
             ApplyMatrix(&matrix, (SVECTOR *)&startLine, (VECTOR *)&ACE_vect);
 
-            ACE_amount = ((ACE_vect.x * camera->focusInstanceVelVec.x) + (ACE_vect.y * camera->focusInstanceVelVec.y)
-            + (ACE_vect.z * camera->focusInstanceVelVec.z)) >> 12;
+            ACE_amount = ((ACE_vect.x * camera->focusInstanceVelVec.x) + (ACE_vect.y * camera->focusInstanceVelVec.y) + (ACE_vect.z * camera->focusInstanceVelVec.z)) >> 12;
 
             if ((camera->always_rotate_flag != 0) || (camera->forced_movement != 0))
             {
@@ -1371,8 +1576,7 @@ TFace *CAMERA_SphereToSphereWithLines(Camera *camera, CameraCollisionInfo *colIn
                     {
                         thislevel = streamUnit->level;
 
-                        if ((streamUnit->used == 2) && (thislevel != level) && (MEMPACK_MemoryValidFunc((char *)thislevel) != 0)
-                        && ((in_warpRoom == 0) || (!(streamUnit->flags & 0x1))))
+                        if ((streamUnit->used == 2) && (thislevel != level) && (MEMPACK_MemoryValidFunc((char *)thislevel) != 0) && ((in_warpRoom == 0) || (!(streamUnit->flags & 0x1))))
                         {
                             colInfo->tfaceList[i] = COLLIDE_PointAndTerrainFunc(thislevel->terrain, &pCollideInfo, flag, &backface_flag, 208, 32, &lcol);
 
@@ -1739,7 +1943,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GetLineAngle);
 
 long CAMERA_ACForcedMovement(Camera *camera, CameraCollisionInfo *colInfo)
 {
-    //short dp; unused
+    // short dp; unused
     Normal normal;
     SVector sv;
 
@@ -1810,8 +2014,7 @@ long CAMERA_AbsoluteCollision(Camera *camera, CameraCollisionInfo *colInfo)
 
     camera->focusRotation.x &= 0xFFF;
 
-    if ((((camera->flags & 0x10000)) || ((camera->instance_mode & 0x24000000)) || ((camera->flags & 0x2000))
-        || (camera->rotState != 0) || (camera->always_rotate_flag != 0)) && (!(camera->lock & 0x1)))
+    if ((((camera->flags & 0x10000)) || ((camera->instance_mode & 0x24000000)) || ((camera->flags & 0x2000)) || (camera->rotState != 0) || (camera->always_rotate_flag != 0)) && (!(camera->lock & 0x1)))
     {
         if ((camera->flags & 0x10000))
         {
@@ -1965,7 +2168,6 @@ void CAMERA_CinematicProcess(Camera *camera)
             CriticalDampPosition(4, &camera->focusPoint, &camera->targetFocusPoint, &camera->focusPointVel, &camera->focusPointAccl, (short)(-camera->smooth));
 
             CAMERA_SetTarget(camera, &camera->focusPoint);
-
 
             if ((ABS(camera->core.position.x - camera->targetPos.x) < 9) &&
                 (ABS(camera->core.position.y - camera->targetPos.y) < 9) &&
@@ -2513,8 +2715,7 @@ void CAMERA_Control(Camera *camera, Instance *playerInstance)
             return;
         }
 
-        if ((!(camera->lock & 0x4)) && (!(camera->flags & 0x10000)) && ((camera->mode == 0) || (camera->mode == 12) || (camera->mode == 4) || (camera->mode == 13))
-        && (!(playerInstance->flags & 0x100)))
+        if ((!(camera->lock & 0x4)) && (!(camera->flags & 0x10000)) && ((camera->mode == 0) || (camera->mode == 12) || (camera->mode == 4) || (camera->mode == 13)) && (!(playerInstance->flags & 0x100)))
         {
             if (((controlCommand[0] & 0x400)) && (lookmode == 0))
             {
@@ -2867,16 +3068,15 @@ void CAMERA_UpdateFocusRotationX(Camera *camera, Instance *focusInstance)
     short dist;
     short tfaceFlag;
     Normal normal;
-    //int mult; unused
+    // int mult; unused
     int tmpsmooth;
 
     dist = camera->targetFocusDistance;
 
     tfaceFlag = 0;
 
-    if ((focusInstance->tface != NULL) && (((Level *)focusInstance->tfaceLevel)->terrain != NULL) && (focusInstance->tface->textoff != 0xFFFF)
-    && ((((TextureFT3 *)((char *)((Level *)focusInstance->tfaceLevel)->terrain->StartTextureList + focusInstance->tface->textoff))->attr & 0x8000)) /*TODO: FAKEMATCH?*/
-    && (dist < 2912))
+    if ((focusInstance->tface != NULL) && (((Level *)focusInstance->tfaceLevel)->terrain != NULL) && (focusInstance->tface->textoff != 0xFFFF) && ((((TextureFT3 *)((char *)((Level *)focusInstance->tfaceLevel)->terrain->StartTextureList + focusInstance->tface->textoff))->attr & 0x8000)) /*TODO: FAKEMATCH?*/
+        && (dist < 2912))
     {
         COLLIDE_GetNormal(focusInstance->tface->normal, (short *)((Level *)focusInstance->tfaceLevel)->terrain->normalList, (SVector *)&normal);
 
@@ -3428,14 +3628,11 @@ long CAMERA_DoCameraCollision2(Camera *camera, Position *targetCamPos, int simpl
         }
     }
 
-    if ((!(camera->flags & 0x12000)) && (camera->instance_xyvel == 0) && (secondcheck_flag == 0)
-    && (camera->always_rotate_flag == 0) && (camera->forced_movement == 0) && (colInfo.numCollided > 0)
-    && ((colInfo.numCollided == 4) || (camera_still != 0)) && (colInfo.lenCenterToExtend < 400))
+    if ((!(camera->flags & 0x12000)) && (camera->instance_xyvel == 0) && (secondcheck_flag == 0) && (camera->always_rotate_flag == 0) && (camera->forced_movement == 0) && (colInfo.numCollided > 0) && ((colInfo.numCollided == 4) || (camera_still != 0)) && (colInfo.lenCenterToExtend < 400))
     {
         panic_count++;
 
-        if ((((gameTrackerX.controlCommand[0][0] & 0x1)) && (panic_count > 10))
-        || ((!(gameTrackerX.controlCommand[0][0] & 0x1)) && (panic_count > 1)))
+        if ((((gameTrackerX.controlCommand[0][0] & 0x1)) && (panic_count > 10)) || ((!(gameTrackerX.controlCommand[0][0] & 0x1)) && (panic_count > 1)))
         {
             CAMERA_Panic(camera, (short)colInfo.lenCenterToExtend);
         }
@@ -3477,8 +3674,7 @@ long CAMERA_DoCameraCollision2(Camera *camera, Position *targetCamPos, int simpl
         colInfo.numCollided = 4;
     }
 
-    if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x24000000)) || (((camera->flags & 0x2000))
-        && (!(camera->instance_mode & 0x2000000))) || (camera->always_rotate_flag != 0))
+    if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x24000000)) || (((camera->flags & 0x2000)) && (!(camera->instance_mode & 0x2000000))) || (camera->always_rotate_flag != 0))
     {
         if (camera->data.Follow.tface != NULL)
         {
@@ -3599,7 +3795,5 @@ long CAMERA_DoCameraCollision2(Camera *camera, Position *targetCamPos, int simpl
 
 int CAMERA_FocusInstanceMoved(Camera *camera)
 {
-    return ((camera->newFocusInstancePos.x != camera->oldFocusInstancePos.x) || (camera->newFocusInstancePos.y != camera->oldFocusInstancePos.y)
-    || (camera->newFocusInstancePos.z != camera->oldFocusInstancePos.z) || (camera->newFocusInstanceRot.x != camera->oldFocusInstanceRot.x)
-    || (camera->newFocusInstanceRot.y != camera->oldFocusInstanceRot.y) || (camera->newFocusInstanceRot.z != camera->oldFocusInstanceRot.z));
+    return ((camera->newFocusInstancePos.x != camera->oldFocusInstancePos.x) || (camera->newFocusInstancePos.y != camera->oldFocusInstancePos.y) || (camera->newFocusInstancePos.z != camera->oldFocusInstancePos.z) || (camera->newFocusInstanceRot.x != camera->oldFocusInstanceRot.x) || (camera->newFocusInstanceRot.y != camera->oldFocusInstanceRot.y) || (camera->newFocusInstanceRot.z != camera->oldFocusInstanceRot.z));
 }

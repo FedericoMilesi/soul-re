@@ -104,5 +104,6 @@ unsigned long SplineGetData(Spline *spline, SplineDef *def, void *p);
 unsigned short SplineGetFrameNumber(Spline *spline, SplineDef *def);
 G2Quat *SplineGetFirstRot(RSpline *rspline, SplineDef *def);
 SVector *SplineGetFirstPoint(Spline *spline, SplineDef *def);
+SVector *SplineGetNearestPoint(Spline *spline, SVector *point, SplineDef *def);
 
 #endif
