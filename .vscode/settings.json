@@ -22,6 +22,9 @@
     "files.associations": {
         "camera.h": "c",
         "spline.h": "c",
-        "physics.h": "c"
+        "physics.h": "c",
+        "math3d.h": "c",
+        "collide.h": "c",
+        "hasm.h": "c"
     }
 }

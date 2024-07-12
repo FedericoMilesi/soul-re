@@ -491,5 +491,6 @@ CdlCB CdSyncCallback(CdlCB func);
 void SpuSetCommonAttr(SpuCommonAttr *attr);
 int VSync(int mode);
 CdlLOC *CdIntToPos(int i, CdlLOC *p);
+void RotTrans(SVECTOR *v0, VECTOR *v1, long *flag);
 
 #endif

@@ -335,5 +335,6 @@ long COLLIDE_GetNormal(short nNum, short *nrmlArray, SVector *nrml);
 void COLLIDE_Instance1SpheresToInstance2(Instance *instance1, Instance *instance2, long sphereToSphere);
 void COLLIDE_MoveAllTransforms(Instance *instance, Position *offset);
 long COLLIDE_FindCollisionFaceNormal(CollideInfo *collideInfo, Normal *normal);
+int COLLIDE_PointAndHFace(SVector *newPos, SVector *oldPos, HFace *hface, Model *model, SVector *hfNormal);
 
 #endif

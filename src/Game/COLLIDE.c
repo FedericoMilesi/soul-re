@@ -1,5 +1,8 @@
 #include "common.h"
 #include "Game/MATH3D.h"
+#include "Game/PIPE3D.h"
+#include "Game/COLLIDE.h"
+#include "Game/HASM.h"
 
 long dyna_clddyna[8] = {
     0x0C, 0x0D, 0x0E, 0x0F, 0x1C, 0x1D, 0x1E, 0x1F};
@@ -428,7 +431,276 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndTerrainFunc);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndHFace);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndInstance);
+void COLLIDE_PointAndInstance(PCollideInfo *pcollideInfo, Instance *instance)
+{
+    MATRIX *swTransform;
+    MATRIX *wsTransform;
+    MATRIX *swNormMat;
+    Vector *oldPosVec;
+    Vector *lNormal;
+    Vector *wNormal;
+    Vector *dv;
+    Vector *newPosVec;
+    SVector *oldPos;
+    SVector *newPos;
+    SVector *point;
+    long *flag;
+    Model *model;
+    HModel *hmodel;
+    HPrim *hprim;
+    int i;
+    long collideType;
+
+    wsTransform = (MATRIX *)getScratchAddr(40);
+
+    swNormMat = (MATRIX *)getScratchAddr(64);
+
+    oldPosVec = (Vector *)getScratchAddr(76);
+
+    lNormal = (Vector *)getScratchAddr(84);
+
+    wNormal = (Vector *)getScratchAddr(88);
+
+    dv = (Vector *)getScratchAddr(96);
+
+    newPosVec = (Vector *)getScratchAddr(100);
+
+    oldPos = (SVector *)getScratchAddr(104);
+
+    newPos = (SVector *)getScratchAddr(106);
+
+    point = (SVector *)getScratchAddr(108);
+
+    flag = (long *)getScratchAddr(112);
+
+    hmodel = &instance->hModelList[instance->currentModel];
+
+    collideType = pcollideInfo->collideType;
+
+    model = instance->object->modelList[instance->currentModel];
+
+    for (i = hmodel->numHPrims, hprim = hmodel->hPrimList; i != 0; i--, hprim++)
+    {
+        if (((hprim->hpFlags & 0x1)) && ((hprim->hpFlags & 0x8)))
+        {
+            HBox *hbox;
+            HFace *hface;
+            HSphere *hsphere;
+            typedef struct
+            {
+                long m[3];
+            } tmm;
+
+            swTransform = &instance->matrix[hprim->segment];
+
+            PIPE3D_InvertTransform(wsTransform, swTransform);
+
+            *(tmm *)(swNormMat->t) = *(tmm *)(swTransform->t);
+
+            TransposeMatrix(wsTransform, swNormMat);
+
+            SetRotMatrix(wsTransform);
+            SetTransMatrix(wsTransform);
+
+            RotTrans(pcollideInfo->newPoint, (VECTOR *)newPosVec, flag);
+            RotTrans(pcollideInfo->oldPoint, (VECTOR *)oldPosVec, flag);
+
+            oldPos->x = (short)oldPosVec->x;
+            oldPos->y = (short)oldPosVec->y;
+            oldPos->z = (short)oldPosVec->z;
+
+            newPos->x = (short)newPosVec->x;
+            newPos->y = (short)newPosVec->y;
+            newPos->z = (short)newPosVec->z;
+
+            switch (hprim->type)
+            {
+            case 1:
+                hsphere = hprim->data.hsphere;
+
+                if (((hsphere->attr & 0x2000)) && (!(collideType & 0x20)))
+                {
+                    COLLIDE_NearestPointOnLine_S(point, (SVECTOR *)oldPos, (SVECTOR *)newPos, &hsphere->position);
+
+                    dv->x = point->x - hsphere->position.x;
+                    dv->y = point->y - hsphere->position.y;
+                    dv->z = point->z - hsphere->position.z;
+
+                    if ((unsigned long)((dv->x * dv->x) + (dv->y * dv->y) + (dv->z * dv->z)) < hsphere->radiusSquared)
+                    {
+                        long len;
+                        long a;
+                        long b;
+                        long c;
+
+                        dv->x = newPos->x - hsphere->position.x;
+                        dv->y = newPos->y - hsphere->position.y;
+                        dv->z = newPos->z - hsphere->position.z;
+
+                        a = abs(dv->x);
+                        b = abs(dv->y);
+                        c = abs(dv->z);
+
+                        MATH3D_Sort3VectorCoords(&a, &b, &c);
+
+                        len = (c * 30) + (b * 12) + (a * 9);
+
+                        if (len != 0)
+                        {
+                            lNormal->x = (dv->x << 12) / (len >> 5);
+                            lNormal->y = (dv->y << 12) / (len >> 5);
+                            lNormal->z = (dv->z << 12) / (len >> 5);
+
+                            dv->x *= hsphere->radius - (len >> 5);
+                            dv->y *= hsphere->radius - (len >> 5);
+                            dv->z *= hsphere->radius - (len >> 5);
+
+                            dv->x = (dv->x << 5) / len;
+                            dv->y = (dv->y << 5) / len;
+                            dv->z = (dv->z << 5) / len;
+
+                            newPos->x += (short)dv->x;
+                            newPos->y += (short)dv->y;
+                            newPos->z += (short)dv->z;
+
+                            SetRotMatrix(swNormMat);
+                            SetTransMatrix(swTransform);
+
+                            RotTrans((SVECTOR *)newPos, (VECTOR *)newPosVec, flag);
+
+                            ApplyMatrixLV(swNormMat, (VECTOR *)lNormal, (VECTOR *)wNormal);
+
+                            pcollideInfo->newPoint->vx = (short)newPosVec->x;
+                            pcollideInfo->newPoint->vy = (short)newPosVec->y;
+                            pcollideInfo->newPoint->vz = (short)newPosVec->z;
+
+                            pcollideInfo->wNormal.vx = (short)wNormal->x;
+                            pcollideInfo->wNormal.vy = (short)wNormal->y;
+                            pcollideInfo->wNormal.vz = (short)wNormal->z;
+
+                            pcollideInfo->type = 1;
+
+                            pcollideInfo->segment = hprim->segment;
+
+                            pcollideInfo->prim = hsphere;
+
+                            pcollideInfo->inst = instance;
+                        }
+                    }
+                }
+
+                break;
+            case 2:
+            {
+                SVector hfNormal;
+
+                hface = hprim->data.hface;
+
+                if (COLLIDE_PointAndHFace(newPos, oldPos, hface, model, &hfNormal) != 0)
+                {
+                    ApplyMatrixSV(swNormMat, (SVECTOR *)&hfNormal, &pcollideInfo->wNormal);
+
+                    pcollideInfo->type = 2;
+
+                    pcollideInfo->segment = hprim->segment;
+
+                    pcollideInfo->prim = hface;
+
+                    pcollideInfo->inst = instance;
+                }
+
+                break;
+            }
+            case 5:
+            {
+                SVector hbNormal;
+                SVector point0;
+                SVector point1;
+                SVector normal1;
+
+                hbox = hprim->data.hbox;
+
+                if ((hbox->flags & 0x2000))
+                {
+                    unsigned short temp; // not from SYMDUMP
+
+                    temp = instance->scale.x;
+
+                    if (temp == 4096)
+                    {
+                        hbox->maxX = hbox->refMaxX;
+                        hbox->minX = hbox->refMinX;
+                    }
+                    else
+                    {
+                        hbox->maxX = (hbox->refMaxX * temp) >> 12;
+                        hbox->minX = (hbox->refMinX * temp) >> 12;
+                    }
+
+                    temp = instance->scale.y;
+
+                    if (temp == 4096)
+                    {
+                        hbox->maxY = hbox->refMaxY;
+                        hbox->minY = hbox->refMinY;
+                    }
+                    else
+                    {
+                        hbox->maxY = (hbox->refMaxY * temp) >> 12;
+                        hbox->minY = (hbox->refMinY * temp) >> 12;
+                    }
+
+                    temp = instance->scale.z;
+
+                    if (temp == 4096)
+                    {
+                        hbox->maxZ = hbox->refMaxZ;
+                        hbox->minZ = hbox->refMinZ;
+                    }
+                    else
+                    {
+                        hbox->maxZ = (hbox->refMaxZ * temp) >> 12;
+                        hbox->minZ = (hbox->refMinZ * temp) >> 12;
+                    }
+
+                    if (COLLIDE_IntersectLineAndBox(&point0, &hbNormal, &point1, &normal1, newPos, oldPos, hbox) != 0)
+                    {
+                        COPY_SVEC(SVector, newPos, SVector, &point0);
+
+                        ApplyMatrixSV(swNormMat, (SVECTOR *)&hbNormal, &pcollideInfo->wNormal);
+
+                        pcollideInfo->type = 5;
+
+                        pcollideInfo->segment = hprim->segment;
+
+                        pcollideInfo->prim = hbox;
+
+                        pcollideInfo->inst = instance;
+                    }
+                }
+
+                break;
+            }
+            }
+
+            if ((newPos->x != newPosVec->x) || (newPos->y != newPosVec->y) || (newPos->z != newPosVec->z))
+            {
+                pcollideInfo->cldPoint.vx = newPos->x;
+                pcollideInfo->cldPoint.vy = newPos->y;
+                pcollideInfo->cldPoint.vz = newPos->z;
+
+                SetRotMatrix(swNormMat);
+                SetTransMatrix(swTransform);
+
+                RotTrans((SVECTOR *)newPos, (VECTOR *)newPosVec, flag);
+
+                pcollideInfo->newPoint->vx = (short)newPosVec->x;
+                pcollideInfo->newPoint->vy = (short)newPosVec->y;
+                pcollideInfo->newPoint->vz = (short)newPosVec->z;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndInstanceTrivialReject);
 
