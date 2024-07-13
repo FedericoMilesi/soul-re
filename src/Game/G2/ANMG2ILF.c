@@ -161,7 +161,19 @@ void G2AnimSection_InterpToKeylistFrame(G2AnimSection *section, G2AnimKeylist *k
     G2AnimSection_InterpToKeylistAtTime(section, keylist, keylistID, (short)(targetFrame * keylist->s0TailTime), (short)duration);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_IsInInterpolation);
+G2Bool G2AnimSection_IsInInterpolation(G2AnimSection *section)
+{
+    G2AnimInterpInfo *interpInfo;
+
+    interpInfo = section->interpInfo;
+
+    if ((interpInfo == NULL) || (interpInfo->stateBlockList == NULL))
+    {
+        return G2FALSE;
+    }
+
+    return !G2FALSE;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_NextKeyframe);
 
