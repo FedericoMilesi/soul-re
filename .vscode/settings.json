@@ -26,6 +26,8 @@
         "math3d.h": "c",
         "collide.h": "c",
         "hasm.h": "c",
-        "mempack.h": "c"
+        "mempack.h": "c",
+        "anmg2ilf.h": "c",
+        "anmintrp.h": "c"
     }
 }

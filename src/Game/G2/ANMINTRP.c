@@ -24,7 +24,7 @@ static inline void gte_process(G2Quat *dest, G2SVector3 *base, G2SVector3 *offse
     gte_stlvnlsv(dest);
 }
 
-// modified from decls.h
+//void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime, int duration)
 void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime, short duration)
 {
     G2Anim *anim;

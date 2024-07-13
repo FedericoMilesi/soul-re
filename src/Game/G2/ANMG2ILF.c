@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/G2/ANMG2ILF.h"
+#include "Game/G2/ANMINTRP.h"
 
 short G2Anim_GetElapsedTime(G2Anim *anim)
 {
@@ -155,7 +156,10 @@ int G2AnimSection_GetStoredKeyframeNumber(G2AnimSection *section)
     return section->storedTime / section->keylist->s0TailTime;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_InterpToKeylistFrame);
+void G2AnimSection_InterpToKeylistFrame(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, int targetFrame, int duration)
+{
+    G2AnimSection_InterpToKeylistAtTime(section, keylist, keylistID, (short)(targetFrame * keylist->s0TailTime), (short)duration);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_IsInInterpolation);
 
