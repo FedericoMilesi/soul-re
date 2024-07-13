@@ -123,7 +123,10 @@ void G2Anim_SwitchToKeylist(G2Anim *anim, G2AnimKeylist *keylist, int keylistID)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimKeylist_GetDuration);
+short G2AnimKeylist_GetDuration(G2AnimKeylist *keylist)
+{
+    return keylist->s0TailTime + (keylist->timePerKey * (keylist->keyCount - 1));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimKeylist_GetKeyframeCount);
 
