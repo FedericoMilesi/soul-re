@@ -138,7 +138,17 @@ void G2AnimSection_ClearAlarm(G2AnimSection *section, unsigned long flag)
     section->alarmFlags &= ~flag;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_GetKeyframeNumber);
+int G2AnimSection_GetKeyframeNumber(G2AnimSection *section)
+{
+    if (G2AnimSection_IsInInterpolation(section) != G2FALSE)
+    {
+        return section->interpInfo->targetTime / section->keylist->s0TailTime;
+    }
+    else
+    {
+        return section->elapsedTime / section->keylist->s0TailTime;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_GetStoredKeyframeNumber);
 
