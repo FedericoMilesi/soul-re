@@ -5,7 +5,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMDECMP", _G2Anim_DecompressChannel_Adapt
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMDECMP", _G2Anim_DecompressChannel_Linear);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMDECMP", _G2Anim_InitializeChannel_AdaptiveDelta);
+void _G2Anim_InitializeChannel_AdaptiveDelta(G2AnimDecompressChannelInfo *dcInfo, G2AnimChanStatus *status)
+{
+    unsigned short *chanData;
+    int keyCount;
+
+    keyCount = dcInfo->keylist->keyCount;
+
+    chanData = dcInfo->chanData;
+
+    status->index = ((unsigned char *)chanData)[0]; // double-check
+
+    status->keyData = chanData[1];
+
+    dcInfo->chanData = &chanData[((keyCount + 3) >> 2)] + 2;
+}
 
 void _G2Anim_InitializeChannel_Linear(G2AnimDecompressChannelInfo *dcInfo, G2AnimChanStatus *status)
 {
