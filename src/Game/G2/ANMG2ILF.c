@@ -237,6 +237,9 @@ void G2AnimSection_SetPaused(G2AnimSection *section)
     section->flags |= 0x1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetUnpaused);
+void G2AnimSection_SetUnpaused(G2AnimSection *section)
+{
+    section->flags &= ~0x1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SwitchToKeylist);
