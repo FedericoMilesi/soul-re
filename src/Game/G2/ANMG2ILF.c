@@ -242,4 +242,7 @@ void G2AnimSection_SetUnpaused(G2AnimSection *section)
     section->flags &= ~0x1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SwitchToKeylist);
+void G2AnimSection_SwitchToKeylist(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID)
+{
+    G2AnimSection_SwitchToKeylistAtTime(section, keylist, keylistID, 0);
+}
