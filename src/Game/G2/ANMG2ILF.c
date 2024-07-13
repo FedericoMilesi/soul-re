@@ -128,7 +128,10 @@ short G2AnimKeylist_GetDuration(G2AnimKeylist *keylist)
     return keylist->s0TailTime + (keylist->timePerKey * (keylist->keyCount - 1));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimKeylist_GetKeyframeCount);
+int G2AnimKeylist_GetKeyframeCount(G2AnimKeylist *keylist)
+{
+    return ((keylist->timePerKey * (keylist->keyCount - 1)) + ((keylist->s0TailTime * 2) - 1)) / keylist->s0TailTime;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_ClearAlarm);
 
