@@ -227,7 +227,10 @@ void G2AnimSection_SetNoLooping(G2AnimSection *section)
     section->flags &= ~0x2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetNotRewinding);
+void G2AnimSection_SetNotRewinding(G2AnimSection *section)
+{
+    section->flags &= ~0x4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetPaused);
 
