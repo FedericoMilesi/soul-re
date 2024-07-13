@@ -133,7 +133,10 @@ int G2AnimKeylist_GetKeyframeCount(G2AnimKeylist *keylist)
     return ((keylist->timePerKey * (keylist->keyCount - 1)) + ((keylist->s0TailTime * 2) - 1)) / keylist->s0TailTime;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_ClearAlarm);
+void G2AnimSection_ClearAlarm(G2AnimSection *section, unsigned long flag)
+{
+    section->alarmFlags &= ~flag;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_GetKeyframeNumber);
 
