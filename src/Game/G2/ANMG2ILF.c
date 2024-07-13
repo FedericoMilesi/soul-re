@@ -222,7 +222,10 @@ void G2AnimSection_SetLoopRangeAll(G2AnimSection *section)
     section->loopEndTime = G2AnimKeylist_GetDuration(section->keylist);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetNoLooping);
+void G2AnimSection_SetNoLooping(G2AnimSection *section)
+{
+    section->flags &= ~0x2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetNotRewinding);
 
