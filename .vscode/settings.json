@@ -25,6 +25,7 @@
         "physics.h": "c",
         "math3d.h": "c",
         "collide.h": "c",
-        "hasm.h": "c"
+        "hasm.h": "c",
+        "mempack.h": "c"
     }
 }
