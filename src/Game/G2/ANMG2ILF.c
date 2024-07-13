@@ -206,7 +206,14 @@ void G2AnimSection_SetInterpInfo(G2AnimSection *section, G2AnimInterpInfo *newIn
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetLooping);
+void G2AnimSection_SetLooping(G2AnimSection *section)
+{
+    G2AnimSection_ClearAlarm(section, 0x3);
+
+    G2AnimSection_SetLoopRangeAll(section);
+
+    section->flags |= 0x2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetLoopRangeAll);
 
