@@ -188,7 +188,13 @@ short G2AnimSection_NextKeyframe(G2AnimSection *section)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetAlphaTable);
+void G2AnimSection_SetAlphaTable(G2AnimSection *section, G2AnimAlphaTable *table)
+{
+    if (section->interpInfo != NULL)
+    {
+        section->interpInfo->alphaTable = table;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetInterpInfo);
 
