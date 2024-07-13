@@ -196,7 +196,15 @@ void G2AnimSection_SetAlphaTable(G2AnimSection *section, G2AnimAlphaTable *table
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetInterpInfo);
+void G2AnimSection_SetInterpInfo(G2AnimSection *section, G2AnimInterpInfo *newInfoPtr)
+{
+    section->interpInfo = newInfoPtr;
+
+    if (section->interpInfo != NULL)
+    {
+        memset(section->interpInfo, 0, sizeof(G2AnimInterpInfo));
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetLooping);
 
