@@ -28,6 +28,7 @@
         "hasm.h": "c",
         "mempack.h": "c",
         "anmg2ilf.h": "c",
-        "anmintrp.h": "c"
+        "anmintrp.h": "c",
+        "gameloop.h": "c"
     }
 }

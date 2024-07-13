@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/G2/ANMINTRP.h"
+#include "Game/G2/TIMERG2.h"
 
 short G2Anim_GetElapsedTime(G2Anim *anim)
 {
@@ -175,7 +176,17 @@ G2Bool G2AnimSection_IsInInterpolation(G2AnimSection *section)
     return !G2FALSE;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_NextKeyframe);
+short G2AnimSection_NextKeyframe(G2AnimSection *section)
+{
+    if (!(section->flags & 0x1))
+    {
+        G2AnimSection_SetNotRewinding(section);
+
+        return G2AnimSection_UpdateOverInterval(section, G2Timer_GetFrameTime());
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetAlphaTable);
 
