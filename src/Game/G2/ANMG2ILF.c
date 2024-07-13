@@ -150,7 +150,10 @@ int G2AnimSection_GetKeyframeNumber(G2AnimSection *section)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_GetStoredKeyframeNumber);
+int G2AnimSection_GetStoredKeyframeNumber(G2AnimSection *section)
+{
+    return section->storedTime / section->keylist->s0TailTime;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_InterpToKeylistFrame);
 
