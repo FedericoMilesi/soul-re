@@ -215,7 +215,12 @@ void G2AnimSection_SetLooping(G2AnimSection *section)
     section->flags |= 0x2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetLoopRangeAll);
+void G2AnimSection_SetLoopRangeAll(G2AnimSection *section)
+{
+    section->loopStartTime = 0;
+
+    section->loopEndTime = G2AnimKeylist_GetDuration(section->keylist);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimSection_SetNoLooping);
 
