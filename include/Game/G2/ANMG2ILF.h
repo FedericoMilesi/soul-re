@@ -30,5 +30,6 @@ void G2Anim_GetRootMotionOverInterval(G2Anim *anim, short intervalStart, short i
 void G2AnimSection_SetLoopRangeAll(G2AnimSection *section);
 void G2AnimSection_ClearAlarm(G2AnimSection *section, unsigned long flag);
 void G2AnimSection_SetUnpaused(G2AnimSection *section);
+void G2AnimSection_SwitchToKeylist(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID);
 
 #endif

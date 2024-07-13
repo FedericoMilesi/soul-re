@@ -113,7 +113,15 @@ void G2Anim_SetUnpaused(G2Anim *anim)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2Anim_SwitchToKeylist);
+void G2Anim_SwitchToKeylist(G2Anim *anim, G2AnimKeylist *keylist, int keylistID)
+{
+    int i;
+
+    for (i = 0; i < anim->sectionCount; i++)
+    {
+        G2AnimSection_SwitchToKeylist(&anim->section[i], keylist, keylistID);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMG2ILF", G2AnimKeylist_GetDuration);
 
