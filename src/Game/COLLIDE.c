@@ -4,6 +4,7 @@
 #include "Game/COLLIDE.h"
 #include "Game/HASM.h"
 #include "Game/MEMPACK.h"
+#include "Game/GAMELOOP.h"
 
 long dyna_clddyna[8] = {
     0x0C, 0x0D, 0x0E, 0x0F, 0x1C, 0x1D, 0x1E, 0x1F};
@@ -881,8 +882,107 @@ long COLLIDE_SphereAndTerrain(SCollideInfo *scollideInfo, Level *level)
     return result;
 }
 
-void COLLIDE_InstanceTerrain(Instance *instance, Level *level);
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceTerrain);
+void COLLIDE_InstanceTerrain(Instance *instance, Level *level)
+{
+    Vector *newPosVec;
+    Vector *oldPosVec;
+    SVector *oldPos;
+    SCollideInfo scollideInfoX;
+    SCollideInfo *scollideInfo;
+    Sphere *wSphere;
+    MATRIX *swTransform;
+    MATRIX *oldSWTransform;
+    HSphere *hsphere;
+    long flags;
+    int i;
+    HModel *hmodel;
+    HPrim *hprim;
+    int currentModel;
+    unsigned char withFlags;
+    void (*collideFunc)();
+
+    newPosVec = (Vector *)getScratchAddr(82);
+    oldPosVec = (Vector *)getScratchAddr(86);
+
+    oldPos = (SVector *)getScratchAddr(90);
+
+    wSphere = (Sphere *)getScratchAddr(110);
+
+    scollideInfo = &scollideInfoX;
+
+    if ((instance->matrix != NULL) && (instance->oldMatrix != NULL))
+    {
+        if ((instance->object->oflags2 & 0x80000))
+        {
+            gameTrackerX.monster_collide_override = 1;
+        }
+
+        collideFunc = instance->collideFunc;
+
+        currentModel = instance->currentModel;
+
+        if (collideFunc != NULL)
+        {
+            hmodel = &instance->hModelList[currentModel];
+
+            for (i = hmodel->numHPrims, hprim = hmodel->hPrimList; i != 0; i--, hprim++)
+            {
+                if ((hprim->hpFlags & 0x1))
+                {
+                    withFlags = hprim->withFlags;
+
+                    if (((withFlags & 0x2)) && (hprim->type == 1))
+                    {
+                        swTransform = &instance->matrix[hprim->segment];
+
+                        oldSWTransform = &instance->oldMatrix[hprim->segment];
+
+                        hsphere = hprim->data.hsphere;
+
+                        SetRotMatrix(swTransform);
+                        SetTransMatrix(swTransform);
+
+                        RotTrans((SVECTOR *)&hsphere->position, (VECTOR *)newPosVec, &flags);
+
+                        SetRotMatrix(oldSWTransform);
+                        SetTransMatrix(oldSWTransform);
+
+                        RotTrans((SVECTOR *)&hsphere->position, (VECTOR *)oldPosVec, &flags);
+
+                        wSphere->position.x = (short)newPosVec->x;
+                        wSphere->position.y = (short)newPosVec->y;
+                        wSphere->position.z = (short)newPosVec->z;
+
+                        wSphere->radius = hsphere->radius;
+                        wSphere->radiusSquared = hsphere->radiusSquared;
+
+                        oldPos->x = (short)oldPosVec->x;
+                        oldPos->y = (short)oldPosVec->y;
+                        oldPos->z = (short)oldPosVec->z;
+
+                        scollideInfo->sphere = wSphere;
+
+                        scollideInfo->oldPos = (SVECTOR *)oldPos;
+
+                        scollideInfo->collideFunc = collideFunc;
+
+                        scollideInfo->instance = instance;
+
+                        scollideInfo->segment = hprim->segment;
+
+                        scollideInfo->id = hsphere->id;
+
+                        scollideInfo->prim = (void *)hsphere;
+
+                        COLLIDE_SphereAndTerrain(scollideInfo, level);
+                    }
+                }
+            }
+        }
+
+        gameTrackerX.monster_collide_override = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_LineWithSignals);
 
