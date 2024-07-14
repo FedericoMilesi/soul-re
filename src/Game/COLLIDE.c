@@ -3,6 +3,7 @@
 #include "Game/PIPE3D.h"
 #include "Game/COLLIDE.h"
 #include "Game/HASM.h"
+#include "Game/MEMPACK.h"
 
 long dyna_clddyna[8] = {
     0x0C, 0x0D, 0x0E, 0x0F, 0x1C, 0x1D, 0x1E, 0x1F};
@@ -851,7 +852,34 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndHFace);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SAndT);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndTerrain);
+long COLLIDE_SphereAndTerrain(SCollideInfo *scollideInfo, Level *level)
+{
+    int result;
+    int d;
+    int in_warpRoom;
+    StreamUnit *stream;
+
+    result = COLLIDE_SAndT(scollideInfo, level);
+
+    in_warpRoom = 0;
+
+    stream = STREAM_GetStreamUnitWithID(level->streamUnitID);
+
+    if (stream != NULL)
+    {
+        in_warpRoom = stream->flags & 0x1;
+    }
+
+    for (d = 0; d < 16; d++)
+    {
+        if ((StreamTracker.StreamList[d].used == 2) && (StreamTracker.StreamList[d].level != level) && ((in_warpRoom == 0) || (!(StreamTracker.StreamList[d].flags & 0x1))) && (MEMPACK_MemoryValidFunc((char *)StreamTracker.StreamList[d].level) != 0))
+        {
+            result = COLLIDE_SAndT(scollideInfo, StreamTracker.StreamList[d].level);
+        }
+    }
+
+    return result;
+}
 
 void COLLIDE_InstanceTerrain(Instance *instance, Level *level);
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceTerrain);

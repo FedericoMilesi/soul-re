@@ -323,6 +323,24 @@ typedef struct evMonsterHitTerrainData {
     short bspFlags;
 } evMonsterHitTerrainData;
 
+// size: 0x1C
+typedef struct SCollideInfo {
+    // offset: 0000 (12 bytes)
+    struct _Sphere *sphere;
+    // offset: 0004 (8 bytes)
+    struct SVECTOR *oldPos;
+    // offset: 0008
+    void (*collideFunc)();
+    // offset: 000C
+    long id;
+    // offset: 0010
+    long segment;
+    // offset: 0014 (668 bytes)
+    struct _Instance *instance;
+    // offset: 0018
+    void *prim;
+} SCollideInfo;
+
 TFace *COLLIDE_PointAndTerrainFunc(Terrain *terrain, PCollideInfo *pCollideInfo, int Flags, short *Backface_Flag, long ignoreAttr, long acceptAttr, LCollideInfo *lcolinfo);
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);
@@ -337,5 +355,6 @@ void COLLIDE_MoveAllTransforms(Instance *instance, Position *offset);
 long COLLIDE_FindCollisionFaceNormal(CollideInfo *collideInfo, Normal *normal);
 int COLLIDE_PointAndHFace(SVector *newPos, SVector *oldPos, HFace *hface, Model *model, SVector *hfNormal);
 int COLLIDE_PointAndTfaceFunc(Terrain *terrain, BSPTree *bsp, SVector *orgNewPos, SVector *orgOldPos, TFace *tface, long ignoreAttr, long flags);
+long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level);
 
 #endif
