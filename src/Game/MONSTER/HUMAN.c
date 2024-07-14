@@ -328,7 +328,7 @@ void HUMAN_Embrace(Instance *instance)
 
     INSTANCE_Post(gameTrackerX.playerInstance, 0x1000016, juice);
 
-    do {} while (0); // garbage code for reodering
+    do {} while (0); // garbage code for reordering
 
     if (mv->soulJuice < juice)
     {
@@ -520,7 +520,7 @@ void HUMAN_GetAngry()
 
             allegiances = mv->subAttr->allegiances;
 
-            do {} while (0); // garbage code for reodering
+            do {} while (0); // garbage code for reordering
 
             allegiances->gods &= ~0x1;
 

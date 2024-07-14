@@ -1461,7 +1461,7 @@ void MON_LookAtPos(Instance *instance, Position *position)
         }
     }
 
-    if (z != 0) // garbage code for reodering
+    if (z != 0) // garbage code for reordering
     {
         temp = -temp;
     }

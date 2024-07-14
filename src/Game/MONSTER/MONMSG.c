@@ -48,7 +48,7 @@ void MON_IdleMessageHandler(Instance *instance, Message *message)
     case 0x1000002:
     case 0x100000A:
     case 0x1000023:
-        if (message != NULL) // garbage code for reodering 
+        if (message != NULL) // garbage code for reordering 
         {
             temp = -temp;
         }
