@@ -876,7 +876,169 @@ long CAMERA_LengthSVector(SVector *sv)
     return MATH3D_FastSqrt0((sv->x * sv->x) + (sv->y * sv->y) + (sv->z * sv->z));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetValue);
+void CAMERA_SetValue(Camera *camera, long index, long value)
+{
+    long min;
+    long max;
+    long minTilt;
+    long maxTilt;
+    long *temp; // not from decls.h
+
+    min = 0;
+    max = 16000;
+
+    minTilt = -4096;
+    maxTilt = 4096;
+
+    temp = &camera->minFocusDistance;
+
+    temp[index] = value;
+
+    if (camera->cineControl != 0)
+    {
+        gameTrackerX.gameFlags |= 0x80;
+    }
+    else
+    {
+        gameTrackerX.gameFlags &= ~0x80;
+    }
+
+    switch (camera->mode)
+    {
+    case 0:
+        if (camera->focusDistanceList[0][0] < camera->focusDistanceList[0][1])
+        {
+            min = MIN(camera->focusDistanceList[0][0], camera->focusDistanceList[0][2]);
+        }
+        else
+        {
+            min = MIN(camera->focusDistanceList[0][1], camera->focusDistanceList[0][2]);
+        }
+
+        if (camera->focusDistanceList[0][0] > camera->focusDistanceList[0][1])
+        {
+            max = MAX(camera->focusDistanceList[0][0], camera->focusDistanceList[0][2]);
+        }
+        else
+        {
+            max = MAX(camera->focusDistanceList[0][1], camera->focusDistanceList[0][2]);
+        }
+
+        if (camera->tiltList[0][0] < camera->tiltList[0][1])
+        {
+            minTilt = MIN(camera->tiltList[0][0], camera->tiltList[0][2]);
+        }
+        else
+        {
+            minTilt = MIN(camera->tiltList[0][1], camera->tiltList[0][2]);
+        }
+
+        if (camera->tiltList[0][0] > camera->tiltList[0][1])
+        {
+            maxTilt = MAX(camera->tiltList[0][0], camera->tiltList[0][2]);
+        }
+        else
+        {
+            maxTilt = MAX(camera->tiltList[0][1], camera->tiltList[0][2]);
+        }
+
+        break;
+    case 12:
+        if (camera->focusDistanceList[1][0] < camera->focusDistanceList[1][1])
+        {
+            min = MIN(camera->focusDistanceList[1][0], camera->focusDistanceList[1][2]);
+        }
+        else
+        {
+            min = MIN(camera->focusDistanceList[1][1], camera->focusDistanceList[1][2]);
+        }
+
+        if (camera->focusDistanceList[1][0] > camera->focusDistanceList[1][1])
+        {
+            max = MAX(camera->focusDistanceList[1][0], camera->focusDistanceList[1][2]);
+        }
+        else
+        {
+            max = MAX(camera->focusDistanceList[1][1], camera->focusDistanceList[1][2]);
+        }
+
+        if (camera->tiltList[1][0] < camera->tiltList[1][1])
+        {
+            minTilt = MIN(camera->tiltList[1][0], camera->tiltList[1][2]);
+        }
+        else
+        {
+            minTilt = MIN(camera->tiltList[1][1], camera->tiltList[1][2]);
+        }
+
+        if (camera->tiltList[1][0] > camera->tiltList[1][1])
+        {
+            maxTilt = MAX(camera->tiltList[1][0], camera->tiltList[1][2]);
+        }
+        else
+        {
+            maxTilt = MAX(camera->tiltList[1][1], camera->tiltList[1][2]);
+        }
+
+        break;
+    case 13:
+        if (camera->focusDistanceList[2][0] < camera->focusDistanceList[2][1])
+        {
+            min = MIN(camera->focusDistanceList[2][0], camera->focusDistanceList[2][2]);
+        }
+        else
+        {
+            min = MIN(camera->focusDistanceList[2][1], camera->focusDistanceList[2][2]);
+        }
+
+        if (camera->focusDistanceList[2][0] > camera->focusDistanceList[2][1])
+        {
+            max = MAX(camera->focusDistanceList[2][0], camera->focusDistanceList[2][2]);
+        }
+        else
+        {
+            max = MAX(camera->focusDistanceList[2][1], camera->focusDistanceList[2][2]);
+        }
+
+        if (camera->tiltList[2][0] < camera->tiltList[2][1])
+        {
+            minTilt = MIN(camera->tiltList[2][0], camera->tiltList[2][2]);
+        }
+        else
+        {
+            minTilt = MIN(camera->tiltList[2][1], camera->tiltList[2][2]);
+        }
+
+        if (camera->tiltList[2][0] > camera->tiltList[2][1])
+        {
+            maxTilt = MAX(camera->tiltList[2][0], camera->tiltList[2][2]);
+        }
+        else
+        {
+            maxTilt = MAX(camera->tiltList[2][1], camera->tiltList[2][2]);
+        }
+
+        break;
+    }
+
+    if (camera->targetFocusDistance < min)
+    {
+        camera->targetFocusDistance = (short)min;
+    }
+    else if (camera->targetFocusDistance > max)
+    {
+        camera->targetFocusDistance = (short)max;
+    }
+
+    if (camera->targetFocusRotation.x < minTilt)
+    {
+        camera->targetFocusRotation.x = (short)minTilt;
+    }
+    else if (camera->targetFocusRotation.x > maxTilt)
+    {
+        camera->targetFocusRotation.x = (short)maxTilt;
+    }
+}
 
 short CAMERA_AngleDifference(short angle0, short angle1)
 {
