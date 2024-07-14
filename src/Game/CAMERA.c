@@ -1999,7 +1999,217 @@ short CAMERA_dampgetline(short angle)
     return target_angle;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_ACNoForcedMovement);
+long CAMERA_ACNoForcedMovement(Camera *camera, CameraCollisionInfo *colInfo)
+{
+    long hit;
+    short playerSamePos;
+    short angle;
+    int temp, temp2; // not from decls.h
+    short temp3; // not from decls.h
+
+    hit = 0;
+
+    playerSamePos = CAMERA_FocusInstanceMoved(camera) == 0;
+
+    if ((camera->always_rotate_flag == 0) && (camera->rotState != 3) && (colInfo->numCollided >= 2))
+    {
+        int n;
+        int flag;
+        short dist;
+
+        flag = 0x1;
+
+        if ((colInfo->line == 1) || (colInfo->line == 2))
+        {
+            dist = 32767;
+
+            if ((colInfo->flags & 0x6) == 0x6)
+            {
+                angle = colInfo->lengthList[2];
+
+                if ((angle >= 121) && (colInfo->lengthList[1] >= 121) && (ABS(angle - colInfo->lengthList[1]) < 600))
+                {
+                    CAMERA_update_dist_debounced(camera, colInfo->lenCenterToExtend);
+
+                    CAMERA_dampgetline(0);
+
+                    if ((camera->mode == 13) && (abs(ACE_amount) >= 11))
+                    {
+                        camera->collisionTargetFocusRotation.z = camera->targetFocusRotation.z;
+                    }
+
+                    return 1;
+                }
+            }
+
+            for (n = 1; n < 5; n++)
+            {
+                if (n != colInfo->line)
+                {
+                    if (colInfo->lengthList[n] < 800)
+                    {
+                        flag = 0;
+                        break;
+                    }
+
+                    if (colInfo->lengthList[n] < dist)
+                    {
+                        dist = colInfo->lengthList[n];
+                    }
+                }
+            }
+
+            if (flag != 0)
+            {
+                colInfo->numCollided = 1;
+
+                colInfo->flags = 1 << colInfo->line;
+
+                if (colInfo->lenCenterToExtend >= 801)
+                {
+                    CAMERA_update_dist_debounced(camera, colInfo->lenCenterToExtend);
+                }
+                else
+                {
+                    CAMERA_update_dist_debounced(camera, dist);
+                }
+            }
+            else if (temp = colInfo->numCollided, colInfo->numCollided == 4)
+            {
+                if ((camera->collision_lastPush != 0) && (colInfo->lenCenterToExtend < 400))
+                {
+                    colInfo->numCollided = 1;
+
+                    if (camera->collision_lastPush == 2)
+                    {
+                        colInfo->flags = 0x2;
+
+                        colInfo->line = 1;
+                    }
+                    else
+                    {
+                        colInfo->line = 2;
+
+                        colInfo->flags = temp;
+                    }
+                }
+            }
+        }
+    }
+
+    if ((colInfo->numCollided == 4) && (!(camera->lock & 0x1)))
+    {
+        hit = 1;
+
+        camera->collisionTargetFocusDistance = colInfo->lenCenterToExtend;
+
+        camera->collisionTargetFocusRotation.z = camera->targetFocusRotation.z;
+    }
+    else if (((colInfo->flags & 0x2)) && (!(camera->lock & 0x4)) && ((playerSamePos == 0) || (camera->collision_lastPush != 1)))
+    {
+        if (!(colInfo->flags & 0x4))
+        {
+            camera->collideRotControl = 1;
+
+            camera->collision_lastPush = 2;
+
+            if ((camera->mode != 13) || (ACE_amount >= -10))
+            {
+                temp3 = CAMERA_dampgetline(CAMERA_GetLineAngle(camera, colInfo, &right_point, 1));
+
+                if (abs(ACE_amount) < 6)
+                {
+                    if (temp3 >= -63)
+                    {
+                        temp2 = (unsigned short)camera->focusRotation.z - 4;
+
+                        camera->collisionTargetFocusRotation.z = temp3 + temp2;
+                    }
+                    else
+                    {
+                        camera->collisionTargetFocusRotation.z -= 64;
+                    }
+
+                    return 1;
+                }
+                else if ((temp3 << 16) <= 0)
+                {
+                    camera->collisionTargetFocusRotation.z = (temp3 - 4) + camera->focusRotation.z;
+                }
+            }
+            else
+            {
+                camera->collisionTargetFocusRotation.z = camera->targetFocusRotation.z;
+
+                CAMERA_update_dist_debounced(camera, colInfo->lenCenterToExtend);
+            }
+        }
+        else
+        {
+            CAMERA_update_dist_debounced(camera, colInfo->lenCenterToExtend);
+        }
+
+        return 1;
+    }
+    else if (((colInfo->flags & 0x4)) && (!(camera->lock & 0x4)) && ((playerSamePos == 0) || (camera->collision_lastPush != 2)))
+    {
+        if (!(colInfo->flags & 0x2))
+        {
+            camera->collideRotControl = 1;
+
+            camera->collision_lastPush = 1;
+
+            if ((camera->mode == 13) && (ACE_amount >= 11))
+            {
+                camera->collisionTargetFocusRotation.z = camera->targetFocusRotation.z;
+
+                CAMERA_update_dist_debounced(camera, colInfo->lenCenterToExtend);
+                return 1;
+            }
+        }
+        else
+        {
+            CAMERA_update_dist_debounced(camera, colInfo->lenCenterToExtend);
+            return 1;
+        }
+
+        temp3 = CAMERA_dampgetline(CAMERA_GetLineAngle(camera, colInfo, &left_point, 2));
+
+        if (abs(ACE_amount) < 6)
+        {
+            if (temp3 >= 64)
+            {
+                camera->collisionTargetFocusRotation.z += 64;
+            }
+            else
+            {
+                temp2 = (unsigned short)camera->focusRotation.z + 4;
+
+                camera->collisionTargetFocusRotation.z = temp3 + temp2;
+            }
+        }
+        else if (temp3 >= 0)
+        {
+            temp2 = (unsigned short)camera->focusRotation.z + 4;
+
+            camera->collisionTargetFocusRotation.z = temp3 + temp2;
+        }
+
+        return 1;
+    }
+    else if ((((colInfo->flags & 0x8)) && (temp = colInfo->flags, (!(camera->lock & 0x2)))) || (((colInfo->flags & 0x10)) && (!(camera->lock & 0x2))))
+    {
+        CAMERA_update_dist_debounced(camera, colInfo->lenCenterToExtend);
+
+        do {} while (0); // garbage code for reordering
+
+        hit = 1;
+    }
+
+    CAMERA_dampgetline(0);
+
+    return hit;
+}
 
 long CAMERA_AbsoluteCollision(Camera *camera, CameraCollisionInfo *colInfo)
 {
