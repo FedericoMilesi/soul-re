@@ -4,6 +4,9 @@
 #include "Game/PHYSICS.h"
 #include "Game/GAMELOOP.h"
 #include "Game/HASM.h"
+#include "Game/COLLIDE.h"
+#include "Game/STATE.h"
+#include "Game/PHYSOBS.h"
 
 int PHYSICS_CheckFaceStick(PCollideInfo *CInfo);
 void PHYSICS_GenericLineCheck(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);

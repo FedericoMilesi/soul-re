@@ -12,5 +12,6 @@ int PhysicsCheckSwim(Instance *instance, int Data, short Mode);
 int PhysicsCheckDropHeight(Instance *instance, int Data, int Mode);
 void PhysicsSetVelFromZRot(Instance *instance, short angle, long magnitude);
 void PhysicsDefaultLinkedMoveResponse(Instance *instance, evPhysicsLinkedMoveData *Data, int updateTransforms);
+void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Data);
 
 #endif

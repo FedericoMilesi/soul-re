@@ -30,6 +30,8 @@
         "anmg2ilf.h": "c",
         "anmintrp.h": "c",
         "gameloop.h": "c",
-        "animg2.h": "c"
+        "animg2.h": "c",
+        "state.h": "c",
+        "physobs.h": "c"
     }
 }

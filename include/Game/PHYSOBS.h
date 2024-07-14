@@ -130,5 +130,7 @@ void PhysicalObjectPost(Instance *instance, unsigned long Message, unsigned long
 void TurnOffCollisionPhysOb(Instance *instance, int coll);
 void TurnOnCollisionPhysOb(Instance *instance, int coll);
 Instance *PHYSOB_BirthCollectible(Instance *parent, int x, int y, int z, int type, int lifeTime);
+int CheckPhysOb(Instance *instance);
+int CheckPhysObFamily(Instance *instance, unsigned short family);
 
 #endif

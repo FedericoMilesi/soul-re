@@ -502,5 +502,6 @@ void G2EmulationInstanceSetAnimSpeed(Instance *instance, int CurrentSection, int
 void G2EmulationInstanceInitSection(Instance *instance, int CurrentSection, void *callback, void *data);
 intptr_t SetPhysicsSwimData(int CheckDepth, SVector *iVelocity, int SwimDepth, int WadeDepth, int TreadDepth);
 intptr_t SetPhysicsDropHeightData(Position *offset, int dropOffset, int mode);
+intptr_t SetPhysicsLinkedMoveData(Instance *instance, int segment, SVector *posDelta, SVector *rotDelta);
 
 #endif

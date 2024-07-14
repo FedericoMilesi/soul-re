@@ -336,5 +336,6 @@ void COLLIDE_Instance1SpheresToInstance2(Instance *instance1, Instance *instance
 void COLLIDE_MoveAllTransforms(Instance *instance, Position *offset);
 long COLLIDE_FindCollisionFaceNormal(CollideInfo *collideInfo, Normal *normal);
 int COLLIDE_PointAndHFace(SVector *newPos, SVector *oldPos, HFace *hface, Model *model, SVector *hfNormal);
+int COLLIDE_PointAndTfaceFunc(Terrain *terrain, BSPTree *bsp, SVector *orgNewPos, SVector *orgOldPos, TFace *tface, long ignoreAttr, long flags);
 
 #endif
