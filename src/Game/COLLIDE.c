@@ -1322,4 +1322,90 @@ void COLLIDE_SetBSPTreeFlag(CollideInfo *collideInfo, short flag)
     *bspTreeFlags |= flag;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndTfaceFunc);
+int COLLIDE_PointAndTfaceFunc(Terrain *terrain, BSPTree *bsp, SVector *orgNewPos, SVector *orgOldPos, TFace *tface, long ignoreAttr, long flags)
+{
+    PandTFScratch *CSpad;
+    int result;
+
+    CSpad = (PandTFScratch *)getScratchAddr(16);
+
+    result = 0;
+
+    if ((tface == NULL) || ((bsp->flags & 0x2)))
+    {
+        return 0;
+    }
+
+    if (!((1 << (tface->attr & 0x1F)) & ignoreAttr))
+    {
+        SUB_SVEC(SVector, (SVector *)getScratchAddr(26), SVector, orgNewPos, Position, &bsp->globalOffset);
+        SUB_SVEC(SVector, (SVector *)getScratchAddr(28), SVector, orgOldPos, Position, &bsp->globalOffset);
+
+        CSpad->posMatrix.m[0][0] = CSpad->newPos.x;
+        CSpad->posMatrix.m[0][1] = CSpad->newPos.y;
+        CSpad->posMatrix.m[0][2] = CSpad->newPos.z;
+
+        CSpad->posMatrix.m[1][0] = CSpad->oldPos.x;
+        CSpad->posMatrix.m[1][1] = CSpad->oldPos.y;
+        CSpad->posMatrix.m[1][2] = CSpad->oldPos.z;
+
+        SetRotMatrix(&CSpad->posMatrix);
+
+        {
+            short *nrmlArray;
+            SVector *nrml;
+            short *sPtr;
+            short temp; // not from decls.h
+
+            temp = tface->normal;
+
+            nrmlArray = (short *)terrain->normalList;
+
+            nrml = &CSpad->normal;
+
+            if (temp >= 0)
+            {
+                sPtr = &nrmlArray[3 * temp];
+
+                nrml->x = *sPtr++ & 0x1FFF;
+                nrml->y = *sPtr++;
+                nrml->z = *sPtr;
+            }
+            else
+            {
+                sPtr = &nrmlArray[3 * -temp];
+
+                nrml->x = -(*sPtr++ & 0x1FFF);
+                nrml->y = -*sPtr++;
+                nrml->z = -*sPtr;
+            }
+        }
+
+        {
+            SVector *vertex0;
+            SVector *vertex1;
+
+            vertex0 = (SVector *)&terrain->vertexList[tface->face.v0];
+            vertex1 = (SVector *)&terrain->vertexList[tface->face.v1];
+
+            gte_ldv2_ext(vertex0);
+            gte_ldv0(&CSpad->normal);
+            gte_nrtv0();
+            gte_stlvnl(&CSpad->dpv);
+
+            CSpad->dpv.x -= CSpad->dpv.z;
+            CSpad->dpv.y -= CSpad->dpv.z;
+
+            if ((((CSpad->dpv.x < 0) && (CSpad->dpv.y >= 0)) || (((flags & 0x1)) && (CSpad->dpv.x > 0) && (CSpad->dpv.y <= 0)))
+            && (COLLIDE_IntersectLineAndPlane_S(&CSpad->planePoint, (Position *)&CSpad->oldPos, (Position *)&CSpad->newPos, &CSpad->normal, CSpad->dpv.z) != 0)
+            && (COLLIDE_PointInTriangle(vertex0, vertex1, (SVector *)&terrain->vertexList[tface->face.v2], &CSpad->planePoint, &CSpad->normal) != 0))
+            {
+                result = 1;
+
+                ADD_SVEC(SVector, orgNewPos, SVector, &CSpad->planePoint, Position, &bsp->globalOffset);
+            }
+        }
+    }
+
+    return result;
+}

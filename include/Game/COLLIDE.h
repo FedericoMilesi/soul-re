@@ -342,6 +342,22 @@ typedef struct SCollideInfo {
     void *prim;
 } SCollideInfo;
 
+// size: 0x4C
+typedef struct PandTFScratch {
+    // offset: 0000 (32 bytes)
+    struct MATRIX posMatrix;
+    // offset: 0020 (8 bytes)
+    struct _SVector planePoint;
+    // offset: 0028 (8 bytes)
+    struct _SVector newPos;
+    // offset: 0030 (8 bytes)
+    struct _SVector oldPos;
+    // offset: 0038 (8 bytes)
+    struct _SVector normal;
+    // offset: 0040 (12 bytes)
+    struct _Vector dpv;
+} PandTFScratch;
+
 TFace *COLLIDE_PointAndTerrainFunc(Terrain *terrain, PCollideInfo *pCollideInfo, int Flags, short *Backface_Flag, long ignoreAttr, long acceptAttr, LCollideInfo *lcolinfo);
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);

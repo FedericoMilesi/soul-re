@@ -33,6 +33,7 @@
         "animg2.h": "c",
         "state.h": "c",
         "physobs.h": "c",
-        "signal.h": "c"
+        "signal.h": "c",
+        "sdk.h": "c"
     }
 }

@@ -173,6 +173,16 @@
 	: "r"( r0 )						\
 	: "$12", "$13", "$14", "memory" )
 
+// custom macro
+#define gte_ldv2_ext( r0 ) __asm__ volatile (			\
+	"lw		$12, 0( %0 );"					\
+	"lw		$13, 4( %0 );"					\
+	"ctc2	$12, $3;"					\
+	"ctc2	$13, $4;"					\
+	:							\
+	: "r"( r0 )						\
+	: "$12", "$13" )
+
 // size: 0x8
 typedef struct RECT {
     // offset: 0000
