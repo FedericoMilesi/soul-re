@@ -5,6 +5,7 @@
 #include "Game/HASM.h"
 #include "Game/MEMPACK.h"
 #include "Game/GAMELOOP.h"
+#include "Game/CAMERA.h"
 
 long dyna_clddyna[8] = {
     0x0C, 0x0D, 0x0E, 0x0F, 0x1C, 0x1D, 0x1E, 0x1F};
@@ -1045,7 +1046,142 @@ void COLLIDE_InstanceTerrainSignal(Instance *instance, Level *level)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_CameraWithStreamSignals);
+StreamUnit *COLLIDE_CameraWithStreamSignals(Camera *camera)
+{
+    SVector startPoint;
+    SVector endPoint;
+    Model *model;
+    long numSignals;
+    long i;
+    long numStreamSignals;
+    MultiSignal *signalListArray[8];
+    StreamUnit *streamSignalUnits[8];
+    StreamUnit *playerStreamUnit;
+    Level *level;
+    long playerStreamUnitID;
+    Instance *instance;
+    MultiSignal *msignal;
+    long isWarpGateSignal;
+    StreamUnit *cameraStreamUnit;
+    long cameraStreamID;
+    int number;
+
+    instance = camera->focusInstance;
+
+    playerStreamUnitID = instance->currentStreamUnitID;
+
+    if ((instance == gameTrackerX.playerInstance) && (gameTrackerX.SwitchToNewStreamUnit != 0))
+    {
+        playerStreamUnitID = gameTrackerX.moveRazielToStreamID;
+    }
+
+    playerStreamUnit = STREAM_GetStreamUnitWithID(playerStreamUnitID);
+
+    endPoint = *(SVector *)&camera->core.position;
+
+    if (instance->matrix != NULL)
+    {
+        model = instance->object->modelList[instance->currentModel];
+
+        if (model != NULL)
+        {
+            if (model->numSegments >= 2)
+            {
+                startPoint.x = (short)instance->matrix[1].t[0];
+                startPoint.y = (short)instance->matrix[1].t[1];
+                startPoint.z = (short)instance->matrix[1].t[2];
+            }
+            else
+            {
+                startPoint = *(SVector *)&instance->position;
+            }
+        }
+        else
+        {
+            startPoint = *(SVector *)&instance->position;
+        }
+    }
+    else
+    {
+        startPoint = *(SVector *)&instance->position;
+    }
+
+    level = playerStreamUnit->level;
+
+    numStreamSignals = 0;
+
+    if (level != NULL)
+    {
+        numSignals = COLLIDE_LineWithSignals(&startPoint, &endPoint, signalListArray, 8, level);
+
+        for (i = 0; i < numSignals; i++)
+        {
+            msignal = (MultiSignal *)signalListArray[i]->signalList;
+
+            if (SIGNAL_IsStreamSignal((Signal *)msignal, &isWarpGateSignal) != 0)
+            {
+                if (isWarpGateSignal != 0)
+                {
+                    if (WARPGATE_IsWarpgateActive() != 0)
+                    {
+                        if (gameTrackerX.SwitchToNewWarpIndex == -1)
+                        {
+                            number = CurrentWarpNumber;
+                        }
+                        else
+                        {
+                            number = gameTrackerX.SwitchToNewWarpIndex;
+                        }
+
+                        cameraStreamID = WarpRoomArray[number].streamUnit->StreamUnitID;
+                    }
+                    else
+                    {
+                        cameraStreamID = 0;
+                    }
+                }
+                else
+                {
+                    cameraStreamID = msignal->signalList->id;
+                }
+
+                if (cameraStreamID != 0)
+                {
+                    cameraStreamUnit = STREAM_GetStreamUnitWithID(cameraStreamID);
+                }
+                else
+                {
+                    cameraStreamUnit = NULL;
+                }
+
+                if (cameraStreamUnit != NULL)
+                {
+                    streamSignalUnits[numStreamSignals++] = cameraStreamUnit;
+                }
+            }
+        }
+    }
+
+    if (numStreamSignals != 0)
+    {
+        if (numStreamSignals == 1)
+        {
+            return streamSignalUnits[0];
+        }
+
+        for (i = 0; i < numStreamSignals; i++)
+        {
+            if (streamSignalUnits[i]->StreamUnitID != playerStreamUnitID)
+            {
+                return streamSignalUnits[i];
+            }
+        }
+
+        return NULL;
+    }
+
+    return NULL;
+}
 
 void COLLIDE_InstanceListWithSignals(InstanceList *instanceList)
 {
