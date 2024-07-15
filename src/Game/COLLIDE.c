@@ -986,8 +986,64 @@ void COLLIDE_InstanceTerrain(Instance *instance, Level *level)
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_LineWithSignals);
 
-void COLLIDE_InstanceTerrainSignal(Instance *instance, Level *level);
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceTerrainSignal);
+void COLLIDE_InstanceTerrainSignal(Instance *instance, Level *level)
+{
+    Model *model;
+    int numSignals;
+    int d;
+    MultiSignal *msignal;
+    SVector startPoint;
+    SVector endPoint;
+    MultiSignal *signalListArray[8];
+
+    model = instance->object->modelList[instance->currentModel];
+
+    if ((instance->matrix != NULL) && (instance->oldMatrix != NULL))
+    {
+        if (((instance->object->oflags2 & 0x80000)) && (INSTANCE_Query(instance, 1) != 130))
+        {
+            startPoint = *(SVector *)&instance->oldPos;
+
+            startPoint.z += 100;
+
+            endPoint = *(SVector *)&instance->position;
+
+            endPoint.z += 100;
+        }
+        else if ((model != NULL) && (model->numSegments >= 2))
+        {
+            startPoint.x = (short)instance->oldMatrix[1].t[0];
+            startPoint.y = (short)instance->oldMatrix[1].t[1];
+            startPoint.z = (short)instance->oldMatrix[1].t[2];
+
+            endPoint.x = (short)instance->matrix[1].t[0];
+            endPoint.y = (short)instance->matrix[1].t[1];
+            endPoint.z = (short)instance->matrix[1].t[2];
+        }
+        else
+        {
+            startPoint = *(SVector *)&instance->oldPos;
+
+            endPoint = *(SVector *)&instance->position;
+        }
+
+        numSignals = COLLIDE_LineWithSignals(&startPoint, &endPoint, signalListArray, 8, level);
+
+        for (d = 0; d < numSignals; d++)
+        {
+            msignal = signalListArray[d];
+
+            if (instance == gameTrackerX.playerInstance)
+            {
+                msignal->flags |= 0x1;
+            }
+
+            SIGNAL_HandleSignal(instance, msignal->signalList, 0);
+
+            EVENT_AddSignalToReset(msignal);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_CameraWithStreamSignals);
 

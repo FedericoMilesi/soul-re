@@ -4,6 +4,7 @@
 #include "common.h"
 #include "Game/FX.h"
 #include "Game/STREAM.h"
+#include "Game/SIGNAL.h"
 
 // size: 0xC
 typedef struct _TFace {
@@ -356,5 +357,6 @@ long COLLIDE_FindCollisionFaceNormal(CollideInfo *collideInfo, Normal *normal);
 int COLLIDE_PointAndHFace(SVector *newPos, SVector *oldPos, HFace *hface, Model *model, SVector *hfNormal);
 int COLLIDE_PointAndTfaceFunc(Terrain *terrain, BSPTree *bsp, SVector *orgNewPos, SVector *orgOldPos, TFace *tface, long ignoreAttr, long flags);
 long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level);
+long COLLIDE_LineWithSignals(SVector *startPoint, SVector *endPoint, MultiSignal **signalList, long maxSignals, Level *level);
 
 #endif
