@@ -13,6 +13,6 @@ typedef struct __Force {
 	short Friction;
 } Force;
 
-void SetExternalForce(Force *In, short x, short y, short z, int Space, int Friction);
+void SetExternalForce(Force *In, short x, short y, short z, short Space, int Friction);
 
 #endif

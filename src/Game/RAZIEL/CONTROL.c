@@ -90,7 +90,17 @@ void InitExternalForces(Force *Forces, int MaxForces)
     ExternalForces = Forces;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", SetExternalForce);
+//void SetExternalForce(Force *In, short x, short y, short z, int Space, int Friction)
+void SetExternalForce(Force *In, short x, short y, short z, short Space, int Friction)
+{
+    In->LinearForce.x = x;
+    In->LinearForce.y = y;
+    In->LinearForce.z = z;
+
+    In->Friction = Friction;
+
+    In->Type = Space;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", SetExternalTransitionForce);
 
