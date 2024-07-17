@@ -58,6 +58,68 @@ void PointAt(Instance *instance, Position *Target, Rotation *Rot1)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", ThrowSetFocusPoint);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", LimitRotation);
+void LimitRotation(Rotation *rot)
+{
+    rot->z &= 0xFFF;
+    rot->x &= 0xFFF;
+
+    while (rot->z >= 4097)
+    {
+        rot->z -= 4096;
+    }
+
+    if (rot->z > 0)
+    {
+        if (rot->z < 2048)
+        {
+            if (Raziel.throwData->maxZRotation < rot->z)
+            {
+                rot->z = Raziel.throwData->maxZRotation;
+            }
+        }
+        else if (rot->z < Raziel.throwData->minZRotation)
+        {
+            rot->z = Raziel.throwData->minZRotation;
+        }
+    }
+    else
+    {
+        rot->z += 4096;
+
+        if (rot->z < Raziel.throwData->minZRotation)
+        {
+            rot->z = Raziel.throwData->minZRotation;
+        }
+    }
+
+    while (rot->x >= 4097)
+    {
+        rot->x -= 4096;
+    }
+
+    if (rot->x > 0)
+    {
+        if (rot->x < 2048)
+        {
+            if (Raziel.throwData->maxXRotation < rot->x)
+            {
+                rot->x = Raziel.throwData->maxXRotation;
+            }
+        }
+        else if (rot->x < Raziel.throwData->minXRotation)
+        {
+            rot->x = Raziel.throwData->minXRotation;
+        }
+    }
+    else
+    {
+        rot->x += 4096;
+
+        if (rot->x < Raziel.throwData->minXRotation)
+        {
+            rot->x = Raziel.throwData->minXRotation;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerGrab);
