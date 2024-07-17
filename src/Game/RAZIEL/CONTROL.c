@@ -102,7 +102,16 @@ void SetExternalForce(Force *In, short x, short y, short z, short Space, int Fri
     In->Type = Space;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", SetExternalTransitionForce);
+void SetExternalTransitionForce(Force *in, Instance *instance, int time, int x, int y, int z)
+{
+    in->Type = 2;
+
+    in->LinearForce.x = (x - instance->xVel) / time;
+    in->LinearForce.y = (y - instance->yVel) / time;
+    in->LinearForce.z = (z - instance->zVel) / time;
+
+    in->Friction = (short)time;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", ProcessPhysics);
 
