@@ -173,4 +173,61 @@ void ProcessPhysics(Player *player, CharacterState *In, int CurrentSection, int 
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", ApplyExternalLocalForces);
+void ApplyExternalLocalForces(Player *player, Instance *instance, Force *Forces, int MaxForces, Vector *Out)
+{
+    int i;
+    int friction;
+
+    (void)player;
+    (void)instance;
+
+    Out->z = 0;
+    Out->y = 0;
+    Out->x = 0;
+
+    for (i = 0; i < MaxForces; i++)
+    {
+        if (Forces[i].Friction != 0)
+        {
+            if (Forces[i].Type == 0)
+            {
+                Out->x += Forces[i].LinearForce.x;
+                Out->y -= Forces[i].LinearForce.y;
+                Out->z += Forces[i].LinearForce.z;
+            }
+            else if (Forces[i].Type == 1)
+            {
+                Out->x += Forces[i].LinearForce.x;
+                Out->y += Forces[i].LinearForce.y;
+                Out->z += Forces[i].LinearForce.z;
+            }
+
+            if (Forces[i].Type == 2)
+            {
+                Out->x += Forces[i].LinearForce.x;
+                Out->y -= Forces[i].LinearForce.y;
+                Out->z += Forces[i].LinearForce.z;
+
+                Forces[i].Friction--;
+            }
+            else
+            {
+                friction = Forces[i].Friction;
+
+                Forces[i].LinearForce.x = (Forces[i].LinearForce.x * friction) < 0 ? (Forces[i].LinearForce.x * friction) + 4095 : Forces[i].LinearForce.x * friction;
+                Forces[i].LinearForce.x >>= 12;
+                Forces[i].LinearForce.y = (Forces[i].LinearForce.y * friction) < 0 ? (Forces[i].LinearForce.y * friction) + 4095 : Forces[i].LinearForce.y * friction;
+                Forces[i].LinearForce.y >>= 12;
+                Forces[i].LinearForce.z = (Forces[i].LinearForce.z * friction) < 0 ? (Forces[i].LinearForce.z * friction) + 4095 : Forces[i].LinearForce.z * friction;
+                Forces[i].LinearForce.z >>= 12;
+
+                if ((Forces[i].LinearForce.x == 0) && (Forces[i].LinearForce.y == 0) && (Forces[i].LinearForce.z == 0))
+                {
+                    Forces[i].Friction = 0;
+                }
+            }
+        }
+    }
+
+    Out->y = -Out->y;
+}
