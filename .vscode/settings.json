@@ -35,6 +35,7 @@
         "physobs.h": "c",
         "signal.h": "c",
         "sdk.h": "c",
-        "vm.h": "c"
+        "vm.h": "c",
+        "monlib.h": "c"
     }
 }

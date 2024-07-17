@@ -42,5 +42,7 @@ long MON_AnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, lo
 unsigned long MON_CheckTerrain(Instance *instance, BSPTree *bsp, TFace *tface);
 void MON_SetDefaults(Instance *instance);
 int MON_SetVelocityTowardsImpalingObject(Instance *instance, int checkOrientation);
+void MON_TurnOffSphereCollisions(Instance *instance);
+void MON_TurnOnSphereCollisions(Instance *instance);
 
 #endif

@@ -1776,7 +1776,105 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffSphereCollisions)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnSphereCollisions);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ProcessSpecialFade);
+void MON_ProcessSpecialFade(Instance *instance)
+{
+    MonsterVars *mv;
+    int currentFadeValue;
+    int targetFadeValue;
+    int fadeRate;
+    Instance *child;
+    int temp; // not from decls.h
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((instance->object->oflags & 0x80000))
+    {
+        if ((instance->currentMainState != MONSTER_STATE_DEAD) && (instance->currentMainState != MONSTER_STATE_GENERALDEATH))
+        {
+            if ((*(int *)&gameTrackerX.gameData.asmData.MorphTime == 1000) || ((gameTrackerX.gameData.asmData.MorphType == 1)
+                && (gameTrackerX.gameData.asmData.MorphTime != 1000))) // double-check
+            {
+                targetFadeValue = mv->targetFade;
+
+                currentFadeValue = 4096 - targetFadeValue;
+            }
+            else
+            {
+                currentFadeValue = mv->targetFade;
+
+                targetFadeValue = 4096 - currentFadeValue;
+            }
+
+            if (gameTrackerX.gameData.asmData.MorphTime < 333)
+            {
+                instance->fadeValue = currentFadeValue + (((4096 - currentFadeValue) * gameTrackerX.gameData.asmData.MorphTime) / 333);
+            }
+            else if (gameTrackerX.gameData.asmData.MorphTime > 666)
+            {
+                instance->fadeValue = (((targetFadeValue - 4096) * (gameTrackerX.gameData.asmData.MorphTime - 666)) / 333) + 4096;
+            }
+            else
+            {
+                instance->fadeValue = 4096;
+            }
+
+            if (instance->fadeValue < 0)
+            {
+                instance->fadeValue = 0;
+            }
+            else if (instance->fadeValue > 4096)
+            {
+                instance->fadeValue = 4096;
+            }
+
+            if (instance->fadeValue == 4096)
+            {
+                MON_TurnOffSphereCollisions(instance);
+
+                instance->flags |= 0x800;
+            }
+            else
+            {
+                MON_TurnOnSphereCollisions(instance);
+
+                instance->flags &= ~0x800;
+            }
+        }
+    }
+    else if ((mv->auxFlags & 0x8000000))
+    {
+        fadeRate = mv->fadeRate;
+
+        targetFadeValue = mv->targetFade;
+
+        temp = fadeRate * gameTrackerX.timeMult;
+
+        currentFadeValue = instance->fadeValue + (temp / 4096);
+
+        if (fadeRate > 0)
+        {
+            if (targetFadeValue < currentFadeValue)
+            {
+                currentFadeValue = targetFadeValue;
+
+                mv->auxFlags &= ~0x8000000;
+            }
+        }
+        else if (currentFadeValue < targetFadeValue)
+        {
+            currentFadeValue = targetFadeValue;
+
+            mv->auxFlags &= ~0x8000000;
+        }
+
+        instance->fadeValue = currentFadeValue;
+    }
+
+    for (child = instance->LinkChild; child != NULL; child = child->LinkSibling)
+    {
+        child->fadeValue = instance->fadeValue;
+    }
+}
 
 void MON_StartSpecialFade(Instance *instance, int fadeLevel, int fadeTime)
 {
