@@ -74,7 +74,21 @@ void SetDropPhysics(Instance *instance, Player *player)
     SetExternalForce(ExternalForces, 0, 4, -16, 0, 4096);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", InitExternalForces);
+void InitExternalForces(Force *Forces, int MaxForces)
+{
+    int i;
+
+    for (i = MaxForces - 1; i != 0; i--)
+    {
+        Forces[i].Friction = 0;
+
+        Forces[i].LinearForce.x = 0;
+        Forces[i].LinearForce.y = 0;
+        Forces[i].LinearForce.z = 0;
+    }
+
+    ExternalForces = Forces;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", SetExternalForce);
 
