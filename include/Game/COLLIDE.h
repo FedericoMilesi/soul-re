@@ -481,5 +481,6 @@ long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level);
 long COLLIDE_LineWithSignals(SVector *startPoint, SVector *endPoint, MultiSignal **signalList, long maxSignals, Level *level);
 void COLLIDE_MakeNormal(Terrain *terrain, TFace *tface, SVector *normal);
 long COLLIDE_SphereAndHFace(Sphere *sphere, Position *oldPos, HFaceInfo *hfaceInfo, SVector *intersect, long *edge);
+void COLLIDE_PointAndInstanceTrivialReject(PCollideInfo *pcollideInfo, Instance *instance);
 
 #endif
