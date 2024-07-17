@@ -38,6 +38,10 @@
         "vm.h": "c",
         "monlib.h": "c",
         "player.h": "c",
-        "control.h": "c"
+        "control.h": "c",
+        "raziel.h": "c",
+        "common.h": "c",
+        "instance.h": "c",
+        "anmctrlr.h": "c"
     }
 }

@@ -2,6 +2,7 @@
 #define _STATE_H_
 
 #include "common.h"
+#include "Game/G2/ANIMG2.h"
 
 // size: 0x8
 typedef struct __Event {
@@ -503,5 +504,6 @@ void G2EmulationInstanceInitSection(Instance *instance, int CurrentSection, void
 intptr_t SetPhysicsSwimData(int CheckDepth, SVector *iVelocity, int SwimDepth, int WadeDepth, int TreadDepth);
 intptr_t SetPhysicsDropHeightData(Position *offset, int dropOffset, int mode);
 intptr_t SetPhysicsLinkedMoveData(Instance *instance, int segment, SVector *posDelta, SVector *rotDelta);
+void G2EmulationSetInterpController_Vector(Instance *instance, long segment, long type, G2SVector3 *vec, int Frames, intptr_t Data);
 
 #endif

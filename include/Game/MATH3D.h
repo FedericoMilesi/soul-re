@@ -134,5 +134,8 @@ short MATH3D_FastAtan2(long y, long x);
 short MATH3D_AngleFromPosToPos(Position *from, Position *to);
 void AngleMoveToward(short *current_ptr, short destination, short step);
 void MATH3D_Sort3VectorCoords(long *a, long *b, long *c);
+void MATH3D_ZYXtoXYZ(Rotation *rot);
+void MATH3D_RotationFromPosToPos(Position *from, Position *to, Rotation *rot);
+int MATH3D_ConeDetect(SVector *pos, int arc, int elevation);
 
 #endif

@@ -3,6 +3,9 @@
 
 #include "common.h"
 #include "Game/GAMELOOP.h"
+#include "Game/PLAYER.h"
+
+EXTERN STATIC Player Raziel;
 
 void RAZIEL_DebugHurtRaziel();
 void RAZIEL_DebugHealthSetScale(long healthScale);
