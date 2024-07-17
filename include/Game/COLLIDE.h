@@ -358,6 +358,111 @@ typedef struct PandTFScratch {
     struct _Vector dpv;
 } PandTFScratch;
 
+// size: 0xC
+typedef struct _HVertex {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short z;
+    // offset: 0006
+    short normal;
+    // offset: 0008
+    long pad;
+} HVertex;
+
+typedef struct _HFaceInfo {
+    // offset: 0000
+    long flags;
+    // offset: 0004
+    long attr;
+    // offset: 0008 (12 bytes)
+    struct _HFace *hface;
+    // offset: 000C (8 bytes)
+    struct _SVector normal;
+    // offset: 0014 (12 bytes)
+    struct _HVertex *vertex0;
+    // offset: 0018 (12 bytes)
+    struct _HVertex *vertex1;
+    // offset: 001C (12 bytes)
+    struct _HVertex *vertex2;
+} HFaceInfo;
+
+// size: 0x8
+typedef struct _HNormal {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short z;
+    // offset: 0006
+    short pad;
+} HNormal;
+
+// size: 0xD4
+typedef struct SandTScratch {
+    // offset: 0000 (32 bytes)
+    struct MATRIX posMatrix;
+    // offset: 0020 (12 bytes)
+    struct _Vector dpv;
+    // offset: 002C (8 bytes)
+    struct _HNormal *normalList;
+    // offset: 0030 (48 bytes)
+    struct _CollideInfo collideInfo;
+    // offset: 0060 (32 bytes)
+    struct _HFaceInfo hfaceInfo;
+    // offset: 0080 (8 bytes)
+    struct _SVector midPoint;
+    // offset: 0088 (8 bytes)
+    struct _SVector spherePos;
+    // offset: 0090
+    void (*collideFunc)();
+    // offset: 0094 (668 bytes)
+    struct _Instance *instance;
+    // offset: 0098
+    long edge;
+    // offset: 009C
+    long in_spectral;
+    // offset: 00A0 (8 bytes)
+    struct _SVector oldPos;
+    // offset: 00A8
+    void *prim;
+    // offset: 00AC (8 bytes)
+    struct _SVector normal;
+    // offset: 00B4 (12 bytes)
+    struct _Sphere sphere;
+    // offset: 00C0
+    short result;
+    // offset: 00C2
+    short i;
+    // offset: 00C4
+    long collide_ignoreAttr;
+    // offset: 00C8
+    long collide_acceptAttr;
+    // offset: 00CC
+    long midRadius;
+    // offset: 00D0 (12 bytes)
+    struct _TVertex *vertexList;
+} SandTScratch;
+
+// size: 0xC
+typedef struct _BoundingBox {
+    // offset: 0000
+    short minX;
+    // offset: 0002
+    short minY;
+    // offset: 0004
+    short minZ;
+    // offset: 0006
+    short maxX;
+    // offset: 0008
+    short maxY;
+    // offset: 000A
+    short maxZ;
+} BoundingBox;
+
 TFace *COLLIDE_PointAndTerrainFunc(Terrain *terrain, PCollideInfo *pCollideInfo, int Flags, short *Backface_Flag, long ignoreAttr, long acceptAttr, LCollideInfo *lcolinfo);
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal);
 int COLLIDE_PointInTriangle2DPub(short *v0, short *v1, short *v2, short *point);
@@ -374,5 +479,7 @@ int COLLIDE_PointAndHFace(SVector *newPos, SVector *oldPos, HFace *hface, Model 
 int COLLIDE_PointAndTfaceFunc(Terrain *terrain, BSPTree *bsp, SVector *orgNewPos, SVector *orgOldPos, TFace *tface, long ignoreAttr, long flags);
 long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level);
 long COLLIDE_LineWithSignals(SVector *startPoint, SVector *endPoint, MultiSignal **signalList, long maxSignals, Level *level);
+void COLLIDE_MakeNormal(Terrain *terrain, TFace *tface, SVector *normal);
+long COLLIDE_SphereAndHFace(Sphere *sphere, Position *oldPos, HFaceInfo *hfaceInfo, SVector *intersect, long *edge);
 
 #endif

@@ -149,6 +149,15 @@
 
 #define gte_gpl12() gte_gpl(1)
 
+#define gte_ldsvrtrow0(r0) __asm__ ( \
+        "lw    $12, 0(%0);" \
+        "lw    $13, 4(%0);" \
+        "ctc2    $12, $0;" \
+        "ctc2    $13, $1" \
+        : : "r"(r0) \
+        : "$12", "$13" \
+    ) 
+
 // custom macro
 #define gte_ldlvnlsv( r0 ) __asm__ volatile (			\
 	"lhu	$12, 0( %0 );"					\

@@ -852,7 +852,368 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceList);
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndHFace);
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SAndT);
+long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level)
+{
+    SandTScratch *CSpad;
+    void **stack;
+    BSPNode *bspNode;
+    Terrain *terrain;
+    long curTree;
+    void (*collideFunc)(); // not from decls.h
+    short normal; // not from decls.h
+
+    CSpad = (SandTScratch *)getScratchAddr(114);
+
+    terrain = level->terrain;
+
+    stack = (void **)getScratchAddr(167);
+
+    if (gameTrackerX.gameData.asmData.MorphTime != 1000)
+    {
+        CSpad->in_spectral = 2;
+    }
+    else if (gameTrackerX.gameData.asmData.MorphType == 1)
+    {
+        CSpad->in_spectral = 1;
+    }
+    else
+    {
+        CSpad->in_spectral = 0;
+    }
+
+    CSpad->normalList = (HNormal *)terrain->normalList;
+    CSpad->vertexList = terrain->vertexList;
+
+    CSpad->collideFunc = scollideInfo->collideFunc;
+
+    CSpad->instance = scollideInfo->instance;
+
+    CSpad->prim = scollideInfo->prim;
+
+    CSpad->sphere = *scollideInfo->sphere;
+
+    CSpad->result = 0;
+
+    CSpad->collide_ignoreAttr = collide_ignoreAttr;
+    CSpad->collide_acceptAttr = collide_acceptAttr;
+
+    COPY_SVEC(SVector, &CSpad->oldPos, SVector, (SVector *)scollideInfo->oldPos);
+
+    CSpad->spherePos.x = CSpad->sphere.position.x;
+    CSpad->spherePos.y = CSpad->sphere.position.y;
+    CSpad->spherePos.z = CSpad->sphere.position.z;
+
+    CSpad->midPoint.x = CSpad->spherePos.x - CSpad->oldPos.x;
+    CSpad->midPoint.y = CSpad->spherePos.y - CSpad->oldPos.y;
+    CSpad->midPoint.z = CSpad->spherePos.z - CSpad->oldPos.z;
+
+    {
+        long a;
+        long b;
+        long c;
+
+        a = abs(CSpad->midPoint.x);
+        b = abs(CSpad->midPoint.y);
+        c = abs(CSpad->midPoint.z);
+
+        MATH3D_Sort3VectorCoords(&a, &b, &c);
+
+        CSpad->midRadius = (30 * c) + (12 * b) + (9 * a);
+    }
+
+    if (CSpad->midRadius == 0)
+    {
+        return 0;
+    }
+
+    CSpad->midPoint.x = (CSpad->spherePos.x + CSpad->oldPos.x) >> 1;
+    CSpad->midPoint.y = (CSpad->spherePos.y + CSpad->oldPos.y) >> 1;
+    CSpad->midPoint.z = (CSpad->spherePos.z + CSpad->oldPos.z) >> 1;
+
+    CSpad->midRadius = (CSpad->midRadius / 2) + CSpad->sphere.radius;
+
+    if (CSpad->in_spectral == 2)
+    {
+        CSpad->midRadius += 2048;
+    }
+
+    for (curTree = 0; curTree < terrain->numBSPTrees; curTree++)
+    {
+        BSPTree *bsp;
+
+        bsp = &terrain->BSPTreeArray[curTree];
+
+        if ((((bsp->ID >= 0) && ((!(bsp->flags & 0x4000)) || (gameTrackerX.raziel_collide_override != 0)))
+            && ((!(bsp->flags & 0x2000)) || ((unsigned char)gameTrackerX.monster_collide_override != 0)))
+        && ((!(bsp->flags & 0x102)) || (((bsp->flags & 0xE0)) && ((INSTANCE_Query(CSpad->instance, 1) & 0x2)))))
+        {
+            CSpad->collideInfo.bspID = bsp->ID;
+
+            SUB_SVEC(SVector, &CSpad->oldPos, SVector, &CSpad->oldPos, Position, &bsp->globalOffset);
+            SUB_SVEC(SVector, &CSpad->midPoint, SVector, &CSpad->midPoint, Position, &bsp->globalOffset);
+            SUB_SVEC(Position, &CSpad->sphere.position, Position, &CSpad->sphere.position, Position, &bsp->globalOffset);
+
+            CSpad->posMatrix.m[0][0] = CSpad->sphere.position.x;
+            CSpad->posMatrix.m[0][1] = CSpad->sphere.position.y;
+            CSpad->posMatrix.m[0][2] = CSpad->sphere.position.z;
+
+            CSpad->posMatrix.m[1][0] = CSpad->oldPos.x;
+            CSpad->posMatrix.m[1][1] = CSpad->oldPos.y;
+            CSpad->posMatrix.m[1][2] = CSpad->oldPos.z;
+
+            *stack = stack;
+
+            SetRotMatrix(&CSpad->posMatrix);
+
+            *++stack = bsp->bspRoot;
+
+            while (*stack != stack)
+            {
+                bspNode = (BSPNode *)*stack--;
+
+                if ((bspNode->flags & 0x2))
+                {
+                    SVector *point;
+                    BoundingBox *box;
+                    int temp; // not from decls.h
+
+                    box = (BoundingBox *)&bspNode->d;
+
+                    point = (SVector *)&CSpad->midPoint;
+
+                    temp = (point->x - (short)CSpad->midRadius < box->maxX) && (point->x + (short)CSpad->midRadius > box->minX)
+                        && (point->y - (short)CSpad->midRadius < box->maxY) && (point->y + (short)CSpad->midRadius > box->minY)
+                        && (point->z - (short)CSpad->midRadius < box->maxZ) && (point->z + (short)CSpad->midRadius > box->minZ);
+
+                    if (temp != 0)
+                    {
+                        TFace *tface;
+
+                        *(unsigned int *)&CSpad->posMatrix.m[0][0] = *(unsigned int *)&CSpad->sphere.position.x;
+                        CSpad->posMatrix.m[0][2] = CSpad->sphere.position.z;
+
+                        gte_ldsvrtrow0(&CSpad->posMatrix);
+
+                        for (CSpad->i = bspNode->c, tface = *(TFace **)&bspNode->a; CSpad->i != 0; CSpad->i--, tface++)
+                        {
+                            if (((!(tface->attr & CSpad->collide_ignoreAttr)) || ((tface->attr & CSpad->collide_acceptAttr)))
+                            && ((tface->textoff == 0xFFFF) || (!(((TextureFT3 *)((char *)terrain->StartTextureList + tface->textoff))->attr & 0x2000)))
+                            && (!(tface->attr & 0x8)))
+                            {
+                                if ((CSpad->in_spectral == 2) && (tface->normal != terrain->morphNormalIdx[(int)(tface - terrain->faceList)]))
+                                {
+                                    COLLIDE_MakeNormal(terrain, (TFace *)tface, &CSpad->normal);
+                                }
+                                else
+                                {
+                                    short *nrmlArray;
+                                    SVector *nrml;
+                                    short *sPtr;
+
+                                    normal = (short)tface->normal;
+
+                                    nrmlArray = (short *)CSpad->normalList;
+
+                                    nrml = &CSpad->normal;
+
+                                    if (normal >= 0)
+                                    {
+                                        sPtr = &nrmlArray[normal * 3];
+
+                                        nrml->x = *sPtr++ & 0x1FFF;
+                                        nrml->y = *sPtr++;
+                                        nrml->z = *sPtr;
+                                    }
+                                    else
+                                    {
+                                        sPtr = &nrmlArray[-normal * 3];
+
+                                        nrml->x = -(*sPtr++ & 0x1FFF);
+                                        nrml->y = -*sPtr++;
+                                        nrml->z = -*sPtr;
+                                    }
+                                }
+
+                                {
+                                    SVector *vertex0;
+
+                                    vertex0 = (SVector *)&CSpad->vertexList[tface->face.v0];
+
+                                    gte_ldv2_ext(vertex0);
+                                    gte_ldv0(&CSpad->normal);
+                                    gte_nrtv0();
+                                    gte_stlvnl(&CSpad->dpv);
+
+                                    if ((CSpad->dpv.x <= CSpad->dpv.y) && ((CSpad->dpv.x - CSpad->dpv.z) < CSpad->sphere.radius)
+                                    && ((CSpad->dpv.y - CSpad->dpv.z) >= -CSpad->sphere.radius))
+                                    {
+                                        CSpad->hfaceInfo.hface = (HFace *)tface;
+
+                                        CSpad->hfaceInfo.vertex0 = (HVertex *)vertex0;
+                                        CSpad->hfaceInfo.vertex1 = (HVertex *)&CSpad->vertexList[(short)tface->face.v1];
+                                        CSpad->hfaceInfo.vertex2 = (HVertex *)&CSpad->vertexList[(short)tface->face.v2];
+
+                                        CSpad->hfaceInfo.normal = *(SVector *)&CSpad->normal;
+
+                                        if (COLLIDE_SphereAndHFace(&CSpad->sphere, (Position *)&CSpad->oldPos, &CSpad->hfaceInfo,
+                                            (SVector *)&CSpad->collideInfo.point1, &CSpad->edge) != 0)
+                                        {
+                                            CSpad->collideInfo.flags = 0;
+
+                                            if (CSpad->edge != 0)
+                                            {
+                                                CSpad->collideInfo.flags = 0x4;
+                                            }
+                                            else
+                                            {
+                                                CSpad->collideInfo.flags = 0x8;
+                                            }
+
+                                            CSpad->collideInfo.type0 = 1;
+                                            CSpad->collideInfo.type1 = 3;
+
+                                            CSpad->collideInfo.inst0 = CSpad->instance;
+                                            CSpad->collideInfo.inst1 = bsp;
+
+                                            CSpad->collideInfo.level = level;
+
+                                            CSpad->collideInfo.segment = (char)scollideInfo->segment;
+
+                                            CSpad->collideInfo.prim0 = CSpad->prim;
+
+                                            CSpad->collideInfo.offset.x = CSpad->sphere.position.x - CSpad->posMatrix.m[0][0];
+                                            CSpad->collideInfo.offset.y = CSpad->sphere.position.y - CSpad->posMatrix.m[0][1];
+                                            CSpad->collideInfo.offset.z = CSpad->sphere.position.z - CSpad->posMatrix.m[0][2];
+
+                                            CSpad->collideInfo.prim1 = tface;
+
+                                            if (CSpad->instance != NULL)
+                                            {
+                                                CSpad->instance->collideInfo = &CSpad->collideInfo;
+
+                                                if (CSpad->collideFunc != NULL)
+                                                {
+                                                    collideFunc = CSpad->collideFunc;
+
+                                                    collideFunc(CSpad->instance, &gameTrackerX);
+                                                }
+                                            }
+
+                                            CSpad->result = 1;
+
+                                            *(unsigned int *)&CSpad->posMatrix.m[0][0] = *(unsigned int *)&CSpad->sphere.position.x;
+                                            CSpad->posMatrix.m[0][2] = CSpad->sphere.position.z;
+                                        }
+
+                                        SetRotMatrix(&CSpad->posMatrix);
+                                    }
+                                }
+                            }
+                        }
+
+                        *(unsigned int *)&CSpad->posMatrix.m[0][0] = *(unsigned int *)&CSpad->sphere.position.x;
+                        CSpad->posMatrix.m[0][2] = CSpad->sphere.position.z;
+
+                        gte_ldsvrtrow0(&CSpad->posMatrix);
+                    }
+                }
+                else
+                {
+                    int plane_front_error;
+                    int plane_back_error;
+
+                    gte_ldv0(&bspNode->a);
+                    gte_nrtv0();
+                    gte_stlvnl(&CSpad->dpv);
+
+                    CSpad->dpv.x -= bspNode->d;
+                    CSpad->dpv.y -= bspNode->d;
+
+                    if (CSpad->in_spectral != 0)
+                    {
+                        plane_front_error = bspNode->front_spectral_error;
+                        plane_back_error = bspNode->back_spectral_error;
+                    }
+                    else
+                    {
+                        plane_front_error = bspNode->front_material_error;
+                        plane_back_error = bspNode->back_material_error;
+                    }
+
+                    if ((CSpad->sphere.radius + plane_front_error) <= CSpad->dpv.y)
+                    {
+                        if ((CSpad->sphere.radius + plane_front_error) < CSpad->dpv.x)
+                        {
+                            if (bspNode->front != NULL)
+                            {
+                                *++stack = bspNode->front;
+                            }
+                        }
+                        else
+                        {
+                            if (bspNode->back != NULL)
+                            {
+                                *++stack = bspNode->back;
+                            }
+
+                            if (bspNode->front != NULL)
+                            {
+                                *++stack = bspNode->front;
+                            }
+                        }
+                    }
+                    else if ((plane_back_error - CSpad->sphere.radius) >= CSpad->dpv.y)
+                    {
+                        if ((plane_back_error - CSpad->sphere.radius) <= CSpad->dpv.x)
+                        {
+                            if (bspNode->front != NULL)
+                            {
+                                *++stack = bspNode->front;
+                            }
+                        }
+
+                        if (bspNode->back != NULL)
+                        {
+                            *++stack = bspNode->back;
+                        }
+                    }
+                    else if (CSpad->dpv.x >= CSpad->dpv.y)
+                    {
+                        if (bspNode->front != NULL)
+                        {
+                            *++stack = bspNode->front;
+                        }
+
+                        if (bspNode->back != NULL)
+                        {
+                            *++stack = bspNode->back;
+                        }
+                    }
+                    else
+                    {
+                        if (bspNode->back != NULL)
+                        {
+                            *++stack = bspNode->back;
+                        }
+
+                        if (bspNode->front != NULL)
+                        {
+                            *++stack = bspNode->front;
+                        }
+                    }
+                }
+            }
+
+            ADD_SVEC(SVector, &CSpad->oldPos, SVector, &CSpad->oldPos, Position, &bsp->globalOffset);
+            ADD_SVEC(SVector, &CSpad->midPoint, SVector, &CSpad->midPoint, Position, &bsp->globalOffset);
+            ADD_SVEC(Position, &CSpad->sphere.position, Position, &CSpad->sphere.position, Position, &bsp->globalOffset);
+        }
+    }
+
+    COPY_SVEC(Position, &scollideInfo->sphere->position, Position, &CSpad->sphere.position);
+
+    return CSpad->result;
+}
 
 long COLLIDE_SphereAndTerrain(SCollideInfo *scollideInfo, Level *level)
 {
