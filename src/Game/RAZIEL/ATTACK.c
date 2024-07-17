@@ -72,7 +72,7 @@ void LimitRotation(Rotation *rot)
     {
         if (rot->z < 2048)
         {
-            if (Raziel.throwData->maxZRotation < rot->z)
+            if (rot->z > Raziel.throwData->maxZRotation)
             {
                 rot->z = Raziel.throwData->maxZRotation;
             }
@@ -101,7 +101,7 @@ void LimitRotation(Rotation *rot)
     {
         if (rot->x < 2048)
         {
-            if (Raziel.throwData->maxXRotation < rot->x)
+            if (rot->x > Raziel.throwData->maxXRotation)
             {
                 rot->x = Raziel.throwData->maxXRotation;
             }
