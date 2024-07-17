@@ -31,10 +31,6 @@ void DeInitAlgorithmicWings(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ALGOCTRL", AlgorithmicWings);
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ALGOCTRL", AlgorithmicNeck);
-#else
 void AlgorithmicNeck(Instance *Player, Instance *Target)
 {
     Position From;
@@ -127,4 +123,3 @@ void AlgorithmicNeck(Instance *Player, Instance *Target)
 
     G2EmulationSetInterpController_Vector(Player, 17, 8, (G2SVector3 *)&Rot1, 3, 0);
 }
-#endif
