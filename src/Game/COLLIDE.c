@@ -707,7 +707,193 @@ void COLLIDE_PointAndInstance(PCollideInfo *pcollideInfo, Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndInstanceTrivialReject);
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndWorld);
+#else
+void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level)
+{
+    int i;
+    LCollideInfo lcol;
+    Instance *instance;
+    Level *thislevel;
+    TFace *tface;
+    int in_warpRoom;
+    Terrain *terrain;
+    InstanceList *instanceList;
+    StreamUnit *streamUnit;
+
+    in_warpRoom = 0;
+
+    pcollideInfo->type = 0;
+
+    if ((pcollideInfo->collideType & 0x1))
+    {
+        tface = NULL;
+
+        if ((level != NULL) && (MEMPACK_MemoryValidFunc((char *)level) != 0))
+        {
+            terrain = level->terrain;
+
+            tface = COLLIDE_PointAndTerrain(terrain, pcollideInfo, &lcol);
+
+            if (tface != NULL)
+            {
+                pcollideInfo->type = 3;
+
+                pcollideInfo->prim = tface;
+
+                pcollideInfo->inst = (Instance *)level;
+
+                pcollideInfo->segment = lcol.curTree;
+
+                if (gameTrackerX.gameData.asmData.MorphTime != 1000)
+                {
+                    COLLIDE_MakeNormal(terrain, tface, (SVector *)&pcollideInfo->wNormal);
+                }
+                else
+                {
+                    COLLIDE_GetNormal((short)tface->normal, &terrain->normalList->x, (SVector *)&pcollideInfo->wNormal);
+                }
+            }
+            else if ((STREAM_GetStreamUnitWithID(level->streamUnitID)->flags & 0x1))
+            {
+                in_warpRoom = 1;
+            }
+        }
+
+        if (tface == NULL)
+        {
+            streamUnit = &StreamTracker.StreamList[0];
+
+            for (i = 0; i < 16; i++, streamUnit++)
+            {
+                thislevel = streamUnit->level;
+
+                if ((streamUnit->used == 2) && (thislevel != level) && ((in_warpRoom == 0) || (!(streamUnit->flags & 0x1))))
+                {
+                    if (MEMPACK_MemoryValidFunc((char *)thislevel) != 0)
+                    {
+                        terrain = thislevel->terrain;
+
+                        tface = COLLIDE_PointAndTerrain(terrain, pcollideInfo, &lcol);
+
+                        if (tface != NULL)
+                        {
+                            pcollideInfo->type = 3;
+
+                            pcollideInfo->prim = tface;
+
+                            pcollideInfo->inst = (Instance *)thislevel;
+
+                            pcollideInfo->segment = lcol.curTree;
+
+                            if (gameTrackerX.gameData.asmData.MorphTime != 1000)
+                            {
+                                COLLIDE_MakeNormal(terrain, tface, (SVector *)&pcollideInfo->wNormal);
+                            }
+                            else
+                            {
+                                COLLIDE_GetNormal((short)tface->normal, &terrain->normalList->x, (SVector *)&pcollideInfo->wNormal);
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (tface == NULL)
+            {
+                pcollideInfo->type = 0;
+
+                pcollideInfo->prim = NULL;
+
+                pcollideInfo->inst = NULL;
+
+                pcollideInfo->wNormal.vx = 0;
+                pcollideInfo->wNormal.vy = 0;
+                pcollideInfo->wNormal.vz = 0;
+            }
+        }
+    }
+
+    instanceList = gameTrackerX.instanceList;
+
+    if ((pcollideInfo->collideType & 0x8))
+    {
+        for (i = 16; i < 32; i++)
+        {
+            instance = (Instance *)instanceList->group[i].next;
+
+            while (instance != NULL)
+            {
+                if (!(instance->flags2 & 0x24000000))
+                {
+                    COLLIDE_PointAndInstanceTrivialReject(pcollideInfo, instance);
+                }
+
+                instance = (Instance *)instance->node.next;
+            }
+        }
+    }
+    else if ((pcollideInfo->collideType & 0x10))
+    {
+        if ((pcollideInfo->collideType & 0x2))
+        {
+            for (i = 0; i < 8; i++)
+            {
+                instance = (Instance *)(&instanceList->group[stat_clddyna[i]])->next;
+
+                while (instance != NULL)
+                {
+                    if (!(instance->flags2 & 0x24000000))
+                    {
+                        COLLIDE_PointAndInstanceTrivialReject(pcollideInfo, instance);
+                    }
+
+                    instance = (Instance *)instance->node.next;
+                }
+            }
+        }
+
+        if ((pcollideInfo->collideType & 0x4))
+        {
+            for (i = 0; i < 8; i++)
+            {
+                instance = (Instance *)(&instanceList->group[dyna_clddyna[i]])->next;
+
+                while (instance != NULL)
+                {
+                    if (!(instance->flags2 & 0x24000000))
+                    {
+                        COLLIDE_PointAndInstanceTrivialReject(pcollideInfo, instance);
+                    }
+
+                    instance = (Instance *)instance->node.next;
+                }
+            }
+        }
+    }
+    else if ((pcollideInfo->collideType & 0x4))
+    {
+        for (i = 0; i < 8; i++)
+        {
+            instance = (Instance *)(&instanceList->group[dyna_clddyna[i]])->next;
+
+            while (instance != NULL)
+            {
+                if (!(instance->flags2 & 0x24000000))
+                {
+                    COLLIDE_PointAndInstanceTrivialReject(pcollideInfo, instance);
+                }
+
+                instance = (Instance *)instance->node.next;
+            }
+        }
+    }
+}
+#endif
 
 long COLLIDE_ClosestPointInBoxToPoint(Position *boxPoint, HBox *hbox, SVector *point)
 {
