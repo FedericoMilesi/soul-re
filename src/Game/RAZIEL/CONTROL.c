@@ -1,7 +1,17 @@
 #include "common.h"
+#include "Game/RAZIEL/CONTROL.h"
 #include "Game/PLAYER.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", SetPhysics);
+EXTERN STATIC Force *ExternalForces;
+
+void SetPhysics(Instance *instance, short gravity, long x, long y, long z)
+{
+    SetExternalForce(ExternalForces, 0, 0, gravity, 0, 4096);
+
+    instance->xVel = x;
+    instance->yVel = y;
+    instance->zVel = z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", ResetPhysics);
 
