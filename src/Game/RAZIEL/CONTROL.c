@@ -66,7 +66,13 @@ void SetImpulsePhysics(Instance *instance, Player *player)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", SetDropPhysics);
+void SetDropPhysics(Instance *instance, Player *player)
+{
+    (void)instance;
+    (void)player;
+
+    SetExternalForce(ExternalForces, 0, 4, -16, 0, 4096);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", InitExternalForces);
 
