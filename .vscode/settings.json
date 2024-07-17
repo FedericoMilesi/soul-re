@@ -42,6 +42,7 @@
         "raziel.h": "c",
         "common.h": "c",
         "instance.h": "c",
-        "anmctrlr.h": "c"
+        "anmctrlr.h": "c",
+        "mainvm.h": "c"
     }
 }
