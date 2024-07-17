@@ -37,6 +37,52 @@ typedef struct __SensoryData {
     unsigned long heldClass;
 } SensoryData;
 
+// size: 0x20
+typedef struct __ThrowItem {
+    // offset: 0000
+    unsigned char prepAnim;
+    // offset: 0001
+    unsigned char prepAnimFramesIn;
+    // offset: 0002
+    unsigned char prepAnimAlphaIn;
+    // offset: 0003
+    unsigned char coilAnim;
+    // offset: 0004
+    unsigned char coilAnimFramesIn;
+    // offset: 0005
+    unsigned char coilAnimAlphaIn;
+    // offset: 0006
+    unsigned char throwAnim;
+    // offset: 0007
+    unsigned char throwAnimFramesInFactor;
+    // offset: 0008
+    unsigned char throwFrameToLaunch;
+    // offset: 0009
+    unsigned char framesOut;
+    // offset: 000A
+    short launchPointX;
+    // offset: 000C
+    short launchPointY;
+    // offset: 000E
+    short launchPointZ;
+    // offset: 0010
+    short maxXRotation;
+    // offset: 0012
+    short minXRotation;
+    // offset: 0014
+    short maxZRotation;
+    // offset: 0016
+    short minZRotation;
+    // offset: 0018
+    short velocity;
+    // offset: 001A
+    short gravity;
+    // offset: 001C
+    short coilRot;
+    // offset: 001E
+    short selfAdjustingFlag;
+} ThrowItem;
+
 // size: 0x5B8
 typedef struct __Player {
     // offset: 0000
