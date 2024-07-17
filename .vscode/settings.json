@@ -37,6 +37,7 @@
         "sdk.h": "c",
         "vm.h": "c",
         "monlib.h": "c",
-        "player.h": "c"
+        "player.h": "c",
+        "control.h": "c"
     }
 }

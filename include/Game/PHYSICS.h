@@ -13,5 +13,7 @@ int PhysicsCheckDropHeight(Instance *instance, int Data, int Mode);
 void PhysicsSetVelFromZRot(Instance *instance, short angle, long magnitude);
 void PhysicsDefaultLinkedMoveResponse(Instance *instance, evPhysicsLinkedMoveData *Data, int updateTransforms);
 void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Data);
+void PhysicsMoveLocalZClamp(Instance *instance, long segment, long time, long clamp);
+void PHYSICS_StopIfCloseToTarget(Instance *instance, int x, int y, int z);
 
 #endif

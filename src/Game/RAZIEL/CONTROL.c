@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/RAZIEL/CONTROL.h"
 #include "Game/PLAYER.h"
+#include "Game/PHYSICS.h"
 
 EXTERN STATIC Force *ExternalForces;
 
@@ -113,6 +114,63 @@ void SetExternalTransitionForce(Force *in, Instance *instance, int time, int x, 
     in->Friction = (short)time;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", ProcessPhysics);
+void ProcessPhysics(Player *player, CharacterState *In, int CurrentSection, int Mode)
+{
+    int time;
+    Instance *instance;
+
+    (void)CurrentSection;
+
+    instance = In->CharacterInstance;
+
+    if (In->CharacterInstance->matrix != NULL)
+    {
+        time = (In->CharacterInstance->anim.section[0].speedAdjustment * gameTrackerX.timeMult) / 4096;
+
+        switch (Mode)
+        {
+        case 0:
+            ApplyExternalLocalForces(player, In->CharacterInstance, ExternalForces, 4, (Vector *)&In->CharacterInstance->xAccl);
+
+            PhysicsMoveLocalZClamp(In->CharacterInstance, player->RotationSegment, time, 0);
+            break;
+        case 4:
+            ApplyExternalLocalForces(player, In->CharacterInstance, ExternalForces, 4, (Vector *)&In->CharacterInstance->xAccl);
+
+            PhysicsMoveLocalZClamp(In->CharacterInstance, player->RotationSegment, time, 0);
+
+            PHYSICS_StopIfCloseToTarget(In->CharacterInstance, 0, 0, 0);
+
+            if ((In->CharacterInstance->xAccl == 0) && (In->CharacterInstance->yAccl == 0) && (In->CharacterInstance->zAccl == 0))
+            {
+                SetExternalForce(ExternalForces, 0, 0, 0, 0, 0);
+            }
+
+            break;
+        case 5:
+            PhysicsMoveLocalZClamp(In->CharacterInstance, player->RotationSegment, time, 0);
+
+            PHYSICS_StopIfCloseToTarget(instance, 0, 0, player->swimTargetSpeed);
+
+            if ((instance->xAccl == 0) && (instance->yAccl == 0) && (instance->zAccl == 0))
+            {
+                INSTANCE_Post(instance, 0x100011, player->swimTargetSpeed);
+            }
+
+            break;
+        case 6:
+            PhysicsMoveLocalZClamp(In->CharacterInstance, player->RotationSegment, time, 1);
+
+            PHYSICS_StopIfCloseToTarget(instance, 0, 0, player->swimTargetSpeed);
+
+            if ((instance->xAccl == 0) && (instance->yAccl == 0) && (instance->zAccl == 0))
+            {
+                INSTANCE_Post(instance, 0x100011, player->swimTargetSpeed);
+            }
+
+            break;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", ApplyExternalLocalForces);
