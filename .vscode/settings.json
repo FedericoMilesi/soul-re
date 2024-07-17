@@ -36,6 +36,7 @@
         "signal.h": "c",
         "sdk.h": "c",
         "vm.h": "c",
-        "monlib.h": "c"
+        "monlib.h": "c",
+        "player.h": "c"
     }
 }
