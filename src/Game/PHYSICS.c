@@ -74,7 +74,7 @@ void PHYSICS_CheckLineInWorldMask(Instance *instance, PCollideInfo *pcollideInfo
     ResetNoPtCollideInFamily(instance);
 }
 
-int PhysicsCheckLinkedMove(Instance *instance, int Data, short Mode)
+int PhysicsCheckLinkedMove(Instance *instance, intptr_t Data, short Mode)
 {
     evPhysicsLinkedMoveData *ptr;
     Instance *on;
