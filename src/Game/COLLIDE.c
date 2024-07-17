@@ -1034,7 +1034,102 @@ void COLLIDE_Instances(Instance *instance1, Instance *instance2)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_InstanceList);
+void COLLIDE_InstanceList(InstanceList *instanceList)
+{
+    Instance *instance;
+    Instance *instance2;
+    Instance *playerInstance;
+    int i;
+    int j;
+
+    playerInstance = gameTrackerX.playerInstance;
+
+    if (gameTrackerX.cheatMode != 1)
+    {
+        for (i = 16; i < 32; i++)
+        {
+            instance = (Instance *)instanceList->group[i].next;
+
+            while (instance != NULL)
+            {
+                if ((instance->flags2 & 0x24040000) == 0)
+                {
+                    COLLIDE_Instances(instance, playerInstance);
+                }
+
+                instance = (Instance *)instance->node.next;
+            }
+        }
+    }
+
+    for (i = 0; i < 8; i++)
+    {
+        instance = (Instance *)(instanceList->group + dyna_clddyna[i])->next;
+
+        while (instance != NULL)
+        {
+            if (!(instance->flags2 & 0x24040000))
+            {
+                instance2 = (Instance *)instance->node.next;
+
+                while (instance2 != NULL)
+                {
+                    if (!(instance2->flags2 & 0x24040000))
+                    {
+                        COLLIDE_Instances(instance, instance2);
+                    }
+
+                    instance2 = (Instance *)instance2->node.next;
+                }
+
+                for (j = i + 1; j < 8; j++)
+                {
+                    instance2 = (Instance *)(instanceList->group + dyna_clddyna[j])->next;
+
+                    while (instance2 != NULL)
+                    {
+                        if (!(instance2->flags2 & 0x24040000))
+                        {
+                            COLLIDE_Instances(instance, instance2);
+                        }
+
+                        instance2 = (Instance *)instance2->node.next;
+                    }
+                }
+            }
+
+            instance = (Instance *)instance->node.next;
+        }
+    }
+
+    for (i = 0; i < 8; i++)
+    {
+        instance = (Instance *)(instanceList->group + dyna_cldstat[i])->next;
+
+        while (instance != NULL)
+        {
+            if (!(instance->flags2 & 0x24040000))
+            {
+                for (j = 0; j < 8; j++)
+                {
+                    instance2 = (Instance *)(instanceList->group + stat_clddyna[j])->next;
+
+                    while (instance2 != NULL)
+                    {
+                        if (!(instance2->flags2 & 0x24040000))
+                        {
+                            COLLIDE_Instances(instance, instance2);
+                        }
+
+                        instance2 = (Instance *)instance2->node.next;
+                    }
+                }
+            }
+
+            instance = (Instance *)instance->node.next;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndHFace);
 
