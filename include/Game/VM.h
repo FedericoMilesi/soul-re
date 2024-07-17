@@ -3,6 +3,40 @@
 
 #include "common.h"
 
+// size: 0x6
+typedef struct _VMOffset {
+    // offset: 0000
+    short dx;
+    // offset: 0002
+    short dy;
+    // offset: 0004
+    short dz;
+} VMOffset;
+
+// size: 0x3
+typedef struct _VMColorOffset {
+    // offset: 0000
+    char dr;
+    // offset: 0001
+    char dg;
+    // offset: 0002
+    char db;
+} VMColorOffset;
+
+// size: 0xC
+typedef struct _VMOffsetTable {
+    // offset: 0000
+    long numVMOffsets;
+    // offset: 0004 (6 bytes)
+    // size: 0x6
+    union {
+        // offset: 0000 (6 bytes)
+        struct _VMOffset moveOffsets;
+        // offset: 0000 (3 bytes)
+        struct _VMColorOffset colorOffsets;
+    } offsets;
+} VMOffsetTable;
+
 // size: 0x3C
 typedef struct _VMObject {
     // offset: 0000
@@ -42,7 +76,5 @@ typedef struct _VMObject {
     // offset: 0038
     char *name;
 } VMObject;
-
-typedef struct _VMOffsetTable VMOffsetTable;
 
 #endif

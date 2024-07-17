@@ -34,6 +34,7 @@
         "state.h": "c",
         "physobs.h": "c",
         "signal.h": "c",
-        "sdk.h": "c"
+        "sdk.h": "c",
+        "vm.h": "c"
     }
 }
