@@ -33,7 +33,14 @@ void ResetPhysics(Instance *instance, short gravity)
     instance->zAccl = gravity;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", SetDampingPhysics);
+void SetDampingPhysics(Instance *instance, int damping)
+{
+    instance->xAccl = -((instance->xVel * damping) / 4096);
+    instance->yAccl = -((instance->yVel * damping) / 4096);
+    instance->zAccl = -((instance->zVel * damping) / 4096);
+
+    SetExternalForce(ExternalForces, (short)instance->xAccl, (short)instance->yAccl, (short)instance->zAccl, 0, 4096);
+}
 
 void SetImpulsePhysics(Instance *instance, Player *player)
 {
