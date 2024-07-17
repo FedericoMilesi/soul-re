@@ -381,7 +381,7 @@ void MonsterCollide(Instance *instance, GameTracker *gameTracker)
                             collideInfo->offset.x += data->normal.x >> 10;
                             collideInfo->offset.y += data->normal.y >> 10;
 
-                            INSTANCE_Post(instance, 0x1000007, (int)data);
+                            INSTANCE_Post(instance, 0x1000007, (intptr_t)data);
                         }
 
                         {
