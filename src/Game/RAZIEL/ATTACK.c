@@ -3,6 +3,8 @@
 #include "Game/RAZIEL/RAZIEL.h"
 #include "Game/MATH3D.h"
 #include "Game/G2/ANMCTRLR.h"
+#include "Game/CAMERA.h"
+#include "Game/RAZIEL/RAZLIB.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerDecodeHold);
 
@@ -56,7 +58,47 @@ void PointAt(Instance *instance, Position *Target, Rotation *Rot1)
     G2Anim_SetController_Vector(&instance->anim, 14, 14, (G2SVector3 *)Rot1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", ThrowSetFocusPoint);
+void ThrowSetFocusPoint(Instance *instance, Rotation *rot)
+{
+    MATRIX *pTempMat;
+    Instance *weaponInstance;
+    SVECTOR v1;
+    VECTOR v4;
+
+    rot->x = -rot->x;
+
+    pTempMat = theCamera.core.cwTransform2;
+
+    weaponInstance = razGetHeldWeapon();
+
+    if ((weaponInstance != NULL) && (weaponInstance->matrix != NULL))
+    {
+        v1.vx = 0;
+        v1.vy = 0;
+        v1.vz = Raziel.throwData->velocity;
+
+        ApplyMatrix(pTempMat, &v1, &v4);
+
+        Raziel.throwTarget.x = (short)v4.vx;
+        Raziel.throwTarget.y = (short)v4.vy;
+        Raziel.throwTarget.z = (short)v4.vz;
+
+        if (G2Anim_IsControllerActive(&instance->anim, 14, 14) == G2FALSE)
+        {
+            G2Anim_EnableController(&instance->anim, 14, 14);
+        }
+
+        MATH3D_ZYXtoXYZ(rot);
+
+        G2Anim_SetController_Vector(&instance->anim, 14, 14, (G2SVector3 *)rot);
+
+        v4.vx = weaponInstance->matrix[1].t[0];
+        v4.vy = weaponInstance->matrix[1].t[1];
+        v4.vz = weaponInstance->matrix[1].t[2];
+
+        CAMERA_SetLookFocusAndDistance(&theCamera, &v4, PlayerData->throwManualDistance);
+    }
+}
 
 void LimitRotation(Rotation *rot)
 {
