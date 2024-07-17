@@ -13,7 +13,25 @@ void SetPhysics(Instance *instance, short gravity, long x, long y, long z)
     instance->zVel = z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", ResetPhysics);
+void ResetPhysics(Instance *instance, short gravity)
+{
+    int i;
+
+    SetExternalForce(ExternalForces, 0, 0, gravity, 0, 4096);
+
+    for (i = 1; i < 4; i++)
+    {
+        SetExternalForce(&ExternalForces[i], 0, 0, 0, 0, 0);
+    }
+
+    instance->xVel = 0;
+    instance->yVel = 0;
+    instance->zVel = 0;
+
+    instance->xAccl = 0;
+    instance->yAccl = 0;
+    instance->zAccl = gravity;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/CONTROL", SetDampingPhysics);
 
