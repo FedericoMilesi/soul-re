@@ -652,7 +652,7 @@ int MON_OnGround(Instance *instance)
 
     data.slipSlope = 3200;
 
-    return PhysicsCheckGravity(instance, (int)&data.UpperOffset, (!(mv->mvFlags & 0x800)) << 2);
+    return PhysicsCheckGravity(instance, (intptr_t)&data.UpperOffset, (!(mv->mvFlags & 0x800)) << 2);
 }
 
 void MON_ApplyPhysics(Instance *instance)
