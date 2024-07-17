@@ -7,7 +7,59 @@
 
 EXTERN STATIC int AlgoControlFlag;
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ALGOCTRL", InitAlgorithmicWings);
+void InitAlgorithmicWings(Instance *instance)
+{
+    G2EulerAngles Rot;
+    unsigned char i;
+
+    if (!(AlgoControlFlag & 0x1))
+    {
+        if (instance->matrix == NULL)
+        {
+            INSTANCE_Post(instance, 0x100006, 0);
+        }
+        else
+        {
+            for (i = 51; i < 54; i++)
+            {
+                if (instance->matrix == NULL)
+                {
+                    Rot.z = 0;
+                    Rot.y = 0;
+                    Rot.x = 0;
+                }
+                else
+                {
+                    G2EulerAngles_FromMatrix(&Rot, &instance->anim.segMatrices[i - 1], 21);
+                }
+
+                G2Anim_EnableController(&instance->anim, i, 8);
+
+                G2EmulationSetInterpController_Vector(instance, i, 8, (G2SVector3 *)&Rot, (i - 50) * 3, 2);
+            }
+
+            for (i = 59; i < 62; i++)
+            {
+                if (instance->matrix == NULL)
+                {
+                    Rot.z = 0;
+                    Rot.y = 0;
+                    Rot.x = 0;
+                }
+                else
+                {
+                    G2EulerAngles_FromMatrix(&Rot, &instance->anim.segMatrices[i - 1], 21);
+                }
+
+                G2Anim_EnableController(&instance->anim, i, 8);
+
+                G2EmulationSetInterpController_Vector(instance, i, 8, (G2SVector3 *)&Rot, (i - 58) * 3, 2);
+            }
+
+            AlgoControlFlag |= 0x1;
+        }
+    }
+}
 
 void DeInitAlgorithmicWings(Instance *instance)
 {
