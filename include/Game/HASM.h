@@ -9,5 +9,6 @@ short MATH3D_racos_S(long a);
 long COLLIDE_IntersectLineAndPlane_S(SVector *planePoint, Position *oldPos, Position *position, SVector *normal, long z);
 int CheckVolatile(void *);
 void G2Quat_FromEuler_S(G2Quat *quatInfo, G2EulerAngles *preQuat);
+void COLLIDE_NearestPointOnLine_S(SVector *linePoint, SVECTOR *oldPoint, SVECTOR *newPoint, Position *position);
 
 #endif
