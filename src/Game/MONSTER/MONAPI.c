@@ -640,7 +640,7 @@ void MonsterMessage(Instance *instance, unsigned long message, unsigned long dat
                 instance->rotation.z = ((evPositionData *)data)->z;
                 return;
             case 0x4000E:
-                if (data != NULL)
+                if ((uintptr_t *)data != NULL)
                 {
                     mv->mvFlags |= 0x4;
                 }
@@ -656,7 +656,7 @@ void MonsterMessage(Instance *instance, unsigned long message, unsigned long dat
 
                 return;
             case 0x40013:
-                if (data != NULL)
+                if ((uintptr_t *)data != NULL)
                 {
                     mv->mvFlags |= 0x80000;
                 }
