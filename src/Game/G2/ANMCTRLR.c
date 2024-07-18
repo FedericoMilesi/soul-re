@@ -49,7 +49,37 @@ void G2Anim_DisableController(G2Anim *anim, int segNumber, int type)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_InterpDisableController);
+void G2Anim_InterpDisableController(G2Anim *anim, int segNumber, int type, short duration)
+{
+    G2SVector3 zeroVector;
+    G2Quat targetQuat;
+    G2AnimController *controller;
+
+    memset(&zeroVector, 0, sizeof(G2SVector3));
+
+    if ((duration == 0) || (type == 32))
+    {
+        G2Anim_DisableController(anim, segNumber, type);
+    }
+
+    controller = _G2AnimControllerST_FindInList(segNumber, type, &anim->controllerList);
+
+    if (controller != NULL)
+    {
+        if (controller->type == 8)
+        {
+            _G2AnimController_GetSimpleWorldRotQuat(controller, anim, &targetQuat);
+
+            G2Anim_SetInterpController_Quat(anim, segNumber, type, &targetQuat, duration);
+        }
+        else
+        {
+            G2Anim_SetInterpController_Vector(anim, segNumber, type, &zeroVector, duration);
+        }
+
+        controller->flags |= 0x8000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_IsControllerActive);
 
