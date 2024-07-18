@@ -127,7 +127,16 @@ void G2Anim_SetControllerAngleOrder(G2Anim *anim, int segNumber, int type, int o
     controller->flags = (controller->flags & 0xFF00) | order;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_SetController_Vector);
+void G2Anim_SetController_Vector(G2Anim *anim, int segNumber, int type, G2SVector3 *vector)
+{
+    G2AnimController *controller;
+
+    controller = _G2Anim_FindController(anim, segNumber, type);
+
+    controller->data.vector.base = *vector;
+
+    controller->flags = (unsigned char)controller->flags;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_SetInterpController_Vector);
 
