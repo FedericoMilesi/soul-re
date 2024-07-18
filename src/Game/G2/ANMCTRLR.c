@@ -1,6 +1,10 @@
 #include "common.h"
+#include "Game/G2/ANMCTRLR.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_AttachControllerToSeg);
+void G2Anim_AttachControllerToSeg(G2Anim *anim, int segNumber, int type)
+{
+    _G2AnimController_InsertIntoList(_G2AnimController_Create(segNumber, type), &anim->controllerList);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_DetachControllerFromSeg);
 
