@@ -57,5 +57,6 @@ G2AnimController *_G2AnimControllerST_RemoveFromList(int segNumber, int type, un
 G2AnimController *_G2AnimControllerST_FindInList(int segNumber, int type, unsigned short *listPtr);
 void _G2AnimController_GetSimpleWorldRotQuat(G2AnimController *controller, G2Anim *anim, G2Quat *quat);
 void G2Anim_SetInterpController_Quat(G2Anim *anim, int segNumber, int type, G2Quat *quat, int duration);
+G2AnimController *_G2Anim_FindController(G2Anim *anim, int segNumber, int type);
 
 #endif

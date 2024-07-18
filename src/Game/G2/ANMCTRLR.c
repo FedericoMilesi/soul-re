@@ -113,7 +113,10 @@ G2Bool G2Anim_IsControllerInterpolating(G2Anim *anim, int segNumber, int type)
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_GetControllerCurrentInterpVector);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_SetControllerCallbackData);
+void G2Anim_SetControllerCallbackData(G2Anim *anim, int segNumber, int type, void *callbackData)
+{
+    _G2Anim_FindController(anim, segNumber, type)->callbackData = callbackData;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_SetControllerAngleOrder);
 
