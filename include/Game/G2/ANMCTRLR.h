@@ -53,5 +53,6 @@ void _G2AnimController_InsertIntoList(G2AnimController *controller, unsigned sho
 G2AnimController *_G2AnimController_Create(int segNumber, int type);
 G2AnimController *_G2AnimControllerST_FindPtrInList(int segNumber, int type, unsigned short **listPtrPtr);
 G2AnimController *_G2AnimController_Destroy(G2AnimController *controller);
+G2AnimController *_G2AnimControllerST_RemoveFromList(int segNumber, int type, unsigned short *listPtr);
 
 #endif

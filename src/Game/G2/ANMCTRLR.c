@@ -37,7 +37,17 @@ void G2Anim_DetachControllerFromSeg(G2Anim *anim, int segNumber, int type)
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_EnableController);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_DisableController);
+void G2Anim_DisableController(G2Anim *anim, int segNumber, int type)
+{
+    G2AnimController *controller;
+
+    controller = _G2AnimControllerST_RemoveFromList(segNumber, type, &anim->controllerList);
+
+    if (controller != NULL)
+    {
+        _G2AnimController_InsertIntoList(controller, &anim->disabledControllerList);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_InterpDisableController);
 
