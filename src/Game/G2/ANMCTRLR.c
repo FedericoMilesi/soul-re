@@ -35,7 +35,41 @@ void G2Anim_DetachControllerFromSeg(G2Anim *anim, int segNumber, int type)
     *controllerNextPtr = controller - _controllerPool.blockPool;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_EnableController);
+void G2Anim_EnableController(G2Anim *anim, int segNumber, int type)
+{
+    G2AnimController *controller;
+    G2Matrix *segMatrix;
+
+    controller = _G2AnimControllerST_RemoveFromList(segNumber, type, &anim->disabledControllerList);
+
+    if (controller != NULL)
+    {
+        controller->duration = 0;
+
+        controller->elapsedTime = 0;
+
+        controller->flags = (unsigned char)controller->flags;
+
+        if (controller->type == 8)
+        {
+            G2Quat_FromMatrix_S(&controller->data.quat.dest, &anim->segMatrices[segNumber]);
+        }
+        else if (controller->type == 32)
+        {
+            segMatrix = &anim->segMatrices[segNumber];
+
+            controller->data.quat.src.x = (unsigned short)segMatrix->trans.x;
+            controller->data.quat.src.y = (unsigned short)segMatrix->trans.y;
+            controller->data.quat.src.z = (unsigned short)segMatrix->trans.z;
+        }
+        else
+        {
+            memset(&controller->data.quat.src, 0, sizeof(G2Quat) * 2);
+        }
+
+        _G2AnimController_InsertIntoList(controller, &anim->controllerList);
+    }
+}
 
 void G2Anim_DisableController(G2Anim *anim, int segNumber, int type)
 {
