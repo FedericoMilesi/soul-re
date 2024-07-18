@@ -174,7 +174,31 @@ void G2Anim_SetController_Vector(G2Anim *anim, int segNumber, int type, G2SVecto
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_SetInterpController_Vector);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_SetInterpController_Quat);
+void G2Anim_SetInterpController_Quat(G2Anim *anim, int segNumber, int type, G2Quat *quat, int duration)
+{
+    G2AnimController *controller;
+    G2Quat *source;
+    unsigned long zw;
+    unsigned long xy;
+
+    source = quat;
+
+    controller = _G2Anim_FindController(anim, segNumber, type);
+
+    _G2AnimController_GetCurrentInterpQuat(controller, anim, &controller->data.quat.src);
+
+    xy = *(unsigned long *)&source->x;
+    zw = *(unsigned long *)&source->z;
+
+    controller->elapsedTime = 0;
+
+    *(unsigned int *)&controller->data.quat.dest.x = xy;
+    *(unsigned int *)&controller->data.quat.dest.z = zw;
+
+    controller->flags = (unsigned char)controller->flags | 0x4000;
+
+    controller->duration = duration;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2Anim_ApplyControllersToStoredFrame);
 
