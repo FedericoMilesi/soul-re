@@ -95,7 +95,21 @@ G2Bool G2Anim_IsControllerActive(G2Anim *anim, int segNumber, int type)
     return ((controller->flags & 0x8000) < 0x8000);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_IsControllerInterpolating);
+G2Bool G2Anim_IsControllerInterpolating(G2Anim *anim, int segNumber, int type)
+{
+    G2AnimController *controller;
+
+    controller = _G2AnimControllerST_FindInList(segNumber, type, &anim->controllerList);
+
+    if ((controller == NULL) || (!(controller->flags & 0x4000)))
+    {
+        return G2FALSE;
+    }
+    else
+    {
+        return ((controller->flags & 0x2000) < 0x2000);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_GetControllerCurrentInterpVector);
 
