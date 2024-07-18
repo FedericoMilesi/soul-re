@@ -151,8 +151,30 @@ void putVoiceCommand(XAVoiceTracker *vt, unsigned char voiceCmd, unsigned char n
     }
 }
 
-static voiceCmd voiceCmdTbl[5] = {voiceCmdPlay, voiceCmdStop, voiceCmdPause, voiceCmdResume, voiceCmdNull};
-INCLUDE_ASM("asm/nonmatchings/Game/VOICEXA", processVoiceCommands);
+void processVoiceCommands(XAVoiceTracker *vt)
+{
+    VoiceCommand *cmd;
+    static voiceCmd voiceCmdTbl[5] = {voiceCmdPlay, voiceCmdStop, voiceCmdPause, voiceCmdResume, voiceCmdNull};
+
+    if (vt->voiceCmdsQueued != 0)
+    {
+        cmd = &vt->voiceCmdQueue[vt->voiceCmdOut];
+
+        vt->voiceCmdsQueued--;
+
+        if (++vt->voiceCmdOut == 16)
+        {
+            vt->voiceCmdOut = 0;
+        }
+
+        if (cmd->voiceCmd < 5)
+        {
+            voiceCmdTbl[cmd->voiceCmd](vt, (short)cmd->voiceCmdParam);
+
+            vt->voiceStatus = cmd->nextVoiceStatus;
+        }
+    }
+}
 
 void voiceCmdPlay(XAVoiceTracker *vt, short voiceIndex)
 {
