@@ -200,7 +200,15 @@ void G2Anim_SetInterpController_Quat(G2Anim *anim, int segNumber, int type, G2Qu
     controller->duration = duration;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2Anim_ApplyControllersToStoredFrame);
+void _G2Anim_ApplyControllersToStoredFrame(G2Anim *anim)
+{
+    int i;
+
+    for (i = 0; i < anim->sectionCount; i++)
+    {
+        _G2AnimSection_ApplyControllersToStoredFrame(&anim->section[i]);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2Anim_BuildTransformsWithControllers);
 

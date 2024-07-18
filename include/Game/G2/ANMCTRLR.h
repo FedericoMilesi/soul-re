@@ -59,5 +59,6 @@ void _G2AnimController_GetSimpleWorldRotQuat(G2AnimController *controller, G2Ani
 void G2Anim_SetInterpController_Quat(G2Anim *anim, int segNumber, int type, G2Quat *quat, int duration);
 G2AnimController *_G2Anim_FindController(G2Anim *anim, int segNumber, int type);
 void _G2AnimController_GetCurrentInterpQuat(G2AnimController *controller, G2Anim *anim, G2Quat *quat);
+void _G2AnimSection_ApplyControllersToStoredFrame(G2AnimSection *section);
 
 #endif
