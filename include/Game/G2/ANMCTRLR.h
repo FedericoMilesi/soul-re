@@ -29,6 +29,20 @@ typedef struct _G2AnimController_Type
     } data;
 } G2AnimController;
 
+// size: 0x10
+typedef struct _G2AnimControllerPool_Type {
+    // offset: 0000
+    unsigned short blockSize;
+    // offset: 0002
+    unsigned short stackTop;
+    // offset: 0004
+    unsigned short stackSize;
+    // offset: 0008
+    unsigned short *stack;
+    // offset: 000C (36 bytes)
+    struct _G2AnimController_Type *blockPool;
+} G2AnimControllerPool;
+
 G2Bool G2Anim_IsControllerActive(G2Anim *anim, int segNumber, int type);
 void G2Anim_DisableController(G2Anim *anim, int segNumber, int type);
 void G2Anim_SetControllerAngleOrder(G2Anim *anim, int segNumber, int type, int order);
@@ -37,5 +51,7 @@ void G2Anim_SetController_Vector(G2Anim *anim, int segNumber, int type, G2SVecto
 void G2Anim_InterpDisableController(G2Anim *anim, int segNumber, int type, short duration);
 void _G2AnimController_InsertIntoList(G2AnimController *controller, unsigned short *listPtr);
 G2AnimController *_G2AnimController_Create(int segNumber, int type);
+G2AnimController *_G2AnimControllerST_FindPtrInList(int segNumber, int type, unsigned short **listPtrPtr);
+G2AnimController *_G2AnimController_Destroy(G2AnimController *controller);
 
 #endif
