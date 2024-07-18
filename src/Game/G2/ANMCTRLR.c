@@ -218,7 +218,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_ApplyToSegVal
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2Anim_UpdateControllers);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2Anim_CopyVectorWithOrder);
+void _G2Anim_CopyVectorWithOrder(G2SVector3 *sourceVector, G2EulerAngles *destVector, int order)
+{
+    if (order != 1)
+    {
+        if (order == 21)
+        {
+            destVector->x = sourceVector->x;
+            destVector->y = sourceVector->y;
+            destVector->z = sourceVector->z;
+
+            destVector->order = order;
+        }
+    }
+    else
+    {
+        destVector->x = sourceVector->z;
+        destVector->y = sourceVector->y;
+        destVector->z = sourceVector->x;
+
+        destVector->order = order;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimSection_ApplyControllersToStoredFrame);
 
