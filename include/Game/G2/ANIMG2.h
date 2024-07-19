@@ -194,5 +194,6 @@ void _G2AnimSection_UpdateStoredFrameFromData(G2AnimSection *section, G2Anim *an
 long _G2AnimAlphaTable_GetValue(G2AnimAlphaTable *table, long trueAlpha);
 void G2Anim_GetRootMotionFromTimeForDuration(G2Anim *anim, short durationStart, short duration, G2SVector3 *motionVector);
 short G2AnimSection_UpdateOverInterval(G2AnimSection *section, short interval);
+G2AnimSection *G2Anim_GetSectionWithSeg(G2Anim *anim, int segNumber);
 
 #endif

@@ -2,6 +2,7 @@
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/PSX/PSX_G2/QUATVM.h"
 #include "Game/G2/POOLMMG2.h"
+#include "Game/G2/TIMERG2.h"
 
 //static G2AnimControllerPool _controllerPool;
 G2AnimControllerPool _controllerPool;
@@ -218,7 +219,59 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2Anim_BuildSegTransformWithCo
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_ApplyToSegValue);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2Anim_UpdateControllers);
+void _G2Anim_UpdateControllers(G2Anim *anim)
+{
+    G2AnimController *controller;
+    G2AnimSection *section;
+    short elapsedTime;
+
+    if (anim->controllerList != 0)
+    {
+        elapsedTime = G2Timer_GetFrameTime();
+
+        controller = &_controllerPool.blockPool[anim->controllerList];
+
+        while (_controllerPool.blockPool < controller)
+        {
+            if ((controller->flags & 0x4000))
+            {
+                if (controller->elapsedTime >= controller->duration)
+                {
+                    if ((controller->flags & 0x8000))
+                    {
+                        controller->flags &= 0x7FFF;
+
+                        _G2AnimControllerST_RemoveFromList(controller->segNumber, controller->type, &anim->controllerList);
+
+                        _G2AnimController_InsertIntoList(controller, &anim->disabledControllerList);
+                    }
+                    else if (!(controller->flags & 0x2000))
+                    {
+                        controller->flags |= 0x2000;
+
+                        section = G2Anim_GetSectionWithSeg(anim, controller->segNumber);
+
+                        if ((section != NULL) && (section->callback != NULL))
+                        {
+                            section->callback(anim, section->sectionID, G2ANIM_MSG_SEGCTRLR_INTERPDONE, controller->type, controller->segNumber, (Instance *)controller->callbackData);
+                        }
+                    }
+                }
+                else
+                {
+                    controller->elapsedTime += elapsedTime;
+
+                    if (controller->duration < controller->elapsedTime)
+                    {
+                        controller->elapsedTime = controller->duration;
+                    }
+                }
+            }
+
+            controller = &_controllerPool.blockPool[controller->next];
+        }
+    }
+}
 
 void _G2Anim_CopyVectorWithOrder(G2SVector3 *sourceVector, G2EulerAngles *destVector, int order)
 {
