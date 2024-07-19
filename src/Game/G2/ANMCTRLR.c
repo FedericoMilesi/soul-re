@@ -430,7 +430,35 @@ G2AnimController *_G2AnimController_Destroy(G2AnimController *controller)
     return controller;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_InsertIntoList);
+void _G2AnimController_InsertIntoList(G2AnimController *controller, unsigned short *listPtr)
+{
+    G2AnimController *testController;
+
+    for (testController = &_controllerPool.blockPool[*listPtr]; _controllerPool.blockPool < testController; )
+    {
+        if ((testController->segNumber <= controller->segNumber) && ((testController->segNumber != controller->segNumber) || (testController->type <= controller->type)))
+        {
+            listPtr = (unsigned short *)testController;
+
+            testController = &_controllerPool.blockPool[testController->next];
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    *listPtr = controller - _controllerPool.blockPool;
+
+    do
+    {
+        listPtr = (unsigned short *)controller;
+
+        controller = &_controllerPool.blockPool[*listPtr];
+    } while (_controllerPool.blockPool < controller);
+
+    *listPtr = testController - _controllerPool.blockPool;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetCurrentInterpQuat);
 
