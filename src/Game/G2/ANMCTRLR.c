@@ -3,6 +3,7 @@
 #include "Game/PSX/PSX_G2/QUATVM.h"
 #include "Game/G2/POOLMMG2.h"
 #include "Game/G2/TIMERG2.h"
+#include "Game/G2/ANMINTRP.h"
 
 //static G2AnimControllerPool _controllerPool;
 G2AnimControllerPool _controllerPool;
@@ -504,7 +505,26 @@ void _G2AnimController_GetCurrentInterpQuat(G2AnimController *controller, G2Anim
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetSimpleWorldRotQuat);
+G2AnimSegValue _segValues[80]; // TODO: delete, this is duplicated from ANMINTRP.c
+void _G2AnimController_GetSimpleWorldRotQuat(G2AnimController *controller, G2Anim *anim, G2Quat *quat)
+{
+    Segment *segment;
+    G2Matrix *parentMatrix;
+    G2Matrix segMatrix;
+    int segNumber;
+
+    segNumber = controller->segNumber;
+
+    segment = &anim->modelData->segmentList[segNumber];
+
+    parentMatrix = &anim->segMatrices[segment->parent];
+
+    _G2Anim_BuildSegLocalRotMatrix(&_segValues[segNumber], &segMatrix);
+
+    MulMatrix2((MATRIX *)parentMatrix, (MATRIX *)&segMatrix);
+
+    G2Quat_FromMatrix_S(quat, &segMatrix);
+}
 
 G2AnimController *_G2AnimControllerST_FindInList(int segNumber, int type, unsigned short *listPtr)
 {
