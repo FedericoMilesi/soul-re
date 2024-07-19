@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/PSX/PSX_G2/QUATVM.h"
+#include "Game/G2/POOLMMG2.h"
 
 //static G2AnimControllerPool _controllerPool;
 G2AnimControllerPool _controllerPool;
@@ -336,7 +337,24 @@ G2AnimController *_G2Anim_FindController(G2Anim *anim, int segNumber, int type)
     return controller;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_Create);
+G2AnimController *_G2AnimController_Create(int segNumber, int type)
+{
+    G2AnimController *controller;
+
+    controller = (G2AnimController *)G2PoolMem_Allocate(&_controllerPool);
+
+    memset(controller, 0, sizeof(G2AnimController));
+
+    controller->next = 0;
+
+    controller->segNumber = segNumber;
+
+    controller->type = type;
+
+    controller->flags = 0x15;
+
+    return controller;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_Destroy);
 
