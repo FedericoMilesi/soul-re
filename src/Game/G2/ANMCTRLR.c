@@ -243,7 +243,51 @@ void _G2Anim_CopyVectorWithOrder(G2SVector3 *sourceVector, G2EulerAngles *destVe
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimSection_ApplyControllersToStoredFrame);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_ApplyWorldToParentMatrix);
+unsigned long _G2AnimController_ApplyWorldToParentMatrix(G2AnimController *controller, G2Matrix *parentMatrix)
+{
+    G2Matrix temparentMatrixatrix;
+    G2SVector3 tempSVector;
+    G2LVector3 tempLVector;
+
+    switch (controller->type)
+    {
+    case 8:
+        _G2AnimController_GetMatrix(controller, parentMatrix);
+        break;
+    case 16:
+        break;
+    case 76:
+        _G2AnimController_GetMatrix(controller, &temparentMatrixatrix);
+
+        MulMatrix2((MATRIX *)&temparentMatrixatrix, (MATRIX *)parentMatrix);
+        break;
+    case 84:
+        _G2AnimController_GetVector(controller, &tempSVector);
+
+        tempLVector.x = tempSVector.x;
+        tempLVector.y = tempSVector.y;
+        tempLVector.z = tempSVector.z;
+
+        ScaleMatrix((MATRIX *)parentMatrix, (VECTOR *)&tempLVector);
+        break;
+    case 32:
+        _G2AnimController_GetVector(controller, &tempSVector);
+
+        parentMatrix->trans.x = tempSVector.x;
+        parentMatrix->trans.y = tempSVector.y;
+        parentMatrix->trans.z = tempSVector.z;
+        break;
+    case 100:
+        _G2AnimController_GetVector(controller, &tempSVector);
+
+        parentMatrix->trans.x += tempSVector.x;
+        parentMatrix->trans.y += tempSVector.y;
+        parentMatrix->trans.z += tempSVector.z;
+        break;
+    }
+
+    return 7;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetMatrix);
 

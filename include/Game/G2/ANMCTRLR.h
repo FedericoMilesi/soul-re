@@ -60,5 +60,7 @@ void G2Anim_SetInterpController_Quat(G2Anim *anim, int segNumber, int type, G2Qu
 G2AnimController *_G2Anim_FindController(G2Anim *anim, int segNumber, int type);
 void _G2AnimController_GetCurrentInterpQuat(G2AnimController *controller, G2Anim *anim, G2Quat *quat);
 void _G2AnimSection_ApplyControllersToStoredFrame(G2AnimSection *section);
+void _G2AnimController_GetMatrix(G2AnimController *controller, G2Matrix *matrix);
+void _G2AnimController_GetVector(G2AnimController *controller, G2SVector3 *vector);
 
 #endif
