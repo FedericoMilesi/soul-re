@@ -506,7 +506,29 @@ void _G2AnimController_GetCurrentInterpQuat(G2AnimController *controller, G2Anim
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetSimpleWorldRotQuat);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimControllerST_FindInList);
+G2AnimController *_G2AnimControllerST_FindInList(int segNumber, int type, unsigned short *listPtr)
+{
+    G2AnimController *controller;
+
+    while (controller = &_controllerPool.blockPool[*listPtr], _controllerPool.blockPool < controller)
+    {
+        if ((controller->segNumber != segNumber) || (controller->type != type))
+        {
+            listPtr = (unsigned short *)controller;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    if (controller == _controllerPool.blockPool)
+    {
+        return NULL;
+    }
+
+    return controller;
+}
 
 G2AnimController *_G2AnimControllerST_FindPtrInList(int segNumber, int type, unsigned short **listPtrPtr)
 {
