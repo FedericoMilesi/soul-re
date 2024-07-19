@@ -510,11 +510,13 @@ G2AnimController *_G2AnimControllerST_FindInList(int segNumber, int type, unsign
 {
     G2AnimController *controller;
 
-    while (controller = &_controllerPool.blockPool[*listPtr], _controllerPool.blockPool < controller)
+    controller = &_controllerPool.blockPool[*listPtr];
+
+    while (_controllerPool.blockPool < controller)
     {
         if ((controller->segNumber != segNumber) || (controller->type != type))
         {
-            listPtr = (unsigned short *)controller;
+            controller = &_controllerPool.blockPool[controller->next];
         }
         else
         {
