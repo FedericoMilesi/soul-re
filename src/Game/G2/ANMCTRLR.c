@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/G2/ANMCTRLR.h"
+#include "Game/PSX/PSX_G2/QUATVM.h"
 
 //static G2AnimControllerPool _controllerPool;
 G2AnimControllerPool _controllerPool;
@@ -289,7 +290,35 @@ unsigned long _G2AnimController_ApplyWorldToParentMatrix(G2AnimController *contr
     return 7;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetMatrix);
+void _G2AnimController_GetMatrix(G2AnimController *controller, G2Matrix *matrix)
+{
+    G2Quat tempQuat;
+
+    if ((controller->flags & 0x4000))
+    {
+        if ((controller->flags & 0x2000))
+        {
+            G2Quat_ToMatrix_S(&controller->data.quat.dest, matrix);
+        }
+        else
+        {
+            G2Quat_Slerp_VM(_G2AnimAlphaTable_GetValue(controller->alphaTable, (controller->elapsedTime << 12) / controller->duration), &controller->data.quat.src, &controller->data.quat.dest, &tempQuat, 0);
+
+            G2Quat_ToMatrix_S(&tempQuat, matrix);
+        }
+    }
+    else if ((controller->flags & 0xFF) != 1)
+    {
+        if ((controller->flags & 0xFF) == 21)
+        {
+            RotMatrix((SVECTOR *)&controller->data.vector.base, (MATRIX *)matrix);
+        }
+    }
+    else
+    {
+        RotMatrixZYX((SVECTOR *)&controller->data.vector.base, (MATRIX *)matrix);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetVector);
 
