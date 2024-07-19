@@ -409,7 +409,26 @@ G2AnimController *_G2AnimController_Create(int segNumber, int type)
     return controller;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_Destroy);
+G2AnimController *_G2AnimController_Destroy(G2AnimController *controller)
+{
+    int nextControllerIndex;
+
+    do
+    {
+        nextControllerIndex = controller->next;
+
+        G2PoolMem_Free(&_controllerPool, controller);
+
+        controller = &_controllerPool.blockPool[nextControllerIndex];
+
+        if (controller <= _controllerPool.blockPool)
+        {
+            break;
+        }
+    } while (controller->type == 0);
+
+    return controller;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_InsertIntoList);
 
