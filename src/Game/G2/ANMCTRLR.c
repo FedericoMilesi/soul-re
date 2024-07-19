@@ -322,7 +322,19 @@ void _G2AnimController_GetMatrix(G2AnimController *controller, G2Matrix *matrix)
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetVector);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2Anim_FindController);
+G2AnimController *_G2Anim_FindController(G2Anim *anim, int segNumber, int type)
+{
+    G2AnimController *controller;
+
+    controller = _G2AnimControllerST_FindInList(segNumber, type, &anim->controllerList);
+
+    if (controller == NULL)
+    {
+        controller = _G2AnimControllerST_FindInList(segNumber, type, &anim->disabledControllerList);
+    }
+
+    return controller;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_Create);
 
