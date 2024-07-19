@@ -460,7 +460,49 @@ void _G2AnimController_InsertIntoList(G2AnimController *controller, unsigned sho
     *listPtr = testController - _controllerPool.blockPool;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetCurrentInterpQuat);
+void _G2AnimController_GetCurrentInterpQuat(G2AnimController *controller, G2Anim *anim, G2Quat *quat)
+{
+    G2EulerAngles eulerVector;
+
+    if ((controller->flags & 0x4000))
+    {
+        if ((controller->flags & 0x2000))
+        {
+            *quat = controller->data.quat.dest;
+        }
+        else
+        {
+            G2Quat_Slerp_VM(_G2AnimAlphaTable_GetValue(controller->alphaTable, (controller->elapsedTime * 4096) / controller->duration), &controller->data.quat.src, &controller->data.quat.dest, quat, 0);
+        }
+    }
+    else
+    {
+        if (controller->type == 8)
+        {
+            G2Quat_FromMatrix_S(quat, &anim->segMatrices[controller->segNumber]);
+        }
+        else if (controller->type == 76)
+        {
+            *(unsigned int *)&quat->x = 0;
+            *(unsigned int *)&quat->z = 4096 << 16;
+        }
+        else
+        {
+            if (controller->type == 14)
+            {
+                _G2Anim_CopyVectorWithOrder(&controller->data.vector.base, &eulerVector, controller->flags & 0xFF);
+            }
+            else
+            {
+                G2Anim_GetSegChannelValue(anim, controller->segNumber, (unsigned short *)&eulerVector, 7);
+
+                eulerVector.order = 0;
+            }
+
+            G2Quat_FromEuler_S(quat, &eulerVector);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetSimpleWorldRotQuat);
 
