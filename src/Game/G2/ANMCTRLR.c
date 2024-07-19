@@ -508,6 +508,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetSimpleWorl
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimControllerST_FindInList);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimControllerST_FindPtrInList);
+G2AnimController *_G2AnimControllerST_FindPtrInList(int segNumber, int type, unsigned short **listPtrPtr)
+{
+    G2AnimController *controller;
+
+    controller = &_controllerPool.blockPool[**listPtrPtr];
+
+    while (_controllerPool.blockPool < controller)
+    {
+        if ((controller->segNumber == segNumber) && (controller->type == type))
+        {
+            break;
+        }
+
+        *listPtrPtr = (unsigned short *)controller;
+
+        controller = &_controllerPool.blockPool[controller->next];
+    }
+
+    if (controller == _controllerPool.blockPool)
+    {
+        *listPtrPtr = NULL;
+
+        return NULL;
+    }
+
+    return controller;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimControllerST_RemoveFromList);
