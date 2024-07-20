@@ -20,5 +20,6 @@ typedef struct _G2PoolMem_Type G2PoolMem;
 void G2PoolMem_ResetPool(void *voidPool);
 void G2PoolMem_Free(void *voidPool, void *block);
 void *G2PoolMem_Allocate(void *voidPool);
+void G2PoolMem_InitPool(void *voidPool, int blockCount, int blockSize);
 
 #endif

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/G2/ANMDECMP.h"
+#include "Game/G2/POOLMMG2.h"
 
 //static G2AnimChanStatusBlockPool _chanStatusBlockPool;
 G2AnimChanStatusBlockPool _chanStatusBlockPool;
@@ -30,7 +31,22 @@ G2Bool G2Anim_Install()
     return !G2FALSE;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_ResetInternalState);
+void G2Anim_ResetInternalState()
+{
+    G2AnimController *dummyController;
+
+    G2PoolMem_ResetPool(&_chanStatusBlockPool);
+    G2PoolMem_ResetPool(&_interpStateBlockPool);
+    G2PoolMem_ResetPool(&_controllerPool);
+
+    dummyController = (G2AnimController *)G2PoolMem_Allocate(&_controllerPool);
+
+    dummyController->next = 0;
+
+    dummyController->segNumber = 255;
+
+    dummyController->type = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_Init);
 
