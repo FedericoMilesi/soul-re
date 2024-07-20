@@ -2,6 +2,7 @@
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/G2/ANMDECMP.h"
 #include "Game/G2/POOLMMG2.h"
+#include "Game/G2/ANMG2ILF.h"
 
 //static G2AnimChanStatusBlockPool _chanStatusBlockPool;
 G2AnimChanStatusBlockPool _chanStatusBlockPool;
@@ -108,7 +109,35 @@ G2AnimSection *G2Anim_AddSection(G2Anim *anim, int firstSegID, int segCount)
     return section;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_Free);
+void G2Anim_Free(G2Anim *anim)
+{
+    G2AnimSection *animSection;
+    int sectionID;
+    G2AnimInterpInfo *interpInfo;
+
+    for (sectionID = 0; sectionID < anim->sectionCount; sectionID++)
+    {
+        animSection = &anim->section[sectionID];
+
+        if (G2AnimSection_IsInInterpolation(animSection) != G2FALSE)
+        {
+            animSection->elapsedTime = animSection->interpInfo->targetTime;
+        }
+
+        _G2Anim_FreeChanStatusBlockList(animSection->chanStatusBlockList);
+
+        interpInfo = animSection->interpInfo;
+
+        animSection->chanStatusBlockList = NULL;
+
+        if (interpInfo != NULL)
+        {
+            _G2Anim_FreeInterpStateBlockList(interpInfo->stateBlockList);
+
+            interpInfo->stateBlockList = NULL;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_Restore);
 
