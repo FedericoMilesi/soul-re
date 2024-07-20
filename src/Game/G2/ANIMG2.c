@@ -139,7 +139,23 @@ void G2Anim_Free(G2Anim *anim)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_Restore);
+void G2Anim_Restore(G2Anim *anim)
+{
+    G2AnimSection *section;
+    int sectionID;
+
+    for (sectionID = 0; sectionID < anim->sectionCount; sectionID++)
+    {
+        section = &anim->section[sectionID];
+
+        if (section->keylist != NULL)
+        {
+            section->storedTime = -section->keylist->timePerKey;
+
+            G2AnimSection_JumpToTime(section, section->elapsedTime);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_BuildTransforms);
 

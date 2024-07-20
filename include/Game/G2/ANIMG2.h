@@ -199,5 +199,6 @@ short G2AnimSection_UpdateOverInterval(G2AnimSection *section, short interval);
 G2AnimSection *G2Anim_GetSectionWithSeg(G2Anim *anim, int segNumber);
 //void _G2Anim_BuildSegLocalRotMatrix(G2AnimSegValue *segValue, G2Matrix *segMatrix);
 void _G2Anim_FreeChanStatusBlockList(G2AnimChanStatusBlock *block);
+void G2AnimSection_JumpToTime(G2AnimSection *section, short targetTime);
 
 #endif
