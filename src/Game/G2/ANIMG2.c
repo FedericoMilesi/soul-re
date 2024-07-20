@@ -161,7 +161,33 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_BuildTransforms);
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_UpdateStoredFrame);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_GetSectionWithSeg);
+G2AnimSection *G2Anim_GetSectionWithSeg(G2Anim *anim, int segNumber)
+{
+    G2AnimSection *section;
+    G2AnimSection *tempSection;
+    G2AnimSection *endSection;
+    int firstSeg;
+    int lastSeg;
+
+    section = NULL;
+
+    endSection = &anim->section[anim->sectionCount];
+
+    for (tempSection = &anim->section[0]; tempSection < endSection; tempSection++)
+    {
+        firstSeg = tempSection->firstSeg;
+
+        lastSeg = firstSeg + tempSection->segCount;
+
+        if ((segNumber >= firstSeg) && (segNumber < lastSeg))
+        {
+            section = tempSection;
+            break;
+        }
+    }
+
+    return section;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_SegmentHasActiveChannels);
 
