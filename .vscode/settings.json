@@ -43,6 +43,7 @@
         "common.h": "c",
         "instance.h": "c",
         "anmctrlr.h": "c",
-        "mainvm.h": "c"
+        "mainvm.h": "c",
+        "poolmmg2.h": "c"
     }
 }

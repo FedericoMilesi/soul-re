@@ -4,6 +4,7 @@
 #include "Game/G2/POOLMMG2.h"
 #include "Game/G2/TIMERG2.h"
 #include "Game/G2/ANMINTRP.h"
+#include "Game/MATH3D.h"
 
 //static G2AnimControllerPool _controllerPool;
 G2AnimControllerPool _controllerPool;
@@ -297,7 +298,115 @@ void _G2Anim_CopyVectorWithOrder(G2SVector3 *sourceVector, G2EulerAngles *destVe
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimSection_ApplyControllersToStoredFrame);
+G2AnimSegValue _segValues[80]; // TODO: delete, this is duplicated from ANMINTRP.c
+void _G2AnimSection_ApplyControllersToStoredFrame(G2AnimSection *section)
+{
+    G2Anim *anim;
+    G2AnimController *controller;
+    G2AnimSegValue *segValue;
+    Segment *segment;
+    G2Matrix segMatrix;
+    G2Matrix parentMatrix;
+    G2Matrix invParentMatrix;
+    G2EulerAngles eulerAngles;
+    int segIndex;
+    int segCount;
+
+    anim = _G2AnimSection_GetAnim(section);
+
+    if (anim->controllerList != 0)
+    {
+        segIndex = section->firstSeg;
+
+        controller = &_controllerPool.blockPool[anim->controllerList];
+
+        segValue = &_segValues[segIndex];
+
+        segCount = segIndex + section->segCount;
+
+        for (segment = anim->modelData->segmentList; segIndex < segCount; segment++, segValue++, segIndex++)
+        {
+            if (controller->segNumber == segIndex)
+            {
+                _G2Anim_BuildSegLocalRotMatrix(segValue, &segMatrix);
+
+                if (anim->segMatrices != NULL)
+                {
+                    parentMatrix = anim->segMatrices[segment->parent];
+                }
+                else
+                {
+                    MATH3D_SetUnityMatrix((MATRIX *)&parentMatrix);
+                }
+
+                while (controller->segNumber == segIndex)
+                {
+                    if ((segIndex != 0) || ((controller->type & 0x2)))
+                    {
+                        if ((controller->type & 0x38) == 8)
+                        {
+                            _G2AnimController_ApplyToSegValue(controller, segValue, &segMatrix, &parentMatrix);
+
+                            if (!(controller->type & 0x2))
+                            {
+                                TransposeMatrix((MATRIX *)&parentMatrix, (MATRIX *)&invParentMatrix);
+
+                                MulMatrix2((MATRIX *)&invParentMatrix, (MATRIX *)&segMatrix);
+                            }
+
+                            if (segValue->bIsQuat != 0)
+                            {
+                                G2Quat tempQuat;
+                                G2Quat *dest;
+                                unsigned long zw;
+                                unsigned long xy;
+
+                                dest = &segValue->rotQuat.quat;
+
+                                G2Quat_FromMatrix_S(&tempQuat, &segMatrix);
+
+                                xy = ((int *)&tempQuat)[0];
+                                zw = ((int *)&tempQuat)[1];
+
+                                ((int *)dest)[0] = xy;
+                                ((int *)dest)[1] = zw;
+                            }
+                            else
+                            {
+                                G2SVector3 *dest;
+                                unsigned long mask;
+                                unsigned short z;
+                                //unsigned long xy; unused         
+
+                                dest = &segValue->rotQuat.rot;
+
+                                G2EulerAngles_FromMatrix(&eulerAngles, &segMatrix, 0);
+
+                                z = eulerAngles.z;
+
+                                dest->z = z & 0xFFF;
+
+                                mask = 0xFFF0FFF;
+
+                                ((int *)dest)[0] = ((int *)&eulerAngles)[0] & mask;
+                            }
+                        }
+                        else
+                        {
+                            _G2AnimController_ApplyToSegValue(controller, segValue, &segMatrix, &parentMatrix);
+                        }
+
+                        controller = &_controllerPool.blockPool[controller->next];
+                    }
+                    else
+                    {
+                        controller = &_controllerPool.blockPool[controller->next];
+                    }
+                }
+            }
+        }
+    }
+}
 
 unsigned long _G2AnimController_ApplyWorldToParentMatrix(G2AnimController *controller, G2Matrix *parentMatrix)
 {
@@ -505,7 +614,6 @@ void _G2AnimController_GetCurrentInterpQuat(G2AnimController *controller, G2Anim
     }
 }
 
-G2AnimSegValue _segValues[80]; // TODO: delete, this is duplicated from ANMINTRP.c
 void _G2AnimController_GetSimpleWorldRotQuat(G2AnimController *controller, G2Anim *anim, G2Quat *quat)
 {
     Segment *segment;
