@@ -48,7 +48,40 @@ void G2Anim_ResetInternalState()
     dummyController->type = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_Init);
+void G2Anim_Init(G2Anim *anim, Model *modelData)
+{
+    G2AnimSection *section;
+    int sectionID;
+
+    anim->sectionCount = 1;
+
+    anim->masterSection = 0;
+
+    anim->controllerList = 0;
+
+    anim->disabledControllerList = 0;
+
+    anim->segMatrices = NULL;
+
+    anim->modelData = modelData;
+
+    memset(&anim->disabledBits, 0, sizeof(anim->disabledBits) + sizeof(anim->section));
+
+    for (sectionID = 0; sectionID < 3; sectionID++)
+    {
+        section = &anim->section[sectionID];
+
+        section->storedTime = -1;
+
+        section->swAlarmTable = NULL;
+
+        section->speedAdjustment = 4096;
+
+        section++;
+    }
+
+    anim->section[0].segCount = (unsigned char)modelData->numSegments;
+}
 
 G2AnimSection *G2Anim_AddSection(G2Anim *anim, int firstSegID, int segCount)
 {
