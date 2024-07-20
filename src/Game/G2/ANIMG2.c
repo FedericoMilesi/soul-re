@@ -50,7 +50,30 @@ void G2Anim_ResetInternalState()
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_Init);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_AddSection);
+G2AnimSection *G2Anim_AddSection(G2Anim *anim, int firstSegID, int segCount)
+{
+    G2AnimSection *section;
+
+    section = &anim->section[anim->sectionCount];
+
+    memset(section, 0, sizeof(G2AnimSection));
+
+    section->sectionID = anim->sectionCount;
+
+    section->storedTime = -1;
+
+    section->firstSeg = firstSegID;
+
+    section->segCount = segCount;
+
+    section->swAlarmTable = NULL;
+
+    section->speedAdjustment = 4096;
+
+    anim->sectionCount++;
+
+    return section;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_Free);
 
