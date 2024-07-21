@@ -298,7 +298,36 @@ G2AnimSection *G2Anim_GetSectionWithSeg(G2Anim *anim, int segNumber)
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_SegmentHasActiveChannels);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_GetSegChannelValue);
+void G2Anim_GetSegChannelValue(G2Anim *anim, int segIndex, unsigned short *valueTable, unsigned short channelMask)
+{
+    unsigned short *chanFinalValue;
+    unsigned short z;
+    unsigned long xy;
+
+    G2Anim_UpdateStoredFrame(anim);
+
+    xy = ((unsigned long *)&anim->rootTrans.x)[0];
+    z = anim->rootTrans.z;
+
+    ((unsigned long *)&_segValues[0].trans.x)[0] = xy;
+    _segValues[0].trans.z = z;
+
+    _G2Anim_ApplyControllersToStoredFrame(anim);
+
+    chanFinalValue = (unsigned short *)&_segValues[segIndex];
+
+    while (channelMask != 0)
+    {
+        if ((channelMask & 0x1))
+        {
+            *valueTable++ = *chanFinalValue;
+        }
+
+        channelMask >>= 1;
+
+        chanFinalValue++;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_GetRootMotionFromTimeForDuration);
 
