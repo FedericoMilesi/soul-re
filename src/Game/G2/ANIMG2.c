@@ -359,7 +359,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", FooBar);
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_UpdateStoredFrameFromData);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_GetAnim);
+G2Anim *_G2AnimSection_GetAnim(G2AnimSection *section)
+{
+    return (G2Anim *)((char *)section - ((section->sectionID * sizeof(G2AnimSection)) + 36));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_TriggerEffects);
 
