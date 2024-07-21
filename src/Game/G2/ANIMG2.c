@@ -357,7 +357,34 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_InitStatus);
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", FooBar);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_UpdateStoredFrameFromData);
+void _G2AnimSection_UpdateStoredFrameFromData(G2AnimSection *section, G2Anim *anim)
+{
+    short timePerKey;
+    long storedKey;
+    long targetKey;
+    long timeOffset;
+
+    storedKey = section->storedTime / section->keylist->timePerKey;
+
+    timePerKey = section->keylist->timePerKey;
+
+    targetKey = section->elapsedTime / timePerKey;
+
+    if ((storedKey < 0) || (targetKey < storedKey))
+    {
+        _G2AnimSection_InitStatus(section, anim);
+
+        storedKey = -1;
+    }
+
+    timeOffset = ((section->elapsedTime - (targetKey * timePerKey)) << 12) / timePerKey;
+
+    FooBar(section, anim, storedKey, targetKey, timeOffset);
+
+    section->storedTime = section->elapsedTime;
+
+    section->flags |= 0x80;
+}
 
 G2Anim *_G2AnimSection_GetAnim(G2AnimSection *section)
 {
