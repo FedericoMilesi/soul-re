@@ -157,7 +157,48 @@ void G2Anim_Restore(G2Anim *anim)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_BuildTransforms);
+G2AnimSegValue _segValues[80]; // TODO: delete, this is duplicated from ANMINTRP.c
+void G2Anim_BuildTransforms(G2Anim *anim)
+{
+    unsigned short z;
+    unsigned long xy;
+
+    G2Anim_UpdateStoredFrame(anim);
+
+    if ((anim->section[0].flags & 0x88) != 0x80)
+    {
+        ((int *)&anim->rootTrans.x)[0] = 0;
+        anim->rootTrans.z = 0;
+    }
+
+    if ((anim->section[0].flags & 0x4))
+    {
+        anim->rootTrans.x = -anim->rootTrans.x;
+        anim->rootTrans.y = -anim->rootTrans.y;
+        anim->rootTrans.z = -anim->rootTrans.z;
+    }
+
+    z = anim->rootTrans.z;
+    xy = ((unsigned long *)&anim->rootTrans.x)[0];
+
+    _segValues[0].trans.z = z;
+    ((unsigned long *)&_segValues[0].trans.x)[0] = xy;
+
+    if (anim->controllerList != 0)
+    {
+        _G2Anim_BuildTransformsWithControllers(anim);
+    }
+    else
+    {
+        _G2Anim_BuildTransformsNoControllers(anim);
+    }
+
+    ((int *)&anim->rootTrans.x)[0] = 0;
+    anim->rootTrans.z = 0;
+
+    anim->section[0].flags &= 0x7F;
+    anim->flags &= ~0x1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_UpdateStoredFrame);
 

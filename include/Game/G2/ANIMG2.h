@@ -200,5 +200,6 @@ G2AnimSection *G2Anim_GetSectionWithSeg(G2Anim *anim, int segNumber);
 //void _G2Anim_BuildSegLocalRotMatrix(G2AnimSegValue *segValue, G2Matrix *segMatrix);
 void _G2Anim_FreeChanStatusBlockList(G2AnimChanStatusBlock *block);
 void G2AnimSection_JumpToTime(G2AnimSection *section, short targetTime);
+void _G2Anim_BuildTransformsNoControllers(G2Anim *anim);
 
 #endif
