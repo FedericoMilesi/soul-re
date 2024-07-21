@@ -20,4 +20,21 @@ int mytolower(int c)
     return c;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/SUPPORT", strcmpi);
+int strcmpi(char *s1, char *s2)
+{
+    int c1;
+    int c2;
+
+    do
+    {
+        c1 = mytolower((unsigned char)*s1++);
+        c2 = mytolower((unsigned char)*s2++);
+
+        if (c1 != c2)
+        {
+            return c1 - c2;
+        }
+    } while (c1 != 0);
+
+    return 0;
+}
