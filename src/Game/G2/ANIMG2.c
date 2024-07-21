@@ -371,7 +371,23 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_BuildSegTransformNoContro
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_BuildSegLocalRotMatrix);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", wombat);
+void wombat(unsigned char *segKeyList, int flagBitOffset, G2AnimSegKeyflagInfo *kfInfo)
+{
+    int flagDWordOffset;
+    int flagBitShift;
+
+    flagDWordOffset = flagBitOffset >> 5;
+
+    segKeyList = &segKeyList[flagDWordOffset << 2];
+
+    flagBitShift = flagBitOffset - (flagDWordOffset << 5);
+
+    kfInfo->stream = (unsigned long *)segKeyList;
+
+    kfInfo->flags = *kfInfo->stream >> flagBitShift;
+
+    kfInfo->bitCount = 32 - (flagBitOffset & 0x1F);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", kangaroo);
 
