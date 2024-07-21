@@ -10,5 +10,6 @@ long LOAD_GetSearchDirectory();
 void LOAD_SetSearchDirectory(long id);
 long LOAD_DoesFileExist(char *fileName);
 void LOAD_InitCdStreamMode();
+char *LOAD_ReadFileFromCD(char *filename, int memType);
 
 #endif

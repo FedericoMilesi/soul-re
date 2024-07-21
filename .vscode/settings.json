@@ -45,6 +45,7 @@
         "anmctrlr.h": "c",
         "mainvm.h": "c",
         "poolmmg2.h": "c",
-        "localstr.h": "c"
+        "localstr.h": "c",
+        "load3d.h": "c"
     }
 }

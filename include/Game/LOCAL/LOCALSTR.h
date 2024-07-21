@@ -126,4 +126,16 @@ typedef enum localstr_t {
     LOCALSTR_NUM_ITEMS = 110,
 } localstr_t;
 
+// size: 0x10
+typedef struct LocalizationHeader {
+    // offset: 0000 (4 bytes)
+    enum language_t language;
+    // offset: 0004
+    int numXAfiles;
+    // offset: 0008
+    int XATableOffset;
+    // offset: 000C
+    int numStrings;
+} LocalizationHeader;
+
 #endif
