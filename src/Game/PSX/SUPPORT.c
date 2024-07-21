@@ -8,7 +8,43 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/SUPPORT", vsprintf);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/SUPPORT", my_itoa);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/SUPPORT", atoi);
+//int atoi(char *str)
+int atoi(const char *str)
+{
+    int val;
+    int neg;
+    unsigned char *temp; // not from decls.h
+
+    temp = (unsigned char *)str;
+
+    val = 0;
+
+    neg = 0;
+
+    if (*temp == '-')
+    {
+        temp++;
+
+        neg = 1;
+    }
+
+    while (*temp != 0)
+    {
+        val *= 10;
+        val += *temp - '0';
+
+        temp++;
+    }
+
+    if (neg != 0)
+    {
+        return -val;
+    }
+    else
+    {
+        return val;
+    }
+}
 
 int mytolower(int c)
 {
