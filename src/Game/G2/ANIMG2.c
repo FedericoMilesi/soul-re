@@ -363,6 +363,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_GetAnim);
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_TriggerEffects);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_FreeChanStatusBlockList);
+void _G2Anim_FreeChanStatusBlockList(G2AnimChanStatusBlock *block)
+{
+    G2AnimChanStatusBlock *nextBlock;
+
+    while (block != NULL)
+    {
+        nextBlock = block->next;
+
+        G2PoolMem_Free(&_chanStatusBlockPool, block);
+
+        block = nextBlock;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimAlphaTable_GetValue);
