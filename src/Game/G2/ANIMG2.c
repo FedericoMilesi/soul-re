@@ -333,7 +333,31 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_GetRootMotionFromTimeForDu
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2AnimSection_SwitchToKeylistAtTime);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2AnimSection_JumpToTime);
+void G2AnimSection_JumpToTime(G2AnimSection *section, short targetTime)
+{
+    G2Anim *anim;
+
+    anim = _G2AnimSection_GetAnim(section);
+
+    if (targetTime < section->elapsedTime)
+    {
+        section->storedTime = -section->keylist->timePerKey;
+    }
+
+    section->elapsedTime = targetTime;
+
+    _G2AnimSection_UpdateStoredFrameFromData(section, anim);
+
+    G2AnimSection_ClearAlarm(section, 0x3);
+
+    section->flags &= 0x7F;
+
+    if (section->firstSeg == 0)
+    {
+        *(unsigned int *)&anim->rootTrans.x = 0;
+        anim->rootTrans.z = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2AnimSection_UpdateOverInterval);
 
