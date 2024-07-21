@@ -158,6 +158,15 @@
         : "$12", "$13" \
     ) 
 
+#define gte_nGPL(sf) __asm__ ( \
+        "nop;" \
+        "nop;" \
+        ".word %0" \
+        : : "g"(0x4BA0003E | ((sf) & 0x1) << 19) \
+    )
+
+#define gte_ngpl12() gte_nGPL(1)
+
 // custom macro
 #define gte_ldlvnlsv( r0 ) __asm__ volatile (			\
 	"lhu	$12, 0( %0 );"					\

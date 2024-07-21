@@ -17,9 +17,9 @@ static inline void gte_process(G2Quat *dest, G2SVector3 *base, G2SVector3 *offse
 
     gte_ldsv(offset);
 
-    gte_nlddp(alpha);
+    gte_lddp(alpha);
 
-    gte_gpl12();
+    gte_ngpl12();
 
     gte_stlvnlsv(dest);
 }
