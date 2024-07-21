@@ -3,6 +3,7 @@
 #include "Game/G2/ANMDECMP.h"
 #include "Game/G2/POOLMMG2.h"
 #include "Game/G2/ANMG2ILF.h"
+#include "Game/G2/ANMINTRP.h"
 
 //static G2AnimChanStatusBlockPool _chanStatusBlockPool;
 G2AnimChanStatusBlockPool _chanStatusBlockPool;
@@ -200,7 +201,72 @@ void G2Anim_BuildTransforms(G2Anim *anim)
     anim->flags &= ~0x1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_UpdateStoredFrame);
+void G2Anim_UpdateStoredFrame(G2Anim *anim)
+{
+    G2AnimSection *section;
+    short storedTime;
+    short elapsedTime;
+    G2SVector3 motionVector;
+    int sectionCount;
+    G2AnimInterpInfo *interpInfo;
+    G2SVector3 *vector;
+
+    section = &anim->section[0];
+
+    sectionCount = anim->sectionCount;
+
+    storedTime = section->storedTime;
+
+    elapsedTime = section->elapsedTime;
+
+    for (; sectionCount > 0; sectionCount--)
+    {
+        interpInfo = section->interpInfo;
+
+        if ((interpInfo != NULL) && (interpInfo->stateBlockList != NULL))
+        {
+            _G2AnimSection_UpdateStoredFrameFromQuat(section);
+        }
+        else
+        {
+            _G2AnimSection_UpdateStoredFrameFromData(section, anim);
+        }
+
+        section++;
+    }
+
+    vector = &motionVector;
+
+    if (storedTime < 0)
+    {
+        storedTime = 0;
+    }
+
+    ((int *)&vector->x)[0] = 0;
+    vector->z = 0;
+
+    if (elapsedTime > storedTime)
+    {
+        G2Anim_GetRootMotionOverInterval(anim, storedTime, elapsedTime, vector);
+    }
+    else if (elapsedTime < storedTime)
+    {
+        G2Anim_GetRootMotionOverInterval(anim, elapsedTime, storedTime, vector);
+    }
+
+    if ((anim->section[0].flags & 0x4))
+    {
+        anim->rootTrans.x -= motionVector.x;
+        anim->rootTrans.y -= motionVector.y;
+        anim->rootTrans.z -= motionVector.z;
+    }
+    else
+    {
+        anim->rootTrans.x += motionVector.x;
+        anim->rootTrans.y += motionVector.y;
+        anim->rootTrans.z += motionVector.z;
+    }
+}
 
 G2AnimSection *G2Anim_GetSectionWithSeg(G2Anim *anim, int segNumber)
 {
