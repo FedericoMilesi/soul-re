@@ -806,7 +806,17 @@ void process_menu_line(GameTracker *gt, DebugMenuLine *menu)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", pre_process_functions);
+int pre_process_functions(GameTracker *gt, DebugMenuLine *menu)
+{
+    (void)menu;
+
+    if (gt->playerInstance != NULL)
+    {
+        gt->playerInstance->flags |= 0x100;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", post_process_functions);
 
