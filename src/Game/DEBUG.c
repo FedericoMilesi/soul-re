@@ -764,7 +764,29 @@ void handle_line_type_action_with_line(GameTracker *gt, DebugMenuLine *line)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", handle_line_type_menu);
+void handle_line_type_menu(GameTracker *gt, DebugMenuLine *line)
+{
+    typedef int (*fptr)(); // not from decls.h
+    fptr ok; // modified from decls.h
+
+    if ((gt->controlCommand[0][1] & 0x80))
+    {
+        ok = (fptr)line->bit_mask;
+
+        if (ok != 0)
+        {
+            ok();
+        }
+
+        get_last_menu_line(line)->lower = debugMenuChoice;
+
+        the_previous_menu = currentMenu;
+
+        currentMenu = (DebugMenuLine *)line->var_address;
+
+        debugMenuChoice = get_last_menu_line(currentMenu)->lower;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", process_menu_line);
 
