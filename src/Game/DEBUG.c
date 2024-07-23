@@ -893,7 +893,20 @@ static char D_800D0174[] = "-center";
 static char D_800D017C[] = "unknown format control: %s\n";
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", adjust_format);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", find_eol);
+char *find_eol(char *text)
+{
+    unsigned char *temp; // not from decls.h
+
+    for (temp = (unsigned char *)text; *temp != '\0'; temp++)
+    {
+        if (*temp == '\n')
+        {
+            break;
+        }
+    }
+
+    return (char *)temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", draw_menu_item);
 
