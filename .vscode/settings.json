@@ -49,6 +49,7 @@
         "load3d.h": "c",
         "debug.h": "c",
         "sound.h": "c",
-        "saveinfo.h": "c"
+        "saveinfo.h": "c",
+        "font.h": "c"
     }
 }

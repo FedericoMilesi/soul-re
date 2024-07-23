@@ -260,6 +260,7 @@ MATRIX *GAMELOOP_GetMatrices(int numMatrices);
 void GAMELOOP_Set_Pause_Redraw();
 void GAMELOOP_StreamLevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker, int toSignalNum, int fromSignalNum);
 void GAMELOOP_RequestLevelChange(char *name, short number, GameTracker *gameTracker);
+void ResetPrimPool();
 
 GameTracker gameTrackerX;
 extern long playerCameraMode;

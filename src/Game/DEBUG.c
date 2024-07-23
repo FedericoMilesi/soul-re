@@ -6,6 +6,7 @@
 #include "Game/PSX/MAIN.h"
 #include "Game/CAMERA.h"
 #include "Game/SOUND.h"
+#include "Game/FONT.h"
 
 void DEBUG_FillUpHealth(long *var);
 void DEBUG_FogLoad();
@@ -952,7 +953,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ReloadCurrentLevel);
 
 void DEBUG_LevelSelectNew()
 {
-    unsigned char *name; // modified from decls.h
+    char *name;
     short number;
     unsigned char *p; // modified from decls.h
     char saveChar;
@@ -963,7 +964,7 @@ void DEBUG_LevelSelectNew()
 
     number = (short)currentMenu[debugMenuChoice].lower;
 
-    name = p;
+    name = (char *)p;
 
     for (; *p != '\0'; p++)
     {
@@ -1021,7 +1022,49 @@ void DEBUG_CaptureScreen()
 {
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_PageFlip);
+void DEBUG_PageFlip()
+{
+    POLY_F4 poly;
+    unsigned long **drawot;
+
+    DrawSync(0);
+
+    VSync(0);
+    VSync(0);
+    VSync(0);
+    VSync(0);
+    VSync(0);
+
+    DrawSyncCallback(NULL);
+
+    VSyncCallback(NULL);
+
+    ResetPrimPool();
+
+    drawot = gameTrackerX.drawOT;
+
+    gameTrackerX.drawPage = 0;
+
+    PutDrawEnv(draw);
+
+    ClearOTagR((u_long *)drawot, 3072);
+
+    DrawSync(0);
+
+    setPolyF4(&poly);
+
+    setRGB0(&poly, 32, 32, 32);
+    setXY4(&poly, 0, 14, 511, 14, 0, (short)fontTracker.font_ypos - 2, 511, (short)fontTracker.font_ypos - 2);
+
+    DrawPrim(&poly);
+
+    FONT_Flush();
+
+    DrawOTag((u_long *)drawot);
+    DrawSync(0);
+
+    PutDispEnv((DISPENV *)gameTrackerX.disp);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FatalError);
 

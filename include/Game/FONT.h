@@ -53,4 +53,6 @@ FontTracker fontTracker;
 
 unsigned short SpecialFogClut;
 
+void FONT_Flush();
+
 #endif
