@@ -46,6 +46,7 @@
         "mainvm.h": "c",
         "poolmmg2.h": "c",
         "localstr.h": "c",
-        "load3d.h": "c"
+        "load3d.h": "c",
+        "debug.h": "c"
     }
 }

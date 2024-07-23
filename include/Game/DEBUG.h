@@ -1,6 +1,8 @@
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
+#include "Game/GAMELOOP.h"
+
 enum DEBUG_LINE_TYPE {
     DEBUG_LINE_TYPE_BIT = 0,
     DEBUG_LINE_TYPE_LONG = 1,
@@ -51,5 +53,6 @@ extern unsigned long debugRazielFlags2;
 extern unsigned long debugRazielFlags3;
 
 void DEBUG_FatalError(const char *fmt, ...);
+void DEBUG_DisplayStatus(GameTracker *gameTracker);
 
 #endif

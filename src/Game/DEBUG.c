@@ -640,7 +640,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", process_cheat_codes);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_Process);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_Draw);
+void DEBUG_Draw(GameTracker *gameTracker, unsigned long **ot)
+{
+    (void)ot;
+
+    if ((gameTracker->gameMode == 0) || (gameTracker->cheatMode == 1) || (gameTracker->gameMode == 4))
+    {
+        DEBUG_DisplayStatus(gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_MenuCountLength);
 
