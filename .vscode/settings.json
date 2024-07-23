@@ -47,6 +47,7 @@
         "poolmmg2.h": "c",
         "localstr.h": "c",
         "load3d.h": "c",
-        "debug.h": "c"
+        "debug.h": "c",
+        "sound.h": "c"
     }
 }

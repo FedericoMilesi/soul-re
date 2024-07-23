@@ -38,5 +38,10 @@ void SOUND_ProcessInstanceSounds(unsigned char *sfxFileData, SoundInstance *soun
 void SOUND_EndInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl);
 unsigned long SndPlayVolPan(unsigned int sample, unsigned short vol, unsigned short pan, short pitch);
 void SOUND_HandleGlobalValueSignal(int name, long data);
+void SOUND_MusicOff();
+void SOUND_MusicOn();
+void SOUND_SfxOff();
+void SOUND_SfxOn();
+void SOUND_ShutdownMusic();
 
 #endif

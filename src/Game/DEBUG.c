@@ -5,6 +5,7 @@
 #include "Game/RAZIEL/RAZIEL.h"
 #include "Game/PSX/MAIN.h"
 #include "Game/CAMERA.h"
+#include "Game/SOUND.h"
 
 void DEBUG_FillUpHealth(long *var);
 void DEBUG_FogLoad();
@@ -666,7 +667,30 @@ long DEBUG_MenuCountLength(DebugMenuLine *menu)
     return length;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ExitMenus);
+void DEBUG_ExitMenus()
+{
+    currentMenu[DEBUG_MenuCountLength(currentMenu)].lower = debugMenuChoice;
+
+    if ((unsigned char)gameTrackerX.sound.gMusicOn == 0)
+    {
+        SOUND_MusicOff();
+
+        SOUND_ShutdownMusic();
+    }
+    else
+    {
+        SOUND_MusicOn();
+    }
+
+    if ((unsigned char)gameTrackerX.sound.gSfxOn == 0)
+    {
+        SOUND_SfxOff();
+    }
+    else
+    {
+        SOUND_SfxOn();
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", get_last_menu_line);
 
