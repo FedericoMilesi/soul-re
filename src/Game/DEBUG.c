@@ -862,7 +862,11 @@ void set_debug_leading()
     cem_item_leading = 12;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", set_user_leading);
+void set_user_leading()
+{
+    cem_line_leading = 12;
+    cem_item_leading = 16;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", isdigit);
 
