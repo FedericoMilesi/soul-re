@@ -650,7 +650,21 @@ void DEBUG_Draw(GameTracker *gameTracker, unsigned long **ot)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_MenuCountLength);
+long DEBUG_MenuCountLength(DebugMenuLine *menu)
+{
+    int length;
+    DebugMenuLine *curLine;
+
+    for (length = 0, curLine = menu; curLine != NULL; curLine++, length++)
+    {
+        if (curLine->type == DEBUG_LINE_TYPE_ENDLIST)
+        {
+            break;
+        }
+    }
+
+    return length;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ExitMenus);
 
