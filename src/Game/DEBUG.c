@@ -734,7 +734,16 @@ void handle_line_type_bit(GameTracker *gt, DebugMenuLine *line)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", handle_line_type_action);
+void handle_line_type_action(GameTracker *gt, DebugMenuLine *line)
+{
+    typedef int (*fptr)(); // not from decls.h
+    //int ok; // unused
+
+    if ((gt->controlCommand[0][1] & 0x80))
+    {
+        ((fptr)line->var_address)();
+    }
+}
 
 void handle_line_type_action_with_line(GameTracker *gt, DebugMenuLine *line)
 {
