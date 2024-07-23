@@ -7,6 +7,7 @@
 #include "Game/CAMERA.h"
 #include "Game/SOUND.h"
 #include "Game/FONT.h"
+#include "Game/MATH3D.h"
 
 void DEBUG_FillUpHealth(long *var);
 void DEBUG_FogLoad();
@@ -1072,7 +1073,68 @@ void DEBUG_ProcessSecondController()
 {
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ProcessCheat);
+void DEBUG_ProcessCheat(GameTracker *gameTracker)
+{
+    SVECTOR v;
+    VECTOR dv;
+    MATRIX rotate_mat;
+    long angleRelCamera;
+
+    angleRelCamera = 0;
+
+    if (((gameTracker->controlCommand[0][0] & 0xA01) != 0xA01) && ((gameTracker->controlCommand[0][0] & 0xA02) != 0xA02))
+    {
+        if ((gameTracker->controlCommand[0][0] & 0x5) == 0x5)
+        {
+            angleRelCamera = 2560;
+        }
+        else if ((gameTracker->controlCommand[0][0] & 0x9) == 0x9)
+        {
+            angleRelCamera = 1536;
+        }
+        else if ((gameTracker->controlCommand[0][0] & 0x6) == 0x6)
+        {
+            angleRelCamera = 3584;
+        }
+        else if ((gameTracker->controlCommand[0][0] & 0xA) == 0xA)
+        {
+            angleRelCamera = 512;
+        }
+        else if ((gameTracker->controlCommand[0][0] & 0x2))
+        {
+            angleRelCamera = 4096;
+        }
+        else if ((gameTracker->controlCommand[0][0] & 0x4))
+        {
+            angleRelCamera = 3072;
+        }
+        else if ((gameTracker->controlCommand[0][0] & 0x8))
+        {
+            angleRelCamera = 1024;
+        }
+        else if ((gameTracker->controlCommand[0][0] & 0x1))
+        {
+            angleRelCamera = 2048;
+        }
+    }
+
+    if (angleRelCamera != 0)
+    {
+        memset(&v, 0, sizeof(SVECTOR));
+        memset(&dv, 0, sizeof(VECTOR));
+
+        v.vy = -256;
+
+        MATH3D_SetUnityMatrix(&rotate_mat);
+
+        RotMatrixZ(theCamera.core.rotation.z + angleRelCamera, &rotate_mat);
+
+        ApplyMatrix(&rotate_mat, &v, &dv);
+
+        gameTracker->playerInstance->position.x += (short)dv.vx;
+        gameTracker->playerInstance->position.y += (short)dv.vy;
+    }
+}
 
 void DEBUG_DoAreaProtection()
 {
