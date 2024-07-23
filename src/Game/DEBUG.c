@@ -950,7 +950,48 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ExitGame);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ReloadCurrentLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_LevelSelectNew);
+void DEBUG_LevelSelectNew()
+{
+    unsigned char *name; // modified from decls.h
+    short number;
+    unsigned char *p; // modified from decls.h
+    char saveChar;
+
+    saveChar = 0;
+
+    p = (unsigned char *)currentMenu[debugMenuChoice].text;
+
+    number = (short)currentMenu[debugMenuChoice].lower;
+
+    name = p;
+
+    for (; *p != '\0'; p++)
+    {
+        if ((*p == ' ') || (*p == '\t') || (*p == '\n'))
+        {
+            saveChar = *p;
+
+            *p = 0;
+            break;
+        }
+    }
+
+    if ((gameTrackerX.streamFlags & 0x200000))
+    {
+        SAVE_SaveGame();
+    }
+
+    GAMELOOP_RequestLevelChange(name, number, &gameTrackerX);
+
+    gameTrackerX.levelDone = 4;
+
+    if (saveChar != 0)
+    {
+        *p = saveChar;
+    }
+
+    gameTrackerX.gameMode = 0;
+}
 
 void DEBUG_SetViewVram()
 {
