@@ -40,7 +40,14 @@ int MONSENSE_Hear(Instance *instance, evCollideInstanceStatsData *data)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_Smell);
+int MONSENSE_Smell(Instance *instance, evCollideInstanceStatsData *data)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    return data->distance < mv->subAttr->senses->scentRadius;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_FirstSense);
 
