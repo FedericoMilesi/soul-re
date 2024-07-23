@@ -735,7 +735,34 @@ void handle_line_type_bit(GameTracker *gt, DebugMenuLine *line)
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", handle_line_type_action);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", handle_line_type_action_with_line);
+void handle_line_type_action_with_line(GameTracker *gt, DebugMenuLine *line)
+{
+    option_ctrl_t ctrl;
+
+    if ((gt->controlCommand[0][1] & 0x80))
+    {
+        ctrl = option_ctrl_select;
+    }
+    else if ((gt->controlCommand[0][1] & 0x4))
+    {
+        ctrl = option_ctrl_left;
+    }
+    else if ((gt->controlCommand[0][1] & 0x8))
+    {
+        ctrl = option_ctrl_right;
+    }
+    else
+    {
+        ctrl = option_ctrl_none;
+    }
+
+    if (ctrl != option_ctrl_none)
+    {
+        typedef void *(*fptr)(); // not from decls.h
+
+        ((fptr)line->var_address)(gt, line);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", handle_line_type_menu);
 

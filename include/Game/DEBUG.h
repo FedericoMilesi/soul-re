@@ -48,6 +48,15 @@ typedef struct GameCheat {
     short cheatStage;
 } GameCheat;
 
+typedef enum option_ctrl_t {
+    option_ctrl_bogus = 0,
+    option_ctrl_none = 1,
+    option_ctrl_select = 2,
+    option_ctrl_left = 3,
+    option_ctrl_right = 4,
+    option_ctrl_num_states = 5,
+} option_ctrl_t;
+
 extern unsigned long debugRazielFlags1;
 extern unsigned long debugRazielFlags2;
 extern unsigned long debugRazielFlags3;
