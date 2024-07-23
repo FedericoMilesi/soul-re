@@ -1017,7 +1017,39 @@ void DEBUG_EndViewVram(GameTracker *gameTracker)
 /*TODO: migrate to DEBUG_ViewVram*/
 static long D_800D0398 = 0;
 static long D_800D039C = 0;
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ViewVram);
+void DEBUG_ViewVram(GameTracker *gameTracker)
+{
+    long *controlCommand;
+    //static int xPos;
+    //static int yPos;
+
+    controlCommand = &gameTracker->controlCommand[0][0];
+
+    if (((controlCommand[1] & 0x1)) && (D_800D039C >= 0))
+    {
+        D_800D039C -= 32;
+    }
+
+    if (((controlCommand[1] & 0x2)) && (D_800D039C < 272))
+    {
+        D_800D039C += 32;
+    }
+
+    if (((controlCommand[1] & 0x4)) && (D_800D0398 >= 0))
+    {
+        D_800D0398 -= 32;
+    }
+
+    if (((controlCommand[1] & 0x8)) && (D_800D0398 < 512))
+    {
+        D_800D0398 += 32;
+    }
+
+    SetDefDispEnv(&disp[0], D_800D0398, D_800D039C, 512, 240);
+    SetDefDispEnv(&disp[1], D_800D0398, D_800D039C, 512, 240);
+
+    gameTracker->playerInstance->flags |= 0x100;
+}
 
 void DEBUG_CaptureScreen()
 {
