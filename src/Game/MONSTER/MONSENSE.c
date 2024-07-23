@@ -1,6 +1,20 @@
 #include "common.h"
+#include "Game/MONSTER/MONAPI.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_FindIR);
+MonsterIR *MONSENSE_FindIR(MonsterVars *mv, Instance *instance)
+{
+    MonsterIR *mir;
+
+    for (mir = mv->monsterIRList; mir != NULL; mir = mir->next)
+    {
+        if (mir->instance == instance)
+        {
+            break;
+        }
+    }
+
+    return mir;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_See);
 
