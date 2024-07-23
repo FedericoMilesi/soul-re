@@ -788,7 +788,23 @@ void handle_line_type_menu(GameTracker *gt, DebugMenuLine *line)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", process_menu_line);
+void process_menu_line(GameTracker *gt, DebugMenuLine *menu)
+{
+    DebugMenuLine *line;
+    debug_dispatch_t *dispatch;
+
+    line = &menu[debugMenuChoice];
+
+    if (line->type < DEBUG_LINE_TYPE_ENDLIST)
+    {
+        dispatch = &debug_dispatch_table[line->type];
+
+        if (dispatch->fn != NULL)
+        {
+            dispatch->fn(gt, line);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", pre_process_functions);
 
