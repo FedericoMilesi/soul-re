@@ -43,5 +43,8 @@ void SOUND_MusicOn();
 void SOUND_SfxOff();
 void SOUND_SfxOn();
 void SOUND_ShutdownMusic();
+void SOUND_SetMusicVolume(int newVolume);
+void SOUND_SetSfxVolume(int newVolume);
+void SOUND_SetVoiceVolume(int newVolume);
 
 #endif

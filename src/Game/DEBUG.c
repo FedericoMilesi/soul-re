@@ -39,6 +39,7 @@ DebugMenuLine mainMenu[];
 DebugMenuLine BossAreasMenu[];
 DebugMenuLine level2SelectMenu[];
 DebugMenuLine pauseMenu[];
+DebugMenuLine debugSoundMenu[0]; // double-check
 
 static char pauseFormatString[20] = "-abs 256 40 -center";
 static char mainFormatString[20] = "-abs 160 40 -center";
@@ -818,7 +819,42 @@ int pre_process_functions(GameTracker *gt, DebugMenuLine *menu)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", post_process_functions);
+void post_process_functions(GameTracker *gt, DebugMenuLine *menu)
+{
+    if (menu == debugSoundMenu)
+    {
+        SOUND_SetMusicVolume(-1);
+        SOUND_SetSfxVolume(-1);
+        SOUND_SetVoiceVolume(-1);
+
+        if ((gt->debugFlags & 0x80000))
+        {
+            gt->sound.gVoiceOn = 1;
+        }
+        else
+        {
+            gt->sound.gVoiceOn = 0;
+        }
+
+        if ((gt->debugFlags2 & 0x1000))
+        {
+            gt->sound.gMusicOn = 1;
+        }
+        else
+        {
+            gt->sound.gMusicOn = 0;
+        }
+
+        if ((gt->debugFlags2 & 0x2000))
+        {
+            gt->sound.gSfxOn = 1;
+        }
+        else
+        {
+            gt->sound.gSfxOn = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", set_debug_leading);
 
