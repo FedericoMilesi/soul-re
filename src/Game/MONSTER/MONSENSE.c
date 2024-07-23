@@ -1,5 +1,7 @@
 #include "common.h"
+#include "Game/MONSTER/MONSENSE.h"
 #include "Game/MONSTER/MONAPI.h"
+#include "Game/MATH3D.h"
 
 MonsterIR *MONSENSE_FindIR(MonsterVars *mv, Instance *instance)
 {
@@ -18,7 +20,25 @@ MonsterIR *MONSENSE_FindIR(MonsterVars *mv, Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_See);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_Hear);
+int MONSENSE_Hear(Instance *instance, evCollideInstanceStatsData *data)
+{
+    MonsterVars *mv;
+    MonsterSenses *senses;
+    long mode;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    senses = mv->subAttr->senses;
+
+    mode = INSTANCE_Query(data->instance, 10);
+
+    if (((!(mode & 0x10B0143)) || ((mode & 0x200000))) && (data->distance < (unsigned)senses->soundRadius))
+    {
+        return MATH3D_ConeDetect(&data->relativePosition, senses->soundArc, senses->soundElevation);
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_Smell);
 
