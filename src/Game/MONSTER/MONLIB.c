@@ -1979,7 +1979,45 @@ void MON_SoulSucked(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetUpKnockBack);
+int MON_SetUpKnockBack(Instance *instance, Instance *enemy, evMonsterHitData *data)
+{
+    MonsterVars *mv;
+    long d;
+    long t;
+    long a;
+    long v;
+    int front;
+    short temp; // not from decls.h
+
+    mv = (MonsterVars *)instance->extraData;
+
+    d = data->knockBackDistance;
+    t = data->knockBackDuration;
+
+    a = PHYSICS_FindAFromDAndT(d, t);
+    v = PHYSICS_FindVFromAAndD(a, d);
+
+    temp = ((instance->rotation.z - MATH3D_AngleFromPosToPos(&instance->position, &enemy->position)) + 1024) & 0xFFF;
+
+    if (temp <= 2047)
+    {
+        MON_TurnToPosition(instance, &enemy->position, 4096);
+
+        PHYSICS_SetVAndAFromRot(instance, &instance->rotation, -v, a);
+
+        front = 1;
+    }
+    else
+    {
+        PHYSICS_SetVAndAFromRot(instance, &instance->rotation, v, -a);
+
+        front = 0;
+    }
+
+    mv->generalTimer = MON_GetTime(instance) + (t * 33);
+
+    return front;
+}
 
 void MON_DoDrainEffects(Instance *instance, Instance *ei)
 {
