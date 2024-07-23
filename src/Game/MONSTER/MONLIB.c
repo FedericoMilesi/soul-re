@@ -11,6 +11,7 @@
 #include "Game/PHYSICS.h"
 #include "Game/FX.h"
 #include "Game/G2/ANMCTRLR.h"
+#include "Game/CAMERA.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -1980,7 +1981,60 @@ void MON_SoulSucked(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetUpKnockBack);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_DoDrainEffects);
+void MON_DoDrainEffects(Instance *instance, Instance *ei)
+{
+    MonsterAttributes *ma;
+    MonsterVars *mv;
+    MATRIX *mat;
+    SVector location;
+    SVector position;
+    SVector vel;
+    SVector accel;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    memset(&accel, 0, sizeof(SVector));
+
+    if (ei == gameTrackerX.playerInstance)
+    {
+        mat = &ei->matrix[(rand() % (ei->object->modelList[ei->currentModel]->numSegments - 16)) + 14];
+    }
+    else
+    {
+        mat = &ei->matrix[rand() % ei->object->modelList[ei->currentModel]->numSegments];
+    }
+
+    location.x = mat->t[0];
+    location.y = mat->t[1];
+    location.z = mat->t[2];
+
+    mat = &instance->matrix[ma->headSegment];
+
+    vel.x = (mat->t[0] - location.x) / 48;
+    vel.y = (mat->t[1] - location.y) / 48;
+    vel.z = (mat->t[2] - location.z) / 48;
+
+    position.x = mat->t[0];
+    position.y = mat->t[1];
+    position.z = mat->t[2];
+
+    FX_Dot(&location, &vel, &accel, 0, 0xFF6060, 24, 20, 0);
+
+    if (ei == gameTrackerX.playerInstance)
+    {
+        mat = &ei->matrix[14];
+
+        location.x = mat->t[0];
+        location.y = mat->t[1];
+        location.z = mat->t[2];
+
+        mv->effectTimer = (mv->effectTimer + ((gameTrackerX.timeMult * 80) / 4096)) & 0xFFF;
+
+        FX_Lightning(theCamera.core.wcTransform, gameTrackerX.drawOT, NULL, mv->effectTimer, &position, &location, 0, 96, 24, 80, 1, 0xD06060, 0xFF6400);
+    }
+}
 
 void MON_SetFXHitData(Instance *instance, evFXHitData *data, int type, int amount)
 {

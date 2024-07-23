@@ -493,5 +493,6 @@ FXParticle *FX_GetParticle(Instance *instance, short startSegment);
 void FX_RelocateFXPointers(Object *oldObject, Object *newObject, long sizeOfObject);
 void FX_Relocate(SVector *offset);
 void FX_UpdateInstanceWaterSplit(Instance *instance);
+void FX_Lightning(MATRIX *wcTransform, unsigned long **ot, MATRIX *mat, short deg, SVector *start, SVector *end, int width, int small_width, int segs, int sine_size, int variation, long color, long glow_color);
 
 #endif
