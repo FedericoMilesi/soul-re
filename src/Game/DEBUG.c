@@ -928,7 +928,10 @@ void DEBUG_DrawShrinkCels()
 {
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ContinueGame);
+void DEBUG_ContinueGame()
+{
+    gameTrackerX.gameFlags |= 0x40000000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ExitGame);
 
