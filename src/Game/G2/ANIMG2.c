@@ -331,7 +331,76 @@ void G2Anim_GetSegChannelValue(G2Anim *anim, int segIndex, unsigned short *value
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_GetRootMotionFromTimeForDuration);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2AnimSection_SwitchToKeylistAtTime);
+void G2AnimSection_SwitchToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime)
+{
+    G2Anim *anim;
+    G2SVector3 rootMotion;
+    G2AnimInterpInfo *interpInfo;
+    unsigned short z;
+    unsigned long xy;
+
+    anim = _G2AnimSection_GetAnim(section);
+
+    if (section->firstSeg == 0)
+    {
+        anim->flags |= 0x1;
+
+        if ((section->keylist != NULL) && (section->storedTime >= 0))
+        {
+            G2Anim_GetRootMotionOverInterval(anim, section->storedTime, section->elapsedTime, &rootMotion);
+        }
+        else
+        {
+            *(unsigned long *)&rootMotion.x = 0;
+            rootMotion.z = 0;
+        }
+
+        rootMotion.x += anim->rootTrans.x;
+        rootMotion.y += anim->rootTrans.y;
+        rootMotion.z += anim->rootTrans.z;
+    }
+
+    interpInfo = section->interpInfo;
+
+    if ((interpInfo != NULL) && (interpInfo->stateBlockList != NULL))
+    {
+        _G2Anim_FreeInterpStateBlockList(interpInfo->stateBlockList);
+
+        interpInfo->stateBlockList = NULL;
+    }
+
+    G2AnimSection_ClearAlarm(section, 0x3);
+
+    if (keylist != section->keylist)
+    {
+        section->keylist = keylist;
+        section->keylistID = keylistID;
+
+        section->storedTime = -section->keylist->timePerKey;
+    }
+
+    G2AnimSection_JumpToTime(section, targetTime);
+
+    if (section->firstSeg == 0)
+    {
+        section->flags |= 0x80;
+
+        xy = *(unsigned long *)&rootMotion.x;
+        z = rootMotion.z;
+
+        *(unsigned long *)&anim->rootTrans.x = xy;
+        anim->rootTrans.z = z;
+    }
+
+    if ((section->flags & 0x2))
+    {
+        G2AnimSection_SetLoopRangeAll(section);
+    }
+
+    G2AnimSection_SetUnpaused(section);
+
+    section->swAlarmTable = NULL;
+}
 
 void G2AnimSection_JumpToTime(G2AnimSection *section, short targetTime)
 {
