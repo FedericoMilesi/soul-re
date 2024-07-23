@@ -702,7 +702,20 @@ DebugMenuLine *get_last_menu_line(DebugMenuLine *line)
     return line;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", num_menu_items);
+int num_menu_items(DebugMenuLine *menu)
+{
+    int nitems;
+
+    nitems = 0;
+
+    while (menu->type != DEBUG_LINE_TYPE_ENDLIST)
+    {
+        nitems++;
+        menu++;
+    }
+
+    return nitems;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", maybe_change_menu_choice);
 
