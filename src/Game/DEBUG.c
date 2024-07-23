@@ -692,7 +692,15 @@ void DEBUG_ExitMenus()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", get_last_menu_line);
+DebugMenuLine *get_last_menu_line(DebugMenuLine *line)
+{
+    while (line->type != DEBUG_LINE_TYPE_ENDLIST)
+    {
+        line++;
+    }
+
+    return line;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", num_menu_items);
 
