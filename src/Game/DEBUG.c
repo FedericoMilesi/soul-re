@@ -721,7 +721,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", maybe_change_menu_choice);
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", handle_line_type_long);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", handle_line_type_bit);
+void handle_line_type_bit(GameTracker *gt, DebugMenuLine *line)
+{
+    if ((gt->controlCommand[0][1] & 0x4))
+    {
+        *line->var_address |= line->bit_mask;
+    }
+    else if ((gt->controlCommand[0][1] & 0x8))
+    {
+        *line->var_address &= ~line->bit_mask;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", handle_line_type_action);
 
