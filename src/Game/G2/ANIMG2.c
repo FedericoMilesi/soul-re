@@ -438,7 +438,36 @@ INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_BuildTransformsNoControll
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_BuildSegTransformNoControllers);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_BuildSegLocalRotMatrix);
+void _G2Anim_BuildSegLocalRotMatrix(G2AnimSegValue *segValue, G2Matrix *segMatrix)
+{
+    G2SVector3 rot;
+    G2SVector3 *source;
+    G2SVector3 *dest;
+    unsigned long mask;
+    unsigned short z;
+    unsigned long xy;
+
+    source = &segValue->rotQuat.rot;
+
+    if (segValue->bIsQuat != 0)
+    {
+        G2Quat_ToMatrix_S(&segValue->rotQuat.quat, segMatrix);
+    }
+    else
+    {
+        mask = 0xFFF0FFF;
+
+        dest = &rot;
+
+        z = source->z & 0xFFF;
+        xy = *(unsigned long *)&source->x & mask;
+
+        dest->z = z;
+        *(unsigned long *)&rot.x = xy;
+
+        RotMatrixZYX((SVECTOR *)dest, (MATRIX *)segMatrix);
+    }
+}
 
 void wombat(unsigned char *segKeyList, int flagBitOffset, G2AnimSegKeyflagInfo *kfInfo)
 {
