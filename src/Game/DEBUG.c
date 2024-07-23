@@ -856,7 +856,11 @@ void post_process_functions(GameTracker *gt, DebugMenuLine *menu)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", set_debug_leading);
+void set_debug_leading()
+{
+    cem_line_leading = 10;
+    cem_item_leading = 12;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", set_user_leading);
 
