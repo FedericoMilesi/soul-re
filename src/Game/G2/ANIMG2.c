@@ -487,7 +487,42 @@ void wombat(unsigned char *segKeyList, int flagBitOffset, G2AnimSegKeyflagInfo *
     kfInfo->bitCount = 32 - (flagBitOffset & 0x1F);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", kangaroo);
+unsigned long kangaroo(G2AnimSegKeyflagInfo *kfInfo)
+{
+    unsigned long keyflags;
+    unsigned long tempFlags;
+
+    keyflags = 0;
+
+    if (kfInfo->stream != NULL)
+    {
+        keyflags = kfInfo->flags & 0x7;
+
+        kfInfo->flags >>= 3;
+
+        kfInfo->bitCount -= 3;
+
+        if (kfInfo->bitCount <= 0)
+        {
+            kfInfo->stream = &kfInfo->stream[1];
+
+            kfInfo->flags = kfInfo->stream[0];
+
+            if (kfInfo->bitCount < 0)
+            {
+                tempFlags = (kfInfo->flags << (kfInfo->bitCount + 3)) & 0x7;
+
+                keyflags |= tempFlags;
+
+                kfInfo->flags >>= -kfInfo->bitCount;
+            }
+
+            kfInfo->bitCount += 32;
+        }
+    }
+
+    return keyflags;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_InitializeSegValue);
 
