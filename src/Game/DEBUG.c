@@ -868,7 +868,14 @@ void set_user_leading()
     cem_item_leading = 16;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", isdigit);
+int isdigit(char c)
+{
+    unsigned char temp; // not from decls.h
+
+    temp = c - '0';
+
+    return temp <= ('9' - '0');
+}
 
 /*TODO: migrate to adjust_format*/
 static char D_800D0164[] = "-abs ";
