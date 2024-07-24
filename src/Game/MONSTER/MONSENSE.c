@@ -278,7 +278,7 @@ void MONSENSE_SetupSenses(Instance *instance)
 
     gNumMonsters++;
 
-    if ((((MonsterAttributes *)instance->data)->whatAmI) & 0x1804)
+    if (((((MonsterAttributes *)instance->data)->whatAmI) & 0x1804))
     {
         num = ++gNumSpectralMonsters;
     }
