@@ -1209,7 +1209,25 @@ void DEBUG_ExitGame()
     gameTrackerX.gameFlags |= 0x1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ReloadCurrentLevel);
+void DEBUG_ReloadCurrentLevel()
+{
+    if (gameTrackerX.levelChange == 0)
+    {
+        if ((gameTrackerX.streamFlags & 0x200000))
+        {
+            SAVE_SaveGame();
+        }
+
+        gameTrackerX.gameFlags |= 0x1;
+
+        SOUND_ResetAllSound();
+
+        gameTrackerX.levelChange = 1;
+        gameTrackerX.levelDone = 4;
+    }
+
+    gameTrackerX.gameMode = 0;
+}
 
 void DEBUG_LevelSelectNew()
 {
