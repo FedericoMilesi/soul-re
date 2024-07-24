@@ -78,7 +78,14 @@ int memcard_data_size()
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_initialize);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_end);
+void memcard_end(memcard_t *memcard)
+{
+    memcard->table->end(memcard->mcmenu);
+
+    unload(memcard);
+
+    memcard->running = 0;
+}
 
 int maybe_start(memcard_t *memcard)
 {
