@@ -3,6 +3,7 @@
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MATH3D.h"
 #include "Game/PHYSOBS.h"
+#include "Game/MONSTER/MONLIB.h"
 
 MonsterIR *MONSENSE_FindIR(MonsterVars *mv, Instance *instance)
 {
@@ -120,7 +121,64 @@ void MONSENSE_SenseInstance(Instance *instance, evCollideInstanceStatsData *data
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_StartMonsterIRList);
+void MONSENSE_StartMonsterIRList(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterIR *mir;
+    MonsterIR *newlist;
+    int enemyOnList;
+    char temp; // not from decls.h
+
+    temp = 0;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    newlist = NULL;
+
+    enemyOnList = 0;
+
+    if (mv->alertCount != 0)
+    {
+        MonsterIR *next;
+
+        for (mir = mv->monsterIRList; mir != NULL; mir = next)
+        {
+            next = mir->next;
+
+            if ((mir->handle != mir->instance->instanceID) || ((!(mir->mirFlags & 0xE0)) && (mir->forgetTimer < MON_GetTime(instance))))
+            {
+                if (mv != NULL) // garbage code for reodering
+                {
+                    temp = -temp;
+                }
+
+                mir->next = mv->freeIRs;
+
+                mv->freeIRs = mir;
+            }
+            else
+            {
+                mir->next = newlist;
+
+                newlist = mir;
+
+                newlist->mirFlags &= ~0xE0;
+
+                if (mv->enemy == newlist)
+                {
+                    enemyOnList = 1;
+                }
+            }
+        }
+
+        if (enemyOnList == 0)
+        {
+            mv->enemy = NULL;
+        }
+
+        mv->monsterIRList = newlist;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_GetMonsterIR);
 
