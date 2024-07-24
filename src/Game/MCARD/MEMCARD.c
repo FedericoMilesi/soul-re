@@ -86,7 +86,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_main_menu);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_pause_menu);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", gt2mcmenu);
+void *gt2mcmenu(void *gt)
+{
+    memcard_t *memcard;
+
+    memcard = ((GameTracker *)gt)->memcard;
+
+    return memcard->mcmenu;
+}
 
 void memcard_pop(void *opaque)
 {
