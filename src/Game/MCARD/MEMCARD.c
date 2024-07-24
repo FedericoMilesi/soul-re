@@ -18,7 +18,40 @@ int MEMCARD_IsWrongVersion(memcard_t *memcard)
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", load);
+extern char D_8001248C[];
+void load(memcard_t *memcard)
+{
+    Object *object;
+
+    if ((gameTrackerX.gameFlags & 0x8000000))
+    {
+        object = (Object *)&gameTrackerX.primPool->prim;
+    }
+    else
+    {
+        object = (Object *)MEMPACK_Malloc(40000, 43);
+    }
+
+    LOAD_LoadToAddress("\\kain2\\object\\mcardx\\mcardx.drm", object, 1);
+    //LOAD_LoadToAddress(D_8001248C, object, 1);
+
+    memcard->table = (mcmenu_table_t *)object->relocModule;
+
+    RELMOD_InitModulePointers((uintptr_t)object->relocModule, (int *)object->relocList);
+
+    memcard->object = object;
+
+    //if (memcard->table->versionID != "Jun 30 1999")
+    if (memcard->table->versionID != monVersion)
+    {
+        if (!(gameTrackerX.gameFlags & 0x8000000))
+        {
+            MEMPACK_Free((char *)object);
+        }
+
+        memcard->table = NULL;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", unload);
 
