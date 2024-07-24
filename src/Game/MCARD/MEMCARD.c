@@ -20,7 +20,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", load);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", unload);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_data_size);
+int memcard_data_size()
+{
+    return sizeof(memcard_t);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_initialize);
 
