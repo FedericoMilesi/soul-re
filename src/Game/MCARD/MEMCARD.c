@@ -3,6 +3,9 @@
 #include "Game/SAVEINFO.h"
 #include "Game/MENU/MENU.h"
 #include "Game/PSX/MAIN.h"
+#include "Game/MEMPACK.h"
+#include "Game/RELMOD.h"
+#include "Game/STRMLOAD.h"
 
 int MEMCARD_IsWrongVersion(memcard_t *memcard)
 {

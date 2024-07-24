@@ -54,6 +54,7 @@
         "fx.h": "c",
         "event.h": "c",
         "strmload.h": "c",
-        "menu.h": "c"
+        "menu.h": "c",
+        "relmod.h": "c"
     }
 }

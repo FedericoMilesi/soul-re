@@ -59,5 +59,6 @@ void LOAD_NonBlockingBufferedLoad(char *fileName, void *retFunc, void *retData, 
 int STREAM_PollLoadQueue();
 void LOAD_ChangeDirectory(char *name);
 int STREAM_IsCdBusy(long *numberInQueue);
+void LOAD_LoadToAddress(char *fileName, void *loadAddr, long relocateBinary);
 
 #endif
