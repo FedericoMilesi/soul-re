@@ -959,7 +959,53 @@ char *find_eol(char *text)
     return (char *)temp;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", draw_menu_item);
+void draw_menu_item(GameTracker *gt, debug_format_t *fmt, char *text)
+{
+    char *eol;
+    unsigned char c; // modified from decls.h
+
+    (void)gt;
+
+    while (1)
+    {
+        eol = find_eol(text);
+
+        c = eol[0];
+
+        eol[0] = 0;
+
+        if (fmt->is_centered != 0)
+        {
+            FONT_SetCursor(fmt->xpos - (FONT_GetStringWidth(text) >> 1), fmt->ypos);
+        }
+        else
+        {
+            FONT_SetCursor(fmt->xpos, fmt->ypos);
+        }
+
+        if (currentMenu->type != DEBUG_LINE_TYPE_FORMAT)
+        {
+            FONT_Print(text);
+        }
+        else
+        {
+            FONT_Print2(text);
+        }
+
+        if (c == 0)
+        {
+            break;
+        }
+
+        text = &eol[1];
+
+        eol[0] = c;
+
+        fmt->ypos += cem_line_leading;
+    }
+
+    fmt->ypos += cem_item_leading;
+}
 
 /*TODO: migrate to draw_menu*/
 static char D_800D0198[] = ">";

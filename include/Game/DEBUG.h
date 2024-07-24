@@ -57,6 +57,16 @@ typedef enum option_ctrl_t {
     option_ctrl_num_states = 5,
 } option_ctrl_t;
 
+// size: 0xC
+typedef struct debug_format_t {
+    // offset: 0000
+    int xpos;
+    // offset: 0004
+    int ypos;
+    // offset: 0008
+    int is_centered;
+} debug_format_t;
+
 extern unsigned long debugRazielFlags1;
 extern unsigned long debugRazielFlags2;
 extern unsigned long debugRazielFlags3;
