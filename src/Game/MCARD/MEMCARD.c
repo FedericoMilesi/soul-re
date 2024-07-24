@@ -56,7 +56,20 @@ void load(memcard_t *memcard)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", unload);
+void unload(memcard_t *memcard)
+{
+    if (memcard->object != NULL)
+    {
+        if ((char *)memcard->object != (char *)gameTrackerX.primPool->prim)
+        {
+            MEMPACK_Free((char *)memcard->object);
+        }
+
+        memcard->object = NULL;
+    }
+
+    memcard->table = NULL;
+}
 
 int memcard_data_size()
 {
