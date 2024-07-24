@@ -17,6 +17,12 @@ int gNumMaterialMonsters;
 //static MonsterVars *monsterSenseArray[40];
 MonsterVars *monsterSenseArray[40];
 
+//static int lastSenseFrame;
+int lastSenseFrame;
+
+//static char monsterSensed[40];
+char monsterSensed[40];
+
 MonsterIR *MONSENSE_FindIR(MonsterVars *mv, Instance *instance)
 {
     MonsterIR *mir;
@@ -278,6 +284,50 @@ int MONSENSE_GetDistanceInDirection(Instance *instance, short angle)
     return mv->radarDistance[bit / 512];
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_DoSenses);
+extern int D_800D1B2C;
+void MONSENSE_DoSenses(Instance *instance)
+{
+    MonsterVars *mv;
+    //static int doneThisFrame;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    MONSENSE_ProcessIRList(instance);
+
+    if (lastSenseFrame < (long)gameTrackerX.frameCount)
+    {
+        if (lastSenseFrame < (long)(gameTrackerX.frameCount - 1))
+        {
+            memset(&monsterSensed, 0, sizeof(monsterSensed));
+
+            lastSenseFrame = gameTrackerX.frameCount - 1;
+        }
+
+        //doneThisFrame = 0;
+        D_800D1B2C = 0;
+    }
+
+    //if ((doneThisFrame == 0) && (monsterSensed[mv->senseIndex] == 0))
+    if ((D_800D1B2C == 0) && (monsterSensed[(int)mv->senseIndex] == 0))
+    {
+        lastSenseFrame = gameTrackerX.frameCount;
+
+        monsterSensed[(int)mv->senseIndex] = 1;
+
+        //doneThisFrame = 1;
+        D_800D1B2C = 1;
+
+        mv->alertCount = 1;
+
+        if (!(mv->auxFlags & 0x20000000))
+        {
+            MONSENSE_Radar(instance);
+        }
+    }
+    else
+    {
+        mv->alertCount = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_AdjustRadarFromObjects);
