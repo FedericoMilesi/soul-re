@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/MCARD/MEMCARD.h"
 #include "Game/SAVEINFO.h"
+#include "Game/MENU/MENU.h"
 
 int MEMCARD_IsWrongVersion(memcard_t *memcard)
 {
@@ -37,7 +38,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_pause_menu);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", gt2mcmenu);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_pop);
+void memcard_pop(void *opaque)
+{
+    GameTracker *temp; // not from decls.h
+
+    (void)opaque;
+
+    temp = &gameTrackerX;
+
+    menu_pop(temp->menu);
+
+    memcard_end(temp->memcard);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_start);
 

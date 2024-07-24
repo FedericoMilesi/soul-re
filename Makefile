@@ -105,6 +105,7 @@ $(BUILD_DIR)/src/Game/VRAM.c.o: CFLAGS += -fno-builtin
 $(BUILD_DIR)/src/Game/STREAM.c.o: CFLAGS += -fno-builtin
 $(BUILD_DIR)/src/Game/SIGNAL.c.o: CFLAGS += -fno-builtin
 $(BUILD_DIR)/src/Game/CINEMA/CINEPSX.c.o: CFLAGS += -G0
+$(BUILD_DIR)/src/Game/MCARD/MEMCARD.c.o: CFLAGS += -G0
 
 all: $(EXE)
 
