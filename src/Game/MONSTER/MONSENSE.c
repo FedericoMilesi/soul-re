@@ -198,7 +198,25 @@ MonsterIR *MONSENSE_GetMonsterIR(MonsterVars *mv)
     return mir;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_InitIRList);
+void MONSENSE_InitIRList(MonsterVars *mv, MonsterIR *list, int num)
+{
+    int i;
+
+    i = num;
+
+    mv->freeIRs = list;
+
+    while (--i != 0)
+    {
+        list->next = list + 1;
+
+        list = list->next;
+    }
+
+    list->next = NULL;
+
+    mv->monsterIRList = NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_SetEnemy);
 
