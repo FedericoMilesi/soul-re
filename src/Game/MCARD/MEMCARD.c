@@ -80,7 +80,22 @@ INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_initialize);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_end);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", maybe_start);
+int maybe_start(memcard_t *memcard)
+{
+    if (memcard->running == 0)
+    {
+        if (memcard->object == NULL)
+        {
+            load(memcard);
+        }
+
+        memcard->running = 1;
+
+        memcard->table->begin(memcard->mcmenu);
+    }
+
+    return 1;
+}
 
 int memcard_main_menu(void *gt, int index)
 {
