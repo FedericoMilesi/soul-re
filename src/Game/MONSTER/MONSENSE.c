@@ -5,6 +5,18 @@
 #include "Game/PHYSOBS.h"
 #include "Game/MONSTER/MONLIB.h"
 
+//static int gNumMonsters;
+int gNumMonsters;
+
+//static int gNumSpectralMonsters;
+int gNumSpectralMonsters;
+
+//static int gNumMaterialMonsters;
+int gNumMaterialMonsters;
+
+//static MonsterVars *monsterSenseArray[40];
+MonsterVars *monsterSenseArray[40];
+
 MonsterIR *MONSENSE_FindIR(MonsterVars *mv, Instance *instance)
 {
     MonsterIR *mir;
@@ -224,7 +236,31 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_ProcessIRList);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_SetupSenses);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_RemoveSenses);
+void MONSENSE_RemoveSenses(Instance *instance)
+{
+    MonsterVars *mv;
+    int i;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    gNumMonsters--;
+
+    if ((((MonsterAttributes *)instance->data)->whatAmI & 0x1804))
+    {
+        gNumSpectralMonsters--;
+    }
+    else
+    {
+        gNumMaterialMonsters--;
+    }
+
+    for (i = mv->senseIndex; i < gNumMonsters; i++)
+    {
+        monsterSenseArray[i] = monsterSenseArray[i + 1];
+
+        monsterSenseArray[i]->senseIndex = i;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_Radar);
 
