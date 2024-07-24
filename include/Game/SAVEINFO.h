@@ -125,6 +125,7 @@ void SAVE_IntroForStreamID(StreamUnit *streamUnit);
 void SAVE_UpdateLevelWithSave(StreamUnit *streamUnit);
 void SAVE_SaveGame();
 long SAVE_SizeOfFreeSpace();
+void SAVE_RestoreGame();
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];

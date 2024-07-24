@@ -2,6 +2,7 @@
 #include "Game/MCARD/MEMCARD.h"
 #include "Game/SAVEINFO.h"
 #include "Game/MENU/MENU.h"
+#include "Game/PSX/MAIN.h"
 
 int MEMCARD_IsWrongVersion(memcard_t *memcard)
 {
@@ -53,7 +54,18 @@ void memcard_pop(void *opaque)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_start);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_load);
+void memcard_load(void *opaque)
+{
+    (void)opaque;
+
+    gameTrackerX.streamFlags |= 0x200000;
+
+    SAVE_RestoreGame();
+
+    MAIN_StartGame();
+
+    memcard_end(gameTrackerX.memcard);
+}
 
 void memcard_save(void *opaque)
 {
