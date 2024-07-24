@@ -722,7 +722,56 @@ int num_menu_items(DebugMenuLine *menu)
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", maybe_change_menu_choice);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", handle_line_type_long);
+void handle_line_type_long(GameTracker *gt, DebugMenuLine *line)
+{
+    long *command;
+    int incr;
+    typedef void *(*fptr)(); // not from decls.h
+
+    command = &gt->controlCommand[0][0];
+
+    if ((command[1] & 0xC))
+    {
+        if ((gt->controlCommand[0][0] & 0x400))
+        {
+            incr = 10;
+        }
+        else if ((gt->controlCommand[0][0] & 0x800))
+        {
+            incr = 100;
+        }
+        else if ((gt->controlCommand[0][0] & 0x200))
+        {
+            incr = 1000;
+        }
+        else
+        {
+            incr = 1;
+        }
+
+        if ((command[1] & 0x4))
+        {
+            incr = -incr;
+        }
+
+        *(long *)line->var_address += incr;
+
+        if (*(long *)line->var_address < line->lower)
+        {
+            *(long *)line->var_address = line->lower;
+        }
+
+        if (*(long *)line->var_address > line->upper)
+        {
+            *(long *)line->var_address = line->upper;
+        }
+
+        if (line->bit_mask != 0)
+        {
+            ((fptr)line->bit_mask)((long *)line->var_address);
+        }
+    }
+}
 
 void handle_line_type_bit(GameTracker *gt, DebugMenuLine *line)
 {
