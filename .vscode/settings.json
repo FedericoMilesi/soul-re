@@ -53,6 +53,7 @@
         "font.h": "c",
         "fx.h": "c",
         "event.h": "c",
-        "strmload.h": "c"
+        "strmload.h": "c",
+        "menu.h": "c"
     }
 }

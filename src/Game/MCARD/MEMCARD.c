@@ -62,4 +62,16 @@ void memcard_save(void *opaque)
     SAVE_SaveGame();
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_item);
+void memcard_item(void *opaque, int (*fn)(), long parameter, long flags, char *text)
+{
+    (void)opaque;
+
+    if (flags != 0)
+    {
+        menu_item_flags(gameTrackerX.menu, fn, parameter, flags, text);
+    }
+    else
+    {
+        menu_item(gameTrackerX.menu, fn, parameter, text);
+    }
+}
