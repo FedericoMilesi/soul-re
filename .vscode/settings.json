@@ -55,6 +55,7 @@
         "event.h": "c",
         "strmload.h": "c",
         "menu.h": "c",
-        "relmod.h": "c"
+        "relmod.h": "c",
+        "memcard.h": "c"
     }
 }
