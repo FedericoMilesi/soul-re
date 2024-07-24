@@ -230,7 +230,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_Radar);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_GetClosestFreeDirection);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_GetDistanceInDirection);
+int MONSENSE_GetDistanceInDirection(Instance *instance, short angle)
+{
+    MonsterVars *mv;
+    int bit;
+
+    bit = (angle + 256) & 0xFFF;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    return mv->radarDistance[bit / 512];
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_DoSenses);
 
