@@ -1196,7 +1196,18 @@ void DEBUG_ContinueGame()
     gameTrackerX.gameFlags |= 0x40000000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ExitGame);
+void DEBUG_ExitGame()
+{
+    SOUND_StopAllSound();
+
+    gameTrackerX.levelChange = 1;
+
+    gameTrackerX.gameMode = 0;
+
+    gameTrackerX.levelDone = 2;
+
+    gameTrackerX.gameFlags |= 0x1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_ReloadCurrentLevel);
 
