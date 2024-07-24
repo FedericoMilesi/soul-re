@@ -240,7 +240,59 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_SetEnemy);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_ProcessIRList);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_SetupSenses);
+void MONSENSE_SetupSenses(Instance *instance)
+{
+    MonsterAllegiances *allegiances;
+    MonsterVars *mv;
+    int num;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    allegiances = mv->subAttr->allegiances;
+
+    MONSENSE_InitIRList(mv, (MonsterIR *)&mv[1], 5); // double-check
+
+    instance->flags2 |= 0x400;
+
+    if (allegiances != NULL)
+    {
+        instance->checkMask = allegiances->enemies | allegiances->allies | allegiances->food | allegiances->gods;
+    }
+
+    instance->maxCheckDistance = 12000;
+
+    instance->checkMask |= 0xB;
+
+    mv->enemy = NULL;
+
+    mv->leader = NULL;
+
+    monsterSenseArray[gNumMonsters] = mv;
+
+    mv->senseIndex = gNumMonsters;
+
+    if (gNumMonsters == 0)
+    {
+        lastSenseFrame = -1;
+    }
+
+    gNumMonsters++;
+
+    if ((((MonsterAttributes *)instance->data)->whatAmI) & 0x1804)
+    {
+        num = ++gNumSpectralMonsters;
+    }
+    else
+    {
+        num = ++gNumMaterialMonsters;
+    }
+
+    if ((num > 6) && ((instance->parent == NULL) && (instance->currentStreamUnitID != instance->birthStreamUnitID)))
+    {
+        instance->flags |= 0x20;
+        instance->flags2 |= 0x20000;
+    }
+}
 
 void MONSENSE_RemoveSenses(Instance *instance)
 {
