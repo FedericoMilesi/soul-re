@@ -73,5 +73,11 @@ extern unsigned long debugRazielFlags3;
 
 void DEBUG_FatalError(const char *fmt, ...);
 void DEBUG_DisplayStatus(GameTracker *gameTracker);
+void DEBUG_ProcessSecondController(GameTracker *gameTracker);
+void DEBUG_ProcessCheat(GameTracker *gameTracker);
+void DEBUG_Menu(GameTracker *gt);
+void process_cheat_codes(GameTracker *gt, long *ctrl);
+void DEBUG_ViewVram(GameTracker *gameTracker);
+void DEBUG_CaptureScreen(GameTracker *gameTracker);
 
 #endif

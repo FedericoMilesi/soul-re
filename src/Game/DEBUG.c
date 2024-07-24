@@ -642,7 +642,70 @@ void DEBUG_SendMoveTo()
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", process_cheat_codes);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_Process);
+void DEBUG_Process(GameTracker *gameTracker)
+{
+    long *controlCommand;
+    long oldFlags;
+    long oldFlags2;
+
+    oldFlags = gameTracker->debugFlags;
+    oldFlags2 = gameTracker->debugFlags2;
+
+    controlCommand = &gameTracker->controlCommand[0][0];
+
+    if (gameTracker->gameMode == 0)
+    {
+        if ((oldFlags & 0x8))
+        {
+            DEBUG_ProcessSecondController(gameTracker);
+        }
+
+        if (gameTracker->cheatMode == 1)
+        {
+            DEBUG_ProcessCheat(gameTracker);
+        }
+    }
+    else if (gameTracker->gameMode == 4)
+    {
+        DEBUG_Menu(gameTracker);
+
+        if (((gameTracker->debugFlags2 & 0x40000)) && (!(oldFlags2 & 0x40000)))
+        {
+            gameTracker->debugFlags |= 0x8;
+        }
+
+        if ((!(gameTracker->debugFlags2 & 0x40000)) && ((oldFlags2 & 0x40000)))
+        {
+            gameTracker->debugFlags &= ~0x8;
+        }
+
+        if (((gameTracker->debugFlags & 0x8)) && (!(oldFlags & 0x8)))
+        {
+            theCamera.core.debugPos.x = theCamera.core.position.x;
+            theCamera.core.debugPos.y = theCamera.core.position.y;
+            theCamera.core.debugPos.z = theCamera.core.position.z;
+
+            theCamera.core.debugRot.x = theCamera.core.rotation.x;
+            theCamera.core.debugRot.y = theCamera.core.rotation.y;
+            theCamera.core.debugRot.z = theCamera.core.rotation.z;
+        }
+    }
+    else if (gameTracker->gameMode == 6)
+    {
+        process_cheat_codes(gameTracker, controlCommand);
+
+        DEBUG_Menu(gameTracker);
+    }
+    else if (gameTracker->gameMode == 7)
+    {
+        DEBUG_ViewVram(gameTracker);
+    }
+
+    if (((gameTracker->debugFlags & 0x4000)) && ((controlCommand[1] & 0x400)))
+    {
+        DEBUG_CaptureScreen(gameTracker);
+    }
+}
 
 void DEBUG_Draw(GameTracker *gameTracker, unsigned long **ot)
 {
@@ -1146,8 +1209,9 @@ void DEBUG_ViewVram(GameTracker *gameTracker)
     gameTracker->playerInstance->flags |= 0x100;
 }
 
-void DEBUG_CaptureScreen()
+void DEBUG_CaptureScreen(GameTracker *gameTracker)
 {
+    (void)gameTracker;
 }
 
 void DEBUG_PageFlip()
@@ -1196,8 +1260,9 @@ void DEBUG_PageFlip()
 
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FatalError);
 
-void DEBUG_ProcessSecondController()
+void DEBUG_ProcessSecondController(GameTracker *gameTracker)
 {
+    (void)gameTracker;
 }
 
 void DEBUG_ProcessCheat(GameTracker *gameTracker)
