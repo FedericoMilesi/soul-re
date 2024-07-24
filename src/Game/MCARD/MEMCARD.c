@@ -2,7 +2,19 @@
 #include "Game/MCARD/MEMCARD.h"
 #include "Game/SAVEINFO.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", MEMCARD_IsWrongVersion);
+int MEMCARD_IsWrongVersion(memcard_t *memcard)
+{
+    int result;
+
+    result = 1;
+
+    if (memcard != NULL)
+    {
+        result = memcard->wrongVerison;
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", load);
 
