@@ -428,7 +428,86 @@ void G2AnimSection_JumpToTime(G2AnimSection *section, short targetTime)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2AnimSection_UpdateOverInterval);
+short G2AnimSection_UpdateOverInterval(G2AnimSection *section, short interval)
+{
+    G2Anim *anim;
+    G2SVector3 motionVector;
+    G2AnimInterpInfo *interpInfo;
+    short elapsedTime;
+    unsigned short z;
+    unsigned long xy;
+    short temp; // not from decls.h
+
+    if ((section->flags & 0x1))
+    {
+        return 0;
+    }
+
+    interpInfo = section->interpInfo;
+
+    if ((interpInfo != NULL) && (interpInfo->stateBlockList != NULL))
+    {
+        anim = _G2AnimSection_GetAnim(section);
+
+        anim->flags |= 0x1;
+
+        elapsedTime = section->elapsedTime;
+
+        temp = (elapsedTime + (short)((interval * section->speedAdjustment) >> 12)) - interpInfo->duration;
+
+        if (temp >= 0)
+        {
+            section->storedTime = -section->keylist->timePerKey;
+
+            G2AnimSection_JumpToTime(section, interpInfo->targetTime);
+
+            if (section->firstSeg == 0)
+            {
+                G2Anim_GetRootMotionOverInterval(anim, elapsedTime, interpInfo->duration, &motionVector);
+
+                xy = *(unsigned long *)&motionVector.x;
+                z = motionVector.z;
+
+                *(unsigned long *)&anim->rootTrans.x = xy;
+                anim->rootTrans.z = z;
+
+                section->flags |= 0x80;
+            }
+
+            _G2Anim_FreeInterpStateBlockList(interpInfo->stateBlockList);
+
+            interpInfo->stateBlockList = NULL;
+
+            if ((section->flags & 0x2))
+            {
+                G2AnimSection_SetLoopRangeAll(section);
+            }
+
+            section->alarmFlags |= 0x10;
+
+            if (section->callback != NULL)
+            {
+                section->callback(anim, section->sectionID, G2ANIM_MSG_SECTION_INTERPDONE, 0, 0, (Instance *)section->callbackData);
+            }
+
+            return temp;
+        }
+        else
+        {
+            section->elapsedTime = elapsedTime + (short)((interval * section->speedAdjustment) >> 12);
+            return 0;
+        }
+    }
+
+    if (!(section->flags & 0x4))
+    {
+        return G2AnimSection_AdvanceOverInterval(section, interval);
+    }
+    else
+    {
+        return G2AnimSection_RewindOverInterval(section, interval);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2AnimSection_AdvanceOverInterval);
 

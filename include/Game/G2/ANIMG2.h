@@ -213,5 +213,7 @@ void G2AnimSection_JumpToTime(G2AnimSection *section, short targetTime);
 void _G2Anim_BuildTransformsNoControllers(G2Anim *anim);
 void FooBar(G2AnimSection *section, G2Anim *anim, int decompressedKey, int targetKey, long timeOffset);
 void _G2AnimSection_InitStatus(G2AnimSection *section, G2Anim *anim);
+short G2AnimSection_RewindOverInterval(G2AnimSection *section, short interval);
+short G2AnimSection_AdvanceOverInterval(G2AnimSection *section, short interval);
 
 #endif
