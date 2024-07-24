@@ -180,7 +180,23 @@ void MONSENSE_StartMonsterIRList(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_GetMonsterIR);
+MonsterIR *MONSENSE_GetMonsterIR(MonsterVars *mv)
+{
+    MonsterIR *mir;
+
+    if (mv->freeIRs != NULL)
+    {
+        mir = mv->freeIRs;
+
+        mv->freeIRs = mir->next;
+    }
+    else
+    {
+        mir = NULL;
+    }
+
+    return mir;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_InitIRList);
 
