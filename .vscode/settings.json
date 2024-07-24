@@ -56,6 +56,7 @@
         "strmload.h": "c",
         "menu.h": "c",
         "relmod.h": "c",
-        "memcard.h": "c"
+        "memcard.h": "c",
+        "monsense.h": "c"
     }
 }

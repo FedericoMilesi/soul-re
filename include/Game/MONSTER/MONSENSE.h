@@ -32,5 +32,7 @@ void MONSENSE_RemoveSenses(Instance *instance);
 void MONSENSE_SetupSenses(Instance *instance);
 void MONSENSE_StartMonsterIRList(Instance *instance);
 void MONSENSE_SenseInstance(Instance *instance, evCollideInstanceStatsData *data);
+int MONSENSE_See(Instance *instance, evCollideInstanceStatsData *data);
+void MONSENSE_SetupMIR(Instance *instance, evCollideInstanceStatsData *data, int flags);
 
 #endif

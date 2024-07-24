@@ -59,6 +59,54 @@ typedef struct PhysObWeaponProperties {
     struct PhysObWeaponAttributes WeaponAttributes;
 } PhysObWeaponProperties;
 
+// size: 0x2C
+typedef struct PhysObInteractProperties {
+    // offset: 0000 (8 bytes)
+    struct PhysObProperties Properties;
+    // offset: 0008
+    unsigned short conditions;
+    // offset: 000A
+    unsigned short auxConditions;
+    // offset: 000C
+    unsigned short action;
+    // offset: 000E
+    unsigned short auxAction;
+    // offset: 0010
+    unsigned char startAnim;
+    // offset: 0011
+    unsigned char endAnim;
+    // offset: 0012
+    unsigned char razielAnim;
+    // offset: 0013
+    unsigned char razielAuxAnim;
+    // offset: 0014
+    unsigned char frame;
+    // offset: 0015
+    unsigned char startAnimMode;
+    // offset: 0016
+    unsigned short distance;
+    // offset: 0018
+    unsigned short newType;
+    // offset: 001A
+    unsigned short newClass;
+    // offset: 001C
+    unsigned short mode;
+    // offset: 001E
+    unsigned short engageXYDistance;
+    // offset: 0020
+    short engageZMinDelta;
+    // offset: 0022
+    short engageZMaxDelta;
+    // offset: 0024
+    unsigned char engageYCone;
+    // offset: 0025
+    unsigned char engageZCone;
+    // offset: 0026
+    unsigned short pad;
+    // offset: 0028 (28 bytes)
+    struct PhysObWeaponAttributes *weapon;
+} PhysObInteractProperties;
+
 // size: 0x48
 typedef struct PhysObData {
     // offset: 0000
