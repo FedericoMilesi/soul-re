@@ -52,7 +52,16 @@ void memcard_pop(void *opaque)
     memcard_end(temp->memcard);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_start);
+void memcard_start(void *opaque)
+{
+    (void)opaque;
+
+    gameTrackerX.streamFlags |= 0x1000000;
+
+    MAIN_StartGame();
+
+    memcard_end(gameTrackerX.memcard);
+}
 
 void memcard_load(void *opaque)
 {
