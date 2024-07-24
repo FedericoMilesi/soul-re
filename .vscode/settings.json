@@ -51,6 +51,8 @@
         "sound.h": "c",
         "saveinfo.h": "c",
         "font.h": "c",
-        "fx.h": "c"
+        "fx.h": "c",
+        "event.h": "c",
+        "strmload.h": "c"
     }
 }

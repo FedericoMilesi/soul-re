@@ -32,5 +32,6 @@ void MEMPACK_Free(char *address);
 long MEMPACK_MemoryValidFunc(char *address);
 unsigned long MEMPACK_Size(char *address);
 void MEMPACK_DoGarbageCollection();
+unsigned long MEMPACK_ReportFreeMemory();
 
 #endif

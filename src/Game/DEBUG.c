@@ -8,6 +8,9 @@
 #include "Game/SOUND.h"
 #include "Game/FONT.h"
 #include "Game/MATH3D.h"
+#include "Game/MEMPACK.h"
+#include "Game/EVENT.h"
+#include "Game/STRMLOAD.h"
 
 void DEBUG_FillUpHealth(long *var);
 void DEBUG_FogLoad();
@@ -1095,7 +1098,94 @@ static char D_800D0260[] = " FMEM %d  FreeSaveMem %d\n";
 static char D_800D027C[] = " AREA DRM = %s\n";
 static char D_800D028C[] = " CAM TILT %d DIST %d\n";
 static char D_800D02A4[] = "Loading From CD: In Queue(%d)\n";
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_DisplayStatus);
+#else
+void DEBUG_DisplayStatus(GameTracker *gameTracker)
+{
+    int deg;
+    long numberInQueue;
+
+    STREAM_GetLevelWithID(gameTracker->playerInstance->currentStreamUnitID);
+
+    if ((gameTracker->debugFlags & 0x40000000))
+    {
+        EVENT_PrintVars();
+    }
+
+    if ((gameTracker->debugFlags & 0x4000004))
+    {
+        if ((gameTracker->debugFlags & 0x4000000))
+        {
+            //FONT_Print("$@EF\n FRTE %d ", (1000000 / gameTracker->totalTime) + 1);
+            FONT_Print(D_800D01A8, (1000000 / gameTracker->totalTime) + 1);
+            //FONT_Print(" INS  %d", gameTracker->visibleInstances);
+            FONT_Print(D_800D01B8, gameTracker->visibleInstances);
+            //FONT_Print("/%d\n", gameTracker->instanceList->numInstances + 1);
+            FONT_Print(D_800D01C4, gameTracker->instanceList->numInstances + 1);
+        }
+        else
+        {
+            //FONT_Print("$@KG\n FRTE %d\n", (1000000 / gameTracker->totalTime) + 1);
+            FONT_Print(D_800D01CC, (1000000 / gameTracker->totalTime) + 1);
+        }
+
+        //FONT_Print(" Focus XYZ(%d,%d,%d)\n", theCamera.focusInstance->position.x, theCamera.focusInstance->position.y, theCamera.focusInstance->position.z);
+        FONT_Print(D_800D01DC, theCamera.focusInstance->position.x, theCamera.focusInstance->position.y, theCamera.focusInstance->position.z);
+
+        if ((gameTracker->debugFlags & 0x4))
+        {
+            if (gameTracker->idleTime != 0)
+            {
+                //FONT_Print(" IDLE %d PCT\n", (gameTracker->idleTime * 100) / 33333);
+                FONT_Print(D_800D01F4, (gameTracker->idleTime * 100) / 33333);
+            }
+            else
+            {
+                //FONT_Print(" IDLE ZERO\n");
+                FONT_Print(D_800D0204);
+            }
+
+            //FONT_Print(" DRAW %d\n", gameTracker->drawTime);
+            FONT_Print(D_800D0210, gameTracker->drawTime);
+            //FONT_Print(" Far Plane =%d\n", theCamera.core.farPlane);
+            FONT_Print(D_800D021C, theCamera.core.farPlane);
+            //FONT_Print(" Fog Near = %d Fog Far = %d\n", gameTracker->level->fogNear, gameTracker->level->fogFar);
+            FONT_Print(D_800D022C, gameTracker->level->fogNear, gameTracker->level->fogFar);
+            //FONT_Print("Military Time %04d\n", gameTrackerX.timeOfDay);
+            FONT_Print(D_800D024C, gameTrackerX.timeOfDay);
+        }
+
+        //FONT_Print(" FMEM %d  FreeSaveMem %d\n", MEMPACK_ReportFreeMemory(), SAVE_SizeOfFreeSpace());
+        FONT_Print(D_800D0260, MEMPACK_ReportFreeMemory(), SAVE_SizeOfFreeSpace());
+        //FONT_Print(" AREA DRM = %s\n", gameTracker->baseAreaName);
+        FONT_Print(D_800D027C, gameTracker->baseAreaName);
+
+        deg = theCamera.core.rotation.x;
+
+        if (deg > 2048)
+        {
+            deg = (4096 - deg);
+        }
+        else
+        {
+            deg = -deg;
+        }
+
+        deg = (deg * 360) / 4096;
+
+        //FONT_Print(" CAM TILT %d DIST %d\n", deg, theCamera.targetFocusDistance);
+        FONT_Print(D_800D028C, deg, theCamera.targetFocusDistance);
+    }
+
+    if ((gameTracker->debugFlags < 0) && (STREAM_IsCdBusy(&numberInQueue) != 0))
+    {
+        //FONT_Print("Loading From CD: In Queue(%d)\n", numberInQueue);
+        FONT_Print(D_800D02A4, numberInQueue);
+    }
+}
+#endif
 
 void DEBUG_DrawShrinkCels()
 {

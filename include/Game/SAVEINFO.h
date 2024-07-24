@@ -124,6 +124,7 @@ SavedLevel *SAVE_CreatedSavedLevel(long areaID, Level *level);
 void SAVE_IntroForStreamID(StreamUnit *streamUnit);
 void SAVE_UpdateLevelWithSave(StreamUnit *streamUnit);
 void SAVE_SaveGame();
+long SAVE_SizeOfFreeSpace();
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];

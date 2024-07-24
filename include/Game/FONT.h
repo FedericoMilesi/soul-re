@@ -2,7 +2,8 @@
 #define _FONT_H_
 
 int FONT_GetStringWidth(char *str);
-void FONT_Print(char *fmt);
+//void FONT_Print(char *fmt);
+void FONT_Print(const char *fmt, ...);
 void FONT_Print2(char *fmt);
 void FONT_SetCursor(short x, short y);
 
