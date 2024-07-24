@@ -1,4 +1,6 @@
 #include "common.h"
+#include "Game/MCARD/MEMCARD.h"
+#include "Game/SAVEINFO.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", MEMCARD_IsWrongVersion);
 
@@ -26,6 +28,11 @@ INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_start);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_load);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_save);
+void memcard_save(void *opaque)
+{
+    (void)opaque;
+
+    SAVE_SaveGame();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_item);
