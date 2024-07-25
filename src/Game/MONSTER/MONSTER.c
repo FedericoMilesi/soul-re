@@ -87,7 +87,10 @@ void MON_BirthEntry(Instance *instance)
     (void)instance;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Birth);
+void MON_Birth(Instance *instance)
+{
+    MON_SwitchState(instance, MONSTER_STATE_IDLE);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_ParryEntry);
 
