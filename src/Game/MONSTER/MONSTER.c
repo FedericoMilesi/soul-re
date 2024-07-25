@@ -4,6 +4,7 @@
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONMSG.h"
 #include "Game/PHYSICS.h"
+#include "Game/MONSTER/MISSILE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -229,7 +230,24 @@ void MON_CombatEntry(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Combat);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_ProjectileEntry);
+void MON_ProjectileEntry(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+    MonsterMissile *missileDef;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    missileDef = &ma->missileList[(int)mv->subAttr->combatAttributes->missileAttack];
+
+    do {} while (0); // garbage code for reordering
+
+    MON_PlayAnimFromList(instance, missileDef->animList, 0, 1);
+
+    mv->attackState = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Projectile);
 
