@@ -6,6 +6,7 @@
 #include "Game/PHYSICS.h"
 #include "Game/MONSTER/MISSILE.h"
 #include "Game/G2/ANMG2ILF.h"
+#include "Game/MATH3D.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -286,7 +287,85 @@ void MON_IdleEntry(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Idle);
+void MON_Idle(Instance *instance)
+{
+    MonsterVars *mv;
+    int combatIdle;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    combatIdle = 0;
+
+    if (!(mv->mvFlags & 0x4))
+    {
+        int state;
+        MonsterIR *enemy;
+
+        enemy = mv->enemy;
+
+        state = -1;
+
+        if (MON_ValidPosition(instance) == 0)
+        {
+            state = 1;
+        }
+        else if (enemy != NULL)
+        {
+            combatIdle = 1;
+
+            if (MON_ShouldIFlee(instance) != 0)
+            {
+                state = 19;
+            }
+            else if ((enemy->mirFlags & 0x100))
+            {
+                state = 25;
+            }
+            else if (((mv->behaviorState == 7) && (enemy->distance > mv->guardRange)) || (MON_ValidUnit(instance, enemy->instance->currentStreamUnitID) == 0))
+            {
+                MON_TurnToPosition(instance, (Position *)&enemy->instance->position.x, mv->subAttr->speedPivotTurn);
+            }
+            else
+            {
+                state = 13;
+            }
+
+            mv->lookAtPos = &enemy->instance->position;
+        }
+        else if (((mv->behaviorState == 2) || (mv->behaviorState == 3)) && ((instance->flags2 & 0x2)))
+        {
+            state = 5;
+        }
+
+        if (state != -1)
+        {
+            MON_SwitchState(instance, (MonsterState)state);
+        }
+    }
+    else if ((mv->auxFlags & 0x10000000))
+    {
+        AngleMoveToward(&instance->rotation.z, mv->destination.z, (short)((mv->subAttr->speedPivotTurn * gameTrackerX.timeMult) / 4096));
+
+        if (instance->rotation.z == mv->destination.z)
+        {
+            mv->auxFlags &= ~0x10000000;
+        }
+    }
+
+    if ((!(mv->mvFlags & 0x4)) && ((!(mv->mvFlags & 0x4000000)) || ((instance->flags2 & 0x2))))
+    {
+        if (combatIdle != 0)
+        {
+            MON_PlayCombatIdle(instance, 2);
+        }
+        else
+        {
+            MON_PlayRandomIdle(instance, 2);
+        }
+    }
+
+    MON_IdleQueueHandler(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_FleeEntry);
 
