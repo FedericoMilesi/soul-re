@@ -2,6 +2,7 @@
 #include "Game/MONSTER/MONSTER.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/MONSTER/MONMSG.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -105,7 +106,15 @@ void MON_ParryEntry(Instance *instance)
     MON_TurnToPosition(instance, &mv->enemy->instance->position, 4096);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Parry);
+void MON_Parry(Instance *instance)
+{
+    if ((instance->flags2 & 0x10))
+    {
+        MON_SwitchState(instance, MONSTER_STATE_COMBAT);
+    }
+
+    MON_DefaultQueueHandler(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_LandOnFeetEntry);
 
