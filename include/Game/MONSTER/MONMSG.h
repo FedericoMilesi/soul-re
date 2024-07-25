@@ -9,5 +9,6 @@ void MON_DefaultMessageHandler(Instance *instance, Message *message);
 void MON_DefaultQueueHandler(Instance *instance);
 void MON_PupateMessageHandler(Instance *instance, Message *message);
 void MON_IdleQueueHandler(Instance *instance);
+int MON_GroundMoveQueueHandler(Instance *instance);
 
 #endif

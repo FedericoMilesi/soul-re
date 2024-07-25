@@ -4,6 +4,7 @@
 void PLANAPI_DeleteNodeFromPoolByUnit(long streamUnitID);
 void PLANAPI_InitPlanMkrList(StreamUnit *streamUnit);
 int PLANAPI_NumNodesInPool(void *planningPool);
+int PLANAPI_FindNodePositionInUnit(StreamUnit *streamUnit, Position *pos, int id, int type);
 
 // size: 0x20
 typedef struct PoolManagementData {

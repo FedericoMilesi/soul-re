@@ -8,6 +8,7 @@
 #include "Game/MONSTER/MISSILE.h"
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/MATH3D.h"
+#include "Game/PLAN/PLANAPI.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -452,7 +453,132 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Pursue);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_WanderEntry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Wander);
+void MON_Wander(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((mv->mvFlags & 0x4))
+    {
+        MON_TurnToPosition(instance, &mv->destination, mv->subAttr->speedWalkTurn);
+
+        if (MATH3D_LengthXYZ(instance->position.x - mv->destination.x, instance->position.y - mv->destination.y, instance->position.z - mv->destination.z) < 300)
+        {
+            MON_SwitchState(instance, MONSTER_STATE_IDLE);
+        }
+
+        MON_GroundMoveQueueHandler(instance);
+    }
+    else if (!(mv->mvFlags & 0x40000))
+    {
+        if (mv->generalTimer < MON_GetTime(instance))
+        {
+            MON_SwitchState(instance, MONSTER_STATE_IDLE);
+        }
+        else if (mv->behaviorState == 3)
+        {
+            if (mv->currentMarker != NULL)
+            {
+                int markerID;
+
+                markerID = *mv->currentMarker;
+
+                mv->currentMarker++;
+
+                PLANAPI_FindNodePositionInUnit(STREAM_GetStreamUnitWithID(instance->currentStreamUnitID), &mv->destination, markerID, 0);
+
+                if (*mv->currentMarker == 0)
+                {
+                    mv->currentMarker = mv->patrolMarkers;
+                }
+
+                mv->mvFlags |= 0x40000;
+            }
+        }
+        else
+        {
+            Position *target;
+            short range;
+
+            range = mv->wanderRange;
+
+            target = NULL;
+
+            if (mv->leader != NULL)
+            {
+                range = 800;
+
+                target = &mv->leader->instance->position;
+            }
+            else if (instance->intro != NULL)
+            {
+                target = &instance->intro->position;
+            }
+
+            MON_GetRandomDestinationInWorld(instance, target, range);
+        }
+
+        MON_GroundMoveQueueHandler(instance);
+    }
+    else
+    {
+        int planresult;
+        int state;
+
+        planresult = MON_DefaultPlanMovement(instance, 2, 100);
+
+        state = -1;
+
+        switch (planresult)
+        {
+        case 0:
+        case 1:
+        case 5:
+        case 6:
+            break;
+        case 4:
+            if (mv->behaviorState != 4)
+            {
+                if (!(rand() & 0x3))
+                {
+                    mv->generalTimer = MON_GetTime(instance) + 1000;
+
+                    state = 5;
+                }
+                else
+                {
+                    state = 2;
+                }
+            }
+            else
+            {
+                state = 20;
+            }
+
+            break;
+        case 2:
+        case 3:
+            state = 2;
+            break;
+        }
+
+        if (state != -1)
+        {
+            MON_SwitchState(instance, state);
+        }
+    }
+
+    if (mv->enemy != NULL)
+    {
+        if (MON_ShouldIFlee(instance) != 0)
+        {
+            MON_SwitchState(instance, MONSTER_STATE_FLEE);
+        }
+
+        mv->lookAtPos = &mv->enemy->instance->position;
+    }
+}
 
 void MON_HideEntry(Instance *instance)
 {
