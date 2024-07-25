@@ -5,6 +5,7 @@
 #include "Game/MONSTER/MONMSG.h"
 #include "Game/PHYSICS.h"
 #include "Game/MONSTER/MISSILE.h"
+#include "Game/G2/ANMG2ILF.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -251,7 +252,39 @@ void MON_ProjectileEntry(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Projectile);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_IdleEntry);
+void MON_IdleEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    mv->mvFlags &= ~0x1000;
+    mv->mvFlags &= ~0x40000;
+
+    mv->mode = 1;
+
+    if ((mv->mvFlags & 0x4))
+    {
+        MonsterAttributes *ma;
+
+        ma = (MonsterAttributes *)instance->data;
+
+        if (mv->enemy != NULL)
+        {
+            MON_PlayCombatIdle(instance, 2);
+        }
+        else
+        {
+            MON_PlayAnimID(instance, ma->idleList->anim, 2);
+        }
+    }
+    else if (!(instance->anim.section->flags & 0x1))
+    {
+        G2Anim_SetLooping(&instance->anim);
+
+        mv->mvFlags |= 0x4000000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Idle);
 

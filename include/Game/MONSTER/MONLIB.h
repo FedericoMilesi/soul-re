@@ -49,5 +49,6 @@ void MON_BirthSoul(Instance *instance, int link);
 void MON_ChangeHumanOpinion(Instance *instance);
 void MON_DropAllObjects(Instance *instance);
 int MON_AnimPlaying(Instance *instance, MonsterAnim animtype);
+void MON_PlayCombatIdle(Instance *instance, int mode);
 
 #endif
