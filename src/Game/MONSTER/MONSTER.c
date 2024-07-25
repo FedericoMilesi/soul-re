@@ -50,7 +50,35 @@ void MON_DeadEntry(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Dead);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_MissileHitEntry);
+void MON_MissileHitEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    instance->xAccl = 0;
+    instance->yAccl = 0;
+
+    instance->xVel = 0;
+    instance->yVel = 0;
+
+    MON_PlayAnim(instance, MONSTER_ANIM_MISSILEIMPALEDEATH, 1);
+
+    mv->mvFlags |= 0x200000;
+    mv->mvFlags &= ~0x10;
+
+    MON_TurnOffAllSpheres(instance);
+
+    mv->causeOfDeath = 0;
+
+    MON_DropAllObjects(instance);
+
+    mv->heldID = mv->held->introUniqueID;
+
+    INSTANCE_Post(mv->held, 0x800002, SetObjectData(0, 0, 0, instance, 3));
+
+    SOUND_Play3dSound(&instance->position, 39, -100, 100, 16000);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_MissileHit);
 
