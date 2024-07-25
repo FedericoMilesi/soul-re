@@ -454,7 +454,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_WanderEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Wander);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_HideEntry);
+void MON_HideEntry(Instance *instance)
+{
+    MON_PlayRandomIdle(instance, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Hide);
 
