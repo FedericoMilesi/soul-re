@@ -127,7 +127,40 @@ void SOUL_MoveToDest(Instance *instance, long maxAccel, long time)
     SOUL_Physics(instance, time);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_MovePastWall);
+void SOUL_MovePastWall(Instance *instance, Instance *sucker)
+{
+    PCollideInfo pcollideInfo;
+    Position newPos;
+    Position oldPos;
+    Position delta;
+    MATRIX *to;
+    MATRIX *from;
+
+    from = sucker->matrix;
+
+    to = instance->matrix;
+
+    oldPos.x = from->t[0];
+    oldPos.y = from->t[1];
+    oldPos.z = from->t[2];
+
+    newPos.x = to->t[0];
+    newPos.y = to->t[1];
+    newPos.z = to->t[2];
+
+    pcollideInfo.newPoint = (SVECTOR *)&newPos;
+    pcollideInfo.oldPoint = (SVECTOR *)&oldPos;
+
+    PHYSICS_CheckLineInWorld(instance, &pcollideInfo);
+
+    SUB_SVEC(Position, &delta, Position, &newPos, Position, &instance->position);
+
+    COLLIDE_UpdateAllTransforms(instance, (SVECTOR *)&delta);
+
+    COLLIDE_MoveAllTransforms(instance, &delta);
+
+    instance->position = newPos;
+}
 
 void SOUL_Init(Instance *instance)
 {

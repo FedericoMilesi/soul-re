@@ -18,5 +18,6 @@ void PHYSICS_StopIfCloseToTarget(Instance *instance, int x, int y, int z);
 long PHYSICS_FindAFromDAndT(long d, long t);
 long PHYSICS_FindVFromAAndD(long a, long d);
 void PHYSICS_SetVAndAFromRot(Instance *instance, Rotation *rot, long v, long a);
+void PHYSICS_CheckLineInWorld(Instance *instance, PCollideInfo *pcollideInfo);
 
 #endif
