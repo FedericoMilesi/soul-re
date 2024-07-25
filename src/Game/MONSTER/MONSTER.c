@@ -92,7 +92,18 @@ void MON_Birth(Instance *instance)
     MON_SwitchState(instance, MONSTER_STATE_IDLE);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_ParryEntry);
+void MON_ParryEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    MON_PlayAnim(instance, MONSTER_ANIM_JUMPRIGHT, 1);
+
+    do {} while (0); // garbage code for reordering
+
+    MON_TurnToPosition(instance, &mv->enemy->instance->position, 4096);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Parry);
 
