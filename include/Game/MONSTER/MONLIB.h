@@ -48,5 +48,6 @@ void MON_TurnOffAllSpheres(Instance *instance);
 void MON_BirthSoul(Instance *instance, int link);
 void MON_ChangeHumanOpinion(Instance *instance);
 void MON_DropAllObjects(Instance *instance);
+int MON_AnimPlaying(Instance *instance, MonsterAnim animtype);
 
 #endif

@@ -3,6 +3,7 @@
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONMSG.h"
+#include "Game/PHYSICS.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -160,7 +161,47 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Surprised);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_StunnedEntry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Stunned);
+void MON_Stunned(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((instance->flags2 & 0x10))
+    {
+        if (!(mv->mvFlags & 0x100))
+        {
+            MON_SwitchState(instance, MONSTER_STATE_COMBAT);
+        }
+        else
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_STUNNED, 1);
+        }
+    }
+
+    if (mv->generalTimer < MON_GetTime(instance))
+    {
+        instance->xVel = 0;
+        instance->yVel = 0;
+        instance->zVel = 0;
+    }
+
+    if ((!(mv->mvFlags & 0x100)) && (MON_AnimPlaying(instance, MONSTER_ANIM_STUNNED_RECOVERY) == 0))
+    {
+        MON_PlayAnim(instance, MONSTER_ANIM_STUNNED_RECOVERY, 1);
+    }
+
+    MON_DefaultQueueHandler(instance);
+
+    PHYSICS_StopIfCloseToTarget(instance, 0, 0, 0);
+
+    PhysicsMove(instance, &instance->position, gameTrackerX.timeMult);
+
+    if (instance->currentMainState != MONSTER_STATE_STUNNED)
+    {
+        instance->checkMask &= ~0x20;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_GrabbedEntry);
 

@@ -61,6 +61,7 @@
         "monapi.h": "c",
         "human.h": "c",
         "montable.h": "c",
-        "vwraith.h": "c"
+        "vwraith.h": "c",
+        "monmsg.h": "c"
     }
 }
