@@ -36,5 +36,6 @@ int MONSENSE_See(Instance *instance, evCollideInstanceStatsData *data);
 void MONSENSE_SetupMIR(Instance *instance, evCollideInstanceStatsData *data, int flags);
 void MONSENSE_Radar(Instance *instance);
 void MONSENSE_ProcessIRList(Instance *instance);
+short MONSENSE_GetClosestFreeDirection(Instance *instance, short angle, long range);
 
 #endif

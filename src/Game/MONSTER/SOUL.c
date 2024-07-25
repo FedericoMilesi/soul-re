@@ -8,6 +8,7 @@
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONMSG.h"
+#include "Game/MONSTER/MONSENSE.h"
 
 void SOUL_QueueHandler(Instance *instance)
 {
@@ -383,7 +384,63 @@ void SOUL_FleeEntry(Instance *instance)
     MON_FleeEntry(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SOUL", SOUL_Flee);
+void SOUL_Flee(Instance *instance)
+{
+    MonsterVars *mv;
+    short temp; // not from decls.h
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (mv->enemy == NULL)
+    {
+        MON_SwitchState(instance, MONSTER_STATE_IDLE);
+    }
+    else
+    {
+        Instance *enemy;
+        int dx;
+        int dy;
+
+        enemy = mv->enemy->instance;
+
+        temp = MONSENSE_GetClosestFreeDirection(instance, MATH3D_AngleFromPosToPos(&enemy->position, &instance->position), 500);
+
+        dx = (rsin(temp) * 2000) / 4096;
+        dy = -(rcos(temp) * 2000) / 4096;
+
+        instance->xAccl = dx - instance->xVel;
+        instance->yAccl = dy - instance->yVel;
+
+        if (instance->xAccl < -2)
+        {
+            instance->xAccl = -2;
+        }
+        else if (instance->xAccl > 2)
+        {
+            instance->xAccl = 2;
+        }
+
+        if (instance->yAccl < -2)
+        {
+            instance->yAccl = -2;
+        }
+        else if (instance->yAccl > 2)
+        {
+            instance->yAccl = 2;
+        }
+
+        instance->zAccl = 0;
+    }
+
+    SOUL_Physics(instance, gameTrackerX.timeMult);
+
+    SOUL_QueueHandler(instance);
+
+    if (!(instance->flags2 & 0x8000000))
+    {
+        SOUL_Fade(instance);
+    }
+}
 
 void SOUL_IdleEntry(Instance *instance)
 {
