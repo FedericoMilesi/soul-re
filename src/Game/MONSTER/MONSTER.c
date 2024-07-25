@@ -368,7 +368,20 @@ void MON_Idle(Instance *instance)
     MON_IdleQueueHandler(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_FleeEntry);
+void MON_FleeEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    mv->mode = 4;
+
+    mv->mvFlags |= 0x1000;
+    mv->mvFlags &= ~0x10000;
+    mv->mvFlags &= ~0x20000;
+
+    MON_PlayAnim(instance, MONSTER_ANIM_RUN, 2);
+}
 
 void MON_Flee(Instance *instance)
 {
