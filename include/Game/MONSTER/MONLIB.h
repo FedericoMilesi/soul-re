@@ -51,5 +51,6 @@ void MON_DropAllObjects(Instance *instance);
 int MON_AnimPlaying(Instance *instance, MonsterAnim animtype);
 void MON_PlayCombatIdle(Instance *instance, int mode);
 int MON_ShouldIFlee(Instance *instance);
+void MON_GetPlanSlot(MonsterVars *mv);
 
 #endif

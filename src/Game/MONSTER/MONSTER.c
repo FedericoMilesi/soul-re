@@ -423,7 +423,30 @@ void MON_Flee(Instance *instance)
     MON_DefaultQueueHandler(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_PursueEntry);
+void MON_PursueEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    mv->mvFlags |= 0x1000;
+    mv->mvFlags &= ~0x10000;
+
+    if ((mv->mvFlags & 0x4))
+    {
+        MON_PlayAnim(instance, MONSTER_ANIM_RUN, 2);
+    }
+    else
+    {
+        MON_GetPlanSlot(mv);
+
+        MON_PlayCombatIdle(instance, 2);
+    }
+
+    mv->mode = 4;
+
+    mv->mvFlags &= ~0x20000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Pursue);
 
