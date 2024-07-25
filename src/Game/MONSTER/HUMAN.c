@@ -5,7 +5,7 @@
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONMSG.h"
 #include "Game/MONSTER/HUMAN.h"
-#include "Game/MONSTER.h"
+#include "Game/MONSTER/MONSTER.h"
 #include "Game/GAMEPAD.h"
 #include "Game/SAVEINFO.h"
 #include "Game/PSX/SUPPORT.h"

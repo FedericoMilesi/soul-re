@@ -1,7 +1,7 @@
 #include "common.h"
 #include "Game/STATE.h"
 #include "Game/GAMELOOP.h"
-#include "Game/MONSTER.h"
+#include "Game/MONSTER/MONSTER.h"
 #include "Game/SAVEINFO.h"
 #include "Game/PHYSICS.h"
 #include "Game/MATH3D.h"

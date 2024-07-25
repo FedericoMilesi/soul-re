@@ -1,7 +1,7 @@
 #include "common.h"
 #include "Game/MONSTER/HUMAN.h"
 #include "Game/MONSTER/MONAPI.h"
-#include "Game/MONSTER.h"
+#include "Game/MONSTER/MONSTER.h"
 
 void WORSHIP_Init(Instance *instance)
 {

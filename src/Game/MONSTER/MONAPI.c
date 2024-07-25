@@ -2,7 +2,7 @@
 #include "Libs/STRING.h"
 #include "Game/SAVEINFO.h"
 #include "Game/GAMELOOP.h"
-#include "Game/MONSTER.h"
+#include "Game/MONSTER/MONSTER.h"
 #include "Game/STATE.h"
 #include "Game/MEMPACK.h"
 #include "Game/MONSTER/MONAPI.h"

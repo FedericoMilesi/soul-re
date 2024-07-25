@@ -58,6 +58,9 @@
         "relmod.h": "c",
         "memcard.h": "c",
         "monsense.h": "c",
-        "monapi.h": "c"
+        "monapi.h": "c",
+        "human.h": "c",
+        "montable.h": "c",
+        "vwraith.h": "c"
     }
 }

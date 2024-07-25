@@ -1,5 +1,5 @@
 #include "common.h"
-#include "Game/MONSTER.h"
+#include "Game/MONSTER/MONSTER.h"
 
 void VWRAITH_MoveVertical(Instance *instance, long targetZ, int velocity)
 {
