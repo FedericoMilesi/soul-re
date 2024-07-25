@@ -125,7 +125,10 @@ void MON_LandInWaterEntry(Instance *instance)
     instance->checkMask &= ~0x20;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_LandInWater);
+void MON_LandInWater(Instance *instance)
+{
+    MON_SwitchState(instance, MONSTER_STATE_FALL);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_BreakHoldEntry);
 
