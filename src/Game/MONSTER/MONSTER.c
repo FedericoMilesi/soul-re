@@ -120,7 +120,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_LandOnFeetEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_LandOnFeet);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_LandInWaterEntry);
+void MON_LandInWaterEntry(Instance *instance)
+{
+    instance->checkMask &= ~0x20;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_LandInWater);
 
