@@ -215,7 +215,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_AttackEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Attack);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_CombatEntry);
+void MON_CombatEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    mv->mode = 0x2000000;
+
+    mv->mvFlags &= ~0x40000;
+    mv->mvFlags |= 0x10000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Combat);
 
