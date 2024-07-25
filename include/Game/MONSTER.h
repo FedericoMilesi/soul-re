@@ -4,7 +4,6 @@
 #include "common.h"
 
 void MON_DamageEffect(Instance *instance, evFXHitData *data);
-
 void MON_Flee(Instance *instance);
 void MON_Idle(Instance *instance);
 void MON_IdleEntry(Instance *instance);

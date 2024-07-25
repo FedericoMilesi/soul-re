@@ -57,6 +57,7 @@
         "menu.h": "c",
         "relmod.h": "c",
         "memcard.h": "c",
-        "monsense.h": "c"
+        "monsense.h": "c",
+        "monapi.h": "c"
     }
 }

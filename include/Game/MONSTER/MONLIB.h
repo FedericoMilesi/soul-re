@@ -44,5 +44,8 @@ void MON_SetDefaults(Instance *instance);
 int MON_SetVelocityTowardsImpalingObject(Instance *instance, int checkOrientation);
 void MON_TurnOffSphereCollisions(Instance *instance);
 void MON_TurnOnSphereCollisions(Instance *instance);
+void MON_TurnOffAllSpheres(Instance *instance);
+void MON_BirthSoul(Instance *instance, int link);
+void MON_ChangeHumanOpinion(Instance *instance);
 
 #endif
