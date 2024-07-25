@@ -589,7 +589,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Hide);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_SurpriseAttackEntry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_SurpriseAttack);
+void MON_SurpriseAttack(Instance *instance)
+{
+    MON_Attack(instance);
+}
 
 void MON_EnvironmentDamageEntry(Instance *instance)
 {
