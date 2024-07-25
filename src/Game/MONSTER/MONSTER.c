@@ -3,6 +3,7 @@
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONMSG.h"
+#include "Game/MONSTER/MONSENSE.h"
 #include "Game/PHYSICS.h"
 #include "Game/MONSTER/MISSILE.h"
 #include "Game/G2/ANMG2ILF.h"
@@ -369,7 +370,45 @@ void MON_Idle(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_FleeEntry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Flee);
+void MON_Flee(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (mv->enemy == NULL)
+    {
+        MON_SwitchState(instance, MONSTER_STATE_IDLE);
+
+        mv->behaviorState = mv->initialBehavior;
+        return;
+    }
+
+    if (((mv->mvFlags & 0x2000000)) && (mv->ally != NULL) && (mv->ally->distance < mv->enemy->distance))
+    {
+        if (!(INSTANCE_Query(instance, 1) & 0x4))
+        {
+            MON_SwitchState(instance, MONSTER_STATE_PURSUE);
+            return;
+        }
+    }
+
+    if (mv->enemy->distance > mv->subAttr->fleeRange)
+    {
+        MON_SwitchState(instance, MONSTER_STATE_WANDER);
+        return;
+    }
+
+    if (MON_ValidPosition(instance) == 0)
+    {
+        MON_SwitchState(instance, MONSTER_STATE_PURSUE);
+        return;
+    }
+
+    AngleMoveToward(&instance->rotation.z, MONSENSE_GetClosestFreeDirection(instance, MATH3D_AngleFromPosToPos(&mv->enemy->instance->position, &instance->position), 1000), mv->subAttr->speedFleeTurn);
+
+    MON_DefaultQueueHandler(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_PursueEntry);
 
