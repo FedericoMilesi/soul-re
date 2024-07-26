@@ -14,6 +14,7 @@
 #include "Game/SOUND.h"
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/PLAN/ENMYPLAN.h"
+#include "Game/CAMERA.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -1179,7 +1180,105 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_VertexBurnt);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DamageEffect);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DefaultInit);
+void MON_DefaultInit(Instance *instance)
+{
+    MonsterAttributes *ma;
+    MonsterVars *mv;
+    HModel *hModel;
+    HPrim *hprim;
+    int i;
+    int state;
+    Level *level;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    if ((mv->mvFlags & 0x1000000))
+    {
+        MONAPI_CheckGenerator(instance);
+    }
+
+    if (MON_OnGround(instance) != 0)
+    {
+        mv->mvFlags |= 0x2;
+    }
+    else
+    {
+        mv->mvFlags &= ~0x2;
+    }
+
+    if (instance->hModelList != NULL)
+    {
+        hModel = &instance->hModelList[instance->currentModel];
+
+        hprim = (HPrim *)&hModel->hPrimList->hpFlags; // likely a bug from the game itself
+
+        for (i = hModel->numHPrims; i != 0; i--, hprim++)
+        {
+            if (hprim->segment != 1)
+            {
+                hprim->withFlags &= 0xA5;
+            }
+        }
+    }
+
+    if (ma->neckSegment != 0)
+    {
+        G2Anim_AttachControllerToSeg(&instance->anim, ma->neckSegment, 14);
+
+        G2Anim_DisableController(&instance->anim, ma->neckSegment, 14);
+    }
+
+    if ((ma->spineSegment != 0) && (ma->spineSegment != ma->neckSegment))
+    {
+        G2Anim_AttachControllerToSeg(&instance->anim, ma->spineSegment, 14);
+
+        G2Anim_DisableController(&instance->anim, ma->spineSegment, 14);
+    }
+
+    if (!(instance->object->oflags & 0x80000))
+    {
+        level = STREAM_GetLevelWithID(theCamera.focusInstance->currentStreamUnitID);
+
+        if (MATH3D_LengthXYZ(instance->position.x - theCamera.core.position.x, instance->position.y - theCamera.core.position.y, instance->position.z - theCamera.core.position.z) < level->fogNear)
+        {
+            instance->fadeValue = 4096;
+
+            MON_StartSpecialFade(instance, 0, 20);
+        }
+    }
+
+    state = 0;
+
+    if (!(instance->flags & 0x2))
+    {
+        if (mv->behaviorState == 4)
+        {
+            state = 20;
+        }
+        else if (mv->behaviorState == 16)
+        {
+            state = 26;
+        }
+        else if (mv->behaviorState == 13)
+        {
+            state = 23;
+
+            mv->damageType = 0;
+        }
+        else if ((mv->mvFlags & 0x2))
+        {
+            state = 2;
+        }
+        else
+        {
+            state = 4;
+        }
+    }
+
+    MON_SwitchState(instance, (MonsterState)state);
+}
 
 void MON_CleanUp(Instance *instance)
 {

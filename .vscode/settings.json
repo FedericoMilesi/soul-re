@@ -64,6 +64,7 @@
         "vwraith.h": "c",
         "monmsg.h": "c",
         "planapi.h": "c",
-        "monster.h": "c"
+        "monster.h": "c",
+        "quatvm.h": "c"
     }
 }

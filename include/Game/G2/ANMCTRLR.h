@@ -66,5 +66,7 @@ void _G2AnimController_GetVector(G2AnimController *controller, G2SVector3 *vecto
 unsigned long _G2AnimController_ApplyToSegValue(G2AnimController *controller, G2AnimSegValue *segValue, G2Matrix *segMatrix, G2Matrix *parentMatrix);
 void _G2Anim_BuildTransformsWithControllers(G2Anim *anim);
 void _G2Anim_ApplyControllersToStoredFrame(G2Anim *anim);
+void G2Anim_AttachControllerToSeg(G2Anim *anim, int segNumber, int type);
+void G2Anim_DetachControllerFromSeg(G2Anim *anim, int segNumber, int type);
 
 #endif
