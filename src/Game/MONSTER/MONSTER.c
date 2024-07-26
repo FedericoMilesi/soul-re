@@ -1065,7 +1065,39 @@ void MON_PetrifiedEntry(Instance *instance)
     mv->mvFlags |= 0x80;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Petrified);
+void MON_Petrified(Instance *instance)
+{
+    MonsterVars *mv;
+    Message *message;
+    int time;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    time = MON_GetTime(instance);
+
+    if (mv->generalTimer < (unsigned int)time)
+    {
+        mv->mvFlags &= ~0x80;
+
+        instance->petrifyValue = 0;
+
+        MON_SwitchState(instance, MONSTER_STATE_IDLE);
+    }
+    else if ((mv->generalTimer - 1000) < (unsigned int)time)
+    {
+        instance->petrifyValue = (short)(4 * (mv->generalTimer - (unsigned int)time));
+    }
+
+    while (message = DeMessageQueue(&mv->messageQueue), message != NULL)
+    {
+        if ((message->ID == 0x100001F) || ((message->ID == 0x1000023) && (message->Data == 0x1000)))
+        {
+            mv->damageType = 0x400;
+
+            MON_SwitchState(instance, MONSTER_STATE_GENERALDEATH);
+        }
+    }
+}
 
 int MONSTER_CalcDamageIntensity(int hp, int maxHp)
 {
