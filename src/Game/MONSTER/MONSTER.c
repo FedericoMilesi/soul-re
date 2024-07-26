@@ -9,6 +9,7 @@
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/MATH3D.h"
 #include "Game/PLAN/PLANAPI.h"
+#include "Game/FX.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -604,7 +605,63 @@ void MON_EnvironmentDamage(Instance *instance)
     (void)instance;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_MonsterGlow);
+void MON_MonsterGlow(Instance *instance, long color, int glowtime, int glowin, int glowfade)
+{
+    FXGlowEffect *glow;
+    MonsterAttributes *ma;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    if (glowtime > 0)
+    {
+        glowtime *= 33;
+    }
+
+    if (glowfade > 0)
+    {
+        glowfade *= 33;
+    }
+
+    if (glowin > 0)
+    {
+        glowin *= 33;
+    }
+
+    glow = FX_DoInstanceTwoSegmentGlow(instance, ma->waistSegment, ma->leftFootSegment, &color, 1, 1024, 160);
+
+    glow->lifeTime = glowtime;
+
+    glow->fadein_time = glowin;
+    glow->fadeout_time = glowfade;
+
+    glow = FX_DoInstanceTwoSegmentGlow(instance, ma->waistSegment, ma->rightFootSegment, &color, 1, 1024, 160);
+
+    glow->lifeTime = glowtime;
+
+    glow->fadein_time = glowin;
+    glow->fadeout_time = glowfade;
+
+    glow = FX_DoInstanceTwoSegmentGlow(instance, ma->leftShoulderSegment, ma->leftWeaponSegment, &color, 1, 1024, 128);
+
+    glow->lifeTime = glowtime;
+
+    glow->fadein_time = glowin;
+    glow->fadeout_time = glowfade;
+
+    glow = FX_DoInstanceTwoSegmentGlow(instance, ma->rightShoulderSegment, ma->rightWeaponSegment, &color, 1, 1024, 128);
+
+    glow->lifeTime = glowtime;
+
+    glow->fadein_time = glowin;
+    glow->fadeout_time = glowfade;
+
+    glow = FX_DoInstanceTwoSegmentGlow(instance, ma->headSegment, ma->waistSegment, &color, 1, 1024, 192);
+
+    glow->lifeTime = glowtime;
+
+    glow->fadein_time = glowin;
+    glow->fadeout_time = glowfade;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_GeneralDeathEntry);
 

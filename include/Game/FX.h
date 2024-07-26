@@ -477,6 +477,46 @@ typedef struct GenericFXObject {
     long *ColorList;
 } GenericFXObject;
 
+// size: 0x2C
+typedef struct _FXGlowEffect {
+    // offset: 0000
+    void *next;
+    // offset: 0004
+    void *continue_process;
+    // offset: 0008 (668 bytes)
+    struct _Instance *instance;
+    // offset: 000C
+    unsigned char effectType;
+    // offset: 000D
+    unsigned char type;
+    // offset: 000E
+    short lifeTime;
+    // offset: 0010
+    unsigned long diffTime;
+    // offset: 0014
+    long *colorArray;
+    // offset: 0018
+    long currentColor;
+    // offset: 001C
+    short numColors;
+    // offset: 001E
+    short colorBlendCycle;
+    // offset: 0020
+    short width;
+    // offset: 0022
+    short height;
+    // offset: 0024
+    unsigned char numSegments;
+    // offset: 0025
+    unsigned char SegmentInc;
+    // offset: 0026
+    short segment;
+    // offset: 0028
+    short fadein_time;
+    // offset: 002A
+    short fadeout_time;
+} FXGlowEffect;
+
 void FX_ContinueParticle(FXParticle *currentParticle, FXTracker *fxTracker);
 void FX_SetReaverInstance(Instance *instance);
 void FX_EndInstanceEffects(Instance *instance);
@@ -494,5 +534,6 @@ void FX_RelocateFXPointers(Object *oldObject, Object *newObject, long sizeOfObje
 void FX_Relocate(SVector *offset);
 void FX_UpdateInstanceWaterSplit(Instance *instance);
 void FX_Lightning(MATRIX *wcTransform, unsigned long **ot, MATRIX *mat, short deg, SVector *start, SVector *end, int width, int small_width, int segs, int sine_size, int variation, long color, long glow_color);
+FXGlowEffect *FX_DoInstanceTwoSegmentGlow(Instance *instance, long segment, long segmentEnd, long *color, long numColors, long atuColorCycleRate, long height);
 
 #endif
