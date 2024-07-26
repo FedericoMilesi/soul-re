@@ -17,7 +17,14 @@ void menu_initialize(menu_t *menu, void *opaque)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_format);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_set);
+void menu_set(menu_t *menu, int (*fn)())
+{
+    menu->nmenus = 0;
+
+    menu->drawfn = NULL;
+
+    menu_push(menu, fn);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_push);
 
