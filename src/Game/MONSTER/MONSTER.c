@@ -1054,7 +1054,16 @@ void MON_Embrace(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_PetrifiedEntry);
+void MON_PetrifiedEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    mv->generalTimer = MON_GetTime(instance) + 7000;
+
+    mv->mvFlags |= 0x80;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Petrified);
 
