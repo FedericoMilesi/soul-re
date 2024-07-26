@@ -756,7 +756,131 @@ void MON_MonsterGlow(Instance *instance, long color, int glowtime, int glowin, i
     glow->fadeout_time = glowfade;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_GeneralDeathEntry);
+void MON_GeneralDeathEntry(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+    char temp; // not from decls.h
+
+    temp = 0;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    if (instance->LinkParent != NULL)
+    {
+        MON_UnlinkFromRaziel(instance);
+
+        instance->xAccl = 0;
+        instance->yAccl = 0;
+        instance->zAccl = -16;
+    }
+
+    instance->flags2 |= 0x80;
+
+    mv->mvFlags |= 0x202000;
+    mv->mvFlags &= ~0x10;
+
+    switch (mv->damageType)
+    {
+    case 16:
+        mv->effect = (void *)SOUND_Play3dSound(&instance->position, 35, 600, 80, 10000);
+
+        MON_PlayAnim(instance, MONSTER_ANIM_AGONY, 2);
+
+        mv->causeOfDeath = 3;
+
+        mv->generalTimer = MON_GetTime(instance) + 3000;
+        mv->effectTimer = MON_GetTime(instance) + 12000;
+
+        instance->xAccl = 0;
+        instance->yAccl = 0;
+
+        instance->xVel = 0;
+        instance->yVel = 0;
+        break;
+    case 32:
+        mv->causeOfDeath = 1;
+    case 64:
+        if ((mv != NULL) && (mv->mvFlags != 0)) // garbage code for reordering
+        {
+            temp = -temp;
+        }
+
+        if ((ma->whatAmI & 0x8))
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_FALLOVER, 1);
+        }
+        else
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_AGONY, 2);
+        }
+
+        if (mv->damageType == 64)
+        {
+            mv->causeOfDeath = 2;
+        }
+
+        mv->generalTimer = MON_GetTime(instance) + 2000;
+
+        mv->mvFlags |= 0x400000;
+
+        mv->effectTimer = MON_GetTime(instance) + 10000;
+
+        MON_MonsterGlow(instance, 18784, -1, 0, 0);
+
+        instance->xAccl = 0;
+        instance->yAccl = 0;
+
+        instance->xVel = 0;
+        instance->yVel = 0;
+        break;
+    case 1024:
+        MON_PlayAnim(instance, MONSTER_ANIM_FALLOVER, 1);
+
+        mv->causeOfDeath = 6;
+
+        mv->generalTimer = 0;
+
+        instance->xAccl = 0;
+        instance->yAccl = 0;
+
+        instance->xVel = 0;
+        instance->yVel = 0;
+        break;
+    default:
+        if (mv->enemy != NULL)
+        {
+            if (MON_SetUpKnockBack(instance, mv->enemy->instance, (evMonsterHitData *)mv->messageData) != 0)
+            {
+                MON_PlayAnim(instance, MONSTER_ANIM_HIT1, 1);
+            }
+            else
+            {
+                MON_PlayAnim(instance, MONSTER_ANIM_HIT2, 1);
+            }
+        }
+        else
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_FALLOVER, 1);
+        }
+
+        mv->generalTimer = 0;
+
+        mv->causeOfDeath = 7;
+
+        MON_TurnOffAllSpheres(instance);
+
+        instance->xAccl = 0;
+        instance->yAccl = 0;
+
+        instance->xVel = 0;
+        instance->yVel = 0;
+    }
+
+    MON_DropAllObjects(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_GeneralDeath);
 
