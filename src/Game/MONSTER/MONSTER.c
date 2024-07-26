@@ -942,7 +942,33 @@ void MON_GeneralDeath(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_NoticeEntry);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Notice);
+void MON_Notice(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if ((instance->flags2 & 0x10))
+    {
+        if (mv->behaviorState == 8)
+        {
+            MON_SwitchState(instance, MONSTER_STATE_HIDE);
+        }
+        else
+        {
+            MON_SwitchState(instance, MONSTER_STATE_COMBAT);
+        }
+    }
+
+    if (mv->enemy != NULL)
+    {
+        mv->lookAtPos = &mv->enemy->instance->position;
+
+        MON_TurnToPosition(instance, &mv->enemy->instance->position, mv->subAttr->speedPivotTurn);
+    }
+
+    MON_DefaultQueueHandler(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_PupateEntry);
 
