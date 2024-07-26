@@ -57,5 +57,6 @@ int MON_ShouldIAmbushEnemy(Instance *instance);
 void MON_UnlinkFromRaziel(Instance *instance);
 int MON_SetUpKnockBack(Instance *instance, Instance *enemy, evMonsterHitData *data);
 int MON_OnGround(Instance *instance);
+void MON_DoDrainEffects(Instance *instance, Instance *ei);
 
 #endif

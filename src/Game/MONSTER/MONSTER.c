@@ -1012,7 +1012,47 @@ void MON_EmbraceEntry(Instance *instance)
     mv->generalTimer = MON_GetTime(instance) + mv->subAttr->combatAttributes->suckTime;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Embrace);
+void MON_Embrace(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterIR *enemy;
+    Instance *ei;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    enemy = mv->enemy;
+
+    if (enemy != NULL)
+    {
+        if ((enemy->distance > mv->subAttr->combatAttributes->suckRange) || (!(enemy->mirFlags & 0x20)) || (!(enemy->mirFlags & 0x1000))
+        || ((mv->mvFlags & 0x4)) || (mv->generalTimer < MON_GetTime(instance)))
+        {
+            MON_SwitchState(instance, MONSTER_STATE_COMBAT);
+        }
+        else
+        {
+            ei = enemy->instance;
+
+            MON_DoDrainEffects(instance, ei);
+
+            INSTANCE_Post(ei, 0x40006, mv->subAttr->combatAttributes->suckPower << 8);
+            INSTANCE_Post(instance, 0x1000016, mv->subAttr->combatAttributes->suckPower / 8);
+
+            MON_TurnToPosition(instance, &ei->position, mv->subAttr->speedPivotTurn);
+        }
+    }
+    else
+    {
+        MON_SwitchState(instance, MONSTER_STATE_IDLE);
+    }
+
+    MON_DefaultQueueHandler(instance);
+
+    if ((enemy != NULL) && (instance->currentMainState != MONSTER_STATE_EMBRACE))
+    {
+        enemy->mirFlags &= ~0x1000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_PetrifiedEntry);
 
