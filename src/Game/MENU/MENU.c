@@ -49,4 +49,11 @@ INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_draw);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_run);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_process);
+void menu_process(menu_t *menu)
+{
+    menu_build(menu);
+
+    menu_draw(menu);
+
+    menu_run(menu);
+}
