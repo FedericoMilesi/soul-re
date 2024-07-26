@@ -776,7 +776,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_PetrifiedEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Petrified);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_CalcDamageIntensity);
+int MONSTER_CalcDamageIntensity(int hp, int maxHp)
+{
+    return ((maxHp - hp) * 256) / maxHp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_ProcessClosestVerts);
 
