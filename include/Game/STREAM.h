@@ -93,6 +93,13 @@ typedef struct _TVertex {
     unsigned char code;
 } TVertex;
 
+typedef struct _MVertex {
+    // offset: 0000 (6 bytes)
+    struct _Vertex vertex;
+    // offset: 0006
+    unsigned short normal;
+} MVertex;
+
 // size: 0x54
 typedef struct _Terrain {
     // offset: 0000

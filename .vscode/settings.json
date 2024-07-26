@@ -63,6 +63,7 @@
         "montable.h": "c",
         "vwraith.h": "c",
         "monmsg.h": "c",
-        "planapi.h": "c"
+        "planapi.h": "c",
+        "monster.h": "c"
     }
 }

@@ -3,6 +3,26 @@
 
 #include "common.h"
 
+// size: 0x8
+typedef struct burntTuneType {
+    // offset: 0000
+    int burntDist;
+    // offset: 0004
+    int fadeDelta;
+} burntTuneType;
+
+// size: 0x10
+typedef struct burntMessType {
+    // offset: 0000
+    int closestvert;
+    // offset: 0004
+    int closestdist;
+    // offset: 0008
+    int closestseg;
+    // offset: 000C (8 bytes)
+    struct burntTuneType *burntTune;
+} burntMessType;
+
 void MON_DamageEffect(Instance *instance, evFXHitData *data);
 void MON_Flee(Instance *instance);
 void MON_Idle(Instance *instance);
@@ -69,5 +89,8 @@ void MON_TerrainImpaleDeathEntry(Instance *instance);
 void MON_TerrainImpaleDeath(Instance *instance);
 void MON_PetrifiedEntry(Instance *instance);
 void MON_Petrified(Instance *instance);
+void ProcessBurntMess(Instance *instance, int vertidx, int segidx, int dist, void *cb_data);
+void MONSTER_InitVertexColors(Instance *instance, Model *model);
+void MONSTER_ProcessClosestVerts(Instance *instance, SVector *location, void (*processVert_cb)(), void *cb_data);
 
 #endif

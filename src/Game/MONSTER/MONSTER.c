@@ -1026,7 +1026,61 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_VertexBlood);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", ProcessBurntMess);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_StartVertexBurnt);
+int MONSTER_StartVertexBurnt(Instance *instance, SVector *location, burntTuneType *burntTune)
+{
+    Model *model;
+    burntMessType bmt;
+    SVector localloc;
+    MVertex *vertexList;
+    Vector locVec;
+    long flag;
+    MATRIX *segMatrix;
+
+    model = instance->object->modelList[instance->currentModel];
+
+    if ((instance->perVertexColor != NULL) || (MONSTER_InitVertexColors(instance, model), instance->perVertexColor != NULL))
+    {
+        localloc = *location;
+
+        bmt.closestvert = -1;
+        bmt.closestdist = 65536;
+        bmt.closestseg = -1;
+
+        bmt.burntTune = burntTune;
+
+        MONSTER_ProcessClosestVerts(instance, &localloc, ProcessBurntMess, &bmt);
+
+        if ((burntTune->burntDist >> 1) < bmt.closestdist)
+        {
+            vertexList = model->vertexList;
+
+            segMatrix = &instance->matrix[bmt.closestseg];
+
+            SetRotMatrix(segMatrix);
+            SetTransMatrix(segMatrix);
+
+            RotTrans((SVECTOR *)&vertexList[bmt.closestvert].vertex, (VECTOR *)&locVec, &flag);
+
+            localloc.x = (short)locVec.x;
+            localloc.y = (short)locVec.y;
+            localloc.z = (short)locVec.z;
+
+            bmt.closestdist = 0;
+
+            FX_MakeHitFX(&localloc);
+
+            MONSTER_ProcessClosestVerts(instance, &localloc, ProcessBurntMess, &bmt);
+        }
+        else
+        {
+            FX_MakeHitFX(&localloc);
+        }
+
+        return bmt.closestvert;
+    }
+
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_VertexBurnt);
 
