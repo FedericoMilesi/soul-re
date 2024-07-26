@@ -15,6 +15,7 @@
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/CAMERA.h"
+#include "Game/MEMPACK.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -1112,7 +1113,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_ProcessClosestVerts
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", ProcessBloodyMess);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_InitVertexColors);
+void MONSTER_InitVertexColors(Instance *instance, Model *model)
+{
+    int i;
+    CVECTOR *ptr;
+
+    instance->perVertexColor = (CVECTOR *)MEMPACK_Malloc(model->numVertices * 4, 33);
+
+    for (ptr = instance->perVertexColor, i = model->numVertices; i != 0; i--, ptr++)
+    {
+        *(long *)ptr = 0xFFFFFF;
+    }
+}
 
 int MONSTER_StartVertexBlood(Instance *instance, SVector *location, int amount)
 {
