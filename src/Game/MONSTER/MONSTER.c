@@ -10,6 +10,7 @@
 #include "Game/MATH3D.h"
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/FX.h"
+#include "Game/STATE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -940,7 +941,23 @@ void MON_GeneralDeath(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_NoticeEntry);
+void MON_NoticeEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (((long)mv->auxFlags < 0) && (mv->subAttr->allegiances->allies != 0))
+    {
+        MON_PlayAnim(instance, MONSTER_ANIM_ALARM, 1);
+
+        INSTANCE_Broadcast(instance, mv->subAttr->allegiances->allies, 0x1000011, SetMonsterAlarmData(mv->enemy->instance, &mv->enemy->instance->position, 2));
+    }
+    else
+    {
+        MON_PlayAnim(instance, MONSTER_ANIM_NOTICE, 1);
+    }
+}
 
 void MON_Notice(Instance *instance)
 {
