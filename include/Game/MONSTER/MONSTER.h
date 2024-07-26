@@ -23,6 +23,20 @@ typedef struct burntMessType {
     struct burntTuneType *burntTune;
 } burntMessType;
 
+// size: 0x14
+typedef struct bloodyMessType {
+    // offset: 0000
+    int closestvert;
+    // offset: 0004
+    int closestdist;
+    // offset: 0008
+    int closestseg;
+    // offset: 000C
+    int bloodiedAVert;
+    // offset: 0010
+    int bloodIntensity;
+} bloodyMessType;
+
 void MON_DamageEffect(Instance *instance, evFXHitData *data);
 void MON_Flee(Instance *instance);
 void MON_Idle(Instance *instance);
@@ -92,5 +106,6 @@ void MON_Petrified(Instance *instance);
 void ProcessBurntMess(Instance *instance, int vertidx, int segidx, int dist, void *cb_data);
 void MONSTER_InitVertexColors(Instance *instance, Model *model);
 void MONSTER_ProcessClosestVerts(Instance *instance, SVector *location, void (*processVert_cb)(), void *cb_data);
+void ProcessBloodyMess(Instance *instance, int vertidx, int segidx, int dist, void *cb_data);
 
 #endif

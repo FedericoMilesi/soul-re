@@ -1114,7 +1114,65 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", ProcessBloodyMess);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_InitVertexColors);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_StartVertexBlood);
+int MONSTER_StartVertexBlood(Instance *instance, SVector *location, int amount)
+{
+    Model *model;
+    bloodyMessType bmt;
+    SVector localloc;
+    MVertex *vertexList;
+    Vector locVec;
+    long flag;
+    MATRIX *segMatrix;
+
+    model = instance->object->modelList[instance->currentModel];
+
+    if ((instance->perVertexColor != NULL) || (MONSTER_InitVertexColors(instance, model), instance->perVertexColor != NULL))
+    {
+        localloc = *location;
+
+        bmt.closestvert = -1;
+        bmt.closestdist = 65536;
+        bmt.closestseg = -1;
+
+        bmt.bloodiedAVert = 0;
+
+        bmt.bloodIntensity = amount;
+
+        MONSTER_ProcessClosestVerts(instance, &localloc, ProcessBloodyMess, &bmt.closestvert);
+
+        if (bmt.closestdist >= 51)
+        {
+            vertexList = model->vertexList;
+
+            segMatrix = &instance->matrix[bmt.closestseg];
+
+            SetRotMatrix(segMatrix);
+            SetTransMatrix(segMatrix);
+
+            RotTrans((SVECTOR *)&vertexList[bmt.closestvert].vertex, (VECTOR *)&locVec, &flag);
+
+            bmt.bloodiedAVert = 1;
+
+            bmt.closestdist = 0;
+
+            localloc.x = (short)locVec.x;
+            localloc.y = (short)locVec.y;
+            localloc.z = (short)locVec.z;
+
+            FX_MakeHitFX(&localloc);
+
+            MONSTER_ProcessClosestVerts(instance, &localloc, ProcessBloodyMess, &bmt);
+        }
+        else
+        {
+            FX_MakeHitFX(&localloc);
+        }
+
+        return bmt.closestvert;
+    }
+
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MONSTER_VertexBlood);
 
