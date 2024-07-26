@@ -882,7 +882,63 @@ void MON_GeneralDeathEntry(Instance *instance)
     MON_DropAllObjects(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_GeneralDeath);
+void MON_GeneralDeath(Instance *instance)
+{
+    MonsterVars *mv;
+    Message *message;
+    int dead;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    dead = 0;
+
+    if ((((instance->flags2 & 0x10)) && (MON_AnimPlaying(instance, MONSTER_ANIM_FALLOVER) != 0)) || (mv->causeOfDeath == 6))
+    {
+        dead = 1;
+    }
+    else if (((instance->flags2 & 0x12)) && (mv->generalTimer < MON_GetTime(instance)))
+    {
+        MON_PlayAnim(instance, MONSTER_ANIM_FALLOVER, 1);
+
+        MON_TurnOffAllSpheres(instance);
+    }
+
+    if (dead != 0)
+    {
+        mv->mvFlags &= ~0x10;
+
+        G2Anim_SetNoLooping(&instance->anim);
+
+        MON_SwitchState(instance, MONSTER_STATE_DEAD);
+    }
+
+    if ((mv->mvFlags & 0x400))
+    {
+        if (MON_OnGround(instance) != 0)
+        {
+            mv->mvFlags |= 0x2;
+        }
+        else
+        {
+            mv->mvFlags &= ~0x2;
+        }
+    }
+
+    if (!(mv->mvFlags & 0x2))
+    {
+        MON_ApplyPhysics(instance);
+    }
+
+    while (message = DeMessageQueue(&mv->messageQueue), message != NULL)
+    {
+        if (message->ID == 0x100000B)
+        {
+            instance->xAccl = 0;
+            instance->yAccl = 0;
+            instance->zAccl = -16;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_NoticeEntry);
 
