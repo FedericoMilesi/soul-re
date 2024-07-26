@@ -48,5 +48,6 @@ void SOUND_SetSfxVolume(int newVolume);
 void SOUND_SetVoiceVolume(int newVolume);
 void SOUND_StopAllSound();
 void SOUND_ResetAllSound();
+void SndEndLoop(unsigned long handle);
 
 #endif

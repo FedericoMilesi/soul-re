@@ -11,6 +11,9 @@
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/FX.h"
 #include "Game/STATE.h"
+#include "Game/SOUND.h"
+#include "Game/G2/ANMCTRLR.h"
+#include "Game/PLAN/ENMYPLAN.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -1178,4 +1181,46 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DamageEffect);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DefaultInit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_CleanUp);
+void MON_CleanUp(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    MON_DropAllObjects(instance);
+
+    if (instance->LinkParent != NULL)
+    {
+        MON_UnlinkFromRaziel(instance);
+    }
+
+    if ((mv->causeOfDeath == 3) && (mv->effect != NULL))
+    {
+        SndEndLoop((unsigned long)mv->effect);
+
+        mv->effect = NULL;
+    }
+
+    if (mv->pathSlotID != -1)
+    {
+        ENMYPLAN_ReleasePlanningWorkspace(mv->pathSlotID);
+    }
+
+    if (ma->neckSegment != 0)
+    {
+        G2Anim_DetachControllerFromSeg(&instance->anim, ma->neckSegment, 14);
+    }
+
+    if ((ma->spineSegment != 0) && (ma->spineSegment != ma->neckSegment))
+    {
+        G2Anim_DetachControllerFromSeg(&instance->anim, ma->spineSegment, 14);
+    }
+
+    if ((INSTANCE_Query(instance, 1) & 0xC000))
+    {
+        GlobalSave->humanOpinionOfRaziel++;
+    }
+}
