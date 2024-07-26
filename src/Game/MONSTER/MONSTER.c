@@ -1001,7 +1001,16 @@ void MON_PupateEntry(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Pupate);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_EmbraceEntry);
+void MON_EmbraceEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    MON_PlayAnim(instance, MONSTER_ANIM_SOULSUCK, 2);
+
+    mv->generalTimer = MON_GetTime(instance) + mv->subAttr->combatAttributes->suckTime;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Embrace);
 
