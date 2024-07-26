@@ -588,7 +588,38 @@ void MON_HideEntry(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Hide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_SurpriseAttackEntry);
+void MON_SurpriseAttackEntry(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterCombatAttributes *combatAttr;
+    MonsterAttributes *ma;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    combatAttr = mv->subAttr->combatAttributes;
+
+    ma = (MonsterAttributes *)instance->data;
+
+    do {} while (0); // garbage code for reordering
+
+    mv->attackType = &ma->attackAttributesList[(int)combatAttr->ambushAttack];
+
+    mv->attackState = 0;
+
+    MON_PlayAnimFromList(instance, mv->attackType->animList, 0, 1);
+
+    if (mv->behaviorState == 8)
+    {
+        if (mv->activeBehavior != -1)
+        {
+            mv->behaviorState = mv->activeBehavior;
+        }
+        else
+        {
+            mv->behaviorState = mv->initialBehavior;
+        }
+    }
+}
 
 void MON_SurpriseAttack(Instance *instance)
 {
