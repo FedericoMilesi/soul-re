@@ -987,7 +987,17 @@ void MON_Notice(Instance *instance)
     MON_DefaultQueueHandler(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_PupateEntry);
+void MON_PupateEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    instance->flags |= 0x800;
+    instance->flags2 |= 0x20000000;
+
+    mv->effectTimer = MON_GetTime(instance) + 2000 + ((rand() & 0xFFF));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Pupate);
 
