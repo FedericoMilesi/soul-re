@@ -1,6 +1,10 @@
 #include "common.h"
+#include "Game/MENU/MENU.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_data_size);
+int menu_data_size()
+{
+    return sizeof(menu_t);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_initialize);
 
