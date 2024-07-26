@@ -28,7 +28,10 @@ void menu_set(menu_t *menu, int (*fn)())
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_push);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_pop);
+void menu_pop(menu_t *menu)
+{
+    menu->nmenus--;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_item_flags);
 
