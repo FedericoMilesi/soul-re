@@ -53,5 +53,6 @@ void MON_PlayCombatIdle(Instance *instance, int mode);
 int MON_ShouldIFlee(Instance *instance);
 void MON_GetPlanSlot(MonsterVars *mv);
 int MON_DefaultPlanMovement(Instance *instance, int anim, long distance);
+int MON_ShouldIAmbushEnemy(Instance *instance);
 
 #endif

@@ -586,7 +586,69 @@ void MON_HideEntry(Instance *instance)
     MON_PlayRandomIdle(instance, 1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Hide);
+void MON_Hide(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterIR *enemy;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    enemy = mv->enemy;
+
+    if ((!(mv->mvFlags & 0x4)) && (enemy != NULL))
+    {
+        switch (mv->behaviorState)
+        {
+        case 4:
+            MON_ChangeBehavior(instance, mv->triggeredBehavior);
+            break;
+        case 9:
+            MON_SwitchState(instance, MONSTER_STATE_FLEE);
+            break;
+        case 8:
+            if ((!(mv->mvFlags & 0x40000000)) && (MON_ShouldIAmbushEnemy(instance) != 0))
+            {
+                if (mv->ambushJumpType == 0)
+                {
+                    MON_TurnToPosition(instance, &enemy->instance->position, 4096);
+
+                    MON_SwitchState(instance, MONSTER_STATE_SURPRISEATTACK);
+                }
+                else
+                {
+                    if (mv->ambushJumpType == 1)
+                    {
+                        MON_PlayAnim(instance, MONSTER_ANIM_EVADELEFT, 1);
+                    }
+                    else
+                    {
+                        MON_PlayAnim(instance, MONSTER_ANIM_EVADERIGHT, 1);
+                    }
+
+                    mv->mvFlags |= 0x40000000;
+                }
+            }
+
+            break;
+        default:
+            MON_SwitchState(instance, MONSTER_STATE_PURSUE);
+        }
+    }
+
+    if ((instance->flags2 & 0x10))
+    {
+        if ((mv->mvFlags & 0x40000000))
+        {
+            MON_SwitchState(instance, MONSTER_STATE_COMBAT);
+        }
+        else
+        {
+            MON_PlayRandomIdle(instance, 1);
+        }
+    }
+
+    MON_DefaultQueueHandler(instance);
+}
 
 void MON_SurpriseAttackEntry(Instance *instance)
 {
