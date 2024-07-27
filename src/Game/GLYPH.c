@@ -413,7 +413,54 @@ long GlyphTime(int time)
     return time / 4096;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", ShrinkGlyphMenu);
+void ShrinkGlyphMenu(Instance *instance)
+{
+    GlyphData *data;
+    int time;
+    short accl;
+
+    data = (GlyphData *)instance->extraData;
+
+    gameTrackerX.streamFlags &= ~0x100000;
+
+    if (data->glyph_time > 0)
+    {
+        data->glyph_time -= (short)((gameTrackerX.timeMult * 512) >> 12);
+
+        if (data->glyph_time < 0)
+        {
+            data->glyph_time = 0;
+        }
+
+        glyph_time = data->glyph_time;
+
+        time = GlyphTime(data->glyph_time);
+
+        data->glyph_radius = (time * 150) / 4096;
+
+        data->glyph_scale = time;
+
+        if (data->glyph_time > 0)
+        {
+            GlyphDrawMenu(instance);
+        }
+    }
+    else
+    {
+        glyph_cost = -1;
+    }
+
+    if (MANNA_Pickup_Time <= 0)
+    {
+        CriticalDampValue(5, &MANNA_Position, -64, &MANNA_Pos_vel, &accl, 12);
+    }
+    else
+    {
+        MANNA_Pickup_Time -= gameTrackerX.timeMult;
+    }
+
+    data->glyph_open = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", EnlargeGlyphMenu);
 
