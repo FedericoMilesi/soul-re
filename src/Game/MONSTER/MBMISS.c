@@ -8,10 +8,6 @@
 #include "Game/OBTABLE.h"
 #include "Game/MATH3D.h"
 
-extern char D_800D1BF0[];
-
-extern char D_800D1BFC[];
-
 void WCBEGG_Message(Instance *instance, unsigned long message, unsigned long data)
 {
     //PhysObData *pod; unused
@@ -55,7 +51,7 @@ int WCBEGG_ShouldIgniteEgg(Instance *egg, walbossAttributes *wa)
                     return 1;
                 }
 
-                if (strcmpi(instance->object->name, D_800D1BF0) == 0)
+                if (strcmpi(instance->object->name, "walfire_") == 0)
                 {
                     return 1;
                 }
@@ -89,7 +85,7 @@ void WCBEGG_Process(Instance *instance, GameTracker *gameTracker)
         instance->collideFunc = WCBEGG_ExplodeCollide;
     }
 
-    walboss = OBTABLE_FindObject(D_800D1BFC);
+    walboss = OBTABLE_FindObject("walboss_");
 
     if (walboss != NULL)
     {
@@ -155,7 +151,7 @@ void WCBEGG_ExplodeProcess(Instance *instance, GameTracker *gameTracker)
         instance->collideFunc = WCBEGG_ExplodeCollide;
     }
 
-    walboss = OBTABLE_FindObject(D_800D1BFC);
+    walboss = OBTABLE_FindObject("walboss_");
 
     if (walboss != NULL)
     {
@@ -202,7 +198,7 @@ void WCBEGG_SplitProcess(Instance *instance, GameTracker *gameTracker)
 
     currentTime = MON_GetTime(instance);
 
-    walboss = OBTABLE_FindObject(D_800D1BFC);
+    walboss = OBTABLE_FindObject("walboss_");
 
     if (walboss != NULL)
     {
@@ -344,7 +340,7 @@ void WCBEGG_Collide(Instance *instance, GameTracker *gameTracker)
 
     collideInfo = (CollideInfo *)instance->collideInfo;
 
-    if (((unsigned char)collideInfo->type1 != 1) || (inst1 = (Instance *)collideInfo->inst1, strcmpi(inst1->object->name, D_800D1BFC) != 0))
+    if (((unsigned char)collideInfo->type1 != 1) || (inst1 = (Instance *)collideInfo->inst1, strcmpi(inst1->object->name, "walboss_") != 0))
     {
         TurnOffCollisionPhysOb(instance, 7);
 

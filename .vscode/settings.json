@@ -65,6 +65,7 @@
         "monmsg.h": "c",
         "planapi.h": "c",
         "monster.h": "c",
-        "quatvm.h": "c"
+        "quatvm.h": "c",
+        "obtable.h": "c"
     }
 }
