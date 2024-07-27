@@ -101,6 +101,28 @@ typedef struct ObjectAccess {
     void *object;
 } ObjectAccess;
 
+// size: 0x24
+typedef struct ObjectFunc {
+    // offset: 0000
+    char *scriptName;
+    // offset: 0004
+    void (*initFunc)();
+    // offset: 0008
+    void (*processFunc)();
+    // offset: 000C
+    void (*collideFunc)();
+    // offset: 0010
+    unsigned long (*queryFunc)();
+    // offset: 0014
+    void (*messageFunc)();
+    // offset: 0018
+    void (*additionalCollideFunc)();
+    // offset: 001C
+    void (*relocateTuneFunc)();
+    // offset: 0020
+    void (*relocateInstObFunc)();
+} ObjectFunc;
+
 extern ObjectAccess objectAccess[8924+28];
 
 void OBTABLE_GetInstanceAdditionalCollideFunc(Instance *instance);
