@@ -586,7 +586,170 @@ void Glyph_StartSpell(Instance *instance, int glyphnum)
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", Glyph_Broadcast);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", Glyph_DoSpell);
+void Glyph_DoSpell(Instance *instance, int glyphnum)
+{
+    int fx_radius;
+    //int fx_accl; unused
+    int fx_vel;
+    long fx_color;
+    int fx_height1;
+    int fx_height2;
+    int fx_height3;
+    int fx_rad2;
+    int fx_rad3;
+    int pred_offset;
+    int color_change_radius;
+    MATRIX mat;
+    GlyphTuneData *glyphtunedata;
+    int temp; // not from decls.h
+
+    fx_radius = 0;
+
+    fx_vel = 0;
+
+    fx_color = 0;
+
+    fx_height1 = 0;
+    fx_height2 = 0;
+    fx_height3 = 0;
+
+    fx_rad2 = 0;
+    fx_rad3 = 0;
+
+    glyphtunedata = (GlyphTuneData *)instance->object->data;
+
+    fx_going = 0;
+
+    MATH3D_SetUnityMatrix(&mat);
+
+    pred_offset = 0;
+
+    fx_radius_old = 0;
+
+    color_change_radius = glyphtunedata->glyph_range[glyphnum - 1];
+
+    blast_range = color_change_radius;
+
+    temp = color_change_radius - (color_change_radius / 4);
+
+    switch (glyphnum)
+    {
+    case 6:
+        fx_radius = 1;
+
+        fx_color = 0xFFFFFF;
+
+        fx_height1 = -512;
+        fx_height2 = 0;
+        fx_height3 = 512;
+
+        fx_vel = 1048576;
+
+        fx_rad2 = 640;
+        fx_rad3 = 832;
+
+        fx_going = 6;
+        break;
+    case 4:
+        fx_radius = 1;
+
+        fx_color = 0xFF0000;
+
+        fx_height1 = -512;
+        fx_height2 = 0;
+        fx_height3 = 512;
+
+        fx_vel = 1048576;
+
+        fx_rad2 = 640;
+        fx_rad3 = 832;
+
+        fx_going = 4;
+        break;
+    case 5:
+        fx_radius = 1;
+
+        fx_vel = 1048576;
+
+        fx_color = 0xFF;
+
+        fx_height1 = -512;
+        fx_height2 = 0;
+        fx_height3 = 512;
+
+        fx_rad2 = 640;
+        fx_rad3 = 832;
+
+        fx_going = 5;
+        break;
+    case 2:
+        CAMERA_SetShake(&theCamera, 60, 2048);
+
+        fx_radius = 640;
+
+        fx_vel = 1310720;
+
+        fx_color = 0xA0A0A0;
+
+        fx_height3 = 0;
+        fx_height2 = 0;
+        fx_height1 = 0;
+
+        fx_rad2 = 640;
+        fx_rad3 = 832;
+
+        fx_going = 2;
+        break;
+    case 1:
+        fx_radius = 1;
+
+        fx_color = 0xC0C0C0;
+
+        fx_height1 = -256;
+        fx_height2 = 256;
+        fx_height3 = 768;
+
+        fx_vel = 2097152;
+
+        fx_rad2 = -640;
+        fx_rad3 = 0;
+
+        fx_going = 1;
+        break;
+    case 3:
+        fx_radius = 1;
+
+        fx_color = 0xFFFFFF;
+
+        fx_height1 = 0;
+        fx_height2 = 64;
+        fx_height3 = 128;
+
+        fx_vel = 1048576;
+
+        fx_rad2 = 640;
+        fx_rad3 = 832;
+
+        fx_going = 3;
+
+        pred_offset = 5;
+        break;
+    case 7:
+        break;
+    }
+
+    if (fx_going != 0)
+    {
+        fx_blastring = FX_DoBlastRing(NULL, (SVector *)&instance->position, &mat, -1, fx_radius, blast_range, temp, fx_rad2, fx_rad3, fx_vel, -2048, fx_height1, fx_height2, fx_height3, fx_color, 0, pred_offset, -99, 0);
+
+        if (fx_blastring == NULL)
+        {
+            fx_going = 0;
+        }
+    }
+
+    blast_range <<= 12;
+}
 
 void Glyph_EndFX()
 {
