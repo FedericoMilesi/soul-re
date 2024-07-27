@@ -1,7 +1,7 @@
 #include "common.h"
 #include "Game/MEMPACK.h"
 
-EXTERN STATIC NewMemTracker newMemTracker;
+static NewMemTracker newMemTracker;
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Init);
 
