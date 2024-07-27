@@ -504,7 +504,47 @@ void EnlargeGlyphMenu(Instance *instance)
 }
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphOffProcess);
+void _GlyphOffProcess(Instance *instance, int data1, int data2)
+{
+    Message *Ptr;
+    GlyphData *data;
+
+    data = (GlyphData *)instance->extraData;
+
+    ShrinkGlyphMenu(instance);
+
+    while ((Ptr = PeekMessageQueue(&data->messages)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100004:
+        case 0x100001:
+            break;
+        case 0x80000010:
+            if (data->process == &_GlyphSelectProcess)
+            {
+                _GlyphSwitchProcess(instance, _GlyphOffProcess);
+            }
+            else
+            {
+                _GlyphSwitchProcess(instance, _GlyphSelectProcess);
+            }
+
+            break;
+        default:
+            _GlyphDefaultProcess(instance, data1, data2);
+        }
+
+        DeMessageQueue(&data->messages);
+    }
+
+    if (data->process == &_GlyphSelectProcess)
+    {
+        SndPlayVolPan(17, 127, 64, 0);
+    }
+
+    Glyph_DoFX(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphSelectProcess);
 

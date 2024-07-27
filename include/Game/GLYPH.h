@@ -49,6 +49,7 @@ void Glyph_StartSpell(Instance *instance, int glyphnum);
 void Glyph_DoSpell(Instance *instance, int glyphnum);
 void HUD_Init();
 void GlyphDrawMenu(Instance *instance);
+void Glyph_DoFX(Instance *instance);
 
 int hud_warp_arrow_flash;
 
