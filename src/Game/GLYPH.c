@@ -6,6 +6,7 @@
 #include "Game/DEBUG.h"
 #include "Game/SOUND.h"
 #include "Game/FX.h"
+#include "Game/MEMPACK.h"
 
 EXTERN STATIC short HUD_Captured;
 
@@ -41,13 +42,76 @@ EXTERN STATIC int blast_range;
 
 EXTERN STATIC short glyph_trigger;
 
+EXTERN STATIC short glyph_time;
+
+EXTERN STATIC short glyph_cost;
+
 EXTERN STATIC int MANNA_Pickup_Time;
 
 EXTERN STATIC short MANNA_Position;
 
+EXTERN STATIC short MANNA_Pos_vel;
+
 FXBlastringEffect *fx_blastring;
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
+void GlyphInit(Instance *instance, GameTracker *gameTracker)
+{
+    GlyphData *data;
+
+    (void)gameTracker;
+
+    if ((instance->flags & 0x20000))
+    {
+        data = (GlyphData *)instance->extraData;
+
+        MEMPACK_Free((char *)data);
+    }
+    else
+    {
+        data = (GlyphData *)MEMPACK_Malloc(sizeof(GlyphData), 29);
+
+        instance->extraData = data;
+
+        InitMessageQueue(&data->messages);
+
+        EnMessageQueueData(&data->messages, 0x100001, 0);
+
+        data->process = &_GlyphOffProcess;
+
+        data->selectedGlyph = 7;
+
+        data->target_glyph_rotation = 3510;
+
+        data->glyph_time = 0;
+
+        glyph_time = 0;
+
+        data->glyph_radius = 0;
+        data->glyph_scale = 0;
+        data->glyph_movement = 1;
+        data->glyph_open = 0;
+
+        glyph_trigger = 0;
+
+        fx_blastring = NULL;
+
+        glyph_cost = -1;
+
+        fx_going = 0;
+
+        data->glyph_rotation = (data->selectedGlyph - 1) * 585;
+
+        instance->flags |= 0x10800;
+    }
+
+    HUD_Init();
+
+    MANNA_Pickup_Time = 0;
+
+    MANNA_Position = -64;
+
+    MANNA_Pos_vel = 0;
+}
 
 void GlyphCollide()
 {

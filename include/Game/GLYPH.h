@@ -47,6 +47,7 @@ void _GlyphOffProcess(Instance *instance, int data1, int data2);
 void ShrinkGlyphMenu(Instance *instance);
 void Glyph_StartSpell(Instance *instance, int glyphnum);
 void Glyph_DoSpell(Instance *instance, int glyphnum);
+void HUD_Init();
 
 int hud_warp_arrow_flash;
 
