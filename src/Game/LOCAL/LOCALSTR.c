@@ -3,7 +3,7 @@
 #include "Game/VOICEXA.h"
 #include "Game/LOAD3D.h"
 
-language_t the_language;
+static language_t the_language;
 
 EXTERN STATIC char **LocalStrings;
 
