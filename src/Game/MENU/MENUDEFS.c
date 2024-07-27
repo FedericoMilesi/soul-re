@@ -1,6 +1,18 @@
 #include "common.h"
+#include "Game/GAMELOOP.h"
+#include "Game/GAMEPAD.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_check_controller);
+void do_check_controller(void *gt)
+{
+    if (((GameTracker *)gt)->gameMode == 6)
+    {
+        GAMEPAD_DisplayControllerStatus(170);
+    }
+    else
+    {
+        GAMEPAD_DisplayControllerStatus(200);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_push_menu);
 
