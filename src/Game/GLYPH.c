@@ -548,7 +548,41 @@ void _GlyphOffProcess(Instance *instance, int data1, int data2)
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphSelectProcess);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", Glyph_StartSpell);
+void Glyph_StartSpell(Instance *instance, int glyphnum)
+{
+    int message;
+
+    (void)instance;
+
+    message = 0;
+
+    switch (glyphnum)
+    {
+    case 6:
+        message = 0x80006;
+        break;
+    case 4:
+        message = 0x80004;
+        break;
+    case 5:
+        message = 0x80005;
+        break;
+    case 2:
+        message = 0x80002;
+        break;
+    case 1:
+        message = 0x80001;
+        break;
+    case 3:
+        message = 0x80003;
+        break;
+    case 7:
+        message = 0x80007;
+        break;
+    }
+
+    INSTANCE_Post(gameTrackerX.playerInstance, message, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", Glyph_Broadcast);
 
