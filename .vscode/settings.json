@@ -67,6 +67,7 @@
         "monster.h": "c",
         "quatvm.h": "c",
         "obtable.h": "c",
-        "glyph.h": "c"
+        "glyph.h": "c",
+        "draw.h": "c"
     }
 }

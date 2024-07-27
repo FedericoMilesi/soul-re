@@ -536,5 +536,7 @@ void FX_UpdateInstanceWaterSplit(Instance *instance);
 void FX_Lightning(MATRIX *wcTransform, unsigned long **ot, MATRIX *mat, short deg, SVector *start, SVector *end, int width, int small_width, int segs, int sine_size, int variation, long color, long glow_color);
 FXGlowEffect *FX_DoInstanceTwoSegmentGlow(Instance *instance, long segment, long segmentEnd, long *color, long numColors, long atuColorCycleRate, long height);
 void FX_MakeHitFX(SVector *position);
+void FX_MakeGlyphIcon(Position *position, Object *glyphObject, int size, int glyphnum, int enabled);
+void FX_DrawScreenPoly(int transtype, unsigned long color, int zdepth);
 
 #endif

@@ -7,6 +7,8 @@
 #include "Game/SOUND.h"
 #include "Game/FX.h"
 #include "Game/MEMPACK.h"
+#include "Game/MATH3D.h"
+#include "Game/DRAW.h"
 
 EXTERN STATIC short HUD_Captured;
 
@@ -269,7 +271,140 @@ void HUD_GetPlayerScreenPt(DVECTOR *center)
     PopMatrix();
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphDrawMenu);
+#else
+void GlyphDrawMenu(Instance *instance)
+{
+    Position place;
+    DVECTOR center;
+    int n;
+    int rot;
+    int radius;
+    int glyph_rotation_speed;
+    int MANNA_Count;
+    GlyphData *data;
+    GlyphTuneData *glyphtunedata;
+
+    glyph_rotation_speed = (gameTrackerX.timeMult * 64) >> 12;
+
+    data = (GlyphData *)instance->extraData;
+
+    glyphtunedata = (GlyphTuneData *)instance->object->data;
+
+    MANNA_Count = INSTANCE_Query(gameTrackerX.playerInstance, 32);
+
+    if (data->target_glyph_rotation != data->glyph_rotation)
+    {
+        int diff;
+
+        diff = AngleDiff(data->target_glyph_rotation, data->glyph_rotation);
+
+        if (glyph_rotation_speed >= ABS(diff))
+        {
+            data->glyph_rotation = data->target_glyph_rotation;
+        }
+        else if (data->glyph_movement > 0)
+        {
+            data->glyph_rotation = (data->glyph_rotation + glyph_rotation_speed) & 0xFFF;
+        }
+        else
+        {
+            data->glyph_rotation = (data->glyph_rotation - glyph_rotation_speed) & 0xFFF;
+        }
+    }
+
+    HUD_GetPlayerScreenPt(&center);
+
+    if (center.vy < 72)
+    {
+        center.vy = 72;
+    }
+
+    radius = data->glyph_radius;
+
+    rot = data->glyph_rotation + 3072;
+
+    for (n = 0; n < 7; rot -= 585, n++)
+    {
+        int enabled;
+        int scale_modify;
+        int num;
+        int temp; // not from decls.h
+
+        rot &= 0xFFF;
+
+        if (AngleDiff(rot, 3072) >= 0)
+        {
+            temp = 4096;
+
+            scale_modify = temp - (AngleDiff(rot, 3072) << 1);
+        }
+        else
+        {
+            scale_modify = temp + (AngleDiff(rot, 3072) << 1); // bug in the original code?
+        }
+
+        if (scale_modify < 1536)
+        {
+            scale_modify = 1536;
+        }
+
+        scale_modify = (data->glyph_scale * scale_modify) / 4096;
+
+        place.x = center.vx + ((rcos(rot) * radius) >> 12);
+        place.y = center.vy - (((rsin(rot) * radius) >> 12) / 8);
+
+        if (_GlyphIsGlyphSet(n + 1) != 0)
+        {
+            num = n;
+
+            if (_GlyphIsGlyphUsable(n + 1) != 0)
+            {
+                if (_GlyphCost(glyphtunedata, n + 1) <= MANNA_Count)
+                {
+                    enabled = 1;
+                }
+                else
+                {
+                    enabled = 0;
+                }
+            }
+            else
+            {
+                enabled = 0;
+            }
+        }
+        else if ((n + 1) != 7)
+        {
+            num = 7;
+
+            enabled = 1;
+        }
+        else
+        {
+            num = n;
+
+            enabled = 0;
+        }
+
+        FX_MakeGlyphIcon(&place, instance->object, (glyphtunedata->glyph_size * scale_modify) / 8192, num, enabled);
+    }
+
+    if ((data->glyph_time == 4096) && (data->target_glyph_rotation == data->glyph_rotation) && (MANNA_Count >= _GlyphCost(glyphtunedata, data->selectedGlyph)))
+    {
+        Vector f1;
+
+        f1.x = center.vx;
+        f1.y = center.vy + (radius / 8);
+
+        DRAW_CreateAGlowingCircle(&f1, 320, gameTrackerX.primPool, gameTrackerX.drawOT, 5, 0x1404040, 20, 24, 0);
+    }
+
+    FX_DrawScreenPoly(2, (data->glyph_time / glyphtunedata->glyph_darkness) | (((data->glyph_time / glyphtunedata->glyph_darkness) << 16) | ((data->glyph_time / glyphtunedata->glyph_darkness) << 8)), 32);
+}
+#endif
 
 long GlyphTime(int time)
 {

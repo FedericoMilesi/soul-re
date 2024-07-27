@@ -44,4 +44,6 @@ typedef struct _ButtonTexture {
     long xshift;
 } ButtonTexture;
 
+void DRAW_CreateAGlowingCircle(Vector *f1, long z, PrimPool *primPool, unsigned long **ot, long otz, long color, long w, long h, long angle);
+
 #endif
