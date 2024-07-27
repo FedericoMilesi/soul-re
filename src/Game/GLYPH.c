@@ -41,6 +41,10 @@ EXTERN STATIC int blast_range;
 
 EXTERN STATIC short glyph_trigger;
 
+EXTERN STATIC int MANNA_Pickup_Time;
+
+EXTERN STATIC short MANNA_Position;
+
 FXBlastringEffect *fx_blastring;
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
@@ -306,7 +310,12 @@ void GlyphTrigger()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", MANNA_Pickup);
+void MANNA_Pickup()
+{
+    MANNA_Pickup_Time = 122880;
+
+    MANNA_Position = 24;
+}
 
 void HEALTHU_Pickup(Instance *instance)
 {
