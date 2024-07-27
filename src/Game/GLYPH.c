@@ -39,6 +39,8 @@ EXTERN STATIC int fx_radius_old;
 
 EXTERN STATIC int blast_range;
 
+EXTERN STATIC short glyph_trigger;
+
 FXBlastringEffect *fx_blastring;
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
@@ -252,7 +254,49 @@ void Glyph_DoFX(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphGenericProcess);
+void _GlyphGenericProcess(Instance *instance, int data1, int data2)
+{
+    Message *Ptr;
+    GlyphData *data;
+
+    data = (GlyphData *)instance->extraData;
+
+    ShrinkGlyphMenu(instance);
+
+    while (Ptr = PeekMessageQueue(&data->messages), Ptr != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            Glyph_StartSpell(instance, data->selectedGlyph);
+            break;
+        case 0x100004:
+            break;
+        case 0x80000000:
+            _GlyphSwitchProcess(instance, &_GlyphOffProcess);
+            break;
+        default:
+            _GlyphDefaultProcess(instance, data1, data2);
+        }
+
+        DeMessageQueue(&data->messages);
+    }
+
+    if (glyph_trigger != 0)
+    {
+        GlyphTuneData *glyphtunedata;
+
+        glyphtunedata = (GlyphTuneData *)instance->object->data;
+
+        Glyph_DoSpell(instance, data->selectedGlyph);
+
+        glyph_trigger = 0;
+
+        INSTANCE_Post(gameTrackerX.playerInstance, 0x40008, _GlyphCost(glyphtunedata, data->selectedGlyph));
+    }
+
+    Glyph_DoFX(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphTrigger);
 
