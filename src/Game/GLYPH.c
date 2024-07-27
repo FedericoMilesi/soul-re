@@ -896,6 +896,125 @@ void HUD_Setup_Chit_Count(int chits)
     HUD_Count = chits % 5;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HUD_Update);
+void HUD_Update()
+{
+    short accl;
+
+    if ((gameTrackerX.gameMode == 6) && (HUD_State == 0))
+    {
+        HUD_State = 10;
+    }
+    else if (gameTrackerX.gameMode != 6)
+    {
+        if ((HUD_State == 10) || (HUD_State == 11))
+        {
+            HUD_State = 12;
+        }
+    }
+    else if (HUD_State > 1)
+    {
+        if (HUD_State < 7)
+        {
+            return;
+        }
+    }
+
+    if (HUD_Wait > 0)
+    {
+        HUD_Wait--;
+        return;
+    }
+
+    switch (HUD_State)
+    {
+    default:
+    case 0:
+    case 7:
+    case 8:
+    case 9:
+        HUD_Position = -1000;
+        HUD_Rotation = 0;
+
+        HUD_Rot_vel = 0;
+        HUD_Pos_vel = 0;
+
+        if (HUD_Count == 5)
+        {
+            HUD_Count = 0;
+        }
+
+        break;
+    case 3:
+    case 4:
+    case 11:
+        break;
+    case 1:
+    case 10:
+        HUD_Damp(&HUD_Position, 0, &HUD_Pos_vel, 96);
+
+        if (HUD_Position >= 0)
+        {
+            HUD_Position = 0;
+
+            if (HUD_State != 10)
+            {
+                if (HUD_Count <= 0)
+                {
+                    HUD_State = 3;
+                }
+                else
+                {
+                    HUD_State = 2;
+                }
+            }
+            else
+            {
+                HUD_State = 11;
+            }
+        }
+
+        if (HUD_State == 10)
+        {
+            MANNA_Pickup_Time = 0;
+
+            CriticalDampValue(5, &MANNA_Position, 24, &MANNA_Pos_vel, &accl, 12);
+        }
+
+        break;
+    case 2:
+        HUD_Damp(&HUD_Rotation, 819, &HUD_Rot_vel, 80);
+
+        if (HUD_Rotation >= 819)
+        {
+            HUD_Rotation = 819;
+
+            HUD_State = 3;
+        }
+
+        break;
+    case 5:
+        HUD_State = 6;
+
+        HUD_Wait = 10;
+
+        HUD_Rotation = 0;
+
+        HUD_Captured = 0;
+
+        HUD_Count++;
+        HUD_Count_Overall++;
+        break;
+    case 6:
+    case 12:
+        HUD_Damp(&HUD_Position, -1000, &HUD_Pos_vel, 96);
+
+        if (HUD_Position < -999)
+        {
+            HUD_State = 0;
+        }
+
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", HUD_Draw);
