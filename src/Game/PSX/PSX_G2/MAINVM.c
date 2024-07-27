@@ -2,7 +2,7 @@
 #include "Game/PSX/PSX_G2/MAINVM.h"
 #include "Game/PSX/MAIN.h"
 
-EXTERN STATIC G2AppDataVM _appDataVM;
+static G2AppDataVM _appDataVM;
 
 int main()
 {
