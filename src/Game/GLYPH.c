@@ -298,7 +298,13 @@ void _GlyphGenericProcess(Instance *instance, int data1, int data2)
     Glyph_DoFX(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphTrigger);
+void GlyphTrigger()
+{
+    if (fx_going == 0)
+    {
+        glyph_trigger = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", MANNA_Pickup);
 
