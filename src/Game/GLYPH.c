@@ -5,6 +5,7 @@
 #include "Game/STATE.h"
 #include "Game/DEBUG.h"
 #include "Game/SOUND.h"
+#include "Game/FX.h"
 
 EXTERN STATIC short HUD_Captured;
 
@@ -31,6 +32,10 @@ EXTERN STATIC int glowdeg;
 EXTERN STATIC SVector HUD_Cap_Pos;
 
 EXTERN STATIC SVector HUD_Cap_Vel;
+
+EXTERN STATIC short fx_going;
+
+FXBlastringEffect *fx_blastring;
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
 
@@ -213,7 +218,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", Glyph_Broadcast);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", Glyph_DoSpell);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", Glyph_EndFX);
+void Glyph_EndFX()
+{
+    fx_blastring->lifeTime = 0;
+
+    fx_going = 0;
+
+    fx_blastring = NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", Glyph_DoFX);
 
