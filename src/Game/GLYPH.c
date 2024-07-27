@@ -462,7 +462,47 @@ void ShrinkGlyphMenu(Instance *instance)
     data->glyph_open = 0;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", EnlargeGlyphMenu);
+#else
+void EnlargeGlyphMenu(Instance *instance)
+{
+    GlyphData *data;
+    int time;
+    short accl;
+
+    data = (GlyphData *)instance->extraData;
+
+    gameTrackerX.streamFlags |= 0x100000;
+
+    if (data->glyph_time < 4096)
+    {
+        data->glyph_time += (short)((gameTrackerX.timeMult * 512) >> 12);
+
+        if (data->glyph_time >= 4097)
+        {
+            data->glyph_time = 4096;
+        }
+
+        glyph_time = data->glyph_time;
+    }
+
+    time = GlyphTime(data->glyph_time);
+
+    data->glyph_radius = (time * 150) / 4096;
+
+    data->glyph_scale = time;
+
+    GlyphDrawMenu(instance);
+
+    MANNA_Pickup_Time = 0;
+
+    CriticalDampValue(5, &MANNA_Position, 24, &MANNA_Pos_vel, &accl, 12);
+
+    data->glyph_open = 1;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphOffProcess);
 
