@@ -66,6 +66,7 @@
         "planapi.h": "c",
         "monster.h": "c",
         "quatvm.h": "c",
-        "obtable.h": "c"
+        "obtable.h": "c",
+        "glyph.h": "c"
     }
 }

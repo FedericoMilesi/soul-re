@@ -35,6 +35,10 @@ EXTERN STATIC SVector HUD_Cap_Vel;
 
 EXTERN STATIC short fx_going;
 
+EXTERN STATIC int fx_radius_old;
+
+EXTERN STATIC int blast_range;
+
 FXBlastringEffect *fx_blastring;
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphInit);
@@ -227,7 +231,26 @@ void Glyph_EndFX()
     fx_blastring = NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", Glyph_DoFX);
+void Glyph_DoFX(Instance *instance)
+{
+    if ((gameTrackerX.gameMode != 6) && (!(gameTrackerX.streamFlags & 0x100000)) && (fx_going != 0))
+    {
+        Glyph_Broadcast(instance, fx_going);
+
+        fx_radius_old = fx_blastring->radius;
+
+        if (fx_blastring->radius > blast_range)
+        {
+            Glyph_EndFX();
+        }
+
+        if (fx_going == 5)
+        {
+            fx_blastring->height1 -= 60;
+            fx_blastring->height3 += 60;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", _GlyphGenericProcess);
 
