@@ -7,7 +7,7 @@
 #include "Game/GAMEPAD.h"
 #include "Game/MEMPACK.h"
 
-EXTERN STATIC short FireReaverFlag;
+static short FireReaverFlag;
 
 void _SoulReaverAnimate(Instance *instance);
 
