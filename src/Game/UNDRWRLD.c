@@ -14,13 +14,13 @@ void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUni
 
 static UW_ScreenXY *ScreenMorphArray = 0;
 
-EXTERN STATIC long UW_angle;
+static long UW_angle;
 
-EXTERN STATIC long UW_scalex;
+static long UW_scalex;
 
-EXTERN STATIC long UW_scalexInc;
+static long UW_scalexInc;
 
-EXTERN STATIC long UW_angleInc;
+static long UW_angleInc;
 
 short RENDER_currentStreamUnitID;
 
