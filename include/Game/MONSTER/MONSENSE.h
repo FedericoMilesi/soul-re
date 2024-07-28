@@ -26,6 +26,16 @@ typedef struct _MonsterSenses {
     unsigned short allyRadius;
 } MonsterSenses;
 
+// size: 0x6
+typedef struct RadarInfo {
+    // offset: 0000
+    short angle;
+    // offset: 0002
+    short x;
+    // offset: 0004
+    short y;
+} RadarInfo;
+
 MonsterIR *MONSENSE_SetEnemy(Instance *instance, Instance *newenemy);
 void MONSENSE_DoSenses(Instance *instance);
 void MONSENSE_RemoveSenses(Instance *instance);

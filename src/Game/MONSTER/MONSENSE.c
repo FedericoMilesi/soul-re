@@ -4,6 +4,7 @@
 #include "Game/MATH3D.h"
 #include "Game/PHYSOBS.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/PHYSICS.h"
 
 //static int gNumMonsters;
 int gNumMonsters;
@@ -22,6 +23,12 @@ int lastSenseFrame;
 
 //static char monsterSensed[40];
 char monsterSensed[40];
+
+//static RadarInfo radarDir[8];
+RadarInfo radarDir[8];
+
+//static unsigned char radarDirIndex[8];
+unsigned char radarDirIndex[8];
 
 MonsterIR *MONSENSE_FindIR(MonsterVars *mv, Instance *instance)
 {
@@ -320,7 +327,80 @@ void MONSENSE_RemoveSenses(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_Radar);
+void MONSENSE_Radar(Instance *instance)
+{
+    MonsterVars *mv;
+    SVECTOR newPos;
+    SVECTOR oldPos;
+    PCollideInfo pCollideInfo;
+    int index;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    index = mv->radarCounter[radarDirIndex];
+
+    newPos.vx = instance->position.x + radarDir[index].x;
+    newPos.vy = instance->position.y + radarDir[index].y;
+    newPos.vz = instance->position.z + 100;
+
+    oldPos.vx = instance->position.x;
+    oldPos.vy = instance->position.y;
+    oldPos.vz = instance->position.z + 100;
+
+    pCollideInfo.newPoint = &newPos;
+    pCollideInfo.oldPoint = &oldPos;
+
+    pCollideInfo.collideType = 0x13F;
+
+    PHYSICS_CheckLineInWorldMask(instance, &pCollideInfo);
+
+    if (pCollideInfo.type == 0)
+    {
+        oldPos.vx = instance->position.x + radarDir[index].x;
+        oldPos.vy = instance->position.y + radarDir[index].y;
+        oldPos.vz = instance->position.z - 256;
+
+        newPos.vx = instance->position.x;
+        newPos.vy = instance->position.y;
+        newPos.vz = instance->position.z - 256;
+
+        PHYSICS_CheckLineInWorld(instance, &pCollideInfo);
+
+        if (pCollideInfo.type == 0)
+        {
+            mv->radarMap |= 0x1 << index;
+
+            mv->radarDistance[index] = 1280;
+
+            mv->radarCounter++;
+
+            if (mv->radarCounter >= 8)
+            {
+                mv->radarCounter = 0;
+            }
+
+            return;
+        }
+    }
+
+    mv->radarMap &= ~(0x1 << index);
+
+    if ((pCollideInfo.type == 3) && ((((Level *)pCollideInfo.inst)->terrain->BSPTreeArray[pCollideInfo.segment].flags & 0x2)))
+    {
+        mv->radarDistance[index] = 0;
+    }
+    else
+    {
+        mv->radarDistance[index] = MATH3D_LengthXY(newPos.vx - instance->position.x, newPos.vy - instance->position.y);
+    }
+
+    mv->radarCounter++;
+
+    if (mv->radarCounter >= 8)
+    {
+        mv->radarCounter = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSENSE", MONSENSE_GetClosestFreeDirection);
 
