@@ -171,7 +171,68 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_SurprisedEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Surprised);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_StunnedEntry);
+void MON_StunnedEntry(Instance *instance)
+{
+    MonsterVars *mv;
+    MonsterCombatAttributes *combat;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    combat = mv->subAttr->combatAttributes;
+
+    if ((mv->mvFlags & 0x40))
+    {
+        mv->enemy->mirConditions |= 0x400;
+
+        mv->mvFlags |= 0x10000;
+        mv->mvFlags |= 0x800000;
+
+        if (MON_SetUpKnockBack(instance, mv->enemy->instance, mv->messageData) != 0)
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_HIT1, 1);
+        }
+        else
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_HIT2, 1);
+        }
+    }
+    else if (!(mv->mvFlags & 0x100))
+    {
+        if ((mv->damageType == 0x40) || (mv->damageType == 0x2000))
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_BLIND, 2);
+        }
+        else if (mv->damageType == 0x10)
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_AGONY, 2);
+        }
+        else if (mv->damageType == 0x200)
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_DEAF, 1);
+        }
+        else
+        {
+            MON_PlayAnim(instance, MONSTER_ANIM_STUNNED, 2);
+        }
+    }
+
+    mv->mvFlags |= 0x10110;
+
+    mv->damageTimer = MON_GetTime(instance) + combat->damageTime;
+
+    if ((mv->damageType == 0x40) && (mv->subAttr->sunVuln != 0))
+    {
+        mv->stunTimer = MON_GetTime(instance) + (combat->stunTime * 2);
+    }
+    else
+    {
+        mv->stunTimer = MON_GetTime(instance) + combat->stunTime;
+    }
+
+    mv->mode = 0x8000;
+
+    instance->checkMask |= 0x20;
+}
 
 void MON_Stunned(Instance *instance)
 {
