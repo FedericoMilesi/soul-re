@@ -283,9 +283,13 @@ int STREAM_InList(char *name, char **nameList)
     return 0;
 }
 
-/*TODO: migrate to STREAM_IsSpecialMonster*/
-static char *D_800CC3F8[] = {"wallcr", "aluka", "ronin", "sluagh", "vwraith", NULL}; //mon
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_IsSpecialMonster);
+int STREAM_IsSpecialMonster(char *name)
+{
+    //static char *mon[6] = {"wallcr", "aluka", "ronin", "sluagh", "vwraith", NULL};
+    static char *mon[] = {"wallcr", "aluka", "ronin", "sluagh", "vwraith", NULL};
+
+    return STREAM_InList(name, mon);
+}
 
 void STREAM_DumpSomeMonsters()
 {
