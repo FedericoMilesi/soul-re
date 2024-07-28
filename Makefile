@@ -49,7 +49,7 @@ PYTHON     := python3
 SPLAT_YAML := $(BASEEXE).yaml
 SPLAT      := splat split $(SPLAT_YAML)
 DIFF       := diff
-MASPSX     := $(PYTHON) tools/maspsx/maspsx.py --aspsx-version=2.81 -G4096
+MASPSX     := $(PYTHON) tools/maspsx/maspsx.py --use-comm-section --aspsx-version=2.81 -G4096
 
 CROSS    := mips-linux-gnu-
 AS       := $(CROSS)as -EL
