@@ -30,4 +30,31 @@ void RELMOD_InitModulePointers(intptr_t baseaddr, int *relocs)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RELMOD", RELMOD_RelocModulePointers);
+void RELMOD_RelocModulePointers(intptr_t baseaddr, int offset, int *relocs)
+{
+    int oldbaseaddr;
+    int *rel_addr;
+
+    while (*relocs != -1)
+    {
+        rel_addr = (int *)(baseaddr + (*relocs & ~0x3));
+
+        switch (*relocs++ & 0x3)
+        {
+        case 0:
+            *rel_addr += offset;
+            break;
+        case 1:
+            *(short *)rel_addr = ((baseaddr + *relocs++) + 32768) >> 16;
+            break;
+        case 2:
+            *(short *)rel_addr += offset;
+            break;
+        case 3:
+            oldbaseaddr = baseaddr - offset;
+
+            *rel_addr = (*rel_addr - (((unsigned int)oldbaseaddr << 4) >> 6)) + (((unsigned int)baseaddr << 4) >> 6);
+            break;
+        }
+    }
+}
