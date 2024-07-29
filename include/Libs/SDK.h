@@ -522,5 +522,6 @@ CdlLOC *CdIntToPos(int i, CdlLOC *p);
 void RotTrans(SVECTOR *v0, VECTOR *v1, long *flag);
 u_long DrawSyncCallback(void (*func)());
 DISPENV *PutDispEnv(DISPENV *env);
+void LoadAverageShort12(SVECTOR *v0, SVECTOR *v1, long p0, long p1, SVECTOR *v2);
 
 #endif

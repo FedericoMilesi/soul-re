@@ -3062,7 +3062,27 @@ void MORPH_SubtractOffsets(Level *BaseLevel, int time)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_GetComponentsForTrackingPoint);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_AveragePoint);
+void MORPH_AveragePoint(SVector *start, SVector *end, int interp, SVector *out)
+{
+    if (interp >= 0)
+    {
+        if (interp >= 4097)
+        {
+            interp = 4096;
+        }
+
+        LoadAverageShort12((SVECTOR *)start, (SVECTOR *)end, 4096 - interp, interp, (SVECTOR *)out);
+    }
+    else
+    {
+        if (interp < -4096)
+        {
+            interp = -4096;
+        }
+
+        LoadAverageShort12((SVECTOR *)end, (SVECTOR *)start, interp + 4096, -interp, (SVECTOR *)out);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_UpdateTrackingPoint);
 
