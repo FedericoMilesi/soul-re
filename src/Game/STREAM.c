@@ -53,6 +53,10 @@ TFace *MORPH_SavedFace;
 
 Level *MORPH_SavedLevel;
 
+short MORPH_Component[3];
+
+short MORPH_Track[2];
+
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
 void RelocateTerrain(Terrain *terrain, SVector *offset);
@@ -3060,7 +3064,101 @@ void MORPH_SubtractOffsets(Level *BaseLevel, int time)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_GetComponentsForTrackingPoint);
+void MORPH_GetComponentsForTrackingPoint(TFace *face, Level *level)
+{
+    SVector *v[3];
+    Position *offset;
+    Position player;
+    int n;
+    int saved_div;
+    int next;
+    int side;
+    int track;
+    int x[2];
+    TVertex *vertexList;
+
+    MORPH_SavedFace = face;
+
+    MORPH_SavedLevel = level;
+
+    if ((face != NULL) && (level != NULL))
+    {
+        vertexList = level->terrain->vertexList;
+
+        v[0] = (SVector *)&vertexList[face->face.v0].vertex;
+        v[1] = (SVector *)&vertexList[face->face.v1].vertex;
+        v[2] = (SVector *)&vertexList[face->face.v2].vertex;
+
+        offset = &level->terrain->BSPTreeArray[gameTrackerX.playerInstance->bspTree].globalOffset;
+
+        SUB_SVEC(Position, &player, Position, &gameTrackerX.playerInstance->position, Position, offset);
+
+        for (track = 0; track < 2; track++)
+        {
+            int div;
+
+            saved_div = 0;
+
+            side = 0;
+
+            for (n = 0; n < 3; n++)
+            {
+                next = n + 1;
+
+                if (next >= 3)
+                {
+                    next = 0;
+                }
+
+                if (((track != 1) || (n != MORPH_Track[0])) && (((player.y >= v[n]->y) && (player.y <= v[next]->y))
+                    || ((player.y >= v[next]->y) && (player.y <= v[n]->y))))
+                {
+                    div = v[next]->y - v[n]->y;
+
+                    if (ABS(div) > ABS(saved_div))
+                    {
+                        saved_div = div;
+
+                        side = n;
+                    }
+                }
+            }
+
+            {
+                int next;
+
+                MORPH_Track[track] = side;
+
+                next = side + 1;
+
+                if (next >= 3)
+                {
+                    next = 0;
+                }
+
+                if (saved_div != 0)
+                {
+                    MORPH_Component[track] = ((player.y - v[side]->y) << 12) / saved_div;
+                }
+                else
+                {
+                    MORPH_Component[track] = 0;
+                }
+
+                x[track] = v[side]->x + ((MORPH_Component[track] * (v[next]->x - v[side]->x)) / 4096);
+            }
+        }
+
+        if (x[0] != x[1])
+        {
+            MORPH_Component[2] = ((player.x - x[0]) << 12) / (x[1] - x[0]);
+        }
+        else
+        {
+            MORPH_Component[2] = 0;
+        }
+    }
+}
 
 void MORPH_AveragePoint(SVector *start, SVector *end, int interp, SVector *out)
 {
