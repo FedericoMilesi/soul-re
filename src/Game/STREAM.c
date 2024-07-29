@@ -2811,20 +2811,20 @@ void MORPH_UpdateNormals(Level *BaseLevel)
 
             for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = instance->next)
             {
-                Intro *intro; // not from decls.h
+                Intro *temp; // not from decls.h 
 
-                intro = instance->intro;
+                temp = instance->intro;
 
-                if ((intro != NULL) && ((intro->spectralPosition.x) || (intro->spectralPosition.y) || (intro->spectralPosition.z)) && (!(instance->flags2 & 0x8)))
+                if ((temp != NULL) && ((temp->spectralPosition.x != 0) || (temp->spectralPosition.y != 0) || (temp->spectralPosition.z != 0)) && (!(instance->flags2 & 0x8)))
                 {
                     SVECTOR realDiff;
                     Position oldPos;
 
                     oldPos = instance->position;
 
-                    instance->position.x = intro->position.x + intro->spectralPosition.x;
-                    instance->position.y = intro->position.y + intro->spectralPosition.y;
-                    instance->position.z = intro->position.z + intro->spectralPosition.z;
+                    instance->position.x = temp->position.x + temp->spectralPosition.x;
+                    instance->position.y = temp->position.y + temp->spectralPosition.y;
+                    instance->position.z = temp->position.z + temp->spectralPosition.z;
 
                     realDiff.vx = instance->position.x - oldPos.x;
                     realDiff.vy = instance->position.y - oldPos.y;
