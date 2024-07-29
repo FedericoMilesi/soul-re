@@ -2639,7 +2639,84 @@ void MORPH_InMorphDoFadeValues()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_UpdateTimeMult);
+void MORPH_UpdateTimeMult()
+{
+    short ratio;
+    short temp, temp2; // not from decls.h
+
+    if (gameTrackerX.gameData.asmData.MorphTime != 1000)
+    {
+        temp2 = gameTrackerX.gameData.asmData.MorphTime;
+
+        if (gameTrackerX.gameData.asmData.MorphType != 0)
+        {
+            ratio = temp2 - 750;
+
+            if (ratio < 0)
+            {
+                ratio = 0;
+            }
+        }
+        else
+        {
+            if (temp2 > 250)
+            {
+                temp2 = 250;
+            }
+
+            ratio = 250 - temp2;
+        }
+
+        temp = (ratio << 12) / 250;
+
+        gameTrackerX.materialTimeMult = (long)((gameTrackerX.globalTimeMult * temp) << 4) >> 16;
+
+        if (gameTrackerX.materialTimeMult == 0)
+        {
+            gameTrackerX.materialTimeMult = 1;
+        }
+
+        temp2 = gameTrackerX.gameData.asmData.MorphTime;
+
+        if (gameTrackerX.gameData.asmData.MorphType == 0)
+        {
+            ratio = temp2 - 750;
+
+            if (ratio < 0)
+            {
+                ratio = 0;
+            }
+        }
+        else
+        {
+            if (temp2 > 250)
+            {
+                temp2 = 250;
+            }
+
+            ratio = 250 - temp2;
+        }
+
+        temp = (ratio << 12) / 250;
+
+        gameTrackerX.spectralTimeMult = (long)((gameTrackerX.globalTimeMult * temp) << 4) >> 16;
+
+        if (gameTrackerX.spectralTimeMult == 0)
+        {
+            gameTrackerX.spectralTimeMult = 1;
+        }
+    }
+    else if (gameTrackerX.gameData.asmData.MorphType == 0)
+    {
+        gameTrackerX.spectralTimeMult = 0;
+        gameTrackerX.materialTimeMult = gameTrackerX.globalTimeMult;
+    }
+    else
+    {
+        gameTrackerX.materialTimeMult = 0;
+        gameTrackerX.spectralTimeMult = gameTrackerX.globalTimeMult;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_UpdateNormals);
 
