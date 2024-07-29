@@ -100,6 +100,29 @@ typedef struct _MVertex {
     unsigned short normal;
 } MVertex;
 
+// size: 0xE
+typedef struct _MorphVertex {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short z;
+    // offset: 0006
+    short vindex;
+    // offset: 0008
+    short hx;
+    // offset: 000A
+    short hy;
+    // offset: 000C
+    short hz;
+} MorphVertex;
+
+// size: 0x2
+typedef struct _MorphColor {
+    short morphColor15;
+} MorphColor;
+
 // size: 0x54
 typedef struct _Terrain {
     // offset: 0000

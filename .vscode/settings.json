@@ -69,6 +69,8 @@
         "obtable.h": "c",
         "glyph.h": "c",
         "draw.h": "c",
-        "gamepad.h": "c"
+        "gamepad.h": "c",
+        "string.h": "c",
+        "aadlib.h": "c"
     }
 }

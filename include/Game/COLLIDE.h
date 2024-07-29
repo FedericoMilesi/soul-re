@@ -196,6 +196,40 @@ typedef struct _BSPNode {
     short back_material_error;
 } BSPNode;
 
+// size: 0xC
+typedef struct _BoundingBox {
+    // offset: 0000
+    short minX;
+    // offset: 0002
+    short minY;
+    // offset: 0004
+    short minZ;
+    // offset: 0006
+    short maxX;
+    // offset: 0008
+    short maxY;
+    // offset: 000A
+    short maxZ;
+} BoundingBox;
+
+// size: 0x30
+typedef struct _BSPLeaf {
+    // offset: 0000 (8 bytes)
+    struct _Sphere_noSq sphere;
+    // offset: 0008 (12 bytes)
+    struct _TFace *faceList;
+    // offset: 000C
+    short numFaces;
+    // offset: 000E
+    short flags;
+    // offset: 0010 (12 bytes)
+    struct _BoundingBox box;
+    // offset: 001C (12 bytes)
+    struct _BoundingBox spectralBox;
+    // offset: 0028 (8 bytes)
+    struct _Sphere_noSq spectralSphere;
+} BSPLeaf;
+
 // size: 0x24
 typedef struct BSPTree {
     // offset: 0000 (44 bytes)
@@ -416,22 +450,6 @@ typedef struct SandTScratch {
     // offset: 00D0 (12 bytes)
     struct _TVertex *vertexList;
 } SandTScratch;
-
-// size: 0xC
-typedef struct _BoundingBox {
-    // offset: 0000
-    short minX;
-    // offset: 0002
-    short minY;
-    // offset: 0004
-    short minZ;
-    // offset: 0006
-    short maxX;
-    // offset: 0008
-    short maxY;
-    // offset: 000A
-    short maxZ;
-} BoundingBox;
 
 TFace *COLLIDE_PointAndTerrainFunc(Terrain *terrain, PCollideInfo *pCollideInfo, int Flags, short *Backface_Flag, long ignoreAttr, long acceptAttr, LCollideInfo *lcolinfo);
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal);

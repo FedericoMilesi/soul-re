@@ -2718,7 +2718,127 @@ void MORPH_UpdateTimeMult()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_UpdateNormals);
+void MORPH_UpdateNormals(Level *BaseLevel)
+{
+    TFace *face;
+    long faceCount;
+    TVertex *v;
+    MorphVertex *mv;
+    MorphColor *mc;
+    short h1;
+    short *morphNormals;
+
+    morphNormals = BaseLevel->terrain->morphNormalIdx;
+
+    face = BaseLevel->terrain->faceList;
+
+    for (faceCount = BaseLevel->terrain->numFaces; faceCount > 0; faceCount--, face++)
+    {
+        h1 = face->normal;
+
+        face->normal = *morphNormals;
+
+        *morphNormals++ = h1;
+    }
+
+    {
+        BSPNode *node;
+        BSPLeaf *leaf;
+        Terrain *terrain;
+        long curTree;
+
+        mv = BaseLevel->terrain->MorphDiffList;
+
+        if (mv != NULL)
+        {
+            for (; mv->vindex >= 0; mv++)
+            {
+                v = &BaseLevel->terrain->vertexList[mv->vindex];
+
+                v->vertex.x = mv->hx + mv->x;
+                v->vertex.y = mv->hy + mv->y;
+                v->vertex.z = mv->hz + mv->z;
+            }
+        }
+
+        mc = BaseLevel->terrain->MorphColorList;
+
+        if (mc != NULL)
+        {
+            TVertex *endv;
+
+            endv = &BaseLevel->terrain->vertexList[BaseLevel->terrain->numVertices];
+
+            for (v = BaseLevel->terrain->vertexList; v < endv; v++, mc++)
+            {
+                v->r0 = ((unsigned short)mc->morphColor15 & 0x1F) << 3;
+                v->g0 = ((unsigned short)mc->morphColor15 >> 2) & 0xF8;
+                v->b0 = ((unsigned short)mc->morphColor15 >> 7) & 0xF8;
+            }
+        }
+
+        terrain = BaseLevel->terrain;
+
+        for (curTree = 0; curTree < terrain->numBSPTrees; curTree++)
+        {
+            Sphere_noSq hsphere;
+            BoundingBox hbox;
+
+            for (node = terrain->BSPTreeArray[curTree].bspRoot; (BSPLeaf *)node < terrain->BSPTreeArray[curTree].startLeaves; node++)
+            {
+                hsphere = node->sphere;
+
+                node->sphere = node->spectralSphere;
+                node->spectralSphere = hsphere;
+            }
+
+            for (leaf = terrain->BSPTreeArray[curTree].startLeaves; leaf < terrain->BSPTreeArray[curTree].endLeaves; leaf++)
+            {
+                hsphere = leaf->sphere;
+
+                leaf->sphere = leaf->spectralSphere;
+                leaf->spectralSphere = hsphere;
+
+                hbox = leaf->box;
+
+                leaf->box = leaf->spectralBox;
+                leaf->spectralBox = hbox;
+            }
+        }
+
+        {
+            Instance *instance;
+
+            for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = instance->next)
+            {
+                Intro *intro; // not from decls.h
+
+                intro = instance->intro;
+
+                if ((intro != NULL) && ((intro->spectralPosition.x) || (intro->spectralPosition.y) || (intro->spectralPosition.z)) && (!(instance->flags2 & 0x8)))
+                {
+                    SVECTOR realDiff;
+                    Position oldPos;
+
+                    oldPos = instance->position;
+
+                    instance->position.x = intro->position.x + intro->spectralPosition.x;
+                    instance->position.y = intro->position.y + intro->spectralPosition.y;
+                    instance->position.z = intro->position.z + intro->spectralPosition.z;
+
+                    realDiff.vx = instance->position.x - oldPos.x;
+                    realDiff.vy = instance->position.y - oldPos.y;
+                    realDiff.vz = instance->position.z - oldPos.z;
+
+                    if (realDiff.vx + realDiff.vy + realDiff.vz != 0)
+                    {
+                        COLLIDE_UpdateAllTransforms(instance, &realDiff);
+                    }
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_BringBackNormals);
 
