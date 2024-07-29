@@ -2842,7 +2842,114 @@ void MORPH_UpdateNormals(Level *BaseLevel)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_BringBackNormals);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_AddOffsets);
+void MORPH_AddOffsets(Level *BaseLevel, int time)
+{
+    TVertex *v;
+    MorphVertex *mv;
+    MorphColor *mc;
+    //long m; unused
+    long fixed_time;
+    Instance *instance;
+    int temp; // not from decls.h
+
+    instance = gameTrackerX.instanceList->first;
+
+    if (time < 501)
+    {
+        temp = time * 2;
+
+        time = (temp * temp * temp) / 2000000;
+    }
+    else
+    {
+        temp = (1000 - time) * 2;
+
+        time = 1000 - ((temp * temp * temp) / 2000000);
+    }
+
+    mv = BaseLevel->terrain->MorphDiffList;
+
+    fixed_time = (time << 12) / 1000;
+
+    if (mv != NULL)
+    {
+        for (; mv->vindex >= 0; mv++)
+        {
+            v = &BaseLevel->terrain->vertexList[mv->vindex];
+
+            v->vertex.x = (short)(mv->hx + ((mv->x * fixed_time) >> 12));
+            v->vertex.y = (short)(mv->hy + ((mv->y * fixed_time) >> 12));
+            v->vertex.z = (short)(mv->hz + ((mv->z * fixed_time) >> 12));
+        }
+    }
+
+    for (; instance != NULL; instance = instance->next)
+    {
+        Intro *temp2; // not from decls.h
+
+        temp2 = instance->intro;
+
+        if ((temp2 != NULL) && ((temp2->spectralPosition.x != 0) || (temp2->spectralPosition.y != 0) || (temp2->spectralPosition.z != 0)) && (!(instance->flags2 & 0x8)))
+        {
+            SVECTOR diff;
+            SVECTOR realDiff;
+            Position oldPos;
+
+            diff.vx = (short)((temp2->spectralPosition.x * fixed_time) >> 12);
+            diff.vy = (short)((temp2->spectralPosition.y * fixed_time) >> 12);
+            diff.vz = (short)((temp2->spectralPosition.z * fixed_time) >> 12);
+
+            oldPos = instance->position;
+
+            instance->position.x = temp2->position.x + diff.vx;
+            instance->position.y = temp2->position.y + diff.vy;
+            instance->position.z = temp2->position.z + diff.vz;
+
+            realDiff.vx = instance->position.x - oldPos.x;
+            realDiff.vy = instance->position.y - oldPos.y;
+            realDiff.vz = instance->position.z - oldPos.z;
+
+            if (realDiff.vx + realDiff.vy + realDiff.vz != 0)
+            {
+                COLLIDE_UpdateAllTransforms(instance, &realDiff);
+            }
+        }
+    }
+
+    {
+        long r0;
+        long g0;
+        long b0;
+        long r1;
+        long g1;
+        long b1;
+
+        mc = BaseLevel->terrain->MorphColorList;
+
+        if (mc != NULL)
+        {
+            TVertex *endv;
+
+            endv = &BaseLevel->terrain->vertexList[BaseLevel->terrain->numVertices];
+
+            for (v = BaseLevel->terrain->vertexList; v < endv; v++, mc++)
+            {
+                r0 = (v->rgb15 & 0x1F) << 3;
+                r1 = (mc->morphColor15 & 0x1F) << 3;
+
+                g0 = (v->rgb15 >> 2) & 0xF8;
+                g1 = (mc->morphColor15 >> 2) & 0xF8;
+
+                b0 = (v->rgb15 >> 7) & 0xF8;
+                b1 = (mc->morphColor15 >> 7) & 0xF8;
+
+                v->r0 = (unsigned char)(r0 + (((r1 - r0) * fixed_time) >> 12));
+                v->g0 = (unsigned char)(g0 + (((g1 - g0) * fixed_time) >> 12));
+                v->b0 = (unsigned char)(b0 + (((b1 - b0) * fixed_time) >> 12));
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_SubtractOffsets);
 
