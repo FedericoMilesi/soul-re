@@ -47,7 +47,57 @@ void UNDERWORLD_StartProcess()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_RotateScreenStep);
+long UNDERWORLD_RotateScreenStep(long time)
+{
+    int row;
+    int col;
+    int sinAngle;
+    int cosAngle;
+    int hx;
+    int hy;
+
+    if (((long)gameTrackerX.vblCount != time) && (UW_scalex != 0))
+    {
+        UW_ScreenXY *p;
+        int scaleY;
+
+        time = gameTrackerX.vblCount;
+
+        sinAngle = rsin(UW_angle);
+        cosAngle = rcos(UW_angle);
+
+        for (row = 0; row < 3; row++)
+        {
+            for (col = 0; col < 3; col++)
+            {
+                p = &ScreenMorphArray[col + (3 * row)];
+
+                hx = p->sx - 256;
+                hy = p->sy - 120;
+
+                p->dx = (((((hx * cosAngle) - (hy * sinAngle)) >> 12) * UW_scalex) >> 12) + 256;
+                p->dy = (((((hx * sinAngle) + (hy * cosAngle)) >> 12) * UW_scalex) >> 12) + 120;
+            }
+        }
+
+        scaleY = UW_angle + UW_angleInc;
+
+        UW_angle = scaleY;
+
+        UW_scalex += UW_scalexInc;
+
+        if (UW_scalex < 0)
+        {
+            UW_scalex = 0;
+        }
+
+        UW_angle = scaleY & 0xFFF;
+
+        UNDERWORLD_DisplayFrame((long *)gameTrackerX.primPool->nextPrim, (gameTrackerX.gameData.asmData.dispPage ^ 1) << 8);
+    }
+
+    return time;
+}
 
 void UNDERWORLD_DoUV(unsigned char *uv, UW_ScreenXY *p0, int tx)
 {

@@ -71,6 +71,7 @@
         "draw.h": "c",
         "gamepad.h": "c",
         "string.h": "c",
-        "aadlib.h": "c"
+        "aadlib.h": "c",
+        "undrwrld.h": "c"
     }
 }

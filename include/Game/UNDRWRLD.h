@@ -20,5 +20,6 @@ void UNDERWORLD_InitDisplayProcess();
 StreamUnit *UNDERWORLD_LoadLevel(char *baseAreaName, GameTracker *gameTracker);
 long UNDERWORLD_RotateScreenStep(long time);
 void UNDERWORLD_UpdatePlayer(Intro *playerIntro, Instance *instance);
+void UNDERWORLD_DisplayFrame(long *primStart, long drawY);
 
 #endif
