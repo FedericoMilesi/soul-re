@@ -3373,7 +3373,64 @@ void MORPH_UpdateTextures()
     MORPH_ChangeAreaPalettes(time);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_Continue);
+void MORPH_Continue()
+{
+    int i;
+    long mode;
+
+    if (gameTrackerX.gameData.asmData.MorphTime == 0)
+    {
+        MORPH_InMorphInstanceListFlags();
+    }
+
+    gameTrackerX.gameData.asmData.MorphTime += 20;
+
+    MORPH_InMorphDoFadeValues();
+
+    for (i = 0; i < 16; i++)
+    {
+        if (StreamTracker.StreamList[i].used == 2)
+        {
+            MORPH_DoStep(&StreamTracker.StreamList[i], StreamTracker.StreamList[i].baseAreaName);
+
+            MORPH_SetFog(&StreamTracker.StreamList[i], 0);
+        }
+    }
+
+    mode = INSTANCE_Query(gameTrackerX.playerInstance, 10);
+
+    if ((gameTrackerX.playerInstance->tface != NULL) && (mode >= 0))
+    {
+        if (MORPH_SavedFace == gameTrackerX.playerInstance->tface)
+        {
+            MORPH_UpdateTrackingPoint(MORPH_SavedFace, MORPH_SavedLevel);
+        }
+        else
+        {
+            MORPH_GetComponentsForTrackingPoint(gameTrackerX.playerInstance->tface, (Level *)gameTrackerX.playerInstance->tfaceLevel);
+
+            MORPH_UpdateTrackingPoint(gameTrackerX.playerInstance->tface, (Level *)gameTrackerX.playerInstance->tfaceLevel);
+        }
+    }
+
+    MORPH_UpdateTextures();
+
+    if (gameTrackerX.gameData.asmData.MorphTime == 1000)
+    {
+        gameTrackerX.gameData.asmData.MorphType ^= 1;
+
+        if (gameTrackerX.gameData.asmData.MorphType == 0)
+        {
+            gameTrackerX.playerInstance->flags2 &= ~0x8000000;
+        }
+        else
+        {
+            gameTrackerX.playerInstance->flags2 |= 0x8000000;
+        }
+
+        MORPH_SetupInstanceListFlags();
+    }
+}
 
 void STREAM_MORPH_Relocate()
 {
