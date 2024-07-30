@@ -3193,7 +3193,7 @@ void MORPH_ToggleMorph()
 
     SOUND_PlaneShift(gameTrackerX.gameData.asmData.MorphType == 0);
 
-    INSTANCE_Broadcast(NULL, 10, 0x1000020, gameTrackerX.gameData.asmData.MorphType);
+    INSTANCE_Broadcast(NULL, 0xA, 0x1000020, gameTrackerX.gameData.asmData.MorphType);
 
     MORPH_GetComponentsForTrackingPoint(gameTrackerX.playerInstance->tface, (Level *)gameTrackerX.playerInstance->tfaceLevel);
 
