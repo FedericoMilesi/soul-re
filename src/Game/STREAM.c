@@ -3326,7 +3326,38 @@ void MORPH_DoStep(StreamUnit *streamUnit, char *baseAreaName)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_SetFog);
+void MORPH_SetFog(StreamUnit *streamUnit, int mainUnitFlag)
+{
+    long time;
+    Level *level;
+    int fogNear;
+    int fogFar;
+
+    time = (gameTrackerX.gameData.asmData.MorphTime << 12) / 1000;
+
+    level = streamUnit->level;
+
+    if (gameTrackerX.gameData.asmData.MorphType == 0)
+    {
+        time = 4096 - time;
+    }
+
+    fogNear = (((level->holdFogNear - level->spectralFogNear) * time) / 4096) + level->spectralFogNear;
+    fogFar = (((level->holdFogFar - level->spectralFogFar) * time) / 4096) + level->spectralFogFar;
+
+    if (mainUnitFlag != 0)
+    {
+        streamUnit->UnitFogNear = fogNear;
+        streamUnit->TargetFogNear = fogNear;
+
+        streamUnit->UnitFogFar = fogFar;
+        streamUnit->TargetFogFar = fogFar;
+    }
+    else
+    {
+        STREAM_SetStreamFog(streamUnit, (short)fogNear, (short)fogFar);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_UpdateTextures);
 
