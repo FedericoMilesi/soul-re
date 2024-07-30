@@ -69,6 +69,8 @@
         : : "g"(0x4A400012 | ((sf) & 0x1) << 19 | ((mx) & 0x3) << 17 | ((v) & 0x3) << 15 | ((cv) & 0x3) << 13 | ((lm) & 0x1) << 10) \
     )
 
+#define gte_nrtv0tr() gte_nmvmva(1, 0, 0, 0, 0)
+
 #define gte_mvmva(sf, mx, v, cv, lm) __asm__ ( \
         ".word %0" \
         : : "g"(0x4A400012 | ((sf) & 0x1) << 19 | ((mx) & 0x3) << 17 | ((v) & 0x3) << 15 | ((cv) & 0x3) << 13 | ((lm) & 0x1) << 10) \
@@ -166,6 +168,17 @@
     )
 
 #define gte_ngpl12() gte_nGPL(1)
+
+#define gte_stsv(r0) __asm__ ( \
+        "mfc2    $12, $9;" \
+        "mfc2    $13, $10;" \
+        "mfc2    $14, $11;" \
+        "sh    $12, 0(%0);" \
+        "sh    $13, 2(%0);" \
+        "sh    $14, 4(%0)" \
+        : : "r"(r0) \
+        : "$12", "$13", "$14", "memory" \
+    )
 
 // custom macro
 #define gte_ldlvnlsv( r0 ) __asm__ volatile (			\

@@ -3438,7 +3438,71 @@ void STREAM_MORPH_Relocate()
     MORPH_SavedLevel = NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", AddVertex);
+int AddVertex(VECTOR *v0, RECT *rect)
+{
+    SVECTOR v;
+    int x;
+    int y;
+    int z;
+    int scr_x;
+    int scr_y;
+
+    if (v0->vx < 0)
+    {
+        v0->vx += -32768;
+    }
+    else if (v0->vx > 0)
+    {
+        v0->vx += 32768;
+    }
+
+    if (v0->vy < 0)
+    {
+        v0->vy += -32768;
+    }
+    else if (v0->vy > 0)
+    {
+        v0->vy += 32768;
+    }
+
+    if (v0->vz < 0)
+    {
+        v0->vz += -32768;
+    }
+    else if (v0->vz > 0)
+    {
+        v0->vz += 32768;
+    }
+
+    v.vx = v0->vx >> 16;
+    v.vy = v0->vy >> 16;
+    v.vz = v0->vz >> 16;
+
+    gte_ldv0(&v);
+    gte_nrtv0tr();
+    gte_stsv(&v);
+
+    if (v.vz <= 0)
+    {
+        return -1;
+    }
+
+    do {} while (0); // garbage code for reodering
+
+    x = v.vx;
+    y = v.vy;
+    z = v.vz;
+
+    scr_x = ((x * 320) / z) + (512 / 2);
+    scr_y = ((y * 320) / z) + (240 / 2);
+
+    rect->x = (rect->x < scr_x) ? rect->x : scr_x;
+    rect->w = (scr_x >= rect->w) ? scr_x : rect->w;
+    rect->y = (rect->y < scr_y) ? rect->y : scr_y;
+    rect->h = (scr_y >= rect->h) ? scr_y : rect->h;
+
+    return z;
+}
 
 int GetPlaneDist(int k, int j, int i, VECTOR *v)
 {
