@@ -781,6 +781,7 @@ void VRAM_UpdateMorphPalettes()
 {
 }
 
-void MORPH_ChangeAreaPalettes()
+void MORPH_ChangeAreaPalettes(long time)
 {
+    (void)time;
 }

@@ -64,5 +64,6 @@ void VRAM_InitMorphPalettes();
 void AdjustVramCoordsObject(int oldx, int oldy, int newx, int newy, Object *object);
 void VRAM_TransferBufferToVram(void *dataPtr, long dataSize, short status, void *data1, void *data2);
 long VRAM_GetObjectVramSpace(VramSize *vramSize, ObjectTracker *objectTracker);
+void MORPH_ChangeAreaPalettes(long time);
 
 #endif

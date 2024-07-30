@@ -3359,7 +3359,19 @@ void MORPH_SetFog(StreamUnit *streamUnit, int mainUnitFlag)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_UpdateTextures);
+void MORPH_UpdateTextures()
+{
+    int time;
+
+    time = (gameTrackerX.gameData.asmData.MorphTime << 12) / 1000;
+
+    if (gameTrackerX.gameData.asmData.MorphType == 1)
+    {
+        time = 4096 - time;
+    }
+
+    MORPH_ChangeAreaPalettes(time);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_Continue);
 
