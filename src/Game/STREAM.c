@@ -3183,7 +3183,53 @@ void MORPH_AveragePoint(SVector *start, SVector *end, int interp, SVector *out)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_UpdateTrackingPoint);
+void MORPH_UpdateTrackingPoint(TFace *face, Level *level)
+{
+    SVector *v[3];
+    SVector p1;
+    SVector p2;
+    SVector p3;
+    Position *offset;
+    int next;
+    TVertex *vertexList;
+
+    if ((face != NULL) && (level != NULL))
+    {
+        vertexList = level->terrain->vertexList;
+
+        v[0] = (SVector *)&vertexList[face->face.v0];
+        v[1] = (SVector *)&vertexList[face->face.v1];
+        v[2] = (SVector *)&vertexList[face->face.v2];
+
+        next = MORPH_Track[0] + 1;
+
+        if (next >= 3)
+        {
+            next = 0;
+        }
+
+        MORPH_AveragePoint(v[MORPH_Track[0]], v[next], MORPH_Component[0], &p1);
+
+        next = MORPH_Track[1] + 1;
+
+        if (next >= 3)
+        {
+            next = 0;
+        }
+
+        MORPH_AveragePoint(v[MORPH_Track[1]], v[next], MORPH_Component[1], &p2);
+        MORPH_AveragePoint(&p1, &p2, MORPH_Component[2], &p3);
+
+        offset = &level->terrain->BSPTreeArray[gameTrackerX.playerInstance->bspTree].globalOffset;
+
+        ADD_SVEC(SVector, &p3, SVector, &p3, Position, offset);
+
+        COPY_SVEC(Position, &gameTrackerX.playerInstance->position, SVector, &p3);
+
+        gameTrackerX.playerInstance->cachedTFace = -1;
+        gameTrackerX.playerInstance->cachedTFaceLevel = NULL;
+    }
+}
 
 void MORPH_ToggleMorph()
 {
