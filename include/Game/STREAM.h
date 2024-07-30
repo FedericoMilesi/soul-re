@@ -490,5 +490,6 @@ StreamUnit *STREAM_LoadLevel(char *baseAreaName, StreamUnitPortal *streamPortal,
 void PreloadAllConnectedUnits(StreamUnit *streamUnit, SVector *offset);
 void STREAM_OffsetInstancePosition(Instance *instance, SVector *offset, int streamSignalFlag);
 long WARPGATE_GetWarpRoomIndex(char *name);
+//void MORPH_UpdateTrackingPoint(TFace *face, Level *level);
 
 #endif

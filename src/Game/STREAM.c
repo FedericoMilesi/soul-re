@@ -25,6 +25,7 @@
 #include "Game/PSX/SUPPORT.h"
 #include "Libs/STRING.h"
 #include "Game/COLLIDE.h"
+#include "Game/SOUND.h"
 
 short M_TrackClutUpdate;
 
@@ -3184,7 +3185,54 @@ void MORPH_AveragePoint(SVector *start, SVector *end, int interp, SVector *out)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_UpdateTrackingPoint);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_ToggleMorph);
+void MORPH_ToggleMorph()
+{
+    Level *level;
+    int i;
+    StreamUnit *temp; // not from decls.h
+
+    SOUND_PlaneShift(gameTrackerX.gameData.asmData.MorphType == 0);
+
+    INSTANCE_Broadcast(NULL, 10, 0x1000020, gameTrackerX.gameData.asmData.MorphType);
+
+    MORPH_GetComponentsForTrackingPoint(gameTrackerX.playerInstance->tface, (Level *)gameTrackerX.playerInstance->tfaceLevel);
+
+    MORPH_UpdateTrackingPoint(gameTrackerX.playerInstance->tface, (Level *)gameTrackerX.playerInstance->tfaceLevel);
+
+    do {} while (0); // garbage code for reordering
+
+    gameTrackerX.gameData.asmData.MorphTime = 0;
+
+    SOUND_Play3dSound(&gameTrackerX.playerInstance->position, 26, -350, 127, 32767);
+
+    for (temp = StreamTracker.StreamList, i = 16; i > 0; i--, temp++)
+    {
+        if (temp->used == 2)
+        {
+            level = temp->level;
+
+            if (gameTrackerX.gameData.asmData.MorphType == 1)
+            {
+                if (level->materialSignal != NULL)
+                {
+                    level->materialSignal->flags |= 0x1;
+
+                    SIGNAL_HandleSignal(gameTrackerX.playerInstance, level->materialSignal->signalList, 0);
+
+                    EVENT_AddSignalToReset(level->materialSignal);
+                }
+            }
+            else if (level->spectralSignal != NULL)
+            {
+                level->spectralSignal->flags |= 0x1;
+
+                SIGNAL_HandleSignal(gameTrackerX.playerInstance, level->spectralSignal->signalList, 0);
+
+                EVENT_AddSignalToReset(level->spectralSignal);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_DoStep);
 
