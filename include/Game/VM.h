@@ -77,4 +77,6 @@ typedef struct _VMObject {
     char *name;
 } VMObject;
 
+//void VM_UpdateMorph(Level *level, int initFlg);
+
 #endif

@@ -26,6 +26,8 @@
 #include "Libs/STRING.h"
 #include "Game/COLLIDE.h"
 #include "Game/SOUND.h"
+#include "Game/VM.h"
+#include "Game/GAMEPAD.h"
 
 short M_TrackClutUpdate;
 
@@ -3280,7 +3282,49 @@ void MORPH_ToggleMorph()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_DoStep);
+void MORPH_DoStep(StreamUnit *streamUnit, char *baseAreaName)
+{
+    Level *level;
+
+    (void)baseAreaName;
+
+    GAMEPAD_Shock1(64, 61440);
+
+    level = streamUnit->level;
+
+    if (level->terrain->MorphDiffList != NULL)
+    {
+        VM_UpdateMorph(level, 0);
+
+        if (gameTrackerX.gameData.asmData.MorphTime == 1000)
+        {
+            if (gameTrackerX.gameData.asmData.MorphType == 0)
+            {
+                gameTrackerX.gameData.asmData.MorphType ^= 1;
+
+                MORPH_UpdateNormals(level);
+            }
+            else
+            {
+                gameTrackerX.gameData.asmData.MorphType ^= 1;
+
+                MORPH_BringBackNormals(level);
+            }
+
+            gameTrackerX.gameData.asmData.MorphType ^= 1;
+
+            level->morphLastStep = -1;
+        }
+        else if (gameTrackerX.gameData.asmData.MorphType == 0)
+        {
+            MORPH_AddOffsets(level, gameTrackerX.gameData.asmData.MorphTime);
+        }
+        else
+        {
+            MORPH_SubtractOffsets(level, gameTrackerX.gameData.asmData.MorphTime);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_SetFog);
 
