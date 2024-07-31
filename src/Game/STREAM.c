@@ -3743,4 +3743,51 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_RenderWarpUnit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpNonResidentObjects);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_TryAndDumpNonResident);
+int STREAM_TryAndDumpNonResident(ObjectTracker *otr)
+{
+    Instance *instance;
+    Instance *next;
+
+    if ((otr->objectStatus != 2) || ((otr->object->oflags & 0x2000000)))
+    {
+        return 0;
+    }
+
+    if (STREAM_IsObjectInAnyUnit(otr) != 0)
+    {
+        return 0;
+    }
+
+    for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = next)
+    {
+        next = instance->next;
+
+        if ((instance->object == otr->object) && (instance->LinkParent != NULL) && (!(instance->object->oflags2 & 0x80000)))
+        {
+            return 0;
+        }
+    }
+
+    for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = next)
+    {
+        next = instance->next;
+
+        if (instance->object == otr->object)
+        {
+            SAVE_DeleteInstance(instance);
+
+            if (instance->LinkChild != NULL)
+            {
+                INSTANCE_ReallyRemoveAllChildren(instance);
+
+                next = instance->next;
+            }
+
+            INSTANCE_ReallyRemoveInstance(gameTrackerX.instanceList, instance, 0);
+        }
+    }
+
+    STREAM_RemoveAllObjectsNotInUse();
+
+    return otr->objectStatus == 0;
+}
