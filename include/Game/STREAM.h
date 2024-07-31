@@ -492,5 +492,10 @@ void STREAM_OffsetInstancePosition(Instance *instance, SVector *offset, int stre
 long WARPGATE_GetWarpRoomIndex(char *name);
 //void MORPH_UpdateTrackingPoint(TFace *face, Level *level);
 void MORPH_BringBackNormals(Level *BaseLevel);
+void WARPGATE_DrawWarpGateRim(StreamUnit *streamUnit, long drawOn);
+void WARPGATE_HideAllCloudCovers();
+Instance *WARPGATE_UnHideCloudCoverInUnit(long streamUnitID);
+//void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStreamPortal, StreamUnit *mainStreamUnit, RECT *cliprect);
+void WARPGATE_BlockWarpGateEntrance(StreamUnit *streamUnit, long collideOn);
 
 #endif

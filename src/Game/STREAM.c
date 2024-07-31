@@ -3735,7 +3735,123 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_HideAllCloudCovers);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_UnHideCloudCoverInUnit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RenderWarpGate);
+void STREAM_RenderWarpGate(unsigned long **mainOT, StreamUnitPortal *curStreamPortal, StreamUnit *mainStreamUnit, RECT *cliprect)
+{
+    StreamUnit *toStreamUnit;
+
+    WARPGATE_DrawWarpGateRim(mainStreamUnit, 1);
+
+    toStreamUnit = curStreamPortal->toStreamUnit;
+
+    if (WarpGateLoadInfo.loading == 1)
+    {
+        if (WarpGateLoadInfo.curTime <= WarpGateLoadInfo.maxTime)
+        {
+            if (WarpGateLoadInfo.warpFaceInstance == NULL)
+            {
+                WARPGATE_HideAllCloudCovers();
+
+                WarpGateLoadInfo.warpFaceInstance = WARPGATE_UnHideCloudCoverInUnit(mainStreamUnit->StreamUnitID);
+
+                WarpGateLoadInfo.fadeValue = 4096;
+            }
+
+            WARPGATE_CalcWarpFade(gameTrackerX.timeMult);
+        }
+        else
+        {
+            if (toStreamUnit != NULL)
+            {
+                STREAM_DumpUnit(toStreamUnit, 1);
+            }
+
+            WarpGateLoadInfo.loading = 2;
+
+            STREAM_LoadCurrentWarpRoom(curStreamPortal, mainStreamUnit);
+
+            WarpGateLoadInfo.warpFaceInstance->fadeValue = 0;
+
+            return;
+        }
+    }
+    else if (WarpGateLoadInfo.loading == 2)
+    {
+        WarpGateLoadInfo.fadeValue = 0;
+
+        if ((toStreamUnit != NULL) && (toStreamUnit->used == 2))
+        {
+            WarpGateLoadInfo.loading = 3;
+
+            WarpGateLoadInfo.curTime = WarpGateLoadInfo.maxTime;
+        }
+    }
+    else if (WarpGateLoadInfo.loading == 3)
+    {
+        if (WarpGateLoadInfo.curTime >= 0)
+        {
+            WARPGATE_CalcWarpFade((int)-gameTrackerX.timeMult);
+        }
+        else
+        {
+            WARPGATE_HideAllCloudCovers();
+
+            if ((WARPGATE_IsWarpgateInUse() != 0) || (strcmpi(gameTrackerX.baseAreaName, WarpRoomArray[CurrentWarpNumber].name) != 0))
+            {
+                WarpGateLoadInfo.loading = 4;
+            }
+            else
+            {
+                WarpGateLoadInfo.loading = 0;
+
+                CurrentWarpNumber = 0;
+            }
+        }
+    }
+
+    if (WarpGateLoadInfo.loading != 0)
+    {
+        if ((toStreamUnit != NULL) && (toStreamUnit->used == 2))
+        {
+            WARPGATE_RenderWarpUnit(mainOT, curStreamPortal, mainStreamUnit, cliprect);
+        }
+
+        if ((WarpGateLoadInfo.loading == 4) && (WARPGATE_IsWarpgateInUse() == 0))
+        {
+            WarpGateLoadInfo.loading = 1;
+
+            WarpGateLoadInfo.curTime = 0;
+
+            WarpGateLoadInfo.warpFaceInstance = NULL;
+
+            WarpRoomArray[CurrentWarpNumber].streamUnit = NULL;
+
+            while (strcmpi(gameTrackerX.baseAreaName, WarpRoomArray[CurrentWarpNumber].name) != 0)
+            {
+                CurrentWarpNumber = (CurrentWarpNumber + 1) % 14;
+            }
+        }
+    }
+    else
+    {
+        if (WARPGATE_IsWarpgateInUse() != 0)
+        {
+            if (strcmpi(mainStreamUnit->level->worldName, WarpRoomArray[CurrentWarpNumber].name) == 0)
+            {
+                CurrentWarpNumber = (CurrentWarpNumber + 1) % 14;
+            }
+
+            WarpGateLoadInfo.loading = 1;
+
+            WarpGateLoadInfo.warpFaceInstance = NULL;
+
+            WarpGateLoadInfo.curTime = 0;
+        }
+        else
+        {
+            WARPGATE_BlockWarpGateEntrance(mainStreamUnit, 1);
+        }
+    }
+}
 
 /*TODO: migrate to WARPGATE_RenderWarpUnit*/
 static char D_800D195C[] = "Looking at warp unit =%s\n";
