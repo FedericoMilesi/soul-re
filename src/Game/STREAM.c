@@ -3725,7 +3725,29 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", DrawFogRectangle);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RenderAdjacantUnit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetBspTree);
+BSPTree *STREAM_GetBspTree(StreamUnit *streamUnit, long bspNumber)
+{
+    Level *level;
+    Terrain *terrain;
+    int d;
+
+    level = streamUnit->level;
+
+    terrain = level->terrain;
+
+    if (terrain->numBSPTrees != 0)
+    {
+        for (d = 0; d < terrain->numBSPTrees; d++)
+        {
+            if (terrain->BSPTreeArray[d].ID == bspNumber)
+            {
+                return &terrain->BSPTreeArray[d];
+            }
+        }
+    }
+
+    return NULL;
+}
 
 void WARPGATE_BlockWarpGateEntrance(StreamUnit *streamUnit, long collideOn)
 {
