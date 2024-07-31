@@ -343,7 +343,40 @@ unsigned long SplineGetData(Spline *spline, SplineDef *def, void *p)
     return gotDataOk;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetQuatData);
+unsigned long SplineGetQuatData(Spline *spline, SplineDef *def, void *p)
+{
+    unsigned long gotDataOk;
+    int count;
+    G2Quat quat;
+
+    gotDataOk = 0;
+
+    if ((spline != NULL) && (def != NULL))
+    {
+        if ((def->currkey < spline->numkeys) && (def->currkey >= 0))
+        {
+            SplineSetDefDenom(spline, def, 0);
+
+            count = ((RSpline *)spline)->key[def->currkey].count;
+
+            gotDataOk = 1;
+
+            if ((count != 0) && (def->fracCurr != 0))
+            {
+                // third parameter is fake, second parameter might be different
+                G2Quat_Slerp_VM(def->fracCurr / count, &((RSpline *)spline)->key[def->currkey].q, (G2Quat *)(&((RSpline *)spline)->key[def->currkey].q.z + 3), &quat, 0);
+            }
+            else
+            {
+                memcpy(&quat, &((RSpline *)spline)->key[def->currkey].q, 8);
+            }
+
+            memcpy(p, &quat, 8);
+        }
+    }
+
+    return gotDataOk;
+}
 
 unsigned long SplineGetNext(Spline *spline, SplineDef *def)
 {
