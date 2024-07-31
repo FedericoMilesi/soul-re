@@ -3741,7 +3741,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RenderWarpGate);
 static char D_800D195C[] = "Looking at warp unit =%s\n";
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_RenderWarpUnit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_DumpNonResidentObjects);
+void STREAM_DumpNonResidentObjects()
+{
+    Instance *instance;
+    Instance *next;
+    Object *object;
+
+    for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = next)
+    {
+        next = instance->next;
+
+        object = instance->object;
+
+        if ((!(object->oflags & 0x2000000)) && (STREAM_GetStreamUnitWithID(instance->birthStreamUnitID) == 0) && (STREAM_IsObjectInAnyUnit(FindObjectInTracker(object)) == 0))
+        {
+            INSTANCE_ReallyRemoveInstance(gameTrackerX.instanceList, instance, 0);
+        }
+    }
+
+    STREAM_RemoveAllObjectsNotInUse();
+}
 
 int STREAM_TryAndDumpNonResident(ObjectTracker *otr)
 {
