@@ -497,5 +497,6 @@ void WARPGATE_HideAllCloudCovers();
 Instance *WARPGATE_UnHideCloudCoverInUnit(long streamUnitID);
 //void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStreamPortal, StreamUnit *mainStreamUnit, RECT *cliprect);
 void WARPGATE_BlockWarpGateEntrance(StreamUnit *streamUnit, long collideOn);
+//BSPTree *STREAM_GetBspTree(StreamUnit *streamUnit, long bspNumber);
 
 #endif

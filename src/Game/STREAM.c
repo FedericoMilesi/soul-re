@@ -3729,7 +3729,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetBspTree);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_BlockWarpGateEntrance);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_DrawWarpGateRim);
+void WARPGATE_DrawWarpGateRim(StreamUnit *streamUnit, long drawOn)
+{
+    BSPTree *bspTree;
+
+    bspTree = STREAM_GetBspTree(streamUnit, 3);
+
+    if (bspTree != NULL)
+    {
+        bspTree->flags &= ~0x2;
+
+        if (drawOn != 0)
+        {
+            bspTree->flags &= ~0x1;
+        }
+        else
+        {
+            bspTree->flags |= 0x1;
+        }
+    }
+}
 
 void WARPGATE_HideAllCloudCovers()
 {
