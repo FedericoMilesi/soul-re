@@ -3727,7 +3727,27 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RenderAdjacantUnit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_GetBspTree);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_BlockWarpGateEntrance);
+void WARPGATE_BlockWarpGateEntrance(StreamUnit *streamUnit, long collideOn)
+{
+    BSPTree *bspTree;
+
+    bspTree = STREAM_GetBspTree(streamUnit, 7);
+
+    if (bspTree != NULL)
+    {
+        if (collideOn != 0)
+        {
+            bspTree->flags |= 0x2;
+
+            WarpGateLoadInfo.blocked = 0;
+            return;
+        }
+
+        bspTree->flags &= ~0x2;
+
+        WarpGateLoadInfo.blocked = 1;
+    }
+}
 
 void WARPGATE_DrawWarpGateRim(StreamUnit *streamUnit, long drawOn)
 {
