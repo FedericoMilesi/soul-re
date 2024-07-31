@@ -3733,7 +3733,36 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_DrawWarpGateRim);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_HideAllCloudCovers);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_UnHideCloudCoverInUnit);
+Instance *WARPGATE_UnHideCloudCoverInUnit(long streamUnitID)
+{
+    Object *warpFaceObject;
+    Instance *result;
+
+    warpFaceObject = (Object *)objectAccess[23].object;
+
+    result = NULL;
+
+    if (warpFaceObject != NULL)
+    {
+        Instance *instance;
+        Instance *next;
+
+        for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = next)
+        {
+            next = instance->next;
+
+            if ((instance->object == warpFaceObject) && (instance->currentStreamUnitID == streamUnitID))
+            {
+                result = instance;
+
+                result->flags = instance->flags & ~0x800;
+                break;
+            }
+        }
+    }
+
+    return result;
+}
 
 void STREAM_RenderWarpGate(unsigned long **mainOT, StreamUnitPortal *curStreamPortal, StreamUnit *mainStreamUnit, RECT *cliprect)
 {
