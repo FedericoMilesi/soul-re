@@ -60,6 +60,8 @@ short MORPH_Component[3];
 
 short MORPH_Track[2];
 
+short RENDER_currentStreamUnitID;
+
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
 void RelocateTerrain(Terrain *terrain, SVector *offset);
@@ -3723,7 +3725,25 @@ INCLUDE_ASM("asm/nonmatchings/Game/STREAM", GetFogColor);
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", DrawFogRectangle);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", STREAM_RenderAdjacantUnit);
+void STREAM_RenderAdjacantUnit(unsigned long **curOT, StreamUnitPortal *curStreamPortal, StreamUnit *toStreamUnit, StreamUnit *mainStreamUnit, RECT *cliprect)
+{
+    long portalFogColor;
+
+    if (MEMPACK_MemoryValidFunc((char *)toStreamUnit->level) != 0)
+    {
+        RENDER_currentStreamUnitID = (short)toStreamUnit->StreamUnitID;
+
+        portalFogColor = GetFogColor(curStreamPortal, mainStreamUnit, mainStreamUnit->level);
+
+        DrawFogRectangle(cliprect, gameTrackerX.primPool, 3071, curOT, portalFogColor);
+
+        PushMatrix();
+
+        StreamRenderLevel(toStreamUnit, mainStreamUnit->level, curOT, portalFogColor);
+
+        PopMatrix();
+    }
+}
 
 BSPTree *STREAM_GetBspTree(StreamUnit *streamUnit, long bspNumber)
 {

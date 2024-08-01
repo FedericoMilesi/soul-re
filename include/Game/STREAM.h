@@ -498,5 +498,8 @@ Instance *WARPGATE_UnHideCloudCoverInUnit(long streamUnitID);
 //void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStreamPortal, StreamUnit *mainStreamUnit, RECT *cliprect);
 void WARPGATE_BlockWarpGateEntrance(StreamUnit *streamUnit, long collideOn);
 //BSPTree *STREAM_GetBspTree(StreamUnit *streamUnit, long bspNumber);
+long GetFogColor(StreamUnitPortal *portal, StreamUnit *mainStreamUnit, Level *mainLevel);
+//void DrawFogRectangle(RECT *cliprect, PrimPool *primPool, int otzpos, unsigned long **drawot, long color);
+long StreamRenderLevel(StreamUnit *currentUnit, Level *mainLevel, unsigned long **drawot, long portalFogColor);
 
 #endif
