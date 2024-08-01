@@ -3723,7 +3723,45 @@ int STREAM_GetClipRect(StreamUnitPortal *portal, RECT *rect)
 
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", GetFogColor);
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", DrawFogRectangle);
+void DrawFogRectangle(RECT *cliprect, PrimPool *primPool, int otzpos, unsigned long **drawot, long color)
+{
+    POLY_G4 *polyg4;
+    POLY_G4 *temp; // not from decls.h
+
+    (void)primPool;
+
+    polyg4 = (POLY_G4 *)gameTrackerX.primPool->nextPrim;
+
+    temp = polyg4 + 1;
+
+    if (temp < (POLY_G4 *)gameTrackerX.primPool->lastPrim)
+    {
+        gameTrackerX.primPool->nextPrim = (uintptr_t *)temp;
+
+        polyg4->x0 = cliprect->x;
+        polyg4->y0 = cliprect->y;
+
+        polyg4->x1 = cliprect->x + cliprect->w;
+        polyg4->y1 = cliprect->y;
+
+        polyg4->x2 = cliprect->x;
+        polyg4->y2 = cliprect->y + cliprect->h;
+
+        polyg4->x3 = cliprect->x + cliprect->w;
+        polyg4->y3 = cliprect->y + cliprect->h;
+
+        *(int *)&polyg4->r0 = color;
+        *(int *)&polyg4->r1 = color;
+        *(int *)&polyg4->r2 = color;
+        *(int *)&polyg4->r3 = color;
+
+        setPolyG4(polyg4);
+
+        //addPrim(drawot[otzpos], polyg4);
+        *(int *)polyg4 = getaddr(&drawot[otzpos]) | 0x8000000;
+        *(int *)&drawot[otzpos] = (int)polyg4 & 0xFFFFFF;
+    }
+}
 
 void STREAM_RenderAdjacantUnit(unsigned long **curOT, StreamUnitPortal *curStreamPortal, StreamUnit *toStreamUnit, StreamUnit *mainStreamUnit, RECT *cliprect)
 {
