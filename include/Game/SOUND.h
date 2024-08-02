@@ -50,5 +50,6 @@ void SOUND_StopAllSound();
 void SOUND_ResetAllSound();
 void SndEndLoop(unsigned long handle);
 void SOUND_PlaneShift(int newPlane);
+void SOUND_SetMusicVariable(int variable, int value);
 
 #endif

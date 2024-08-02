@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/SOUND.h"
 #include "Game/PSX/AADLIB.h"
 
 char soundBuffer[13256];
@@ -169,4 +170,40 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ShutdownMusic);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SetMusicModifier);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ResetMusicModifier);
+void SOUND_ResetMusicModifier(long modifier)
+{
+    switch (modifier)
+    {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+        SOUND_SetMusicVariable(0, 0);
+        break;
+    case 5:
+        SOUND_SetMusicVariable(1, 0);
+        break;
+    case 6:
+        SOUND_SetMusicVariable(2, 0);
+        break;
+    case 9:
+        SOUND_SetMusicVariable(125, 0);
+        break;
+    case 10:
+        SOUND_SetMusicVariable(126, 0);
+        break;
+    case 11:
+        SOUND_SetMusicVariable(124, 0);
+        break;
+    case 13:
+        SOUND_SetMusicVariable(120, 0);
+        break;
+    case 14:
+        SOUND_SetMusicVariable(3, 0);
+        break;
+    case 15:
+        SOUND_SetMusicVariable(119, 0);
+        break;
+    }
+}
