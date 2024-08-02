@@ -168,7 +168,51 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_PlaneShift);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ShutdownMusic);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SetMusicModifier);
+void SOUND_SetMusicModifier(long modifier)
+{
+    switch (modifier)
+    {
+    case 0:
+        SOUND_SetMusicVariable(0, 0);
+        break;
+    case 1:
+        SOUND_SetMusicVariable(0, 1);
+        break;
+    case 2:
+        SOUND_SetMusicVariable(0, 3);
+        break;
+    case 3:
+        SOUND_SetMusicVariable(0, 4);
+        break;
+    case 4:
+        SOUND_SetMusicVariable(0, 2);
+        break;
+    case 5:
+        SOUND_SetMusicVariable(1, 1);
+        break;
+    case 6:
+        SOUND_SetMusicVariable(2, 1);
+        break;
+    case 9:
+        SOUND_SetMusicVariable(125, 1);
+        break;
+    case 10:
+        SOUND_SetMusicVariable(126, 1);
+        break;
+    case 11:
+        SOUND_SetMusicVariable(124, 1);
+        break;
+    case 13:
+        SOUND_SetMusicVariable(120, 1);
+        break;
+    case 14:
+        SOUND_SetMusicVariable(3, 1);
+        break;
+    case 15:
+        SOUND_SetMusicVariable(119, 1);
+        break;
+    }
+}
 
 void SOUND_ResetMusicModifier(long modifier)
 {
