@@ -33,6 +33,40 @@ typedef struct gSoundData {
     char soundsLoaded;
 } gSoundData;
 
+// size: 0x8
+typedef struct MusicLoadCmd {
+    // offset: 0000
+    int type;
+    // offset: 0004
+    int data;
+} MusicLoadCmd;
+
+// size: 0x4C
+typedef struct MusicLoadInfo {
+    // offset: 0000
+    int state;
+    // offset: 0004
+    int nextState;
+    // offset: 0008
+    int errorStatus;
+    // offset: 000C
+    int bankLoaded;
+    // offset: 0010
+    int checkMusicDelay;
+    // offset: 0014
+    int currentMusicPlane;
+    // offset: 0018 (8 bytes)
+    char currentMusicName[8];
+    // offset: 0020 (32 bytes)
+    struct MusicLoadCmd commandQueue[4];
+    // offset: 0040
+    int commandIn;
+    // offset: 0044
+    int commandOut;
+    // offset: 0048
+    int numCmdsInQueue;
+} MusicLoadInfo;
+
 unsigned long SOUND_Play3dSound(Position *position, int sfxToneID, int pitch, int maxVolume, int minVolDist);
 void SOUND_ProcessInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl, Position *position, int livesInOnePlace, int inSpectral, int hidden, int burning, long *triggerFlags);
 void SOUND_EndInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl);

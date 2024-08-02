@@ -1,8 +1,12 @@
 #include "common.h"
 #include "Game/SOUND.h"
+#include "Game/STRMLOAD.h"
 #include "Game/PSX/AADLIB.h"
+#include "Game/GAMELOOP.h"
 
 char soundBuffer[13256];
+
+MusicLoadInfo musicInfo;
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndOpenSfxChannel);
 
@@ -166,7 +170,37 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_UpdateSound);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_PlaneShift);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ShutdownMusic);
+void SOUND_ShutdownMusic()
+{
+    aadStopAllSlots();
+
+    EnterCriticalSection();
+
+    if ((musicInfo.state == 1) || (musicInfo.state == 3) || (musicInfo.state == 7))
+    {
+        musicInfo.nextState = 0;
+
+        ExitCriticalSection();
+
+        while (musicInfo.state != 0)
+        {
+            STREAM_PollLoadQueue();
+        }
+    }
+    else
+    {
+        ExitCriticalSection();
+    }
+
+    musicInfo.currentMusicName[0] = 0;
+
+    aadFreeDynamicSoundBank(0);
+    aadFreeDynamicSoundBank(1);
+
+    musicInfo.state = 0;
+
+    aadStartMusicMasterVolFade(gameTrackerX.sound.gMusicVol, 1, NULL);
+}
 
 void SOUND_SetMusicModifier(long modifier)
 {
