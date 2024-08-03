@@ -85,5 +85,6 @@ void SOUND_ResetAllSound();
 void SndEndLoop(unsigned long handle);
 void SOUND_PlaneShift(int newPlane);
 void SOUND_SetMusicVariable(int variable, int value);
+void SOUND_PutMusicCommand(int cmdType, int cmdData);
 
 #endif

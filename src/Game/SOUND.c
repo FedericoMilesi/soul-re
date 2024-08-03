@@ -168,7 +168,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessMusicLoad);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_UpdateSound);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_PlaneShift);
+void SOUND_PlaneShift(int newPlane)
+{
+    if ((unsigned char)gameTrackerX.sound.gMusicOn != 0)
+    {
+        SOUND_PutMusicCommand(0, newPlane);
+    }
+    else
+    {
+        musicInfo.currentMusicPlane = -1;
+    }
+}
 
 void SOUND_ShutdownMusic()
 {
