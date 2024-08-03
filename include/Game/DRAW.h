@@ -45,5 +45,6 @@ typedef struct _ButtonTexture {
 } ButtonTexture;
 
 void DRAW_CreateAGlowingCircle(Vector *f1, long z, PrimPool *primPool, unsigned long **ot, long otz, long color, long w, long h, long angle);
+void DRAW_TranslucentQuad(short x0, short y0, short x1, short y1, int x2, int y2, int x3, int y3, int r, int g, int b, int abr, PrimPool *primPool, unsigned long **ot);
 
 #endif

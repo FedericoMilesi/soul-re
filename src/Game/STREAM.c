@@ -28,6 +28,8 @@
 #include "Game/SOUND.h"
 #include "Game/VM.h"
 #include "Game/GAMEPAD.h"
+#include "Game/FONT.h"
+#include "Game/DRAW.h"
 
 short M_TrackClutUpdate;
 
@@ -61,6 +63,8 @@ short MORPH_Component[3];
 short MORPH_Track[2];
 
 short RENDER_currentStreamUnitID;
+
+EXTERN STATIC int s_zval;
 
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
@@ -4022,9 +4026,102 @@ void STREAM_RenderWarpGate(unsigned long **mainOT, StreamUnitPortal *curStreamPo
     }
 }
 
-/*TODO: migrate to WARPGATE_RenderWarpUnit*/
-static char D_800D195C[] = "Looking at warp unit =%s\n";
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", WARPGATE_RenderWarpUnit);
+void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStreamPortal, StreamUnit *mainStreamUnit, RECT *cliprect)
+{
+    unsigned long **curOT;
+    DR_AREA *PortalClip;
+    StreamUnit *toStreamUnit;
+
+    toStreamUnit = curStreamPortal->toStreamUnit;
+
+    if ((gameTrackerX.debugFlags2 & 0x1000000))
+    {
+        FONT_Print("Looking at warp unit =%s\n", &toStreamUnit->baseAreaName);
+    }
+
+    if ((toStreamUnit->flags & 0x8))
+    {
+        WARPGATE_BlockWarpGateEntrance(mainStreamUnit, 1);
+    }
+    else
+    {
+        WARPGATE_BlockWarpGateEntrance(mainStreamUnit, 0);
+    }
+
+    WARPGATE_DrawWarpGateRim(toStreamUnit, 1);
+
+    if (MEMPACK_MemoryValidFunc((char *)toStreamUnit->level) != 0)
+    {
+        curOT = (unsigned long **)gameTrackerX.primPool->nextPrim;
+
+        if (curOT < (unsigned long **)(gameTrackerX.primPool->lastPrim - 3072))
+        {
+            RECT PortalRect;
+            long portalFogColor;
+            unsigned long *hld;
+
+            gameTrackerX.primPool->nextPrim = (unsigned long *)&curOT[3072];
+
+            ClearOTagR((u_long *)curOT, 3072);
+
+            RENDER_currentStreamUnitID = toStreamUnit->StreamUnitID;
+
+            curStreamPortal->toStreamUnit = toStreamUnit;
+
+            portalFogColor = GetFogColor(curStreamPortal, mainStreamUnit, mainStreamUnit->level);
+
+            DrawFogRectangle(cliprect, gameTrackerX.primPool, 3071, curOT, portalFogColor);
+
+            PushMatrix();
+
+            StreamRenderLevel(toStreamUnit, mainStreamUnit->level, curOT, portalFogColor);
+
+            PopMatrix();
+
+            PortalClip = (DR_AREA *)gameTrackerX.primPool->nextPrim;
+
+            gameTrackerX.primPool->nextPrim = (unsigned long *)(PortalClip + 1);
+
+            PortalRect = *cliprect;
+
+            PortalRect.x += draw[gameTrackerX.drawPage].ofs[0];
+            PortalRect.y += draw[gameTrackerX.drawPage].ofs[1];
+
+            SetDrawArea(PortalClip, &PortalRect);
+
+            //addPrim(curOT[3070], PortalClip);
+            *(int *)PortalClip = getaddr(&curOT[3070]) | 0x2000000;
+            *(int *)&curOT[3070] = (int)PortalClip & 0xFFFFFF;
+
+            if (!(toStreamUnit->flags & 0x8))
+            {
+                DRAW_TranslucentQuad(cliprect->x, cliprect->y, cliprect->x + cliprect->w, cliprect->y, cliprect->x, (short)(cliprect->y + cliprect->h), (short)(cliprect->x + cliprect->w), (short)(cliprect->y + cliprect->h), 50, 50, 50, 1, gameTrackerX.primPool, &curOT[1]);
+                DRAW_TranslucentQuad(cliprect->x, cliprect->y, cliprect->x + cliprect->w, cliprect->y, cliprect->x, (short)(cliprect->y + cliprect->h), (short)(cliprect->x + cliprect->w), (short)(cliprect->y + cliprect->h), 50, 50, 50, 2, gameTrackerX.primPool, &curOT[1]);
+            }
+
+            PortalClip = (DR_AREA *)gameTrackerX.primPool->nextPrim;
+
+            gameTrackerX.primPool->nextPrim = (unsigned long *)(PortalClip + 1);
+
+            PortalRect.x = draw[gameTrackerX.drawPage].ofs[0];
+            PortalRect.y = draw[gameTrackerX.drawPage].ofs[1];
+            PortalRect.w = 512;
+            PortalRect.h = 240;
+
+            SetDrawArea(PortalClip, &PortalRect);
+
+            //addPrim(curOT[1], PortalClip);
+            *(int *)PortalClip = getaddr(&curOT[1]) | 0x2000000;
+            curOT[1] = (int)PortalClip & 0xFFFFFF;
+
+            hld = mainOT[s_zval];
+
+            mainOT[s_zval] = curOT[3071];
+
+            curOT[0] = hld;
+        }
+    }
+}
 
 void STREAM_DumpNonResidentObjects()
 {

@@ -412,6 +412,11 @@ typedef struct SpuCommonAttr {
 
 typedef struct {
     u_long	tag;
+    u_long	code[2];
+} DR_AREA;				/* Drawing Area */
+
+typedef struct {
+    u_long	tag;
     u_char	r0, g0, b0, code;
     short	x0, y0;
     u_char	r1, g1, b1, pad1;
@@ -551,5 +556,6 @@ void RotTrans(SVECTOR *v0, VECTOR *v1, long *flag);
 u_long DrawSyncCallback(void (*func)());
 DISPENV *PutDispEnv(DISPENV *env);
 void LoadAverageShort12(SVECTOR *v0, SVECTOR *v1, long p0, long p1, SVECTOR *v2);
+void SetDrawArea(DR_AREA *p, RECT *r);
 
 #endif
