@@ -3,10 +3,25 @@
 #include "Game/STRMLOAD.h"
 #include "Game/PSX/AADLIB.h"
 #include "Game/GAMELOOP.h"
+#include "Game/FONT.h"
 
 char soundBuffer[13256];
 
 MusicLoadInfo musicInfo;
+
+int gSramFullAlarm;
+
+EXTERN STATIC int gSramFullMsgCnt;
+
+int gSramTotalUsed;
+
+int gSramUsedBlocks;
+
+int gSramTotalFree;
+
+int gSramLargestFree;
+
+int gSramFreeBlocks;
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndOpenSfxChannel);
 
@@ -166,7 +181,31 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_IsMusicLoading);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessMusicLoad);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_UpdateSound);
+extern char D_800D0F9C[];
+void SOUND_UpdateSound()
+{
+    aadProcessLoadQueue();
+
+    if ((!(gameTrackerX.debugFlags & 0x40000)) && ((gSramFullAlarm != 0) || (gSramFullMsgCnt != 0)))
+    {
+        if (gSramFullMsgCnt == 0)
+        {
+            gSramFullMsgCnt = 60;
+        }
+        else
+        {
+            gSramFullMsgCnt--;
+        }
+
+        //FONT_Print("$\n\n\n\n\n\n\n\n\n\nsound memory full!\nu = % d % d f = % d % d lf = % d", gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
+        FONT_Print(D_800D0F9C, gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
+    }
+
+    if ((unsigned char)gameTrackerX.sound.gMusicOn != 0)
+    {
+        SOUND_ProcessMusicLoad();
+    }
+}
 
 void SOUND_PlaneShift(int newPlane)
 {
