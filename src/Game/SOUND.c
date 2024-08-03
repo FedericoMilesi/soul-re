@@ -175,7 +175,22 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", musicEndCallbackFunc);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_PutMusicCommand);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_MusicInit);
+void SOUND_MusicInit()
+{
+    musicInfo.state = 0;
+
+    musicInfo.errorStatus = 0;
+
+    musicInfo.checkMusicDelay = 0;
+
+    musicInfo.currentMusicPlane = -1;
+    musicInfo.currentMusicName[0] = 0;
+
+    musicInfo.numCmdsInQueue = 0;
+
+    musicInfo.commandOut = 0;
+    musicInfo.commandIn = 0;
+}
 
 int SOUND_IsMusicLoading()
 {
