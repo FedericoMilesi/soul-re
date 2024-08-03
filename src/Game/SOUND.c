@@ -173,7 +173,23 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", musicFadeoutReturnFunc);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", musicEndCallbackFunc);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_PutMusicCommand);
+void SOUND_PutMusicCommand(int cmdType, int cmdData)
+{
+    MusicLoadCmd *cmd;
+
+    cmd = &musicInfo.commandQueue[musicInfo.commandIn];
+
+    cmd->type = cmdType;
+
+    cmd->data = cmdData;
+
+    if (musicInfo.numCmdsInQueue < 3)
+    {
+        musicInfo.numCmdsInQueue++;
+
+        musicInfo.commandIn = (musicInfo.commandIn + 1) & 0x3;
+    }
+}
 
 void SOUND_MusicInit()
 {
