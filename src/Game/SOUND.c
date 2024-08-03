@@ -177,7 +177,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_PutMusicCommand);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_MusicInit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_IsMusicLoading);
+int SOUND_IsMusicLoading()
+{
+    int temp; // not from decls.h
+
+    temp = 0;
+
+    if ((musicInfo.state == 1) || (musicInfo.state == 3) || (musicInfo.state == 7))
+    {
+        temp = 1;
+    }
+
+    return temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessMusicLoad);
 
