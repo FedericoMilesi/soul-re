@@ -278,7 +278,7 @@ segments:
       - {start: 0x0C28AC, type: sbss, vram: 0x800D3948, name: Game/FX}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D3C88, name: Game/MEMPACK}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D3C9C, name: Game/PSX/AADLIB}
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D3CAC, name: Game/STREAM}
+      - {start: 0x0C28AC, type: .sbss, vram: 0x800D3CAC, name: Game/STREAM}
       - {start: 0x0C28AC, type: comm, vram: 0x800D3CB0, name: Game/STREAM}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D40D8, name: Game/STRMLOAD}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D40E8, name: Game/EVENT}

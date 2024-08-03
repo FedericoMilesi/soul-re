@@ -64,7 +64,7 @@ short MORPH_Track[2];
 
 short RENDER_currentStreamUnitID;
 
-EXTERN STATIC int s_zval;
+static int s_zval;
 
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
