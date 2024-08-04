@@ -164,7 +164,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndPlay);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndEndLoop);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndPlayVolPan);
+unsigned long SndPlayVolPan(unsigned int sample, unsigned short vol, unsigned short pan, short pitch)
+{
+    if ((unsigned char)gameTrackerX.sound.gSfxOn != 0)
+    {
+        return aadPlaySfx(sample, vol & 0xFFFF, pan & 0xFFFF, pitch);
+    }
+
+    return 0;
+}
 
 unsigned long SndUpdateVolPanPitch(unsigned long handle, unsigned short vol, unsigned short pan, short pitch)
 {
