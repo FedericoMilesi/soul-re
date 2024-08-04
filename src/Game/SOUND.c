@@ -167,7 +167,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndPlayVolPan);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndUpdateVolPanPitch);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", musicLoadReturnFunc);
+void musicLoadReturnFunc(int dynamicBankIndex, int errorStatus)
+{
+    (void)dynamicBankIndex;
+
+    musicInfo.errorStatus = errorStatus;
+
+    musicInfo.state = musicInfo.nextState;
+}
 
 void musicFadeoutReturnFunc()
 {
