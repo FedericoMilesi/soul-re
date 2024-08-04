@@ -160,7 +160,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndIsPlayingOrRequested);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndTypeIsPlayingOrRequested);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndPlay);
+unsigned long SndPlay(unsigned int sample)
+{
+    if ((unsigned char)gameTrackerX.sound.gSfxOn != 0)
+    {
+        return aadPlaySfx(sample, 90, 64, 0);
+    }
+
+    return 0;
+}
 
 void SndEndLoop(unsigned long handle)
 {
