@@ -142,7 +142,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ResumeAllSound);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_StopAllSound);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ResetAllSound);
+void SOUND_ResetAllSound()
+{
+    if ((unsigned char)gameTrackerX.sound.soundsLoaded != 0)
+    {
+        SOUND_StopAllSound();
+
+        aadInitReverb();
+    }
+}
 
 void SOUND_MusicOff()
 {
