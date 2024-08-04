@@ -156,7 +156,10 @@ void SOUND_SfxOn()
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndIsPlaying);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndIsPlayingOrRequested);
+int SndIsPlayingOrRequested(unsigned long handle)
+{
+    return aadIsSfxPlayingOrRequested(handle);
+}
 
 int SndTypeIsPlayingOrRequested(unsigned int sfxToneID)
 {
