@@ -12,5 +12,8 @@ void (*aadInstallEndSequenceCallback(void (*callbackProc)(), long data))();
 int aadAssignDynamicSequence(int bank, int sequenceNumber, int slotNumber);
 void aadStartSlot(int slotNumber);
 void aadEnableSlot(int slotNumber);
+void aadDisableSlot(int slotNumber);
+int aadGetSlotStatus(int slotNumber);
+void aadStopSlot(int slotNumber);
 
 #endif

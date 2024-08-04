@@ -144,7 +144,22 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_StopAllSound);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ResetAllSound);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_MusicOff);
+void SOUND_MusicOff()
+{
+    int slotNumber;
+
+    for (slotNumber = 1; slotNumber < 4; slotNumber++)
+    {
+        aadDisableSlot(slotNumber);
+
+        if (aadGetSlotStatus(slotNumber) == 1)
+        {
+            aadStopSlot(slotNumber);
+
+            aadStartSlot(slotNumber);
+        }
+    }
+}
 
 void SOUND_MusicOn()
 {
