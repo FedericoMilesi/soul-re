@@ -154,7 +154,10 @@ void SOUND_SfxOn()
 {
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndIsPlaying);
+int SndIsPlaying(unsigned long handle)
+{
+    return aadIsSfxPlaying(handle);
+}
 
 int SndIsPlayingOrRequested(unsigned long handle)
 {
