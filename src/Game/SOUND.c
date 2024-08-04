@@ -162,7 +162,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndTypeIsPlayingOrRequested);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndPlay);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndEndLoop);
+void SndEndLoop(unsigned long handle)
+{
+    aadStopSfx(handle);
+}
 
 unsigned long SndPlayVolPan(unsigned int sample, unsigned short vol, unsigned short pan, short pitch)
 {
