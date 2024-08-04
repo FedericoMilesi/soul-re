@@ -7,5 +7,6 @@ unsigned long aadStopSfx(unsigned long handle);
 int aadIsSfxTypePlayingOrRequested(unsigned int sfxToneID);
 int aadIsSfxPlayingOrRequested(unsigned long handle);
 int aadIsSfxPlaying(unsigned long handle);
+void aadStopAllSfx();
 
 #endif

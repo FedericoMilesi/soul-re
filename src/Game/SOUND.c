@@ -148,7 +148,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_MusicOff);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_MusicOn);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SfxOff);
+void SOUND_SfxOff()
+{
+    aadStopAllSfx();
+}
 
 void SOUND_SfxOn()
 {
