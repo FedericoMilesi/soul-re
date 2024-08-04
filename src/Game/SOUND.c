@@ -169,7 +169,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndUpdateVolPanPitch);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", musicLoadReturnFunc);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", musicFadeoutReturnFunc);
+void musicFadeoutReturnFunc()
+{
+    musicInfo.state = musicInfo.nextState;
+}
 
 void musicEndCallbackFunc(long userData, int slot, int loopFlag)
 {
