@@ -146,7 +146,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ResetAllSound);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_MusicOff);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_MusicOn);
+void SOUND_MusicOn()
+{
+    int slotNumber;
+
+    for (slotNumber = 1; slotNumber < 4; slotNumber++)
+    {
+        aadEnableSlot(slotNumber);
+    }
+}
 
 void SOUND_SfxOff()
 {
