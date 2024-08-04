@@ -171,7 +171,27 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", musicLoadReturnFunc);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", musicFadeoutReturnFunc);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", musicEndCallbackFunc);
+void musicEndCallbackFunc(long userData, int slot, int loopFlag)
+{
+    (void)userData;
+    (void)loopFlag;
+
+    if (slot == 0)
+    {
+        aadInstallEndSequenceCallback(NULL, 0);
+
+        if (aadAssignDynamicSequence(musicInfo.bankLoaded, 0, 0) == 0)
+        {
+            aadStartSlot(0);
+
+            musicInfo.state = musicInfo.nextState;
+        }
+        else
+        {
+            musicInfo.state = 0;
+        }
+    }
+}
 
 void SOUND_PutMusicCommand(int cmdType, int cmdData)
 {

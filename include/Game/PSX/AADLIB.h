@@ -8,5 +8,8 @@ void aadStartMusicMasterVolFade(int targetVolume, int volumeStep, void (*fadeCom
 void aadStopAllSlots();
 int aadFreeDynamicSoundBank(int dynamicBankIndex);
 void aadProcessLoadQueue();
+void (*aadInstallEndSequenceCallback(void (*callbackProc)(), long data))();
+int aadAssignDynamicSequence(int bank, int sequenceNumber, int slotNumber);
+void aadStartSlot(int slotNumber);
 
 #endif
