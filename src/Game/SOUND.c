@@ -158,7 +158,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndIsPlaying);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndIsPlayingOrRequested);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndTypeIsPlayingOrRequested);
+int SndTypeIsPlayingOrRequested(unsigned int sfxToneID)
+{
+    return aadIsSfxTypePlayingOrRequested(sfxToneID);
+}
 
 unsigned long SndPlay(unsigned int sample)
 {

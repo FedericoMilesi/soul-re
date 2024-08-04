@@ -4,5 +4,6 @@
 unsigned long aadSetSfxVolPanPitch(unsigned long handle, int volume, int pan, int pitch);
 unsigned long aadPlaySfx(unsigned int toneID, int volume, int pan, int pitchOffset);
 unsigned long aadStopSfx(unsigned long handle);
+int aadIsSfxTypePlayingOrRequested(unsigned int sfxToneID);
 
 #endif
