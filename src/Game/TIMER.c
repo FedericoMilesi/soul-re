@@ -1,7 +1,7 @@
 #include "common.h"
 #include "Game/TIMER.h"
 
-long gTimerEnabled;
+long gTimerEnabled = 0;
 
 unsigned long TIMER_GetTimeMS()
 {
