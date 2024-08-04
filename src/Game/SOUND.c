@@ -4,6 +4,7 @@
 #include "Game/PSX/AADLIB.h"
 #include "Game/GAMELOOP.h"
 #include "Game/FONT.h"
+#include "Game/PSX/AADSFX.h"
 
 char soundBuffer[13256];
 
@@ -165,7 +166,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndEndLoop);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndPlayVolPan);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndUpdateVolPanPitch);
+unsigned long SndUpdateVolPanPitch(unsigned long handle, unsigned short vol, unsigned short pan, short pitch)
+{
+    if ((handle != 0) && ((unsigned char)gameTrackerX.sound.gSfxOn != 0))
+    {
+        return aadSetSfxVolPanPitch(handle, vol, pan, pitch);
+    }
+    else
+    {
+        return 0;
+    }
+}
 
 void musicLoadReturnFunc(int dynamicBankIndex, int errorStatus)
 {
