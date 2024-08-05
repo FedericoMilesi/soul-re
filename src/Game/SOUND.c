@@ -114,7 +114,57 @@ int SOUND_IsInstanceSoundLoaded(unsigned char *sfxFileData, long soundNumber)
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SetInstanceSoundPitch);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SetInstanceSoundVolume);
+void SOUND_SetInstanceSoundVolume(SoundInstance *soundInst, long volumeChangeAmt, long time)
+{
+    SoundEffectChannel *channel;
+
+    if ((soundInst->state & 0xF) == 0x2)
+    {
+        channel = SndGetSfxChannel(soundInst->channel);
+
+        if (channel != NULL)
+        {
+            time = abs(time);
+
+            if ((volumeChangeAmt > 0) && ((channel->volume + volumeChangeAmt) >= 128))
+            {
+                volumeChangeAmt = 127 - channel->volume;
+            }
+
+            if ((volumeChangeAmt < 0) && ((channel->volume + volumeChangeAmt) < 0))
+            {
+                volumeChangeAmt = -channel->volume;
+            }
+
+            if (time != 0)
+            {
+                channel->volumeChangePerUpdate = (short)(volumeChangeAmt / time);
+
+                if (volumeChangeAmt < 0)
+                {
+                    channel->volumeChangeSign = -1;
+                }
+                else
+                {
+                    channel->volumeChangeSign = 1;
+                }
+
+                channel->volumeChangeError = 0;
+
+                channel->volumeChangeTime = (short)time;
+                channel->volumeChangeTimeSave = (short)time;
+
+                channel->volumeChangeErrPerUpdate = (short)abs(volumeChangeAmt % time);
+            }
+            else
+            {
+                channel->volumeChangeTime = 0;
+
+                channel->volume += (short)volumeChangeAmt;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processOneShotSound);
 

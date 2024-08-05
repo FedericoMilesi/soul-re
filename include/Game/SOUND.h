@@ -13,6 +13,46 @@ typedef struct SoundInstance {
     unsigned char delay;
 } SoundInstance;
 
+// size: 0x24
+typedef struct SoundEffectChannel {
+    // offset: 0000
+    unsigned char inUse;
+    // offset: 0001
+    unsigned char unused;
+    // offset: 0002
+    unsigned short unused1;
+    // offset: 0004
+    unsigned long handle;
+    // offset: 0008
+    short volume;
+    // offset: 000A
+    short volumeChangeTime;
+    // offset: 000C
+    short volumeChangeTimeSave;
+    // offset: 000E
+    short volumeChangePerUpdate;
+    // offset: 0010
+    short volumeChangeSign;
+    // offset: 0012
+    short volumeChangeErrPerUpdate;
+    // offset: 0014
+    short volumeChangeError;
+    // offset: 0016
+    short pitch;
+    // offset: 0018
+    short pitchChangeTime;
+    // offset: 001A
+    short pitchChangeTimeSave;
+    // offset: 001C
+    short pitchChangePerUpdate;
+    // offset: 001E
+    short pitchChangeSign;
+    // offset: 0020
+    short pitchChangeErrPerUpdate;
+    // offset: 0022
+    short pitchChangeError;
+} SoundEffectChannel;
+
 // size: 0x14
 typedef struct gSoundData {
     // offset: 0000
@@ -564,5 +604,6 @@ void SOUND_SetMusicVariable(int variable, int value);
 void SOUND_PutMusicCommand(int cmdType, int cmdData);
 void SOUND_ProcessMusicLoad();
 unsigned long SndUpdateVolPanPitch(unsigned long handle, unsigned short vol, unsigned short pan, short pitch);
+SoundEffectChannel *SndGetSfxChannel(int channelNum);
 
 #endif
