@@ -46,7 +46,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processPeriodicSound);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processEventSound);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_StartInstanceSound);
+void SOUND_StartInstanceSound(SoundInstance *soundInst)
+{
+    if ((soundInst->state & 0xF) == 0x1)
+    {
+        soundInst->state = 2;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_StopInstanceSound);
 
