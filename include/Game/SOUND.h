@@ -632,6 +632,32 @@ typedef struct AadInitAttr {
     void (*memoryFreeProc)();
 } AadInitAttr;
 
+// size: 0xE
+typedef struct ObjectEventSound {
+    // offset: 0000
+    unsigned char type;
+    // offset: 0001
+    unsigned char numSfxIDs;
+    // offset: 0002
+    unsigned char soundInst;
+    // offset: 0003
+    unsigned char flags;
+    // offset: 0004
+    unsigned short minVolDistance;
+    // offset: 0006
+    short pitch;
+    // offset: 0008
+    unsigned short pitchVariation;
+    // offset: 000A
+    unsigned char maxVolume;
+    // offset: 000B
+    unsigned char maxVolVariation;
+    // offset: 000C
+    unsigned char initialDelay;
+    // offset: 000D
+    unsigned char initialDelayVariation;
+} ObjectEventSound;
+
 unsigned long SOUND_Play3dSound(Position *position, int sfxToneID, int pitch, int maxVolume, int minVolDist);
 void SOUND_ProcessInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl, Position *position, int livesInOnePlace, int inSpectral, int hidden, int burning, long *triggerFlags);
 void SOUND_EndInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl);
@@ -656,5 +682,10 @@ unsigned long SndUpdateVolPanPitch(unsigned long handle, unsigned short vol, uns
 SoundEffectChannel *SndGetSfxChannel(int channelNum);
 void SndCloseSfxChannel(int channelNum);
 void SOUND_MusicInit();
+unsigned long SOUND_Update3dSound(Position *position, unsigned long handle, int pitch, int maxVolume, int minVolDist);
+int isOkayToPlaySound(int flags, int spectralPlane, int hidden, int burning);
+SoundEffectChannel *SndOpenSfxChannel(unsigned char *channelNum);
+int SndIsPlaying(unsigned long handle);
+int SndIsPlayingOrRequested(unsigned long handle);
 
 #endif

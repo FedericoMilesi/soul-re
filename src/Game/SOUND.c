@@ -60,7 +60,135 @@ void setPeriodicSoundStateOff(SoundInstance *soundInst, ObjectPeriodicSound *sou
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processPeriodicSound);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processEventSound);
+void processEventSound(Position *position, SoundInstance *soundInst, ObjectEventSound *sound)
+{
+    int spectralPlane;
+    int sfxIDNum;
+    SoundEffectChannel *channel;
+
+    spectralPlane = gameTrackerX.gameData.asmData.MorphType;
+
+    sfxIDNum = soundInst->state & 0xF;
+
+    if (sfxIDNum != 1)
+    {
+        if ((sfxIDNum < 2) || ((soundInst->state & 0xF) != 0x2))
+        {
+            soundInst->channel = -1;
+
+            soundInst->state = 1;
+
+            soundInst->delay = 0;
+            return;
+        }
+
+        channel = SndGetSfxChannel(soundInst->channel);
+
+        if (channel != NULL)
+        {
+            if (SndIsPlayingOrRequested(channel->handle) == 0)
+            {
+                SndCloseSfxChannel(soundInst->channel);
+
+                soundInst->channel = -1;
+
+                soundInst->state = 1;
+                return;
+            }
+
+            if (SndIsPlaying(channel->handle) != 0)
+            {
+                if (channel->pitchChangeTime != 0)
+                {
+                    channel->pitch += channel->pitchChangePerUpdate;
+                    channel->pitchChangeError += channel->pitchChangeErrPerUpdate;
+
+                    if (channel->pitchChangeError >= channel->pitchChangeTimeSave)
+                    {
+                        channel->pitch += channel->pitchChangeSign;
+                        channel->pitchChangeError -= channel->pitchChangeTimeSave;
+                    }
+
+                    channel->pitchChangeTime--;
+                }
+
+                if (channel->volumeChangeTime != 0)
+                {
+                    channel->volume += channel->volumeChangePerUpdate;
+                    channel->volumeChangeError += channel->volumeChangeErrPerUpdate;
+
+                    if (channel->volumeChangeError >= channel->volumeChangeTimeSave)
+                    {
+                        channel->volume += channel->volumeChangeSign;
+                        channel->volumeChangeError -= channel->volumeChangeTimeSave;
+                    }
+
+                    channel->volumeChangeTime--;
+                }
+
+                if ((soundInst->state & 0x10))
+                {
+                    soundInst->state &= ~0x10;
+
+                    if (SOUND_Update3dSound(position, channel->handle, channel->pitch, channel->volume, sound->minVolDistance) == 0)
+                    {
+                        SndEndLoop(channel->handle);
+
+                        SndCloseSfxChannel(soundInst->channel);
+
+                        soundInst->channel = -1;
+                    }
+                }
+                else
+                {
+                    soundInst->state |= 0x10;
+                }
+
+                if (isOkayToPlaySound(sound->flags, spectralPlane, 0, 0) == 0)
+                {
+                    SndEndLoop(channel->handle);
+
+                    SndCloseSfxChannel(soundInst->channel);
+
+                    soundInst->channel = -1;
+                }
+            }
+        }
+        else if (isOkayToPlaySound(sound->flags, spectralPlane, 0, 0) != 0)
+        {
+            channel = SndOpenSfxChannel(&soundInst->channel);
+
+            if (channel != NULL)
+            {
+                channel->volume = sound->maxVolume;
+
+                if (sound->maxVolVariation != 0)
+                {
+                    channel->volume += sound->maxVolVariation - (rand() % (2 * sound->maxVolVariation));
+                }
+
+                channel->pitch = sound->pitch;
+
+                if (sound->pitchVariation != 0)
+                {
+                    channel->pitch += sound->pitchVariation - (rand() % (2 * sound->pitchVariation));
+                }
+
+                sfxIDNum = (sound->numSfxIDs < 2) ? 0 : rand() % sound->numSfxIDs;
+
+                // second parameter is likely wrong
+                channel->handle = SOUND_Play3dSound(position, ((unsigned short *)(sound + 1))[sfxIDNum], channel->pitch, channel->volume, sound->minVolDistance);
+
+                if (channel->handle == 0)
+                {
+                    SndCloseSfxChannel(soundInst->channel);
+
+                    soundInst->channel = -1;
+                }
+            }
+        }
+    }
+}
 
 void SOUND_StartInstanceSound(SoundInstance *soundInst)
 {
