@@ -70,7 +70,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_SaveGame);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_RestoreGame);
 
-void SAVE_DebugSaveGame(void)
+void SAVE_DebugSaveGame()
 {
 }
 
