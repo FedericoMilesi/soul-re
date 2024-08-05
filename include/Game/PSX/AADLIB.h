@@ -16,5 +16,7 @@ void aadDisableSlot(int slotNumber);
 int aadGetSlotStatus(int slotNumber);
 void aadStopSlot(int slotNumber);
 void aadInitReverb();
+void aadShutdownReverb();
+void aadCancelPauseSound();
 
 #endif
