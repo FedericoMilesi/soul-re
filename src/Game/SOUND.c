@@ -62,7 +62,15 @@ void SndCloseSfxChannel(int channelNum)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndGetSfxChannel);
+SoundEffectChannel *SndGetSfxChannel(int channelNum)
+{
+    if (channelNum < 16)
+    {
+        return &soundEffectChannelTbl[channelNum];
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessInstanceSounds);
 
