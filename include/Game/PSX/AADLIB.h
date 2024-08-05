@@ -1,6 +1,8 @@
 #ifndef _AADLIB_H_
 #define _AADLIB_H_
 
+#include "Game/SOUND.h"
+
 int aadIsSfxLoaded(unsigned int toneID);
 int aadFreeDynamicSfx(int handle);
 int aadLoadDynamicSfx(char *fileName, long directoryID, long flags);
@@ -24,5 +26,7 @@ void aadSetSfxMasterVolume(int volume);
 void aadSetMusicMasterVolume(int volume);
 void aadSetUserVariable(int variableNumber, int value);
 void aadShutdown();
+unsigned long aadGetMemorySize(AadInitAttr *attributes);
+int aadInit(AadInitAttr *attributes, unsigned char *memoryPtr);
 
 #endif

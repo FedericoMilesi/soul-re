@@ -616,6 +616,22 @@ typedef struct ObjectPeriodicSound {
     unsigned char offTimeVariation;
 } ObjectPeriodicSound;
 
+// size: 0x18
+typedef struct AadInitAttr {
+    // offset: 0000
+    int updateMode;
+    // offset: 0004
+    int numSlots;
+    // offset: 0008
+    void (*nonBlockLoadProc)();
+    // offset: 000C
+    void (*nonBlockBufferedLoadProc)();
+    // offset: 0010
+    void *(*memoryMallocProc)();
+    // offset: 0014
+    void (*memoryFreeProc)();
+} AadInitAttr;
+
 unsigned long SOUND_Play3dSound(Position *position, int sfxToneID, int pitch, int maxVolume, int minVolDist);
 void SOUND_ProcessInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl, Position *position, int livesInOnePlace, int inSpectral, int hidden, int burning, long *triggerFlags);
 void SOUND_EndInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl);
@@ -639,5 +655,6 @@ void SOUND_ProcessMusicLoad();
 unsigned long SndUpdateVolPanPitch(unsigned long handle, unsigned short vol, unsigned short pan, short pitch);
 SoundEffectChannel *SndGetSfxChannel(int channelNum);
 void SndCloseSfxChannel(int channelNum);
+void SOUND_MusicInit();
 
 #endif

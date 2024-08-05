@@ -7,6 +7,8 @@
 #include "Game/PSX/AADSFX.h"
 #include "Game/CAMERA.h"
 #include "Game/MATH3D.h"
+#include "Game/MEMPACK.h"
+#include "Game/STRMLOAD.h"
 
 char soundBuffer[13256];
 
@@ -342,7 +344,40 @@ void SOUND_HandleGlobalValueSignal(int name, long data)
     (void)data;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Init);
+void SOUND_Init()
+{
+    AadInitAttr initAttr;
+
+    initAttr.updateMode = 1;
+
+    initAttr.numSlots = 4;
+
+    initAttr.nonBlockLoadProc = LOAD_NonBlockingFileLoad;
+    initAttr.nonBlockBufferedLoadProc = LOAD_NonBlockingBufferedLoad;
+
+    initAttr.memoryMallocProc = (void *)MEMPACK_Malloc;
+    initAttr.memoryFreeProc = MEMPACK_Free;
+
+    aadGetMemorySize(&initAttr);
+
+    aadInit(&initAttr, (unsigned char *)&soundBuffer);
+
+    gameTrackerX.sound.gMasterVol = 16383;
+
+    SOUND_SetMusicVolume(127);
+    SOUND_SetSfxVolume(127);
+    SOUND_SetVoiceVolume(80);
+
+    gameTrackerX.sound.gSfxOn = 1;
+    gameTrackerX.sound.gMusicOn = 1;
+    gameTrackerX.sound.gVoiceOn = 1;
+
+    gameTrackerX.sound.soundsLoaded = 0;
+
+    SOUND_MusicInit();
+
+    aadInitReverb();
+}
 
 void SOUND_Free()
 {
