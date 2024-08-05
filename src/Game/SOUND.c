@@ -30,7 +30,29 @@ int gSramFreeBlocks;
 
 AadMemoryStruct *aadMem;
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndOpenSfxChannel);
+SoundEffectChannel soundEffectChannelTbl[16];
+
+SoundEffectChannel *SndOpenSfxChannel(unsigned char *channelNum)
+{
+    int i;
+
+    for (i = 0; i < 16; i++)
+    {
+        if (soundEffectChannelTbl[i].inUse == 0)
+        {
+            soundEffectChannelTbl[i].inUse = 255;
+
+            soundEffectChannelTbl[i].pitchChangeTime = 0;
+            soundEffectChannelTbl[i].volumeChangeTime = 0;
+
+            *channelNum = i;
+
+            return &soundEffectChannelTbl[i];
+        }
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndCloseSfxChannel);
 
