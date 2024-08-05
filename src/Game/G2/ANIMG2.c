@@ -659,4 +659,29 @@ void _G2Anim_FreeChanStatusBlockList(G2AnimChanStatusBlock *block)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimAlphaTable_GetValue);
+long _G2AnimAlphaTable_GetValue(G2AnimAlphaTable *table, long trueAlpha)
+{
+    long position;
+    long positionInt;
+    long positionFrac;
+    long value;
+
+    if (table == NULL)
+    {
+        return trueAlpha;
+    }
+
+    value = trueAlpha;
+
+    position = (table->size - 1) * value;
+
+    positionInt = position >> 12;
+
+    value = table->data[positionInt];
+
+    positionFrac = position & 0xFFF;
+
+    value += ((table->data[positionInt + 1] - value) * positionFrac) >> 12;
+
+    return value;
+}
