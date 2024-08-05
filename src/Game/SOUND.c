@@ -40,7 +40,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_EndInstanceSounds);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", isOkayToPlaySound);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", setPeriodicSoundStateOff);
+void setPeriodicSoundStateOff(SoundInstance *soundInst, ObjectPeriodicSound *sound)
+{
+    SndCloseSfxChannel(soundInst->channel);
+
+    soundInst->channel = 255;
+
+    soundInst->state = 3;
+
+    soundInst->delay = sound->offTime;
+
+    if (sound->offTimeVariation != 0)
+    {
+        soundInst->delay += sound->offTimeVariation - (rand() % (sound->offTimeVariation * 2));
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processPeriodicSound);
 

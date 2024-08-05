@@ -583,6 +583,39 @@ typedef struct AadMemoryStruct {
     unsigned char userVariables[128];
 } AadMemoryStruct;
 
+typedef struct ObjectPeriodicSound {
+    // offset: 0000
+    unsigned char type;
+    // offset: 0001
+    unsigned char numSfxIDs;
+    // offset: 0002
+    unsigned char soundInst;
+    // offset: 0003
+    unsigned char flags;
+    // offset: 0004
+    unsigned short minVolDistance;
+    // offset: 0006
+    short pitch;
+    // offset: 0008
+    unsigned short pitchVariation;
+    // offset: 000A
+    unsigned char maxVolume;
+    // offset: 000B
+    unsigned char maxVolVariation;
+    // offset: 000C
+    unsigned char initialDelay;
+    // offset: 000D
+    unsigned char initialDelayVariation;
+    // offset: 000E
+    unsigned char onTime;
+    // offset: 000F
+    unsigned char onTimeVariation;
+    // offset: 0010
+    unsigned char offTime;
+    // offset: 0011
+    unsigned char offTimeVariation;
+} ObjectPeriodicSound;
+
 unsigned long SOUND_Play3dSound(Position *position, int sfxToneID, int pitch, int maxVolume, int minVolDist);
 void SOUND_ProcessInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl, Position *position, int livesInOnePlace, int inSpectral, int hidden, int burning, long *triggerFlags);
 void SOUND_EndInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl);
