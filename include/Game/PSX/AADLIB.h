@@ -21,5 +21,6 @@ void aadCancelPauseSound();
 void aadResumeSound();
 void aadPauseSound();
 void aadSetSfxMasterVolume(int volume);
+void aadSetMusicMasterVolume(int volume);
 
 #endif

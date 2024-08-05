@@ -132,7 +132,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Free);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SetMusicVariable);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SetMusicVolume);
+void SOUND_SetMusicVolume(int newVolume)
+{
+    if (newVolume == -1)
+    {
+        newVolume = gameTrackerX.sound.gMusicVol;
+    }
+
+    gameTrackerX.sound.gMusicVol = newVolume;
+
+    aadSetMusicMasterVolume(newVolume);
+}
 
 void SOUND_SetSfxVolume(int newVolume)
 {
