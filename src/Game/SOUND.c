@@ -5,6 +5,8 @@
 #include "Game/GAMELOOP.h"
 #include "Game/FONT.h"
 #include "Game/PSX/AADSFX.h"
+#include "Game/CAMERA.h"
+#include "Game/MATH3D.h"
 
 char soundBuffer[13256];
 
@@ -118,7 +120,95 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processOneShotSound);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Play3dSound);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Update3dSound);
+unsigned long SOUND_Update3dSound(Position *position, unsigned long handle, int pitch, int maxVolume, int minVolDist)
+{
+    long dx;
+    long dy;
+    long dz;
+    long objDist;
+    long workMinVolDist;
+    int angle;
+    int quadrant;
+    int qpos;
+    int pan;
+    int volume;
+    int temp, temp2; // not from decls.h
+
+    if (maxVolume != 0)
+    {
+        if (minVolDist == 0)
+        {
+            return handle;
+        }
+
+        if ((theCamera.mode == 5) && ((gameTrackerX.gameFlags & 0x10)))
+        {
+            dx = position->x - theCamera.core.position.x;
+            dy = position->y - theCamera.core.position.y;
+            dz = position->z - theCamera.core.position.z;
+
+            workMinVolDist = minVolDist;
+        }
+        else
+        {
+            dx = position->x - theCamera.focusInstance->position.x;
+            dy = position->y - theCamera.focusInstance->position.y;
+            dz = position->z - theCamera.focusInstance->position.z;
+
+            workMinVolDist = minVolDist;
+        }
+
+        objDist = MATH3D_FastSqrt0((dx * dx) + (dy * dy) + (dz * dz));
+
+        if (objDist <= workMinVolDist)
+        {
+            temp = ratan2(dy, dx) + 1024;
+
+            angle = theCamera.core.rotation.z - temp;
+
+            volume = (workMinVolDist - objDist) / (workMinVolDist / maxVolume);
+
+            quadrant = (angle & 0xFFF) >> 10;
+
+            qpos = angle & 0x3FF;
+
+            if (volume >= 128)
+            {
+                volume = 127;
+            }
+
+            switch (quadrant)
+            {
+            case 0:
+                pan = 63 - (qpos >> 4);
+                break;
+            case 1:
+                pan = qpos >> 4;
+                break;
+            case 2:
+                pan = (qpos >> 4) + 64;
+                break;
+            default:
+                pan = 127 - (qpos >> 4);
+            }
+
+            temp2 = (objDist << 8) / workMinVolDist;
+
+            if (pan < 64)
+            {
+                pan = 63 - (((63 - pan) * temp2) >> 8);
+            }
+            else
+            {
+                pan = (((pan - 64) * temp2) >> 8) + 64;
+            }
+
+            return SndUpdateVolPanPitch(handle, volume & 0xFFFF, pan & 0xFFFF, pitch);
+        }
+    }
+
+    return 0;
+}
 
 void SOUND_HandleGlobalValueSignal(int name, long data)
 {

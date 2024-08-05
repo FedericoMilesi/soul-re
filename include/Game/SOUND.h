@@ -563,5 +563,6 @@ void SOUND_PlaneShift(int newPlane);
 void SOUND_SetMusicVariable(int variable, int value);
 void SOUND_PutMusicCommand(int cmdType, int cmdData);
 void SOUND_ProcessMusicLoad();
+unsigned long SndUpdateVolPanPitch(unsigned long handle, unsigned short vol, unsigned short pan, short pitch);
 
 #endif
