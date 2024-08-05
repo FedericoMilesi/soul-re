@@ -20,5 +20,6 @@ void aadShutdownReverb();
 void aadCancelPauseSound();
 void aadResumeSound();
 void aadPauseSound();
+void aadSetSfxMasterVolume(int volume);
 
 #endif
