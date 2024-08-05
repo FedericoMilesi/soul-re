@@ -24,6 +24,8 @@ int gSramLargestFree;
 
 int gSramFreeBlocks;
 
+AadMemoryStruct *aadMem;
+
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndOpenSfxChannel);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SndCloseSfxChannel);
