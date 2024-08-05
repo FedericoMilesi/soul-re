@@ -605,5 +605,6 @@ void SOUND_PutMusicCommand(int cmdType, int cmdData);
 void SOUND_ProcessMusicLoad();
 unsigned long SndUpdateVolPanPitch(unsigned long handle, unsigned short vol, unsigned short pan, short pitch);
 SoundEffectChannel *SndGetSfxChannel(int channelNum);
+void SndCloseSfxChannel(int channelNum);
 
 #endif

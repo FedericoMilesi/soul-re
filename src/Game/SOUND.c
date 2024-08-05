@@ -54,7 +54,23 @@ void SOUND_StartInstanceSound(SoundInstance *soundInst)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_StopInstanceSound);
+void SOUND_StopInstanceSound(SoundInstance *soundInst)
+{
+    SoundEffectChannel *channel;
+
+    channel = SndGetSfxChannel(soundInst->channel);
+
+    if (channel != NULL)
+    {
+        SndEndLoop(channel->handle);
+
+        SndCloseSfxChannel(soundInst->channel);
+
+        soundInst->channel = -1;
+    }
+
+    soundInst->state = 1;
+}
 
 int SOUND_IsInstanceSoundLoaded(unsigned char *sfxFileData, long soundNumber)
 {
