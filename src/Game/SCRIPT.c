@@ -274,7 +274,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_InstanceSplineSet);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_SplineProcess);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SCRIPT", SCRIPT_InstanceSplineProcess);
+long SCRIPT_InstanceSplineProcess(Instance *instance, SplineDef *splineDef, SplineDef *rsplineDef, SplineDef *ssplineDef, int direction)
+{
+    MultiSpline *multi;
+    unsigned long isClass;
+    unsigned long isParent;
+
+    multi = SCRIPT_GetMultiSpline(instance, &isParent, &isClass);
+
+    if (multi != NULL)
+    {
+        if (((isParent != 0) || (isClass != 0)) || ((splineDef == NULL) && (rsplineDef == NULL) && (ssplineDef == NULL)))
+        {
+            splineDef = SCRIPT_GetPosSplineDef(instance, multi, isParent, isClass);
+            rsplineDef = SCRIPT_GetRotSplineDef(instance, multi, isParent, isClass);
+            ssplineDef = SCRIPT_GetScaleSplineDef(instance, multi, isParent, isClass);
+        }
+
+        return SCRIPT_SplineProcess(instance, multi, splineDef, rsplineDef, ssplineDef, direction, isClass);
+    }
+
+    return -1;
+}
 
 void SCRIPT_FadeOutProcess(Instance *instance)
 {

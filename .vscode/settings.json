@@ -74,6 +74,7 @@
         "aadlib.h": "c",
         "undrwrld.h": "c",
         "stream.h": "c",
-        "vram.h": "c"
+        "vram.h": "c",
+        "script.h": "c"
     }
 }
