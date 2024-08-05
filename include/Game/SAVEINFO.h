@@ -4,6 +4,16 @@
 #include "common.h"
 #include "Game/MONSTER/MONAPI.h"
 
+// size: 0x6
+typedef struct _SmallRotation {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short z;
+} SmallRotation;
+
 // size: 0xC
 typedef struct SavedIntroSpline {
     // offset: 0000

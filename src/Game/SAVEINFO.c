@@ -1,6 +1,25 @@
 #include "common.h"
+#include "Game/SAVEINFO.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetInstanceRotation);
+void SAVE_GetInstanceRotation(Instance *instance, SmallRotation *vector)
+{
+    evPositionData *rotation;
+
+    rotation = (evPositionData *)INSTANCE_Query(instance, 7);
+
+    if (rotation == NULL)
+    {
+        vector->x = instance->rotation.x;
+        vector->y = instance->rotation.y;
+        vector->z = instance->rotation.z;
+    }
+    else
+    {
+        vector->x = rotation->x;
+        vector->y = rotation->y;
+        vector->z = rotation->z;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_ClearMemory);
 
