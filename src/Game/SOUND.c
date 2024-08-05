@@ -50,11 +50,11 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_StopInstanceSound);
 
 int SOUND_IsInstanceSoundLoaded(unsigned char *sfxFileData, long soundNumber)
 {
-    unsigned short *sfxIDList; // $s1
-    int numSounds; // $a3
-    int numSfxIDs; // $s0
-    int i; // $a2
-    int status; // $v0
+    unsigned short *sfxIDList;
+    int numSounds;
+    int numSfxIDs;
+    int i;
+    int status;
 
     if ((sfxFileData != NULL) && (*sfxFileData++ == 190) && (*sfxFileData++ == 239))
     {
@@ -105,8 +105,8 @@ int SOUND_IsInstanceSoundLoaded(unsigned char *sfxFileData, long soundNumber)
                 }
             }
         }
-
     }
+
     return -1;
 }
 
