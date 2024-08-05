@@ -18,5 +18,6 @@ void aadStopSlot(int slotNumber);
 void aadInitReverb();
 void aadShutdownReverb();
 void aadCancelPauseSound();
+void aadResumeSound();
 
 #endif
