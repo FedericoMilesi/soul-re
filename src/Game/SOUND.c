@@ -138,7 +138,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SetSfxVolume);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SetVoiceVolume);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_PauseAllSound);
+void SOUND_PauseAllSound()
+{
+    if ((unsigned char)gameTrackerX.sound.soundsLoaded != 0)
+    {
+        aadShutdownReverb();
+
+        aadPauseSound();
+    }
+}
 
 void SOUND_ResumeAllSound()
 {

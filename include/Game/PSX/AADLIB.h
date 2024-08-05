@@ -19,5 +19,6 @@ void aadInitReverb();
 void aadShutdownReverb();
 void aadCancelPauseSound();
 void aadResumeSound();
+void aadPauseSound();
 
 #endif
