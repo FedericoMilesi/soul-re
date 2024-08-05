@@ -40,7 +40,60 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessInstanceSounds);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_EndInstanceSounds);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", isOkayToPlaySound);
+int isOkayToPlaySound(int flags, int spectralPlane, int hidden, int burning)
+{
+    int mask;
+    int tod;
+
+    if ((flags & 0xF))
+    {
+        tod = GAMELOOP_GetTimeOfDay();
+
+        switch (tod)
+        {
+        case 600:
+            mask = 0x1;
+            break;
+        case 700:
+        default:
+            mask = 0x2;
+            break;
+        case 1800:
+            mask = 0x4;
+            break;
+        case 1900:
+            mask = 0x8;
+            break;
+        }
+
+        if (!(flags & mask))
+        {
+            return 0;
+        }
+    }
+
+    if (((flags & 0x10)) && (spectralPlane == 0))
+    {
+        return 0;
+    }
+
+    if (((flags & 0x20)) && (spectralPlane != 0))
+    {
+        return 0;
+    }
+
+    if (((flags & 0x40)) && (hidden != 0))
+    {
+        return 0;
+    }
+
+    if (((flags & 0x80)) && (burning == 0))
+    {
+        return 0;
+    }
+
+    return 1;
+}
 
 void setPeriodicSoundStateOff(SoundInstance *soundInst, ObjectPeriodicSound *sound)
 {
