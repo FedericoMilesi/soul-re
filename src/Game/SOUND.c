@@ -128,7 +128,12 @@ void SOUND_HandleGlobalValueSignal(int name, long data)
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Init);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Free);
+void SOUND_Free()
+{
+    gameTrackerX.sound.soundsLoaded = 0;
+
+    aadShutdown();
+}
 
 void SOUND_SetMusicVariable(int variable, int value)
 {
