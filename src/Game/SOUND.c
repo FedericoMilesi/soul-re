@@ -130,7 +130,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Init);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Free);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_SetMusicVariable);
+void SOUND_SetMusicVariable(int variable, int value)
+{
+    aadSetUserVariable(variable, value);
+}
 
 void SOUND_SetMusicVolume(int newVolume)
 {
