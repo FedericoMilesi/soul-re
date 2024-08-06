@@ -139,6 +139,46 @@ typedef struct SavedBasic {
     unsigned char shiftedSaveSize;
 } SavedBasic;
 
+// size: 0x28
+typedef struct _SavedIntro {
+    // offset: 0000
+    unsigned char savedID;
+    // offset: 0001
+    unsigned char shiftedSaveSize;
+    // offset: 0002
+    unsigned char lightGroup;
+    // offset: 0003
+    unsigned char specturalLightGroup;
+    // offset: 0004 (8 bytes)
+    char name[8];
+    // offset: 000C
+    short introUniqueID;
+    // offset: 000E
+    short streamUnitID;
+    // offset: 0010
+    short birthUnitID;
+    // offset: 0012
+    unsigned short attachedUniqueID;
+    // offset: 0014 (6 bytes)
+    struct _SmallRotation smallRotation;
+    // offset: 001A (6 bytes)
+    struct _Position position;
+    // offset: 0020
+    long flags;
+    // offset: 0024
+    long flags2;
+} SavedIntro;
+
+// size: 0x342
+typedef struct SavedDeadDeadBits {
+    // offset: 0000
+    unsigned char savedID;
+    // offset: 0001
+    unsigned char shiftedSaveSize;
+    // offset: 0002 (832 bytes)
+    char deadDeadBits[832];
+} SavedDeadDeadBits;
+
 void SAVE_DebugSaveGame();
 void SAVE_LoadSaveGame();
 void SAVE_LoadSaveGame();
