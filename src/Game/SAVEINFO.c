@@ -128,7 +128,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_DeleteInstance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_SetDeadDeadBit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_RestoreGlobalSavePointer);
+void SAVE_RestoreGlobalSavePointer()
+{
+    SavedBasic *saveIntro;
+
+    GlobalSave = NULL;
+
+    for (saveIntro = (SavedBasic *)savedInfoTracker.InfoStart; (uintptr_t)saveIntro < (uintptr_t)savedInfoTracker.InfoEnd; saveIntro += 2 * (unsigned char)saveIntro->shiftedSaveSize)
+    {
+        if (saveIntro->savedID == 6)
+        {
+            GlobalSave = (GlobalSaveTracker *)saveIntro;
+            break;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IsUniqueIDDeadDead);
 
