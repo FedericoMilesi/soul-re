@@ -146,7 +146,35 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateGlobalSaveTracker);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_RestoreGlobalSaveTracker);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_SaveEverythingInMemory);
+void SAVE_SaveEverythingInMemory()
+{
+    Instance *instance;
+    long i;
+    Instance *next;
+    Level *level;
+
+    for (instance = gameTrackerX.instanceList->first, next = NULL; instance != NULL; instance = next, next = NULL)
+    {
+        next = instance->next;
+
+        level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+        if (level != NULL)
+        {
+            SAVE_Instance(instance, level);
+        }
+    }
+
+    for (i = 0; i < 16; i++)
+    {
+        if (StreamTracker.StreamList[i].used == 2)
+        {
+            EVENT_SaveEventsFromLevel(StreamTracker.StreamList[i].StreamUnitID, StreamTracker.StreamList[i].level);
+
+            SAVE_CreatedSavedLevel(StreamTracker.StreamList[i].StreamUnitID, StreamTracker.StreamList[i].level);
+        }
+    }
+}
 
 void SAVE_SaveGame()
 {
