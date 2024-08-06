@@ -149,13 +149,24 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_SaveEverythingInMemory);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_SaveGame);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_RestoreGame);
+extern char D_800D1E9C[];
+void SAVE_RestoreGame()
+{
+    gameTrackerX.streamFlags |= 0x200000;
+
+    SAVE_RestoreGlobalSavePointer();
+    SAVE_RestoreGlobalSaveTracker();
+
+    savedInfoTracker.InfoEnd = &savedInfoTracker.InfoStart[GlobalSave->sizeUsedInBlock];
+
+    //GAMELOOP_RequestLevelChange("under", 1, &gameTrackerX);
+    GAMELOOP_RequestLevelChange(D_800D1E9C, 1, &gameTrackerX);
+}
 
 void SAVE_DebugSaveGame()
 {
 }
 
-extern char D_800D1E9C[];
 void SAVE_LoadSaveGame()
 {
     gameTrackerX.streamFlags |= 0x200000;
