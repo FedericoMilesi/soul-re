@@ -4,7 +4,7 @@
 #include "Game/MEMPACK.h"
 
 //static SavedInfoTracker savedInfoTracker;
-EXTERN STATIC SavedInfoTracker savedInfoTracker;
+SavedInfoTracker savedInfoTracker;
 
 //static int the_header_size;
 EXTERN STATIC int the_header_size;
@@ -165,5 +165,8 @@ void SAVE_DebugSaveGame()
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_LoadSaveGame);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_SizeOfFreeSpace);
+long SAVE_SizeOfFreeSpace()
+{
+    return savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd;
+}
 
