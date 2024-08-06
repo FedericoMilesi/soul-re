@@ -132,7 +132,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_RestoreGlobalSavePointer);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IsUniqueIDDeadDead);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IsIntroDeadDead);
+long SAVE_IsIntroDeadDead(Intro *intro)
+{
+    return SAVE_IsUniqueIDDeadDead(intro->UniqueID);
+}
 
 void SAVE_DoInstanceDeadDead(Instance *instance)
 {

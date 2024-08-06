@@ -163,6 +163,7 @@ void SAVE_RestoreGlobalSaveTracker();
 void SAVE_SaveEverythingInMemory();
 void SAVE_UpdateGlobalSaveTracker();
 void SAVE_SetDeadDeadBit(int uniqueID, long set);
+long SAVE_IsUniqueIDDeadDead(long uniqueID);
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];
