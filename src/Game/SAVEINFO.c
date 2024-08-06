@@ -2,6 +2,7 @@
 #include "Game/SAVEINFO.h"
 #include "Game/MCARD/MEMCARD.h"
 #include "Game/MEMPACK.h"
+#include "Game/STRMLOAD.h"
 
 //static SavedInfoTracker savedInfoTracker;
 SavedInfoTracker savedInfoTracker;
@@ -147,7 +148,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_RestoreGlobalSaveTracker);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_SaveEverythingInMemory);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_SaveGame);
+void SAVE_SaveGame()
+{
+    while (STREAM_PollLoadQueue() != 0)
+    {
+    }
+
+    SAVE_SaveEverythingInMemory();
+
+    SAVE_UpdateGlobalSaveTracker();
+
+    GlobalSave->sizeUsedInBlock = *(unsigned short *)&savedInfoTracker.InfoEnd - *(unsigned short *)&savedInfoTracker.InfoStart;
+}
 
 extern char D_800D1E9C[];
 void SAVE_RestoreGame()
