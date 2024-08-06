@@ -13,7 +13,7 @@ EXTERN STATIC int the_header_size;
 EXTERN STATIC long numbufferedIntros;
 
 //static SavedBasic *bufferSavedIntroArray[64];
-EXTERN STATIC SavedBasic *bufferSavedIntroArray[64];
+SavedBasic *bufferSavedIntroArray[64];
 
 long DoMainMenu;
 
@@ -37,13 +37,11 @@ void SAVE_GetInstanceRotation(Instance *instance, SmallRotation *vector)
     }
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_ClearMemory);
-#else
 void SAVE_ClearMemory(GameTracker *gameTracker)
 {
     char *buffer;
+
+    (void)gameTracker;
 
     buffer = savedInfoTracker.MemoryCardBuffer;
 
@@ -66,7 +64,6 @@ void SAVE_ClearMemory(GameTracker *gameTracker)
 
     SAVE_GetSavedBlock(4, 0);
 }
-#endif
 
 void SAVE_Init(GameTracker *gt)
 {

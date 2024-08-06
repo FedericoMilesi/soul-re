@@ -157,6 +157,7 @@ void SAVE_SaveGame();
 long SAVE_SizeOfFreeSpace();
 void SAVE_RestoreGame();
 void SAVE_ClearMemory(GameTracker *gameTracker);
+void *SAVE_GetSavedBlock(long saveType, long extraSize);
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];
