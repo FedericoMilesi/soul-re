@@ -7,8 +7,7 @@
 #include "Game/GAMEPAD.h"
 #include "Game/SCRIPT.h"
 
-//static SavedInfoTracker savedInfoTracker;
-SavedInfoTracker savedInfoTracker;
+static SavedInfoTracker savedInfoTracker;
 
 //static int the_header_size;
 EXTERN STATIC int the_header_size;
@@ -16,8 +15,7 @@ EXTERN STATIC int the_header_size;
 //static long numbufferedIntros;
 EXTERN STATIC long numbufferedIntros;
 
-//static SavedBasic *bufferSavedIntroArray[64];
-SavedBasic *bufferSavedIntroArray[64];
+static SavedBasic *bufferSavedIntroArray[64];
 
 long DoMainMenu;
 

@@ -293,7 +293,7 @@ segments:
       - {start: 0x0C28AC, type: sbss, vram: 0x800D6B38, name: Game/PLAN/PLANAPI}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D6B88, name: Game/RAZIEL} # Game/RAZIEL/* include C files?
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D7364, name: Game/UNDRWRLD}
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D7374, name: Game/SAVEINFO}
+      - {start: 0x0C28AC, type: .sbss, vram: 0x800D7374, name: Game/SAVEINFO}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D7484, name: Game/ENTRYPOINT}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D7488, name: Game/VOICEXA}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D75B0, name: Game/LOCAL/LOCALSTR}
