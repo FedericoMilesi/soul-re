@@ -179,6 +179,33 @@ typedef struct SavedDeadDeadBits {
     char deadDeadBits[832];
 } SavedDeadDeadBits;
 
+typedef struct _SavedIntroWithIntro {
+    // offset: 0000
+    unsigned char savedID;
+    // offset: 0001
+    unsigned char shiftedSaveSize;
+    // offset: 0002
+    unsigned short attachedUniqueID;
+    // offset: 0004
+    short introOffset;
+    // offset: 0006
+    short birthUnitID;
+    // offset: 0008
+    short introUniqueID;
+    // offset: 000A
+    unsigned char lightGroup;
+    // offset: 000B
+    unsigned char specturalLightGroup;
+    // offset: 000C
+    long flags;
+    // offset: 0010
+    long flags2;
+    // offset: 0014 (6 bytes)
+    struct _SmallRotation smallRotation;
+    // offset: 001A (6 bytes)
+    struct _Position position;
+} SavedIntroWithIntro;
+
 void SAVE_DebugSaveGame();
 void SAVE_LoadSaveGame();
 void SAVE_LoadSaveGame();
@@ -204,6 +231,7 @@ void SAVE_SaveEverythingInMemory();
 void SAVE_UpdateGlobalSaveTracker();
 void SAVE_SetDeadDeadBit(int uniqueID, long set);
 long SAVE_IsUniqueIDDeadDead(long uniqueID);
+void SAVE_DeleteBlock(SavedBasic *savedBlock);
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];

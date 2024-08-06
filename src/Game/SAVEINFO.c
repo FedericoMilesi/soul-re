@@ -124,7 +124,22 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_DeleteBlock);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_Instance);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_DeleteInstance);
+void SAVE_DeleteInstance(Instance *instance)
+{
+    SavedBasic *saveIntro;
+
+    for (saveIntro = (SavedBasic *)savedInfoTracker.InfoStart; (uintptr_t)saveIntro < (uintptr_t)savedInfoTracker.InfoEnd; saveIntro += saveIntro->shiftedSaveSize << 1)
+    {
+        if (((saveIntro->savedID == 1) && (((SavedIntro *)saveIntro)->introUniqueID == instance->introUniqueID)) ||
+        ((saveIntro->savedID == 7) && (((SavedIntroWithIntro *)saveIntro)->introUniqueID == instance->introUniqueID)) ||
+        ((saveIntro->savedID == 5) && (((SavedIntroSmall *)saveIntro)->introUniqueID == instance->introUniqueID)) ||
+        ((saveIntro->savedID == 8) && (((SavedIntroSpline *)saveIntro)->introUniqueID == instance->introUniqueID)))
+        {
+            SAVE_DeleteBlock(saveIntro);
+            break;
+        }
+    }
+}
 
 void SAVE_SetDeadDeadBit(int uniqueID, long set)
 {
