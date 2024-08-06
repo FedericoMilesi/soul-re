@@ -10,5 +10,6 @@ long COLLIDE_IntersectLineAndPlane_S(SVector *planePoint, Position *oldPos, Posi
 int CheckVolatile(void *);
 void G2Quat_FromEuler_S(G2Quat *quatInfo, G2EulerAngles *preQuat);
 void COLLIDE_NearestPointOnLine_S(SVector *linePoint, SVECTOR *oldPoint, SVECTOR *newPoint, Position *position);
+void G2Quat_FromMatrix_S(G2Quat *quat, G2Matrix *matrix);
 
 #endif
