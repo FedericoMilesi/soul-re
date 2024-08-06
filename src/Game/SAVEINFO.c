@@ -3,6 +3,8 @@
 #include "Game/MCARD/MEMCARD.h"
 #include "Game/MEMPACK.h"
 #include "Game/STRMLOAD.h"
+#include "Game/DEBUG.h"
+#include "Game/GAMEPAD.h"
 
 //static SavedInfoTracker savedInfoTracker;
 SavedInfoTracker savedInfoTracker;
@@ -144,7 +146,34 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetIntroSpline);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateGlobalSaveTracker);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_RestoreGlobalSaveTracker);
+extern char D_800D1E84[];
+void SAVE_RestoreGlobalSaveTracker()
+{
+    if (GlobalSave->saveVersion != 21793)
+    {
+        //DEBUG_FatalError("error: old save game\n");
+        DEBUG_FatalError(D_800D1E84);
+    }
+    else
+    {
+        gameTrackerX.currentTime = GlobalSave->currentTime;
+
+        memcpy(&gameTrackerX.sound, &GlobalSave->sound, sizeof(gSoundData));
+
+        SOUND_SetSfxVolume(gameTrackerX.sound.gSfxVol);
+        SOUND_SetMusicVolume(gameTrackerX.sound.gMusicVol);
+        SOUND_SetVoiceVolume(gameTrackerX.sound.gVoiceVol);
+
+        if ((GlobalSave->flags & 0x2))
+        {
+            GAMEPAD_EnableDualShock();
+        }
+        else
+        {
+            GAMEPAD_DisableDualShock();
+        }
+    }
+}
 
 void SAVE_SaveEverythingInMemory()
 {
