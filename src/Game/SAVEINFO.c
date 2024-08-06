@@ -163,7 +163,16 @@ void SAVE_DebugSaveGame()
 {
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_LoadSaveGame);
+extern char D_800D1E9C[];
+void SAVE_LoadSaveGame()
+{
+    gameTrackerX.streamFlags |= 0x200000;
+
+    //GAMELOOP_RequestLevelChange("under", 1, &gameTrackerX);
+    GAMELOOP_RequestLevelChange(D_800D1E9C, 1, &gameTrackerX);
+
+    gameTrackerX.gameMode = 0;
+}
 
 long SAVE_SizeOfFreeSpace()
 {
