@@ -156,6 +156,7 @@ void SAVE_UpdateLevelWithSave(StreamUnit *streamUnit);
 void SAVE_SaveGame();
 long SAVE_SizeOfFreeSpace();
 void SAVE_RestoreGame();
+void SAVE_ClearMemory(GameTracker *gameTracker);
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];

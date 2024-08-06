@@ -1,5 +1,7 @@
 #include "common.h"
 #include "Game/SAVEINFO.h"
+#include "Game/MCARD/MEMCARD.h"
+#include "Game/MEMPACK.h"
 
 //static SavedInfoTracker savedInfoTracker;
 EXTERN STATIC SavedInfoTracker savedInfoTracker;
@@ -12,6 +14,8 @@ EXTERN STATIC long numbufferedIntros;
 
 //static SavedBasic *bufferSavedIntroArray[64];
 EXTERN STATIC SavedBasic *bufferSavedIntroArray[64];
+
+long DoMainMenu;
 
 void SAVE_GetInstanceRotation(Instance *instance, SmallRotation *vector)
 {
@@ -64,7 +68,32 @@ void SAVE_ClearMemory(GameTracker *gameTracker)
 }
 #endif
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_Init);
+#else
+void SAVE_Init(GameTracker *gt)
+{
+    void *buffer;
+
+    buffer = MEMPACK_Malloc(24576, 18);
+
+    if (DoMainMenu != 0)
+    {
+        gt->memcard = &gMemcard;
+
+        the_header_size = memcard_initialize(&gMemcard, gt, 3, buffer, 24576);
+    }
+    else
+    {
+        gt->memcard = NULL;
+    }
+
+    savedInfoTracker.MemoryCardBuffer = (char *)buffer;
+
+    SAVE_ClearMemory(gt);
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedBlock);
 

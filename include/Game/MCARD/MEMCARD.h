@@ -17,7 +17,10 @@ typedef struct memcard_t {
     short wrongVerison;
 } memcard_t;
 
+extern memcard_t gMemcard;
+
 void memcard_end(memcard_t *memcard);
 int maybe_start(memcard_t *memcard);
+int memcard_initialize(memcard_t *memcard, void *gt, int nblocks, void *buffer, int nbytes);
 
 #endif
