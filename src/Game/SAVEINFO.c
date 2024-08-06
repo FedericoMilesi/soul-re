@@ -119,7 +119,35 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateLevelWithSave);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_CreatedSavedLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_DeleteBlock);
+void SAVE_DeleteBlock(SavedBasic *savedBlock)
+{
+    long size;
+    char *nextBlock;
+    int i;
+
+    size = savedBlock->shiftedSaveSize << 2;
+
+    nextBlock = (char *)savedBlock + size;
+
+    if (numbufferedIntros != 0)
+    {
+        for (i = 0; i < 64; i++)
+        {
+            if (bufferSavedIntroArray[i] == savedBlock)
+            {
+                bufferSavedIntroArray[i] = NULL;
+            }
+            else if (bufferSavedIntroArray[i] > savedBlock)
+            {
+                bufferSavedIntroArray[i] = (SavedBasic *)((char *)bufferSavedIntroArray[i] - size);
+            }
+        }
+    }
+
+    memmove(savedBlock, nextBlock, savedInfoTracker.InfoEnd - nextBlock);
+
+    savedInfoTracker.InfoEnd -= size;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_Instance);
 
