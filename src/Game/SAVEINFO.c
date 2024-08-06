@@ -270,7 +270,7 @@ void SAVE_RestoreGlobalSavePointer()
 
     GlobalSave = NULL;
 
-    for (saveIntro = (SavedBasic *)savedInfoTracker.InfoStart; (uintptr_t)saveIntro < (uintptr_t)savedInfoTracker.InfoEnd; saveIntro += 2 * (unsigned char)saveIntro->shiftedSaveSize)
+    for (saveIntro = (SavedBasic *)savedInfoTracker.InfoStart; (uintptr_t)saveIntro < (uintptr_t)savedInfoTracker.InfoEnd; saveIntro += saveIntro->shiftedSaveSize << 1)
     {
         if (saveIntro->savedID == 6)
         {
