@@ -323,7 +323,7 @@ SavedIntroSpline *SAVE_GetIntroSpline(Instance *instance)
 {
     SavedBasic *curSave;
 
-    for (curSave = (SavedBasic *)savedInfoTracker.InfoStart; (uintptr_t)curSave < (uintptr_t)savedInfoTracker.InfoEnd; curSave += 2 * curSave->shiftedSaveSize)
+    for (curSave = (SavedBasic *)savedInfoTracker.InfoStart; (uintptr_t)curSave < (uintptr_t)savedInfoTracker.InfoEnd; curSave += curSave->shiftedSaveSize << 1)
     {
         if ((curSave->savedID == 8) && (((SavedIntroSpline *)curSave)->introUniqueID == instance->introUniqueID))
         {
