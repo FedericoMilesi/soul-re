@@ -234,17 +234,13 @@ void SAVE_SetDeadDeadBit(int uniqueID, long set)
 
     if (uniqueID < 8192)
     {
-        saveIntro = (SavedIntro *)savedInfoTracker.InfoStart;
-
-        while ((uintptr_t)saveIntro < (uintptr_t)savedInfoTracker.InfoEnd)
+        for (saveIntro = (SavedIntro *)savedInfoTracker.InfoStart; (uintptr_t)saveIntro < (uintptr_t)savedInfoTracker.InfoEnd; saveIntro = (SavedIntro *)((char *)saveIntro + (saveIntro->shiftedSaveSize << 2)))
         {
             if (saveIntro->savedID == 4)
             {
                 deadDeadBits = (SavedDeadDeadBits *)saveIntro;
                 break;
             }
-
-            saveIntro = (SavedIntro *)((char *)saveIntro + (saveIntro->shiftedSaveSize << 2));
         }
 
         if (deadDeadBits != NULL)
