@@ -17,6 +17,8 @@ BlockVramEntry vramBlockList[90];
 
 long numOfBlocksUsed;
 
+long VRAM_NeedToUpdateMorph = 0;
+
 static inline long VRAM_GetDispPage()
 {
     return (gameTrackerX.gameData.asmData.dispPage ^ 1) << 8;
