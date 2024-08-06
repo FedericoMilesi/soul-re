@@ -142,7 +142,20 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UndestroyInstance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedSmallIntro);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetIntroSpline);
+SavedIntroSpline *SAVE_GetIntroSpline(Instance *instance)
+{
+    SavedBasic *curSave;
+
+    for (curSave = (SavedBasic *)savedInfoTracker.InfoStart; (uintptr_t)curSave < (uintptr_t)savedInfoTracker.InfoEnd; curSave += 2 * curSave->shiftedSaveSize)
+    {
+        if ((curSave->savedID == 8) && (((SavedIntroSpline *)curSave)->introUniqueID == instance->introUniqueID))
+        {
+            return (SavedIntroSpline *)curSave;
+        }
+    }
+
+    return NULL;
+}
 
 void SAVE_UpdateGlobalSaveTracker()
 {
