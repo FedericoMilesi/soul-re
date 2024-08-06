@@ -68,10 +68,6 @@ void SAVE_ClearMemory(GameTracker *gameTracker)
 }
 #endif
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_Init);
-#else
 void SAVE_Init(GameTracker *gt)
 {
     void *buffer;
@@ -93,7 +89,6 @@ void SAVE_Init(GameTracker *gt)
 
     SAVE_ClearMemory(gt);
 }
-#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedBlock);
 
