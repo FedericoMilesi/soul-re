@@ -113,7 +113,20 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IntroForStreamID);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_HasSavedIntro);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_HasSavedLevel);
+SavedLevel *SAVE_HasSavedLevel(long areaID)
+{
+    SavedLevel *savedLevel;
+
+    for (savedLevel = (SavedLevel *)savedInfoTracker.InfoStart; (uintptr_t)savedLevel < (uintptr_t)savedInfoTracker.InfoEnd; savedLevel = (SavedLevel *)((char *)savedLevel + (savedLevel->shiftedSaveSize << 2)))
+    {
+        if ((savedLevel->savedID == 3) && (savedLevel->areaID == areaID))
+        {
+            return savedLevel;
+        }
+    }
+
+    return NULL;
+}
 
 void SAVE_UpdateLevelWithSave(StreamUnit *streamUnit)
 {
