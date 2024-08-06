@@ -4,6 +4,7 @@
 #include "Game/G2/POOLMMG2.h"
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/G2/ANMINTRP.h"
+#include "Game/HASM.h"
 
 //static G2AnimChanStatusBlockPool _chanStatusBlockPool;
 G2AnimChanStatusBlockPool _chanStatusBlockPool;
