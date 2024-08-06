@@ -137,7 +137,7 @@ void SAVE_UpdateLevelWithSave(StreamUnit *streamUnit)
 
             bspTree->localOffset = savedLevel->bspTreeArray[i].localOffset;
 
-            bspTree->flags = ((((unsigned short)bspTree->flags << 16) >> 24) << 8);
+            bspTree->flags = (((unsigned short)bspTree->flags << 16) >> 24) << 8;
 
             bspTree->flags |= savedLevel->bspTreeArray[i].importantFlagsSaved;
 
