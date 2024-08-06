@@ -119,6 +119,26 @@ typedef struct SavedLevel {
     short numberBSPTreesSaved;
 } SavedLevel;
 
+// size: 0x10
+typedef struct SavedInfoTracker {
+    // offset: 0000
+    char *MemoryCardBuffer;
+    // offset: 0004
+    char *InfoStart;
+    // offset: 0008
+    char *InfoEnd;
+    // offset: 000C
+    char *EndOfMemory;
+} SavedInfoTracker;
+
+// size: 0x2
+typedef struct SavedBasic {
+    // offset: 0000
+    unsigned char savedID;
+    // offset: 0001
+    unsigned char shiftedSaveSize;
+} SavedBasic;
+
 void SAVE_DebugSaveGame();
 void SAVE_LoadSaveGame();
 void SAVE_LoadSaveGame();
