@@ -5,6 +5,7 @@
 #include "Game/STRMLOAD.h"
 #include "Game/DEBUG.h"
 #include "Game/GAMEPAD.h"
+#include "Game/SCRIPT.h"
 
 //static SavedInfoTracker savedInfoTracker;
 SavedInfoTracker savedInfoTracker;

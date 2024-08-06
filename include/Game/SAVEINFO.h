@@ -232,6 +232,9 @@ void SAVE_UpdateGlobalSaveTracker();
 void SAVE_SetDeadDeadBit(int uniqueID, long set);
 long SAVE_IsUniqueIDDeadDead(long uniqueID);
 void SAVE_DeleteBlock(SavedBasic *savedBlock);
+long SAVE_SaveableInstance(Instance *instance);
+SavedIntro *SAVE_UpdateSavedIntro(Instance *instance, Level *level, SavedIntro *savedIntro, evControlSaveDataData *extraData);
+SavedIntroWithIntro *SAVE_UpdateSavedIntroWithIntro(Instance *instance, Level *level, SavedIntroWithIntro *savedIntro, evControlSaveDataData *extraData);
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];

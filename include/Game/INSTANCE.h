@@ -274,5 +274,6 @@ void INSTANCE_ReallyRemoveInstance(InstanceList *list, Instance *instance, long 
 Instance *INSTANCE_GetChildLinkedToSegment(Instance *instance, int segment);
 int INSTANCE_SetStatsData(Instance *instance, Instance *checkee, Vector *checkPoint, evCollideInstanceStatsData *data, MATRIX *mat);
 void INSTANCE_ReallyRemoveAllChildren(Instance *instance);
+long INSTANCE_GetSplineFrameNumber(Instance *instance, MultiSpline *spline);
 
 #endif
