@@ -144,7 +144,23 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedSmallIntro);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetIntroSpline);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateGlobalSaveTracker);
+void SAVE_UpdateGlobalSaveTracker()
+{
+    GlobalSave->currentTime = (unsigned long)gameTrackerX.currentTime;
+
+    memcpy(&GlobalSave->sound, &gameTrackerX.sound, sizeof(gSoundData));
+
+    GlobalSave->saveVersion = 21793;
+
+    if (GAMEPAD_DualShockEnabled() != 0)
+    {
+        GlobalSave->flags |= 0x2;
+    }
+    else
+    {
+        GlobalSave->flags &= ~0x2;
+    }
+}
 
 extern char D_800D1E84[];
 void SAVE_RestoreGlobalSaveTracker()
