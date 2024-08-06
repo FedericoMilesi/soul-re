@@ -138,7 +138,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_DoInstanceDeadDead);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_MarkDeadDead);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UndestroyInstance);
+void SAVE_UndestroyInstance(Instance *instance)
+{
+    SAVE_SetDeadDeadBit(instance->introUniqueID, 0);
+}
 
 SavedIntroSmall *SAVE_GetSavedSmallIntro(Instance *instance)
 {
