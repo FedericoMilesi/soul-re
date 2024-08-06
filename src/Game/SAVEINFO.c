@@ -136,7 +136,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IsIntroDeadDead);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_DoInstanceDeadDead);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_MarkDeadDead);
+void SAVE_MarkDeadDead(Instance *instance)
+{
+    instance->flags |= 0x800000;
+}
 
 void SAVE_UndestroyInstance(Instance *instance)
 {
