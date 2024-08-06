@@ -115,7 +115,49 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_HasSavedIntro);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_HasSavedLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateLevelWithSave);
+void SAVE_UpdateLevelWithSave(StreamUnit *streamUnit)
+{
+    long Zoffset;
+    ActualSavedLevel *savedLevel;
+    Terrain *terrain;
+    long i;
+    BSPTree *bspTree;
+
+    Zoffset = streamUnit->level->terrain->BSPTreeArray->globalOffset.z;
+
+    savedLevel = (ActualSavedLevel *)SAVE_HasSavedLevel(streamUnit->StreamUnitID);
+
+    if (savedLevel != NULL)
+    {
+        terrain = streamUnit->level->terrain;
+
+        for (i = 0; i < savedLevel->numberBSPTreesSaved; i++)
+        {
+            bspTree = &terrain->BSPTreeArray[savedLevel->bspTreeArray[i].bspIndex];
+
+            bspTree->localOffset = savedLevel->bspTreeArray[i].localOffset;
+
+            bspTree->flags = ((((unsigned short)bspTree->flags << 16) >> 24) << 8);
+
+            bspTree->flags |= savedLevel->bspTreeArray[i].importantFlagsSaved;
+
+            bspTree->globalOffset.x += bspTree->localOffset.x;
+            bspTree->globalOffset.y += bspTree->localOffset.y;
+            bspTree->globalOffset.z += bspTree->localOffset.z;
+        }
+
+        if ((savedLevel->waterZ != -32767) && (savedLevel->waterZ != 32767))
+        {
+            streamUnit->level->waterZLevel = savedLevel->waterZ + Zoffset;
+        }
+        else
+        {
+            streamUnit->level->waterZLevel = savedLevel->waterZ;
+        }
+
+        terrain->UnitChangeFlags |= 0x3;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_CreatedSavedLevel);
 

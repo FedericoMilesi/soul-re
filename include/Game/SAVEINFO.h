@@ -206,6 +206,32 @@ typedef struct _SavedIntroWithIntro {
     struct _Position position;
 } SavedIntroWithIntro;
 
+// size: 0x8
+typedef struct SavedBspTree {
+    // offset: 0000 (6 bytes)
+    struct _Position localOffset;
+    // offset: 0006
+    unsigned char importantFlagsSaved;
+    // offset: 0007
+    unsigned char bspIndex;
+} SavedBspTree;
+
+// size: 0x10
+typedef struct ActualSavedLevel {
+    // offset: 0000
+    unsigned char savedID;
+    // offset: 0001
+    unsigned char shiftedSaveSize;
+    // offset: 0002
+    short areaID;
+    // offset: 0004
+    short waterZ;
+    // offset: 0006
+    short numberBSPTreesSaved;
+    // offset: 0008 (8 bytes)
+    struct SavedBspTree bspTreeArray[1];
+} ActualSavedLevel;
+
 void SAVE_DebugSaveGame();
 void SAVE_LoadSaveGame();
 void SAVE_LoadSaveGame();
@@ -235,6 +261,7 @@ void SAVE_DeleteBlock(SavedBasic *savedBlock);
 long SAVE_SaveableInstance(Instance *instance);
 SavedIntro *SAVE_UpdateSavedIntro(Instance *instance, Level *level, SavedIntro *savedIntro, evControlSaveDataData *extraData);
 SavedIntroWithIntro *SAVE_UpdateSavedIntroWithIntro(Instance *instance, Level *level, SavedIntroWithIntro *savedIntro, evControlSaveDataData *extraData);
+SavedLevel *SAVE_HasSavedLevel(long areaID);
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];
