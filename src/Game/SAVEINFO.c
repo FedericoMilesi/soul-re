@@ -134,7 +134,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IsUniqueIDDeadDead);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IsIntroDeadDead);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_DoInstanceDeadDead);
+void SAVE_DoInstanceDeadDead(Instance *instance)
+{
+    SAVE_DeleteInstance(instance);
+
+    SAVE_SetDeadDeadBit(instance->introUniqueID, 1);
+}
 
 void SAVE_MarkDeadDead(Instance *instance)
 {
