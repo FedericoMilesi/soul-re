@@ -66,6 +66,7 @@ short RENDER_currentStreamUnitID;
 
 static int s_zval;
 
+/* TODO: Move these function declarations over to STREAM.h */
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
 void RelocateTerrain(Terrain *terrain, SVector *offset);
@@ -78,6 +79,9 @@ void RelocateSFXMarkers(SFXMkr *sfxMkrList, int numSFXMkrs, SVector *offset);
 void RelocateInstances(SVector *offset);
 void RelocatePlanPool(PlanningNode *planPool, SVector *offset);
 void RelocateStreamPortals(StreamUnitPortal *StreamUnitList, int NumStreamUnits, SVector *offset);
+void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit);
+void MORPH_UpdateTrackingPoint(TFace *face, Level *level);
+BSPTree *STREAM_GetBspTree(StreamUnit *streamUnit, long bspNumber);
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName)
 {
@@ -3533,7 +3537,6 @@ void CalcVert(VECTOR *v, VECTOR *v1, VECTOR *v2, int dist1, int dist2, int k, in
     v->vz = (((v2->vz - v1->vz) >> 12) * (dist2 / diff)) + v2->vz;
 }
 
-int AddClippedTri(SVECTOR *iv, RECT *cliprect, int *minz);
 INCLUDE_ASM("asm/nonmatchings/Game/STREAM", AddClippedTri);
 
 int STREAM_GetClipRect(StreamUnitPortal *portal, RECT *rect)

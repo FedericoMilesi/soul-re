@@ -559,20 +559,18 @@ void MORPH_UpdateNormals(Level *BaseLevel);
 void WARPGATE_FixUnit(StreamUnit *streamUnit);
 void STREAM_AdjustMultiSpline(MultiSpline *multi, SVector *offset);
 StreamUnit *STREAM_LoadLevel(char *baseAreaName, StreamUnitPortal *streamPortal, int loadnext);
-//void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit);
 void PreloadAllConnectedUnits(StreamUnit *streamUnit, SVector *offset);
 void STREAM_OffsetInstancePosition(Instance *instance, SVector *offset, int streamSignalFlag);
 long WARPGATE_GetWarpRoomIndex(char *name);
-//void MORPH_UpdateTrackingPoint(TFace *face, Level *level);
 void MORPH_BringBackNormals(Level *BaseLevel);
 void WARPGATE_DrawWarpGateRim(StreamUnit *streamUnit, long drawOn);
 void WARPGATE_HideAllCloudCovers();
 Instance *WARPGATE_UnHideCloudCoverInUnit(long streamUnitID);
 void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStreamPortal, StreamUnit *mainStreamUnit, RECT *cliprect);
 void WARPGATE_BlockWarpGateEntrance(StreamUnit *streamUnit, long collideOn);
-//BSPTree *STREAM_GetBspTree(StreamUnit *streamUnit, long bspNumber);
 long GetFogColor(StreamUnitPortal *portal, StreamUnit *mainStreamUnit, Level *mainLevel);
 void DrawFogRectangle(RECT *cliprect, PrimPool *primPool, int otzpos, unsigned long **drawot, long color);
 long StreamRenderLevel(StreamUnit *currentUnit, Level *mainLevel, unsigned long **drawot, long portalFogColor);
+int AddClippedTri(SVECTOR *iv, RECT *cliprect, int *minz);
 
 #endif
