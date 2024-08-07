@@ -1,8 +1,7 @@
 #include "common.h"
+#include "Game/PIPE3D.h"
 #include "Game/MATH3D.h"
 #include "Game/HASM.h"
-
-void PIPE3D_NormalizeMatrix(MATRIX *target, MATRIX *source);
 
 void PIPE3D_AspectAdjustMatrix(MATRIX *matrix)
 {

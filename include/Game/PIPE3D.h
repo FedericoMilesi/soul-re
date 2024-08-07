@@ -4,5 +4,6 @@
 #include "TYPES.h"
 
 void PIPE3D_InvertTransform(MATRIX *target, MATRIX *source);
+void PIPE3D_NormalizeMatrix(MATRIX *target, MATRIX *source);
 
 #endif
