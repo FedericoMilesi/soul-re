@@ -526,7 +526,7 @@ long SIGNAL_IsStreamSignal(Signal *signal, long *isWarpGate)
 
         if (done == 0)
         {
-            signal = (Signal *)((char *)signal + ((signalInfoList[signalNumber].length + 1) * 4));
+            signal = (Signal *)((char *)signal + ((signalInfoList[signalNumber].length + 1) * 4)); // TODO: this needs rewriting because the * 4 is likely implicit
         }
     } while (done == 0);
 
@@ -552,7 +552,7 @@ MultiSignal *SIGNAL_RelocateSignal(MultiSignal *multiSignal, long offset)
             signalInfoList[signal->id & 0x7FFFFFFF].signalRelocateFunc(signal, offset);
         }
 
-        signal = (Signal *)((char *)signal + ((signalInfoList[signal->id & 0x7FFFFFFF].length + 1) * 4));
+        signal = (Signal *)((char *)signal + ((signalInfoList[signal->id & 0x7FFFFFFF].length + 1) * 4)); // TODO: this needs rewriting because the * 4 is likely implicit
     }
 
     return (MultiSignal *)&signal->data.callSignal;
@@ -578,7 +578,7 @@ MultiSignal *SIGNAL_FindSignal(Level *level, long id)
 
         for (i = 0; i < msignal->numSignals; i++)
         {
-            signal = (Signal *)((char *)signal + (signalInfoList[signal->id & 0x7FFFFFFF].length + 1) * 4);
+            signal = (Signal *)((char *)signal + (signalInfoList[signal->id & 0x7FFFFFFF].length + 1) * 4); // TODO: this needs rewriting because the * 4 is likely implicit
         }
 
         msignal = (MultiSignal *)&signal->data.callSignal;
