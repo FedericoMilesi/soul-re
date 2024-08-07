@@ -40,15 +40,11 @@ void SCRIPT_InstanceSplineInit(Instance *instance)
     if (multi != NULL)
     {
         sd = SCRIPT_GetPosSplineDef(instance, multi, isParent, isClass);
-
         rsd = SCRIPT_GetRotSplineDef(instance, multi, isParent, isClass);
-
         ssd = SCRIPT_GetScaleSplineDef(instance, multi, isParent, isClass);
 
         spline = multi->positional;
-
         rspline = multi->rotational;
-
         sspline = multi->scaling;
 
         if (rspline != NULL)
