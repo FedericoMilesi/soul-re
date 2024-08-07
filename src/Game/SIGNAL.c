@@ -9,7 +9,7 @@
 #include "Game/SAVEINFO.h"
 #include "Libs/STRING.h"
 
-void (*HandleGlobalValueSignal[1])() = {SOUND_HandleGlobalValueSignal};
+/*Unused*/ void (*HandleGlobalValueSignal[1])() = {SOUND_HandleGlobalValueSignal};
 
 long SIGNAL_HandleLightGroup(Instance *instance, Signal *signal)
 {

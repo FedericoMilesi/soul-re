@@ -381,7 +381,7 @@ int STREAM_TryAndDumpANonResidentObject()
     return -1;
 }
 
-static char D_800D18C4[] = "LOW MEMORY: Dumping monster %s\n";
+/*Unused*/ static char D_800D18C4[] = "LOW MEMORY: Dumping monster %s\n";
 
 int InsertGlobalObject(char *name, GameTracker *gameTracker)
 {
