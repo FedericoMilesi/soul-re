@@ -75,6 +75,7 @@
         "undrwrld.h": "c",
         "stream.h": "c",
         "vram.h": "c",
-        "script.h": "c"
+        "script.h": "c",
+        "voicexa.h": "c"
     }
 }

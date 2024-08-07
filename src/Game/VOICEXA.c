@@ -5,12 +5,6 @@
 
 typedef void (*voiceCmd)(XAVoiceTracker *vt, short voiceIndex);
 
-void voiceCmdPlay(XAVoiceTracker *vt, short voiceIndex);
-void voiceCmdStop(XAVoiceTracker *vt, short cmdParam);
-void voiceCmdPause(XAVoiceTracker *vt, short cmdParam);
-void voiceCmdResume(XAVoiceTracker *vt, short cmdParam);
-void voiceCmdNull(XAVoiceTracker *vt, short cmdParam);
-
 XAVoiceTracker voiceTracker;
 
 XAVoiceListEntry *voiceList;

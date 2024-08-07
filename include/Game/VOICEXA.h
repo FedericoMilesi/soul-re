@@ -84,5 +84,10 @@ typedef struct XAVoiceListEntry {
 } XAVoiceListEntry;
 
 int VOICEXA_FinalStatus(XAVoiceTracker *vt);
+void voiceCmdPlay(XAVoiceTracker *vt, short voiceIndex);
+void voiceCmdStop(XAVoiceTracker *vt, short cmdParam);
+void voiceCmdPause(XAVoiceTracker *vt, short cmdParam);
+void voiceCmdResume(XAVoiceTracker *vt, short cmdParam);
+void voiceCmdNull(XAVoiceTracker *vt, short cmdParam);
 
 #endif
