@@ -14,12 +14,6 @@
 #include "Game/MONSTER/HUMAN.h"
 #include "Game/CAMERA.h"
 
-void INSTANCE_BuildStaticShadow();
-int INSTANCE_InPlane(Instance *instance, int plane);
-void INSTANCE_UnlinkChildren(Instance *instance);
-int INSTANCE_SetStatsData(Instance *instance, Instance *checkee, Vector *checkPoint, evCollideInstanceStatsData *data, MATRIX *mat);
-void INSTANCE_DefaultInit(Instance *instance, Object *object, int modelNum);
-
 void INSTANCE_Deactivate(Instance *instance)
 {
     Object *object;

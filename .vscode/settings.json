@@ -78,6 +78,8 @@
         "script.h": "c",
         "voicexa.h": "c",
         "reaver.h": "c",
-        "pipe3d.h": "c"
+        "pipe3d.h": "c",
+        "quatg2.h": "c",
+        "instncg2.h": "c"
     }
 }
