@@ -1,7 +1,7 @@
 #ifndef _INSTANCE_H_
 #define _INSTANCE_H_
 
-typedef struct _Instance Instance;
+typedef struct _Instance Instance; // TODO: This typedef should be inlined in the actual struct
 
 #include "common.h"
 #include "Game/LIST.h"
