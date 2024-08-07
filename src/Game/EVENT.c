@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/EVENT.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_UpdateResetSignalArrayAndWaterMovement);
 
@@ -16,7 +17,6 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_KillSpecificHint);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_GetCurrentHint);
 
-void EVENT_ProcessTimers();
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ProcessTimers);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ProcessHints);
@@ -33,7 +33,6 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_Init);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_GetNextTerrainMove);
 
-void EVENT_ProcessMovingWater();
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ProcessMovingWater);
 
 void EVENT_DoProcess()
@@ -221,7 +220,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_RemoveStreamToInstanceList);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_RelocateInstanceList);
 
-void EVENT_PrintVars(void)
+void EVENT_PrintVars()
 {
 }
 

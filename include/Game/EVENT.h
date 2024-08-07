@@ -152,5 +152,7 @@ void EVENT_LoadEventsForLevel(long levelID, Level *level);
 void EVENT_AddSignalToReset(MultiSignal *mSignal);
 void EVENT_AddStreamToInstanceList(StreamUnit *stream);
 void EVENT_PrintVars();
+void EVENT_ProcessMovingWater();
+void EVENT_ProcessTimers();
 
 #endif
