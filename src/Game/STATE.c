@@ -8,6 +8,7 @@
 static char circBuf[4096];
 
 static G2AnimAlphaTable *G2AlphaTables[7] = {0};
+
 static void *circWhere = circBuf;
 
 static inline void STATE_ConfigThrowFields(evObjectThrowData *Ptr, SVector *angularVel, long spinType)
@@ -695,7 +696,7 @@ void G2EmulationInit()
 
     if (G2AlphaTables[1] == NULL)
     {
-        G2AlphaTables[1] = (G2AnimAlphaTable *)MEMPACK_Malloc(18, 25);
+        G2AlphaTables[1] = (G2AnimAlphaTable *)MEMPACK_Malloc(18, 25); // TODO: find struct sizeof for allocSize parameter
 
         G2AlphaTables[1]->size = 4;
 
@@ -719,7 +720,7 @@ void G2EmulationInit()
 
     if (G2AlphaTables[3] == NULL)
     {
-        G2AlphaTables[3] = (G2AnimAlphaTable *)MEMPACK_Malloc(6, 25);
+        G2AlphaTables[3] = (G2AnimAlphaTable *)MEMPACK_Malloc(6, 25); // TODO: find struct sizeof for allocSize parameter
 
         G2AlphaTables[3]->size = 1;
 
