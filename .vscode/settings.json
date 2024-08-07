@@ -76,6 +76,7 @@
         "stream.h": "c",
         "vram.h": "c",
         "script.h": "c",
-        "voicexa.h": "c"
+        "voicexa.h": "c",
+        "reaver.h": "c"
     }
 }

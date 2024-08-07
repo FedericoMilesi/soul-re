@@ -94,5 +94,6 @@ typedef struct __ReaverData {
 } ReaverData;
 
 void CollideReaverProjectile(Instance *instance, GameTracker *gameTracker);
+void _SoulReaverAnimate(Instance *instance);
 
 #endif
