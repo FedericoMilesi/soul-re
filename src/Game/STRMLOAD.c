@@ -173,7 +173,6 @@ int STREAM_IsCdBusy(long *numberInQueue)
 static char D_800D19A4[] = "%s status %d\n";
 static char D_800D19B4[] = "(%d)";
 static char D_800D19BC[] = "Could not read directory hash %d\n";
-int STREAM_PollLoadQueue();
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_PollLoadQueue);
 
 LoadQueueEntry *STREAM_SetUpQueueEntry(char *fileName, void *retFunc, void *retData, void *retData2, void **retPointer, int fromhead)
