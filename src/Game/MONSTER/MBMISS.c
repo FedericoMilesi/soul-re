@@ -283,7 +283,7 @@ void WCBEGG_ExplodeCollide(Instance *instance, GameTracker *gameTracker)
 
     data = (PhysObData *)instance->extraData;
 
-    s1 = (HSphere *)(unsigned char)collideInfo->type1;
+    s1 = (HSphere *)((uintptr_t)(unsigned char)collideInfo->type1);
 
     temp = collideInfo->prim1;
 
