@@ -19,5 +19,8 @@ long PHYSICS_FindAFromDAndT(long d, long t);
 long PHYSICS_FindVFromAAndD(long a, long d);
 void PHYSICS_SetVAndAFromRot(Instance *instance, Rotation *rot, long v, long a);
 void PHYSICS_CheckLineInWorld(Instance *instance, PCollideInfo *pcollideInfo);
+int PHYSICS_CheckFaceStick(PCollideInfo *CInfo);
+void PHYSICS_GenericLineCheck(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
+void PHYSICS_GenericLineCheckMask(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
 
 #endif
