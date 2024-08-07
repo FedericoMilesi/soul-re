@@ -60,6 +60,7 @@ void SCRIPT_InstanceSplineInit(Instance *instance)
 
             if ((isParent == 0) && (isClass == 0))
             {
+                if (1)
                 {
                     G2Quat_ToMatrix_S(q, (G2Matrix *)&multi->curRotMatrix);
 
