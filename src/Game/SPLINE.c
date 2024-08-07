@@ -363,7 +363,7 @@ unsigned long SplineGetQuatData(Spline *spline, SplineDef *def, void *p)
 
             if ((count != 0) && (def->fracCurr != 0))
             {
-                // third parameter is fake, second parameter might be different
+                // TODO: third parameter is fake, second parameter might be different as well
                 G2Quat_Slerp_VM(def->fracCurr / count, &((RSpline *)spline)->key[def->currkey].q, (G2Quat *)(&((RSpline *)spline)->key[def->currkey].q.z + 3), &quat, 0);
             }
             else
