@@ -764,7 +764,7 @@ void MonsterTranslateAnim(Object *object)
         {
             relocModule = object->relocModule;
 
-            if ((relocModule == NULL) || ((char *)((Dummy3 *)relocModule)->unknown != monVersion)) // relocModule needs parsing to the correct struct
+            if ((relocModule == NULL) || ((intptr_t)((Dummy3 *)relocModule)->unknown != (intptr_t)monVersion)) // relocModule needs parsing to the correct struct
             {
                 object->data = NULL;
                 return;
