@@ -13,26 +13,6 @@
 #define GETP_ZW(b) *(long*)(&b->z);
 #define SETP_ZW(b, c) *(long*)(&b->z) = c;
 
-// size: 0x18
-typedef struct _G2AnimSegValue_Type {
-    // offset: 0000 (8 bytes)
-    // size: 0x8
-    union {
-        // offset: 0000 (6 bytes)
-        struct _G2SVector3_Type rot;
-        // offset: 0000 (8 bytes)
-        struct _G2Quat_Type quat;
-    } rotQuat;
-    // offset: 0008 (6 bytes)
-    struct _G2SVector3_Type scale;
-    // offset: 000E
-    unsigned short pad;
-    // offset: 0010 (6 bytes)
-    struct _G2SVector3_Type trans;
-    // offset: 0016
-    unsigned short bIsQuat;
-} G2AnimSegValue;
-
 // size: 0x28
 typedef struct _G2AnimQuatInfo_Type {
     // offset: 0000 (8 bytes)

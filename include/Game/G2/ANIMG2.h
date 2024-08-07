@@ -190,6 +190,37 @@ typedef struct _G2AnimSegKeyflagInfo_Type {
     int bitCount;
 } G2AnimSegKeyflagInfo;
 
+typedef struct _G2Quat_Type {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short z;
+    // offset: 0006
+    short w;
+} G2Quat;
+
+// size: 0x18
+typedef struct _G2AnimSegValue_Type {
+    // offset: 0000 (8 bytes)
+    // size: 0x8
+    union {
+        // offset: 0000 (6 bytes)
+        struct _G2SVector3_Type rot;
+        // offset: 0000 (8 bytes)
+        struct _G2Quat_Type quat;
+    } rotQuat;
+    // offset: 0008 (6 bytes)
+    struct _G2SVector3_Type scale;
+    // offset: 000E
+    unsigned short pad;
+    // offset: 0010 (6 bytes)
+    struct _G2SVector3_Type trans;
+    // offset: 0016
+    unsigned short bIsQuat;
+} G2AnimSegValue;
+
 void G2Anim_Restore(G2Anim *anim);
 void G2Anim_Free(G2Anim *anim);
 G2Bool G2Anim_SegmentHasActiveChannels(G2Anim *anim, int segNumber, unsigned short chanMask);
@@ -207,7 +238,7 @@ long _G2AnimAlphaTable_GetValue(G2AnimAlphaTable *table, long trueAlpha);
 void G2Anim_GetRootMotionFromTimeForDuration(G2Anim *anim, short durationStart, short duration, G2SVector3 *motionVector);
 short G2AnimSection_UpdateOverInterval(G2AnimSection *section, short interval);
 G2AnimSection *G2Anim_GetSectionWithSeg(G2Anim *anim, int segNumber);
-//void _G2Anim_BuildSegLocalRotMatrix(G2AnimSegValue *segValue, G2Matrix *segMatrix);
+void _G2Anim_BuildSegLocalRotMatrix(G2AnimSegValue *segValue, G2Matrix *segMatrix);
 void _G2Anim_FreeChanStatusBlockList(G2AnimChanStatusBlock *block);
 void G2AnimSection_JumpToTime(G2AnimSection *section, short targetTime);
 void _G2Anim_BuildTransformsNoControllers(G2Anim *anim);
