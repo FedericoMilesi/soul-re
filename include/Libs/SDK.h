@@ -214,18 +214,6 @@
 	: "r"( r0 )						\
 	: "$12", "$13" )
 
-// size: 0x8
-typedef struct RECT {
-    // offset: 0000
-    short x;
-    // offset: 0002
-    short y;
-    // offset: 0004
-    short w;
-    // offset: 0006
-    short h;
-} RECT;
-
 // size: 0x14
 typedef struct DISPENV {
     // offset: 0000 (8 bytes)

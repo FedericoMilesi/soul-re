@@ -97,4 +97,16 @@ typedef struct CVECTOR {
     unsigned char cd;
 } CVECTOR;
 
+// size: 0x8
+typedef struct RECT {
+    // offset: 0000
+    short x;
+    // offset: 0002
+    short y;
+    // offset: 0004
+    short w;
+    // offset: 0006
+    short h;
+} RECT;
+
 #endif
