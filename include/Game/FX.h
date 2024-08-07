@@ -538,5 +538,9 @@ FXGlowEffect *FX_DoInstanceTwoSegmentGlow(Instance *instance, long segment, long
 void FX_MakeHitFX(SVector *position);
 void FX_MakeGlyphIcon(Position *position, Object *glyphObject, int size, int glyphnum, int enabled);
 void FX_DrawScreenPoly(int transtype, unsigned long color, int zdepth);
+void FX_CalcSpiral(int degchange);
+void FX_GetSpiralPoint(int radius, int deg, int *x, int *y);
+void FX_DeleteGeneralEffect(FXGeneralEffect *effect);
+void FX_StandardFXPrimProcess(FX_PRIM *fxPrim, FXTracker *fxTracker);
 
 #endif

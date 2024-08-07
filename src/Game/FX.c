@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/FX.h"
 #include "Game/MATH3D.h"
 #include "Game/MEMPACK.h"
 #include "Game/DRAW.h"
@@ -30,8 +31,6 @@ EXTERN STATIC int Spiral_Glow_Size;
 EXTERN STATIC int Spiral_Mod;
 
 EXTERN STATIC Instance *FX_reaver_instance;
-
-void FX_StandardFXPrimProcess(FX_PRIM *fxPrim, FXTracker *fxTracker);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Init);
 
@@ -498,10 +497,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_UpdateInstanceSplitRing);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_UpdateGlowEffect);
 
-void FX_InsertGeneralEffect(void *ptr);
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_InsertGeneralEffect);
 
-void FX_DeleteGeneralEffect(FXGeneralEffect *effect);
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DeleteGeneralEffect);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DoInstanceOneSegmentGlow);
@@ -637,7 +634,6 @@ void FX_EndInstanceParticleEffects(Instance *instance)
     }
 }
 
-void FX_GetSpiralPoint(int radius, int deg, int *x, int *y);
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_GetSpiralPoint);
 
 void FX_GetLinePoint(int radius, int next_radius, int deg, int next_deg, int *pntx, int *pnty, int part)
@@ -654,7 +650,6 @@ void FX_GetLinePoint(int radius, int next_radius, int deg, int next_deg, int *pn
     *pnty = y1 + (((y2 - y1) * part) / 4096);
 }
 
-void FX_CalcSpiral(int degchange);
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_CalcSpiral);
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Spiral);
