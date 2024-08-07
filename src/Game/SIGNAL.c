@@ -465,7 +465,41 @@ SignalInfo signalInfoList[27] = {
     { SIGNAL_HandleSetCameraDistance, 1, 1, NULL },
 };
 
-INCLUDE_ASM("asm/nonmatchings/Game/SIGNAL", COLLIDE_HandleSignal);
+void COLLIDE_HandleSignal(Instance *instance, Signal *signal, long numSignals, int dontForceDoSignal)
+{
+    long signalNumber;
+    int temp; // not from decls.h
+
+    (void)dontForceDoSignal;
+
+    if (numSignals == 0)
+    {
+        return;
+    }
+
+    do
+    {
+        temp = 0x7FFFFFFF;
+    } while (0); // garbage code for reordering
+
+    for (; ; )
+    {
+        signalNumber = signal->id & temp;
+
+        if (((signalInfoList[signalNumber].onlyPlayer != 0) && (instance != gameTrackerX.playerInstance)) || (((gameTrackerX.gameFlags & 0x40)) && (signal->id < 0)))
+        {
+            signal = (Signal *)((char *)signal + ((signalInfoList[signal->id & temp].length + 1) * 4)); // TODO: this needs rewriting because the * 4 is likely implicit
+        }
+        else if ((signalNumber < 27) && (signalInfoList[signalNumber].signalHandleFunc(instance, signal) != NULL))
+        {
+            signal = (Signal *)((char *)signal + ((signalInfoList[signal->id & temp].length + 1) * 4)); // TODO: this needs rewriting because the * 4 is likely implicit
+        }
+        else
+        {
+            break;
+        }
+    }
+}
 
 long SIGNAL_IsThisStreamAWarpGate(Signal *signal)
 {
