@@ -147,7 +147,180 @@ void setPeriodicSoundStateOff(SoundInstance *soundInst, ObjectPeriodicSound *sou
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processPeriodicSound);
+void processPeriodicSound(Position *position, int livesInOnePlane, int inSpectral, int hidden, int burning, SoundInstance *soundInst, ObjectPeriodicSound *sound)
+{
+    SoundEffectChannel *channel;
+    int sfxIDNum;
+    int sfxToneID;
+    int spectralPlane;
+
+    spectralPlane = gameTrackerX.gameData.asmData.MorphType;
+
+    switch (soundInst->state & 0xF)
+    {
+    default:
+    case 0:
+        soundInst->channel = -1;
+
+        soundInst->state = 1;
+
+        soundInst->delay = sound->initialDelay;
+
+        if (sound->initialDelayVariation == 0)
+        {
+            return;
+        }
+
+        soundInst->delay += sound->initialDelayVariation - (char)(rand() % ((int)sound->initialDelayVariation << 1));
+        return;
+    case 3:
+    case 1:
+        if (((livesInOnePlane == 0) || ((inSpectral != 0) && (spectralPlane != 0)) || ((inSpectral == 0) && (spectralPlane == 0))) == 0)
+        {
+            return;
+        }
+
+        if (isOkayToPlaySound(sound->flags, spectralPlane, hidden, burning) == 0)
+        {
+            return;
+        }
+
+        if (soundInst->delay != 0)
+        {
+            soundInst->delay--;
+            return;
+        }
+
+        channel = SndOpenSfxChannel(&soundInst->channel);
+
+        if (channel == NULL)
+        {
+            return;
+        }
+
+        channel->volume = (unsigned short)sound->maxVolume;
+
+        if (sound->maxVolVariation != 0)
+        {
+            channel->volume += (unsigned short)sound->maxVolVariation - (short)(rand() % ((int)sound->maxVolVariation << 1));
+        }
+
+        channel->pitch = sound->pitch;
+
+        if (sound->pitchVariation != 0)
+        {
+            channel->pitch += sound->pitchVariation - (short)(rand() % ((int)sound->pitchVariation << 1));
+        }
+
+        if (sound->numSfxIDs >= 2)
+        {
+            sfxIDNum = rand() % (int)sound->numSfxIDs;
+        }
+        else
+        {
+            sfxIDNum = 0;
+        }
+
+        sfxToneID = ((unsigned short *)sound)[9 + sfxIDNum]; // TODO: needs rewriting, seems wrong
+
+        channel->handle = SOUND_Play3dSound(position, sfxToneID, channel->pitch, channel->volume, sound->minVolDistance);
+
+        if (channel->handle != 0)
+        {
+            soundInst->state = 2;
+
+            soundInst->delay = sound->onTime;
+
+            if (sound->onTimeVariation == 0)
+            {
+                return;
+            }
+
+            soundInst->delay += sound->onTimeVariation - (char)(rand() % ((int)sound->onTimeVariation << 1));
+            return;
+        }
+
+        SndCloseSfxChannel(soundInst->channel);
+
+        soundInst->channel = -1;
+        return;
+    case 2:
+        channel = SndGetSfxChannel(soundInst->channel);
+
+        if (SndIsPlayingOrRequested(channel->handle) == 0)
+        {
+            setPeriodicSoundStateOff(soundInst, sound);
+            return;
+        }
+
+        if (SndIsPlaying(channel->handle) == 0)
+        {
+            return;
+        }
+
+        if ((livesInOnePlane == 0) || ((inSpectral != 0) && (spectralPlane != 0)) || ((inSpectral == 0) && (spectralPlane == 0)) != 0)
+        {
+            if (isOkayToPlaySound(sound->flags, spectralPlane, hidden, burning) != 0)
+            {
+                if (soundInst->delay == 0)
+                {
+                    if (sound->offTime != 0)
+                    {
+                        SndEndLoop(channel->handle);
+
+                        setPeriodicSoundStateOff(soundInst, sound);
+                    }
+                    else
+                    {
+                        if (sound->maxVolVariation != 0)
+                        {
+                            channel->volume = sound->maxVolume;
+
+                            channel->volume += sound->maxVolVariation - (short)(rand() % ((int)sound->maxVolVariation << 1));
+                        }
+
+                        if (sound->pitchVariation != 0)
+                        {
+                            channel->pitch = sound->pitch;
+
+                            channel->pitch += sound->pitchVariation - (short)(rand() % ((int)sound->pitchVariation << 1));
+                        }
+
+                        soundInst->delay = sound->onTime;
+
+                        if (sound->onTimeVariation != 0)
+                        {
+                            soundInst->delay += sound->onTimeVariation - (char)(rand() % ((int)sound->onTimeVariation << 1));
+                        }
+                    }
+                }
+                else
+                {
+                    soundInst->delay--;
+                }
+
+                if (!(soundInst->state & 0x10))
+                {
+                    break;
+                }
+
+                soundInst->state &= ~0x10;
+
+                if (SOUND_Update3dSound(position, channel->handle, channel->pitch, channel->volume, sound->minVolDistance) != 0)
+                {
+                    return;
+                }
+            }
+        }
+
+        SndEndLoop(channel->handle);
+
+        setPeriodicSoundStateOff(soundInst, sound);
+        return;
+    }
+
+    soundInst->state |= 0x10;
+}
 
 void processEventSound(Position *position, SoundInstance *soundInst, ObjectEventSound *sound)
 {
