@@ -261,6 +261,8 @@ void GAMELOOP_Set_Pause_Redraw();
 void GAMELOOP_StreamLevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker, int toSignalNum, int fromSignalNum);
 void GAMELOOP_RequestLevelChange(char *name, short number, GameTracker *gameTracker);
 void ResetPrimPool();
+void GAMELOOP_Process(GameTracker *gameTracker);
+void ResetDrawPage();
 
 GameTracker gameTrackerX;
 extern long playerCameraMode;

@@ -6,8 +6,6 @@ EXTERN STATIC short pause_redraw_flag;
 
 EXTERN STATIC PrimPool *primPool[2];
 
-void ResetDrawPage();
-
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AllocStaticMemory);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_InitGameTracker);
@@ -172,7 +170,6 @@ void GAMELOOP_Reset24FPS()
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DoTimeProcess);
 
-void GAMELOOP_Process(GameTracker *gameTracker);
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_Process);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ModeStartRunning);
