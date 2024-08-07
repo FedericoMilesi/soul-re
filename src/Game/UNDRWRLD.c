@@ -10,8 +10,6 @@
 #include "Game/STRMLOAD.h"
 #include "Game/PSX/SUPPORT.h"
 
-void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit); /*TODO*/
-
 static UW_ScreenXY *ScreenMorphArray = 0;
 
 static long UW_angle;
