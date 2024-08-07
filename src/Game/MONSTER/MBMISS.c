@@ -89,7 +89,7 @@ void WCBEGG_Process(Instance *instance, GameTracker *gameTracker)
 
     if (walboss != NULL)
     {
-        wa = (walbossAttributes *)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
+        wa = (walbossAttributes *)(intptr_t)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
 
         timeBetween = ((Dummy *)data)->unknown + (wa->timeToEggThrob * 33); // data needs parsing to the correct struct
 
@@ -155,7 +155,7 @@ void WCBEGG_ExplodeProcess(Instance *instance, GameTracker *gameTracker)
 
     if (walboss != NULL)
     {
-        wa = (walbossAttributes *)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
+        wa = (walbossAttributes *)(intptr_t)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
 
         if (currentTime >= (((Dummy *)data)->unknown + 330)) // data needs parsing to the correct struct
         {
@@ -202,7 +202,7 @@ void WCBEGG_SplitProcess(Instance *instance, GameTracker *gameTracker)
 
     if (walboss != NULL)
     {
-        wa = (walbossAttributes *)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
+        wa = (walbossAttributes *)(intptr_t)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
 
         if (currentTime >= (((Dummy *)data)->unknown + 198)) // data needs parsing to the correct struct
         {
@@ -283,11 +283,11 @@ void WCBEGG_ExplodeCollide(Instance *instance, GameTracker *gameTracker)
 
     data = (PhysObData *)instance->extraData;
 
-    s1 = (unsigned char)collideInfo->type1;
+    s1 = (HSphere *)(unsigned char)collideInfo->type1;
 
     temp = collideInfo->prim1;
 
-    if (((int)s1 == 1) && (temp->id == 8))
+    if (((uintptr_t)s1 == 1) && (temp->id == 8))
     {
         inst1 = collideInfo->inst1;
 
@@ -299,13 +299,13 @@ void WCBEGG_ExplodeCollide(Instance *instance, GameTracker *gameTracker)
                 {
                     INSTANCE_Post(inst1, 0x1000017, 2);
 
-                    G2EmulationInstanceSwitchAnimationAlpha(instance, 0, 4, 0, 0, (int)s1, 0);
+                    G2EmulationInstanceSwitchAnimationAlpha(instance, 0, 4, 0, 0, (uintptr_t)s1, 0);
 
                     instance->processFunc = WCBEGG_ExplodeProcess;
                 }
                 else
                 {
-                    G2EmulationInstanceSwitchAnimationAlpha(instance, 0, 3, 0, 0, (int)s1, 0);
+                    G2EmulationInstanceSwitchAnimationAlpha(instance, 0, 3, 0, 0, (uintptr_t)s1, 0);
 
                     instance->processFunc = WCBEGG_SplitProcess;
                 }
