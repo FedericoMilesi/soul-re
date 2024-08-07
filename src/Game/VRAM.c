@@ -5,10 +5,6 @@
 #include "Game/FONT.h"
 #include "Game/HASM.h"
 
-int VRAM_InsertFreeVram(short x, short y, short w, short h, short flags);
-int VRAM_DeleteFreeVram(short x, short y, short w, short h);
-void VRAM_DeleteFreeBlock(BlockVramEntry *block);
-
 BlockVramEntry *usedVramBlocks;
 
 BlockVramEntry *openVramBlocks;
