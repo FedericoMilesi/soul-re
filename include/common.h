@@ -23,7 +23,4 @@ typedef unsigned char u_char;
 #define EXTERN extern
 #define STATIC
 
-#define SCREEN_WIDTH		512
-#define SCREEN_HEIGHT		240
-
 #endif
