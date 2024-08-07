@@ -530,7 +530,7 @@ void MON_PlayRandomIdle(Instance *instance, int mode)
 
         if (mv->behaviorState == 0)
         {
-            idle = &ma->idleList[(int)((MonsterBehavior *)((int)behavior + mv->ambient))->idleList[0]];
+            idle = &ma->idleList[(int)((MonsterBehavior *)((uintptr_t)behavior + mv->ambient))->idleList[0]];
         }
         else
         {
