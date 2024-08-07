@@ -3669,8 +3669,8 @@ int STREAM_GetClipRect(StreamUnitPortal *portal, RECT *rect)
             {
                 rect->x = 0;
                 rect->y = 0;
-                rect->w = SCREEN_WIDTH;
-                rect->h = SCREEN_HEIGHT;
+                rect->w = 512;
+                rect->h = 240;
 
                 return 1;
             }
@@ -3688,12 +3688,12 @@ int STREAM_GetClipRect(StreamUnitPortal *portal, RECT *rect)
 
         if (rect->w >= 513)
         {
-            rect->w = SCREEN_WIDTH;
+            rect->w = 512;
         }
 
         if (rect->h >= 241)
         {
-            rect->h = SCREEN_HEIGHT;
+            rect->h = 240;
         }
 
         rect->w -= rect->x;
