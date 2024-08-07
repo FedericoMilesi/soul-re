@@ -265,7 +265,7 @@ void processEventSound(Position *position, SoundInstance *soundInst, ObjectEvent
 
                 sfxIDNum = (sound->numSfxIDs < 2) ? 0 : rand() % sound->numSfxIDs;
 
-                // second parameter is likely wrong
+                // TODO: second parameter is likely wrong
                 channel->handle = SOUND_Play3dSound(position, ((unsigned short *)(sound + 1))[sfxIDNum], channel->pitch, channel->volume, sound->minVolDistance);
 
                 if (channel->handle == 0)

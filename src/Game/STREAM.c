@@ -3705,7 +3705,7 @@ int STREAM_GetClipRect(StreamUnitPortal *portal, RECT *rect)
             {
                 if (nz > 0)
                 {
-                    rect->h = SCREEN_HEIGHT - rect->y;
+                    rect->h = 240 - rect->y;
                 }
                 else
                 {
