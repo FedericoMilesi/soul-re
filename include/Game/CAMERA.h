@@ -498,6 +498,8 @@ void CAMERA_Adjust_distance(Camera *camera, long dist);
 void CAMERA_Relocate(Camera *camera, SVector *offset, int streamSignalFlag);
 long CAMERA_LengthSVector(SVector *sv);
 short CAMERA_GetLineAngle(Camera *camera, CameraCollisionInfo *colInfo, SVector *linept, int line);
+int CAMERA_FocusInstanceMoved(Camera *camera);
+void CAMERA_EndLook(Camera *camera);
 
 extern int CameraCenterDelay;
 Camera theCamera;

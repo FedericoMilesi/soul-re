@@ -59,9 +59,6 @@ static short Camera_lookHeight;
 
 static short Camera_lookDist;
 
-int CAMERA_FocusInstanceMoved(Camera *camera);
-void CAMERA_EndLook(Camera *camera);
-
 static inline int GetSecondCheckFlag(Camera *camera)
 {
     if ((camera->flags & 0x10000))
