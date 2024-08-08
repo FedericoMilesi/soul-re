@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/MONSTER/VWRAITH.h"
 #include "Game/MONSTER/MONSTER.h"
 
 void VWRAITH_MoveVertical(Instance *instance, long targetZ, int velocity)
@@ -31,7 +32,6 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_PursueEntry);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_Pursue);
 
-void VWRAITH_VerticalMove(Instance *instance);
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_VerticalMove);
 
 void VWRAITH_CombatEntry(Instance *instance)

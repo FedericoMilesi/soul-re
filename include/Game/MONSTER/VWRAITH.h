@@ -5,4 +5,6 @@
 
 extern MonsterFunctionTable VWRAITH_FunctionTable;
 
+void VWRAITH_VerticalMove(Instance *instance);
+
 #endif
