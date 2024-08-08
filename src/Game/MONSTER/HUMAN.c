@@ -10,12 +10,6 @@
 #include "Game/SAVEINFO.h"
 #include "Game/PSX/SUPPORT.h"
 
-void HUMAN_CleanUp(Instance *instance);
-uintptr_t HUMAN_Query(Instance *instance, unsigned long query);
-void HUMAN_IdleEntry(Instance *instance);
-void HUMAN_Idle(Instance *instance);
-void HUMAN_Flee(Instance *instance);
-
 MonsterStateChoice HUMAN_StateChoiceTable[] = {
     { 9, { HUMAN_StunnedEntry, HUMAN_Stunned } },
     { 0x17, { HUMAN_DeadEntry, HUMAN_Dead } },

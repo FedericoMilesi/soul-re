@@ -80,6 +80,7 @@
         "reaver.h": "c",
         "pipe3d.h": "c",
         "quatg2.h": "c",
-        "instncg2.h": "c"
+        "instncg2.h": "c",
+        "support.h": "c"
     }
 }
