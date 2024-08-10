@@ -105,7 +105,35 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_DeleteSavedEvent);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedNextEvent);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_BufferIntro);
+void SAVE_BufferIntro(SavedBasic *savedIntro)
+{
+    long i;
+
+    if (numbufferedIntros < 64)
+    {
+        for (i = 0; i < 64; i++)
+        {
+            if (bufferSavedIntroArray[i] == savedIntro)
+            {
+                break;
+            }
+        }
+
+        if (i == 64)
+        {
+            numbufferedIntros++;
+
+            for (i = 0; i < 64; i++)
+            {
+                if (bufferSavedIntroArray[i] == NULL)
+                {
+                    bufferSavedIntroArray[i] = savedIntro;
+                    break;
+                }
+            }
+        }
+    }
+}
 
 void SAVE_IntroduceBufferIntros()
 {
