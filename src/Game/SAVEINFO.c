@@ -107,7 +107,73 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedNextEvent);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_BufferIntro);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IntroduceBufferIntros);
+void SAVE_IntroduceBufferIntros()
+{
+    long i;
+    StreamUnit *streamUnit;
+
+    for (i = 0; numbufferedIntros != 0; i++)
+    {
+        if (i >= 64)
+        {
+            break;
+        }
+
+        if (bufferSavedIntroArray[i] != NULL)
+        {
+            int deleted;
+
+            if (bufferSavedIntroArray[i]->savedID == 1)
+            {
+                SavedIntro *temp; // not from decls.h
+
+                temp = (SavedIntro *)bufferSavedIntroArray[i];
+
+                streamUnit = STREAM_GetStreamUnitWithID(((SavedIntro *)bufferSavedIntroArray[i])->streamUnitID);
+
+                if (streamUnit != NULL)
+                {
+                    if (INSTANCE_IntroduceSavedInstance(temp, streamUnit, &deleted) != NULL)
+                    {
+                        bufferSavedIntroArray[i] = NULL;
+
+                        numbufferedIntros--;
+                    }
+                }
+                else
+                {
+                    bufferSavedIntroArray[i] = NULL;
+
+                    numbufferedIntros--;
+                }
+            }
+            else
+            {
+                SavedIntroWithIntro *temp; // not from decls.h
+
+                temp = (SavedIntroWithIntro *)bufferSavedIntroArray[i];
+
+                streamUnit = STREAM_GetStreamUnitWithID(((SavedIntroWithIntro *)bufferSavedIntroArray[i])->birthUnitID);
+
+                if (streamUnit != NULL)
+                {
+                    if (INSTANCE_IntroduceSavedInstanceWithIntro(temp, streamUnit, &deleted) != NULL)
+                    {
+                        bufferSavedIntroArray[i] = NULL;
+
+                        numbufferedIntros--;
+                    }
+                }
+                else
+                {
+                    bufferSavedIntroArray[i] = NULL;
+
+                    numbufferedIntros--;
+                }
+            }
+        }
+    }
+}
 
 void SAVE_IntroForStreamID(StreamUnit *streamUnit)
 {
