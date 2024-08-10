@@ -13,7 +13,7 @@ BlockVramEntry vramBlockList[90];
 
 long numOfBlocksUsed;
 
-long VRAM_NeedToUpdateMorph = 0;
+/* Unused */ long VRAM_NeedToUpdateMorph = 0;
 
 static inline long VRAM_GetDispPage()
 {
