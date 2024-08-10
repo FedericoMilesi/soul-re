@@ -111,7 +111,27 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IntroduceBufferIntros);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IntroForStreamID);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_HasSavedIntro);
+long SAVE_HasSavedIntro(Intro *intro, long currentStreamID)
+{
+    SavedIntro *saveIntro;
+    long result;
+
+    (void)currentStreamID;
+
+    result = 0;
+
+    for (saveIntro = (SavedIntro *)savedInfoTracker.InfoStart; (uintptr_t)saveIntro < (uintptr_t)savedInfoTracker.InfoEnd; saveIntro = (SavedIntro *)((char *)saveIntro + (saveIntro->shiftedSaveSize << 2)))
+    {
+        if (((saveIntro->savedID == 1) && (saveIntro->introUniqueID == intro->UniqueID))
+        || ((saveIntro->savedID == 7) && (((SavedIntroWithIntro *)saveIntro)->introUniqueID == intro->UniqueID)))
+        {
+            result = 1;
+            break;
+        }
+    }
+
+    return result;
+}
 
 SavedLevel *SAVE_HasSavedLevel(long areaID)
 {
