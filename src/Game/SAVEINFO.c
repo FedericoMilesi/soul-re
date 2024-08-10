@@ -109,7 +109,33 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_BufferIntro);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IntroduceBufferIntros);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IntroForStreamID);
+void SAVE_IntroForStreamID(StreamUnit *streamUnit)
+{
+    SavedBasic *saveIntro;
+    long streamID;
+    int deleted;
+
+    streamID = streamUnit->StreamUnitID;
+
+    for (saveIntro = (SavedBasic *)savedInfoTracker.InfoStart; (uintptr_t)saveIntro < (uintptr_t)savedInfoTracker.InfoEnd; )
+    {
+        deleted = 0;
+
+        if ((saveIntro->savedID == 1) && (((SavedIntro *)saveIntro)->streamUnitID == streamID))
+        {
+            INSTANCE_IntroduceSavedInstance((SavedIntro *)saveIntro, streamUnit, &deleted);
+        }
+        else if ((saveIntro->savedID == 7) && (((SavedIntroWithIntro *)saveIntro)->birthUnitID == streamID))
+        {
+            INSTANCE_IntroduceSavedInstanceWithIntro((SavedIntroWithIntro *)saveIntro, streamUnit, &deleted);
+        }
+
+        if (deleted == 0)
+        {
+            saveIntro += saveIntro->shiftedSaveSize << 1;
+        }
+    }
+}
 
 long SAVE_HasSavedIntro(Intro *intro, long currentStreamID)
 {
