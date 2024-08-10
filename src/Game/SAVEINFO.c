@@ -300,7 +300,44 @@ void SAVE_RestoreGlobalSavePointer()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_IsUniqueIDDeadDead);
+long SAVE_IsUniqueIDDeadDead(long uniqueID)
+{
+    SavedIntro *saveIntro;
+    SavedDeadDeadBits *deadDeadBits;
+    long result;
+    int deadByte;
+    int deadBit;
+
+    deadDeadBits = NULL;
+
+    result = 0;
+
+    if (uniqueID < 8192)
+    {
+        for (saveIntro = (SavedIntro *)savedInfoTracker.InfoStart; (uintptr_t)saveIntro < (uintptr_t)savedInfoTracker.InfoEnd; saveIntro = (SavedIntro *)((char *)saveIntro + (saveIntro->shiftedSaveSize << 2)))
+        {
+            if (saveIntro->savedID == 4)
+            {
+                deadDeadBits = (SavedDeadDeadBits *)saveIntro;
+                break;
+            }
+        }
+
+        if (deadDeadBits != NULL)
+        {
+            deadByte = uniqueID / 8;
+
+            deadBit = 1 << (uniqueID & 0x7);
+
+            if (deadByte < 832)
+            {
+                result = !(((unsigned char)deadDeadBits->deadDeadBits[deadByte] & deadBit) ^ deadBit);
+            }
+        }
+    }
+
+    return result;
+}
 
 long SAVE_IsIntroDeadDead(Intro *intro)
 {
