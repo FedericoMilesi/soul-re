@@ -397,7 +397,48 @@ void PIPE3D_CalcWorldToSplitPlaneTransform(MATRIX *wpTransform, SVector *normal,
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_TransformAnimatedSplitInstanceVertices);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_TransformSplitInstanceVertices);
+void PIPE3D_TransformSplitInstanceVertices(MVertex *vertexList, PVertex *pvertex, Model *model, MATRIX *wpTransform, MATRIX *matrixPool, Mirror *mirror)
+{
+    MATRIX *spTransform;
+    Vector *vector;
+    long i;
+    Segment *segment;
+
+    (void)mirror;
+
+    vector = (Vector *)getScratchAddr(8);
+
+    spTransform = (MATRIX *)getScratchAddr(0);
+
+    for (segment = model->segmentList, i = 0; i < model->numSegments; segment++, i++)
+    {
+        if (model->segmentList[i].lastVertex != -1)
+        {
+            MVertex *firstVertex;
+            MVertex *lastVertex;
+            MVertex *modelVertex;
+
+            firstVertex = &vertexList[segment->firstVertex];
+            lastVertex = &vertexList[segment->lastVertex];
+
+            CompMatrix(wpTransform, &matrixPool[i], spTransform);
+
+            SetRotMatrix(spTransform);
+            SetTransMatrix(spTransform);
+
+            for (modelVertex = firstVertex; modelVertex <= lastVertex; pvertex++, modelVertex++)
+            {
+                gte_ldv0(modelVertex);
+                gte_nrtvx();
+                gte_stlvnl(vector);
+
+                pvertex->x = (short)vector->x;
+                pvertex->y = (short)vector->y;
+                *(short *)&pvertex->otz = (short)vector->z;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_AnimateTextures);
 

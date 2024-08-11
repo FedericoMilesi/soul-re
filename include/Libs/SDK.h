@@ -214,6 +214,9 @@
 	: "r"( r0 )						\
 	: "$12", "$13" )
 
+// custom macro
+#define gte_nrtvx() gte_nmvmva(1, 0, 0, 0, 0)
+
 // size: 0x14
 typedef struct DISPENV {
     // offset: 0000 (8 bytes)
@@ -519,6 +522,7 @@ void PopMatrix();
 void SetTransMatrix(MATRIX *m);
 void SetRotMatrix(MATRIX *m);
 void PushMatrix();
+MATRIX *CompMatrix(MATRIX *m0, MATRIX *m1, MATRIX *m2);
 MATRIX *TransMatrix(MATRIX *m, VECTOR *v);
 int rcos(int);
 int rsin(int);
