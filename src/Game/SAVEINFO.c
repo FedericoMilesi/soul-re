@@ -93,7 +93,50 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedBlock);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_PurgeAMemoryBlock);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_SaveableInstance);
+long SAVE_SaveableInstance(Instance *instance)
+{
+    long result;
+    int temp, temp2; // not from decls.h
+
+    result = 0;
+
+    temp2 = instance->flags2;
+
+    if ((!(temp2 & 0x20000)) && (instance->object != NULL))
+    {
+        if (((instance->object->oflags2 & 0x80000)) || (instance == gameTrackerX.playerInstance))
+        {
+            result = 1;
+        }
+        else if ((instance->object->oflags2 & 0x40000))
+        {
+            result = 1;
+
+            if ((instance->object->oflags & result))
+            {
+                temp = (temp2 & 0x8) > 0;
+
+                result = temp > 0;
+            }
+        }
+        else if (!(instance->flags & 0x100000))
+        {
+            result = 3;
+        }
+    }
+
+    if ((instance->object->oflags2 & 0x100000))
+    {
+        result = 0;
+    }
+
+    if ((result == 1) && (instance->currentStreamUnitID == instance->birthStreamUnitID) && (instance->introUniqueID < 8192))
+    {
+        result = 2;
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateSavedIntro);
 
