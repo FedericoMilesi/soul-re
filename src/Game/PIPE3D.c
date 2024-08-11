@@ -374,7 +374,26 @@ void PIPE3D_TransformFromZAxis(MATRIX *transform, SVector *normal)
 }
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_CalcWorldToSplitPlaneTransform);
+void PIPE3D_CalcWorldToSplitPlaneTransform(MATRIX *wpTransform, SVector *normal, SVector *translation)
+{
+    SVector svector;
+    Vector vector;
+
+    PIPE3D_TransformFromZAxis(wpTransform, normal);
+
+    svector.x = -translation->x;
+    svector.y = -translation->y;
+    svector.z = -translation->z;
+
+    gte_SetRotMatrix(&wpTransform->m[0][0]);
+    gte_ldv0(&svector.x);
+    gte_nrtv0();
+    gte_stlvnl(&vector);
+
+    wpTransform->t[0] = vector.x;
+    wpTransform->t[1] = vector.y;
+    wpTransform->t[2] = vector.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_TransformAnimatedSplitInstanceVertices);
 
