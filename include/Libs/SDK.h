@@ -519,6 +519,7 @@ void PopMatrix();
 void SetTransMatrix(MATRIX *m);
 void SetRotMatrix(MATRIX *m);
 void PushMatrix();
+MATRIX *TransMatrix(MATRIX *m, VECTOR *v);
 int rcos(int);
 int rsin(int);
 void ScaleMatrix(MATRIX *, VECTOR *);

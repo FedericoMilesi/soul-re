@@ -2,6 +2,8 @@
 #include "Game/PIPE3D.h"
 #include "Game/MATH3D.h"
 #include "Game/HASM.h"
+#include "Game/CAMERA.h"
+#include "Game/GAMELOOP.h"
 
 void PIPE3D_AspectAdjustMatrix(MATRIX *matrix)
 {
@@ -20,7 +22,96 @@ void PIPE3D_AspectAdjustMatrix(MATRIX *matrix)
     matrix->m[0][2] = (matrix->m[0][2] * 512) / 320;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_CalculateWCTransform);
+void PIPE3D_CalculateWCTransform(CameraCore *cameraCore)
+{
+    MATRIX user_rotation;
+    MATRIX first;
+    MATRIX *cam_wcTrans;
+    SVECTOR v0;
+    VECTOR v1;
+
+    cam_wcTrans = cameraCore->wcTransform;
+
+    v0.vx = -cameraCore->position.x;
+    v0.vy = -cameraCore->position.y;
+    v0.vz = -cameraCore->position.z;
+
+    if (!(gameTrackerX.debugFlags & 0x8))
+    {
+        MATH3D_SetUnityMatrix(&user_rotation);
+
+        RotMatrixZ(-cameraCore->rotation.z, &user_rotation);
+        RotMatrixX(-cameraCore->rotation.x, &user_rotation);
+        RotMatrixY(-cameraCore->rotation.y, &user_rotation);
+
+        v0.vx = -cameraCore->position.x;
+        v0.vy = -cameraCore->position.y;
+        v0.vz = -cameraCore->position.z;
+    }
+    else
+    {
+        MATH3D_SetUnityMatrix(&user_rotation);
+
+        RotMatrixZ(-cameraCore->debugRot.z, &user_rotation);
+        RotMatrixY(-cameraCore->debugRot.y, &user_rotation);
+        RotMatrixX(-cameraCore->debugRot.x, &user_rotation);
+
+        v0.vx = -cameraCore->debugPos.x;
+        v0.vy = -cameraCore->debugPos.y;
+        v0.vz = -cameraCore->debugPos.z;
+
+        cameraCore->nondebugPos.x = cameraCore->position.x;
+        cameraCore->nondebugPos.y = cameraCore->position.y;
+        cameraCore->nondebugPos.z = cameraCore->position.z;
+
+        cameraCore->position.x = cameraCore->debugPos.x;
+        cameraCore->position.y = cameraCore->debugPos.y;
+        cameraCore->position.z = cameraCore->debugPos.z;
+    }
+
+    first.m[0][0] = 4096;
+    first.m[0][1] = 0;
+    first.m[0][2] = 0;
+
+    first.m[1][0] = 0;
+    first.m[1][1] = 0;
+    first.m[1][2] = -4096;
+
+    first.m[2][0] = 0;
+    first.m[2][1] = 4096;
+    first.m[2][2] = 0;
+
+    MulMatrix0(&first, &user_rotation, cam_wcTrans);
+    MulMatrix0(&first, &user_rotation, cameraCore->wcTransform2);
+
+    PIPE3D_AspectAdjustMatrix(cam_wcTrans);
+
+    cam_wcTrans->m[0][0] = (cam_wcTrans->m[0][0] * cameraCore->screenScale.x) >> 12;
+    cam_wcTrans->m[0][1] = (cam_wcTrans->m[0][1] * cameraCore->screenScale.x) >> 12;
+    cam_wcTrans->m[0][2] = (cam_wcTrans->m[0][2] * cameraCore->screenScale.x) >> 12;
+
+    cam_wcTrans->m[1][0] = (cam_wcTrans->m[1][0] * cameraCore->screenScale.y) >> 12;
+    cam_wcTrans->m[1][1] = (cam_wcTrans->m[1][1] * cameraCore->screenScale.y) >> 12;
+    cam_wcTrans->m[1][2] = (cam_wcTrans->m[1][2] * cameraCore->screenScale.y) >> 12;
+
+    cam_wcTrans->m[2][0] = (cam_wcTrans->m[2][0] * cameraCore->screenScale.z) >> 12;
+    cam_wcTrans->m[2][1] = (cam_wcTrans->m[2][1] * cameraCore->screenScale.z) >> 12;
+    cam_wcTrans->m[2][2] = (cam_wcTrans->m[2][2] * cameraCore->screenScale.z) >> 12;
+
+    gte_SetRotMatrix(cam_wcTrans);
+    gte_ldv0(&v0);
+    gte_nrtv0();
+    gte_stlvnl(&v1);
+
+    TransMatrix(cam_wcTrans, &v1);
+
+    gte_SetRotMatrix(cameraCore->wcTransform2);
+    gte_ldv0(&v0);
+    gte_nrtv0();
+    gte_stlvnl(&v1);
+
+    TransMatrix(cameraCore->wcTransform2, &v1);
+}
 
 void PIPE3D_InvertTransform(MATRIX *target, MATRIX *source)
 {
