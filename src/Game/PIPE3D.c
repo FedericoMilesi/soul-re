@@ -284,7 +284,31 @@ void PIPE3D_InstanceListTransformAndDrawFunc(StreamUnit *unit, unsigned long **o
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_InstanceListTransformAndDraw);
+void PIPE3D_InstanceListTransformAndDraw(StreamUnit *unit, GameTracker *gameTracker, unsigned long **ot, CameraCore *cameraCore)
+{
+    Instance *instance;
+    int id;
+    Instance *player;
+
+    instance = gameTracker->instanceList->first;
+
+    player = gameTracker->playerInstance;
+
+    id = unit->StreamUnitID;
+
+    if ((player->currentStreamUnitID == id) && (!(player->flags & 0x800)))
+    {
+        PIPE3D_InstanceListTransformAndDrawFunc(unit, ot, cameraCore, player);
+    }
+
+    for (; instance != NULL; instance = instance->next)
+    {
+        if ((!(instance->flags & 0x800)) && (!(instance->flags2 & 0x4000000)) && (instance->currentStreamUnitID == id) && (instance != player))
+        {
+            PIPE3D_InstanceListTransformAndDrawFunc(unit, ot, cameraCore, instance);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_TransformFromZAxis);
 
