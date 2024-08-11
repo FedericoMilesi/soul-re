@@ -91,7 +91,27 @@ void SAVE_Init(GameTracker *gt)
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedBlock);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_PurgeAMemoryBlock);
+long SAVE_PurgeAMemoryBlock()
+{
+    SavedBasic *curSave;
+    long result;
+
+    result = 0;
+
+    for (curSave = (SavedBasic *)savedInfoTracker.InfoStart; (uintptr_t)curSave < (uintptr_t)savedInfoTracker.InfoEnd; curSave += curSave->shiftedSaveSize << 1)
+    {
+        if (((curSave->savedID == 1) && (((SavedIntro *)curSave)->flags2 & 0x100))
+        || ((curSave->savedID == 7) && (((SavedIntroWithIntro *)curSave)->flags2 & 0x100)))
+        {
+            SAVE_DeleteBlock(curSave);
+
+            result = 1;
+            break;
+        }
+    }
+
+    return result;
+}
 
 long SAVE_SaveableInstance(Instance *instance)
 {
