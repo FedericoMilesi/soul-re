@@ -310,7 +310,69 @@ void PIPE3D_InstanceListTransformAndDraw(StreamUnit *unit, GameTracker *gameTrac
     }
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_TransformFromZAxis);
+#else
+void PIPE3D_TransformFromZAxis(MATRIX *transform, SVector *normal)
+{
+    G2EulerAngles ea1;
+    SVector xprod;
+    SVector yprod;
+
+    if ((abs(normal->x) < 5) && (abs(normal->y) < 5))
+    {
+        if (normal->z >= 0)
+        {
+            MATH3D_SetUnityMatrix(transform);
+        }
+        else
+        {
+            transform->m[0][0] = 4096;
+            transform->m[0][1] = 0;
+            transform->m[0][2] = 0;
+
+            transform->m[1][0] = 0;
+            transform->m[1][1] = -4096;
+            transform->m[1][2] = 0;
+
+            transform->m[2][0] = 0;
+            transform->m[2][1] = 0;
+            transform->m[2][2] = -4096;
+        }
+
+        return;
+    }
+
+    xprod.x = (short *)-normal->y;
+    xprod.y = (short *)normal->x;
+    xprod.z = 0;
+
+    MATH3D_Normalize((Normal *)&xprod);
+
+    yprod.x = ((normal->y * xprod.z) - (normal->z * xprod.y)) >> 12;
+    yprod.y = -(((normal->x * xprod.z) - (normal->z * xprod.x)) >> 12);
+    yprod.z = ((normal->x * xprod.y) - (normal->y * xprod.x)) >> 12;
+
+    MATH3D_Normalize((Normal *)&yprod);
+
+    transform->m[0][0] = xprod.x;
+    transform->m[0][1] = xprod.y;
+    transform->m[0][2] = xprod.z;
+
+    transform->m[1][0] = yprod.x;
+    transform->m[1][1] = yprod.y;
+    transform->m[1][2] = yprod.z;
+
+    transform->m[2][0] = normal->x;
+    transform->m[2][1] = normal->y;
+    transform->m[2][2] = normal->z;
+
+    G2EulerAngles_FromMatrix(&ea1, (G2Matrix *)transform, 21);
+
+    RotMatrix((SVECTOR *)&ea1, transform);
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_CalcWorldToSplitPlaneTransform);
 
