@@ -440,7 +440,29 @@ void PIPE3D_TransformSplitInstanceVertices(MVertex *vertexList, PVertex *pvertex
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_AnimateTextures);
+void PIPE3D_AnimateTextures(AniTex *aniTextures, long req_frame)
+{
+    AniTexInfo *ani_tex_info;
+    TextureMT3 *dest;
+    TextureMT3 *src;
+    long i;
+
+    if ((aniTextures != NULL) && (req_frame != -1))
+    {
+        for (ani_tex_info = &aniTextures->aniTexInfo, i = 0; i < aniTextures->numAniTextues; ani_tex_info++, i++)
+        {
+            dest = ani_tex_info->texture;
+
+            src = &dest[((unsigned int)req_frame / ani_tex_info->speed) % ani_tex_info->numFrames] + 1;
+
+            *(int *)&dest->u0 = *(int *)&src->u0;
+            *(int *)&dest->u1 = *(int *)&src->u1;
+            *(int *)&dest->u2 = *(int *)&src->u2;
+
+            dest->color = src->color;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_AnimateTerrainTextures);
 
