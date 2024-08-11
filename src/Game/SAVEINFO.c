@@ -101,7 +101,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateSavedIntroWithIntro);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedEvent);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_DeleteSavedEvent);
+void SAVE_DeleteSavedEvent(long areaID, long eventNumber)
+{
+    SavedBasic *savedEvent;
+
+    savedEvent = SAVE_GetSavedEvent(areaID, eventNumber);
+
+    if (savedEvent != NULL)
+    {
+        SAVE_DeleteBlock(savedEvent);
+    }
+}
 
 SavedBasic *SAVE_GetSavedNextEvent(long areaID, SavedBasic *curSave)
 {
