@@ -232,6 +232,34 @@ typedef struct ActualSavedLevel {
     struct SavedBspTree bspTreeArray[1];
 } ActualSavedLevel;
 
+// size: 0x10
+typedef struct SavedEvent {
+    // offset: 0000
+    unsigned char savedID;
+    // offset: 0001
+    unsigned char shiftedSaveSize;
+    // offset: 0002
+    short areaID;
+    // offset: 0004
+    short eventNumber;
+    // offset: 0006 (10 bytes)
+    short eventVariables[5];
+} SavedEvent;
+
+// size: 0xA
+typedef struct SavedEventSmallVars {
+    // offset: 0000
+    unsigned char savedID;
+    // offset: 0001
+    unsigned char shiftedSaveSize;
+    // offset: 0002
+    short areaID;
+    // offset: 0004
+    char eventNumber;
+    // offset: 0005 (5 bytes)
+    char eventVariables[5];
+} SavedEventSmallVars;
+
 void SAVE_DebugSaveGame();
 void SAVE_LoadSaveGame();
 void SAVE_LoadSaveGame();

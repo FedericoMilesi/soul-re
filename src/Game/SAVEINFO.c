@@ -103,7 +103,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedEvent);
 
 INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_DeleteSavedEvent);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedNextEvent);
+SavedBasic *SAVE_GetSavedNextEvent(long areaID, SavedBasic *curSave)
+{
+    if (curSave == NULL)
+    {
+        curSave = (SavedBasic *)savedInfoTracker.InfoStart;
+    }
+    else
+    {
+        curSave = &curSave[curSave->shiftedSaveSize << 1];
+    }
+
+    for (; (uintptr_t)curSave < (uintptr_t)savedInfoTracker.InfoEnd; curSave += curSave->shiftedSaveSize << 1)
+    {
+        if (((curSave->savedID == 2) && (((SavedEvent *)curSave)->areaID == areaID))
+        || ((curSave->savedID == 9) && (((SavedEventSmallVars *)curSave)->areaID == areaID)))
+        {
+            return curSave;
+        }
+    }
+
+    return NULL;
+}
 
 void SAVE_BufferIntro(SavedBasic *savedIntro)
 {
