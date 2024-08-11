@@ -4,6 +4,8 @@
 #include "Game/HASM.h"
 #include "Game/CAMERA.h"
 #include "Game/GAMELOOP.h"
+#include "Game/LIGHT3D.h"
+#include "Game/STREAM.h"
 
 void PIPE3D_AspectAdjustMatrix(MATRIX *matrix)
 {
@@ -191,7 +193,96 @@ INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_TransformVerticesToWorld);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_InstanceTransformAndDraw);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_InstanceListTransformAndDrawFunc);
+void PIPE3D_InstanceListTransformAndDrawFunc(StreamUnit *unit, unsigned long **ot, CameraCore *cameraCore, Instance *instance)
+{
+    VertexPool *vertexPool;
+    PrimPool *primPool;
+    VECTOR dpv[2];
+    long maxRad;
+    Level *level;
+    SVECTOR bsPos;
+
+    level = unit->level;
+
+    vertexPool = gameTrackerX.vertexPool;
+    primPool = gameTrackerX.primPool;
+
+    bsPos.vx = instance->position.x;
+    bsPos.vy = instance->position.y;
+    bsPos.vz = instance->position.z;
+
+    if ((unit == NULL) || (!(unit->flags & 0x1)) || (unit->StreamUnitID == gameTrackerX.StreamUnitID) || (WARPGATE_IsObjectOnWarpSide(instance) != 0))
+    {
+        maxRad = instance->object->modelList[instance->currentModel]->maxRad;
+
+        gte_SetRotMatrix(&cameraCore->vvNormalWorVecMat[0]);
+        gte_ldv0(&bsPos);
+        gte_nrtv0();
+        gte_stlvnl(&dpv[0]);
+
+        dpv[0].vx -= cameraCore->vvPlaneConsts[0];
+
+        if ((-maxRad < dpv[0].vx) && (dpv[0].vx < (cameraCore->farPlane + maxRad)) && (-maxRad < (dpv[0].vy - cameraCore->vvPlaneConsts[1]))
+        && (-maxRad < (dpv[0].vz - cameraCore->vvPlaneConsts[2])))
+        {
+            gte_SetRotMatrix(&cameraCore->vvNormalWorVecMat[1]);
+            gte_ldv0(&bsPos);
+            gte_nrtv0();
+            gte_stlvnl(&dpv[1]);
+
+            if ((-maxRad < (dpv[1].vx - cameraCore->vvPlaneConsts[3])) && (-maxRad < (dpv[1].vy - cameraCore->vvPlaneConsts[4])))
+            {
+                if ((instance->flags & 0x80))
+                {
+                    PIPE3D_AnimateTextures(instance->object->modelList[instance->currentModel]->aniTextures, instance->currentTextureAnimFrame);
+                }
+                else
+                {
+                    PIPE3D_AnimateTextures(instance->object->modelList[instance->currentModel]->aniTextures, gameTrackerX.frameCount);
+
+                    instance->currentTextureAnimFrame++;
+                }
+
+                LIGHT_SetMatrixForLightGroupInstance(instance, level);
+
+                if ((!(instance->halvePlane.flags & 0xB)) || ((instance->flags2 & 0x800000)))
+                {
+                    PIPE3D_InstanceTransformAndDraw(instance, cameraCore, vertexPool, primPool, ot, NULL);
+                }
+                else
+                {
+                    PIPE3D_HalvePlaneInstanceTransformAndDraw(instance, cameraCore->wcTransform, vertexPool, primPool, ot, NULL);
+                }
+
+                if ((instance->flags2 & 0x40))
+                {
+                    LIGHT_DrawShadow(cameraCore->wcTransform, instance, primPool, ot);
+                }
+
+                if (instance->additionalDrawFunc != NULL)
+                {
+                    instance->additionalDrawFunc(cameraCore->wcTransform, instance, vertexPool, primPool, ot);
+                }
+
+                gameTrackerX.visibleInstances++;
+
+                instance->flags |= 0x200;
+            }
+            else
+            {
+                instance->flags &= ~0x200;
+            }
+        }
+        else
+        {
+            instance->flags &= ~0x200;
+        }
+    }
+    else
+    {
+        instance->flags &= ~0x200;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_InstanceListTransformAndDraw);
 

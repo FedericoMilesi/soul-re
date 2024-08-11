@@ -572,5 +572,6 @@ long GetFogColor(StreamUnitPortal *portal, StreamUnit *mainStreamUnit, Level *ma
 void DrawFogRectangle(RECT *cliprect, PrimPool *primPool, int otzpos, unsigned long **drawot, long color);
 long StreamRenderLevel(StreamUnit *currentUnit, Level *mainLevel, unsigned long **drawot, long portalFogColor);
 int AddClippedTri(SVECTOR *iv, RECT *cliprect, int *minz);
+int WARPGATE_IsObjectOnWarpSide(Instance *instance);
 
 #endif

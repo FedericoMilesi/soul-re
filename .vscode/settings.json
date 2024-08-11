@@ -81,6 +81,7 @@
         "pipe3d.h": "c",
         "quatg2.h": "c",
         "instncg2.h": "c",
-        "support.h": "c"
+        "support.h": "c",
+        "light3d.h": "c"
     }
 }

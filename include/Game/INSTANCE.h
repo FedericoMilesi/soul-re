@@ -124,7 +124,8 @@ struct _Instance {
     // offset: 0110
     void (*additionalCollideFunc)();
     // offset: 0114
-    void *additionalDrawFunc;
+    //void *additionalDrawFunc;
+    void (*additionalDrawFunc)();
     // offset: 0118
     uintptr_t(*queryFunc)();
     // offset: 011C
