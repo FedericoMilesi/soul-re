@@ -180,6 +180,12 @@
         : "$12", "$13", "$14", "memory" \
     )
 
+#define gte_stsz(r0) __asm__ ( \
+        "swc2    $19, 0(%0)" \
+        : : "r"(r0) \
+        : "memory" \
+    )
+
 // custom macro
 #define gte_ldlvnlsv( r0 ) __asm__ volatile (			\
 	"lhu	$12, 0( %0 );"					\

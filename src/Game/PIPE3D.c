@@ -472,4 +472,25 @@ INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_HalvePlaneGetRingPoints);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_DoGlow);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_Segment2ScreenPt);
+long PIPE3D_Segment2ScreenPt(Instance *instance, MATRIX *wcTransform, int segIndex, Position *pos)
+{
+    MATRIX scTransform;
+    Position vOrigin;
+    long face_z;
+
+    CompMatrix(wcTransform, &instance->matrix[segIndex], &scTransform);
+
+    SetRotMatrix(&scTransform);
+    SetTransMatrix(&scTransform);
+
+    vOrigin.z = 0;
+    vOrigin.y = 0;
+    vOrigin.x = 0;
+
+    gte_ldv0(&vOrigin);
+    gte_nrtps();
+    gte_stsxy(pos);
+    gte_stsz(&face_z);
+
+    return (face_z >> 2) - 20;
+}
