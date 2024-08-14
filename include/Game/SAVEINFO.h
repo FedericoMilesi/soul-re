@@ -291,6 +291,7 @@ SavedIntro *SAVE_UpdateSavedIntro(Instance *instance, Level *level, SavedIntro *
 SavedIntroWithIntro *SAVE_UpdateSavedIntroWithIntro(Instance *instance, Level *level, SavedIntroWithIntro *savedIntro, evControlSaveDataData *extraData);
 SavedLevel *SAVE_HasSavedLevel(long areaID);
 SavedBasic *SAVE_GetSavedEvent(long areaID, long eventNumber);
+long SAVE_PurgeAMemoryBlock();
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];

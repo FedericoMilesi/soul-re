@@ -19,6 +19,8 @@ static SavedBasic *bufferSavedIntroArray[64];
 
 long DoMainMenu;
 
+long SaveArraySize[10];
+
 void SAVE_GetInstanceRotation(Instance *instance, SmallRotation *vector)
 {
     evPositionData *rotation;
@@ -89,7 +91,60 @@ void SAVE_Init(GameTracker *gt)
     SAVE_ClearMemory(gt);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_GetSavedBlock);
+extern char D_800D1E0C[];
+extern char D_800D1E24[];
+extern char D_800D1E44[];
+void *SAVE_GetSavedBlock(long saveType, long extraSize)
+{
+    SavedBasic *savedInfo;
+    long sizeOfSave;
+    long done;
+
+    savedInfo = NULL;
+
+    if (saveType >= 10)
+    {
+        //DEBUG_FatalError("illegal save type %d\n", saveType);
+        DEBUG_FatalError(D_800D1E0C, saveType);
+    }
+
+    sizeOfSave = SaveArraySize[saveType] + extraSize;
+
+    sizeOfSave = ((sizeOfSave + 3) >> 2) << 2;
+
+    done = 0;
+
+    if (sizeOfSave >= 1021)
+    {
+        //DEBUG_FatalError("save %d is too big! (type %d)\n", sizeOfSave, saveType);
+        DEBUG_FatalError(D_800D1E24, sizeOfSave, saveType);
+    }
+
+    do
+    {
+        if ((savedInfoTracker.InfoEnd + sizeOfSave) < savedInfoTracker.EndOfMemory)
+        {
+            savedInfo = (SavedBasic *)savedInfoTracker.InfoEnd;
+
+            *savedInfoTracker.InfoEnd = (char)saveType;
+
+            savedInfo->shiftedSaveSize = (unsigned char)(sizeOfSave >> 2);
+
+            savedInfoTracker.InfoEnd += sizeOfSave;
+
+            done = 1;
+        }
+        else if (SAVE_PurgeAMemoryBlock() == 0)
+        {
+            //DEBUG_FatalError("ran out of saved memory. needed %d, used %d. increase from % d\n", sizeOfSave, savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd, 24576);
+            DEBUG_FatalError(D_800D1E44, sizeOfSave, savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd, 24576);
+
+            done = 1;
+        }
+    } while (done == 0);
+
+    return savedInfo;
+}
 
 long SAVE_PurgeAMemoryBlock()
 {
