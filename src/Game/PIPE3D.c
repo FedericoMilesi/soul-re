@@ -7,6 +7,10 @@
 #include "Game/LIGHT3D.h"
 #include "Game/STREAM.h"
 
+long modelFadeValue; // not from decls.h
+
+long draw_belowSplit;
+
 void PIPE3D_AspectAdjustMatrix(MATRIX *matrix)
 {
     int temp, temp2, temp3; // not from decls.h
@@ -466,7 +470,67 @@ void PIPE3D_AnimateTextures(AniTex *aniTextures, long req_frame)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_AnimateTerrainTextures);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_HalvePlaneInstanceTransformAndDraw);
+void PIPE3D_HalvePlaneInstanceTransformAndDraw(Instance *instance, MATRIX *wcTransform, VertexPool *vertexPool, PrimPool *primPool, unsigned long **ot, Mirror *mirror)
+{
+    Object *object;
+    Model *model;
+    MATRIX *matrixPool;
+    MATRIX wpTransform;
+    MATRIX pwTransform;
+    MATRIX pcTransform;
+    MATRIX lm;
+    MVertex *vertexList;
+    SVector normalX;
+    SVector *normal;
+    SVector translation;
+
+    (void)object;
+
+    normal = &normalX;
+
+    matrixPool = instance->matrix;
+
+    model = instance->object->modelList[instance->currentModel];
+
+    vertexList = model->vertexList;
+
+    normal->x = instance->halvePlane.a;
+    normal->y = instance->halvePlane.b;
+    normal->z = instance->halvePlane.c;
+
+    translation.x = -(short)((normal->x * instance->halvePlane.d) >> 12);
+    translation.y = -(short)((normal->y * instance->halvePlane.d) >> 12);
+    translation.z = -(short)((normal->z * instance->halvePlane.d) >> 12);
+
+    PIPE3D_CalcWorldToSplitPlaneTransform(&wpTransform, normal, &translation);
+
+    PIPE3D_InvertTransform(&pwTransform, &wpTransform);
+
+    CompMatrix(wcTransform, &pwTransform, &pcTransform);
+
+    if (matrixPool != NULL)
+    {
+        LIGHT_PresetInstanceLight(instance, 2048, &lm);
+
+        modelFadeValue = INSTANCE_GetFadeValue(instance);
+
+        PIPE3D_TransformAnimatedSplitInstanceVertices(vertexList, vertexPool->vertex, model, &wpTransform, matrixPool, mirror, &lm, vertexPool->color, instance->perVertexColor);
+
+        if (&primPool->nextPrim[model->numFaces * 12] < primPool->lastPrim)
+        {
+            if ((instance->halvePlane.flags & 0x2))
+            {
+                draw_belowSplit = 1;
+            }
+            else
+            {
+                draw_belowSplit = 0;
+            }
+
+            primPool->nextPrim = DRAW_SplitModel_S(model, instance, vertexPool, &pcTransform, primPool, ot);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_HalvePlaneGetRingPoints);
 
