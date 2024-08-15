@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/DRAW.h"
 #include "Game/PIPE3D.h"
 #include "Game/MATH3D.h"
 #include "Game/HASM.h"
@@ -6,6 +7,7 @@
 #include "Game/GAMELOOP.h"
 #include "Game/LIGHT3D.h"
 #include "Game/STREAM.h"
+#include "Game/FX.h"
 
 long modelFadeValue; // not from decls.h
 
@@ -532,7 +534,72 @@ void PIPE3D_HalvePlaneInstanceTransformAndDraw(Instance *instance, MATRIX *wcTra
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_HalvePlaneGetRingPoints);
+void PIPE3D_HalvePlaneGetRingPoints(Instance *instance, MATRIX *wcTransform, VertexPool *vertexPool, PrimPool *primPool, unsigned long **ot, FXHalvePlane *ring)
+{
+    Object *object;
+    Model *model;
+    MATRIX *matrixPool;
+    MATRIX wpTransform;
+    MATRIX pwTransform;
+    MATRIX pcTransform;
+    MVertex *vertexList;
+    PVertex *poolVertex;
+    SVector normalX;
+    SVector *normal;
+    SVector translation;
+    PlaneConstants *halvePlane;
+
+    poolVertex = (PVertex *)vertexPool;
+
+    object = instance->object;
+
+    normal = &normalX;
+
+    matrixPool = instance->matrix;
+
+    model = object->modelList[instance->currentModel];
+
+    vertexList = model->vertexList;
+
+    if (ring->type == 0)
+    {
+        halvePlane = &ring->ringPlane;
+    }
+    else
+    {
+        halvePlane = &instance->halvePlane;
+    }
+
+    normal->x = halvePlane->a;
+    normal->y = halvePlane->b;
+    normal->z = halvePlane->c;
+
+    translation.x = -(short)((normal->x * halvePlane->d) >> 12);
+    translation.y = -(short)((normal->y * halvePlane->d) >> 12);
+    translation.z = -(short)((normal->z * halvePlane->d) >> 12);
+
+    PIPE3D_CalcWorldToSplitPlaneTransform(&wpTransform, normal, &translation);
+
+    PIPE3D_InvertTransform(&pwTransform, &wpTransform);
+
+    if (ring->type == 2)
+    {
+        PIPE3D_InvertTransform(&pcTransform, &wpTransform);
+    }
+    else
+    {
+        CompMatrix(wcTransform, &pwTransform, &pcTransform);
+    }
+
+    if (matrixPool != NULL)
+    {
+        PIPE3D_TransformSplitInstanceVertices(vertexList, poolVertex, model, &wpTransform, matrixPool, NULL);
+
+        draw_belowSplit = 0;
+
+        primPool->nextPrim = DRAW_DrawRingPoints(model, vertexPool, &pcTransform, primPool, ot, ring->currentColor, ring->type);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_DoGlow);
 

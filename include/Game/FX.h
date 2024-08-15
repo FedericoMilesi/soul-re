@@ -517,6 +517,34 @@ typedef struct _FXGlowEffect {
     short fadeout_time;
 } FXGlowEffect;
 
+// size: 0x2C
+typedef struct _FXHalvePlane {
+    // offset: 0000
+    void *next;
+    // offset: 0004
+    void *continue_process;
+    // offset: 0008 (668 bytes)
+    struct _Instance *instance;
+    // offset: 000C
+    unsigned char effectType;
+    // offset: 000D
+    unsigned char type;
+    // offset: 000E
+    short lifeTime;
+    // offset: 0010
+    long diffTime;
+    // offset: 0014 (12 bytes)
+    struct _PlaneConstants ringPlane;
+    // offset: 0020
+    long currentColor;
+    // offset: 0024
+    long *colorArray;
+    // offset: 0028
+    short numColors;
+    // offset: 002A
+    short colorBlendLife;
+} FXHalvePlane;
+
 void FX_ContinueParticle(FXParticle *currentParticle, FXTracker *fxTracker);
 void FX_SetReaverInstance(Instance *instance);
 void FX_EndInstanceEffects(Instance *instance);
