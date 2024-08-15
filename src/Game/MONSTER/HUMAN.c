@@ -306,7 +306,7 @@ void HUMAN_Embrace(Instance *instance)
 
     MON_TurnToPosition(instance, &gameTrackerX.playerInstance->position, 4096);
 
-    while ((message = DeMessageQueue(&mv->messageQueue)))
+    while ((message = DeMessageQueue(&mv->messageQueue)) != NULL)
     {
         if ((message != NULL) && (message->ID == 0x1000014))
         {

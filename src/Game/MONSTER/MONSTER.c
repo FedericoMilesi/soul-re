@@ -996,7 +996,7 @@ void MON_GeneralDeath(Instance *instance)
         MON_ApplyPhysics(instance);
     }
 
-    while (message = DeMessageQueue(&mv->messageQueue), message != NULL)
+    while ((message = DeMessageQueue(&mv->messageQueue)) != NULL)
     {
         if (message->ID == 0x100000B)
         {
@@ -1154,7 +1154,7 @@ void MON_Petrified(Instance *instance)
         instance->petrifyValue = (short)(4 * (mv->generalTimer - (unsigned int)time));
     }
 
-    while (message = DeMessageQueue(&mv->messageQueue), message != NULL)
+    while ((message = DeMessageQueue(&mv->messageQueue)) != NULL)
     {
         if ((message->ID == 0x100001F) || ((message->ID == 0x1000023) && (message->Data == 0x1000)))
         {

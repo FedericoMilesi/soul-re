@@ -17,7 +17,7 @@ void SOUL_QueueHandler(Instance *instance)
 
     mv = (MonsterVars *)instance->extraData;
 
-    while ((message = DeMessageQueue(&mv->messageQueue)))
+    while ((message = DeMessageQueue(&mv->messageQueue)) != NULL)
     {
         if ((message != NULL) && (message->ID == 0x100000D))
         {
