@@ -180,5 +180,7 @@ void TurnOnCollisionPhysOb(Instance *instance, int coll);
 Instance *PHYSOB_BirthCollectible(Instance *parent, int x, int y, int z, int type, int lifeTime);
 int CheckPhysOb(Instance *instance);
 int CheckPhysObFamily(Instance *instance, unsigned short family);
+void PHYSOB_NormalToAxis(short *x, short *y);
+int PHYSOB_CheckSlide2(Instance *instance, int x, int y, evPhysicsSlideData **data);
 
 #endif

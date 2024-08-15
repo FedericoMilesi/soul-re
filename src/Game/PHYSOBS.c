@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/PHYSOBS.h"
 #include "Game/MATH3D.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_PlayDropSound);
@@ -180,7 +181,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckSlide2);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckDropOnSlope);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckSlideNormal);
+int PHYSOB_CheckSlideNormal(Instance *instance, int x, int y, evPhysicsSlideData **data)
+{
+    PHYSOB_NormalToAxis((short *)&x, (short *)&y);
+
+    return PHYSOB_CheckSlide2(instance, x, y, data);
+}
 
 void PHYSOB_NormalToAxis(short *x, short *y)
 {
