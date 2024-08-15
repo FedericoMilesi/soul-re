@@ -152,7 +152,61 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_MoveTowardsAlign);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_ReAlignFalling);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", DropPhysOb);
+void DropPhysOb(Instance *instance, int flags)
+{
+    PhysObData *Data;
+    Instance *parent;
+    int temp; // not from decls.h
+
+    parent = instance->LinkParent;
+
+    Data = (PhysObData *)instance->extraData;
+
+    if (parent != NULL)
+    {
+        INSTANCE_UnlinkFromParent(instance);
+    }
+    else
+    {
+        Data->Mode &= ~0x800000;
+    }
+
+    PHYSOB_CheckDroppedLineCollision(instance, parent);
+
+    if ((flags & 0x2))
+    {
+        Data->Mode = (Data->Mode & ~0x90) | 0x1000;
+
+        instance->zAccl = 0;
+    }
+    else
+    {
+        if (!(flags & 0x4))
+        {
+            temp = 0;
+
+            if (parent != NULL)
+            {
+                temp = -900;
+            }
+
+            PHYSOB_ReAlignFalling(instance, temp);
+        }
+
+        Data->throwingInstance = parent;
+
+        Data->Mode = (Data->Mode & ~0x1090) | 0x400004;
+
+        instance->zAccl = -10;
+    }
+
+    instance->xVel = 0;
+    instance->yVel = 0;
+    instance->zVel = 0;
+
+    instance->xAccl = 0;
+    instance->yAccl = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysicalRelocateTune);
 
