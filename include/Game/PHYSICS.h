@@ -22,5 +22,6 @@ void PHYSICS_CheckLineInWorld(Instance *instance, PCollideInfo *pcollideInfo);
 int PHYSICS_CheckFaceStick(PCollideInfo *CInfo);
 void PHYSICS_GenericLineCheck(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
 void PHYSICS_GenericLineCheckMask(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
+int PhysicsCheckSliding(Instance *instance, int Data, short Mode);
 
 #endif
