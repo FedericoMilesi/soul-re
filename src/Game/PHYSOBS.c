@@ -179,7 +179,12 @@ int PHYSOBS_CheckObjectAxisAlignment(MATRIX *m0, MATRIX *m1, SVector *axis)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckSlide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckSlide2);
+int PHYSOB_CheckSlide2(Instance *instance, int x, int y, evPhysicsSlideData **data)
+{
+    *data = (evPhysicsSlideData *)SetPhysicsSlideData(1, (short)(x * 704), (short)(y * 704), 0, 640, 640, -150);
+
+    return PhysicsCheckSliding(instance, (intptr_t)*data, 1);
+}
 
 int PHYSOB_CheckDropOnSlope(Instance *instance, int x, int y, evPhysicsSlideData **data)
 {
