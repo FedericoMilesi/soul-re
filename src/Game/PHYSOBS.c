@@ -177,7 +177,12 @@ int PHYSOBS_CheckObjectAxisAlignment(MATRIX *m0, MATRIX *m1, SVector *axis)
     return (short)(((v0.x * v1.x) + (v0.y * v1.y) + (v0.z * v1.z)) >> 12);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckSlide);
+int PHYSOB_CheckSlide(Instance *instance, int x, int y, evPhysicsSlideData **data)
+{
+    *data = (evPhysicsSlideData *)SetPhysicsSlideData(1, (short)(x * 704), (short)(y * 704), 0, 640, 640, -160);
+
+    return PhysicsCheckSliding(instance, (intptr_t)*data, 1);
+}
 
 int PHYSOB_CheckSlide2(Instance *instance, int x, int y, evPhysicsSlideData **data)
 {
