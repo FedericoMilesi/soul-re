@@ -11,33 +11,6 @@ static G2AnimAlphaTable *G2AlphaTables[7] = {0};
 
 static void *circWhere = circBuf;
 
-static inline void STATE_ConfigThrowFields(evObjectThrowData *Ptr, SVector *angularVel, long spinType)
-{
-    if (spinType < 0)
-    {
-        return;
-    }
-
-    if (spinType < 2)
-    {
-        return;
-    }
-
-    if (spinType != 2)
-    {
-        return;
-    }
-
-    if (angularVel == NULL)
-    {
-        Ptr->spinType = 0;
-    }
-    else
-    {
-        Ptr->angularVel = *angularVel;
-    }
-}
-
 void InitMessageQueue(MessageQueue *In)
 {
     In->Head = 0;
@@ -474,18 +447,9 @@ intptr_t SetFXHitData(Instance *hitter, int segment, int amount, int type)
     return (intptr_t)Ptr;
 }
 
-intptr_t SetObjectThrowData(void *target, SVector *angularVel, unsigned short type, unsigned short spinType, int speed, int gravity, int zVel, int initialXRot)
+intptr_t SetObjectThrowData(void *target, SVector *angularVel, unsigned short type, unsigned short spinType, unsigned short speed, short gravity, short zVel, short initialXRot)
 {
     evObjectThrowData *Ptr;
-    short temp, temp2, temp3, temp4; // not from decls.h
-
-    temp = speed;
-
-    temp2 = gravity;
-
-    temp3 = zVel;
-
-    temp4 = initialXRot;
 
     Ptr = (evObjectThrowData *)CIRC_Alloc(sizeof(evObjectThrowData));
 
@@ -516,15 +480,32 @@ intptr_t SetObjectThrowData(void *target, SVector *angularVel, unsigned short ty
         }
     }
 
-    STATE_ConfigThrowFields(Ptr, angularVel, spinType);
+    switch (spinType)
+    {
+    case 0:
+        break;
+    case 1:
+        break;
+    case 2:
+        if (angularVel == NULL)
+        {
+            Ptr->spinType = 0;
+        }
+        else
+        {
+            Ptr->angularVel = *angularVel;
+        }
 
-    Ptr->speed = temp;
+        break;
+    }
 
-    Ptr->gravity = temp2;
+    Ptr->speed = speed;
 
-    Ptr->zVel = temp3;
+    Ptr->gravity = gravity;
 
-    Ptr->initialXRot = temp4;
+    Ptr->zVel = zVel;
+
+    Ptr->initialXRot = initialXRot;
 
     return (intptr_t)Ptr;
 }

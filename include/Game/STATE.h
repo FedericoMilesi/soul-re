@@ -527,7 +527,7 @@ void PurgeMessageQueue(MessageQueue *In);
 Message *PeekMessageQueue(MessageQueue *In);
 intptr_t SetActionPlayHostAnimationData(Instance *instance, Instance *host, int newAnim, int newFrame, int frames, int mode);
 void G2EmulationInstanceSwitchAnimationAlpha(Instance *instance, int CurrentSection, int NewAnim, int NewFrame, int Frames, int Mode, int AlphaTable);
-intptr_t SetObjectThrowData(void *target, SVector *angularVel, unsigned short type, unsigned short spinType, int speed, int gravity, int zVel, int initialXRot);
+intptr_t SetObjectThrowData(void *target, SVector *angularVel, unsigned short type, unsigned short spinType, unsigned short speed, short gravity, short zVel, short initialXRot);
 intptr_t SetCollideInfoData(CollideInfo *srcCI);
 intptr_t SetShadowSegmentData(unsigned long total);
 void G2EmulationInstanceSetAnimSpeed(Instance *instance, int CurrentSection, int speed);
