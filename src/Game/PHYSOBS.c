@@ -104,7 +104,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteSlideToStop);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteFlip);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckSlope);
+int CheckSlope(int Znormal, int Slope, int Slop)
+{
+    int temp; // not from decls.h
+
+    temp = 0;
+
+    if ((Slope - Slop) < Znormal)
+    {
+        temp = Znormal < (Slope + Slop);
+    }
+
+    return temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckBlockSlope);
 
