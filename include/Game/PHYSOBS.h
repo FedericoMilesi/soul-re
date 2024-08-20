@@ -171,6 +171,56 @@ typedef struct PhysObData {
     int physObTimer;
 } PhysObData;
 
+// size: 0x8
+typedef struct LightTableEntry {
+    // offset: 0000
+    short r;
+    // offset: 0002
+    short g;
+    // offset: 0004
+    short b;
+    // offset: 0006
+    short radius;
+} LightTableEntry;
+
+// size: 0x8
+typedef struct _PhysObLight {
+    // offset: 0000
+    unsigned char length;
+    // offset: 0001
+    unsigned char segment;
+    // offset: 0002
+    short speed;
+    // offset: 0004 (8 bytes)
+    struct LightTableEntry *lightTable;
+} PhysObLight;
+
+// size: 0xC
+typedef struct __PhysObProjectileData {
+    // offset: 0000
+    char model;
+    // offset: 0001
+    char startAnim;
+    // offset: 0002
+    char loopAnim;
+    // offset: 0003
+    char endAnim;
+    // offset: 0004
+    long flags;
+    // offset: 0008 (28 bytes)
+    struct PhysObWeaponAttributes *weapon;
+} PhysObProjectileData;
+
+// size: 0x10
+typedef struct __PhysObProjectileProperties {
+    // offset: 0000 (8 bytes)
+    struct PhysObProperties Properties;
+    // offset: 0008
+    long totalProjectiles;
+    // offset: 000C (12 bytes)
+    struct __PhysObProjectileData *data;
+} PhysObProjectileProperties;
+
 evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint, int type);
 void CollidePhysicalObject(Instance *instance, GameTracker *gameTracker);
 void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker);

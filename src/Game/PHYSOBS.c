@@ -208,7 +208,88 @@ void DropPhysOb(Instance *instance, int flags)
     instance->yAccl = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysicalRelocateTune);
+void PhysicalRelocateTune(Object *object, long offset)
+{
+    PhysObWeaponProperties *properties;
+    PhysObLight *pLight;
+
+    properties = (PhysObWeaponProperties *)object->data;
+
+    if (properties != NULL)
+    {
+        if (properties->Properties.family == 0)
+        {
+            pLight = (PhysObLight *)OFFSET_DATA(properties->WeaponAttributes.Light, offset);
+
+            properties->WeaponAttributes.Light = pLight;
+
+            if (pLight != NULL)
+            {
+                pLight->lightTable = (LightTableEntry *)OFFSET_DATA(pLight->lightTable, offset);
+            }
+
+            properties->WeaponAttributes.splinter.splinterData = (void *)OFFSET_DATA(properties->WeaponAttributes.splinter.splinterData, offset);
+        }
+
+        if (properties->Properties.family == 3)
+        {
+            PhysObInteractProperties *prop;
+            PhysObWeaponAttributes *weapon;
+
+            prop = (PhysObInteractProperties *)object->data;
+
+            prop->weapon = (PhysObWeaponAttributes *)OFFSET_DATA(prop->weapon, offset);
+
+            weapon = prop->weapon;
+
+            if (weapon != NULL)
+            {
+                weapon->Light = (PhysObLight *)OFFSET_DATA(weapon->Light, offset);
+
+                pLight = weapon->Light;
+
+                if (pLight != NULL)
+                {
+                    pLight->lightTable = (LightTableEntry *)OFFSET_DATA(pLight->lightTable, offset);
+                }
+
+                weapon->splinter.splinterData = (void *)OFFSET_DATA(weapon->splinter.splinterData, offset);
+            }
+        }
+
+        if (properties->Properties.family == 7)
+        {
+            PhysObProjectileProperties *prop;
+            PhysObProjectileData *temp; // not from decls.h
+
+            prop = (PhysObProjectileProperties *)object->data;
+
+            prop->data = (PhysObProjectileData *)OFFSET_DATA(prop->data, offset);
+
+            if (prop->data != NULL)
+            {
+                int i;
+
+                temp = prop->data;
+
+                for (i = 0; i < prop->totalProjectiles; i++)
+                {
+                    temp[i].weapon = (PhysObWeaponAttributes *)OFFSET_DATA(temp[i].weapon, offset);
+
+                    if (temp[i].weapon != NULL)
+                    {
+                        pLight = temp[i].weapon->Light;
+
+                        if (pLight != NULL)
+                        {
+                            pLight->lightTable = (LightTableEntry *)OFFSET_DATA(pLight->lightTable, offset);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 int PHYSOBS_CheckObjectAxisAlignment(MATRIX *m0, MATRIX *m1, SVector *axis)
 {
