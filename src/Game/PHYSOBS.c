@@ -92,7 +92,30 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysObGetSplinter);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", TurnOnCollisionPhysOb);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", TurnOffCollisionPhysOb);
+void TurnOffCollisionPhysOb(Instance *instance, int coll)
+{
+    PhysObWeaponAttributes *weapon;
+
+    weapon = PhysObGetWeapon(instance);
+
+    if (weapon != NULL)
+    {
+        if ((coll & 0x2))
+        {
+            COLLIDE_SegmentCollisionOff(instance, (signed char)weapon->LeftHandSphere);
+        }
+
+        if ((coll & 0x1))
+        {
+            COLLIDE_SegmentCollisionOff(instance, (signed char)weapon->RightHandSphere);
+        }
+
+        if ((coll & 0x4))
+        {
+            COLLIDE_SegmentCollisionOff(instance, (signed char)weapon->ThrowSphere);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", GetPhysObCollisionType);
 
