@@ -84,7 +84,47 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", GetObliqueDirection);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CollidePhysicalObject);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysObGetWeapon);
+PhysObWeaponAttributes *PhysObGetWeapon(Instance *instance)
+{
+    PhysObWeaponAttributes *weapon;
+
+    weapon = NULL;
+
+    if (CheckPhysObFamily(instance, 0) != 0)
+    {
+        PhysObWeaponProperties *Prop;
+
+        Prop = (PhysObWeaponProperties *)instance->data;
+
+        weapon = &Prop->WeaponAttributes;
+    }
+
+    if (CheckPhysObFamily(instance, 3) != 0)
+    {
+        PhysObInteractProperties *Prop;
+
+        Prop = (PhysObInteractProperties *)instance->data;
+
+        weapon = Prop->weapon;
+    }
+
+    if (CheckPhysObFamily(instance, 7) != 0)
+    {
+        PhysObProjectileProperties *Prop;
+        PhysObProjectileData *temp; // not from decls.h
+        evObjectBirthProjectileData *temp2; // not from decls.h
+
+        Prop = (PhysObProjectileProperties *)instance->data;
+
+        temp2 = (evObjectBirthProjectileData *)instance->extraData;
+
+        temp = Prop->data;
+
+        weapon = temp[temp2->joint].weapon;
+    }
+
+    return weapon;
+}
 
 PhysObLight *PhysObGetLight(Instance *instance)
 {
