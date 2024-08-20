@@ -98,7 +98,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", GetPhysObCollisionType);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteThrow);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteDrag);
+void ExecuteDrag(Instance *instance)
+{
+    PhysObData *Data;
+
+    Data = (PhysObData *)instance->extraData;
+
+    if ((Data->Mode & 0x2))
+    {
+        Data->Mode &= ~0x2;
+    }
+
+    if ((Data->Mode & 0x100000))
+    {
+        Data->Force = NULL;
+
+        FinishPush(instance);
+
+        Data->Mode = (Data->Mode & ~0x10014A) | 0x1;
+
+        instance->initialPos = instance->position;
+    }
+    else
+    {
+        G2EmulationInstancePlayAnimation(instance);
+    }
+}
 
 void ExecuteSlideToStop(Instance *instance)
 {
