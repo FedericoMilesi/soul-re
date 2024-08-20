@@ -102,7 +102,49 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteDrag);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteSlideToStop);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteFlip);
+void ExecuteFlip(Instance *instance)
+{
+    PhysObData *Data;
+
+    Data = (PhysObData *)instance->extraData;
+
+    if ((Data->Mode & 0x2))
+    {
+        Data->Mode &= ~0x2;
+    }
+
+    if ((Data->Mode & 0x100000))
+    {
+        if ((Data->Mode & 0x4000000))
+        {
+            Data->Mode &= ~0x410114A;
+
+            if (!(Data->Mode & 0x4))
+            {
+                Data->Mode |= 0x1;
+            }
+        }
+        else
+        {
+            if (Data->PathNumber == 14)
+            {
+                instance->zVel = -50;
+            }
+
+            ResetOrientation(instance);
+
+            Data->Force = NULL;
+
+            Data->Mode = (Data->Mode & ~0x1000) | 0x4000000;
+
+            instance->initialPos = instance->position;
+        }
+    }
+    else
+    {
+        G2EmulationInstancePlayAnimation(instance);
+    }
+}
 
 int CheckSlope(int Znormal, int Slope, int Slop)
 {
