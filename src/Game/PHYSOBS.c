@@ -108,7 +108,23 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckSlope);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckBlockSlope);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_FigureDragForSlope);
+int PHYSOBS_FigureDragForSlope(Instance *instance, int pathNumber, int *result)
+{
+    int didSomething;
+
+    didSomething = 0;
+
+    do {} while (0); // garbage code for reodering
+
+    if ((PHYSOBS_IsAPushBlockAttached(instance) != NULL) || (pathNumber == 5) || (pathNumber == 1) || (pathNumber == 7) || (pathNumber == 4) || (pathNumber == 2) || (didSomething = 0, pathNumber == 3))
+    {
+        *result = 0;
+
+        didSomething = 1;
+    }
+
+    return didSomething;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckThrownLineCollision);
 
