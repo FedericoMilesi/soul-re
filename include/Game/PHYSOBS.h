@@ -237,5 +237,7 @@ int PHYSOB_ReAlignFalling(Instance *instance, int zEndOff);
 int CheckPhysObAbility(Instance *instance, unsigned short ability);
 void ResetOrientation(Instance *instance);
 void PhysOb_AlignPush(Instance *instance, int x, int y, int path, PhysObData *Data);
+Instance *PHYSOBS_IsAPushBlockAttached(Instance *block);
+int PHYSOB_CheckDirectedLineCollision(Instance *instance, int xoffset, int yoffset, int startZOffset);
 
 #endif

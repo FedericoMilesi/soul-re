@@ -116,7 +116,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckDroppedLineCollision);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckDirectedLineCollision);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_CheckForStackedForwardHits);
+long PHYSOBS_CheckForStackedForwardHits(Instance *block, long xoffset, long yoffset)
+{
+    Instance *attachedBlock;
+    long result;
+
+    result = 0;
+
+    attachedBlock = PHYSOBS_IsAPushBlockAttached(block);
+
+    while (attachedBlock != NULL)
+    {
+        if (PHYSOB_CheckDirectedLineCollision(attachedBlock, xoffset, yoffset, 0) != 0)
+        {
+            result = 1;
+            break;
+        }
+
+        attachedBlock = PHYSOBS_IsAPushBlockAttached(attachedBlock);
+    }
+
+    return result;
+}
 
 void PHYSOBS_SetNewAnim(Instance *instance, PhysObData *Data, unsigned long modeBits, int path, int resetflg)
 {
