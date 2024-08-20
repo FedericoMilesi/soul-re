@@ -96,7 +96,46 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", TurnOffCollisionPhysOb);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", GetPhysObCollisionType);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteThrow);
+void ExecuteThrow(Instance *instance)
+{
+    PhysObData *Data;
+
+    Data = (PhysObData *)instance->extraData;
+
+    if ((Data->throwFlags & 0x1))
+    {
+        short angley;
+        Position zero;
+        Position velocity;
+
+        memset(&zero, 0, sizeof(Position));
+
+        velocity.x = (short)instance->xVel;
+        velocity.y = (short)instance->yVel;
+        velocity.z = (short)instance->zVel;
+
+        angley = MATH3D_AngleFromPosToPos(&zero, &velocity);
+
+        instance->rotation.x = Data->initialXRot + MATH3D_ElevationFromPosToPos(&zero, &velocity);
+        instance->rotation.z = angley;
+        instance->rotation.y = 0;
+
+        MATH3D_ZYXtoXYZ(&instance->rotation);
+    }
+    else
+    {
+        instance->rotation.x += Data->xRotVel;
+        instance->rotation.y += Data->yRotVel;
+        instance->rotation.z += Data->zRotVel;
+    }
+
+    Data->physObTimer -= gameTrackerX.timeMult;
+
+    if (Data->physObTimer < 0)
+    {
+        INSTANCE_KillInstance(instance);
+    }
+}
 
 void ExecuteDrag(Instance *instance)
 {
