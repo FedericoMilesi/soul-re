@@ -88,7 +88,22 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysObGetWeapon);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysObGetLight);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysObGetSplinter);
+PhysObSplinter *PhysObGetSplinter(Instance *instance)
+{
+    PhysObWeaponAttributes *weapon;
+    PhysObSplinter *pSplinter;
+
+    pSplinter = NULL;
+
+    weapon = PhysObGetWeapon(instance);
+
+    if (weapon != NULL)
+    {
+        pSplinter = &weapon->splinter;
+    }
+
+    return pSplinter;
+}
 
 void TurnOnCollisionPhysOb(Instance *instance, int coll)
 {
