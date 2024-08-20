@@ -234,5 +234,6 @@ void PHYSOB_NormalToAxis(short *x, short *y);
 int PHYSOB_CheckSlide2(Instance *instance, int x, int y, evPhysicsSlideData **data);
 int PHYSOB_CheckDroppedLineCollision(Instance *instance, Instance *parent);
 int PHYSOB_ReAlignFalling(Instance *instance, int zEndOff);
+int CheckPhysObAbility(Instance *instance, unsigned short ability);
 
 #endif

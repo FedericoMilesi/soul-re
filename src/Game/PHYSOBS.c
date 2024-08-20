@@ -124,7 +124,104 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckForEnemyInBlkSpot);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_CheckForValidMove);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteGravitate);
+void ExecuteGravitate(Instance *instance)
+{
+    PhysObData *Data;
+    Instance *Force;
+    G2EulerAngles ea;
+    Vector Position;
+    Model *model;
+    MATRIX *forceMatrix;
+    int scale;
+
+    Data = (PhysObData *)instance->extraData;
+
+    Force = Data->Force;
+
+    model = instance->object->modelList[0];
+
+    forceMatrix = &Force->matrix[Data->LinkNode];
+
+    if (CheckPhysObAbility(instance, 1) != 0)
+    {
+        COLLIDE_SegmentCollisionOff(instance, 1);
+    }
+
+    if (Data->Steps != 0)
+    {
+        G2EulerAngles_FromMatrix(&ea, (G2Matrix *)forceMatrix, 21);
+
+        if (Data->Step == 0)
+        {
+            Data->rx1 = instance->rotation.x;
+            Data->ry1 = instance->rotation.y;
+            Data->rz1 = instance->rotation.z;
+
+            Data->px = instance->position.x;
+            Data->py = instance->position.y;
+            Data->pz = instance->position.z;
+        }
+
+        instance->rotation.x = Data->rx1 + (((ea.x - Data->rx1) * Data->Step) / Data->Steps);
+        instance->rotation.y = Data->ry1 + (((ea.y - Data->ry1) * Data->Step) / Data->Steps);
+        instance->rotation.z = Data->rz1 + (((ea.z - Data->rz1) * Data->Step) / Data->Steps);
+
+        ApplyMatrix(&instance->matrix[2], (SVECTOR *)&model->segmentList[2].px, (VECTOR *)&Position);
+
+        Position.x = forceMatrix->t[0] - Position.x;
+        Position.y = forceMatrix->t[1] - Position.y;
+        Position.z = forceMatrix->t[2] - Position.z;
+
+        instance->position.x = (short)(Data->px + (((Position.x - Data->px) * Data->Step) / Data->Steps));
+        instance->position.y = (short)(Data->py + (((Position.y - Data->py) * Data->Step) / Data->Steps));
+        instance->position.z = (short)(Data->pz + (((Position.z - Data->pz) * Data->Step) / Data->Steps));
+
+        Data->Step++;
+    }
+
+    if ((Data->Mode & 0x20000))
+    {
+        if (Data->Steps == 0)
+        {
+            scale = 4096;
+        }
+        else
+        {
+            scale = 4096 - ((Data->Step << 12) / Data->Steps);
+        }
+
+        instance->scale.x = instance->scale.y = instance->scale.z = scale;
+    }
+
+    if (Data->Step == Data->Steps)
+    {
+        if ((Data->Mode & 0x20000))
+        {
+            INSTANCE_KillInstance(instance);
+        }
+        else
+        {
+            Data->Mode = (Data->Mode & ~0x1024005) | 0x1080;
+
+            TurnOffCollisionPhysOb(instance, 7);
+
+            INSTANCE_LinkToParent(instance, Force, Data->LinkNode);
+
+            Data->Force = NULL;
+
+            Data->Step = 0;
+            Data->Steps = 0;
+
+            instance->xVel = 0;
+            instance->yVel = 0;
+            instance->zVel = 0;
+
+            instance->xAccl = 0;
+            instance->yAccl = 0;
+            instance->zAccl = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteFollow);
 
