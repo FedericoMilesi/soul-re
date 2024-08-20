@@ -470,7 +470,73 @@ void PIPE3D_AnimateTextures(AniTex *aniTextures, long req_frame)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_AnimateTerrainTextures);
+void PIPE3D_AnimateTerrainTextures(DrMoveAniTex *aniTextures, long req_frame, PrimPool *primPool, unsigned long **drawot)
+{
+    unsigned long *prim;
+    DrMoveAniTexDestInfo *dest;
+    DrMoveAniTexSrcInfo *src;
+    long i;
+    unsigned long **otl;
+
+    prim = primPool->nextPrim;
+
+    otl = &drawot[3071];
+
+    if (aniTextures != NULL)
+    {
+        if ((char *)prim < (char *)&primPool->lastPrim[-(aniTextures->numAniTextues * 24)])
+        {
+            for (i = 0; i < aniTextures->numAniTextues; i++)
+            {
+                dest = ((DrMoveAniTex *)((unsigned long *)aniTextures + i))->aniTexInfo;
+
+                src = &dest->frame + ((req_frame / (unsigned long)dest->speed) % dest->numFrames);
+
+                if (*(int *)&src->pixSrcX != *(int *)&dest->pixCurrentX) // TODO: this is likely an optimization
+                {
+                    prim[1] = 0x1000000;
+                    prim[2] = 0x80000000;
+                    prim[3] = *(int *)src;
+                    prim[4] = ((int *)dest)[0];
+                    prim[5] = ((int *)dest)[1];
+
+                    //addPrim(otl[0], prim);
+
+                    *(int *)prim = getaddr(&otl[0]) | 0x5000000;
+                    *(int *)&otl[0] = (int)prim & 0xFFFFFF;
+
+                    *(int *)&dest->pixCurrentX = *(int *)&src->pixSrcX;
+
+                    prim += 24 / 4;
+
+                    primPool->numPrims++;
+                }
+
+                if (*(int *)&src->clutSrcX != *(int *)&dest->clutCurrentX) // TODO: this is likely an optimization
+                {
+                    prim[1] = 0x1000000;
+                    prim[2] = 0x80000000;
+                    prim[3] = *(int *)&src->clutSrcX;
+                    prim[4] = *(int *)&dest->clutDstX;
+                    prim[5] = *(int *)&dest->clutW;
+
+                    //addPrim(otl[0], prim);
+
+                    *(int *)prim = getaddr(&otl[0]) | 0x5000000;
+                    *(int *)&otl[0] = (int)prim & 0xFFFFFF;
+
+                    prim += 24 / 4;
+
+                    *(int *)&dest->clutCurrentX = *(int *)&src->clutSrcX;
+
+                    primPool->numPrims++;
+                }
+            }
+        }
+
+        primPool->nextPrim = prim;
+    }
+}
 
 void PIPE3D_HalvePlaneInstanceTransformAndDraw(Instance *instance, MATRIX *wcTransform, VertexPool *vertexPool, PrimPool *primPool, unsigned long **ot, Mirror *mirror)
 {
