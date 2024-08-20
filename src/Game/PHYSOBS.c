@@ -3,6 +3,7 @@
 #include "Game/MATH3D.h"
 #include "Game/PHYSICS.h"
 #include "Game/STATE.h"
+#include "Game/G2/ANMG2ILF.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_PlayDropSound);
 
@@ -76,7 +77,31 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysicalObjectQuery);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysicalObjectPost);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysobAnimCallback);
+long PhysobAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data)
+{
+    PhysObData *Data;
+    Instance *temp; // not from decls.h
+
+    if (message == 1)
+    {
+        temp = (Instance *)data;
+
+        Data = (PhysObData *)temp->extraData;
+
+        G2AnimSection_SetPaused(&anim->section[sectionID]);
+
+        Data->Mode |= 0x100000;
+
+        if ((Data->Mode & 0x80000))
+        {
+            INSTANCE_KillInstance(temp);
+        }
+
+        return messageDataA;
+    }
+
+    return INSTANCE_DefaultAnimCallback(anim, sectionID, message, messageDataA, messageDataB, (Instance *)data);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckForceCollision);
 
