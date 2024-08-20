@@ -100,7 +100,39 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteThrow);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteDrag);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteSlideToStop);
+void ExecuteSlideToStop(Instance *instance)
+{
+    PhysObData *Data;
+
+    Data = (PhysObData *)instance->extraData;
+
+    if ((Data->Mode & 0x100000))
+    {
+        if ((Data->Mode & 0x4000000))
+        {
+            Data->Mode &= ~0x410114A;
+
+            if (!(Data->Mode & 0x4))
+            {
+                Data->Mode |= 0x1;
+            }
+        }
+        else
+        {
+            Data->Force = NULL;
+
+            FinishPush(instance);
+
+            Data->Mode = (Data->Mode & ~0x1000) | 0x4000000;
+
+            instance->initialPos = instance->position;
+        }
+    }
+    else
+    {
+        G2EmulationInstancePlayAnimation(instance);
+    }
+}
 
 void ExecuteFlip(Instance *instance)
 {
