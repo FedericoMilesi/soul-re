@@ -118,7 +118,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckDirectedLineCollision);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_CheckForStackedForwardHits);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_SetNewAnim);
+void PHYSOBS_SetNewAnim(Instance *instance, PhysObData *Data, unsigned long modeBits, int path, int resetflg)
+{
+    Data->PathNumber = (short)path;
+
+    Data->Mode = (Data->Mode & ~0x1) | modeBits;
+
+    if (resetflg != 0)
+    {
+        ResetOrientation(instance);
+    }
+
+    PhysOb_AlignPush(instance, (int)Data->xForce, (int)Data->yForce, path, Data);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckForEnemyInBlkSpot);
 

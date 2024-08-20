@@ -235,5 +235,7 @@ int PHYSOB_CheckSlide2(Instance *instance, int x, int y, evPhysicsSlideData **da
 int PHYSOB_CheckDroppedLineCollision(Instance *instance, Instance *parent);
 int PHYSOB_ReAlignFalling(Instance *instance, int zEndOff);
 int CheckPhysObAbility(Instance *instance, unsigned short ability);
+void ResetOrientation(Instance *instance);
+void PhysOb_AlignPush(Instance *instance, int x, int y, int path, PhysObData *Data);
 
 #endif
