@@ -573,5 +573,6 @@ void DrawFogRectangle(RECT *cliprect, PrimPool *primPool, int otzpos, unsigned l
 long StreamRenderLevel(StreamUnit *currentUnit, Level *mainLevel, unsigned long **drawot, long portalFogColor);
 int AddClippedTri(SVECTOR *iv, RECT *cliprect, int *minz);
 int WARPGATE_IsObjectOnWarpSide(Instance *instance);
+int STREAM_IsMorphInProgress();
 
 #endif

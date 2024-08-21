@@ -221,6 +221,88 @@ typedef struct __PhysObProjectileProperties {
     struct __PhysObProjectileData *data;
 } PhysObProjectileProperties;
 
+// size: 0x20
+typedef struct PhysObSwitchProperties {
+    // offset: 0000 (8 bytes)
+    struct PhysObProperties Properties;
+    // offset: 0008
+    short Distance;
+    // offset: 000A
+    short Class;
+    // offset: 000C
+    unsigned char onAnim;
+    // offset: 000D
+    unsigned char offAnim;
+    // offset: 000E
+    unsigned char failedOnAnim;
+    // offset: 000F
+    unsigned char enableAnim;
+    // offset: 0010
+    unsigned char shutAnim;
+    // offset: 0011
+    unsigned char onWalkTimer;
+    // offset: 0012
+    unsigned char offWalkTimer;
+    // offset: 0013
+    unsigned char walkMode;
+    // offset: 0014
+    unsigned char razielOnAnim;
+    // offset: 0015
+    unsigned char razielOffAnim;
+    // offset: 0016
+    unsigned char razielFailedOnAnim;
+    // offset: 0017
+    unsigned char razielEnableAnim;
+    // offset: 0018
+    unsigned char startMode;
+    // offset: 0019
+    unsigned char startAnim;
+    // offset: 001A
+    unsigned short engageXYDistance;
+    // offset: 001C
+    char engageZMinDelta;
+    // offset: 001D
+    char engageZMaxDelta;
+    // offset: 001E
+    unsigned char engageYCone;
+    // offset: 001F
+    unsigned char engageZCone;
+} PhysObSwitchProperties;
+
+// size: 0x4
+typedef struct SwitchData {
+    // offset: 0000
+    short state;
+    // offset: 0002
+    short accumulator;
+} SwitchData;
+
+// size: 0x8
+typedef struct _PhysObSaveData {
+    // offset: 0000 (4 bytes)
+    struct SwitchData switchData;
+    // offset: 0004
+    long Mode;
+} PhysObSaveData;
+
+// size: 0x14
+typedef struct PhysObCollectibleProperties {
+    // offset: 0000 (8 bytes)
+    struct PhysObProperties Properties;
+    // offset: 0008
+    short collectClass;
+    // offset: 000A
+    short collectValue;
+    // offset: 000C
+    unsigned long distance;
+    // offset: 0010
+    unsigned char idleAnim;
+    // offset: 0011
+    unsigned char collectAnim;
+    // offset: 0012
+    unsigned short spatialNode;
+} PhysObCollectibleProperties;
+
 evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint, int type);
 void CollidePhysicalObject(Instance *instance, GameTracker *gameTracker);
 void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker);
@@ -241,5 +323,20 @@ Instance *PHYSOBS_IsAPushBlockAttached(Instance *block);
 int PHYSOB_CheckDirectedLineCollision(Instance *instance, int xoffset, int yoffset, int startZOffset);
 void FinishPush(Instance *instance);
 PhysObWeaponAttributes *PhysObGetWeapon(Instance *instance);
+PhysObLight *PhysObGetLight(Instance *instance);
+int PushPhysOb(Instance *instance, short x, short y, short PathNumber, Instance *Force);
+int FlipPhysOb(Instance *instance, short x, short y, Instance *Force);
+int PickUpPhysOb(Instance *instance, short Steps, Instance *Force, int LinkNode);
+void ExecuteGravitate(Instance *instance);
+int CanBePickedUp(Instance *instance, Instance *Force, int LinkNode);
+void StopPhysOb(Instance *instance);
+void DropPhysOb(Instance *instance, int flags);
+void ThrowPhysOb(Instance *instance, evObjectThrowData *throwData);
+int SwitchPhysOb(Instance *instance);
+void ResetSwitchPhysOb(Instance *instance);
+int InteractPhysOb(Instance *instance, Instance *Force, int LinkNode, int Action);
+void PHYSOB_EndBurning(Instance *instance, PhysObLight *pLight);
+void PHYSOB_StopBurning(Instance *instance, PhysObLight *pLight);
+void PHYSOB_StartBurning(Instance *instance, PhysObLight *pLight);
 
 #endif

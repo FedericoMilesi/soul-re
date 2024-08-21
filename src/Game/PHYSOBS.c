@@ -3,6 +3,9 @@
 #include "Game/MATH3D.h"
 #include "Game/PHYSICS.h"
 #include "Game/STATE.h"
+#include "Game/STREAM.h"
+#include "Game/GLYPH.h"
+#include "Game/SCRIPT.h"
 #include "Game/G2/ANMG2ILF.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_PlayDropSound);
@@ -75,7 +78,343 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ProcessPhysicalObject);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysicalObjectQuery);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysicalObjectPost);
+void PhysicalObjectPost(Instance *instance, unsigned long Message, unsigned long Data)
+{
+    evObjectData *Ptr;
+    PhysObData *PData;
+
+    PData = (PhysObData *)instance->extraData;
+
+    Ptr = (evObjectData *)Data;
+
+    switch (Message)
+    {
+    case 0x800025:
+        break;
+    case 0x800000:
+        if ((STREAM_IsMorphInProgress() != 0) || (gameTrackerX.gameData.asmData.MorphType == 0))
+        {
+            Ptr->rc = PushPhysOb(instance, Ptr->x, Ptr->y, Ptr->PathNumber, Ptr->Force);
+        }
+
+        break;
+    case 0x800001:
+        if ((STREAM_IsMorphInProgress() != 0) || (gameTrackerX.gameData.asmData.MorphType == 0))
+        {
+            Ptr->rc = FlipPhysOb(instance, Ptr->x, Ptr->y, Ptr->Force);
+        }
+
+        break;
+    case 0x800002:
+        if ((STREAM_IsMorphInProgress() != 0) || (gameTrackerX.gameData.asmData.MorphType == 0) || (Ptr->PathNumber == 0))
+        {
+            Ptr->LinkNode = PickUpPhysOb(instance, Ptr->PathNumber, Ptr->Force, Ptr->LinkNode);
+
+            if ((Ptr->PathNumber == 0) && ((PData->Mode & 0x4000)))
+            {
+                ExecuteGravitate(instance);
+            }
+        }
+
+        break;
+    case 0x80002E:
+        if (CanBePickedUp(instance, Ptr->Force, Ptr->LinkNode) != 0)
+        {
+            Ptr->LinkNode = 0;
+        }
+
+        break;
+    case 0x800004:
+        StopPhysOb(instance);
+        break;
+    case 0x800008:
+        DropPhysOb(instance, (int)Data);
+
+        if (((int)Data & 0x1))
+        {
+            PData->Mode |= 0x2000000;
+        }
+
+        break;
+    case 0x800010:
+        ThrowPhysOb(instance, (evObjectThrowData *)Data);
+        break;
+    case 0x800020:
+        SwitchPhysOb(instance);
+        break;
+    case 0x80002D:
+        ResetSwitchPhysOb(instance);
+        break;
+    case 0x800023:
+        if ((STREAM_IsMorphInProgress() != 0) || (gameTrackerX.gameData.asmData.MorphType == 0))
+        {
+            evObjectBreakOffData *temp; // not from decls.h
+
+            temp = (evObjectBreakOffData *)Data;
+
+            InteractPhysOb(instance, temp->force, temp->node, temp->action);
+        }
+
+        break;
+    case 0x800021:
+    case 0x800022:
+    {
+        PhysObSwitchProperties *Prop;
+        PhysObSwitchProperties *temp; // not from decls.h
+
+        if (CheckPhysOb(instance) != 0)
+        {
+            Prop = (PhysObSwitchProperties *)instance->data;
+
+            if (CheckPhysObFamily(instance, 2) != 0)
+            {
+                temp = (PhysObSwitchProperties *)instance->extraData;
+
+                if (Message == 0x800021)
+                {
+                    temp->Properties.ID |= 0x2;
+                }
+                else
+                {
+                    temp->Properties.ID &= ~0x2;
+                }
+
+                break;
+            }
+
+            if (Prop->Class == 0)
+            {
+                PhysObData *Data;
+
+                Data = (PhysObData *)instance->extraData;
+
+                if (Message == 0x800021)
+                {
+                    Data->Mode &= ~0x2000;
+                    break;
+                }
+
+                Data->Mode |= 0x2000;
+            }
+        }
+
+        break;
+    }
+    case 0x100007:
+    {
+        PhysObSaveData *saveData;
+
+        saveData = ((evControlSaveDataData *)Data)->data;
+
+        *(SwitchData *)&PData->xForce = saveData->switchData; // TODO: very illogical, needs rewriting
+
+        PData->Mode = saveData->Mode & ~0x100800;
+
+        if ((PData->Mode & 0x2000000))
+        {
+            instance->flags |= 0x20;
+        }
+
+        if (CheckPhysObAbility(instance, 32) != 0)
+        {
+            PhysObLight *pLight;
+
+            pLight = PhysObGetLight(instance);
+
+            if (!(PData->Mode & 0x10000))
+            {
+                PHYSOB_EndBurning(instance, pLight);
+            }
+        }
+
+        if (CheckPhysObFamily(instance, 2) != 0)
+        {
+            PhysObSwitchProperties *Prop;
+            PhysObSwitchProperties *temp; // not from decls.h
+
+            temp = (PhysObSwitchProperties *)instance->extraData;
+
+            Prop = (PhysObSwitchProperties *)instance->data;
+
+            if ((temp->Properties.ID & 0x1))
+            {
+                G2EmulationInstanceSetAnimation(instance, 0, Prop->offAnim, 0, 0);
+                G2EmulationInstanceSetMode(instance, 0, 1);
+
+                G2EmulationInstancePlayAnimation(instance);
+            }
+        }
+
+        if (CheckPhysObFamily(instance, 3) != 0)
+        {
+            PhysObInteractProperties *temp; // not from decls.h
+
+            temp = (PhysObInteractProperties *)instance->extraData;
+
+            if ((short)temp->Properties.Type != 0)
+            {
+                G2EmulationInstanceSetAnimation(instance, 0, 0, 0, 0);
+                G2EmulationInstanceSetMode(instance, 0, 1);
+
+                G2EmulationInstancePlayAnimation(instance);
+            }
+        }
+
+        break;
+    }
+    case 0x100008:
+        if (PData != NULL)
+        {
+            PData->px += Ptr->x;
+            PData->py += Ptr->y;
+            PData->pz += Ptr->PathNumber;
+        }
+
+        break;
+    case 0x800026:
+    {
+        PhysObCollectibleProperties *collectibleProp;
+
+        collectibleProp = (PhysObCollectibleProperties *)instance->data;
+
+        switch (collectibleProp->collectClass)
+        {
+        case 1:
+            HEALTHU_Pickup(instance);
+            break;
+        case 2:
+        case 5:
+            MANNA_Pickup();
+        case 3:
+        case 4:
+            INSTANCE_PlainDeath(instance);
+            break;
+        case 7:
+            MANNA_Pickup();
+        case 6:
+            if ((collectibleProp->collectAnim != 0xFF) && (G2EmulationInstanceQueryAnimation(instance, 0) != collectibleProp->collectAnim))
+            {
+                printf("Collect %s\n", instance->object->name);
+
+                G2EmulationInstanceSetAnimation(instance, 0, collectibleProp->collectAnim, 0, 0);
+                G2EmulationInstanceSetMode(instance, 0, 1);
+            }
+
+            break;
+        }
+
+        break;
+    }
+    case 0x800027:
+        if ((uintptr_t *)Data != NULL)
+        {
+            PData->Mode &= ~0x1000;
+        }
+        else
+        {
+            PData->Mode |= 0x1000;
+        }
+
+        break;
+    case 0x80002C:
+        PData->Mode |= 0x800000;
+        break;
+    case 0x200002:
+        TurnOnCollisionPhysOb(instance, (int)Data);
+        break;
+    case 0x200003:
+        TurnOffCollisionPhysOb(instance, (int)Data);
+        break;
+    case 0x200005:
+        PData->Mode |= 0x1000000;
+        break;
+    case 0x200006:
+        PData->Mode &= ~0x1000000;
+        break;
+    case 0x80002b:
+        PData->Mode &= ~0x800000;
+        break;
+    case 0x800029:
+    {
+        PhysObLight *pLight;
+
+        pLight = PhysObGetLight(instance);
+
+        if (pLight != NULL)
+        {
+            switch ((unsigned long)Data)
+            {
+            case 0:
+                PHYSOB_StopBurning(instance, pLight);
+                break;
+            case 1:
+                PHYSOB_StartBurning(instance, pLight);
+                break;
+            case 2:
+            {
+                PhysObData *podata;
+
+                podata = (PhysObData *)instance->extraData;
+
+                podata->burnAmpl = 0;
+
+                podata->Mode &= ~0x8000;
+
+                PHYSOB_EndBurning(instance, pLight);
+                break;
+            }
+            }
+        }
+
+        break;
+    }
+    case 0x80005:
+        ScriptKillInstance(instance, 5);
+        break;
+    case 0x40002:
+        ScriptKillInstance(instance, (int)Data);
+        break;
+    case 0x80002A:
+    {
+        PhysObSwitchProperties *temp; // not from decls.h
+
+        if (CheckPhysObFamily(instance, 2) != 0)
+        {
+            temp = (PhysObSwitchProperties *)instance->extraData;
+
+            temp->Properties.ID = (unsigned short)Data;
+        }
+
+        break;
+    }
+    case 0x8000008:
+    {
+        evAnimationInstanceSwitchData *temp; // not from decls.h
+
+        temp = (evAnimationInstanceSwitchData *)Data;
+
+        G2EmulationInstanceSetAnimation(instance, 0, temp->anim, temp->frame, temp->frames);
+        G2EmulationInstanceSetMode(instance, 0, temp->mode);
+        break;
+    }
+    case 0x4000E:
+    {
+        PhysObProperties *Prop;
+
+        if ((uintptr_t *)Data != NULL)
+        {
+            Prop = (PhysObProperties *)instance->data;
+
+            if ((Prop->family == 7) && (instance->parent != NULL) && ((INSTANCE_Query(instance->parent, 1) & 0xA)))
+            {
+                instance->flags |= 0x20;
+            }
+        }
+
+        break;
+    }
+    }
+}
 
 long PhysobAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data)
 {
