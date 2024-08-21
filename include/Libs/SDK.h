@@ -186,6 +186,12 @@
         : "memory" \
     )
 
+#define gte_stdp(r0) __asm__ ( \
+        "swc2    $8, 0(%0)" \
+        : : "r"(r0) \
+        : "memory" \
+    )
+
 // custom macro
 #define gte_ldlvnlsv( r0 ) __asm__ volatile (			\
 	"lhu	$12, 0( %0 );"					\
@@ -556,5 +562,7 @@ u_long DrawSyncCallback(void (*func)());
 DISPENV *PutDispEnv(DISPENV *env);
 void LoadAverageShort12(SVECTOR *v0, SVECTOR *v1, long p0, long p1, SVECTOR *v2);
 void SetDrawArea(DR_AREA *p, RECT *r);
+void SetLightMatrix(MATRIX *m);
+void LoadAverageCol(u_char *v0, u_char *v1, long p0, long p1, u_char *v2);
 
 #endif

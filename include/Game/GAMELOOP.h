@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "Game/LIGHT3D.h"
+#include "Game/PIPE3D.h"
 
 // size: 0x20
 typedef struct _GameTrackerASMData_Type {
@@ -99,7 +100,8 @@ typedef struct GameTracker {
     // offset: 0148
     void *drawNonAnimatedSegmentFunc;
     // offset: 014C
-    void *drawAnimatedModelFunc;
+    //void *drawAnimatedModelFunc;
+    unsigned long *(*drawAnimatedModelFunc)(struct _Model *, struct _PVertex *, struct _PrimPool *, unsigned long **, struct CVECTOR *);
     // offset: 0150
     void *drawDisplayPolytopeListFunc;
     // offset: 0154

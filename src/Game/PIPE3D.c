@@ -9,6 +9,12 @@
 #include "Game/STREAM.h"
 #include "Game/FX.h"
 
+long depthQBackColor; // not from decls.h
+
+long depthQFogStart; // not from decls.h
+
+long depthQBlendStart; // not from decls.h
+
 long modelFadeValue; // not from decls.h
 
 long draw_belowSplit;
@@ -197,7 +203,132 @@ void PIPE3D_NormalizeMatrix(MATRIX *target, MATRIX *source)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_TransformVerticesToWorld);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_InstanceTransformAndDraw);
+void PIPE3D_InstanceTransformAndDraw(Instance *instance, CameraCore *cameraCore, VertexPool *vertexPool, PrimPool *primPool, unsigned long **ot, Mirror *mirror)
+{
+    Object *object;
+    Model *model;
+    MATRIX *matrixPool;
+    MATRIX lm;
+    long flags;
+
+    (void)mirror;
+
+    object = instance->object;
+
+    matrixPool = instance->matrix;
+
+    model = object->modelList[instance->currentModel];
+
+    if (matrixPool != NULL)
+    {
+        MVertex *vertexList;
+        PVertex *poolVertex;
+        CVECTOR *vertexColor;
+        long spadOffset;
+        long spadFree;
+        //long allocSize; unused
+
+        LIGHT_PresetInstanceLight(instance, 2048, &lm);
+
+        poolVertex = (PVertex *)&vertexPool->vertex;
+
+        vertexColor = (CVECTOR *)&vertexPool->color;
+
+        vertexList = model->vertexList;
+
+        spadFree = 224;
+
+        spadOffset = 32;
+
+        if (spadFree >= (model->numVertices * 2))
+        {
+            poolVertex = (PVertex *)getScratchAddr(32);
+
+            spadOffset += model->numVertices * 2;
+
+            spadFree -= model->numVertices * 2;
+        }
+
+        if (spadFree >= model->numVertices)
+        {
+            vertexColor = (CVECTOR *)getScratchAddr(spadOffset);
+        }
+
+        modelFadeValue = INSTANCE_GetFadeValue(instance);
+
+        flags = PIPE3D_TransformAnimatedInstanceVertices_S((VertexPool *)vertexList, poolVertex, model, cameraCore->wcTransform, matrixPool, &lm, vertexColor, instance->perVertexColor);
+
+        LIGHT_PresetInstanceLight(instance, 4096, &lm);
+
+        MulMatrix0(&lm, &matrixPool[instance->lightMatrix], &lm);
+
+        SetLightMatrix(&lm);
+
+        if ((flags & 0x8000))
+        {
+            flags &= ~0x80009000;
+        }
+
+        if ((!(flags & ~0x1000)) || ((instance->object->oflags2 & 0x2000)))
+        {
+            long BackColorSave;
+            long BlendStartSave;
+            int pval;
+
+            BlendStartSave = 0;
+
+            if (&primPool->nextPrim[model->numFaces * 12] < primPool->lastPrim)
+            {
+                BackColorSave = 0;
+
+                if (!(instance->object->oflags2 & 0x1000))
+                {
+                    SetRotMatrix(theCamera.core.wcTransform);
+                    SetTransMatrix(theCamera.core.wcTransform);
+
+                    gte_ldv0(&instance->position);
+                    gte_nrtps();
+                }
+
+                gte_stdp(&pval);
+
+                if (instance->petrifyValue != 0)
+                {
+                    BackColorSave = depthQBackColor;
+
+                    BlendStartSave = depthQBlendStart;
+
+                    depthQBackColor = 0x707070;
+
+                    depthQBlendStart = depthQFogStart;
+
+                    LoadAverageCol((unsigned char *)&BackColorSave, (unsigned char *)&depthQBackColor, pval, 4096 - pval, (unsigned char *)&depthQBackColor);
+
+                    if (instance->petrifyValue < pval)
+                    {
+                        gte_lddp(pval);
+                    }
+                    else
+                    {
+                        gte_lddp(instance->petrifyValue);
+                    }
+                }
+
+                if ((modelFadeValue < 4094) && (((instance->object->oflags2 & 0x1000)) || (pval < 4090)))
+                {
+                    primPool->nextPrim = gameTrackerX.drawAnimatedModelFunc(model, poolVertex, primPool, ot, vertexColor);
+                }
+
+                if (instance->petrifyValue != 0)
+                {
+                    depthQBlendStart = BlendStartSave;
+
+                    depthQBackColor = BackColorSave;
+                }
+            }
+        }
+    }
+}
 
 void PIPE3D_InstanceListTransformAndDrawFunc(StreamUnit *unit, unsigned long **ot, CameraCore *cameraCore, Instance *instance)
 {
