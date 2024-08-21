@@ -579,7 +579,122 @@ void TurnOffCollisionPhysOb(Instance *instance, int coll)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", GetPhysObCollisionType);
+int GetPhysObCollisionType(Instance *instance)
+{
+    CollideInfo *collideInfo;
+    //HSphere *S; unused
+    Instance *target;
+    PhysObWeaponAttributes *weapon;
+    PhysObData *Data;
+
+    Data = (PhysObData *)instance->extraData;
+
+    collideInfo = (CollideInfo *)instance->collideInfo;
+
+    if (!(Data->Mode & 0x1600001))
+    {
+        weapon = (PhysObWeaponAttributes *)collideInfo->prim0;
+
+        if ((instance->LinkParent == gameTrackerX.playerInstance) && ((unsigned char)weapon->AltDamage == 9))
+        {
+            if ((unsigned char)collideInfo->type1 != 3)
+            {
+                Instance *inst;
+
+                inst = (Instance *)collideInfo->inst1;
+
+                inst->flags |= 0x4;
+            }
+            else
+            {
+                COLLIDE_SetBSPTreeFlag(collideInfo, 0x800);
+            }
+
+            if ((unsigned char)collideInfo->type1 != 1)
+            {
+                COLLIDE_SegmentCollisionOff(instance, (unsigned char)collideInfo->segment);
+
+                if (instance->LinkParent == gameTrackerX.playerInstance)
+                {
+                    INSTANCE_Post(instance->LinkParent, 0x1000024, 0);
+                }
+            }
+        }
+
+        if (((collideInfo->type0 == 1) && (collideInfo->type1 == 1)) && ((unsigned char)weapon->AltDamage == 9)
+        && (weapon = (PhysObWeaponAttributes *)collideInfo->prim1, ((HSphere *)weapon)->id == 8)) // TODO: weapon should be S here
+        {
+            target = (Instance *)collideInfo->inst1;
+
+            weapon = PhysObGetWeapon(instance);
+
+            if (weapon != NULL)
+            {
+                TurnOffCollisionPhysOb(instance, 7);
+
+                if (instance->LinkParent == NULL)
+                {
+                    if ((INSTANCE_Query(target, 0) & 0x10000000))
+                    {
+                        if (weapon->Class == 1)
+                        {
+                            INSTANCE_Post(target, 0x1000019, (intptr_t)instance);
+
+                            Data->Mode &= ~0x10;
+                        }
+                        else if ((CheckPhysObAbility(instance, 32) != 0) && ((Data->Mode & 0x10000)))
+                        {
+                            INSTANCE_Post(target, 0x100000C, 0x20);
+                            INSTANCE_Post(instance, 0x800029, 0);
+                        }
+                        else
+                        {
+                            INSTANCE_Post(target, 0x1000000, SetMonsterHitData(instance, NULL, weapon->Damage, weapon->knockBackDistance, weapon->knockBackFrames));
+                        }
+                    }
+                    else
+                    {
+                        INSTANCE_Post(target, 0x1000000, SetMonsterHitData(instance, NULL, weapon->Damage, weapon->knockBackDistance, weapon->knockBackFrames));
+                    }
+
+                    if ((gameTrackerX.gameData.asmData.MorphType == 0) && (CheckPhysObFamily(instance, 7) != 0) && (instance->parent == gameTrackerX.playerInstance))
+                    {
+                        INSTANCE_Post(target, 0x80001, 0);
+                    }
+                }
+                else
+                {
+                    int damage;
+
+                    damage = weapon->Damage;
+
+                    if (CheckPhysObAbility(instance, 32) != 0)
+                    {
+                        if (!(Data->Mode & 0x10000))
+                        {
+                            damage = weapon->AltDamage;
+                        }
+                    }
+
+                    INSTANCE_Post(instance->LinkParent, 0x2000002, SetMonsterHitData(target, NULL, damage, 0, 0));
+                }
+
+                if ((CheckPhysObAbility(instance, 32) != 0) && ((Data->Mode & 0x10000)))
+                {
+                    INSTANCE_Post(target, 0x400000, SetFXHitData(instance, (unsigned char)collideInfo->segment, weapon->Damage >> 7, 32));
+                }
+                else
+                {
+                    INSTANCE_Post(target, 0x400000, SetFXHitData(instance, (unsigned char)collideInfo->segment, weapon->Damage >> 7, 256));
+                }
+
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
 
 void ExecuteThrow(Instance *instance)
 {
