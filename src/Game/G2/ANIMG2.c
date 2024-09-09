@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/G2/ANIMG2.h"
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/G2/ANMDECMP.h"
 #include "Game/G2/POOLMMG2.h"
@@ -604,7 +605,20 @@ unsigned long kangaroo(G2AnimSegKeyflagInfo *kfInfo)
     return keyflags;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_InitializeSegValue);
+void _G2Anim_InitializeSegValue(G2Anim *anim, G2AnimSegValue *segValue, int segIndex)
+{
+    Segment *segment;
+    //G2Quat *quat; // unused
+    //unsigned long zpad; // unused
+    //unsigned long xy; // unused
+
+    SET_QUAT_FAST(&segValue->rotQuat.quat, 0, 0, 0, 4096);
+    SET_SVEC3_FAST(&segValue->scale, 4096, 4096, 4096);
+
+    segment = &anim->modelData->segmentList[segIndex];
+
+    COPY_SVEC3_FAST((G2SVector3 *)&segValue->trans, (G2SVector3 *)&segment->px);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_InitStatus);
 

@@ -6,6 +6,26 @@
 //#include "Game/G2/ANMINTRP.h"
 #include "Game/G2/ANMDECMP.h"
 
+#define SET_QUAT_FAST(q, _x, _y, _z, _w) {\
+struct _G2Quat_Type* quat = q;\
+*(int*)&quat->x = ((_x) | (_y << 16));\
+*(int*)&quat->z = ((_z) | (_w << 16));\
+}
+
+#define SET_SVEC3_FAST(v, _x, _y, _z) {\
+*(int*)&(v)->x = ((_x) | (_y << 16));\
+(v)->z = (_z);\
+}
+
+#define COPY_SVEC3_FAST(_tgt, _src) {\
+struct _G2SVector3_Type* src = _src;\
+struct _G2SVector3_Type* tgt = _tgt;\
+unsigned long xy = *(int*)&src->x;\
+unsigned long zpad = *(int*)&src->z;\
+*(int*)&tgt->x = xy;\
+*(int*)&tgt->z = zpad & 0xFFFF;\
+}
+
 typedef enum _G2AnimCallbackMsg_Enum {
     G2ANIM_MSG_DONE = 1,
     G2ANIM_MSG_LOOPPOINT = 2,

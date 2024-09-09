@@ -83,6 +83,7 @@
         "instncg2.h": "c",
         "support.h": "c",
         "light3d.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "anmdecmp.h": "c"
     }
 }
