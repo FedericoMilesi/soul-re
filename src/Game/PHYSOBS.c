@@ -74,7 +74,27 @@ Instance *PHYSOBS_IsAPushBlockAttached(Instance *block)
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_IsAnythingAttached);
+Instance *PHYSOBS_IsAnythingAttached(Instance *block)
+{
+    Instance *instance;
+    Instance *next;
+    Instance *result;
+
+    result = NULL;
+
+    for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = next)
+    {
+        next = instance->next;
+
+        if (instance->attachedID == block->introUniqueID)
+        {
+            result = instance;
+            break;
+        }
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckPhysOb);
 
