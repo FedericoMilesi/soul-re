@@ -124,7 +124,50 @@ void UNDERWORLD_DoUV(unsigned char *uv, UW_ScreenXY *p0, int tx)
 
 INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_Poly);
 
-INCLUDE_ASM("asm/nonmatchings/Game/UNDRWRLD", UNDERWORLD_DisplayFrame);
+void UNDERWORLD_DisplayFrame(long *primStart, long drawY)
+{
+    long row;
+    long col;
+    long d;
+    UW_ScreenXY *p0;
+    UW_ScreenXY *p1;
+    UW_ScreenXY *p2;
+    UW_ScreenXY *p3;
+    POLY_GT3 *poly;
+    POLY_GT3 *terminator;
+
+    poly = (POLY_GT3 *)primStart;
+
+    terminator = poly + 1;
+
+    poly->tag = 0xFFFFFF;
+
+    for (row = 0; row < 2; row++)
+    {
+        for (col = 0; col < 2; col++)
+        {
+            d = (row * 3) + col;
+
+            p0 = &ScreenMorphArray[d + 0];
+            p1 = &ScreenMorphArray[d + 1];
+            p2 = &ScreenMorphArray[d + 4];
+            p3 = &ScreenMorphArray[d + 3];
+
+            if (((row <= 0) && (col >= 2)) || ((row >= 2) && (col <= 0)))
+            {
+                poly = UNDERWORLD_Poly(UNDERWORLD_Poly(poly, p0, p1, p3, drawY), p1, p2, p3, drawY);
+            }
+            else
+            {
+                poly = UNDERWORLD_Poly(UNDERWORLD_Poly(poly, p0, p1, p2, drawY), p0, p2, p3, drawY);
+            }
+        }
+    }
+
+    terminator->tag |= 0xFFFFFF;
+
+    DrawOTag((u_long *)poly);
+}
 
 void UNDERWORLD_SetupSource()
 {
