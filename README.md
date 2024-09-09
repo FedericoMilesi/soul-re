@@ -1,6 +1,6 @@
 # Soul Reaverse
 
-<img src="https://i.imgur.com/6SMVdKC.png"/>
+<img src="https://i.imgur.com/RTQyAu8.png"/>
 
 ## About
 
