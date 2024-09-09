@@ -8,7 +8,49 @@
 #include "Game/SCRIPT.h"
 #include "Game/G2/ANMG2ILF.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_PlayDropSound);
+void PHYSOB_PlayDropSound(Instance *instance)
+{
+    PhysObProperties *Prop;
+    int sound;
+
+    Prop = (PhysObProperties *)instance->data;
+
+    if (Prop->family == 1)
+    {
+        sound = (short)((PhysObInteractProperties *)Prop)->auxConditions; // TODO: likely wrong, physob type should be different
+    }
+    else if (Prop->family == 0)
+    {
+        sound = (char)((PhysObInteractProperties *)Prop)->razielAuxAnim; // TODO: likely wrong, physob type should be different
+    }
+    else if (Prop->family == 3)
+    {
+        sound = 0;
+
+        if (((PhysObInteractProperties *)Prop)->weapon != NULL)
+        {
+            sound = ((PhysObInteractProperties *)Prop)->weapon->dropSound;
+        }
+    }
+    else
+    {
+        sound = 0;
+    }
+
+    switch (sound)
+    {
+    case 1:
+        SOUND_Play3dSound(&instance->position, 10, -100, 120, 30000);
+        break;
+    case 2:
+        SOUND_Play3dSound(&instance->position, 282, -400, 90, 14000);
+        SOUND_Play3dSound(&instance->position, 282, -800, 100, 14000);
+        break;
+    case 3:
+        SOUND_Play3dSound(&instance->position, 178, -800, 120, 30000);
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_IsAPushBlockAttached);
 
