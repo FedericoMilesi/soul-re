@@ -1,5 +1,7 @@
 # Soul Reaverse
 
+<img src="https://i.imgur.com/7UixPCK.png"/>
+
 An in-progress decompilation of the Jul 14, 1999 prototype of Legacy of Kain: Soul Reaver on the Playstation 1.
 
 ## Building (Linux)
