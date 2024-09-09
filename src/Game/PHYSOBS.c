@@ -52,7 +52,27 @@ void PHYSOB_PlayDropSound(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_IsAPushBlockAttached);
+Instance *PHYSOBS_IsAPushBlockAttached(Instance *block)
+{
+    Instance *instance;
+    Instance *next;
+    Instance *result;
+
+    result = NULL;
+
+    for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = next)
+    {
+        next = instance->next;
+
+        if ((instance->attachedID == block->introUniqueID) && (CheckPhysObAbility(instance, 2) != 0))
+        {
+            result = instance;
+            break;
+        }
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_IsAnythingAttached);
 
