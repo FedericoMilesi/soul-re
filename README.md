@@ -1,10 +1,10 @@
 # Soul Reaverse
 
-<img src="https://i.imgur.com/9O7RRen.png"/>
+<img src="https://i.imgur.com/hchKKzz.png"/>
 
 ## About
 
-An in-progress decompilation of the Jul 14, 1999 prototype of Legacy of Kain: Soul Reaver on the Playstation 1.
+This project seeks to reconstruct the source code for Legacy of Kain: Soul Reaver, by reverse-engineering MIPS assembly back to C, the language the game was originally programmed on. 
 
 ## Building (Linux)
 
