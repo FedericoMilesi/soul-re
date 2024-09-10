@@ -185,7 +185,33 @@ int GetPhysicalAbility(Instance *instance)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", AnyBlocksInMotion);
+int AnyBlocksInMotion()
+{
+    Instance *instance;
+
+    for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = instance->next)
+    {
+        if ((instance->object->oflags2 & 0x40000))
+        {
+            PhysObProperties *Prop;
+            PhysObData *Data;
+
+            Prop = (PhysObProperties *)instance->data;
+
+            if (((Prop->Type & 0x8)) && (Prop->ID == 0xB00B))
+            {
+                Data = (PhysObData *)instance->extraData;
+
+                if ((Data->Mode & 0x14E))
+                {
+                    return 1;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", SetThrowDirection);
 
