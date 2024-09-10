@@ -141,7 +141,27 @@ int CheckPhysObAbility(Instance *instance, unsigned short ability)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckPhysObFamily);
+int CheckPhysObFamily(Instance *instance, unsigned short family)
+{
+    PhysObProperties *Prop;
+
+    Prop = (PhysObProperties *)instance->data;
+
+    if (Prop != NULL)
+    {
+        if (Prop->ID != 0xB00B)
+        {
+            return 0;
+        }
+
+        if (Prop->family == family)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", GetPhysicalAbility);
 
