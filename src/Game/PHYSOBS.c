@@ -163,7 +163,27 @@ int CheckPhysObFamily(Instance *instance, unsigned short family)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", GetPhysicalAbility);
+int GetPhysicalAbility(Instance *instance)
+{
+    PhysObProperties *Prop;
+    PhysObInteractProperties *temp; // not from decls.h
+
+    Prop = (PhysObProperties *)instance->data;
+
+    if ((Prop != NULL) && (Prop->ID == 0xB00B))
+    {
+        if (Prop->family == 3)
+        {
+            temp = (PhysObInteractProperties *)instance->extraData;
+
+            return (short)temp->Properties.ID;
+        }
+
+        return Prop->Type;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", AnyBlocksInMotion);
 
