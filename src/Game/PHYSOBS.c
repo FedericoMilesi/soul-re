@@ -110,7 +110,36 @@ int CheckPhysOb(Instance *instance)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckPhysObAbility);
+int CheckPhysObAbility(Instance *instance, unsigned short ability)
+{
+    PhysObProperties *prop;
+    PhysObInteractProperties *temp; // not from decls.h 
+
+    prop = (PhysObProperties *)instance->data;
+
+    if (prop != NULL)
+    {
+        if (prop->ID != 0xB00B)
+        {
+            return 0;
+        }
+        else if (prop->family == 3)
+        {
+            temp = (PhysObInteractProperties *)instance->extraData;
+
+            if (((short)temp->Properties.ID & (ability & 0xFFFF)))
+            {
+                return 1;
+            }
+        }
+        else if ((prop->Type & ability))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckPhysObFamily);
 
