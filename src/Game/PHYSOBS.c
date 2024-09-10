@@ -96,7 +96,19 @@ Instance *PHYSOBS_IsAnythingAttached(Instance *block)
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckPhysOb);
+int CheckPhysOb(Instance *instance)
+{
+    PhysObProperties *Prop;
+
+    Prop = (PhysObProperties *)instance->data;
+
+    if (Prop != NULL)
+    {
+        return (Prop->ID ^ 0xB00B) == 0;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckPhysObAbility);
 
