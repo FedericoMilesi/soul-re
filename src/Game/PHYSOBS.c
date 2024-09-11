@@ -367,7 +367,29 @@ int PushPhysOb(Instance *instance, short x, short y, short PathNumber, Instance 
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ResetSwitchPhysOb);
+void ResetSwitchPhysOb(Instance *instance)
+{
+    PhysObData *Data;
+    PhysObSwitchProperties *Prop;
+    PhysObSwitchProperties *temp; // not from decls.h
+
+    if (CheckPhysObFamily(instance, 2) != 0)
+    {
+        Data = (PhysObData *)instance->extraData;
+
+        Prop = (PhysObSwitchProperties *)instance->data;
+
+        Data->Mode |= 0x800;
+
+        temp = (PhysObSwitchProperties *)instance->extraData;
+
+        if (((temp->Properties.ID & 0x2)) && (Prop->shutAnim != 0))
+        {
+            G2EmulationInstanceSetAnimation(instance, 0, Prop->shutAnim, 0, 0);
+            G2EmulationInstanceSetMode(instance, 0, 1);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", SwitchPhysOb);
 
