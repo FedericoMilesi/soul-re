@@ -311,7 +311,61 @@ void SetThrowDirection(Instance *instance, Instance *parent, evObjectThrowData *
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ThrowPhysOb);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PushPhysOb);
+int PushPhysOb(Instance *instance, short x, short y, short PathNumber, Instance *Force)
+{
+    PhysObData *Data;
+    PhysObProperties *Prop;
+    int result;
+
+    Prop = (PhysObProperties *)instance->data;
+
+    result = 0;
+
+    if (((Prop->Type & 0x8)) && (Prop->ID == 0xB00B))
+    {
+        Data = (PhysObData *)instance->extraData;
+
+        if ((!(Data->Mode & 0x214A)) && (AnyBlocksInMotion() == 0))
+        {
+            PHYSOB_NormalToAxis(&x, &y);
+
+            Data->Force = Force;
+
+            Data->PathNumber = PathNumber;
+
+            Data->xForce = x;
+            Data->yForce = y;
+
+            Data->Mode &= ~0x8;
+
+            instance->zVel = 0;
+            instance->yVel = 0;
+            instance->xVel = 0;
+
+            instance->zAccl = 0;
+            instance->yAccl = 0;
+            instance->xAccl = 0;
+
+            result = PHYSOBS_CheckForValidMove(instance);
+
+            if ((result & 0x1))
+            {
+                if (!(Data->Mode & 0x100))
+                {
+                    Data->px = instance->position.x;
+                    Data->py = instance->position.y;
+                    Data->pz = instance->position.z;
+                }
+
+                Data->Mode |= 0x1000;
+
+                instance->flags2 |= 0x8;
+            }
+        }
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ResetSwitchPhysOb);
 
