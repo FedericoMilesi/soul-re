@@ -479,7 +479,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", InteractPhysOb);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ResetOrientation);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", FinishPush);
+void FinishPush(Instance *instance)
+{
+    ResetOrientation(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysOb_AlignPush);
 
