@@ -598,7 +598,58 @@ int FlipPhysOb(Instance *instance, short x, short y, Instance *Force)
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CanBePickedUp);
+int CanBePickedUp(Instance *instance, Instance *Force, int LinkNode)
+{
+    PCollideInfo pcollideInfo;
+    Position newPos;
+    Position oldPos;
+
+    if (Force == NULL)
+    {
+        return 0;
+    }
+    else if ((Force->object->oflags2 & 0x80000))
+    {
+        return 1;
+    }
+    else if (Force->matrix == NULL)
+    {
+        return 1;
+    }
+
+    if (CheckPhysObAbility(instance, 1) != 0)
+    {
+        if (instance->matrix != NULL)
+        {
+            oldPos.x = (short)instance->matrix[2].t[0];
+            oldPos.y = (short)instance->matrix[2].t[1];
+            oldPos.z = (short)instance->matrix[2].t[2];
+
+            newPos.x = (short)Force->matrix[LinkNode].t[0];
+            newPos.y = (short)Force->matrix[LinkNode].t[1];
+            newPos.z = (short)Force->matrix[LinkNode].t[2];
+
+            pcollideInfo.newPoint = (SVECTOR *)&newPos;
+            pcollideInfo.oldPoint = (SVECTOR *)&oldPos;
+
+            if ((CheckPhysObAbility(instance, 32) != 0) && (newPos.z < oldPos.z))
+            {
+                return 1;
+            }
+
+            PHYSICS_CheckLineInWorld(instance, &pcollideInfo);
+
+            if (((pcollideInfo.type < 0) || (pcollideInfo.type >= 2)) && (MATH3D_LengthXYZ(newPos.x - oldPos.x, newPos.y - oldPos.y, newPos.z - oldPos.z) >= 21))
+            {
+                return 0;
+            }
+        }
+
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PickUpPhysOb);
 
