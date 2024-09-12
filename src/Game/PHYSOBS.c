@@ -391,7 +391,89 @@ void ResetSwitchPhysOb(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", SwitchPhysOb);
+int SwitchPhysOb(Instance *instance)
+{
+    PhysObData *Data;
+    PhysObSwitchProperties *Prop;
+    SwitchData *switchData;
+    PhysObSwitchProperties *temp; // not from decls.h
+
+    temp = (PhysObSwitchProperties *)instance->data;
+
+    if (CheckPhysObFamily(instance, 2) != 0)
+    {
+        Data = (PhysObData *)instance->extraData;
+
+        Data->Mode |= 0x800;
+
+        Prop = (PhysObSwitchProperties *)instance->extraData;
+
+        switchData = (SwitchData *)&Prop->Properties.ID; // TODO: this is probably wrong
+
+        if ((Prop->Properties.ID & 0x1))
+        {
+            if ((Prop->Properties.ID & 0x2))
+            {
+                Prop->Properties.ID = (Prop->Properties.ID & ~0x1) | 0x8;
+
+                G2EmulationInstanceSetAnimation(instance, 0, temp->offAnim, 0, 0);
+                G2EmulationInstanceSetMode(instance, 0, 1);
+
+                instance->rotation.z += switchData->accumulator;
+
+                if (temp->Class == 7)
+                {
+                    switchData->accumulator = 1024;
+                }
+                else
+                {
+                    switchData->accumulator = 0;
+                }
+
+                instance->flags |= 0x8;
+            }
+            else if (temp->enableAnim != 255)
+            {
+                G2EmulationInstanceSetAnimation(instance, 0, temp->enableAnim, 0, 0);
+                G2EmulationInstanceSetMode(instance, 0, 1);
+
+                Prop->Properties.ID |= 0x2;
+            }
+        }
+        else
+        {
+            if ((Prop->Properties.ID & 0x2))
+            {
+                Prop->Properties.ID |= 0x5;
+
+                G2EmulationInstanceSetAnimation(instance, 0, temp->onAnim, 0, 0);
+
+                if (temp->Class == 7)
+                {
+                    switchData->accumulator = 1024;
+                }
+                else
+                {
+                    switchData->accumulator = 0;
+                }
+
+                instance->rotation.z += switchData->accumulator;
+
+                instance->flags |= 0x8;
+            }
+            else if (temp->failedOnAnim != 255)
+            {
+                G2EmulationInstanceSetAnimation(instance, 0, temp->failedOnAnim, 0, 0);
+            }
+
+            G2EmulationInstanceSetMode(instance, 0, 1);
+        }
+
+        return 0;
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", InteractPhysOb);
 
