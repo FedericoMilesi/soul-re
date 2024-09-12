@@ -543,7 +543,60 @@ void PhysOb_AlignPush(Instance *instance, int x, int y, int path, PhysObData *Da
     G2Anim_SwitchToKeylist(&instance->anim, instance->object->animList[path], path);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", FlipPhysOb);
+int FlipPhysOb(Instance *instance, short x, short y, Instance *Force)
+{
+    PhysObData *Data;
+    PhysObProperties *Prop;
+    int result;
+
+    result = 0;
+
+    Prop = (PhysObProperties *)instance->data;
+
+    if (((Prop->Type & 0x2)) && (PHYSOBS_IsAPushBlockAttached(instance) == NULL))
+    {
+        Data = (PhysObData *)instance->extraData;
+
+        if ((!(Data->Mode & 0x2000)) && (AnyBlocksInMotion() == 0))
+        {
+            PHYSOB_NormalToAxis(&x, &y);
+
+            Data->PathNumber = 1;
+
+            Data->Force = Force;
+
+            Data->Mode |= 0x8;
+
+            Data->xForce = x;
+            Data->yForce = y;
+
+            instance->zVel = 0;
+            instance->yVel = 0;
+            instance->xVel = 0;
+
+            instance->zAccl = 0;
+            instance->yAccl = 0;
+            instance->xAccl = 0;
+
+            ResetOrientation(instance);
+
+            result = PHYSOBS_CheckForValidMove(instance);
+
+            if ((result & 0x1))
+            {
+                Data->px = instance->position.x;
+                Data->py = instance->position.y;
+                Data->pz = instance->position.z;
+
+                Data->Mode |= 0x1000;
+
+                instance->flags2 |= 0x8;
+            }
+        }
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CanBePickedUp);
 
