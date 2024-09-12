@@ -6,6 +6,7 @@
 #include "Game/STREAM.h"
 #include "Game/GLYPH.h"
 #include "Game/SCRIPT.h"
+#include "Game/G2/ANMCTRLR.h"
 #include "Game/G2/ANMG2ILF.h"
 
 void PHYSOB_PlayDropSound(Instance *instance)
@@ -484,7 +485,63 @@ void FinishPush(Instance *instance)
     ResetOrientation(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysOb_AlignPush);
+void PhysOb_AlignPush(Instance *instance, int x, int y, int path, PhysObData *Data)
+{
+    G2SVector3 vec;
+    int rotZ;
+    short temp[3][3];
+    short temp2[3][3];
+    G2EulerAngles ea;
+
+    G2Anim_EnableController(&instance->anim, 0, 76);
+    G2Anim_EnableController(&instance->anim, 2, 14);
+
+    Data->xForce = x;
+    Data->yForce = y;
+
+    Data->PathNumber = path;
+
+    Data->Mode &= ~0x100000;
+
+    rotZ = 2048;
+
+    if (y <= 0)
+    {
+        rotZ = 0;
+
+        if (y >= 0)
+        {
+            rotZ = 1024;
+
+            if (x < 0)
+            {
+                rotZ = -1024;
+            }
+        }
+    }
+
+    vec.x = 0;
+    vec.y = 0;
+    vec.z = rotZ;
+
+    G2Anim_SetController_Vector(&instance->anim, 0, 76, &vec);
+
+    vec.z = -rotZ;
+
+    RotMatrixZYX((SVECTOR *)&vec, (MATRIX *)&temp);
+
+    MulMatrix0((MATRIX *)&temp, &instance->matrix[2], (MATRIX *)&temp2);
+
+    G2EulerAngles_FromMatrix(&ea, (G2Matrix *)&temp2, 21);
+
+    vec.x = ea.x;
+    vec.y = ea.y;
+    vec.z = ea.z;
+
+    G2Anim_SetController_Vector(&instance->anim, 2, 14, &vec);
+
+    G2Anim_SwitchToKeylist(&instance->anim, instance->object->animList[path], path);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", FlipPhysOb);
 
