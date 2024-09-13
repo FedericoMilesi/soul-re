@@ -713,7 +713,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", BirthProjectilePhysOb);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_SetLightTable);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_EndLighting);
+void PHYSOB_EndLighting(Instance *instance, PhysObLight *pLight)
+{
+    if ((pLight != NULL) && (gameTrackerX.gameData.asmData.lightInstances[0].lightInstance == instance))
+    {
+        gameTrackerX.gameData.asmData.lightInstances[0].lightInstance = NULL;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_StartLighting);
 
