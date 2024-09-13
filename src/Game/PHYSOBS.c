@@ -749,7 +749,24 @@ void PHYSOB_StartLighting(Instance *instance, PhysObLight *pLight)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_StartBurnFX);
+void PHYSOB_StartBurnFX(Instance *instance)
+{
+    PhysObData *Data;
+    Object *object;
+    int i;
+
+    object = instance->object;
+
+    Data = (PhysObData *)instance->extraData;
+
+    if ((Data->burnAmpl == 0) && (object->numberOfEffects != 0))
+    {
+        for (i = 0; i < object->numberOfEffects; i++)
+        {
+            FX_StartInstanceEffect(instance, &object->effectList[i], 1);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_StartBurning);
 
