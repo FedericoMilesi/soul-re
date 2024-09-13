@@ -1781,7 +1781,18 @@ void ExecuteGravitate(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ExecuteFollow);
+void ExecuteFollow(Instance *instance)
+{
+    PhysObData *Data;
+    Instance *Force;
+
+    Data = (PhysObData *)instance->extraData;
+
+    Force = Data->Force;
+
+    instance->position.x = Force->matrix[Data->Segment1].t[0] + Data->px;
+    instance->position.y = Force->matrix[Data->Segment1].t[1] + Data->py;
+}
 
 void PHYSOB_Normalize(SVector *v)
 {
