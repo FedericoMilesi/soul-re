@@ -768,7 +768,11 @@ void PHYSOB_StartBurnFX(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_StartBurning);
+void PHYSOB_StartBurning(Instance *instance, PhysObLight *pLight)
+{
+    PHYSOB_StartBurnFX(instance);
+    PHYSOB_StartLighting(instance, pLight);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_StopLighting);
 
