@@ -2109,6 +2109,8 @@ short CAMERA_GetLineAngle(Camera *camera, CameraCollisionInfo *colInfo, SVector 
     short low;
     short temp; // not from decls.h
 
+    (void)camera;
+
     high = -5000;
     low = 5000;
 
