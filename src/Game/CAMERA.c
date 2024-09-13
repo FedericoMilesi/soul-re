@@ -2098,7 +2098,63 @@ short CAMERA_CalcIntersectAngle(SVector *linept, SVector *vertex0, SVector *vert
     return -9999;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GetLineAngle);
+short CAMERA_GetLineAngle(Camera *camera, CameraCollisionInfo *colInfo, SVector *linept, int line)
+{
+    Terrain *terrain;
+    SVector *vertex0;
+    SVector *vertex1;
+    SVector *vertex2;
+    SVector new_linept;
+    short high;
+    short low;
+    short temp; // not from decls.h
+
+    high = -5000;
+    low = 5000;
+
+    terrain = colInfo->tfaceTerrain[line];
+
+    temp = colInfo->bspTree[line];
+
+    vertex0 = (SVector *)&terrain->vertexList[colInfo->tfaceList[line]->face.v0].vertex;
+    vertex1 = (SVector *)&terrain->vertexList[colInfo->tfaceList[line]->face.v1].vertex;
+    vertex2 = (SVector *)&terrain->vertexList[colInfo->tfaceList[line]->face.v2].vertex;
+
+    new_linept.x = linept->x - terrain->BSPTreeArray[temp].globalOffset.x;
+    new_linept.y = linept->y - terrain->BSPTreeArray[temp].globalOffset.y;
+    new_linept.z = linept->z - terrain->BSPTreeArray[temp].globalOffset.z;
+
+    CAMERA_CalcIntersectAngle(&new_linept, vertex0, vertex1, &high, &low);
+    CAMERA_CalcIntersectAngle(&new_linept, vertex1, vertex2, &high, &low);
+    CAMERA_CalcIntersectAngle(&new_linept, vertex2, vertex0, &high, &low);
+
+    if (high == -5000)
+    {
+        high = 0;
+    }
+
+    if (low == 5000)
+    {
+        low = 0;
+    }
+
+    if (high > 1024)
+    {
+        high = 0;
+    }
+
+    if (low < -1024)
+    {
+        low = 0;
+    }
+
+    if (line == 2)
+    {
+        return high;
+    }
+
+    return low;
+}
 
 long CAMERA_ACForcedMovement(Camera *camera, CameraCollisionInfo *colInfo)
 {
