@@ -696,7 +696,40 @@ int PickUpPhysOb(Instance *instance, short Steps, Instance *Force, int LinkNode)
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_BirthCollectible);
+Instance *PHYSOB_BirthCollectible(Instance *parent, int x, int y, int z, int type, int lifeTime)
+{
+    Object *object;
+    Instance *instance;
+
+    instance = NULL;
+
+    if (type != 0)
+    {
+        object = (Object *)objectAccess[26].object;
+    }
+    else
+    {
+        object = (Object *)objectAccess[25].object;
+    }
+
+    if (object != NULL)
+    {
+        instance = INSTANCE_BirthObject(parent, object, 0);
+
+        if (instance != NULL)
+        {
+            ((Signal *)instance->extraData)->data.introFX.time = lifeTime * 122880; // TODO: double-check whether lvalue is accessing the right union
+
+            instance->fadeValue = 4096;
+
+            instance->position.x = x;
+            instance->position.y = y;
+            instance->position.z = z;
+        }
+    }
+
+    return instance;
+}
 
 evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint, int type)
 {
