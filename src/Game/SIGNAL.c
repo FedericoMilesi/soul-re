@@ -490,7 +490,7 @@ void COLLIDE_HandleSignal(Instance *instance, Signal *signal, long numSignals, i
         {
             signal = (Signal *)((char *)signal + ((signalInfoList[signal->id & temp].length + 1) * 4)); // TODO: this needs rewriting because the * 4 is likely implicit
         }
-        else if ((signalNumber < 27) && (signalInfoList[signalNumber].signalHandleFunc(instance, signal) != NULL))
+        else if ((signalNumber < 27) && (signalInfoList[signalNumber].signalHandleFunc(instance, signal) != 0))
         {
             signal = (Signal *)((char *)signal + ((signalInfoList[signal->id & temp].length + 1) * 4)); // TODO: this needs rewriting because the * 4 is likely implicit
         }
