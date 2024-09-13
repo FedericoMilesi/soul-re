@@ -698,7 +698,16 @@ int PickUpPhysOb(Instance *instance, short Steps, Instance *Force, int LinkNode)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_BirthCollectible);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_BirthProjectile);
+evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint, int type)
+{
+    evObjectBirthProjectileData *rc;
+
+    rc = (evObjectBirthProjectileData *)SetObjectBirthProjectileData(parent, joint, type);
+
+    rc->birthInstance = BirthProjectilePhysOb(parent, joint, type);
+
+    return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", BirthProjectilePhysOb);
 

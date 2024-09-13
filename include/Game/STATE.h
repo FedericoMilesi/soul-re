@@ -538,5 +538,6 @@ intptr_t SetPhysicsLinkedMoveData(Instance *instance, int segment, SVector *posD
 void G2EmulationSetInterpController_Vector(Instance *instance, long segment, long type, G2SVector3 *vec, int Frames, intptr_t Data);
 intptr_t SetMonsterAlarmData(Instance *sender, Position *position, int type);
 intptr_t SetPhysicsSlideData(int Segment, int ForwardVectorX, int ForwardVectorY, int ForwardVectorZ, int DropOffset, int UpperOffset, int Height);
+intptr_t SetObjectBirthProjectileData(Instance *instance, int joint, int type);
 
 #endif
