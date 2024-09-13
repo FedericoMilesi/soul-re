@@ -815,7 +815,21 @@ void PHYSOB_EndBurning(Instance *instance, PhysObLight *pLight)
     Data->Mode &= ~0x10000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", StopPhysOb);
+void StopPhysOb(Instance *instance)
+{
+    PhysObData *Data;
+
+    Data = (PhysObData *)instance->extraData;
+
+    Data->Steps = 0;
+    Data->Step = 0;
+
+    Data->Segment1 = 1;
+
+    ResetOrientation(instance);
+
+    Data->Mode = 0x1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", InitPhysicalObject);
 
