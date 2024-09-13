@@ -651,7 +651,50 @@ int CanBePickedUp(Instance *instance, Instance *Force, int LinkNode)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PickUpPhysOb);
+int PickUpPhysOb(Instance *instance, short Steps, Instance *Force, int LinkNode)
+{
+    PhysObData *Data;
+
+    Data = (PhysObData *)instance->extraData;
+
+    if (instance->LinkParent == NULL)
+    {
+        if ((Data->Mode & 0x2000000))
+        {
+            return 1;
+        }
+
+        TurnOffCollisionPhysOb(instance, 7);
+
+        if (CanBePickedUp(instance, Force, LinkNode) != 0)
+        {
+            Data->Steps = Steps;
+            Data->Step = 0;
+
+            Data->Force = Force;
+
+            Data->LinkNode = LinkNode;
+
+            Data->Mode = (Data->Mode & ~0x600000) | 0x4000;
+
+            if ((CheckPhysObAbility(instance, 32) != 0) && ((Data->Mode & 0x10000)))
+            {
+                PhysObLight *pLight;
+
+                pLight = PhysObGetLight(instance);
+
+                if (pLight != NULL)
+                {
+                    PHYSOB_StartLighting(instance, pLight);
+                }
+            }
+
+            return 0;
+        }
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_BirthCollectible);
 

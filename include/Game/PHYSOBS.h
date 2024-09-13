@@ -339,5 +339,6 @@ void PHYSOB_EndBurning(Instance *instance, PhysObLight *pLight);
 void PHYSOB_StopBurning(Instance *instance, PhysObLight *pLight);
 void PHYSOB_StartBurning(Instance *instance, PhysObLight *pLight);
 long PHYSOBS_CheckForValidMove(Instance *instance);
+void PHYSOB_StartLighting(Instance *instance, PhysObLight *pLight);
 
 #endif
