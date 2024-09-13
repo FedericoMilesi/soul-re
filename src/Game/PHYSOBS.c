@@ -721,7 +721,33 @@ void PHYSOB_EndLighting(Instance *instance, PhysObLight *pLight)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_StartLighting);
+void PHYSOB_StartLighting(Instance *instance, PhysObLight *pLight)
+{
+    PhysObData *Data;
+
+    Data = (PhysObData *)instance->extraData;
+
+    if (Data->burnAmpl < 0)
+    {
+        Data->burnAmpl = -Data->burnAmpl;
+    }
+
+    Data->Mode |= 0x18000;
+
+    if (pLight != NULL)
+    {
+        LightInstance *li;
+
+        gameTrackerX.gameData.asmData.lightInstances[0].lightInstance = instance;
+
+        li = gameTrackerX.gameData.asmData.lightInstances;
+
+        if (li != NULL)
+        {
+            PHYSOB_SetLightTable(pLight, li, Data->burnAmpl);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_StartBurnFX);
 

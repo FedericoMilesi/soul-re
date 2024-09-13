@@ -341,5 +341,6 @@ void PHYSOB_StartBurning(Instance *instance, PhysObLight *pLight);
 long PHYSOBS_CheckForValidMove(Instance *instance);
 void PHYSOB_StartLighting(Instance *instance, PhysObLight *pLight);
 Instance *BirthProjectilePhysOb(Instance *instance, int grabJoint, int type);
+void PHYSOB_SetLightTable(PhysObLight *pLight, LightInstance *li, short burnAmplitude);
 
 #endif
