@@ -787,7 +787,18 @@ void PHYSOB_StopLighting(Instance *instance, PhysObLight *pLight)
     Data->Mode |= 0x8000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_StopBurning);
+void PHYSOB_StopBurning(Instance *instance, PhysObLight *pLight)
+{
+    PhysObData *Data;
+
+    (void)pLight;
+
+    Data = (PhysObData *)instance->extraData;
+
+    Data->burnAmpl = -4096;
+
+    Data->Mode |= 0x48000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_EndBurning);
 
