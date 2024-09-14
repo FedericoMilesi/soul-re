@@ -303,6 +303,16 @@ typedef struct PhysObCollectibleProperties {
     unsigned short spatialNode;
 } PhysObCollectibleProperties;
 
+// size: 0xC
+typedef struct PhysObAnimatedProperties {
+    // offset: 0000 (8 bytes)
+    struct PhysObProperties Properties;
+    // offset: 0008
+    unsigned short flags;
+    // offset: 000A
+    unsigned short pad;
+} PhysObAnimatedProperties;
+
 evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint, int type);
 void CollidePhysicalObject(Instance *instance, GameTracker *gameTracker);
 void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker);
@@ -343,5 +353,10 @@ void PHYSOB_StartLighting(Instance *instance, PhysObLight *pLight);
 Instance *BirthProjectilePhysOb(Instance *instance, int grabJoint, int type);
 void PHYSOB_SetLightTable(PhysObLight *pLight, LightInstance *li, short burnAmplitude);
 long PhysobAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data);
+void ExecuteFlip(Instance *instance);
+void ExecuteDrag(Instance *instance);
+void ExecuteSlideToStop(Instance *instance);
+void ExecuteThrow(Instance *instance);
+void ExecuteFollow(Instance *instance);
 
 #endif

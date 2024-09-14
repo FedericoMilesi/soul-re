@@ -540,5 +540,6 @@ intptr_t SetMonsterAlarmData(Instance *sender, Position *position, int type);
 intptr_t SetPhysicsSlideData(int Segment, int ForwardVectorX, int ForwardVectorY, int ForwardVectorZ, int DropOffset, int UpperOffset, int Height);
 intptr_t SetObjectBirthProjectileData(Instance *instance, int joint, int type);
 intptr_t SetObjectIdleData(long mode, Instance *instance);
+intptr_t SetPhysicsGravityData(int UpperOffset, int LowerOffset, int x, int y, int z, int slope);
 
 #endif

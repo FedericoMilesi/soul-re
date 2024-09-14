@@ -7,6 +7,7 @@
 #include "Game/GLYPH.h"
 #include "Game/SCRIPT.h"
 #include "Game/MEMPACK.h"
+#include "Game/MONSTER/MBMISS.h"
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/G2/ANMG2ILF.h"
 
@@ -1179,7 +1180,499 @@ void InitPhysicalObject(Instance *instance, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ProcessPhysicalObject);
+void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker)
+{
+    PhysObData *Data;
+
+    Data = (PhysObData *)instance->extraData;
+
+    if (instance == gameTracker->gameData.asmData.lightInstances[0].lightInstance)
+    {
+        PhysObLight *pLight;
+
+        pLight = PhysObGetLight(instance);
+
+        if (pLight != NULL)
+        {
+            LightInstance *li;
+
+            li = gameTracker->gameData.asmData.lightInstances;
+
+            if (li->lightInstance == instance)
+            {
+                PHYSOB_SetLightTable(pLight, li, ((Data->Mode & 0x8000)) ? abs(Data->burnAmpl) : 4096);
+            }
+        }
+    }
+
+    if (CheckPhysObAbility(instance, 2) != 0)
+    {
+        if (PHYSOBS_IsAnythingAttached(instance) != NULL)
+        {
+            instance->flags2 |= 0x80;
+        }
+        else
+        {
+            instance->flags2 &= ~0x80;
+        }
+    }
+
+    if ((Data->Mode & 0x2000000))
+    {
+        instance->fadeValue += (short)(gameTrackerX.timeMult / 32);
+
+        if (instance->fadeValue >= 4096)
+        {
+            instance->flags |= 0x20;
+        }
+    }
+
+    if ((Data->Mode & 0x8000))
+    {
+        PhysObWeaponProperties *properties;
+
+        if (Data->burnAmpl < 0)
+        {
+            Data->burnAmpl += 136;
+
+            if (Data->burnAmpl >= 0)
+            {
+                Data->burnAmpl = 0;
+
+                Data->Mode &= ~0x8000;
+
+                properties = (PhysObWeaponProperties *)instance->data;
+
+                if ((properties->Properties.Type & 0x20))
+                {
+                    PhysObLight *pLight;
+
+                    pLight = PhysObGetLight(instance);
+
+                    if ((Data->Mode & 0x40000))
+                    {
+                        PHYSOB_EndBurning(instance, pLight);
+                    }
+                    else
+                    {
+                        PHYSOB_EndLighting(instance, pLight);
+                    }
+
+                    Data->Mode &= ~0x40000;
+                }
+            }
+        }
+        else
+        {
+            Data->burnAmpl += 136;
+
+            if (Data->burnAmpl >= 4096)
+            {
+                Data->burnAmpl = 4096;
+
+                Data->Mode &= ~0x8000;
+            }
+        }
+    }
+
+    if (CheckPhysObFamily(instance, 5) != 0)
+    {
+        Dummy2 *temp; // not from decls.h
+
+        temp = (Dummy2 *)instance->extraData;
+
+        if (temp->unknown > 0)
+        {
+            temp->unknown -= gameTrackerX.timeMult;
+
+            if (temp->unknown < 0)
+            {
+                temp->unknown = 0;
+
+                INSTANCE_KillInstance(instance);
+            }
+            else if (temp->unknown <= 122879)
+            {
+                instance->fadeValue = 4096 - (temp->unknown / 30);
+            }
+            else if (instance->fadeValue != 0)
+            {
+                instance->fadeValue -= 64;
+
+                if (instance->fadeValue < 0)
+                {
+                    instance->fadeValue = 0;
+                }
+            }
+        }
+    }
+
+    {
+        PhysObAnimatedProperties *Prop;
+
+        if (CheckPhysObFamily(instance, 6) != 0)
+        {
+            Prop = (PhysObAnimatedProperties *)instance->data;
+
+            if ((Prop->flags & 0x1))
+            {
+                if ((INSTANCE_Query(gameTrackerX.playerInstance, 36) & 0x10))
+                {
+                    instance->flags &= ~0x800;
+                }
+                else
+                {
+                    instance->flags |= 0x800;
+                }
+            }
+        }
+    }
+
+    if (CheckPhysObAbility(instance, 64) != 0)
+    {
+        PhysObSwitchProperties *temp; // not from decls.h 
+
+        temp = (PhysObSwitchProperties *)instance->extraData;
+
+        if ((Data->Mode & 0x100000))
+        {
+            temp->Properties.ID &= ~0xC;
+
+            Data->Mode &= ~0x100800;
+        }
+
+        if ((Data->Mode & 0x800))
+        {
+            G2EmulationInstancePlayAnimation(instance);
+        }
+    }
+    else
+    {
+        if (CheckPhysObAbility(instance, 0x8000) != 0)
+        {
+            G2EmulationInstancePlayAnimation(instance);
+        }
+
+        if (!(Data->Mode & 0x1))
+        {
+            if ((Data->Mode & 0x8))
+            {
+                ExecuteFlip(instance);
+            }
+
+            if (!(Data->Mode & 0x1))
+            {
+                if ((Data->Mode & 0x40))
+                {
+                    ExecuteDrag(instance);
+                }
+            }
+        }
+
+        if ((Data->Mode & 0x2))
+        {
+            ExecuteSlideToStop(instance);
+        }
+
+        if ((Data->Mode & 0x4000))
+        {
+            ExecuteGravitate(instance);
+        }
+
+        if ((Data->Mode & 0x10))
+        {
+            ExecuteThrow(instance);
+        }
+
+        if ((Data->Mode & 0x20))
+        {
+            ExecuteFollow(instance);
+        }
+
+        if (((Data->Mode & 0x100000)) && (CheckPhysObFamily(instance, 5) != 0))
+        {
+            PhysObCollectibleProperties *collectibleProp;
+
+            collectibleProp = (PhysObCollectibleProperties *)instance->data;
+
+            if (collectibleProp->idleAnim != 255)
+            {
+                G2EmulationInstanceSetAnimation(instance, 0, collectibleProp->idleAnim, 0, 0);
+                G2EmulationInstanceSetMode(instance, 0, 2);
+            }
+
+            Data->Mode &= ~0x100000;
+        }
+
+        if ((Data->Mode & 0x10000))
+        {
+            Level *level;
+
+            level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+            if ((level != NULL) && (instance->matrix != NULL))
+            {
+                PhysObLight *pLight;
+
+                pLight = PhysObGetLight(instance);
+
+                if (level->waterZLevel > instance->matrix[pLight->segment].t[2])
+                {
+                    PHYSOB_EndBurning(instance, pLight);
+                }
+            }
+        }
+
+        if (CheckPhysObFamily(instance, 7) != 0)
+        {
+            evObjectBirthProjectileData *temp; // not from decls.h
+
+            temp = (evObjectBirthProjectileData *)instance->extraData;
+
+            if (temp->joint == 8)
+            {
+                Level *level;
+
+                level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+                if ((level != NULL) && (instance->position.z < level->waterZLevel))
+                {
+                    PhysObProjectileProperties *ProjProp;
+                    PhysObProjectileData *ProjData;
+
+                    ProjProp = (PhysObProjectileProperties *)instance->data;
+
+                    if (instance->currentModel == 0)
+                    {
+                        FX_EndInstanceEffects(instance);
+                    }
+
+                    ProjData = &ProjProp->data[temp->joint];
+
+                    if ((signed char)ProjData->endAnim != -1)
+                    {
+                        if (!(Data->Mode & 0x80000))
+                        {
+                            G2EmulationInstanceSetAnimation(instance, 0, (signed char)ProjData->endAnim, 0, 0);
+                            G2EmulationInstanceSetMode(instance, 0, 1);
+
+                            Data->Mode |= 0x81001;
+                        }
+                    }
+                    else
+                    {
+                        INSTANCE_KillInstance(instance);
+                    }
+                }
+            }
+        }
+
+        if ((!(Data->Mode & 0x1000)) && (instance->matrix != NULL))
+        {
+            evPhysicsGravityData *gravityData;
+            int rc;
+            int upperOffset;
+            short lowerOffset;
+            int wasFalling;
+            int temp, temp2; // not from decls.h
+
+            wasFalling = Data->Mode & 0x4;
+
+            upperOffset = instance->oldPos.z - instance->position.z;
+
+            if (upperOffset < 160)
+            {
+                upperOffset = 160;
+            }
+
+            temp = instance->zAccl * gameTrackerX.timeMult;
+
+            temp2 = (instance->zVel + (short)(temp / 4096)) * gameTrackerX.timeMult;
+
+            lowerOffset = -(temp2 / 4096) + 64; // TODO: looks a bit hacky, needs rewriting
+
+            if (lowerOffset < 160)
+            {
+                lowerOffset = 160;
+            }
+
+            if (lowerOffset < upperOffset)
+            {
+                lowerOffset = upperOffset;
+            }
+            else
+            {
+                upperOffset = lowerOffset;
+            }
+
+            gravityData = (evPhysicsGravityData *)SetPhysicsGravityData((short)upperOffset, lowerOffset, 0, 0, 0, 2896);
+
+            rc = PhysicsCheckGravity(instance, (intptr_t)gravityData, 13);
+
+            if (((rc & 0x1)) && ((instance->attachedID == 0) || (wasFalling != 0)) && (instance->wNormal.z >= 2897))
+            {
+                wasFalling = instance->zVel < -50;
+
+                if ((Data->Mode & 0x14))
+                {
+                    PHYSOB_PlayDropSound(instance);
+                }
+
+                Data->Mode &= ~0x4;
+
+                if ((Data->Mode & 0x400000))
+                {
+                    Data->Mode = (Data->Mode & ~0x400010) | 0x200000;
+
+                    Data->physObTimer = 10;
+
+                    TurnOnCollisionPhysOb(instance, 7);
+                }
+                else
+                {
+                    Data->Mode &= ~0x800000;
+
+                    if (!(Data->Mode & 0x4000000))
+                    {
+                        Data->Mode |= 0x1;
+                    }
+                }
+
+                if ((Data->Mode & 0x10))
+                {
+                    instance->flags2 &= ~0x80;
+                }
+
+                Data->Mode &= ~0x10;
+
+                if (!(Data->Mode & 0x200000))
+                {
+                    TurnOffCollisionPhysOb(instance, 4);
+                }
+
+                if ((rc & 0x80000))
+                {
+                    Data->Mode |= 0x1000;
+
+                    instance->zAccl = 0;
+                    instance->zVel = 0;
+                }
+                else
+                {
+                    instance->zAccl = -1;
+                    instance->zVel = -1;
+                }
+
+                if ((instance->oldMatrix != NULL) && ((Data->Mode & 0x18000) == 0x10000))
+                {
+                    PHYSOB_StopLighting(instance, PhysObGetLight(instance));
+                }
+
+                if ((CheckPhysObAbility(instance, 8) != 0) && (!(Data->Mode & 0x100)))
+                {
+                    if (wasFalling != 0)
+                    {
+                        instance->zAccl = 0;
+
+                        ResetOrientation(instance);
+                    }
+
+                    Data->pz = instance->position.z;
+                }
+            }
+            else if ((instance->attachedID == 0) && (instance->oldMatrix != NULL))
+            {
+                if ((rc & 0x1))
+                {
+                    instance->position.x += gravityData->x;
+                    instance->position.y += gravityData->y;
+                }
+
+                if ((instance->zVel == 0) && ((instance->object->oflags & 0x400)))
+                {
+                    instance->zVel = -50;
+                }
+
+                instance->zAccl = -10;
+
+                Data->Mode |= 0x4;
+            }
+            else
+            {
+                instance->zAccl = 0;
+                instance->zVel = 0;
+            }
+
+            if ((!(instance->object->oflags & 0x80000)) && (CheckPhysObAbility(instance, 8) != 0) && (gameTrackerX.gameData.asmData.MorphType == 0) && (gameTrackerX.gameData.asmData.MorphTime != 1000) && (!(instance->flags2 & 0x8000000)))
+            {
+                PCollideInfo CInfo;
+                SVECTOR Old;
+                SVECTOR New;
+                short len;
+                //short mult; unused
+                int temp; // not from decls.h
+
+                CInfo.oldPoint = &Old;
+                CInfo.newPoint = &New;
+
+                Old.vx = New.vx = instance->position.x;
+                Old.vy = New.vy = instance->position.y;
+                Old.vz = New.vz = instance->position.z;
+
+                New.vz -= 1280;
+
+                Old.vz += 320;
+
+                PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+                len = (Old.vz - New.vz) - 320;
+
+                instance->zAccl = 0;
+
+                temp = 1000 - gameTrackerX.gameData.asmData.MorphTime;
+
+                temp *= 50;
+
+                if (len >= 960)
+                {
+                    short temp2; // not from decls.h
+
+                    temp2 = Data->pz - instance->position.z;
+
+                    len = instance->position.z - (Data->pz - ((temp2 / 640) + 1) * 640); // TODO: looks a bit hacky, needs rewriting
+                }
+
+                len = (len * 1000) / temp;
+
+                len = (len << 12) / gameTrackerX.timeMult; // TODO: looks a bit hacky, needs rewriting
+
+                instance->zVel = -len;
+            }
+        }
+        else
+        {
+            instance->tface = NULL;
+            instance->tfaceLevel = NULL;
+        }
+
+        if ((Data->Mode & 0x200000))
+        {
+            Data->physObTimer--;
+
+            if ((PHYSOB_ReAlignFalling(instance, -900) != 0) || (Data->physObTimer <= 0))
+            {
+                Data->Mode = (Data->Mode & ~0xA00000) | 0x1;
+
+                TurnOffCollisionPhysOb(instance, 7);
+            }
+        }
+
+        if (((instance->object->oflags & 0x80000)) || (CheckPhysObAbility(instance, 8) != 0) || ((gameTrackerX.gameData.asmData.MorphTime == 1000) && (gameTrackerX.gameData.asmData.MorphType == 0)))
+        {
+            PhysicsMove(instance, &instance->position, gameTracker->timeMult);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysicalObjectQuery);
 
