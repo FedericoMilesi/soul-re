@@ -6,6 +6,7 @@
 #include "Game/STREAM.h"
 #include "Game/GLYPH.h"
 #include "Game/SCRIPT.h"
+#include "Game/MEMPACK.h"
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/G2/ANMG2ILF.h"
 
@@ -864,7 +865,319 @@ void StopPhysOb(Instance *instance)
     Data->Mode = 0x1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", InitPhysicalObject);
+void InitPhysicalObject(Instance *instance, GameTracker *gameTracker)
+{
+    PhysObData *Data;
+    PhysObProperties *Prop;
+    PhysObCollectibleProperties *collectibleProp;
+    PhysObInteractProperties *interact;
+    int s;
+    G2SVector3 vec;
+    G2Matrix mat;
+    G2EulerAngles ea;
+    SwitchData *switchData;
+    PhysObSwitchProperties *switchProp;
+    PhysObLight *pLight;
+    INICommand *index;
+
+    if ((instance->flags & 0x20000))
+    {
+        PhysObInteractProperties *interactProp;
+
+        interactProp = (PhysObInteractProperties *)instance->data;
+
+        if (interactProp->mode == 2)
+        {
+            INSTANCE_Post(gameTracker->playerInstance, 0x800024, (intptr_t)SetObjectIdleData(0, NULL));
+        }
+
+        if (CheckPhysObAbility(instance, 8) != 0)
+        {
+            G2Anim_DetachControllerFromSeg(&instance->anim, 0, 76);
+            G2Anim_DetachControllerFromSeg(&instance->anim, 2, 14);
+        }
+
+        MEMPACK_Free((char *)instance->extraData);
+        return;
+    }
+
+    Prop = (PhysObProperties *)instance->data;
+
+    Data = (PhysObData *)MEMPACK_Malloc(sizeof(PhysObData), 26);
+
+    instance->extraData = Data;
+
+    Data->Mode = 0x1;
+
+    Data->Segment1 = 4097;
+    Data->Segment2 = 4098;
+
+    Data->Pad1 = -1;
+
+    Data->burnAmpl = 4096;
+
+    Data->xForce = 0;
+    Data->yForce = 0;
+
+    Data->Force = NULL;
+
+    Data->px = 0;
+    Data->py = 0;
+    Data->pz = 0;
+
+    Data->rx1 = 0;
+    Data->ry1 = 0;
+    Data->rz1 = 0;
+
+    Data->rx2 = 0;
+    Data->ry2 = 0;
+    Data->rz2 = 0;
+
+    Data->Steps = 0;
+    Data->Step = 0;
+
+    Data->RightCollision = NULL;
+    Data->LeftCollision = NULL;
+
+    instance->maxXVel = 640;
+    instance->maxYVel = 640;
+    instance->maxZVel = 640;
+
+    Data->xRotVel = 0;
+    Data->yRotVel = 0;
+    Data->zRotVel = 0;
+
+    if ((instance->object != NULL) && (!(instance->object->oflags & 0x1)))
+    {
+        Data->Mode |= 0x1000;
+    }
+
+    if ((Prop->Type & 0x40))
+    {
+        Prop->Type |= 0x8000;
+
+        instance->flags2 |= 0x4;
+    }
+
+    if ((Prop->Type & 0x8000))
+    {
+        G2EmulationInstanceSetTotalSections(instance, 1);
+        G2EmulationInstanceSetStartAndEndSegment(instance, 0, 0, (int)instance->object->modelList[instance->currentModel]->numSegments - 1);
+        G2EmulationInstanceSetAnimation(instance, 0, 0, 0, 0);
+        G2EmulationInstanceSetMode(instance, 0, 2);
+    }
+
+    if (Prop->family == 5)
+    {
+        collectibleProp = (PhysObCollectibleProperties *)instance->data;
+
+        G2EmulationInstanceInitSection(instance, 0, PhysobAnimCallback, instance);
+
+        if (collectibleProp->idleAnim != 255)
+        {
+            G2EmulationInstanceSetAnimation(instance, 0, collectibleProp->idleAnim, 0, 0);
+            G2EmulationInstanceSetMode(instance, 0, 2);
+        }
+
+        if ((collectibleProp->collectClass == 2) && (gameTrackerX.playerInstance != NULL) && (!(INSTANCE_Query(gameTrackerX.playerInstance, 36) & 0xFC0000)))
+        {
+            instance->flags |= 0x20;
+        }
+
+        if (collectibleProp->collectClass != 3)
+        {
+            instance->flags2 |= 0x20000;
+        }
+    }
+
+    if ((Prop->Type & 0x8D00))
+    {
+        Data->Mode |= 0x1000;
+    }
+
+    if (Prop->family == 3)
+    {
+        PhysObInteractProperties *interactProp;
+
+        interactProp = (PhysObInteractProperties *)instance->extraData;
+
+        interactProp->Properties.ID = Prop->Type | 0x80;
+        interactProp->Properties.Type = 0;
+
+        interact = (PhysObInteractProperties *)instance->data;
+
+        if ((interact->newType & 0x80))
+        {
+            instance->flags2 |= 0x20000;
+        }
+        else if (!(interact->newType & 0x1))
+        {
+            instance->flags2 |= 0x4;
+        }
+
+        if (instance->object->modelList != NULL)
+        {
+            if ((interact->startAnimMode & 0x8))
+            {
+                for (s = 0; s < instance->object->modelList[0]->numSegments; s++)
+                {
+                    COLLIDE_SegmentCollisionOff(instance, s);
+                }
+            }
+            else
+            {
+                for (s = 0; s < instance->object->modelList[0]->numSegments; s++)
+                {
+                    COLLIDE_SegmentCollisionOn(instance, s);
+                }
+            }
+        }
+
+        TurnOffCollisionPhysOb(instance, 7);
+
+        if ((Prop->Type & 0x8000))
+        {
+            switch (interact->startAnimMode & 0x3)
+            {
+            case 0:
+                G2EmulationInstanceSetMode(instance, 0, 2);
+                break;
+            case 1:
+                G2EmulationInstanceSetMode(instance, 0, 1);
+                break;
+            case 2:
+                G2EmulationInstanceSetMode(instance, 0, 0);
+                break;
+            }
+        }
+
+        if ((interact->startAnim != 255) && ((Prop->Type & 0x8000)))
+        {
+            G2EmulationInstanceSetAnimation(instance, 0, interact->startAnim, 0, 0);
+        }
+
+        if (interact->mode == 2)
+        {
+            INSTANCE_Post(gameTracker->playerInstance, 0x800024, SetObjectIdleData(1, instance));
+        }
+    }
+    else if (CheckPhysObAbility(instance, 1) != 0)
+    {
+        TurnOffCollisionPhysOb(instance, 7);
+    }
+    else if (CheckPhysObAbility(instance, 8) != 0)
+    {
+        instance->object->oflags |= 0x40000;
+
+        Data->px = instance->position.x;
+        Data->py = instance->position.y;
+        Data->pz = instance->position.z;
+
+        instance->lightMatrix = 2;
+
+        instance->object->oflags |= 0x400;
+
+        G2EmulationInstanceInitSection(instance, 0, PhysobAnimCallback, instance);
+
+        G2Anim_AttachControllerToSeg(&instance->anim, 0, 76);
+        G2Anim_AttachControllerToSeg(&instance->anim, 2, 14);
+
+        G2Anim_DisableController(&instance->anim, 0, 76);
+
+        G2Anim_EnableController(&instance->anim, 2, 14);
+
+        vec.x = instance->rotation.x;
+        vec.y = instance->rotation.y;
+        vec.z = instance->rotation.z;
+
+        RotMatrixZYX((SVECTOR *)&vec, (MATRIX *)&mat);
+
+        G2EulerAngles_FromMatrix(&ea, &mat, 21);
+
+        vec.x = ea.x;
+        vec.y = ea.y;
+        vec.z = ea.z;
+
+        instance->rotation.x = 0;
+        instance->rotation.y = 0;
+        instance->rotation.z = 0;
+
+        G2Anim_SetController_Vector(&instance->anim, 2, 14, &vec);
+    }
+    else
+    {
+        if (CheckPhysObAbility(instance, 64) != 0)
+        {
+            instance->flags2 |= 0x4;
+
+            switchProp = (PhysObSwitchProperties *)instance->data;
+
+            switchData = (SwitchData *)instance->extraData + 1;
+
+            switchData->state = switchProp->startMode;
+
+            switchData->accumulator = 0;
+
+            if (switchProp->startAnim == 255)
+            {
+                switchProp->startAnim = 0;
+            }
+
+            G2EmulationInstanceSetAnimation(instance, 0, switchProp->startAnim, 0, 0);
+
+            G2EmulationInstanceInitSection(instance, 0, PhysobAnimCallback, instance);
+
+            if (switchProp->Class == 7)
+            {
+                switchData->accumulator = 1024;
+
+                G2EmulationInstanceSetAnimation(instance, 0, switchProp->startAnim, 90, 0);
+                G2EmulationInstanceSetMode(instance, 0, 1);
+
+                G2EmulationInstancePlayAnimation(instance);
+            }
+        }
+
+        if (CheckPhysObFamily(instance, 7) != 0)
+        {
+            G2EmulationInstanceInitSection(instance, 0, PhysobAnimCallback, instance);
+
+            instance->flags2 |= 0x20000;
+        }
+    }
+
+    if (CheckPhysObAbility(instance, 32) != 0)
+    {
+        index = INSTANCE_FindIntroCommand(instance, 21);
+
+        pLight = PhysObGetLight(instance);
+
+        if ((pLight != NULL) && ((index == NULL) || (!(index->parameter[0] & 0x1))))
+        {
+            Data->burnAmpl = 0;
+
+            PHYSOB_StartBurnFX(instance);
+
+            Data->Mode |= 0x10000;
+        }
+        else
+        {
+            PHYSOB_EndBurning(instance, pLight);
+        }
+    }
+
+    instance->flags |= 0x10000;
+
+    if (CheckPhysObFamily(instance, 6) != 0)
+    {
+        instance->flags2 |= 0x20000;
+    }
+
+    if (CheckPhysObFamily(instance, 0) != 0)
+    {
+        instance->flags2 |= 0x100;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ProcessPhysicalObject);
 

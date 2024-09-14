@@ -539,5 +539,6 @@ void G2EmulationSetInterpController_Vector(Instance *instance, long segment, lon
 intptr_t SetMonsterAlarmData(Instance *sender, Position *position, int type);
 intptr_t SetPhysicsSlideData(int Segment, int ForwardVectorX, int ForwardVectorY, int ForwardVectorZ, int DropOffset, int UpperOffset, int Height);
 intptr_t SetObjectBirthProjectileData(Instance *instance, int joint, int type);
+intptr_t SetObjectIdleData(long mode, Instance *instance);
 
 #endif

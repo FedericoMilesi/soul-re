@@ -281,5 +281,6 @@ int INSTANCE_InPlane(Instance *instance, int plane);
 void INSTANCE_UnlinkChildren(Instance *instance);
 void INSTANCE_DefaultInit(Instance *instance, Object *object, int modelNum);
 int INSTANCE_GetFadeValue(Instance *instance);
+INICommand *INSTANCE_FindIntroCommand(Instance *instance, int cmd);
 
 #endif

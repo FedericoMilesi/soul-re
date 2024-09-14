@@ -342,5 +342,6 @@ long PHYSOBS_CheckForValidMove(Instance *instance);
 void PHYSOB_StartLighting(Instance *instance, PhysObLight *pLight);
 Instance *BirthProjectilePhysOb(Instance *instance, int grabJoint, int type);
 void PHYSOB_SetLightTable(PhysObLight *pLight, LightInstance *li, short burnAmplitude);
+long PhysobAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data);
 
 #endif
