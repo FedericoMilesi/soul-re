@@ -746,7 +746,46 @@ evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint,
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", BirthProjectilePhysOb);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_SetLightTable);
+void PHYSOB_SetLightTable(PhysObLight *pLight, LightInstance *li, short burnAmplitude)
+{
+    long idx;
+    long frac;
+    LightTableEntry *ltable;
+    LightTableEntry *ltable2;
+    LightTableEntry *temp; // not from decls.h
+
+    temp = pLight->lightTable;
+
+    idx = (unsigned short)gameTrackerX.vblCount;
+
+    idx = (idx * pLight->speed) % (pLight->length << 12);
+
+    frac = idx & 0xFFF;
+
+    idx >>= 12;
+
+    ltable = &temp[idx++];
+
+    if (idx == pLight->length)
+    {
+        idx = 0;
+    }
+
+    li->segment = pLight->segment;
+
+    ltable2 = &temp[idx];
+
+    li->radius = ((short)(ltable->radius + (((ltable2->radius - ltable->radius) * frac) >> 12)) * burnAmplitude) >> 12;
+
+    if ((li->radius << 16) <= 0)
+    {
+        li->radius = 1;
+    }
+
+    li->r = (short)(((ltable->r << 12) + ((ltable2->r - ltable->r) * frac)) / li->radius);
+    li->g = (short)(((ltable->g << 12) + ((ltable2->g - ltable->g) * frac)) / li->radius);
+    li->b = (short)(((ltable->b << 12) + ((ltable2->b - ltable->b) * frac)) / li->radius);
+}
 
 void PHYSOB_EndLighting(Instance *instance, PhysObLight *pLight)
 {
