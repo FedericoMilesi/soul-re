@@ -1887,7 +1887,277 @@ void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PhysicalObjectQuery);
+unsigned long PhysicalObjectQuery(Instance *instance, unsigned long Query)
+{
+    PhysObData *Data;
+    int trueValue;
+
+    Data = (PhysObData *)instance->extraData;
+
+    trueValue = 1;
+
+    switch (Query)
+    {
+    case 1:
+    {
+        PhysObAnimatedProperties *temp; // not from decls.h
+
+        if (CheckPhysOb(instance) == 0)
+        {
+            return 0;
+        }
+
+        if (CheckPhysObFamily(instance, 6) == 0)
+        {
+            return 32;
+        }
+
+        temp = (PhysObAnimatedProperties *)instance->data;
+
+        if (((temp->flags & 0x1)) && ((instance->flags & 0x800)))
+        {
+            break;
+        }
+
+        return 32;
+    }
+    case 2:
+        return GetPhysicalAbility(instance);
+    case 3:
+        return Data->Mode;
+    case 5:
+    {
+        PhysObSwitchProperties *temp; // not from decls.h 
+
+        temp = (PhysObSwitchProperties *)instance->extraData;
+
+        if (CheckPhysObAbility(instance, 64) != 0)
+        {
+            return (short)temp->Properties.ID;
+        }
+
+        return 0;
+    }
+    case 6:
+        return SetPositionData(instance->position.x, instance->position.y, instance->position.z);
+    case 7:
+    {
+        PhysObData *temp; // not from decls.h 
+
+        if (CheckPhysObAbility(instance, 64) != 0)
+        {
+            temp = (PhysObData *)instance->extraData;
+
+            return SetPositionData(0, 0, (short)(instance->rotation.z + temp->yForce));
+        }
+
+        if (CheckPhysObFamily(instance, 1) != 0)
+        {
+            G2EulerAngles ea;
+
+            if (instance->matrix != NULL)
+            {
+                G2EulerAngles_FromMatrix(&ea, (G2Matrix *)&instance->matrix[2], 0);
+            }
+            else
+            {
+                ea.x = 0;
+                ea.y = 0;
+                ea.z = 0;
+            }
+
+            return SetPositionData(ea.x, ea.y, ea.z);
+        }
+
+        return SetPositionData(instance->rotation.x, instance->rotation.y, instance->rotation.z);
+    }
+    case 4:
+    {
+        PhysObProperties *Prop;
+        PhysObInteractProperties *temp; // not from decls.h 
+
+        Prop = (PhysObProperties *)instance->data;
+
+        if (Prop->family == 3)
+        {
+            temp = (PhysObInteractProperties *)instance->extraData;
+
+            return (short)temp->Properties.Type;
+        }
+        else if (Prop->family == 0)
+        {
+            return (signed char)((PhysObWeaponProperties *)Prop)->WeaponAttributes.Class;
+        }
+        else if (Prop->family == 2)
+        {
+            return ((PhysObSwitchProperties *)Prop)->Class;
+        }
+
+        return (Prop->family == 7) << 3;
+    }
+    case 11:
+        return 3;
+    case 12:
+    case 13:
+        return (unsigned long)instance->matrix;
+    case 14:
+    {
+        PhysObCollectibleProperties *collectibleProp;
+
+        if ((instance->matrix != NULL) && (CheckPhysObFamily(instance, 5) != 0))
+        {
+            collectibleProp = (PhysObCollectibleProperties *)instance->data;
+
+            return (unsigned long)&instance->matrix[collectibleProp->spatialNode];
+        }
+
+        return 0;
+    }
+    case 21:
+        if (CheckPhysObFamily(instance, 3) != 0)
+        {
+            return (unsigned long)instance->data;
+        }
+
+        return 0;
+    case 29:
+        if (CheckPhysObFamily(instance, 5) != 0)
+        {
+            return (unsigned long)instance->data;
+        }
+
+        return 0;
+    case 28:
+        if (CheckPhysObAbility(instance, 64) != 0)
+        {
+            return (unsigned long)instance->data;
+        }
+
+        return 0;
+    case 22:
+    {
+        PhysObDraftProperties *DraftProp;
+        INICommand *index;
+
+        if (CheckPhysObAbility(instance, 256) != 0)
+        {
+            index = INSTANCE_FindIntroCommand(instance, 19);
+
+            if (index != NULL)
+            {
+                DraftProp = (PhysObDraftProperties *)instance->data;
+
+                DraftProp += index->parameter[0];
+            }
+            else
+            {
+                DraftProp = (PhysObDraftProperties *)instance->data;
+            }
+
+            return SetObjectDraftData(DraftProp->force, DraftProp->radius, DraftProp->radiusCoef, DraftProp->height, DraftProp->maxVelocity);
+        }
+
+        return 0;
+    }
+    case 24:
+    {
+        evControlSaveDataData *pdata;
+        PhysObSaveData *data;
+
+        pdata = (evControlSaveDataData *)CIRC_Alloc(sizeof(evControlSaveDataData) * 2);
+
+        pdata->length = 8;
+
+        pdata->data = pdata + 1; // TODO: something else should be assigned here
+
+        memcpy(pdata + 1, (char *)&((evControlSaveDataData *)instance->extraData)->data, sizeof(SwitchData)); // TODO: parameters look wrong
+
+        data = (PhysObSaveData *)pdata + 1; // TODO: looks wrong
+
+        if ((instance->LinkParent != NULL) && ((instance->LinkParent->object->oflags2 & 0x80000)) && (instance->ParentLinkNode != 3))
+        {
+            data->Mode = Data->Mode | 0x2000000;
+        }
+        else if ((instance->LinkParent != NULL) && (instance->LinkParent == gameTrackerX.playerInstance))
+        {
+            data->Mode = (Data->Mode & ~0x1090) | 0x400004;
+        }
+        else
+        {
+            data->Mode = Data->Mode;
+        }
+
+        return (unsigned long)pdata;
+    }
+    case 27:
+        trueValue = 0;
+    case 26:
+    {
+        PhysObSwitchProperties *Prop;
+
+        if (CheckPhysObFamily(instance, 2) != 0)
+        {
+            Prop = (PhysObSwitchProperties *)instance->extraData;
+
+            if ((Prop->Properties.ID & 0x2))
+            {
+                return trueValue;
+            }
+
+            return trueValue == 0;
+        }
+        {
+            PhysObData *Data;
+
+            Prop = (PhysObSwitchProperties *)instance->data;
+
+            if (Prop->Class == 0)
+            {
+                Data = (PhysObData *)instance->extraData;
+
+                if ((Data->Mode & 0x2000))
+                {
+                    return trueValue == 0;
+                }
+            }
+
+            return trueValue;
+        }
+    }
+    case 23:
+        if (CheckPhysObAbility(instance, 64) != 0)
+        {
+            return (unsigned long)instance->data;
+        }
+
+        return 0;
+    case 47:
+    {
+        PhysObData *physobData;
+
+        physobData = (PhysObData *)instance->extraData;
+
+        if (physobData != NULL)
+        {
+            if ((Data->Mode & 0x800))
+            {
+                return 1;
+            }
+
+            if ((Data->Mode & 0x14E))
+            {
+                return 1;
+            }
+        }
+
+        break;
+    }
+    case 17:
+        return G2EmulationInstanceQueryAnimation(instance, 0);
+    }
+
+    return 0;
+}
 
 void PhysicalObjectPost(Instance *instance, unsigned long Message, unsigned long Data)
 {

@@ -541,5 +541,6 @@ intptr_t SetPhysicsSlideData(int Segment, int ForwardVectorX, int ForwardVectorY
 intptr_t SetObjectBirthProjectileData(Instance *instance, int joint, int type);
 intptr_t SetObjectIdleData(long mode, Instance *instance);
 intptr_t SetPhysicsGravityData(int UpperOffset, int LowerOffset, int x, int y, int z, int slope);
+intptr_t SetObjectDraftData(short force, unsigned short radius, unsigned short radiusCoef, unsigned short height, int maxVelocity);
 
 #endif

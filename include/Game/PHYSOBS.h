@@ -313,6 +313,22 @@ typedef struct PhysObAnimatedProperties {
     unsigned short pad;
 } PhysObAnimatedProperties;
 
+// size: 0x14
+typedef struct PhysObDraftProperties {
+    // offset: 0000 (8 bytes)
+    struct PhysObProperties Properties;
+    // offset: 0008
+    short force;
+    // offset: 000A
+    unsigned short radius;
+    // offset: 000C
+    unsigned short radiusCoef;
+    // offset: 000E
+    short maxVelocity;
+    // offset: 0010
+    unsigned long height;
+} PhysObDraftProperties;
+
 evObjectBirthProjectileData *PHYSOB_BirthProjectile(Instance *parent, int joint, int type);
 void CollidePhysicalObject(Instance *instance, GameTracker *gameTracker);
 void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker);
