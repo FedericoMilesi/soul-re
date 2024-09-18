@@ -2556,7 +2556,50 @@ void PHYSOBS_SetNewAnim(Instance *instance, PhysObData *Data, unsigned long mode
     PhysOb_AlignPush(instance, (int)Data->xForce, (int)Data->yForce, path, Data);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckForEnemyInBlkSpot);
+long PHYSOB_CheckForEnemyInBlkSpot(Instance *instance, int dx, int dy)
+{
+    int x;
+    int y;
+    int z;
+    int x0;
+    int x1;
+    int y0;
+    int y1;
+    int z0;
+    int z1;
+    Instance *inst;
+
+    inst = gameTrackerX.instanceList->first;
+
+    x = instance->position.x + dx;
+    y = instance->position.y + dy;
+    z = instance->position.z;
+
+    x0 = x - 320;
+    x1 = x + 320;
+
+    y0 = y - 320;
+    y1 = y + 320;
+
+    z0 = z - 320;
+    z1 = z + 320;
+
+    while (inst != NULL)
+    {
+        if (((!(inst->object->oflags2 & 0x80000)) || ((inst->flags2 & 0x8000000))) || ((INSTANCE_Query(inst, 0) & 0x40000000))
+        || ((inst->position.x < x0) || (inst->position.x > x1)) || ((inst->position.y < y0) || (inst->position.y > y1))
+        || ((inst->position.z < z0) || (inst->position.z > z1)))
+        {
+            inst = inst->next;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_CheckForValidMove);
 
