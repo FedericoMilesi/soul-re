@@ -10,6 +10,7 @@
 #include "Game/MONSTER/MBMISS.h"
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/G2/ANMG2ILF.h"
+#include "Game/G2/INSTNCG2.h"
 
 void PHYSOB_PlayDropSound(Instance *instance)
 {
@@ -480,7 +481,180 @@ int SwitchPhysOb(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", InteractPhysOb);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", ResetOrientation);
+void ResetOrientation(Instance *instance)
+{
+    G2EulerAngles ea;
+    PhysObData *Data;
+    G2SVector3 vec;
+    G2SVector3 vec2;
+    int dp;
+    int fixxy;
+    int fixz;
+    int dx;
+    int dx2;
+    int dy;
+    int dy2;
+    int dz;
+    int dz2;
+    short temp; // not from decls.h
+
+    G2Anim_DisableController(&instance->anim, 0, 76);
+
+    Data = (PhysObData *)instance->extraData;
+
+    fixxy = 0;
+    fixz = 0;
+
+    dp = instance->position.x - Data->px;
+
+    if (dp != 0)
+    {
+        if (dp > 0)
+        {
+            dp = ((dp + 320) / 640) * 640;
+        }
+        else
+        {
+            dp = ((dp - 320) / 640) * 640;
+        }
+
+        instance->position.x = dp + Data->px;
+    }
+
+    dp = instance->position.y - Data->py;
+
+    if (dp != 0)
+    {
+        if (dp > 0)
+        {
+            dp -= fixxy;
+
+            dp = ((dp + 320) / 640) * 640;
+
+            dp += fixxy;
+        }
+        else
+        {
+            dp += fixxy;
+
+            dp = ((dp - 320) / 640) * 640;
+
+            dp -= fixxy;
+        }
+
+        instance->position.y = dp + Data->py;
+    }
+
+    dp = instance->position.z - Data->pz;
+
+    if (dp != 0)
+    {
+        if (dp >= 0)
+        {
+            dp -= fixz;
+
+            dp = ((dp + 80) / 160) * 160;
+
+            dp += fixz;
+        }
+        else
+        {
+            dp += fixz;
+
+            dp = ((dp - 80) / 160) * 160;
+
+            dp -= fixz;
+        }
+
+        instance->position.z = dp + Data->pz;
+    }
+
+    Data->px = instance->position.x;
+    Data->py = instance->position.y;
+    Data->pz = instance->position.z;
+
+    G2EulerAngles_FromMatrix(&ea, (G2Matrix *)&instance->matrix[2], 21);
+
+    if (ea.x < 0)
+    {
+        temp = ((ea.x - 512) / 1024) * 1024;
+    }
+    else
+    {
+        temp = ((ea.x + 512) / 1024) * 1024;
+    }
+
+    vec2.x = temp;
+
+    if (ea.y < 0)
+    {
+        temp = ((ea.y - 512) / 1024) * 1024;
+    }
+    else
+    {
+        temp = ((ea.y + 512) / 1024) * 1024;
+    }
+
+    vec2.y = temp;
+
+    if (ea.z < 0)
+    {
+        temp = ((ea.z - 512) / 1024) * 1024;
+    }
+    else
+    {
+        temp = ((ea.z + 512) / 1024) * 1024;
+    }
+
+    vec2.z = temp;
+
+    SUB_SVEC(G2SVector3, &vec, G2EulerAngles, &ea, G2SVector3, &vec2);
+
+    vec.x = (((vec.x < 0) ? vec.x - 150 : vec.x + 150) / 301) * 301;
+    vec.y = (vec.y < 0) ? ((vec.y - 150) / 301) * 301 : ((vec.y + 150) / 301) * 301;
+    vec.z = (vec.z < 0) ? ((vec.z - 150) / 301) * 301 : ((vec.z + 150) / 301) * 301;
+
+    ADD_SVEC(G2SVector3, &vec, G2SVector3, &vec, G2SVector3, &vec2);
+
+    dx = vec.x - ea.x;
+    dx2 = vec2.x - ea.x;
+
+    dx = abs(dx);
+    dx2 = abs(dx2);
+
+    if (dx > dx2)
+    {
+        vec.x = vec2.x;
+    }
+
+    dy = vec.y - ea.y;
+    dy2 = vec2.y - ea.y;
+
+    dy = abs(dy);
+    dy2 = abs(dy2);
+
+    if (dy > dy2)
+    {
+        vec.y = vec2.y;
+    }
+
+    dz = vec.z - ea.z;
+    dz2 = vec2.z - ea.z;
+
+    dz = abs(dz);
+    dz2 = abs(dz2);
+
+    if (dz > dz2)
+    {
+        vec.z = vec2.z;
+    }
+
+    G2Anim_SetController_Vector(&instance->anim, 2, 14, &vec);
+
+    G2Instance_RebuildTransforms(instance);
+
+    G2Anim_SwitchToKeylist(&instance->anim, *instance->object->animList, 0);
+}
 
 void FinishPush(Instance *instance)
 {
