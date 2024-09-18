@@ -2667,7 +2667,44 @@ int CheckSlope(int Znormal, int Slope, int Slop)
     return temp;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckBlockSlope);
+int CheckBlockSlope(Instance *instance, int x, int y, int hOff, int vOff, int dH, int dV)
+{
+    PCollideInfo CInfo;
+    SVECTOR Old;
+    SVECTOR New;
+    int xOff;
+    int yOff;
+    int dX;
+    int dY;
+    MATRIX *mat;
+
+    CInfo.oldPoint = &Old;
+    CInfo.newPoint = &New;
+
+    mat = instance->matrix;
+
+    Old.vx = mat->t[0];
+    Old.vy = mat->t[1];
+    Old.vz = mat->t[2];
+
+    xOff = x * hOff;
+    yOff = y * hOff;
+
+    Old.vx += xOff;
+    Old.vy += yOff;
+    Old.vz += vOff;
+
+    dX = x * dH;
+    dY = y * dH;
+
+    New.vx = Old.vx + dX;
+    New.vy = Old.vy + dY;
+    New.vz = Old.vz + dV;
+
+    PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+    return CInfo.type == 5;
+}
 
 int PHYSOBS_FigureDragForSlope(Instance *instance, int pathNumber, int *result)
 {
