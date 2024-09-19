@@ -2525,7 +2525,72 @@ long PhysobAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, 
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CheckForceCollision);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", GetObliqueDirection);
+int GetObliqueDirection(Instance *instance, SVector *dir)
+{
+    SVector vel;
+    int obliqueFlg;
+    long axVel;
+    long ayVel;
+    int temp; // not from decls.h
+
+    obliqueFlg = 0;
+
+    vel.x = instance->xVel;
+    vel.y = instance->yVel;
+    vel.z = instance->zVel;
+
+    if (((vel.x << 16) != 0) || ((vel.y << 16) != 0))
+    {
+        axVel = abs(instance->xVel);
+        ayVel = abs(instance->yVel);
+
+        dir->z = 0;
+
+        if (axVel > ayVel)
+        {
+            if (instance->xVel > 0)
+            {
+                dir->x = 4096;
+            }
+            else
+            {
+                dir->x = -4096;
+            }
+
+            dir->y = 0;
+
+            temp = (axVel >> 1) > ayVel;
+        }
+        else
+        {
+            if (instance->yVel > 0)
+            {
+                dir->y = 4096;
+            }
+            else
+            {
+                dir->y = -4096;
+            }
+
+            dir->x = 0;
+
+            temp = axVel < (ayVel >> 1);
+        }
+
+        if (temp == 0)
+        {
+            obliqueFlg = 1;
+        }
+    }
+    else
+    {
+        dir->z = 0;
+        dir->y = 0;
+        dir->x = 0;
+    }
+
+    return obliqueFlg;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", CollidePhysicalObject);
 
