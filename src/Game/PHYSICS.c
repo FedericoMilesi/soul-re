@@ -6,6 +6,7 @@
 #include "Game/HASM.h"
 #include "Game/COLLIDE.h"
 #include "Game/STATE.h"
+#include "Game/SIGNAL.h"
 #include "Game/PHYSOBS.h"
 
 void SetNoPtCollideInFamily(Instance *instance)
@@ -316,7 +317,67 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckBlockers);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckSwim);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsDefaultCheckSwimResponse);
+int PhysicsDefaultCheckSwimResponse(Instance *instance, evPhysicsSwimData *Data)
+{
+    int rc;
+    long waterZLevel;
+
+    STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+    waterZLevel = Data->WaterLevel;
+
+    if (-Data->WadeDepth >= Data->WaterDepth)
+    {
+        rc = 0;
+    }
+    else
+    {
+        rc = 128;
+    }
+
+    if ((-Data->TreadDepth < Data->Depth) && (Data->Depth < 0))
+    {
+        rc |= 0x40;
+    }
+
+    if (Data->Depth < -Data->SwimDepth)
+    {
+        rc |= 0x10;
+    }
+
+    if (Data->Depth > 0)
+    {
+        rc |= 0x20;
+    }
+
+    if ((instance->position.z < waterZLevel) && (instance->oldPos.z > waterZLevel) && (Data->iVelocity->z < 0))
+    {
+        SIGNAL_InWater(instance);
+
+        rc |= 0x100;
+    }
+
+    if (((instance->matrix != NULL) && (instance->oldMatrix != NULL)) && ((instance->matrix[1].t[2] > waterZLevel)
+        && (instance->oldMatrix[1].t[2] < waterZLevel)))
+    {
+        SIGNAL_OutOfWater(instance);
+
+        rc |= 0x200;
+    }
+
+    if ((instance->position.z > waterZLevel) && (instance->oldPos.z < waterZLevel) && (Data->iVelocity->z > 0))
+    {
+        rc |= 0x400;
+    }
+
+    if (((instance->matrix != NULL) && (instance->oldMatrix != NULL)) && ((instance->matrix[1].t[2] < (waterZLevel - Data->SwimDepth))
+        && (instance->oldMatrix[1].t[2] > (waterZLevel - Data->SwimDepth)) && (Data->iVelocity->z < 0)))
+    {
+        rc |= 0x800;
+    }
+
+    return rc;
+}
 
 void PhysicsForceSetWater(Instance *instance, int *Time, int Depth, int rate, int maxAmplitude)
 {
