@@ -604,7 +604,59 @@ int PHYSICS_CheckFaceStick(PCollideInfo *CInfo)
     return rc;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckDontGrabEdge);
+int PHYSICS_CheckDontGrabEdge(PCollideInfo *CInfo)
+{
+    int rc;
+    TFace *tface;
+    BSPTree *bsp;
+    HFace *hface;
+
+    rc = 0;
+
+    if (CInfo->type == 3)
+    {
+        tface = (TFace *)CInfo->prim;
+
+        if (tface->textoff != 0xFFFF)
+        {
+            hface = (HFace *)((char *)((Terrain *)CInfo->inst->node.prev)->StartTextureList + tface->textoff);
+
+            if ((hface->n0 & (unsigned int)0x80) > (unsigned int)rc)
+            {
+                rc = 1;
+            }
+        }
+
+        bsp = &((Terrain *)CInfo->inst->node.prev)->BSPTreeArray[CInfo->segment];
+
+        if ((bsp->flags & 0x8000))
+        {
+            rc = 1;
+        }
+    }
+    else if (CInfo->type == 2)
+    {
+        hface = (HFace *)CInfo->prim;
+
+        if ((hface->attr & 0x80))
+        {
+            rc = 1;
+        }
+    }
+    else if (CInfo->type == 5)
+    {
+        if ((!(INSTANCE_Query(CInfo->inst, 1) & 0x20)) || ((INSTANCE_Query(CInfo->inst, 3) & 0x1)))
+        {
+            rc = 0;
+        }
+        else
+        {
+            rc = 1;
+        }
+    }
+
+    return rc;
+}
 
 void PHYSICS_GenericLineCheckSetup(short x, short y, short z, SVECTOR *inVec)
 {
