@@ -357,8 +357,8 @@ int PhysicsDefaultCheckSwimResponse(Instance *instance, evPhysicsSwimData *Data)
         rc |= 0x100;
     }
 
-    if (((instance->matrix != NULL) && (instance->oldMatrix != NULL)) && ((instance->matrix[1].t[2] > waterZLevel)
-        && (instance->oldMatrix[1].t[2] < waterZLevel)))
+    if (((instance->matrix != NULL) && (instance->oldMatrix != NULL)) && (instance->matrix[1].t[2] > waterZLevel)
+    && (instance->oldMatrix[1].t[2] < waterZLevel))
     {
         SIGNAL_OutOfWater(instance);
 
@@ -370,8 +370,8 @@ int PhysicsDefaultCheckSwimResponse(Instance *instance, evPhysicsSwimData *Data)
         rc |= 0x400;
     }
 
-    if (((instance->matrix != NULL) && (instance->oldMatrix != NULL)) && ((instance->matrix[1].t[2] < (waterZLevel - Data->SwimDepth))
-        && (instance->oldMatrix[1].t[2] > (waterZLevel - Data->SwimDepth)) && (Data->iVelocity->z < 0)))
+    if (((instance->matrix != NULL) && (instance->oldMatrix != NULL)) && (instance->matrix[1].t[2] < (waterZLevel - Data->SwimDepth))
+    && (instance->oldMatrix[1].t[2] > (waterZLevel - Data->SwimDepth)) && (Data->iVelocity->z < 0))
     {
         rc |= 0x800;
     }
