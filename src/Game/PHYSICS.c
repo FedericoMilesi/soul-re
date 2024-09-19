@@ -578,7 +578,31 @@ int PHYSICS_CheckForValidMove(Instance *instance, SVECTOR *startVec, SVECTOR *en
     return rc;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckFaceStick);
+int PHYSICS_CheckFaceStick(PCollideInfo *CInfo)
+{
+    int rc;
+    TFace *tface;
+    HFace *hface;
+    char temp[8]; // not from decls.h
+
+    (void)temp;
+
+    rc = 0;
+
+    if (CInfo->type == 3)
+    {
+        tface = (TFace *)CInfo->prim;
+
+        if (tface->textoff != 0xFFFF)
+        {
+            hface = (HFace *)(((TextureFT3 *)((char *)((Level *)&CInfo->inst->node)->terrain->StartTextureList + tface->textoff))->attr & 0x200);
+
+            rc = (unsigned int)rc < (uintptr_t)hface;
+        }
+    }
+
+    return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PHYSICS_CheckDontGrabEdge);
 
