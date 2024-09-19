@@ -393,7 +393,62 @@ void PhysicsMoveLocalZClamp(Instance *instance, long segment, long time, long cl
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsMove);
+void PhysicsMove(Instance *instance, Position *position, long time)
+{
+    long xVel;
+    long yVel;
+    long zVel;
+    long xat;
+    long yat;
+    long zat;
+
+    xVel = instance->xVel;
+    yVel = instance->yVel;
+    zVel = instance->zVel;
+
+    xat = (instance->xAccl * time) / 4096;
+    yat = (instance->yAccl * time) / 4096;
+    zat = (instance->zAccl * time) / 4096;
+
+    position->x += ((xVel * time) / 4096) + ((xat * time) / 8192);
+    position->y += ((yVel * time) / 4096) + ((yat * time) / 8192);
+    position->z += ((zVel * time) / 4096) + ((zat * time) / 8192);
+
+    xVel += xat;
+    yVel += yat;
+    zVel += zat;
+
+    if (xVel > instance->maxXVel)
+    {
+        xVel = instance->maxXVel;
+    }
+    else if (xVel < -instance->maxXVel)
+    {
+        xVel = -instance->maxXVel;
+    }
+
+    if (yVel > instance->maxYVel)
+    {
+        yVel = instance->maxYVel;
+    }
+    else if (yVel < -instance->maxYVel)
+    {
+        yVel = -instance->maxYVel;
+    }
+
+    if (zVel > instance->maxZVel)
+    {
+        zVel = instance->maxZVel;
+    }
+    else if (zVel < -instance->maxZVel)
+    {
+        zVel = -instance->maxZVel;
+    }
+
+    instance->xVel = xVel;
+    instance->yVel = yVel;
+    instance->zVel = zVel;
+}
 
 void PhysicsSetVelFromZRot(Instance *instance, short angle, long magnitude)
 {
