@@ -3063,7 +3063,30 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckThrownLineCollision);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckDroppedLineCollision);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_CheckDirectedLineCollision);
+int PHYSOB_CheckDirectedLineCollision(Instance *instance, int xoffset, int yoffset, int startZOffset)
+{
+    PCollideInfo pcollideInfo;
+    Position newPos;
+    Position oldPos;
+    MATRIX *mat;
+
+    mat = &instance->matrix[1];
+
+    oldPos.x = mat->t[0];
+    oldPos.y = mat->t[1];
+    oldPos.z = mat->t[2] + startZOffset;
+
+    newPos.x = oldPos.x + xoffset;
+    newPos.y = oldPos.y + yoffset;
+    newPos.z = oldPos.z;
+
+    pcollideInfo.newPoint = (SVECTOR *)&newPos;
+    pcollideInfo.oldPoint = (SVECTOR *)&oldPos;
+
+    PHYSICS_CheckLineInWorld(instance, &pcollideInfo);
+
+    return pcollideInfo.type;
+}
 
 long PHYSOBS_CheckForStackedForwardHits(Instance *block, long xoffset, long yoffset)
 {
