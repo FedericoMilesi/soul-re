@@ -34,15 +34,9 @@ void VWRAITH_Init(Instance* instance)
     MonsterVars* mv;
 
     mv = instance->extraData;
-    
     hitpoints = mv->hitPoints;
     
-    if (hitpoints < 0)
-    {
-        hitpoints += 0xFFF;
-    }
-    
-    color = FX_GetHealthColor(hitpoints >> 0xC);
+    color = FX_GetHealthColor(hitpoints / 4096);
     mv->effect = FX_DoInstanceTwoSegmentGlow(instance, 0x15, 0x17, &color, 1, 0x4B0, 0x9C);
     MON_DefaultInit(instance);
     
