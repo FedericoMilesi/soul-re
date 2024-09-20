@@ -1,6 +1,8 @@
 #include "common.h"
+#include "Game/FX.h"
 #include "Game/MONSTER/VWRAITH.h"
 #include "Game/MONSTER/MONSTER.h"
+#include "Game/MONSTER/MONAPI.h"
 
 void VWRAITH_MoveVertical(Instance *instance, long targetZ, int velocity)
 {
@@ -24,7 +26,25 @@ void VWRAITH_MoveVertical(Instance *instance, long targetZ, int velocity)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_Init);
+void VWRAITH_Init(Instance* instance)
+{
+    
+    long color;
+    int hitpoints;
+    MonsterVars* mv;
+
+    mv = instance->extraData;
+    hitpoints = mv->hitPoints;
+    
+    color = FX_GetHealthColor(hitpoints / 4096);
+    mv->effect = FX_DoInstanceTwoSegmentGlow(instance, 0x15, 0x17, &color, 1, 0x4B0, 0x9C);
+    MON_DefaultInit(instance);
+    
+    mv->soulJuice = 0x3000;
+    mv->auxFlags &= ~1;
+    mv->mvFlags |= 0x10002800;
+    
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_ShouldISwoop);
 
