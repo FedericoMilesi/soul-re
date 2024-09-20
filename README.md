@@ -4,7 +4,9 @@
 
 ## About
 
-This project seeks to reconstruct the source code for Legacy of Kain: Soul Reaver, by reverse-engineering MIPS assembly back to C, the language the game was originally programmed on. 
+Soul Reaverse is a project that seeks to reconstruct the source code of the action-adventure classic Legacy of Kain: Soul Reaver. This is achieved by disassembling the executable of a prototype of the game that was built two weeks before its final release, which includes a full set of debugging symbols that makes the process of reverse-engineering the binary's MIPS instructions back to C language easier.
+
+The current progress of the project is 54% completion.
 
 ## Building (Linux)
 
