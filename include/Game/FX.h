@@ -570,5 +570,6 @@ void FX_CalcSpiral(int degchange);
 void FX_GetSpiralPoint(int radius, int deg, int *x, int *y);
 void FX_DeleteGeneralEffect(FXGeneralEffect *effect);
 void FX_StandardFXPrimProcess(FX_PRIM *fxPrim, FXTracker *fxTracker);
+long FX_GetHealthColor(int currentHealth);
 
 #endif
