@@ -34,7 +34,7 @@ void VWRAITH_Init(Instance *instance)
     int hitpoints;
     MonsterVars *mv;
 
-    mv = instance->extraData;
+    mv = (MonsterVars*) instance->extraData;
     hitpoints = mv->hitPoints;
     
     color = FX_GetHealthColor(hitpoints / 4096);
@@ -56,7 +56,7 @@ void VWRAITH_PursueEntry(Instance *instance)
     MonsterAttributes *ma;
     MonsterAnimation *mAnim;
 
-    mv = instance->extraData;
+    mv = (MonsterVars*) instance->extraData;
     
     if (VWRAITH_ShouldISwoop(instance) != 0)
     {
@@ -69,8 +69,8 @@ void VWRAITH_PursueEntry(Instance *instance)
         return;
     }
     
-    ma = instance->data;
-    mAnim = ma->tunData;
+    ma = (MonsterAttributes*) instance->data;
+    mAnim = (MonsterAnimation*) ma->tunData;
     
     MON_PlayAnimFromList(instance, ma->auxAnimList, (signed char) mAnim->index[2], 1);
 
