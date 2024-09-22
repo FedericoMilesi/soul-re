@@ -3,6 +3,3 @@ KAIN2.ld
 asm/
 build/
 .vscode/
-__pycache__/
-.venv
-.python-version
