@@ -56,19 +56,15 @@ int VWRAITH_ShouldISwoop(Instance *instance)
     mv = (MonsterVars*) instance->extraData;
     ma = (MonsterAttributes*) instance->data;
     
-    if (!(mv->mvFlags & 4)) 
+    if (!(mv->mvFlags & 4) && mv->enemy != NULL) 
     {
-        if (mv->enemy != NULL) 
+        Instance *ei;
+        ei = mv->enemy->instance;
+        if (instance->position.z >= ei->position.z) 
         {
-            
-            Instance *ei;
-            ei = mv->enemy->instance;
-            if (instance->position.z >= ei->position.z) 
+            if (((MonsterCombatAttributes*) ma->tunData)->surpriseRange < mv->enemy->distance) 
             {
-                if (((MonsterCombatAttributes*) ma->tunData)->surpriseRange < mv->enemy->distance) 
-                {
-                    return MON_ShouldIAttackInstance(instance, ei);
-                }
+                return MON_ShouldIAttackInstance(instance, ei);
             }
         }
     }
