@@ -5,6 +5,14 @@
 #include "Game/GAMELOOP.h"
 #include "Game/STATE.h"
 
+// size: 0x8
+typedef struct __EngagedInstance {
+    // offset: 0000 (668 bytes)
+    struct _Instance *instance;
+    // offset: 0004
+    unsigned long distance;
+} EngagedInstance;
+
 // size: 0x54
 typedef struct __SensoryData {
     // offset: 0000

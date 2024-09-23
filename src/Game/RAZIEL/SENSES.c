@@ -1,7 +1,35 @@
 #include "common.h"
+#include "Game/PLAYER.h"
 #include "Game/MATH3D.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/SENSES", SetEngagedInstance);
+int SetEngagedInstance(Player *player, evCollideInstanceStatsData *Ptr, unsigned long Attribute)
+{
+    int rc;
+
+    rc = 0;
+
+    if ((player->Senses.EngagedMask & (1 << Attribute)))
+    {
+        if (player->Senses.EngagedList[Attribute].distance > Ptr->distance)
+        {
+            rc = 1;
+
+            player->Senses.EngagedList[Attribute].instance = Ptr->instance;
+            player->Senses.EngagedList[Attribute].distance = Ptr->distance;
+        }
+    }
+    else
+    {
+        rc = 1;
+
+        player->Senses.EngagedMask |= 1 << Attribute;
+
+        player->Senses.EngagedList[Attribute].instance = Ptr->instance;
+        player->Senses.EngagedList[Attribute].distance = Ptr->distance;
+    }
+
+    return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/SENSES", UpdateEngagementList);
 
