@@ -221,7 +221,24 @@ void OBTABLE_ChangeObjectAccessPointers(Object *oldObject, Object *newObject)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_RelocateObjectTune);
+void OBTABLE_RelocateObjectTune(Object *object, long offset)
+{
+    long id;
+
+    id = object->id;
+
+    if (id >= 0)
+    {
+        if (objectFunc[id].relocateTuneFunc != NULL)
+        {
+            objectFunc[id].relocateTuneFunc(object, offset);
+        }
+    }
+    else
+    {
+        GenericRelocateTune(object, offset);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_RelocateInstanceObject);
 
