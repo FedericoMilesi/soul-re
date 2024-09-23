@@ -574,5 +574,6 @@ long StreamRenderLevel(StreamUnit *currentUnit, Level *mainLevel, unsigned long 
 int AddClippedTri(SVECTOR *iv, RECT *cliprect, int *minz);
 int WARPGATE_IsObjectOnWarpSide(Instance *instance);
 int STREAM_IsMorphInProgress();
+long STREAM_GetWaterZLevel(Level *level, Instance *instance);
 
 #endif

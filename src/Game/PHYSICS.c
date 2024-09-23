@@ -315,7 +315,91 @@ int PhysicsUpdateTface(Instance *instance, intptr_t Data)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckBlockers);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckSwim);
+int PhysicsCheckSwim(Instance *instance, intptr_t Data, short Mode)
+{
+    evPhysicsSwimData *Ptr;
+    int rc;
+    int Depth;
+    int WaterDepth;
+    PCollideInfo CInfo;
+    SVECTOR Old;
+    SVECTOR New;
+    long waterZLevel;
+
+    Ptr = (evPhysicsSwimData *)Data;
+
+    waterZLevel = STREAM_GetWaterZLevel(STREAM_GetLevelWithID(instance->currentStreamUnitID), instance);
+
+    Depth = instance->matrix[1].t[2] - waterZLevel;
+
+    if (waterZLevel == -32767)
+    {
+        Depth = 1;
+        WaterDepth = -32767;
+    }
+    else
+    {
+        WaterDepth = -32767;
+
+        if (waterZLevel == 32767)
+        {
+            Depth = -32767;
+        }
+        else if (Ptr->CheckDepth != 0)
+        {
+            CInfo.oldPoint = &Old;
+            CInfo.newPoint = &New;
+
+            Old.vx = New.vx = (short)instance->matrix[1].t[0];
+            Old.vy = New.vy = (short)instance->matrix[1].t[1];
+            Old.vz = New.vz = (short)instance->matrix[1].t[2];
+
+            New.vz -= Ptr->WadeDepth * 4;
+            Old.vz += Ptr->TreadDepth;
+
+            gameTrackerX.gameFlags |= 0x8000;
+
+            instance->waterFace = NULL;
+
+            PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+            gameTrackerX.gameFlags &= ~0x8000;
+
+            if (CInfo.type != 0)
+            {
+                WaterDepth = (Depth + CInfo.newPoint->vz) - instance->matrix[1].t[2];
+            }
+            else
+            {
+                WaterDepth = Depth - (Ptr->WadeDepth * 4);
+            }
+        }
+        else
+        {
+            Ptr->Depth = Depth;
+            Ptr->WaterDepth = WaterDepth = instance->matrix->t[2] - waterZLevel;
+        }
+    }
+
+    if ((Mode & 0x3))
+    {
+        Ptr->Depth = Depth;
+        Ptr->WaterDepth = WaterDepth;
+    }
+
+    Ptr->WaterLevel = waterZLevel;
+
+    Ptr->rc = rc = PhysicsDefaultCheckSwimResponse(instance, (evPhysicsSwimData *)Ptr);
+
+    if ((Mode & 0x2))
+    {
+        INSTANCE_Post(instance, 0x4020000, Data);
+    }
+
+    FX_UpdateInstanceWaterSplit(instance);
+
+    return rc;
+}
 
 int PhysicsDefaultCheckSwimResponse(Instance *instance, evPhysicsSwimData *Data)
 {

@@ -8,7 +8,7 @@ void PHYSICS_CheckLineInWorldMask(Instance *instance, PCollideInfo *pcollideInfo
 void PhysicsMove(Instance *instance, Position *position, long time);
 void PhysicsSetVelFromRot(Instance *instance, Rotation *rot, long magnitude);
 int PhysicsCheckGravity(Instance *instance, intptr_t Data, short Mode);
-int PhysicsCheckSwim(Instance *instance, int Data, short Mode);
+int PhysicsCheckSwim(Instance *instance, intptr_t Data, short Mode);
 int PhysicsCheckDropHeight(Instance *instance, int Data, int Mode);
 void PhysicsSetVelFromZRot(Instance *instance, short angle, long magnitude);
 void PhysicsDefaultLinkedMoveResponse(Instance *instance, evPhysicsLinkedMoveData *Data, int updateTransforms);
@@ -23,5 +23,6 @@ int PHYSICS_CheckFaceStick(PCollideInfo *CInfo);
 void PHYSICS_GenericLineCheck(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
 void PHYSICS_GenericLineCheckMask(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
 int PhysicsCheckSliding(Instance *instance, int Data, short Mode);
+int PhysicsDefaultCheckSwimResponse(Instance *instance, evPhysicsSwimData *Data);
 
 #endif
