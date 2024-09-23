@@ -1,9 +1,39 @@
 #include "common.h"
 #include "Game/OBTABLE.h"
+#include "Game/GAMELOOP.h"
+#include "Game/SCRIPT.h"
+#include "Game/GENERIC.h"
 
 ObjectFunc objectFunc[8924+8];
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_InstanceInit);
+void OBTABLE_InstanceInit(Instance *instance)
+{
+    long id;
+
+    id = instance->object->id;
+
+    if (id < 0)
+    {
+        GenericInit(instance, &gameTrackerX);
+    }
+    else if (objectFunc[id].initFunc != NULL)
+    {
+        objectFunc[id].initFunc(instance, &gameTrackerX);
+    }
+
+    instance->flags2 |= 0x200000;
+
+    if (!(instance->flags & 0x100000))
+    {
+        SCRIPT_InstanceSplineInit(instance);
+    }
+
+    if ((instance->intro != NULL) && ((instance->intro->flags & 0x20)))
+    {
+        instance->flags2 &= ~0x4;
+        instance->flags2 &= ~0x20000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_GetInstanceCollideFunc);
 
