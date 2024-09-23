@@ -38,7 +38,6 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ProcessMovingWater);
 void EVENT_DoProcess()
 {
     EVENT_ProcessMovingWater();
-
     EVENT_ProcessTimers();
 }
 
@@ -157,6 +156,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_DoSoundMarkerAction);
 long EVENT_GetSoundValue(SoundObject *soundObject)
 {
     (void)soundObject;
+
     return 0;
 }
 
