@@ -109,6 +109,10 @@ int ControlFlag;
 
 EXTERN STATIC int PhysicsMode;
 
+long RazielCommands[10];
+
+EXTERN STATIC long *PadData;
+
 void RAZIEL_DebugHurtRaziel();
 void RAZIEL_DebugHealthSetScale(long healthScale);
 void RAZIEL_DebugManaSetMax(long manaScale);
@@ -120,5 +124,7 @@ void RAZIEL_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *
 long RAZIEL_OkToLookAround(Instance *playerInstance);
 void StateHandlerIdle(CharacterState *In, int CurrentSection, intptr_t Data);
 void DefaultStateHandler(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerLookAround(CharacterState *In, int CurrentSection, intptr_t Data);
+void SetTimer(int ticks);
 
 #endif

@@ -29,5 +29,6 @@ void razSpectralShift();
 void razSetPlayerEventHistory(unsigned long event);
 int razReaverOn();
 Instance *razGetHeldItem();
+void razResetMotion(Instance *instance);
 
 #endif

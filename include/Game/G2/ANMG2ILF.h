@@ -32,5 +32,6 @@ void G2AnimSection_ClearAlarm(G2AnimSection *section, unsigned long flag);
 void G2AnimSection_SetUnpaused(G2AnimSection *section);
 void G2AnimSection_SwitchToKeylist(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID);
 void G2AnimSection_SetNotRewinding(G2AnimSection *section);
+void G2Anim_SetSpeedAdjustment(G2Anim *anim, long adjustment);
 
 #endif

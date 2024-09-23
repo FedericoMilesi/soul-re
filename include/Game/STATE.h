@@ -545,5 +545,8 @@ intptr_t SetObjectDraftData(short force, unsigned short radius, unsigned short r
 void G2EmulationSwitchAnimationSync(CharacterState *In, int SlaveSectionID, int MasterSectionID, int Frames);
 intptr_t SetControlInitIdleData(int mode, long frame, long frames);
 intptr_t SetMonsterImpaleData(Instance *weapon, Rotation *direction, Position *position, int distance);
+void G2EmulationSwitchAnimation(CharacterState *In, int CurrentSection, int NewAnim, int NewFrame, int Frames, int Mode);
+void StateSwitchStateCharacterData(CharacterState *In, void (*NewProcess)(), intptr_t Data);
+void G2EmulationInstanceToInstanceSwitchAnimationCharacter(Instance *instance, Instance *host, int NewAnim, int NewFrame, int Frames, int Mode);
 
 #endif

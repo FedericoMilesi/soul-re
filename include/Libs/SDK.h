@@ -287,7 +287,8 @@ typedef struct DR_STP {
     unsigned long code[2];
 } DR_STP;
 
-typedef unsigned short PadData;
+//typedef unsigned short PadData;
+typedef unsigned short padData;
 
 typedef struct
 {
@@ -314,7 +315,8 @@ typedef struct
 
     union                                         /* Controller data union. */                   /* Controller data union. */
     {
-        PadData    pad;                                 /* Plain pad.       */
+        //PadData    pad;                                 /* Plain pad.       */
+        padData    pad;                                 /* Plain pad.       */
         NegconData negcon;                              /* Namco controller.*/
     }
     data;
@@ -334,7 +336,8 @@ typedef struct
     /* Bottom 4 == shorts of data written */
     union                                         /* Controller data union. */
     {
-        PadData      pad;                               /* Plain pad.       */
+        //PadData      pad;                               /* Plain pad.       */
+        padData      pad;                               /* Plain pad.       */
         MouseData    mouse;                             /* Mouse.           */
         NegconData   negcon;                            /* Namco controller.*/
         MultiTapData tap;                               /* 4-way multi-tap. */

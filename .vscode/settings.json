@@ -86,6 +86,7 @@
         "types.h": "c",
         "anmdecmp.h": "c",
         "razlib.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "health.h": "c"
     }
 }

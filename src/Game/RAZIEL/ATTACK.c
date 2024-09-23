@@ -7,6 +7,9 @@
 #include "Game/RAZIEL/RAZLIB.h"
 #include "Game/STATE.h"
 #include "Game/RAZIEL/STEERING.h"
+#include "Game/RAZIEL/HEALTH.h"
+#include "Game/RAZIEL/CONTROL.h"
+#include "Game/G2/ANMG2ILF.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerDecodeHold);
 
@@ -97,7 +100,122 @@ void StateHandlerCannedReaction(CharacterState *In, int CurrentSection, intptr_t
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerStumble);
+void StateHandlerStumble(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+    int temp; // not from decls.h
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if (CurrentSection == 0)
+            {
+                ControlFlag = 0x8;
+
+                SetPhysics(In->CharacterInstance, -16, 0, 0, 0);
+
+                PhysicsMode = 0;
+
+                SteerSwitchMode(In->CharacterInstance, 0);
+
+                razResetMotion(In->CharacterInstance);
+
+                if (Ptr->Data != 0)
+                {
+                    temp = ((Ptr->Data * 16) - Ptr->Data) * 2;
+
+                    SetTimer(temp / 4096);
+                }
+                else
+                {
+                    SetTimer(1);
+                }
+            }
+
+            G2Anim_SetSpeedAdjustment(&In->CharacterInstance->anim, 2048);
+
+            G2EmulationSwitchAnimation(In, CurrentSection, 128, 0, 3, 2);
+            break;
+        case 0x100004:
+            G2Anim_SetSpeedAdjustment(&In->CharacterInstance->anim, 4096);
+            break;
+        case 0x100000:
+            if (((*PadData & RazielCommands[5])) && ((*PadData & RazielCommands[4])))
+            {
+                Raziel.returnState = StateHandlerIdle;
+
+                StateSwitchStateCharacterData(In, StateHandlerIdle, SetControlInitIdleData(0, 0, 12));
+                StateSwitchStateCharacterData(In, StateHandlerLookAround, 0);
+            }
+            else
+            {
+                StateSwitchStateCharacterData(In, StateHandlerIdle, SetControlInitIdleData(0, 0, 12));
+            }
+
+            break;
+        case 0x4000001:
+            break;
+        case 0x10000000:
+            if (In->SectionList[CurrentSection].Data2 == 1)
+            {
+                In->SectionList[CurrentSection].Data2 = 0;
+                In->SectionList[CurrentSection].Data1 -= 512;
+            }
+
+            break;
+        case 0:
+            In->SectionList[CurrentSection].Data2 = 1;
+            break;
+        case 0x40003:
+            if (CurrentSection == 0)
+            {
+                evActionPlayHostAnimationData *data;
+
+                data = (evActionPlayHostAnimationData *)Ptr->Data;
+
+                G2EmulationInstanceToInstanceSwitchAnimationCharacter(data->instance, data->host, data->newAnim, data->newFrame, data->frames, data->mode);
+            }
+
+            break;
+        case 0x1000000:
+            if ((gameTrackerX.debugFlags2 & 0x800))
+            {
+                evMonsterHitData *data;
+
+                data = (evMonsterHitData *)Ptr->Data;
+
+                LoseHealth(data->power);
+            }
+
+            break;
+        case 0x100015:
+            if (STREAM_IsMorphInProgress() == 0)
+            {
+                EnMessageQueueData(&Raziel.State.SectionList[CurrentSection].Defer, 0x100000, 0);
+            }
+            else
+            {
+                EnMessageQueueData(&Raziel.State.SectionList[CurrentSection].Defer, 0x100015, 0);
+            }
+
+            break;
+        case 0x40005:
+        case 0x100009:
+        case 0x1000001:
+        case 0x2000000:
+        case 0x80000000:
+        case 0x80000008:
+        case 0x80000020:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerHitReaction);
 
