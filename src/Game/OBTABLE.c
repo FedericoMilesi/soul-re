@@ -99,7 +99,21 @@ void OBTABLE_GetInstanceQueryFunc(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_GetInstanceMessageFunc);
+void OBTABLE_GetInstanceMessageFunc(Instance *instance)
+{
+    long id;
+
+    id = instance->object->id;
+
+    if (id >= 0)
+    {
+        instance->messageFunc = objectFunc[id].messageFunc;
+    }
+    else
+    {
+        instance->messageFunc = GenericMessage;
+    }
+}
 
 void OBTABLE_InitObjectWithID(Object *object)
 {
