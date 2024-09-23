@@ -3,5 +3,6 @@
 
 void SetMana(int amount);
 void razPlayUnderworldSounds(Instance *instance);
+int GetMaxHealth();
 
 #endif

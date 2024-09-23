@@ -13,7 +13,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", LoseHealth);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", DrainHealth);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", BumpUpHealth);
+void BumpUpHealth()
+{
+    Raziel.HealthScale++;
+
+    Raziel.HitPoints = GetMaxHealth();
+}
 
 int GetMaxHealth()
 {
