@@ -266,7 +266,88 @@ void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Dat
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckEdgeGrabbing);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsDefaultEdgeGrabResponse);
+void PhysicsDefaultEdgeGrabResponse(Instance *instance, evPhysicsEdgeData *Data, int blockFlag)
+{
+    SVector normal;
+    G2EulerAngles ea1;
+    VECTOR OutTrans;
+    MATRIX TempMat;
+    SVECTOR New;
+    long dp;
+
+    if (blockFlag != 0)
+    {
+        normal.z = 0;
+        normal.y = 0;
+        normal.x = 0;
+
+        if (Data->Normal1->y > 512)
+        {
+            normal.y = 4096;
+            ea1.z = 0;
+        }
+        else if (Data->Normal1->y < -512)
+        {
+            normal.y = -4096;
+            ea1.z = -2048;
+        }
+
+        if (Data->Normal1->x > 512)
+        {
+            normal.x = 4096;
+            ea1.z = -1024;
+        }
+        else if (Data->Normal1->x < -512)
+        {
+            normal.x = -4096;
+            ea1.z = 1024;
+        }
+
+        ea1.y = 0;
+        ea1.x = 0;
+
+        MATH3D_RotateAxisToVector(&TempMat, instance->matrix, &normal, AXIS_Y);
+
+        instance->rotation.x = 0;
+    }
+    else
+    {
+        normal.x = Data->Normal1->x;
+        normal.y = Data->Normal1->y;
+        normal.z = 0;
+
+        MATH3D_RotateAxisToVector(&TempMat, &instance->matrix[1], &normal, AXIS_Y);
+
+        G2EulerAngles_FromMatrix(&ea1, (G2Matrix *)&TempMat, 0);
+
+        instance->rotation.x = 0;
+    }
+
+    instance->rotation.y = 0;
+    instance->rotation.z = ea1.z;
+
+    Data->zRot = ea1.z;
+
+    New.vz = Data->ZDistance;
+    New.vx = Data->XDistance;
+    New.vy = Data->YDistance;
+
+    RotMatrix((SVECTOR *)&instance->rotation, &TempMat);
+
+    gte_SetRotMatrix(&TempMat);
+    gte_ldv0(&New);
+    gte_nrtv0();
+    gte_stlvnl(&OutTrans);
+
+    dp = ((Data->Delta->x * normal.x) + (Data->Delta->y * normal.y) + (Data->Delta->z * normal.z)) >> 12;
+
+    Data->Delta->x = ((int)dp * normal.x) >> 12;
+    Data->Delta->y = ((int)dp * normal.y) >> 12;
+
+    instance->position.z -= (short)OutTrans.vz - (Data->UpperOffset + Data->AboveOffset + Data->Delta->z);
+    instance->position.x += Data->Delta->x - (short)OutTrans.vx;
+    instance->position.y -= (short)OutTrans.vy - Data->Delta->y;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckSliding);
 
