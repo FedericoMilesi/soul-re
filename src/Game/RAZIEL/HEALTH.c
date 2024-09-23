@@ -30,7 +30,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugHealthSetScale);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugManaSetMax);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugHealthFillUp);
+void RAZIEL_DebugHealthFillUp()
+{
+    if (Raziel.CurrentPlane == 1)
+    {
+        Raziel.HitPoints = 100000 + (Raziel.HealthScale * 100000);
+    }
+    else
+    {
+        Raziel.HitPoints = 100000;
+    }
+}
 
 void RAZIEL_DebugManaFillUp()
 {
