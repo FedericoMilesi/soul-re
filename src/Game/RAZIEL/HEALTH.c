@@ -19,7 +19,27 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", GetMaxHealth);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", ProcessHealth);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", HealthCheckForLowHealth);
+int HealthCheckForLowHealth()
+{
+    if (STREAM_IsMorphInProgress() == 0)
+    {
+        if (Raziel.CurrentPlane == 1)
+        {
+            if (Raziel.HitPoints < 100100)
+            {
+                return 1;
+            }
+        }
+        else if (Raziel.HitPoints < 100)
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    return 1;
+}
 
 void DrainMana(int amount)
 {
