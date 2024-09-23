@@ -500,6 +500,7 @@ long CAMERA_LengthSVector(SVector *sv);
 short CAMERA_GetLineAngle(Camera *camera, CameraCollisionInfo *colInfo, SVector *linept, int line);
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
+void CAMERA_ForceEndLookaroundMode(Camera *camera);
 
 extern int CameraCenterDelay;
 Camera theCamera;

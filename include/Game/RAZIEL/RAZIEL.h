@@ -126,5 +126,6 @@ void StateHandlerIdle(CharacterState *In, int CurrentSection, intptr_t Data);
 void DefaultStateHandler(CharacterState *In, int CurrentSection, intptr_t Data);
 void StateHandlerLookAround(CharacterState *In, int CurrentSection, intptr_t Data);
 void SetTimer(int ticks);
+void StateHandlerFall(CharacterState *In, int CurrentSection, intptr_t Data);
 
 #endif

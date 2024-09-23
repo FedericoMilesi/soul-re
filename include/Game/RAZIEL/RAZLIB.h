@@ -30,5 +30,6 @@ void razSetPlayerEventHistory(unsigned long event);
 int razReaverOn();
 Instance *razGetHeldItem();
 void razResetMotion(Instance *instance);
+void razSetFadeEffect(short source, short dest, int steps);
 
 #endif

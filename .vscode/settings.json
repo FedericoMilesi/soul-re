@@ -87,6 +87,7 @@
         "anmdecmp.h": "c",
         "razlib.h": "c",
         "stdlib.h": "c",
-        "health.h": "c"
+        "health.h": "c",
+        "swim.h": "c"
     }
 }

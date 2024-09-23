@@ -548,5 +548,8 @@ intptr_t SetMonsterImpaleData(Instance *weapon, Rotation *direction, Position *p
 void G2EmulationSwitchAnimation(CharacterState *In, int CurrentSection, int NewAnim, int NewFrame, int Frames, int Mode);
 void StateSwitchStateCharacterData(CharacterState *In, void (*NewProcess)(), intptr_t Data);
 void G2EmulationInstanceToInstanceSwitchAnimationCharacter(Instance *instance, Instance *host, int NewAnim, int NewFrame, int Frames, int Mode);
+int G2EmulationQueryAnimation(CharacterState *In, int CurrentSection);
+void G2EmulationSwitchAnimationAlpha(CharacterState *In, int CurrentSection, int NewAnim, int NewFrame, int Frames, int Mode, int AlphaTable);
+void StateSwitchStateCharacterDataDefault(CharacterState *In, void (*NewProcess)(), intptr_t Data);
 
 #endif
