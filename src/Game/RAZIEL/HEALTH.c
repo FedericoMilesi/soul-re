@@ -28,7 +28,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", HealthInstantDeath);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugHealthSetScale);
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugManaSetMax);
+#else
+void RAZIEL_DebugManaSetMax(long manaScale)
+{
+    Raziel.GlyphManaMax = Raziel.GlyphManaBalls = (short)(manaScale * 4);
+}
+#endif
 
 void RAZIEL_DebugHealthFillUp()
 {
