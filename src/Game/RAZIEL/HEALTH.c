@@ -1,4 +1,7 @@
 #include "common.h"
+#include "Game/PLAYER.h"
+#include "Game/RAZIEL/RAZIEL.h"
+#include "Game/RAZIEL/RAZLIB.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", InitHealthSystem);
 
@@ -30,4 +33,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugHealthFillUp);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugManaFillUp);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", razPlayUnderworldSounds);
+void razPlayUnderworldSounds(Instance *instance)
+{
+    if (Raziel.soundHandle != 0)
+    {
+        SndEndLoop(Raziel.soundHandle);
+
+        Raziel.soundHandle = 0;
+    }
+
+    razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle, 26, -250, -250, 120, 120, 0, 3500);
+    razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle, 26, -300, -300, 120, 120, 0, 3500);
+    razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle, 18, -220, -220, 120, 120, 0, 3500);
+    razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle, 26, -250, -250, 120, 120, 0, 3500);
+}
