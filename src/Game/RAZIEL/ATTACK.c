@@ -5,12 +5,97 @@
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/CAMERA.h"
 #include "Game/RAZIEL/RAZLIB.h"
+#include "Game/STATE.h"
+#include "Game/RAZIEL/STEERING.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerDecodeHold);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerAttack2);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerCannedReaction);
+void StateHandlerCannedReaction(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if (CurrentSection == 0)
+            {
+                Raziel.alarmTable = 4500;
+
+                Raziel.Mode = 0x10000;
+
+                ControlFlag = 0x1041009;
+
+                PhysicsMode = 3;
+
+                SteerSwitchMode(In->CharacterInstance, 0);
+
+                In->CharacterInstance->anim.section[0].swAlarmTable = &Raziel.alarmTable;
+            }
+
+            break;
+        case 0x100004:
+            if (CurrentSection == 1)
+            {
+                G2EmulationSwitchAnimationSync(In, 2, 1, 4);
+            }
+
+            break;
+        case 0x100014:
+        case 0x8000000:
+            StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+
+            Raziel.Mode = 1;
+            break;
+        case 0x8000003:
+        {
+            Instance *Inst;
+
+            if (CurrentSection == 0)
+            {
+                Inst = razGetHeldItem();
+
+                if ((Raziel.Senses.EngagedMask & 0x200))
+                {
+                    INSTANCE_Post(Raziel.Senses.EngagedList[9].instance, 0x100000A, SetMonsterImpaleData(Inst, &In->CharacterInstance->rotation, &In->CharacterInstance->position, 520));
+                }
+            }
+
+            break;
+        }
+        case 0x8000004:
+        {
+            Instance *Inst;
+
+            Inst = razGetHeldItem();
+
+            INSTANCE_Post(Inst, 0x800008, 2);
+
+            razReaverOn();
+
+            if ((Raziel.Senses.EngagedMask & 0x200))
+            {
+                INSTANCE_Post(Raziel.Senses.EngagedList[9].instance, 0x100000A, SetMonsterImpaleData(Inst, &In->CharacterInstance->rotation, &In->CharacterInstance->position, 520));
+            }
+
+            break;
+        }
+        case 0x1000000:
+        case 0x1000001:
+        case 0x80000000:
+        case 0x80000008:
+        case 0x80000020:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerStumble);
 

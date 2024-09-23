@@ -28,5 +28,6 @@ void razSetupSoundRamp(Instance *instance, SoundRamp *sound, int sfx, int startP
 void razSpectralShift();
 void razSetPlayerEventHistory(unsigned long event);
 int razReaverOn();
+Instance *razGetHeldItem();
 
 #endif

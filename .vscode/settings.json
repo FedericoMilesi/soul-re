@@ -85,6 +85,7 @@
         "light3d.h": "c",
         "types.h": "c",
         "anmdecmp.h": "c",
-        "razlib.h": "c"
+        "razlib.h": "c",
+        "stdlib.h": "c"
     }
 }
