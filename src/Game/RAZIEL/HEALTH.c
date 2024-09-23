@@ -26,7 +26,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", SetMana);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", HealthInstantDeath);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugHealthSetScale);
+void RAZIEL_DebugHealthSetScale(long healthScale)
+{
+    Raziel.HealthScale = (short)healthScale;
+    Raziel.HealthBalls = (short)((healthScale - 1) * 5);
+
+    Raziel.HitPoints = (100000 * (short)healthScale) + 100000;
+}
 
 // Matches 100% on decomp.me but differs on this project
 #ifndef NON_MATCHING
