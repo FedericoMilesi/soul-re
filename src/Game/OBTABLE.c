@@ -126,24 +126,15 @@ void OBTABLE_InitObjectWithID(Object *object)
 
         if ((object->oflags2 & 0x40000))
         {
-            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, "physical")); id++)
-            {
-
-            }
+            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, "physical")); id++);
         }
         else if ((object->oflags2 & 0x80000))
         {
-            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, "monster_")); id++)
-            {
-
-            }
+            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, "monster_")); id++);
         }
         else
         {
-            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, object->script)); id++)
-            {
-
-            }
+            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, object->script)); id++);
         }
 
         if (objectFunc[id].scriptName != NULL)
