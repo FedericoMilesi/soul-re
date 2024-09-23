@@ -83,7 +83,21 @@ void OBTABLE_GetInstanceProcessFunc(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_GetInstanceQueryFunc);
+void OBTABLE_GetInstanceQueryFunc(Instance *instance)
+{
+    long id;
+
+    id = instance->object->id;
+
+    if (id >= 0)
+    {
+        instance->queryFunc = objectFunc[id].queryFunc;
+    }
+    else
+    {
+        instance->queryFunc = GenericQuery;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_GetInstanceMessageFunc);
 
