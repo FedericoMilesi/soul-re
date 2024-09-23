@@ -21,7 +21,20 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", ProcessHealth);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", HealthCheckForLowHealth);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", DrainMana);
+void DrainMana(int amount)
+{
+    Raziel.GlyphManaBalls -= amount;
+
+    if (Raziel.GlyphManaBalls == 0)
+    {
+        Raziel.GlyphManaBalls = 0;
+    }
+
+    if (Raziel.GlyphManaBalls > Raziel.GlyphManaMax)
+    {
+        Raziel.GlyphManaBalls = Raziel.GlyphManaMax;
+    }
+}
 
 void SetMana(int amount)
 {
