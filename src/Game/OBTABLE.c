@@ -3,6 +3,7 @@
 #include "Game/GAMELOOP.h"
 #include "Game/SCRIPT.h"
 #include "Game/GENERIC.h"
+#include "Game/MEMPACK.h"
 
 ObjectFunc objectFunc[8924+8];
 
@@ -190,7 +191,30 @@ void OBTABLE_RemoveObjectEntry(Object *object)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_FindObject);
+Object *OBTABLE_FindObject(char *objectName)
+{
+    Object *object;
+    ObjectTracker *otr;
+    int i;
+
+    otr = gameTrackerX.GlobalObjects;
+
+    for (i = 48; i != 0; i--, otr++)
+    {
+        if (otr->objectStatus != 0)
+        {
+            object = otr->object;
+
+            if ((MEMPACK_MemoryValidFunc((char *)object) != 0) && ((((unsigned int *)objectName)[0] == ((unsigned int *)object->name)[0])
+                && (((unsigned int *)objectName)[1] == ((unsigned int *)object->name)[1])))
+            {
+                return object;
+            }
+        }
+    }
+
+    return NULL;
+}
 
 void OBTABLE_ChangeObjectAccessPointers(Object *oldObject, Object *newObject)
 {
