@@ -7,7 +7,17 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", InitHealthSystem);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", GainHealth);
+void GainHealth(int data)
+{
+    Raziel.HitPoints += (data * 20000) / 4096;
+
+    if ((Raziel.HitPoints >= GetMaxHealth()) && (Raziel.CurrentPlane == 1))
+    {
+        Raziel.HitPoints = GetMaxHealth();
+
+        razReaverOn();
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", LoseHealth);
 

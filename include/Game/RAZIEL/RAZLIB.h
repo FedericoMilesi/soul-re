@@ -27,5 +27,6 @@ Instance *razGetHeldWeapon();
 void razSetupSoundRamp(Instance *instance, SoundRamp *sound, int sfx, int startPitch, int endPitch, int startVolume, int endVolume, int timer, int distance);
 void razSpectralShift();
 void razSetPlayerEventHistory(unsigned long event);
+int razReaverOn();
 
 #endif
