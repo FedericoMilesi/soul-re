@@ -240,6 +240,16 @@ void OBTABLE_RelocateObjectTune(Object *object, long offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_RelocateInstanceObject);
+void OBTABLE_RelocateInstanceObject(Instance *instance, long offset)
+{
+    int id;
+
+    id = instance->object->id;
+
+    if ((id >= 0) && (objectFunc[id].relocateInstObFunc != NULL))
+    {
+        objectFunc[id].relocateInstObFunc(instance, offset);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_InitAnimPointers);
