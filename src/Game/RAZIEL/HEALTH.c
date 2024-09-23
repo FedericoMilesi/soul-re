@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/RAZIEL/HEALTH.h"
 #include "Game/PLAYER.h"
 #include "Game/RAZIEL/RAZIEL.h"
 #include "Game/RAZIEL/RAZLIB.h"
@@ -31,7 +32,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugManaSetMax);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugHealthFillUp);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugManaFillUp);
+void RAZIEL_DebugManaFillUp()
+{
+    SetMana(1);
+}
 
 void razPlayUnderworldSounds(Instance *instance)
 {
