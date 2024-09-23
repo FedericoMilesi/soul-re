@@ -15,7 +15,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", DrainHealth);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", BumpUpHealth);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", GetMaxHealth);
+int GetMaxHealth()
+{
+    if (Raziel.CurrentPlane == 2)
+    {
+        return 100000;
+    }
+    else
+    {
+        return (Raziel.HealthScale + 1) * 100000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", ProcessHealth);
 
