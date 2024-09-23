@@ -267,6 +267,7 @@ void GAMELOOP_Process(GameTracker *gameTracker);
 void ResetDrawPage();
 
 GameTracker gameTrackerX;
+GameTracker *gameTracker;
 extern long playerCameraMode;
 extern long cameraMode;
 DRAWENV draw[2];

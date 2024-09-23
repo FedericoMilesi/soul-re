@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/RAZIEL/HEALTH.h"
+#include "Game/GAMELOOP.h"
 #include "Game/PLAYER.h"
 #include "Game/RAZIEL/RAZIEL.h"
 #include "Game/RAZIEL/RAZLIB.h"
@@ -34,7 +35,29 @@ void SetMana(int amount)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", HealthInstantDeath);
+void HealthInstantDeath(Instance *instance)
+{
+    (void)instance;
+
+    gameTrackerX.gameData.asmData.MorphType = 1;
+
+    razSpectralShift();
+
+    Raziel.HitPoints = 50000;
+
+    gameTracker->streamFlags |= 0x80000;
+
+    if (Raziel.soulReaver != NULL)
+    {
+        INSTANCE_Post(Raziel.soulReaver, 0x800105, 0);
+    }
+
+    razSetPlayerEventHistory(0x8000);
+
+    Raziel.playerEvent |= 0x8000;
+
+    razPlayUnderworldSounds(gameTrackerX.playerInstance);
+}
 
 void RAZIEL_DebugHealthSetScale(long healthScale)
 {
