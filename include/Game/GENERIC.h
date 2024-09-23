@@ -13,5 +13,6 @@ typedef struct GenericTune {
 
 unsigned long GenericQuery(Instance *instance, unsigned long query);
 void GenericInit(Instance *instance, GameTracker *gameTracker);
+void GenericCollide();
 
 #endif

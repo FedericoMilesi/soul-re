@@ -35,7 +35,21 @@ void OBTABLE_InstanceInit(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_GetInstanceCollideFunc);
+void OBTABLE_GetInstanceCollideFunc(Instance *instance)
+{
+    long id;
+
+    id = instance->object->id;
+
+    if (id >= 0)
+    {
+        instance->collideFunc = objectFunc[id].collideFunc;
+    }
+    else
+    {
+        instance->collideFunc = GenericCollide;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_GetInstanceAdditionalCollideFunc);
 
