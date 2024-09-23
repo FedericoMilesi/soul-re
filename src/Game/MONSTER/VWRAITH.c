@@ -47,7 +47,29 @@ void VWRAITH_Init(Instance *instance)
     
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_ShouldISwoop);
+int VWRAITH_ShouldISwoop(Instance *instance)
+{
+    
+    MonsterVars  *mv;
+    MonsterAttributes *ma;
+    
+    mv = (MonsterVars*) instance->extraData;
+    ma = (MonsterAttributes*) instance->data;
+    
+    if (!(mv->mvFlags & 4) && mv->enemy != NULL) 
+    {
+        Instance *ei;
+        ei = mv->enemy->instance;
+        if (instance->position.z >= ei->position.z) 
+        {
+            if (((MonsterCombatAttributes*) ma->tunData)->surpriseRange < mv->enemy->distance) 
+            {
+                return MON_ShouldIAttackInstance(instance, ei);
+            }
+        }
+    }
+    return 0;
+}
 
 void VWRAITH_PursueEntry(Instance *instance)
 {
@@ -81,7 +103,35 @@ void VWRAITH_PursueEntry(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_Pursue);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/VWRAITH", VWRAITH_VerticalMove);
+void VWRAITH_VerticalMove(Instance *instance) 
+{
+    
+    short targetZ;
+    G2LVector3 *velocity;
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+    MonsterIR *enemy;
+
+    mv = (MonsterVars*) instance->extraData;
+    enemy = mv->enemy;
+    
+    if (enemy == NULL) 
+    {
+        return;
+    }
+    
+    targetZ = enemy->instance->position.z;
+    ma = (MonsterAttributes*) instance->data;
+    velocity = (G2LVector3*) ma->tunData;
+
+    VWRAITH_MoveVertical(instance, targetZ, (short) velocity->z);
+
+    if ((instance->currentMainState == MONSTER_STATE_ATTACK) && (instance->position.z != targetZ)) 
+    {
+        MON_SwitchState(instance, MONSTER_STATE_COMBAT);
+    }
+    
+}
 
 void VWRAITH_CombatEntry(Instance *instance)
 {

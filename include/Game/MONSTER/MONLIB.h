@@ -58,5 +58,6 @@ void MON_UnlinkFromRaziel(Instance *instance);
 int MON_SetUpKnockBack(Instance *instance, Instance *enemy, evMonsterHitData *data);
 int MON_OnGround(Instance *instance);
 void MON_DoDrainEffects(Instance *instance, Instance *ei);
+int MON_ShouldIAttackInstance(struct _Instance *instance, struct _Instance *ei);
 
 #endif
