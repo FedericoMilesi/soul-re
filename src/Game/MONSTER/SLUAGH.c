@@ -41,7 +41,7 @@ void SLUAGH_DeathEntry(Instance *instance)
     FX_StopGlowEffect(mv->effect, 0);
 
     enemy = mv->enemy;
-    mv->effect = 0;
+    mv->effect = NULL;
 
     if (enemy != NULL)
     {
