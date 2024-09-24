@@ -1,9 +1,33 @@
 #include "common.h"
 #include "Game/DRAW.h"
 
+SVECTOR shadow_vertices[11];
+
 INCLUDE_ASM("asm/nonmatchings/Game/DRAW", fDRAW_SPLIT_INTPL_XYZ);
 
-INCLUDE_ASM("asm/nonmatchings/Game/DRAW", DRAW_InitShadow);
+void DRAW_InitShadow()
+{
+    int n;
+    int inc;
+    int deg;
+
+    deg = 0;
+
+    inc = 1677721;
+
+    for (n = 0; n < 10; n++)
+    {
+        shadow_vertices[n].vx = rcos(deg / 4096) / 32;
+        shadow_vertices[n].vy = rsin(deg / 4096) / 32;
+        shadow_vertices[n].vz = 0;
+
+        deg += inc;
+    }
+
+    shadow_vertices[10].vx = shadow_vertices[0].vx;
+    shadow_vertices[10].vy = shadow_vertices[0].vy;
+    shadow_vertices[10].vz = shadow_vertices[0].vz;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/DRAW", DRAW_DrawShadow);
 
