@@ -11,6 +11,8 @@
 #include "Game/RAZIEL/CONTROL.h"
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/RAZIEL/SWIM.h"
+#include "Game/REAVER.h"
+#include "Game/FX.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerDecodeHold);
 

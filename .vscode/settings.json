@@ -88,6 +88,8 @@
         "razlib.h": "c",
         "stdlib.h": "c",
         "health.h": "c",
-        "swim.h": "c"
+        "swim.h": "c",
+        "attack.h": "c",
+        "steering.h": "c"
     }
 }

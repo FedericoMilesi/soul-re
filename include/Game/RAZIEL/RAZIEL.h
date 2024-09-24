@@ -5,6 +5,58 @@
 #include "Game/GAMELOOP.h"
 #include "Game/PLAYER.h"
 
+// size: 0x24
+typedef struct __AttackItem {
+    // offset: 0000
+    unsigned char anim;
+    // offset: 0001
+    unsigned char framesIn;
+    // offset: 0002
+    unsigned char alphaIn;
+    // offset: 0003
+    unsigned char framesOut;
+    // offset: 0004
+    unsigned char switchDelay;
+    // offset: 0005
+    unsigned char ignoreDelay;
+    // offset: 0006
+    unsigned char segmentToGlow;
+    // offset: 0007
+    unsigned char startCollisionFrame;
+    // offset: 0008
+    unsigned char handsToCollide;
+    // offset: 0009
+    unsigned char endCollisionFrame;
+    // offset: 000A
+    unsigned char ribbonStartFrame;
+    // offset: 000B
+    unsigned char ribbonStartSegment;
+    // offset: 000C
+    unsigned char ribbonEndSegment;
+    // offset: 000D
+    unsigned char ribbonLifeTime;
+    // offset: 000E
+    unsigned char ribbonFaceLifeTime;
+    // offset: 000F
+    unsigned char knockBackFrames;
+    // offset: 0010
+    unsigned char glowFadeInFrames;
+    // offset: 0011
+    unsigned char glowFadeOutFrames;
+    // offset: 0012
+    unsigned short ribbonStartOpacity;
+    // offset: 0014
+    unsigned long ribbonStartColor;
+    // offset: 0018
+    unsigned long ribbonEndColor;
+    // offset: 001C
+    unsigned long glowColor;
+    // offset: 0020
+    unsigned short knockBackDistance;
+    // offset: 0022
+    unsigned short hitPowerScale;
+} AttackItem;
+
 // size: 0xA0
 typedef struct RazielData {
     // offset: 0000
@@ -127,5 +179,10 @@ void DefaultStateHandler(CharacterState *In, int CurrentSection, intptr_t Data);
 void StateHandlerLookAround(CharacterState *In, int CurrentSection, intptr_t Data);
 void SetTimer(int ticks);
 void StateHandlerFall(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerMove(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerStopMove(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerAutoFace(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerCompression(CharacterState *In, int CurrentSection, intptr_t Data);
+void DisableWristCollision(Instance *instance, int Side);
 
 #endif

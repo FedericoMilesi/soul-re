@@ -95,5 +95,6 @@ typedef struct __ReaverData {
 
 void CollideReaverProjectile(Instance *instance, GameTracker *gameTracker);
 void _SoulReaverAnimate(Instance *instance);
+unsigned long REAVER_GetGlowColor(Instance *instance);
 
 #endif

@@ -31,5 +31,11 @@ int razReaverOn();
 Instance *razGetHeldItem();
 void razResetMotion(Instance *instance);
 void razSetFadeEffect(short source, short dest, int steps);
+void razResetPauseTranslation(Instance *instance);
+void razSetPauseTranslation(Instance *instance);
+int razSwitchVAnimCharacterGroup(Instance *instance, int animGroup, int *frame, int *frames);
+void razLaunchForce(Instance *instance);
+void razSwitchVAnimCharacterSingle(Instance *instance, int anim, int *frame, int *frames);
+void razAlignYRotMoveInterp(Instance *source, Instance *dest, short distance, unsigned char segNumber, int Frames, int extraZ);
 
 #endif

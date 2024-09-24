@@ -571,5 +571,7 @@ void FX_GetSpiralPoint(int radius, int deg, int *x, int *y);
 void FX_DeleteGeneralEffect(FXGeneralEffect *effect);
 void FX_StandardFXPrimProcess(FX_PRIM *fxPrim, FXTracker *fxTracker);
 long FX_GetHealthColor(int currentHealth);
+FXRibbon *FX_StartRibbon(Instance *instance, short startSegment, short endSegment, short type, int ribbonLifeTime, int faceLifeTime, int startFadeValue, long startColor, long endColor);
+void FX_StopGlowEffect(FXGlowEffect *glowEffect, int fadeout_time);
 
 #endif
