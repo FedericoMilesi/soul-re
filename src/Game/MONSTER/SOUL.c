@@ -289,96 +289,96 @@ void SOUL_SoulSuck(Instance *instance)
     sucker = NULL;
     collidedWith = NULL;
     collisionCnt = 0;
-    
-    mv = (MonsterVars*) instance->extraData;
-    
+
+    mv = (MonsterVars *)instance->extraData;
+
     while (message = DeMessageQueue(&mv->messageQueue), message != NULL)
     {
-        
+
         switch (message->ID)
         {
 
         case 0x1000009:
 
-            suckData = (evMonsterSoulSuckData*) message->Data;
+            suckData = (evMonsterSoulSuckData *)message->Data;
             mv->destination.x = suckData->Destination.x;
             mv->destination.y = suckData->Destination.y;
-            
+
             if (mv->mvFlags & 0x800)
             {
                 mv->destination.z = suckData->Destination.z;
-            } 
+            }
             else
             {
                 mv->destination.z = instance->position.z;
             }
-            
+
             distance = MATH3D_DistanceBetweenPositions(&mv->destination, &instance->position);
-            
-            if (distance < 7000) 
+
+            if (distance < 7000)
             {
 
                 sucker = suckData->sender;
                 MONSENSE_SetEnemy(instance, sucker);
 
-                if ((signed char) mv->subAttr->animList[0x2D] == -1 || distance > 1280) 
+                if ((signed char)mv->subAttr->animList[0x2D] == -1 || distance > 1280)
                 {
-                    
+
                     instance->xAccl = SOUL_CalcAccel(mv->destination.x - instance->position.x, instance->xVel, distance);
                     instance->yAccl = SOUL_CalcAccel(mv->destination.y - instance->position.y, instance->yVel, distance);
                     instance->zAccl = SOUL_CalcAccel(mv->destination.z - instance->position.z, instance->zVel, distance);
-                    
+
                     instance->maxXVel = 600;
                     instance->maxYVel = 600;
                     instance->maxZVel = 17;
-                    
-                } 
+
+                }
                 else
                 {
 
                     int verticalDistance;
-                    
+
                     verticalDistance = abs(instance->position.z - mv->destination.z);
-                    
-                    if (verticalDistance < 200) 
+
+                    if (verticalDistance < 200)
                     {
 
                         int animIndex;
                         int animLength;
                         short duration;
                         MonsterAnimation *animation;
-                        
-                        if (MON_AnimPlaying(instance, MONSTER_ANIM_SUCKED) == 0 && distance > 50) 
+
+                        if (MON_AnimPlaying(instance, MONSTER_ANIM_SUCKED) == 0 && distance > 50)
                         {
                             MON_PlayAnim(instance, MONSTER_ANIM_SUCKED, 1);
                             instance->flags2 |= 0x20000000;
                         }
 
                         animation = MON_GetAnim(instance, mv->subAttr->animList, MONSTER_ANIM_SUCKED);
-                        animIndex = (signed char) *animation->index;
+                        animIndex = (signed char)*animation->index;
                         duration = G2AnimKeylist_GetDuration(instance->object->animList[animIndex]);
-                        
+
                         animLength = ((duration * 30) * 4096) / 3000;
                         animLength -= ((G2Anim_GetElapsedTime(&instance->anim) * 30) * 4096) / 3000;
-                        
-                        if (animLength > 0) 
+
+                        if (animLength > 0)
                         {
 
                             SVector dir;
-                            
+
                             SUB_SVEC(SVector, &dir, Position, &mv->destination, Position, &instance->position);
-                            
-                            instance->xVel = (short) ((dir.x * 4096) / animLength);
-                            instance->yVel = (short) ((dir.y * 4096) / animLength);
-                            instance->zVel = (short) ((dir.z * 4096) / animLength);
-                            
+
+                            instance->xVel = (short)((dir.x * 4096) / animLength);
+                            instance->yVel = (short)((dir.y * 4096) / animLength);
+                            instance->zVel = (short)((dir.z * 4096) / animLength);
+
                         }
-                        
-                        if (!(mv->mvFlags & 0x04000000)) 
+
+                        if (!(mv->mvFlags & 0x04000000))
                         {
                             collidedWith = sucker;
                         }
-                        
+
                         instance->zAccl = 0;
                         instance->yAccl = 0;
                         instance->xAccl = 0;
@@ -386,8 +386,8 @@ void SOUL_SoulSuck(Instance *instance)
                         mv->mvFlags &= ~0x800;
                     }
                 }
-            } 
-            else 
+            }
+            else
             {
                 instance->zAccl = 0;
                 instance->yAccl = 0;
@@ -401,84 +401,84 @@ void SOUL_SoulSuck(Instance *instance)
             break;
         case 0x1000008:
             collisionCnt++;
-            if (MON_GetAnim(instance, mv->subAttr->animList, MONSTER_ANIM_SUCKED) == NULL || !(mv->mvFlags & 0x04000000)) 
+            if (MON_GetAnim(instance, mv->subAttr->animList, MONSTER_ANIM_SUCKED) == NULL || !(mv->mvFlags & 0x04000000))
             {
-                collidedWith = ((evMonsterSoulSuckData*) message->Data)->sender;
+                collidedWith = ((evMonsterSoulSuckData *)message->Data)->sender;
             }
         default:
             MON_DefaultMessageHandler(instance, message);
             break;
         }
     }
-    
-    if (collisionCnt != 0 && sucker != NULL) 
+
+    if (collisionCnt != 0 && sucker != NULL)
     {
         mv->generalTimer2++;
-    } 
+    }
     else
     {
         mv->generalTimer2 = 0;
     }
-    
+
     if (mv->generalTimer2 > 10)
     {
         mv->generalTimer2 = 0;
         SOUL_MovePastWall(instance, sucker);
     }
-    
+
     if (mv->mvFlags & 0x800)
     {
         SOUL_Physics(instance, gameTrackerX.timeMult);
-    } 
+    }
     else
     {
         PhysicsMove(instance, &instance->position, gameTrackerX.timeMult);
     }
-    
+
     if (collidedWith != NULL && collidedWith == sucker)
     {
 
         int soulID;
-        
+
         INSTANCE_Post(sucker, 0x01000009, SetMonsterSoulSuckData(instance, 0, 0, 0));
         INSTANCE_Post(sucker, 0x01000016, mv->soulJuice);
         SOUND_Play3dSound(&instance->position, 8, -0x1C2, 0x50, 0xDAC);
-        
+
         if (sucker == gameTrackerX.playerInstance)
         {
             GAMEPAD_Shock1(0x80, 0x5000);
         }
 
         soulID = mv->soulID;
-        
-        if (soulID != 0) 
+
+        if (soulID != 0)
         {
 
             Instance *body;
-            
+
             body = INSTANCE_Find(soulID);
-            
-            if (body != NULL) 
+
+            if (body != NULL)
             {
                 MON_SoulSucked(body);
             }
-            
+
             SAVE_DeleteInstance(instance);
         }
-        
+
         MON_KillMonster(instance);
         return;
     }
-    
+
     if (sucker == NULL)
     {
-        
-        if (instance->flags2 & 0x20000000) 
+
+        if (instance->flags2 & 0x20000000)
         {
-            instance->flags2 &= 0xDFFFFFFF;
+            instance->flags2 &= ~0x20000000;
         }
-        
-        if (mv->enemy != NULL) 
+
+        if (mv->enemy != NULL)
         {
             MON_SwitchState(instance, MONSTER_STATE_FLEE);
         }
