@@ -69,6 +69,20 @@ void SLUAGH_DeathEntry(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_Death);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_AttackEntry);
+void SLUAGH_AttackEntry(Instance *instance)
+{
+    
+    MonsterVars *mv;
+    mv = (MonsterVars*) instance->extraData;
+    
+    if (mv->enemy->mirFlags & 8)
+    {
+        MON_PlayAnim(instance, MONSTER_ANIM_SOULSUCK, 1);
+        mv->auxFlags |= 4;
+        return;
+    }
+    
+    MON_AttackEntry(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_Attack);
