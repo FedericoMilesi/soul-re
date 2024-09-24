@@ -42,5 +42,7 @@ int razInBaseArea(char *name, int length);
 void razReaverImbue(int reaverType);
 int razReaverOff();
 int razPlaneShift(Instance *instance);
+void razReaverBladeOff();
+void razSetWallCrawlNodes(Instance *instance, evPhysicsWallCrawlData *data);
 
 #endif
