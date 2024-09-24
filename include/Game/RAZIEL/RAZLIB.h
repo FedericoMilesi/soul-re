@@ -37,5 +37,7 @@ int razSwitchVAnimCharacterGroup(Instance *instance, int animGroup, int *frame, 
 void razLaunchForce(Instance *instance);
 void razSwitchVAnimCharacterSingle(Instance *instance, int anim, int *frame, int *frames);
 void razAlignYRotMoveInterp(Instance *source, Instance *dest, short distance, unsigned char segNumber, int Frames, int extraZ);
+void razMaterialShift();
+int razInBaseArea(char *name, int length);
 
 #endif

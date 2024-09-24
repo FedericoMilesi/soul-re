@@ -5,7 +5,43 @@
 #include "Game/RAZIEL/RAZIEL.h"
 #include "Game/RAZIEL/RAZLIB.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", InitHealthSystem);
+extern char D_800D1D1C[];
+void InitHealthSystem()
+{
+    Raziel.DamageFrequency = 0;
+
+    Raziel.HealthScale = 1;
+    Raziel.HealthBalls = 0;
+
+    Raziel.GlyphManaBalls = 0;
+
+    if (gameTrackerX.gameData.asmData.MorphType == 0)
+    {
+        Raziel.CurrentPlane = 2;
+
+        Raziel.HitPoints = 100000;
+
+        razMaterialShift();
+    }
+    else
+    {
+        Raziel.CurrentPlane = 1;
+
+        Raziel.HitPoints = GetMaxHealth();
+
+        razSpectralShift();
+    }
+
+    //if (razInBaseArea("under", sizeof("under") - 1) != 0)
+    if (razInBaseArea(D_800D1D1C, 5) != 0)
+    {
+        Raziel.HitPoints = 100;
+    }
+    else
+    {
+        razSetPlayerEventHistory(0x1000);
+    }
+}
 
 void GainHealth(int data)
 {
