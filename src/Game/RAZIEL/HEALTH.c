@@ -85,7 +85,29 @@ void LoseHealth(int amount)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", DrainHealth);
+void DrainHealth(int amount)
+{
+    if (!(ControlFlag & 0x1000000))
+    {
+        amount /= 4096;
+
+        if (Raziel.CurrentPlane == 1)
+        {
+            Raziel.HitPoints += (int)(PlayerData->healthMaterialRate * amount * gameTrackerX.timeMult) / 4096;
+
+            if (Raziel.soulReaver != NULL)
+            {
+                INSTANCE_Post(Raziel.soulReaver, 0x800101, 0);
+
+                razReaverImbue(2);
+            }
+        }
+        else if ((Raziel.invincibleTimer == 0) && (Raziel.HitPoints > 525))
+        {
+            Raziel.HitPoints += (int)(-PlayerData->healthSpectralRate * amount * gameTrackerX.timeMult) / 4096;
+        }
+    }
+}
 
 void BumpUpHealth()
 {
@@ -179,7 +201,7 @@ void HealthInstantDeath(Instance *instance)
     Raziel.playerEvent |= 0x8000;
 
     razPlayUnderworldSounds(gameTrackerX.playerInstance);
-}
+    }
 
 void RAZIEL_DebugHealthSetScale(long healthScale)
 {
