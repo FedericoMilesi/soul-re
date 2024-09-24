@@ -16,7 +16,569 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerDecodeHold);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerAttack2);
+void StateHandlerAttack2(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+    int message;
+    int messageData;
+    int Frame;
+    int Anim;
+    int ignoreHit;
+    Instance *ignoreInst;
+    Instance *inst;
+    Instance *weaponInst;
+    evMonsterHitData *data;
+    evMonsterHitData *hitData;
+    G2AnimSection *animSection;
+
+    Frame = G2EmulationQueryFrame(In, CurrentSection);
+
+    Anim = G2EmulationQueryAnimation(In, CurrentSection);
+
+    ignoreHit = 0;
+
+    ignoreInst = NULL;
+
+    if (CurrentSection == 0)
+    {
+        if (!(ControlFlag & 0x20))
+        {
+            if (((ControlFlag & 0x10000000)) && (!(Raziel.Mode & 0x2)))
+            {
+                if ((*PadData & 0x8000000F))
+                {
+                    SteerSwitchMode(In->CharacterInstance, 2);
+                }
+                else
+                {
+                    SteerSwitchMode(In->CharacterInstance, 0);
+                }
+            }
+        }
+        else
+        {
+            SteerSwitchMode(In->CharacterInstance, 0);
+        }
+    }
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            Raziel.currentAttack = Ptr->Data;
+
+            In->SectionList[CurrentSection].Data2 = 0;
+
+            if (razGetHeldWeapon() != NULL)
+            {
+                switch (Raziel.Senses.heldClass)
+                {
+                case 0x1:
+                    Raziel.currentAttack = Ptr->Data + 1;
+                    break;
+                case 0x2:
+                    Raziel.currentAttack = Ptr->Data + 2;
+                    break;
+                case 0x1000:
+                    Raziel.currentAttack = Ptr->Data + 3;
+                    break;
+                case 0x3:
+                    Raziel.currentAttack = Ptr->Data + 4;
+                    break;
+                }
+            }
+
+            Raziel.attack = PlayerData->attackList[Raziel.currentAttack][In->SectionList[CurrentSection].Data2];
+
+            if (Ptr->Data >= 10)
+            {
+                if (CurrentSection == 1)
+                {
+                    G2EmulationSwitchAnimationAlpha(In, 1, Raziel.attack->anim, 0, Raziel.attack->framesIn, 1, Raziel.attack->alphaIn);
+                }
+            }
+            else
+            {
+                G2EmulationSwitchAnimationAlpha(In, CurrentSection, Raziel.attack->anim, 0, Raziel.attack->framesIn, 1, Raziel.attack->alphaIn);
+            }
+
+            if (CurrentSection == 1)
+            {
+                unsigned long startColor;
+                unsigned long endColor;
+
+                startColor = Raziel.attack->ribbonStartColor;
+                endColor = Raziel.attack->ribbonEndColor;
+
+                if (razGetHeldWeapon() != NULL)
+                {
+                    inst = razGetHeldWeapon();
+
+                    if ((INSTANCE_Query(inst, 2) & 0x20))
+                    {
+                        if ((INSTANCE_Query(inst, 3) & 0x10000))
+                        {
+                            startColor = PlayerData->nonBurningRibbonStartColor;
+                            endColor = PlayerData->nonBurningRibbonEndColor;
+                        }
+                    }
+                    else if (Raziel.Senses.heldClass == 0x1000)
+                    {
+                        startColor = REAVER_GetGlowColor(inst);
+                        endColor = 0;
+                    }
+                }
+                else
+                {
+                    inst = In->CharacterInstance;
+                }
+
+                FX_StartRibbon(inst, Raziel.attack->ribbonStartSegment, Raziel.attack->ribbonEndSegment, 0, Raziel.attack->ribbonLifeTime, Raziel.attack->ribbonFaceLifeTime, (short)Raziel.attack->ribbonStartOpacity, startColor, endColor);
+
+                if (Ptr->Data >= 10)
+                {
+                    if ((Raziel.Senses.EngagedMask & 0x40))
+                    {
+                        SteerSwitchMode(In->CharacterInstance, 15);
+
+                        SetTimer(4);
+                    }
+                }
+                else
+                {
+                    SteerSwitchMode(In->CharacterInstance, 9);
+                }
+
+                ControlFlag |= 0x2000;
+
+                if (Ptr->Data == 5)
+                {
+                    SetTimer(1);
+                }
+            }
+
+            Raziel.attackLastHit = NULL;
+            Raziel.attackCurrentHit = NULL;
+
+            Raziel.glowEffect = NULL;
+
+            Raziel.Mode |= 0x200000;
+            break;
+        case 0x4010080:
+            if (CurrentSection == 0)
+            {
+                if (Ptr->Data != 0)
+                {
+                    razResetPauseTranslation(In->CharacterInstance);
+                }
+                else
+                {
+                    razSetPauseTranslation(In->CharacterInstance);
+                }
+            }
+
+            break;
+        case 0x100015:
+            if ((Raziel.steeringMode == 15) && ((*PadData & 0x8000000F)))
+            {
+                SteerSwitchMode(In->CharacterInstance, 2);
+            }
+            else
+            {
+                SteerSwitchMode(In->CharacterInstance, 0);
+            }
+
+            break;
+        case 0x2000000:
+        case 0x80000000:
+            Raziel.attack = PlayerData->attackList[Raziel.currentAttack][In->SectionList[CurrentSection].Data2];
+
+            if ((Anim == Raziel.attack->anim) && (Frame >= Raziel.attack->ignoreDelay))
+            {
+                Raziel.attackFlags |= 0x4;
+            }
+
+            if ((CurrentSection == 1) && (Raziel.glowEffect != NULL))
+            {
+                FX_StopGlowEffect(Raziel.glowEffect, 0);
+
+                Raziel.glowEffect = NULL;
+            }
+
+            break;
+        case 0x1000001:
+        case 0x4020000:
+            break;
+        case 0x100004:
+            if (CurrentSection == 1)
+            {
+                DisableWristCollision(In->CharacterInstance, 2);
+                DisableWristCollision(In->CharacterInstance, 1);
+
+                Raziel.dropOffHeight = 256;
+
+                Raziel.fallZVelocity = -96;
+
+                weaponInst = razGetHeldWeapon();
+
+                if (weaponInst != NULL)
+                {
+                    INSTANCE_Post(weaponInst, 0x200005, 0);
+                    INSTANCE_Post(weaponInst, 0x200003, 7);
+                }
+            }
+
+            ControlFlag &= ~0x800000;
+            break;
+        case 0x8000000:
+            if (((Raziel.attackFlags & 0x4)) && (PlayerData->attackList[Raziel.currentAttack][In->SectionList[CurrentSection].Data2 + 1] != NULL))
+            {
+                if (Raziel.currentAttack >= 10)
+                {
+                    if ((*PadData & 0x8000000F))
+                    {
+                        EnMessageQueueData(&In->SectionList[CurrentSection].Event, 0x100000, 0);
+                    }
+                }
+                else
+                {
+                    EnMessageQueueData(&In->SectionList[CurrentSection].Event, 0x100000, 0);
+                }
+            }
+            else if (Raziel.currentAttack >= 10)
+            {
+                if ((*PadData & 0x8000000F))
+                {
+                    StateSwitchStateData(In, CurrentSection, StateHandlerMove, 0);
+                }
+                else
+                {
+                    StateSwitchStateCharacterData(In, StateHandlerStopMove, 60);
+                }
+            }
+            else if ((Raziel.nothingCounter < 7) && ((Raziel.Senses.EngagedMask & 0x40)))
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerAutoFace, 0);
+            }
+            else
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(1, 0, Raziel.attack->framesOut));
+            }
+
+            break;
+        case 0x80000020:
+            if (StateHandlerDecodeHold(&message, &messageData) != 0)
+            {
+                EnMessageQueueData(&In->SectionList[CurrentSection].Event, message, messageData);
+
+                ControlFlag |= 0x800000;
+            }
+
+            break;
+        case 0x100000:
+            In->SectionList[CurrentSection].Data2++;
+
+            if (PlayerData->attackList[Raziel.currentAttack][In->SectionList[CurrentSection].Data2] == NULL)
+            {
+                In->SectionList[CurrentSection].Data2 = 1;
+            }
+
+            Raziel.attack = PlayerData->attackList[Raziel.currentAttack][In->SectionList[CurrentSection].Data2];
+
+            G2EmulationSwitchAnimationAlpha(In, CurrentSection, Raziel.attack->anim, 0, Raziel.attack->framesIn, 1, Raziel.attack->alphaIn);
+
+            if (CurrentSection == 1)
+            {
+                unsigned long startColor;
+                unsigned long endColor;
+
+                startColor = Raziel.attack->ribbonStartColor;
+                endColor = Raziel.attack->ribbonEndColor;
+
+                if (razGetHeldWeapon() != NULL)
+                {
+                    weaponInst = razGetHeldWeapon();
+
+                    if ((INSTANCE_Query(weaponInst, 2) & 0x20))
+                    {
+                        if ((INSTANCE_Query(weaponInst, 3) & 0x10000))
+                        {
+                            startColor = PlayerData->nonBurningRibbonStartColor;
+                            endColor = PlayerData->nonBurningRibbonEndColor;
+                        }
+                    }
+                    else if (Raziel.Senses.heldClass == 0x1000)
+                    {
+                        startColor = REAVER_GetGlowColor(weaponInst);
+                        endColor = 0;
+                    }
+                }
+                else
+                {
+                    weaponInst = In->CharacterInstance;
+                }
+
+                Raziel.attackLastHit = Raziel.attackCurrentHit;
+                Raziel.attackCurrentHit = NULL;
+
+                FX_StartRibbon(weaponInst, Raziel.attack->ribbonStartSegment, Raziel.attack->ribbonEndSegment, 0, Raziel.attack->ribbonLifeTime, Raziel.attack->ribbonFaceLifeTime, (short)Raziel.attack->ribbonStartOpacity, startColor, endColor);
+            }
+
+            EnMessageQueueData(&In->SectionList[CurrentSection].Defer, 0x100002, 0);
+
+            PurgeMessageQueue(&In->SectionList[CurrentSection].Event);
+            break;
+        case 0x100002:
+            Raziel.attackFlags = 0;
+            break;
+        case 0x1000002:
+            if (Raziel.CurrentPlane == 1)
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerGrab, messageData);
+            }
+
+            break;
+        case 0x100000A:
+            if (Ptr->Data != 0)
+            {
+                razSetPlayerEventHistory(0x80);
+
+                ControlFlag |= 0x40000;
+
+                if (CurrentSection == 2)
+                {
+                    G2EmulationSwitchAnimation(In, 2, 0, 0, 3, 2);
+                }
+                else
+                {
+                    G2EmulationSwitchAnimation(In, CurrentSection, 59, 0, 3, 1);
+                }
+
+                StateSwitchStateData(In, CurrentSection, StateHandlerCannedReaction, 0);
+
+                if ((CurrentSection == 0) && ((Raziel.Senses.EngagedMask & 0x200)))
+                {
+                    razAlignYRotMoveInterp(In->CharacterInstance, Raziel.Senses.EngagedList[9].instance, 520, 0, 3, 0);
+                }
+            }
+            else
+            {
+                ControlFlag |= 0x20;
+
+                if (CurrentSection == 1)
+                {
+                    G2EmulationSwitchAnimationCharacter(In, 72, 0, 3, CurrentSection);
+
+                    if ((Raziel.Senses.EngagedMask & 0x200))
+                    {
+                        INSTANCE_Post(Raziel.Senses.EngagedList[9].instance, 0x100000A, 0);
+                    }
+                }
+            }
+
+            break;
+        case 0x8000004:
+            if ((Raziel.Senses.EngagedMask & 0x200))
+            {
+                Instance *Inst;
+
+                Inst = Raziel.Senses.EngagedList[9].instance;
+
+                if (Raziel.Senses.heldClass == 0x1000)
+                {
+                    if (Raziel.currentSoulReaver == 6)
+                    {
+                        INSTANCE_Post(Inst, 0x100000C, 0x20);
+                    }
+                    else
+                    {
+                        INSTANCE_Post(Inst, 0x1000023, 0x1000);
+                    }
+                }
+                else
+                {
+                    INSTANCE_Post(Inst, 0x100000C, 0x20);
+
+                    Inst = razGetHeldWeapon();
+
+                    if (Inst != NULL)
+                    {
+                        INSTANCE_Post(Inst, 0x800029, 0);
+                    }
+                }
+            }
+
+            break;
+        case 0x1000018:
+            if (Ptr->Data != 0)
+            {
+                razSetPlayerEventHistory(0x100);
+
+                ControlFlag |= 0x40000;
+
+                if (CurrentSection == 2)
+                {
+                    G2EmulationSwitchAnimation(In, 2, 0, 0, 3, CurrentSection);
+                }
+                else
+                {
+                    G2EmulationSwitchAnimation(In, CurrentSection, 138, 0, 0, 1);
+                }
+
+                if ((CurrentSection == 1) && ((Raziel.Senses.EngagedMask & 0x200)))
+                {
+                    Raziel.alarmTable = 900;
+
+                    razAlignYRotMoveInterp(In->CharacterInstance, Raziel.Senses.EngagedList[9].instance, 486, 0, 20, 0);
+
+                    In->CharacterInstance->anim.section[CurrentSection].swAlarmTable = &Raziel.alarmTable;
+                }
+            }
+            else
+            {
+                ControlFlag |= 0x20;
+
+                if (CurrentSection == 1)
+                {
+                    G2EmulationSwitchAnimationCharacter(In, 138, 0, 3, CurrentSection);
+
+                    if ((Raziel.Senses.EngagedMask & 0x200))
+                    {
+                        INSTANCE_Post(Raziel.Senses.EngagedList[9].instance, 0x100000A, 0);
+                    }
+                }
+            }
+
+            break;
+        case 0x1000023:
+            if (Ptr->Data == 0)
+            {
+                ControlFlag |= 0x20;
+            }
+
+            if (CurrentSection == 0)
+            {
+                razSwitchVAnimCharacterSingle(In->CharacterInstance, 24, NULL, NULL);
+
+                if ((Raziel.Senses.EngagedMask & 0x200))
+                {
+                    INSTANCE_Post(Raziel.Senses.EngagedList[9].instance, 0x1000023, Ptr->Data);
+
+                    razAlignYRotMoveInterp(In->CharacterInstance, Raziel.Senses.EngagedList[9].instance, 486, 0, 20, 0);
+
+                    if (Ptr->Data != 0)
+                    {
+                        Raziel.alarmTable = 3500;
+
+                        In->CharacterInstance->anim.section[0].swAlarmTable = &Raziel.alarmTable;
+                    }
+                }
+            }
+
+            break;
+        case 0x800010:
+            StateSwitchStateData(In, CurrentSection, StateHandlerThrow2, 0);
+            break;
+        case 0x80000:
+            Raziel.playerEvent |= 0x400;
+
+            razSetPlayerEventHistory(0x400);
+
+            StateSwitchStateData(In, CurrentSection, StateHandlerThrow2, 0);
+
+            if (CurrentSection == 1)
+            {
+                razLaunchForce(In->CharacterInstance);
+            }
+
+            break;
+        case 0x1000024:
+            ignoreHit = 1;
+            break;
+        case 0x2000002:
+            if (CurrentSection == 1)
+            {
+                inst = (Instance *)Ptr->Data;
+
+                ignoreInst = (Instance *)inst->node.prev;
+
+                data = (evMonsterHitData *)Ptr->Data;
+
+                INSTANCE_Post(data->sender, 0x1000000, SetMonsterHitData(In->CharacterInstance, Raziel.attackLastHit, ((intptr_t)inst->prev * Raziel.attack->hitPowerScale) / 4096, Raziel.attack->knockBackDistance, Raziel.attack->knockBackFrames));
+
+                if ((Raziel.attack->handsToCollide & 0x2))
+                {
+                    INSTANCE_Post(data->sender, 0x400000, SetFXHitData(In->CharacterInstance, 41, 32, 256));
+                }
+
+                if ((Raziel.attack->handsToCollide & 0x1))
+                {
+                    INSTANCE_Post(data->sender, 0x400000, SetFXHitData(In->CharacterInstance, 31, 32, 256));
+                }
+
+                Raziel.attackCurrentHit = data->sender;
+            }
+
+            break;
+        case 0x80000001:
+            if (CurrentSection == 0)
+            {
+                if ((ControlFlag & 0x10000000))
+                {
+                    Raziel.Mode = 0x8;
+
+                    if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 0, NULL, NULL) != 0)
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 26, 0, 0, 1);
+                    }
+
+                    StateSwitchStateCharacterData(In, StateHandlerCompression, 0);
+
+                    ControlFlag &= ~0x2000;
+                    break;
+                }
+
+                EnMessageQueueData(&In->SectionList[CurrentSection].Defer, 0x80000001, 0);
+            }
+
+            break;
+        case 0x100001F:
+            if (CurrentSection == 1)
+            {
+                inst = (Instance *)Ptr->Data;
+
+                if (inst->node.next != NULL)
+                {
+                    hitData = (evMonsterHitData *)Ptr->Data;
+
+                    INSTANCE_Post(hitData->lastHit, 0x100001F, SetMonsterHitData(hitData->sender, NULL, hitData->power, Raziel.attack->knockBackDistance, Raziel.attack->knockBackFrames));
+                }
+            }
+
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+
+    if ((Raziel.attackFlags & 0x4))
+    {
+        animSection = &In->CharacterInstance->anim.section[CurrentSection & 0xFF];
+
+        if (animSection->elapsedTime >= Raziel.attack->switchDelay * 100)
+        {
+            EnMessageQueueData(&In->SectionList[CurrentSection].Event, 0x100000, 0);
+        }
+    }
+
+    if ((ignoreHit != 0) && (ignoreInst != NULL))
+    {
+        INSTANCE_Post(ignoreInst, 0x1000024, 0);
+    }
+}
 
 void StateHandlerCannedReaction(CharacterState *In, int CurrentSection, intptr_t Data)
 {
