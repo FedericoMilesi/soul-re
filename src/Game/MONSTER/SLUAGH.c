@@ -2,6 +2,7 @@
 #include "Game/FX.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/MONSTER/MONMSG.h"
 #include "Game/MONSTER/MONSTER.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_Query);
@@ -67,7 +68,32 @@ void SLUAGH_DeathEntry(Instance *instance)
     MON_StartSpecialFade(instance, 0x800, 0x14);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_Death);
+void SLUAGH_Death(Instance *instance)
+{
+
+    if (instance->flags2 & 0x10)
+    {
+        MON_PlayAnim(instance, MONSTER_ANIM_GENERALDEATH, 2);
+    }
+
+    if (instance->flags2 & 2)
+    {
+
+        MonsterVars *mv;
+        mv = (MonsterVars *)instance->extraData;
+
+        if (mv->enemy != NULL)
+        {
+            MON_SwitchState(instance, MONSTER_STATE_FLEE);
+        }
+        else
+        {
+            MON_SwitchState(instance, MONSTER_STATE_IDLE);
+        }
+    }
+
+    MON_DefaultQueueHandler(instance);
+}
 
 void SLUAGH_AttackEntry(Instance *instance)
 {
