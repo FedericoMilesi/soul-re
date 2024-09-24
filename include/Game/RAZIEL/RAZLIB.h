@@ -39,5 +39,7 @@ void razSwitchVAnimCharacterSingle(Instance *instance, int anim, int *frame, int
 void razAlignYRotMoveInterp(Instance *source, Instance *dest, short distance, unsigned char segNumber, int Frames, int extraZ);
 void razMaterialShift();
 int razInBaseArea(char *name, int length);
+void razReaverImbue(int reaverType);
+int razReaverOff();
 
 #endif

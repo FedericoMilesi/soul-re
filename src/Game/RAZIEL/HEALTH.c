@@ -4,6 +4,7 @@
 #include "Game/PLAYER.h"
 #include "Game/RAZIEL/RAZIEL.h"
 #include "Game/RAZIEL/RAZLIB.h"
+#include "Game/GAMEPAD.h"
 
 extern char D_800D1D1C[];
 void InitHealthSystem()
@@ -55,7 +56,34 @@ void GainHealth(int data)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", LoseHealth);
+void LoseHealth(int amount)
+{
+    if ((!(ControlFlag & 0x1000000)) && (Raziel.invincibleTimer == 0) && (Raziel.HitPoints > 525))
+    {
+        Raziel.HitPoints -= (amount * 20000) / 4096;
+
+        Raziel.DamageFrequency -= (amount * 20000) / 4096;
+
+        Raziel.invincibleTimer = PlayerData->healthInvinciblePostHit * 122880;
+
+        if (Raziel.CurrentPlane == 1)
+        {
+            razReaverOff();
+
+            if (Raziel.soulReaver != NULL)
+            {
+                INSTANCE_Post(Raziel.soulReaver, 0x800101, 0);
+
+                razReaverImbue(2);
+            }
+        }
+
+        if (!(gameTrackerX.gameFlags & 0x80))
+        {
+            GAMEPAD_Shock0(1, 9000);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", DrainHealth);
 
