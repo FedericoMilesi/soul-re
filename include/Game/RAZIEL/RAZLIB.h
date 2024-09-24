@@ -41,5 +41,6 @@ void razMaterialShift();
 int razInBaseArea(char *name, int length);
 void razReaverImbue(int reaverType);
 int razReaverOff();
+int razPlaneShift(Instance *instance);
 
 #endif

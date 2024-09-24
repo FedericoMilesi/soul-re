@@ -5,6 +5,8 @@
 #include "Game/RAZIEL/RAZIEL.h"
 #include "Game/RAZIEL/RAZLIB.h"
 #include "Game/GAMEPAD.h"
+#include "Game/CAMERA.h"
+#include "Game/FX.h"
 
 extern char D_800D1D1C[];
 void InitHealthSystem()
@@ -128,7 +130,134 @@ int GetMaxHealth()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", ProcessHealth);
+void ProcessHealth(Instance *instance)
+{
+    if ((Raziel.invincibleTimer != 0) || (!(Raziel.playerEventHistory & 0x1000)))
+    {
+        Raziel.invincibleTimer -= gameTrackerX.timeMult;
+
+        if (Raziel.invincibleTimer < 0)
+        {
+            Raziel.invincibleTimer = 0;
+        }
+
+        if (Raziel.CurrentPlane == 1)
+        {
+            FX_Health_Spiral(Raziel.HealthScale, Raziel.HitPoints - 100000, Raziel.HealthScale * 100000);
+        }
+        else
+        {
+            FX_Health_Spiral(0, Raziel.HitPoints, 100000);
+        }
+    }
+    else
+    {
+        if ((Raziel.HitPoints == GetMaxHealth()) || (Raziel.CurrentPlane == 2))
+        {
+            razReaverOn();
+        }
+        else
+        {
+            razReaverOff();
+        }
+
+        if (Raziel.CurrentPlane == 1)
+        {
+            if ((instance->waterFace != NULL) && (!(Raziel.Abilities & 0x10)))
+            {
+                DrainHealth(40960);
+            }
+
+            if ((Raziel.soulReaver == NULL) || (Raziel.HitPoints != GetMaxHealth()))
+            {
+                Raziel.HitPoints += (int)(PlayerData->healthMaterialRate * gameTrackerX.timeMult) / 4096;
+            }
+
+            if (Raziel.HitPoints < 100000)
+            {
+                razPlaneShift(instance);
+
+                Raziel.invincibleTimer = PlayerData->healthInvinciblePostShunt * 122880;
+
+                if ((Raziel.Mode & 0x40000))
+                {
+                    CAMERA_ChangeToOutOfWater(&theCamera, instance);
+                }
+            }
+            else if (Raziel.HitPoints < 150000)
+            {
+                Raziel.DamageFrequency -= (int)(gameTrackerX.timeMult * 1000) / 4096;
+
+                if (Raziel.DamageFrequency < 0)
+                {
+                    Raziel.DamageFrequency = Raziel.HitPoints - 100000;
+
+                    if ((Raziel.HitPoints - 100000) < 18750)
+                    {
+                        Raziel.DamageFrequency = 18750;
+                    }
+
+                    FX_DoInstancePowerRing(instance, 750 - ((300 * (50000 - Raziel.DamageFrequency)) / 31250), 0, 0, 0);
+
+                    if (!(gameTrackerX.gameFlags & 0x80))
+                    {
+                        GAMEPAD_Shock1(128, 20480);
+                    }
+                }
+            }
+
+            FX_Health_Spiral(Raziel.HealthScale, Raziel.HitPoints - 100000, Raziel.HealthScale * 100000);
+        }
+        else
+        {
+            if (Raziel.HitPoints <= 525)
+            {
+                Raziel.HitPoints -= (int)(PlayerData->healthSpectralRate * gameTrackerX.timeMult) / 4096;
+            }
+            else if (Raziel.HitPoints < 100000)
+            {
+                Raziel.HitPoints += (int)(PlayerData->healthSpectralRate * gameTrackerX.timeMult) / 4096;
+            }
+            else
+            {
+                Raziel.HitPoints = 100000;
+            }
+
+            if ((!(ControlFlag & 0x800000)) && (Raziel.HitPoints < 525))
+            {
+                StateSwitchStateCharacterData(&Raziel.State, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+
+                G2EmulationSwitchAnimationCharacter(&Raziel.State, 214, 0, 3, 1);
+
+                Raziel.HitPoints = 525;
+
+                ControlFlag |= 0x804000;
+            }
+
+            if (Raziel.HitPoints < 0)
+            {
+                gameTracker->streamFlags |= 0x80000;
+
+                if (Raziel.soulReaver != NULL)
+                {
+                    INSTANCE_Post(Raziel.soulReaver, 0x800105, 0);
+                }
+
+                razSetPlayerEventHistory(0x8000);
+
+                Raziel.HitPoints = 50000;
+
+                gameTrackerX.gameData.asmData.MorphType = 1;
+
+                Raziel.playerEvent |= 0x8000;
+
+                razPlayUnderworldSounds(gameTrackerX.playerInstance);
+            }
+
+            FX_Health_Spiral(0, Raziel.HitPoints, 100000);
+        }
+    }
+}
 
 int HealthCheckForLowHealth()
 {
@@ -201,7 +330,7 @@ void HealthInstantDeath(Instance *instance)
     Raziel.playerEvent |= 0x8000;
 
     razPlayUnderworldSounds(gameTrackerX.playerInstance);
-    }
+}
 
 void RAZIEL_DebugHealthSetScale(long healthScale)
 {

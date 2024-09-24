@@ -501,6 +501,7 @@ short CAMERA_GetLineAngle(Camera *camera, CameraCollisionInfo *colInfo, SVector 
 int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
 void CAMERA_ForceEndLookaroundMode(Camera *camera);
+void CAMERA_ChangeToOutOfWater(Camera *camera, Instance *instance);
 
 extern int CameraCenterDelay;
 Camera theCamera;
