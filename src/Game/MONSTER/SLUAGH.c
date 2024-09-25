@@ -5,7 +5,34 @@
 #include "Game/MONSTER/MONMSG.h"
 #include "Game/MONSTER/MONSTER.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_Query);
+uintptr_t SLUAGH_Query(Instance *instance, unsigned long query)
+{
+
+    MonsterVars *mv;
+    MonsterAttributes *ma;
+
+    mv = (MonsterVars *)instance->extraData;
+    ma = (MonsterAttributes *)instance->data;
+
+    switch (query)
+    {
+    case 1:
+        if (mv->auxFlags & 1)
+        {
+            return ma->whatAmI | 4;
+        }
+        return ma->whatAmI;
+    case 0:
+        if (!(mv->auxFlags & 1))
+        {
+            // TODO: Investigate this line later.
+            return (((unsigned char *)&mv->mvFlags)[1] & 1) << 0x1D;
+        }
+        return 0x04000000;
+    default:
+        return MonsterQuery(instance, query);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_DamageEffect);
 
