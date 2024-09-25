@@ -138,4 +138,59 @@ void SLUAGH_AttackEntry(Instance *instance)
     MON_AttackEntry(instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_Attack);
+void SLUAGH_Attack(Instance *instance)
+{
+
+    MonsterVars *mv;
+    Message *message;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (mv->auxFlags & 4)
+    {
+
+        if (instance->flags2 & 0x10)
+        {
+            MON_SwitchState(instance, MONSTER_STATE_COMBAT);
+        }
+
+        while (message = DeMessageQueue(&mv->messageQueue), message != NULL)
+        {
+            if (message->ID == 0x01000009)
+            {
+                if (((evMonsterSoulSuckData *)message->Data)->sender != gameTrackerX.playerInstance)
+                {
+
+                    if (mv->effect == NULL)
+                    {
+
+                        short hitpoints;
+                        MonsterAttributes *ma;
+                        long color;
+
+                        hitpoints = mv->hitPoints;
+                        ma = (MonsterAttributes *)instance->data;
+                        color = FX_GetHealthColor(hitpoints / 4096);
+                        mv->effect = FX_DoInstanceOneSegmentGlow(instance, ma->headSegment, &color, 1, 0x4B0, 0x68, 0x70);
+
+                    }
+                    MON_SwitchState(instance, MONSTER_STATE_IDLE);
+                }
+                continue;
+            }
+            MON_DefaultMessageHandler(instance, message);
+        }
+
+        if (instance->currentMainState != MONSTER_STATE_ATTACK || mv->enemy == NULL)
+        {
+            mv->auxFlags &= ~4;
+            return;
+        }
+        else
+        {
+            INSTANCE_Post(mv->enemy->instance, 0x01000009, SetMonsterSoulSuckData(instance, instance->position.x, instance->position.y, instance->position.z));
+            return;
+        }
+    }
+    MON_Attack(instance);
+}
