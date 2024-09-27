@@ -121,7 +121,47 @@ int GetControllerInput(int *ZDirection, long *controlCommand)
     return rc;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", DecodeDirection);
+int DecodeDirection(int Source, int Destination, short *Difference, short *Zone)
+{
+    int rc;
+
+    rc = 0;
+
+    *Difference = AngleDiff((short)Destination, (short)Source);
+
+    if ((unsigned short)(*Difference + 511) < 1023)
+    {
+        *Zone = 0;
+
+        rc = 0x10000001;
+    }
+    else if ((unsigned short)(*Difference - 512) < 1024)
+    {
+        *Zone = 1024;
+
+        rc = 0x10000004;
+    }
+    else if ((unsigned short)(*Difference + 1535) < 1024)
+    {
+        *Zone = -1024;
+
+        rc = 0x10000002;
+    }
+    else if ((short)*Difference > 1535)
+    {
+        *Zone = 2048;
+
+        rc = 0x10000003;
+    }
+    else if (*Difference < -1535)
+    {
+        *Zone = -2048;
+
+        rc = 0x10000003;
+    }
+
+    return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", ProcessMovement);
 
@@ -289,7 +329,7 @@ void SteerSwitchMode(Instance *instance, int mode)
         CAMERA_StartSwimThrowMode(&theCamera);
 
         CAMERA_SetLookRot(&theCamera, 4096 - Raziel.extraRot.x, 0);
-    }
+}
     case 6:
     case 17:
         Raziel.RotationSegment = 1;
