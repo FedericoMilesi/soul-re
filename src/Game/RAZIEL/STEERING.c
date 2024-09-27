@@ -10,6 +10,8 @@ EXTERN STATIC G2SVector3 ExtraRotData;
 
 EXTERN STATIC G2SVector3 *ExtraRot;
 
+EXTERN STATIC int LastRC;
+
 int UpdateZoneDelta(int rc, int LastRC)
 {
     if (LastRC != 0)
@@ -32,7 +34,92 @@ int UpdateZoneDelta(int rc, int LastRC)
     return ZoneDelta;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", GetControllerInput);
+int GetControllerInput(int *ZDirection, long *controlCommand)
+{
+    int rc;
+
+    if ((gameTrackerX.playerInstance->flags & 0x100))
+    {
+        return 0;
+    }
+
+    if ((*controlCommand & 0x5) == 0x5)
+    {
+        rc = 0x10000010;
+
+        *ZDirection = 2560;
+
+        UpdateZoneDelta(0x10000010, LastRC);
+    }
+    else if ((*controlCommand & 0x9) == 0x9)
+    {
+        rc = 0x10000020;
+
+        *ZDirection = 1536;
+
+        UpdateZoneDelta(0x10000020, LastRC);
+    }
+    else if ((*controlCommand & 0x6) == 0x6)
+    {
+        rc = 0x10000040;
+
+        *ZDirection = 3584;
+
+        UpdateZoneDelta(0x10000040, LastRC);
+    }
+    else if ((*controlCommand & 0xA) == 0xA)
+    {
+        rc = 0x10000030;
+
+        *ZDirection = 512;
+
+        UpdateZoneDelta(0x10000030, LastRC);
+    }
+    else if ((*controlCommand & 0x1))
+    {
+        rc = 0x10000001;
+
+        *ZDirection = 2048;
+
+        UpdateZoneDelta(0x10000001, LastRC);
+    }
+    else if ((*controlCommand & 0x2))
+    {
+        rc = 0x10000003;
+
+        *ZDirection = 4096;
+
+        UpdateZoneDelta(0x10000003, LastRC);
+    }
+    else if ((*controlCommand & 0x8))
+    {
+        rc = 0x10000002;
+
+        *ZDirection = 1024;
+
+        UpdateZoneDelta(0x10000002, LastRC);
+    }
+    else if ((*controlCommand & 0x4))
+    {
+        rc = 0x10000004;
+
+        *ZDirection = 3072;
+
+        UpdateZoneDelta(0x10000004, LastRC);
+    }
+    else
+    {
+        rc = 0;
+
+        ZoneDelta = 16;
+
+        *ZDirection = 0;
+    }
+
+    LastRC = rc;
+
+    return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", DecodeDirection);
 
