@@ -502,6 +502,9 @@ int CAMERA_FocusInstanceMoved(Camera *camera);
 void CAMERA_EndLook(Camera *camera);
 void CAMERA_ForceEndLookaroundMode(Camera *camera);
 void CAMERA_ChangeToOutOfWater(Camera *camera, Instance *instance);
+void CAMERA_EndSwimThrowMode(Camera *camera);
+void CAMERA_SetLookRot(Camera *camera, int x_rotation, int z_rotation);
+void CAMERA_StartSwimThrowMode(Camera *camera);
 
 extern int CameraCenterDelay;
 Camera theCamera;

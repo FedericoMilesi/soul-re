@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/CAMERA.h"
 #include "Game/MATH3D.h"
 #include "Game/RAZIEL/RAZIEL.h"
 #include "Game/G2/ANMCTRLR.h"
