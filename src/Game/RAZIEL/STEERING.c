@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/MATH3D.h"
 #include "Game/RAZIEL/RAZIEL.h"
 #include "Game/G2/ANMCTRLR.h"
 
@@ -44,7 +45,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerAutoFace);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerSwim);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerWallcrawling);
+void SteerWallcrawling(Instance *instance)
+{
+    (void)instance;
+
+    Raziel.Bearing = AngleDiff(ExtraRot->y - 2048, Raziel.ZDirection);
+}
 
 void SteerDisableAutoFace(Instance *instance)
 {
