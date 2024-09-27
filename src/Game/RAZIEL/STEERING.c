@@ -1,6 +1,28 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", UpdateZoneDelta);
+EXTERN STATIC int ZoneDelta;
+
+int UpdateZoneDelta(int rc, int LastRC)
+{
+    if (LastRC != 0)
+    {
+        if (LastRC == rc)
+        {
+            ZoneDelta -= 4;
+
+            if (ZoneDelta < 16)
+            {
+                ZoneDelta = 16;
+            }
+        }
+        else
+        {
+            ZoneDelta = 256;
+        }
+    }
+
+    return ZoneDelta;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", GetControllerInput);
 
