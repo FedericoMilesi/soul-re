@@ -3,6 +3,10 @@
 
 EXTERN STATIC int ZoneDelta;
 
+EXTERN STATIC G2SVector3 ExtraRotData;
+
+EXTERN STATIC G2SVector3 *ExtraRot;
+
 int UpdateZoneDelta(int rc, int LastRC)
 {
     if (LastRC != 0)
@@ -45,7 +49,45 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerDisableAutoFace);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerSwitchMode);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", razInitWallCrawlSteering);
+void razInitWallCrawlSteering(Instance *instance)
+{
+    G2SVector3 vec;
+
+    G2Anim_EnableController(&instance->anim, 1, 38);
+
+    vec.x = 0;
+    vec.y = 0;
+    vec.z = -318;
+
+    instance->position.z += 318;
+    instance->oldPos.z += 318;
+
+    instance->matrix->t[2] += 318;
+    instance->oldMatrix->t[2] += 318;
+
+    G2Anim_SetController_Vector(&instance->anim, 1, 38, &vec);
+
+    G2Anim_EnableController(&instance->anim, 0, 14);
+
+    vec.x = instance->rotation.x;
+    vec.y = instance->rotation.y;
+    vec.z = instance->rotation.z;
+
+    G2Anim_EnableController(&instance->anim, 0, 8);
+
+    G2Anim_SetControllerAngleOrder(&instance->anim, 0, 8, 1);
+    G2Anim_SetController_Vector(&instance->anim, 0, 8, &vec);
+
+    G2Anim_EnableController(&instance->anim, 14, 14);
+    G2Anim_EnableController(&instance->anim, 50, 76);
+    G2Anim_EnableController(&instance->anim, 58, 76);
+
+    ExtraRot = &ExtraRotData;
+
+    ExtraRot->z = 0;
+    ExtraRot->y = 0;
+    ExtraRot->x = 0;
+}
 
 void razDeinitWallCrawlSteering(Instance *instance)
 {
