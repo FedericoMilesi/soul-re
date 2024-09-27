@@ -193,7 +193,28 @@ void SteerTurn(Instance *instance, int rc)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerMove);
+void SteerMove(Instance *instance, int rc)
+{
+    if ((rc != 0) || (Raziel.Bearing != 0))
+    {
+        if (Raziel.Bearing < 0)
+        {
+            Raziel.steeringVelocity = -Raziel.Bearing;
+        }
+        else
+        {
+            Raziel.steeringVelocity = Raziel.Bearing;
+        }
+
+        Raziel.steeringVelocity = (Raziel.steeringVelocity > 768) ? (Raziel.steeringVelocity / 4) + 112 : 112;
+
+        AngleMoveToward(&instance->rotation.z, Raziel.LastBearing, (short)((Raziel.steeringVelocity * gameTrackerX.timeMult) / 4096));
+    }
+    else
+    {
+        Raziel.steeringVelocity = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerAutoFace);
 
