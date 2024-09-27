@@ -37,7 +37,33 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", DecodeDirection);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", ProcessMovement);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerTurn);
+void SteerTurn(Instance *instance, int rc)
+{
+    int rot;
+
+    if ((rc != 0) || (Raziel.Bearing != 0))
+    {
+        if (Raziel.Bearing == 2048)
+        {
+            rot = instance->rotation.z - Raziel.LastBearing;
+
+            if (rot > 0)
+            {
+                Raziel.LastBearing++;
+            }
+            else
+            {
+                Raziel.LastBearing--;
+            }
+        }
+
+        AngleMoveToward(&instance->rotation.z, Raziel.LastBearing, (short)((Raziel.steeringVelocity * gameTrackerX.timeMult) / 4096));
+    }
+    else
+    {
+        Raziel.steeringVelocity = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerMove);
 
