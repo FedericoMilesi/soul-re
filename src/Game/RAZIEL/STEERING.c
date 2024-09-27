@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/RAZIEL/RAZIEL.h"
 #include "Game/G2/ANMCTRLR.h"
 
 EXTERN STATIC int ZoneDelta;
@@ -45,7 +46,23 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerSwim);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerWallcrawling);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerDisableAutoFace);
+void SteerDisableAutoFace(Instance *instance)
+{
+    if (G2Anim_IsControllerActive(&instance->anim, 1, 10) != G2FALSE)
+    {
+        G2Anim_DisableController(&instance->anim, 1, 10);
+    }
+
+    if (G2Anim_IsControllerActive(&instance->anim, 14, 14) != G2FALSE)
+    {
+        G2Anim_DisableController(&instance->anim, 14, 14);
+    }
+
+    instance->rotation.z += Raziel.autoFaceRootAngle;
+
+    Raziel.autoFaceRootAngle = 0;
+    Raziel.autoFaceAnim = -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerSwitchMode);
 
