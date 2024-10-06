@@ -332,7 +332,41 @@ int SteerAutoFace(Instance *instance, long *controlCommand)
     return rc;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerSwim);
+void SteerSwim(Instance *instance)
+{
+    int step;
+    int velocity;
+
+    velocity = rsin(Raziel.ZDirection);
+
+    step = 32;
+    step = (gameTrackerX.timeMult * step) / 4096;
+
+    instance->rotation.z -= (int)(step * velocity) / 4096;
+
+    velocity = rcos(Raziel.ZDirection);
+
+    step = 48;
+    step = (gameTrackerX.timeMult * step) / 4096;
+
+    if ((Raziel.steeringMode != 17) || (velocity < 0))
+    {
+        Raziel.extraRot.x -= (int)(step * velocity) / 4096;
+    }
+
+    if (Raziel.extraRot.x > 2048)
+    {
+        Raziel.extraRot.x = 2048;
+    }
+
+    if (Raziel.extraRot.x < 0)
+    {
+        Raziel.extraRot.x = 0;
+    }
+
+    Raziel.extraRot.z = 0;
+    Raziel.extraRot.y = 0;
+}
 
 void SteerWallcrawling(Instance *instance)
 {
@@ -464,7 +498,7 @@ void SteerSwitchMode(Instance *instance, int mode)
         CAMERA_StartSwimThrowMode(&theCamera);
 
         CAMERA_SetLookRot(&theCamera, 4096 - Raziel.extraRot.x, 0);
-    }
+}
     case 6:
     case 17:
         Raziel.RotationSegment = 1;
