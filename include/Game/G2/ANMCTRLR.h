@@ -68,5 +68,6 @@ void _G2Anim_BuildTransformsWithControllers(G2Anim *anim);
 void _G2Anim_ApplyControllersToStoredFrame(G2Anim *anim);
 void G2Anim_AttachControllerToSeg(G2Anim *anim, int segNumber, int type);
 void G2Anim_DetachControllerFromSeg(G2Anim *anim, int segNumber, int type);
+G2Bool G2Anim_IsControllerInterpolating(G2Anim *anim, int segNumber, int type);
 
 #endif

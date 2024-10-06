@@ -195,7 +195,121 @@ void SteerTurn(Instance *instance, int rc)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerMove);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerAutoFace);
+int SteerAutoFace(Instance *instance, long *controlCommand)
+{
+    short angle;
+    int rc;
+    //Instance *target; unused
+    G2SVector3 autoFaceRot;
+    int diff;
+    int predict;
+
+    (void)controlCommand;
+
+    predict = 0;
+
+    angle = MATH3D_AngleFromPosToPos(&instance->position, &Raziel.Senses.EngagedList[6].instance->position);
+
+    Raziel.autoFaceTrueAngle = angle;
+    Raziel.autoFaceLastAnim = Raziel.autoFaceAnim;
+
+    diff = AngleDiff(angle, Raziel.LastBearing);
+
+    if (((unsigned int)diff + 383) < 767)
+    {
+        predict = 1;
+
+        Raziel.autoFaceAnim = 0;
+        Raziel.autoFaceRootAngle = 0;
+    }
+
+    if (((unsigned int)diff + 1535) < 1152)
+    {
+        predict = 2;
+
+        Raziel.autoFaceAnim = 1;
+        Raziel.autoFaceRootAngle = 1024;
+    }
+
+    if (((unsigned int)diff - 384) < 1152)
+    {
+        predict = 4;
+
+        Raziel.autoFaceAnim = 3;
+        Raziel.autoFaceRootAngle = -1024;
+    }
+
+    if (((unsigned int)diff + 1535) > 3070)
+    {
+        predict = 3;
+
+        Raziel.autoFaceAnim = 2;
+        Raziel.autoFaceRootAngle = 2048;
+    }
+
+    angle = Raziel.LastBearing;
+
+    Raziel.steeringVelocity = 64;
+
+    AngleMoveToward(&instance->rotation.z, angle, (short)(gameTrackerX.timeMult / 64));
+
+    Raziel.autoFaceAnim = predict - 1;
+    Raziel.autoFaceAngle = angle;
+
+    rc = predict | 0x10001000;
+
+    if (Raziel.autoFaceAnim != Raziel.autoFaceLastAnim)
+    {
+        instance->rotation.z = Raziel.LastBearing;
+
+        autoFaceRot.x = 0;
+        autoFaceRot.y = 0;
+        autoFaceRot.z = Raziel.autoFaceRootAngle;
+
+        if (G2Anim_IsControllerActive(&instance->anim, 1, 10) == G2FALSE)
+        {
+            G2Anim_EnableController(&instance->anim, 1, 10);
+        }
+
+        if (Raziel.input == Raziel.lastInput)
+        {
+            G2EmulationSetInterpController_Vector(instance, 1, 10, &autoFaceRot, 4, 3);
+        }
+        else
+        {
+            G2Anim_SetController_Vector(&instance->anim, 1, 10, &autoFaceRot);
+        }
+    }
+
+    diff = AngleDiff(instance->rotation.z, Raziel.autoFaceTrueAngle);
+
+    if (G2Anim_IsControllerInterpolating(&instance->anim, 1, 10) != G2FALSE)
+    {
+        if (G2Anim_IsControllerInterpolating(&instance->anim, 14, 14) == G2FALSE)
+        {
+            autoFaceRot.x = 0;
+            autoFaceRot.y = 0;
+            autoFaceRot.z = diff - Raziel.autoFaceRootAngle;
+
+            G2EmulationSetInterpController_Vector(instance, 14, 14, &autoFaceRot, 4, 3);
+        }
+    }
+    else
+    {
+        autoFaceRot.x = 0;
+        autoFaceRot.y = 0;
+        autoFaceRot.z = diff - Raziel.autoFaceRootAngle;
+
+        if (G2Anim_IsControllerActive(&instance->anim, 14, 14) == G2FALSE)
+        {
+            G2Anim_EnableController(&instance->anim, 14, 14);
+        }
+
+        G2Anim_SetController_Vector(&instance->anim, 14, 14, &autoFaceRot);
+    }
+
+    return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerSwim);
 
@@ -329,7 +443,7 @@ void SteerSwitchMode(Instance *instance, int mode)
         CAMERA_StartSwimThrowMode(&theCamera);
 
         CAMERA_SetLookRot(&theCamera, 4096 - Raziel.extraRot.x, 0);
-}
+    }
     case 6:
     case 17:
         Raziel.RotationSegment = 1;
