@@ -1,6 +1,10 @@
 #include "common.h"
+#include "Game/SOUND.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadGetMemorySize);
+unsigned long aadGetMemorySize(AadInitAttr *attributes)
+{
+    return (1488 * attributes->numSlots) + 7304;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInit);
 
