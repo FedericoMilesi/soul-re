@@ -1,5 +1,5 @@
 #include "common.h"
-#include "Game/SOUND.h"
+#include "Game/PSX/AADSEQEV.h"
 
 AadMemoryStruct *aadMem;
 
@@ -51,7 +51,17 @@ void aadSetSfxMasterVolume(int volume)
     aadMem->sfxMasterVol = volume & 0xFF;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetMusicMasterVolume);
+void aadSetMusicMasterVolume(int volume)
+{
+    int slotNumber;
+
+    aadMem->musicMasterVol = volume;
+
+    for (slotNumber = 0; slotNumber < aadMem->numSlots; slotNumber++)
+    {
+        aadUpdateSlotVolPan(aadMem->sequenceSlots[slotNumber]);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadStartMusicMasterVolFade);
 
