@@ -4,233 +4,214 @@
 /*TODO: Remove LIBS/ when adding PSYQ headers*/
 
 #ifndef MIN
-#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
 #ifndef MAX
-#define MAX(a,b) (((a)>(b))?(a):(b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
 #ifndef ABS
-#define ABS(x) (((x)>=0)?(x):(-(x)))
+#define ABS(x) (((x) >= 0) ? (x) : (-(x)))
 #endif
 
 #ifndef kabs
 #define kabs(a) ((a) > 0 ? (a) : -(a))
 #endif
 
-#define getScratchAddr(offset)  ((unsigned long *)(0x1f800000+(offset)*4))
+#define getScratchAddr(offset) ((unsigned long *)(0x1f800000 + (offset) * 4))
 
-#define getTPage(tp, abr, x, y) 					\
-	 ((((tp)&0x3)<<7)|(((abr)&0x3)<<5)|(((y)&0x100)>>4)|(((x)&0x3ff)>>6)| \
-	 (((y)&0x200)<<2))
+#define getTPage(tp, abr, x, y)                                                                 \
+    ((((tp) & 0x3) << 7) | (((abr) & 0x3) << 5) | (((y) & 0x100) >> 4) | (((x) & 0x3ff) >> 6) | \
+     (((y) & 0x200) << 2))
 
 #define getClut(x, y) \
-	(((y)<<6)|(((x)>>4)&0x3f))
+    (((y) << 6) | (((x) >> 4) & 0x3f))
 
 // GTE macros
 
-#define gte_SetRotMatrix(r0) __asm__ ( \
-        "lw    $12, 0(%0);" \
-        "lw    $13, 4(%0);" \
-        "ctc2    $12, $0;" \
-        "ctc2    $13, $1;" \
-        "lw    $12, 8(%0);" \
-        "lw    $13, 12(%0);" \
-        "lw    $14, 16(%0);" \
-        "ctc2    $12, $2;" \
-        "ctc2    $13, $3;" \
-        "ctc2    $14, $4" \
-        : : "r"(r0) \
-        : "$12", "$13", "$14" \
-    )
+#define gte_SetRotMatrix(r0) __asm__( \
+    "lw    $12, 0(%0);"               \
+    "lw    $13, 4(%0);"               \
+    "ctc2    $12, $0;"                \
+    "ctc2    $13, $1;"                \
+    "lw    $12, 8(%0);"               \
+    "lw    $13, 12(%0);"              \
+    "lw    $14, 16(%0);"              \
+    "ctc2    $12, $2;"                \
+    "ctc2    $13, $3;"                \
+    "ctc2    $14, $4"                 \
+    : : "r"(r0)                       \
+    : "$12", "$13", "$14")
 
-#define gte_SetTransMatrix(r0) __asm__ ( \
-        "lw    $12, 20(%0);" \
-        "lw    $13, 24(%0);" \
-        "ctc2    $12, $5;" \
-        "lw    $14, 28(%0);" \
-        "ctc2    $13, $6;" \
-        "ctc2    $14, $7" \
-        : : "r"(r0) \
-        : "$12", "$13", "$14" \
-    )
+#define gte_SetTransMatrix(r0) __asm__( \
+    "lw    $12, 20(%0);"                \
+    "lw    $13, 24(%0);"                \
+    "ctc2    $12, $5;"                  \
+    "lw    $14, 28(%0);"                \
+    "ctc2    $13, $6;"                  \
+    "ctc2    $14, $7"                   \
+    : : "r"(r0)                         \
+    : "$12", "$13", "$14")
 
-#define gte_ldv0(r0) __asm__ ( \
-        "lwc2    $0, 0(%0);" \
-        "lwc2    $1, 4(%0)" \
-        : : "r"(r0) \
-    )
+#define gte_ldv0(r0) __asm__( \
+    "lwc2    $0, 0(%0);"      \
+    "lwc2    $1, 4(%0)"       \
+    : : "r"(r0))
 
-#define gte_nmvmva(sf, mx, v, cv, lm) __asm__ ( \
-        "nop;" \
-        "nop;" \
-        ".word %0" \
-        : : "g"(0x4A400012 | ((sf) & 0x1) << 19 | ((mx) & 0x3) << 17 | ((v) & 0x3) << 15 | ((cv) & 0x3) << 13 | ((lm) & 0x1) << 10) \
-    )
+#define gte_nmvmva(sf, mx, v, cv, lm) __asm__( \
+    "nop;"                                     \
+    "nop;"                                     \
+    ".word %0"                                 \
+    : : "g"(0x4A400012 | ((sf) & 0x1) << 19 | ((mx) & 0x3) << 17 | ((v) & 0x3) << 15 | ((cv) & 0x3) << 13 | ((lm) & 0x1) << 10))
 
 #define gte_nrtv0tr() gte_nmvmva(1, 0, 0, 0, 0)
 
-#define gte_mvmva(sf, mx, v, cv, lm) __asm__ ( \
-        ".word %0" \
-        : : "g"(0x4A400012 | ((sf) & 0x1) << 19 | ((mx) & 0x3) << 17 | ((v) & 0x3) << 15 | ((cv) & 0x3) << 13 | ((lm) & 0x1) << 10) \
-    )
+#define gte_mvmva(sf, mx, v, cv, lm) __asm__( \
+    ".word %0"                                \
+    : : "g"(0x4A400012 | ((sf) & 0x1) << 19 | ((mx) & 0x3) << 17 | ((v) & 0x3) << 15 | ((cv) & 0x3) << 13 | ((lm) & 0x1) << 10))
 
-#define gte_stlvnl(r0) __asm__ ( \
-        "swc2    $25, 0(%0);" \
-        "swc2    $26, 4(%0);" \
-        "swc2    $27, 8(%0)" \
-        : : "r"(r0) \
-        : "memory" \
-    )
+#define gte_stlvnl(r0) __asm__( \
+    "swc2    $25, 0(%0);"       \
+    "swc2    $26, 4(%0);"       \
+    "swc2    $27, 8(%0)"        \
+    : : "r"(r0)                 \
+    : "memory")
 
 #define gte_nrtv0() gte_nmvmva(1, 0, 0, 3, 0)
 
-#define gte_ldlvl(r0) __asm__ ( \
-        "lwc2    $9, 0(%0);" \
-        "lwc2    $10, 4(%0);" \
-        "lwc2    $11, 8(%0)" \
-        : : "r"(r0) \
-    )
+#define gte_ldlvl(r0) __asm__( \
+    "lwc2    $9, 0(%0);"       \
+    "lwc2    $10, 4(%0);"      \
+    "lwc2    $11, 8(%0)"       \
+    : : "r"(r0))
 
-#define gte_nsqr(sf) __asm__ ( \
-        "nop;" \
-        "nop;" \
-        ".word %0" \
-        : : "g"(0x4AA00428 | ((sf) & 0x1) << 19) \
-    )
+#define gte_nsqr(sf) __asm__( \
+    "nop;"                    \
+    "nop;"                    \
+    ".word %0"                \
+    : : "g"(0x4AA00428 | ((sf) & 0x1) << 19))
 
 #define gte_nsqr0() gte_nsqr(0)
 
-#define gte_sqr(sf) __asm__ ( \
-        ".word %0" \
-        : : "g"(0x4AA00428 | ((sf) & 0x1) << 19) \
-    )
+#define gte_sqr(sf) __asm__( \
+    ".word %0"               \
+    : : "g"(0x4AA00428 | ((sf) & 0x1) << 19))
 
 #define gte_sqr0() gte_sqr(0)
 
-#define gte_nrtps() __asm__ ( \
-        "nop;" \
-        "nop;" \
-        ".word 0x4A180001" \
-    )
+#define gte_nrtps() __asm__( \
+    "nop;"                   \
+    "nop;"                   \
+    ".word 0x4A180001")
 
-#define gte_stsxy(r0) __asm__ ( \
-        "swc2    $14, 0(%0)" \
-        : : "r"(r0) \
-        : "memory" \
-    )
+#define gte_stsxy(r0) __asm__( \
+    "swc2    $14, 0(%0)"       \
+    : : "r"(r0)                \
+    : "memory")
 
-#define gte_ldsv(r0) __asm__ ( \
-        "lhu    $12, 0(%0);" \
-        "lhu    $13, 2(%0);" \
-        "lhu    $14, 4(%0);" \
-        "mtc2    $12, $9;" \
-        "mtc2    $13, $10;" \
-        "mtc2    $14, $11" \
-        : : "r"(r0) \
-        : "$12", "$13", "$14" \
-    )
+#define gte_ldsv(r0) __asm__( \
+    "lhu    $12, 0(%0);"      \
+    "lhu    $13, 2(%0);"      \
+    "lhu    $14, 4(%0);"      \
+    "mtc2    $12, $9;"        \
+    "mtc2    $13, $10;"       \
+    "mtc2    $14, $11"        \
+    : : "r"(r0)               \
+    : "$12", "$13", "$14")
 
-#define gte_lddp(r0) __asm__ ( \
-        "mtc2    %0, $8" \
-        : : "r"(r0) \
-    )
+#define gte_lddp(r0) __asm__( \
+    "mtc2    %0, $8"          \
+    : : "r"(r0))
 
-#define gte_nlddp(r0) __asm__ ( \
-        "mtc2    %0, $8;" \
-        "nop;" \
-        "nop;" \
-        : : "r"(r0) \
-    )
+#define gte_nlddp(r0) __asm__( \
+    "mtc2    %0, $8;"          \
+    "nop;"                     \
+    "nop;"                     \
+    : : "r"(r0))
 
-#define gte_gpl(sf) __asm__ ( \
-        ".word %0" \
-        : : "g"(0x4BA0003E | ((sf) & 0x1) << 19) \
-    )
+#define gte_gpl(sf) __asm__( \
+    ".word %0"               \
+    : : "g"(0x4BA0003E | ((sf) & 0x1) << 19))
 
 #define gte_gpl12() gte_gpl(1)
 
-#define gte_ldsvrtrow0(r0) __asm__ ( \
-        "lw    $12, 0(%0);" \
-        "lw    $13, 4(%0);" \
-        "ctc2    $12, $0;" \
-        "ctc2    $13, $1" \
-        : : "r"(r0) \
-        : "$12", "$13" \
-    ) 
+#define gte_ldsvrtrow0(r0) __asm__( \
+    "lw    $12, 0(%0);"             \
+    "lw    $13, 4(%0);"             \
+    "ctc2    $12, $0;"              \
+    "ctc2    $13, $1"               \
+    : : "r"(r0)                     \
+    : "$12", "$13")
 
-#define gte_nGPL(sf) __asm__ ( \
-        "nop;" \
-        "nop;" \
-        ".word %0" \
-        : : "g"(0x4BA0003E | ((sf) & 0x1) << 19) \
-    )
+#define gte_nGPL(sf) __asm__( \
+    "nop;"                    \
+    "nop;"                    \
+    ".word %0"                \
+    : : "g"(0x4BA0003E | ((sf) & 0x1) << 19))
 
 #define gte_ngpl12() gte_nGPL(1)
 
-#define gte_stsv(r0) __asm__ ( \
-        "mfc2    $12, $9;" \
-        "mfc2    $13, $10;" \
-        "mfc2    $14, $11;" \
-        "sh    $12, 0(%0);" \
-        "sh    $13, 2(%0);" \
-        "sh    $14, 4(%0)" \
-        : : "r"(r0) \
-        : "$12", "$13", "$14", "memory" \
-    )
+#define gte_stsv(r0) __asm__( \
+    "mfc2    $12, $9;"        \
+    "mfc2    $13, $10;"       \
+    "mfc2    $14, $11;"       \
+    "sh    $12, 0(%0);"       \
+    "sh    $13, 2(%0);"       \
+    "sh    $14, 4(%0)"        \
+    : : "r"(r0)               \
+    : "$12", "$13", "$14", "memory")
 
-#define gte_stsz(r0) __asm__ ( \
-        "swc2    $19, 0(%0)" \
-        : : "r"(r0) \
-        : "memory" \
-    )
+#define gte_stsz(r0) __asm__( \
+    "swc2    $19, 0(%0)"      \
+    : : "r"(r0)               \
+    : "memory")
 
-#define gte_stdp(r0) __asm__ ( \
-        "swc2    $8, 0(%0)" \
-        : : "r"(r0) \
-        : "memory" \
-    )
+#define gte_stdp(r0) __asm__( \
+    "swc2    $8, 0(%0)"       \
+    : : "r"(r0)               \
+    : "memory")
 
 // custom macro
-#define gte_ldlvnlsv( r0 ) __asm__ volatile (			\
-	"lhu	$12, 0( %0 );"					\
-	"lhu	$13, 2 ( %0 );"					\
-	"lhu	$14, 4 ( %0 );"					\
-	"mtc2	$12, $25;"					\
-	"mtc2	$13, $26;"					\
-	"mtc2	$14, $27"					\
-	:							\
-	: "r"( r0 )						\
-	: "$12", "$13", "$14" ) 
+#define gte_ldlvnlsv(r0) __asm__ volatile( \
+    "lhu	$12, 0( %0 );"                    \
+    "lhu	$13, 2 ( %0 );"                   \
+    "lhu	$14, 4 ( %0 );"                   \
+    "mtc2	$12, $25;"                       \
+    "mtc2	$13, $26;"                       \
+    "mtc2	$14, $27"                        \
+    :                                      \
+    : "r"(r0)                              \
+    : "$12", "$13", "$14")
 
 // custom macro
-#define gte_stlvnlsv( r0 ) __asm__ volatile (			\
-	"mfc2	$12, $25;"					\
-	"mfc2	$13, $26;"					\
-	"mfc2	$14, $27;"					\
-	"sh	$12, 0( %0 );"					\
-	"sh	$13, 2( %0 );"					\
-	"sh	$14, 4( %0 )"					\
-	:							\
-	: "r"( r0 )						\
-	: "$12", "$13", "$14", "memory" )
+#define gte_stlvnlsv(r0) __asm__ volatile( \
+    "mfc2	$12, $25;"                       \
+    "mfc2	$13, $26;"                       \
+    "mfc2	$14, $27;"                       \
+    "sh	$12, 0( %0 );"                     \
+    "sh	$13, 2( %0 );"                     \
+    "sh	$14, 4( %0 )"                      \
+    :                                      \
+    : "r"(r0)                              \
+    : "$12", "$13", "$14", "memory")
 
 // custom macro
-#define gte_ldv2_ext( r0 ) __asm__ volatile (			\
-	"lw		$12, 0( %0 );"					\
-	"lw		$13, 4( %0 );"					\
-	"ctc2	$12, $3;"					\
-	"ctc2	$13, $4;"					\
-	:							\
-	: "r"( r0 )						\
-	: "$12", "$13" )
+#define gte_ldv2_ext(r0) __asm__ volatile( \
+    "lw		$12, 0( %0 );"                    \
+    "lw		$13, 4( %0 );"                    \
+    "ctc2	$12, $3;"                        \
+    "ctc2	$13, $4;"                        \
+    :                                      \
+    : "r"(r0)                              \
+    : "$12", "$13")
 
 // custom macro
 #define gte_nrtvx() gte_nmvmva(1, 0, 0, 0, 0)
 
 // size: 0x14
-typedef struct DISPENV {
+typedef struct DISPENV
+{
     // offset: 0000 (8 bytes)
     struct RECT disp;
     // offset: 0008 (8 bytes)
@@ -246,7 +227,8 @@ typedef struct DISPENV {
 } DISPENV;
 
 // size: 0x40
-typedef struct DR_ENV {
+typedef struct DR_ENV
+{
     // offset: 0000
     unsigned long tag;
     // offset: 0004 (60 bytes)
@@ -254,7 +236,8 @@ typedef struct DR_ENV {
 } DR_ENV;
 
 // size: 0x5C
-typedef struct DRAWENV {
+typedef struct DRAWENV
+{
     // offset: 0000 (8 bytes)
     struct RECT clip;
     // offset: 0008 (4 bytes)
@@ -280,14 +263,15 @@ typedef struct DRAWENV {
 } DRAWENV;
 
 // size: 0xC
-typedef struct DR_STP {
+typedef struct DR_STP
+{
     // offset: 0000
     unsigned long tag;
     // offset: 0004 (8 bytes)
     unsigned long code[2];
 } DR_STP;
 
-//typedef unsigned short PadData;
+// typedef unsigned short PadData;
 typedef unsigned short padData;
 
 typedef struct
@@ -295,61 +279,55 @@ typedef struct
     unsigned short buttons;
     signed char xOffset;
     signed char yOffset;
-}
-MouseData;
+} MouseData;
 
 typedef struct
 {
-    unsigned short digitalButtons;               /* Bit mask of plain keys. */
-    char centralTwist;                           /* Analogue twisting thing.*/
-    char buttonI;                                /* The I analogue button.  */
-    char buttonII;                               /* The II analogue button. */
-    char topLeft;                                /* The analogue tl button. */
-}
-NegconData;
+    unsigned short digitalButtons; /* Bit mask of plain keys. */
+    char centralTwist;             /* Analogue twisting thing.*/
+    char buttonI;                  /* The I analogue button.  */
+    char buttonII;                 /* The II analogue button. */
+    char topLeft;                  /* The analogue tl button. */
+} NegconData;
 
 typedef struct
 {
-    unsigned char transStatus;  /* 0xff = no pad, bad pad, bad transmission */
-    unsigned char dataFormat;            /* Top 4 bits = type of controller */
+    unsigned char transStatus; /* 0xff = no pad, bad pad, bad transmission */
+    unsigned char dataFormat;  /* Top 4 bits = type of controller */
 
-    union                                         /* Controller data union. */                   /* Controller data union. */
+    union /* Controller data union. */ /* Controller data union. */
     {
-        //PadData    pad;                                 /* Plain pad.       */
-        padData    pad;                                 /* Plain pad.       */
-        NegconData negcon;                              /* Namco controller.*/
-    }
-    data;
-}
-TapCtrllerData;
+        // PadData    pad;                                 /* Plain pad.       */
+        padData pad;       /* Plain pad.       */
+        NegconData negcon; /* Namco controller.*/
+    } data;
+} TapCtrllerData;
 
 typedef struct
 {
-    TapCtrllerData ctrllers[4];               /* Just 4 controller packets. */
-}
-MultiTapData;
+    TapCtrllerData ctrllers[4]; /* Just 4 controller packets. */
+} MultiTapData;
 
 typedef struct
 {
-    unsigned char transStatus;  /* 0xff = no pad, bad pad, bad transmission */
-    unsigned char dataFormat;            /* Top 4 bits = type of controller */
+    unsigned char transStatus; /* 0xff = no pad, bad pad, bad transmission */
+    unsigned char dataFormat;  /* Top 4 bits = type of controller */
     /* Bottom 4 == shorts of data written */
-    union                                         /* Controller data union. */
+    union /* Controller data union. */
     {
-        //PadData      pad;                               /* Plain pad.       */
-        padData      pad;                               /* Plain pad.       */
-        MouseData    mouse;                             /* Mouse.           */
-        NegconData   negcon;                            /* Namco controller.*/
-        MultiTapData tap;                               /* 4-way multi-tap. */
-    }
-    data;
-}
-ControllerPacket;
+        // PadData      pad;                               /* Plain pad.       */
+        padData pad;       /* Plain pad.       */
+        MouseData mouse;   /* Mouse.           */
+        NegconData negcon; /* Namco controller.*/
+        MultiTapData tap;  /* 4-way multi-tap. */
+    } data;
+} ControllerPacket;
 
 typedef void (*CdlCB)();
 
 // size: 0x4
-typedef struct CdlLOC {
+typedef struct CdlLOC
+{
     // offset: 0000
     unsigned char minute;
     // offset: 0001
@@ -361,7 +339,8 @@ typedef struct CdlLOC {
 } CdlLOC;
 
 // size: 0x18
-typedef struct CdlFILE {
+typedef struct CdlFILE
+{
     // offset: 0000 (4 bytes)
     struct CdlLOC pos;
     // offset: 0004
@@ -371,7 +350,8 @@ typedef struct CdlFILE {
 } CdlFILE;
 
 // size: 0x4
-typedef struct CdlFILTER {
+typedef struct CdlFILTER
+{
     // offset: 0000
     unsigned char file;
     // offset: 0001
@@ -381,7 +361,8 @@ typedef struct CdlFILTER {
 } CdlFILTER;
 
 // size: 0x4
-typedef struct SpuVolume {
+typedef struct SpuVolume
+{
     // offset: 0000
     short left;
     // offset: 0002
@@ -389,7 +370,8 @@ typedef struct SpuVolume {
 } SpuVolume;
 
 // size: 0xC
-typedef struct SpuExtAttr {
+typedef struct SpuExtAttr
+{
     // offset: 0000 (4 bytes)
     struct SpuVolume volume;
     // offset: 0004
@@ -399,7 +381,8 @@ typedef struct SpuExtAttr {
 } SpuExtAttr;
 
 // size: 0x28
-typedef struct SpuCommonAttr {
+typedef struct SpuCommonAttr
+{
     // offset: 0000
     unsigned long mask;
     // offset: 0004 (4 bytes)
@@ -416,115 +399,128 @@ typedef struct SpuCommonAttr {
 
 // Prim drawing
 
-typedef struct {
-    u_long	tag;
-    u_long	code[2];
-} DR_AREA;				/* Drawing Area */
+typedef struct
+{
+    u_long tag;
+    u_long code[2];
+} DR_AREA; /* Drawing Area */
 
-typedef struct {
-    u_long	tag;
-    u_char	r0, g0, b0, code;
-    short	x0, y0;
-    u_char	u0, v0;	u_short	clut;
-    u_char	r1, g1, b1, p1;
-    short	x1, y1;
-    u_char	u1, v1;	u_short	tpage;
-    u_char	r2, g2, b2, p2;
-    short	x2, y2;
-    u_char	u2, v2;	u_short	pad2;
-} POLY_GT3;				/* Gouraud Textured Triangle */
+typedef struct
+{
+    u_long tag;
+    u_char r0, g0, b0, code;
+    short x0, y0;
+    u_char u0, v0;
+    u_short clut;
+    u_char r1, g1, b1, p1;
+    short x1, y1;
+    u_char u1, v1;
+    u_short tpage;
+    u_char r2, g2, b2, p2;
+    short x2, y2;
+    u_char u2, v2;
+    u_short pad2;
+} POLY_GT3; /* Gouraud Textured Triangle */
 
-typedef struct {
-    u_long	tag;
-    u_char	r0, g0, b0, code;
-    short	x0, y0;
-    u_char	r1, g1, b1, pad1;
-    short	x1, y1;
-    u_char	r2, g2, b2, pad2;
-    short	x2, y2;
-    u_char	r3, g3, b3, pad3;
-    short	x3, y3;
-} POLY_G4;				/* Gouraud Quadrangle */
+typedef struct
+{
+    u_long tag;
+    u_char r0, g0, b0, code;
+    short x0, y0;
+    u_char r1, g1, b1, pad1;
+    short x1, y1;
+    u_char r2, g2, b2, pad2;
+    short x2, y2;
+    u_char r3, g3, b3, pad3;
+    short x3, y3;
+} POLY_G4; /* Gouraud Quadrangle */
 
-typedef struct {
-    u_long	tag;
-    u_char	r0, g0, b0, code;
-    short	x0, y0;
-    short	x1, y1;
-    short	x2, y2;
-    short	x3, y3;
-} POLY_F4;				/* Flat Quadrangle */
+typedef struct
+{
+    u_long tag;
+    u_char r0, g0, b0, code;
+    short x0, y0;
+    short x1, y1;
+    short x2, y2;
+    short x3, y3;
+} POLY_F4; /* Flat Quadrangle */
 
-typedef	struct {
-    u_long	tag;
-    u_long	code[1];
-} DR_TPAGE;				/* Drawing TPage */
+typedef struct
+{
+    u_long tag;
+    u_long code[1];
+} DR_TPAGE; /* Drawing TPage */
 
-typedef struct {
-    unsigned	addr : 24;
-    unsigned 	len : 8;
-    u_char		r0, g0, b0, code;
+typedef struct
+{
+    unsigned addr : 24;
+    unsigned len : 8;
+    u_char r0, g0, b0, code;
 } P_TAG;
 
-#define setcode(p, _code)	(((P_TAG *)(p))->code = (u_char)(_code))
+#define setcode(p, _code) (((P_TAG *)(p))->code = (u_char)(_code))
 
-#define setlen( p, _len) 	(((P_TAG *)(p))->len  = (u_char)(_len))
+#define setlen(p, _len) (((P_TAG *)(p))->len = (u_char)(_len))
 
-#define _get_mode(dfe, dtd, tpage)	\
-		((0xe1000000)|((dtd)?0x0200:0)| \
-		((dfe)?0x0400:0)|((tpage)&0x9ff))
+#define _get_mode(dfe, dtd, tpage)         \
+    ((0xe1000000) | ((dtd) ? 0x0200 : 0) | \
+     ((dfe) ? 0x0400 : 0) | ((tpage) & 0x9ff))
 
-#define getaddr(p)   		(u_long)(((P_TAG *)(p))->addr)
+#define getaddr(p) (u_long)(((P_TAG *)(p))->addr)
 
-#define setDrawTPage(p, dfe, dtd, tpage)	\
-	setlen(p, 1),	\
-	((u_long *)(p))[1] = _get_mode(dfe, dtd, tpage)
+#define setDrawTPage(p, dfe, dtd, tpage) \
+    setlen(p, 1),                        \
+        ((u_long *)(p))[1] = _get_mode(dfe, dtd, tpage)
 
 /*
  * Set Primitive Colors
  */
-#define setRGB0(p,_r0,_g0,_b0)						\
-	(p)->r0 = _r0,(p)->g0 = _g0,(p)->b0 = _b0
+#define setRGB0(p, _r0, _g0, _b0) \
+    (p)->r0 = _r0, (p)->g0 = _g0, (p)->b0 = _b0
 
-#define setRGB1(p,_r1,_g1,_b1)						\
-	(p)->r1 = _r1,(p)->g1 = _g1,(p)->b1 = _b1
+#define setRGB1(p, _r1, _g1, _b1) \
+    (p)->r1 = _r1, (p)->g1 = _g1, (p)->b1 = _b1
 
-#define setRGB2(p,_r2,_g2,_b2)						\
-	(p)->r2 = _r2,(p)->g2 = _g2,(p)->b2 = _b2
+#define setRGB2(p, _r2, _g2, _b2) \
+    (p)->r2 = _r2, (p)->g2 = _g2, (p)->b2 = _b2
 
-#define setRGB3(p,_r3,_g3,_b3)						\
-	(p)->r3 = _r3,(p)->g3 = _g3,(p)->b3 = _b3
+#define setRGB3(p, _r3, _g3, _b3) \
+    (p)->r3 = _r3, (p)->g3 = _g3, (p)->b3 = _b3
 
- /*
-  * Set Primitive Screen Points
-  */
-#define setXY0(p,_x0,_y0)						\
-	(p)->x0 = (_x0), (p)->y0 = (_y0)				\
+/*
+ * Set Primitive Screen Points
+ */
+#define setXY0(p, _x0, _y0) \
+    (p)->x0 = (_x0), (p)->y0 = (_y0)
 
-#define setXY2(p,_x0,_y0,_x1,_y1)					\
-	(p)->x0 = (_x0), (p)->y0 = (_y0),				\
-	(p)->x1 = (_x1), (p)->y1 = (_y1)
+#define setXY2(p, _x0, _y0, _x1, _y1) \
+    (p)->x0 = (_x0), (p)->y0 = (_y0), \
+    (p)->x1 = (_x1), (p)->y1 = (_y1)
 
-#define setXY3(p,_x0,_y0,_x1,_y1,_x2,_y2)				\
-	(p)->x0 = (_x0), (p)->y0 = (_y0),				\
-	(p)->x1 = (_x1), (p)->y1 = (_y1),				\
-	(p)->x2 = (_x2), (p)->y2 = (_y2)
+#define setXY3(p, _x0, _y0, _x1, _y1, _x2, _y2) \
+    (p)->x0 = (_x0), (p)->y0 = (_y0),           \
+    (p)->x1 = (_x1), (p)->y1 = (_y1),           \
+    (p)->x2 = (_x2), (p)->y2 = (_y2)
 
-#define setXY4(p,_x0,_y0,_x1,_y1,_x2,_y2,_x3,_y3) 			\
-	(p)->x0 = (_x0), (p)->y0 = (_y0),				\
-	(p)->x1 = (_x1), (p)->y1 = (_y1),				\
-	(p)->x2 = (_x2), (p)->y2 = (_y2),				\
-	(p)->x3 = (_x3), (p)->y3 = (_y3)
+#define setXY4(p, _x0, _y0, _x1, _y1, _x2, _y2, _x3, _y3) \
+    (p)->x0 = (_x0), (p)->y0 = (_y0),                     \
+    (p)->x1 = (_x1), (p)->y1 = (_y1),                     \
+    (p)->x2 = (_x2), (p)->y2 = (_y2),                     \
+    (p)->x3 = (_x3), (p)->y3 = (_y3)
 
-#define setXYWH(p,_x0,_y0,_w,_h)					\
-	(p)->x0 = (_x0),      (p)->y0 = (_y0),				\
-	(p)->x1 = (_x0)+(_w), (p)->y1 = (_y0),				\
-	(p)->x2 = (_x0),      (p)->y2 = (_y0)+(_h),			\
-	(p)->x3 = (_x0)+(_w), (p)->y3 = (_y0)+(_h)
+#define setXYWH(p, _x0, _y0, _w, _h)         \
+    (p)->x0 = (_x0), (p)->y0 = (_y0),        \
+    (p)->x1 = (_x0) + (_w), (p)->y1 = (_y0), \
+    (p)->x2 = (_x0), (p)->y2 = (_y0) + (_h), \
+    (p)->x3 = (_x0) + (_w), (p)->y3 = (_y0) + (_h)
 
-#define setPolyF4(p)	setlen(p, 5),  setcode(p, 0x28)
-#define setPolyG4(p)	setlen(p, 8),  setcode(p, 0x38)
+#define setPolyF4(p) setlen(p, 5), setcode(p, 0x28)
+#define setPolyG4(p) setlen(p, 8), setcode(p, 0x38)
 
+long EnableEvent(long);
+long OpenEvent(unsigned long, long, long, long (*func)());
+long SetRCnt(unsigned long, unsigned short, long);
+long StartRCnt(unsigned long);
 int rand();
 void ApplyMatrix(MATRIX *, SVECTOR *, VECTOR *);
 void ApplyMatrixSV(MATRIX *, SVECTOR *, SVECTOR *);

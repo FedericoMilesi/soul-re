@@ -1,6 +1,8 @@
 #include "common.h"
 #include "Game/SOUND.h"
 
+EXTERN STATIC unsigned long __hblankEvent;
+
 unsigned long aadGetMemorySize(AadInitAttr *attributes)
 {
     return (1488 * attributes->numSlots) + 7304;
@@ -8,7 +10,20 @@ unsigned long aadGetMemorySize(AadInitAttr *attributes)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInstallUpdateFunc);
+void aadInstallUpdateFunc(long (*updateFuncPtr)(), int hblanksPerUpdate)
+{
+    EnterCriticalSection();
+
+    __hblankEvent = OpenEvent(0xF2000001, 2, 4096, updateFuncPtr);
+
+    EnableEvent(__hblankEvent);
+
+    SetRCnt(0xF2000001, hblanksPerUpdate, 4096);
+
+    StartRCnt(0xF2000001);
+
+    ExitCriticalSection();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInitVolume);
 
