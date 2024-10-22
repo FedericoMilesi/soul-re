@@ -46,7 +46,10 @@ void aadStartMasterVolumeFade(int targetVolume, int volumeStep, void (*fadeCompl
     aadMem->masterVolFader.fadeCompleteCallback = fadeCompleteCallback;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetSfxMasterVolume);
+void aadSetSfxMasterVolume(int volume)
+{
+    aadMem->sfxMasterVol = volume & 0xFF;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetMusicMasterVolume);
 
