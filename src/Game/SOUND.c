@@ -28,8 +28,6 @@ int gSramLargestFree;
 
 int gSramFreeBlocks;
 
-AadMemoryStruct *aadMem;
-
 SoundEffectChannel soundEffectChannelTbl[16];
 
 SoundEffectChannel *SndOpenSfxChannel(unsigned char *channelNum)
@@ -499,18 +497,18 @@ int SOUND_IsInstanceSoundLoaded(unsigned char *sfxFileData, long soundNumber)
             case 0:
                 sfxIDList = (unsigned short *)&sfxFileData[18];
                 numSfxIDs = sfxFileData[1];
-                sfxFileData += numSfxIDs*2+18;
+                sfxFileData += numSfxIDs * 2 + 18;
                 break;
             case 1:
                 sfxIDList = (unsigned short *)&sfxFileData[14];
                 numSfxIDs = sfxFileData[1];
-                sfxFileData += numSfxIDs*2+14;
+                sfxFileData += numSfxIDs * 2 + 14;
                 break;
             case 2:
             default:
                 sfxIDList = (unsigned short *)&sfxFileData[14];
                 numSfxIDs = sfxFileData[1];
-                sfxFileData += numSfxIDs*2+14;
+                sfxFileData += numSfxIDs * 2 + 14;
                 break;
             }
 
@@ -1049,7 +1047,7 @@ void SOUND_UpdateSound()
             gSramFullMsgCnt--;
         }
 
-        //FONT_Print("$\n\n\n\n\n\n\n\n\n\nsound memory full!\nu = % d % d f = % d % d lf = % d", gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
+        // FONT_Print("$\n\n\n\n\n\n\n\n\n\nsound memory full!\nu = % d % d f = % d % d lf = % d", gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
         FONT_Print(D_800D0F9C, gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
     }
 

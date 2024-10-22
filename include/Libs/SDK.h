@@ -517,6 +517,8 @@ typedef struct
 #define setPolyF4(p) setlen(p, 5), setcode(p, 0x28)
 #define setPolyG4(p) setlen(p, 8), setcode(p, 0x38)
 
+void SpuSetCommonCDMix(long cd_mix);
+void SpuSetCommonMasterVolume(short mvol_left, short mvol_right);
 long EnableEvent(long);
 long OpenEvent(unsigned long, long, long, long (*func)());
 long SetRCnt(unsigned long, unsigned short, long);

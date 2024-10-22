@@ -1,6 +1,8 @@
 #include "common.h"
 #include "Game/SOUND.h"
 
+AadMemoryStruct *aadMem;
+
 EXTERN STATIC unsigned long __hblankEvent;
 
 unsigned long aadGetMemorySize(AadInitAttr *attributes)
@@ -25,7 +27,13 @@ void aadInstallUpdateFunc(long (*updateFuncPtr)(), int hblanksPerUpdate)
     ExitCriticalSection();
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInitVolume);
+void aadInitVolume()
+{
+    aadMem->masterVolume = 0;
+
+    SpuSetCommonCDMix(0);
+    SpuSetCommonMasterVolume(0, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetMasterVolume);
 
