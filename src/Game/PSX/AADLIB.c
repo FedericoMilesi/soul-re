@@ -63,7 +63,14 @@ void aadSetMusicMasterVolume(int volume)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadStartMusicMasterVolFade);
+void aadStartMusicMasterVolFade(int targetVolume, int volumeStep, void (*fadeCompleteCallback)())
+{
+    aadMem->musicMasterVolFader.volumeStep = volumeStep;
+
+    aadMem->musicMasterVolFader.targetVolume = targetVolume;
+
+    aadMem->musicMasterVolFader.fadeCompleteCallback = fadeCompleteCallback;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadShutdown);
 
