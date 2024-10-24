@@ -578,5 +578,11 @@ void LoadAverageShort12(SVECTOR *v0, SVECTOR *v1, long p0, long p1, SVECTOR *v2)
 void SetDrawArea(DR_AREA *p, RECT *r);
 void SetLightMatrix(MATRIX *m);
 void LoadAverageCol(u_char *v0, u_char *v1, long p0, long p1, u_char *v2);
+long StopRCnt(unsigned long);
+long DisableEvent(long);
+long CloseEvent(long);
+void SpuSetKey(long on_off, unsigned long voice_bit);
+long SpuClearReverbWorkArea(long mode);
+void SpuQuit(void);
 
 #endif

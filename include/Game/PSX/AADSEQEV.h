@@ -3,6 +3,7 @@
 
 #include "Game/SOUND.h"
 
-void aadUpdateSlotVolPan(AadSequenceSlot *slot);     
+void aadUpdateSlotVolPan(AadSequenceSlot *slot);
+int aadGetReverbMode();
 
 #endif

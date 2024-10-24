@@ -77,7 +77,28 @@ void aadStartMusicMasterVolFade(int targetVolume, int volumeStep, void (*fadeCom
     aadMem->musicMasterVolFader.fadeCompleteCallback = fadeCompleteCallback;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadShutdown);
+void aadShutdown()
+{
+    EnterCriticalSection();
+
+    StopRCnt(0xF2000001);
+
+    DisableEvent(__hblankEvent);
+
+    CloseEvent(__hblankEvent);
+
+    aadMem->flags |= 0x2;
+
+    ExitCriticalSection();
+
+    SpuSetKey(0, 0xFFFFFF);
+
+    SpuClearReverbWorkArea(aadGetReverbMode());
+
+    SpuQuit();
+
+    aadMem = NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSlotUpdateWrapper);
 
