@@ -35,7 +35,12 @@ void aadInitVolume()
     SpuSetCommonMasterVolume(0, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetMasterVolume);
+void aadSetMasterVolume(int volume)
+{
+    aadMem->masterVolume = (short)volume;
+
+    SpuSetCommonMasterVolume(volume, volume);
+}
 
 void aadStartMasterVolumeFade(int targetVolume, int volumeStep, void (*fadeCompleteCallback)())
 {
