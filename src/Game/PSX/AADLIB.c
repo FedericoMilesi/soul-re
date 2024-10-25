@@ -208,7 +208,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadAllNotesOff);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadMuteChannels);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadUnMuteChannels);
+void aadUnMuteChannels(AadSequenceSlot *slot, unsigned long channelList)
+{
+    unsigned long delayedUnMute;
+
+    delayedUnMute = slot->delayedMuteMode & channelList;
+
+    if (delayedUnMute != 0)
+    {
+        slot->delayedUnMuteCmds |= delayedUnMute;
+
+        channelList &= ~delayedUnMute;
+    }
+
+    slot->channelMute &= ~channelList;
+}
 
 void (*aadInstallEndSequenceCallback(void (*callbackProc)(), long data))()
 {
