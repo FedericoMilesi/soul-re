@@ -196,7 +196,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadPauseSlot);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadResumeSlot);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadGetSlotStatus);
+int aadGetSlotStatus(int slotNumber)
+{
+    return aadMem->sequenceSlots[slotNumber]->status;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadAllNotesOff);
 
