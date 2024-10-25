@@ -206,7 +206,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadUnMuteChannels);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInstallEndSequenceCallback);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetUserVariable);
+void aadSetUserVariable(int variableNumber, int value)
+{
+    aadMem->userVariables[variableNumber] = value;
+}
 
 void aadSetNoUpdateMode(int noUpdate)
 {
