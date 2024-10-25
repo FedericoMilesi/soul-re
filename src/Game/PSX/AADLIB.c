@@ -204,7 +204,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadMuteChannels);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadUnMuteChannels);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInstallEndSequenceCallback);
+void (*aadInstallEndSequenceCallback(void (*callbackProc)(), long data))()
+{
+    void (*previousCallbackProc)();
+
+    previousCallbackProc = (void *)aadMem->endSequenceCallback;
+
+    aadMem->endSequenceCallback = callbackProc;
+    aadMem->endSequenceCallbackData = data;
+
+    return previousCallbackProc;
+}
 
 void aadSetUserVariable(int variableNumber, int value)
 {
