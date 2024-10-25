@@ -1,6 +1,15 @@
 #include "common.h"
+#include "Game/PLAN/ENMYPLAN.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_InitEnemyPlanPool);
+void ENMYPLAN_InitEnemyPlanPool(void *enemyPlanPool)
+{
+    int i;
+
+    for (i = 0; i < 10; i++)
+    {
+        ((EnemyPlanSlotData *)enemyPlanPool)[i].slotInUse = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_GetNextAvailablePlanningSlot);
 
