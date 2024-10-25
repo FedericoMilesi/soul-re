@@ -584,5 +584,6 @@ long CloseEvent(long);
 void SpuSetKey(long on_off, unsigned long voice_bit);
 long SpuClearReverbWorkArea(long mode);
 void SpuQuit(void);
+void SpuSetVoicePitch(int vNum, unsigned short pitch);
 
 #endif
