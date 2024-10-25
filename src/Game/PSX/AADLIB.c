@@ -168,7 +168,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInitReverb);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadShutdownReverb);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadGetReverbMode);
+int aadGetReverbMode()
+{
+    return 3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadGetReverbSize);
 
