@@ -208,7 +208,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInstallEndSequenceCallback);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetUserVariable);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetNoUpdateMode);
+void aadSetNoUpdateMode(int noUpdate)
+{
+    if (noUpdate != 0)
+    {
+        aadMem->flags |= 0x2;
+    }
+    else
+    {
+        aadMem->flags &= ~0x2;
+    }
+}
 
 void aadPauseSound()
 {
