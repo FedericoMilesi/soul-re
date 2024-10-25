@@ -212,7 +212,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetNoUpdateMode);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadPauseSound);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadCancelPauseSound);
+void aadCancelPauseSound()
+{
+    aadMem->flags &= ~0xC;
+}
 
 void aadResumeSound()
 {
