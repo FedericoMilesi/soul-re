@@ -210,7 +210,24 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetUserVariable);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetNoUpdateMode);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadPauseSound);
+void aadPauseSound()
+{
+    int i;
+
+    if (!(aadMem->flags & 0x8))
+    {
+        aadMem->flags |= 0xC;
+
+        for (i = 0; i < 24; i++)
+        {
+            aadMem->synthVoice[i].flags &= ~0x2;
+
+            SpuGetVoicePitch(i, &aadMem->voicePitchSave[i]);
+
+            SpuSetVoicePitch(i, 0);
+        }
+    }
+}
 
 void aadCancelPauseSound()
 {
