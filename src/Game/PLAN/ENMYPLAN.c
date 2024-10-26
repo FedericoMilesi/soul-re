@@ -31,7 +31,24 @@ int ENMYPLAN_GetNextAvailablePlanningSlot()
     return slotID;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_GetInitializedPlanningWorkspaceFinal);
+int ENMYPLAN_GetInitializedPlanningWorkspaceFinal()
+{
+    EnemyPlanSlotData *pool;
+    int slotID;
+
+    pool = (EnemyPlanSlotData *)gameTrackerX.enemyPlanPool;
+
+    slotID = ENMYPLAN_GetNextAvailablePlanningSlot();
+
+    if (slotID != -1)
+    {
+        pool[slotID].slotInUse = 1;
+
+        pool[slotID].state = 0;
+    }
+
+    return slotID;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_ReleasePlanningWorkspace);
 
