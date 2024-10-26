@@ -171,7 +171,27 @@ int ValidSlotAndState(EnemyPlanSlotData *pool, int slotID)
     return (pool[slotID].state == 2) || (pool[slotID].state == 3);
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_GetNodeTypeOfNextWaypoint);
+#else
+int ENMYPLAN_GetNodeTypeOfNextWaypoint(int slotID)
+{
+    EnemyPlanSlotData *pool;
+    EnemyPlanSlotData *planSlot;
+
+    pool = gameTrackerX.enemyPlanPool;
+
+    if (ValidSlotAndState(pool, slotID) != 0)
+    {
+        planSlot = &pool[slotID];
+
+        return planSlot->planData.nodeTypeArray[(int)planSlot->wayPointBeingServoedTo];
+    }
+
+    return 64;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_GetPosOfNextWaypoint);
 
