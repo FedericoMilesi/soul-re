@@ -193,7 +193,29 @@ int ENMYPLAN_GetNodeTypeOfNextWaypoint(int slotID)
 }
 #endif
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_GetPosOfNextWaypoint);
+#else
+int ENMYPLAN_GetPosOfNextWaypoint(int slotID, Position *pos)
+{
+    EnemyPlanSlotData *pool;
+    EnemyPlanSlotData *planSlot;
+
+    pool = gameTrackerX.enemyPlanPool;
+
+    if (ValidSlotAndState(pool, slotID) != 0)
+    {
+        planSlot = &pool[slotID];
+
+        COPY_SVEC(Position, pos, Position, &planSlot->planData.wayPointArray[(int)planSlot->wayPointBeingServoedTo]);
+
+        return 1;
+    }
+
+    return 0;
+}
+#endif
 
 void ENMYPLAN_RelocatePlanPositions(int slotID, Position *offset)
 {
