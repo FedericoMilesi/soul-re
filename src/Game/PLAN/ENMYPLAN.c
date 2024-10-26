@@ -95,7 +95,13 @@ int ENMYPLAN_WayPointSkipped(Position *currentPos, Position *targetPos, Position
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_WayPointReached);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_Replan);
+void ENMYPLAN_Replan(EnemyPlanSlotData *planSlot)
+{
+    planSlot->state = 0;
+
+    PLANAPI_DeleteNodesFromPoolByType(2);
+    PLANAPI_DeleteNodesFromPoolByType(3);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_PathClear);
 
