@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/PLAN/ENMYPLAN.h"
+#include "Game/PLAN/PLANAPI.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MATH3D.h"
 
@@ -51,7 +52,23 @@ int ENMYPLAN_GetInitializedPlanningWorkspaceFinal()
     return slotID;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_ReleasePlanningWorkspace);
+void ENMYPLAN_ReleasePlanningWorkspace(int slotID)
+{
+    EnemyPlanSlotData *pool;
+
+    pool = gameTrackerX.enemyPlanPool;
+
+    if (slotID >= 0)
+    {
+        if (slotID < 10)
+        {
+            PLANAPI_DeleteNodesFromPoolByType(2);
+            PLANAPI_DeleteNodesFromPoolByType(3);
+
+            pool[slotID].slotInUse = 0;
+        }
+    }
+}
 
 int ENMYPLAN_WayPointSkipped(Position *currentPos, Position *targetPos, Position *nextTargetPos)
 {
