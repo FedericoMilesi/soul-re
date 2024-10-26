@@ -175,4 +175,29 @@ INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_GetNodeTypeOfNextWay
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_GetPosOfNextWaypoint);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_RelocatePlanPositions);
+void ENMYPLAN_RelocatePlanPositions(int slotID, Position *offset)
+{
+    EnemyPlanSlotData *pool;
+    EnemyPlanSlotData *planSlot;
+    Position *pos;
+    int i;
+    int numWayPoints;
+
+    pool = gameTrackerX.enemyPlanPool;
+
+    planSlot = &pool[slotID];
+
+    numWayPoints = planSlot->planData.numWayPoints;
+
+    if (((slotID != -1) && (slotID < 10)) && (numWayPoints <= 7))
+    {
+        for (i = numWayPoints; i > 0;)
+        {
+            i--;
+
+            pos = &planSlot->planData.wayPointArray[i];
+
+            ADD_SVEC(Position, pos, Position, pos, Position, offset);
+        }
+    }
+}
