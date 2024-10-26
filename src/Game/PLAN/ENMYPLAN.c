@@ -146,7 +146,15 @@ int ENMYPLAN_PathClear(Position *pos, Position *target)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_MoveToTargetFinal);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ValidSlotAndState);
+int ValidSlotAndState(EnemyPlanSlotData *pool, int slotID)
+{
+    if ((slotID == -1) || (slotID >= 10))
+    {
+        return 0;
+    }
+
+    return (pool[slotID].state == 2) || (pool[slotID].state == 3);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_GetNodeTypeOfNextWaypoint);
 
