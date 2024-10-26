@@ -94,7 +94,22 @@ int ENMYPLAN_WayPointSkipped(Position *currentPos, Position *targetPos, Position
     return ((((range[0] * 724) >> 10) * range[1]) < ((vector[0].x * vector[1].x) + (vector[0].y * vector[1].y) + (vector[0].z * vector[1].z))) ^ 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_WayPointReached);
+int ENMYPLAN_WayPointReached(Position *currentPos, Position *oldCurrentPos, Position *targetPos)
+{
+    long range[2];
+
+    range[0] = MATH3D_LengthXYZ(targetPos->x - currentPos->x, targetPos->y - currentPos->y, targetPos->z - currentPos->z);
+    range[1] = MATH3D_LengthXYZ(targetPos->x - oldCurrentPos->x, targetPos->y - oldCurrentPos->y, targetPos->z - oldCurrentPos->z);
+
+    if (((range[0] > range[1]) && (range[0] < 400)) || (range[0] < 50))
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
 
 void ENMYPLAN_Replan(EnemyPlanSlotData *planSlot)
 {
