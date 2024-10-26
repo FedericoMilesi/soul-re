@@ -3,7 +3,12 @@
 
 SVECTOR shadow_vertices[11];
 
-INCLUDE_ASM("asm/nonmatchings/Game/DRAW", fDRAW_SPLIT_INTPL_XYZ);
+void fDRAW_SPLIT_INTPL_XYZ(SVector *newVertex, SVector *pvb, SVector *pvc)
+{
+    newVertex->x = pvb->x + ((pvb->z * (pvc->x - pvb->x)) / (pvb->z - pvc->z));
+    newVertex->y = pvb->y + ((pvb->z * (pvc->y - pvb->y)) / (pvb->z - pvc->z));
+    newVertex->z = 0;
+}
 
 void DRAW_InitShadow()
 {
