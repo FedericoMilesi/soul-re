@@ -3,8 +3,37 @@
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/PLAN/PLANSRCH.h"
 #include "Game/PLAN/PLANPOOL.h"
+#include "Game/MATH3D.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANSRCH", PLANSRCH_FindNodeToExpand);
+PlanningNode *PLANSRCH_FindNodeToExpand(PlanningNode *planningPool, PlanningNode *goalNode, int validNodeTypes)
+{
+    int i;
+    PlanningNode *nodeToExpand;
+    unsigned long bestValueSoFar;
+    unsigned long valueForCurrentNode;
+    PlanningNode *currentNode;
+
+    bestValueSoFar = -1;
+
+    nodeToExpand = NULL;
+
+    for (currentNode = planningPool, i = 0; i < poolManagementData->numNodesInPool; currentNode++, i++)
+    {
+        if ((((validNodeTypes >> currentNode->nodeType) & 0x1)) && (((currentNode->flags & 0x1)) && (!(currentNode->flags & 0x2))))
+        {
+            valueForCurrentNode = currentNode->cost + MATH3D_LengthXYZ(currentNode->pos.x - goalNode->pos.x, currentNode->pos.y - goalNode->pos.y, currentNode->pos.z - goalNode->pos.z);
+
+            if (valueForCurrentNode <= bestValueSoFar)
+            {
+                nodeToExpand = currentNode;
+
+                bestValueSoFar = valueForCurrentNode;
+            }
+        }
+    }
+
+    return nodeToExpand;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANSRCH", PLANSRCH_ExpandNode);
 
