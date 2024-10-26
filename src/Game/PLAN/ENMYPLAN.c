@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/PLAN/ENMYPLAN.h"
+#include "Game/GAMELOOP.h"
 
 void ENMYPLAN_InitEnemyPlanPool(void *enemyPlanPool)
 {
@@ -11,7 +12,24 @@ void ENMYPLAN_InitEnemyPlanPool(void *enemyPlanPool)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_GetNextAvailablePlanningSlot);
+int ENMYPLAN_GetNextAvailablePlanningSlot()
+{
+    int slotID;
+    int i;
+
+    slotID = -1;
+
+    for (i = 0; i < 10; i++)
+    {
+        if ((signed char)((EnemyPlanSlotData *)gameTrackerX.enemyPlanPool)[i].slotInUse == 0)
+        {
+            slotID = i;
+            break;
+        }
+    }
+
+    return slotID;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_GetInitializedPlanningWorkspaceFinal);
 
