@@ -3,6 +3,7 @@
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MATH3D.h"
+#include "Game/PLAN/PLANCOLL.h"
 
 void ENMYPLAN_InitEnemyPlanPool(void *enemyPlanPool)
 {
@@ -103,7 +104,45 @@ void ENMYPLAN_Replan(EnemyPlanSlotData *planSlot)
     PLANAPI_DeleteNodesFromPoolByType(3);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_PathClear);
+int ENMYPLAN_PathClear(Position *pos, Position *target)
+{
+    int len;
+    int oldPCO;
+    Position *tpos;
+    Position newTarget;
+
+    oldPCO = gameTrackerX.plan_collide_override;
+
+    gameTrackerX.plan_collide_override = 1;
+
+    newTarget.x = target->x - pos->x;
+    newTarget.y = target->y - pos->y;
+    newTarget.z = target->z - pos->z;
+
+    len = MATH3D_LengthXYZ(newTarget.x, newTarget.y, newTarget.z);
+
+    if (len > 1280)
+    {
+        newTarget.x = (((newTarget.x << 12) / len) * 1280) / 4096;
+        newTarget.y = (((newTarget.y << 12) / len) * 1280) / 4096;
+        newTarget.z = (((newTarget.z << 12) / len) * 1280) / 4096;
+
+        newTarget.x += pos->x;
+        newTarget.y += pos->y;
+
+        tpos = &newTarget;
+
+        newTarget.z += pos->z;
+    }
+    else
+    {
+        tpos = target;
+    }
+
+    PLANCOLL_DoesStraightLinePathExist(pos, tpos, 0);
+
+    gameTrackerX.plan_collide_override = oldPCO;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_MoveToTargetFinal);
 
