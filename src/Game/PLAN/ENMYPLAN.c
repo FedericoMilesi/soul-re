@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MATH3D.h"
 
 void ENMYPLAN_InitEnemyPlanPool(void *enemyPlanPool)
 {
@@ -52,7 +53,28 @@ int ENMYPLAN_GetInitializedPlanningWorkspaceFinal()
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_ReleasePlanningWorkspace);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_WayPointSkipped);
+int ENMYPLAN_WayPointSkipped(Position *currentPos, Position *targetPos, Position *nextTargetPos)
+{
+    long range[2];
+    Position vector[2];
+
+    SUB_SVEC(Position, &vector[0], Position, targetPos, Position, currentPos);
+
+    range[0] = MATH3D_LengthXYZ(vector[0].x, vector[0].y, vector[0].z);
+
+    SUB_SVEC(Position, &vector[1], Position, nextTargetPos, Position, targetPos);
+
+    range[1] = MATH3D_LengthXYZ(vector[1].x, vector[1].y, vector[1].z);
+
+    if (range[0] < range[1])
+    {
+        range[0] = range[0] ^ range[1];
+        range[1] = range[1] ^ range[0];
+        range[0] = range[0] ^ range[1];
+    }
+
+    return ((((range[0] * 724) >> 10) * range[1]) < ((vector[0].x * vector[1].x) + (vector[0].y * vector[1].y) + (vector[0].z * vector[1].z))) ^ 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/ENMYPLAN", ENMYPLAN_WayPointReached);
 
