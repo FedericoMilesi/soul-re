@@ -1,6 +1,19 @@
 #include "common.h"
+#include "Game/PLAN/PLAN.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_NumNodesInPlan);
+int PLANPOOL_NumNodesInPlan(PlanningNode *goalNode, PlanningNode *planningPool)
+{
+    PlanningNode *currentNode;
+    int i;
+
+    for (i = 0, currentNode = &planningPool[goalNode->parent]; goalNode != currentNode; i++)
+    {
+        goalNode = &planningPool[goalNode->parent];
+        currentNode = &planningPool[goalNode->parent];
+    }
+
+    return i + 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_CountBitsSetInLong);
 
