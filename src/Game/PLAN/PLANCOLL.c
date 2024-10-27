@@ -3,16 +3,13 @@
 #include "Game/MATH3D.h"
 #include "Game/GAMELOOP.h"
 
-EXTERN STATIC FindTerrainHit directionList[6];
+// static FindTerrainHit directionList[6];
+FindTerrainHit directionList[6];
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANCOLL", PLANCOLL_DoesLOSExistFinal);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANCOLL", PLANCOLL_CheckUnderwaterPoint);
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANCOLL", PLANCOLL_FindTerrainHitFinal);
-#else
 int PLANCOLL_FindTerrainHitFinal(PlanCollideInfo *pci, int *placement, int distBefore, int distAfter, int start, int end)
 {
     PCollideInfo pcollideinfo;
@@ -90,7 +87,6 @@ int PLANCOLL_FindTerrainHitFinal(PlanCollideInfo *pci, int *placement, int distB
 
     return 0;
 }
-#endif
 
 int PLANCOLL_DoesStraightLinePathExist(Position *startPos, Position *endPos, int collideType)
 {
