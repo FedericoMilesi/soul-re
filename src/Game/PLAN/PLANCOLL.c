@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/PLAN/PLANCOLL.h"
 #include "Game/MATH3D.h"
+#include "Game/GAMELOOP.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANCOLL", PLANCOLL_DoesLOSExistFinal);
 
@@ -8,7 +9,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANCOLL", PLANCOLL_CheckUnderwaterPoint
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANCOLL", PLANCOLL_FindTerrainHitFinal);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANCOLL", PLANCOLL_DoesStraightLinePathExist);
+int PLANCOLL_DoesStraightLinePathExist(Position *startPos, Position *endPos, int collideType)
+{
+    int temp, temp2; // not from decls.h
+
+    temp = 0;
+
+    temp2 = gameTrackerX.gameFlags < temp;
+
+    if (PLANCOLL_DoesLOSExistFinal(startPos, endPos, collideType, temp2, 256) != 0)
+    {
+        temp = PLANCOLL_DoesLOSExistFinal(startPos, endPos, collideType, temp2, -256) != 0;
+    }
+
+    return temp;
+}
 
 int PLANCOLL_DoesWaterPathUpExist(Position *startPos, Position *endPos, int collideType, Position *peakPos, int passThroughHit)
 {
