@@ -32,7 +32,10 @@ int PLANPOOL_NumConnectionsExaminedForNode(PlanningNode *node)
     return PLANPOOL_CountBitsSetInLong(node->connectionStatus);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_NumConnectionsForNode);
+int PLANPOOL_NumConnectionsForNode(PlanningNode *node)
+{
+    return PLANPOOL_CountBitsSetInLong(node->connections);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_GetFirstNodeOfSource);
 
