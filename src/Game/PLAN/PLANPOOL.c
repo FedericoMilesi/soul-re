@@ -15,7 +15,17 @@ int PLANPOOL_NumNodesInPlan(PlanningNode *goalNode, PlanningNode *planningPool)
     return i + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_CountBitsSetInLong);
+int PLANPOOL_CountBitsSetInLong(long mylong)
+{
+    int numBitsSet;
+
+    for (numBitsSet = 0; mylong != 0; numBitsSet++)
+    {
+        mylong &= mylong - 1;
+    }
+
+    return numBitsSet;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_NumConnectionsExaminedForNode);
 
