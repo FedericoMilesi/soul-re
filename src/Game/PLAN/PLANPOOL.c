@@ -203,7 +203,11 @@ void PLANPOOL_MarkTwoNodesAsConnected(PlanningNode *node1, PlanningNode *node2, 
     node1->connections |= 1 << node2Index;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_MarkTwoNodesAsNotConnected);
+void PLANPOOL_MarkTwoNodesAsNotConnected(PlanningNode *node1, PlanningNode *node2, PlanningNode *planningPool)
+{
+    node1->connectionStatus |= 1 << (node2 - planningPool);
+    node1->connections &= ~(1 << (node2 - planningPool));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_GetClosestUnexploredValidNeighbor);
 
