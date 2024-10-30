@@ -104,7 +104,20 @@ int PLANPOOL_NumberOfNodesOfSource(PlanningNode *planningPool, char nodeSource)
 }
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_GetNodeWithID);
+PlanningNode *PLANPOOL_GetNodeWithID(PlanningNode *planningPool, int type, int id, long suID)
+{
+    int i;
+
+    for (i = 0; i < poolManagementData->numNodesInPool; i++)
+    {
+        if ((planningPool[i].nodeType == type) && (planningPool[i].id == id) && (planningPool[i].streamUnitID == suID))
+        {
+            return &planningPool[i];
+        }
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_GetNodeByPosition);
 
