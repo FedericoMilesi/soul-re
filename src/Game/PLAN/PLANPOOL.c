@@ -189,7 +189,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_AppropriatePair);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_AreTwoNodesConnected);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_MarkTwoNodesAsConnected);
+void PLANPOOL_MarkTwoNodesAsConnected(PlanningNode *node1, PlanningNode *node2, PlanningNode *planningPool)
+{
+    int node1Index;
+    int node2Index;
+
+    node1Index = node1 - planningPool;
+    node2Index = node2 - planningPool;
+
+    poolManagementData->distanceMatrix[node1Index][node2Index] = clamp(MATH3D_DistanceBetweenPositions(&node1->pos, &node2->pos), 0, 65536);
+
+    node1->connectionStatus |= 1 << node2Index;
+    node1->connections |= 1 << node2Index;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_MarkTwoNodesAsNotConnected);
 
