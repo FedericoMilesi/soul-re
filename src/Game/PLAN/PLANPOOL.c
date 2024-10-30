@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/PLAN/PLAN.h"
+#include "Game/PLAN/PLANAPI.h"
 
 int PLANPOOL_NumNodesInPlan(PlanningNode *goalNode, PlanningNode *planningPool)
 {
@@ -37,7 +38,25 @@ int PLANPOOL_NumConnectionsForNode(PlanningNode *node)
     return PLANPOOL_CountBitsSetInLong(node->connections);
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_GetFirstNodeOfSource);
+#else
+PlanningNode *PLANPOOL_GetFirstNodeOfSource(PlanningNode *planningPool, char nodeSource)
+{
+    int i;
+
+    for (i = 0; i < poolManagementData->numNodesInPool; i++, planningPool++)
+    {
+        if ((planningPool->nodeType & 0x7) == nodeSource)
+        {
+            return planningPool;
+        }
+    }
+
+    return NULL;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_NumberOfNodesOfType);
 
