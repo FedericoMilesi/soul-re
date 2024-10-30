@@ -35,7 +35,52 @@ PlanningNode *PLANSRCH_FindNodeToExpand(PlanningNode *planningPool, PlanningNode
     return nodeToExpand;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANSRCH", PLANSRCH_ExpandNode);
+void PLANSRCH_ExpandNode(PlanningNode *planningPool, PlanningNode *nodeToExpand)
+{
+    int i;
+    int connectionStatus;
+    int connections;
+    int nodeToExpandIndex;
+
+    connectionStatus = nodeToExpand->connectionStatus;
+    connections = nodeToExpand->connections;
+
+    nodeToExpandIndex = nodeToExpand - planningPool;
+
+    nodeToExpand->flags |= 0x2;
+
+    for (i = 0; i < poolManagementData->numNodesInPool; i++)
+    {
+        if (((connectionStatus & 0x1)) && ((connections & 0x1)) && (&planningPool[i] != nodeToExpand))
+        {
+            long newCost;
+
+            newCost = nodeToExpand->cost + (short)poolManagementData->distanceMatrix[nodeToExpandIndex][i];
+
+            if ((!(planningPool[i].flags & 0x1)) || (newCost < planningPool[i].cost))
+            {
+                planningPool[i].parent = nodeToExpand - planningPool;
+
+                if (newCost < -0x7FFF)
+                {
+                    newCost = -0x7FFF;
+                }
+
+                if (newCost > 0x7FFF)
+                {
+                    newCost = 0x7FFF;
+                }
+
+                planningPool[i].cost = newCost;
+
+                planningPool[i].flags |= 0x1;
+            }
+        }
+
+        connectionStatus >>= 1;
+        connections >>= 1;
+    }
+}
 
 void PLANSRCH_InitNodesForSearch(PlanningNode *planningPool)
 {
