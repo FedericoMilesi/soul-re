@@ -147,7 +147,43 @@ PlanningNode *PLANPOOL_GetNodeByPosition(Position *currentPos, PlanningNode *pla
     return returnNode;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_GetClosestNode);
+#else
+PlanningNode *PLANPOOL_GetClosestNode(Position *pos, PlanningNode *planningPool, char distanceType)
+{
+    int i;
+    long dist;
+    long minDist;
+    PlanningNode *closestNode;
+
+    minDist = 0x7FFFFFFF;
+
+    closestNode = NULL;
+
+    for (i = 0; i < poolManagementData->numNodesInPool; i++)
+    {
+        if (distanceType == 0)
+        {
+            dist = MATH3D_LengthXY(pos->x - planningPool[i].pos.x, pos->y - planningPool[i].pos.y);
+        }
+        else
+        {
+            dist = MATH3D_LengthXYZ(pos->x - planningPool[i].pos.x, pos->y - planningPool[i].pos.y, pos->z - planningPool[i].pos.z);
+        }
+
+        if (dist < minDist)
+        {
+            minDist = dist;
+
+            closestNode = &planningPool[i];
+        }
+    }
+
+    return closestNode;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_AppropriatePair);
 
