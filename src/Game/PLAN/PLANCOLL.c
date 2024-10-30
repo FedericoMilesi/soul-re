@@ -7,7 +7,49 @@
 // static FindTerrainHit directionList[6];
 FindTerrainHit directionList[6];
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANCOLL", PLANCOLL_DoesLOSExistFinal);
+int PLANCOLL_DoesLOSExistFinal(Position *startPos, Position *endPos, int collideType, int passThroughHit, int zoffset)
+{
+    PCollideInfo pcollideinfo;
+    SVECTOR startPt;
+    SVECTOR endPt;
+    Level *temp;       // not from decls.h
+    TFace *temp2;      // not from decls.h
+    TextureFT3 *temp3; // not from decls.h
+
+    (void)collideType;
+
+    COPY_SVEC(SVector, (SVector *)&startPt, Position, startPos);
+    COPY_SVEC(SVector, (SVector *)&endPt, Position, endPos);
+
+    pcollideinfo.newPoint = &endPt;
+    pcollideinfo.oldPoint = &startPt;
+
+    pcollideinfo.collideType = 0x127;
+
+    pcollideinfo.inst = NULL;
+    pcollideinfo.instance = NULL;
+
+    startPt.vz += zoffset;
+    endPt.vz += zoffset;
+
+    COLLIDE_PointAndWorld(&pcollideinfo, NULL);
+
+    if ((passThroughHit != 0) && (pcollideinfo.type == 3) && (((TFace *)pcollideinfo.prim)->textoff != 0xFFFF))
+    {
+        temp = (Level *)pcollideinfo.inst;
+
+        temp2 = (TFace *)pcollideinfo.prim;
+
+        temp3 = (TextureFT3 *)((char *)temp->terrain->StartTextureList + temp2->textoff);
+
+        if ((temp3->attr & 0x1000))
+        {
+            return 1;
+        }
+    }
+
+    return pcollideinfo.type == 0;
+}
 
 int PLANCOLL_CheckUnderwaterPoint(Position *position)
 {
