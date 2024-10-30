@@ -2,13 +2,55 @@
 #include "Game/PLAN/PLANCOLL.h"
 #include "Game/MATH3D.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MEMPACK.h"
 
 // static FindTerrainHit directionList[6];
 FindTerrainHit directionList[6];
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANCOLL", PLANCOLL_DoesLOSExistFinal);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANCOLL", PLANCOLL_CheckUnderwaterPoint);
+int PLANCOLL_CheckUnderwaterPoint(Position *position)
+{
+    StreamUnit *streamUnit;
+    Level *level;
+    BSPTree *tree;
+    Sphere_noSq *sphere;
+    int i;
+    Position center;
+
+    streamUnit = &StreamTracker.StreamList[0];
+
+    for (i = 16; i != 0; i--, streamUnit++)
+    {
+        if ((streamUnit->used == 2) && (MEMPACK_MemoryValidFunc((char *)streamUnit->level) != 0))
+        {
+            level = streamUnit->level;
+
+            tree = level->terrain->BSPTreeArray;
+
+            sphere = &tree->bspRoot->sphere;
+
+            COPY_SVEC(Position, &center, Position, &sphere->position);
+
+            {
+                Position *_v0;
+
+                _v0 = &tree->globalOffset;
+
+                center.x += _v0->x;
+                center.y += _v0->y;
+                center.z += _v0->z;
+            }
+
+            if ((MATH3D_LengthXYZ(position->x - center.x, position->y - center.y, position->z - center.z) < sphere->radius) && (position->z < level->waterZLevel))
+            {
+                return streamUnit->StreamUnitID;
+            }
+        }
+    }
+
+    return -1;
+}
 
 int PLANCOLL_FindTerrainHitFinal(PlanCollideInfo *pci, int *placement, int distBefore, int distAfter, int start, int end)
 {
