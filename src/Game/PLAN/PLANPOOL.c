@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/PLAN/PLAN.h"
 #include "Game/PLAN/PLANAPI.h"
+#include "Game/MATH3D.h"
 
 int PLANPOOL_NumNodesInPlan(PlanningNode *goalNode, PlanningNode *planningPool)
 {
@@ -119,7 +120,32 @@ PlanningNode *PLANPOOL_GetNodeWithID(PlanningNode *planningPool, int type, int i
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_GetNodeByPosition);
+PlanningNode *PLANPOOL_GetNodeByPosition(Position *currentPos, PlanningNode *planningPool)
+{
+    int i;
+    unsigned long zDiff;
+    unsigned long minZDiff;
+    PlanningNode *returnNode;
+
+    minZDiff = -1;
+
+    returnNode = NULL;
+
+    for (i = 0; i < poolManagementData->numNodesInPool; i++)
+    {
+        if (MATH3D_LengthXY(currentPos->x - planningPool[i].pos.x, currentPos->y - planningPool[i].pos.y) < 11)
+        {
+            zDiff = abs(currentPos->z - planningPool[i].pos.z);
+
+            if (zDiff < minZDiff)
+            {
+                returnNode = &planningPool[i];
+            }
+        }
+    }
+
+    return returnNode;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_GetClosestNode);
 
