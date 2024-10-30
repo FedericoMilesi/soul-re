@@ -58,7 +58,28 @@ PlanningNode *PLANPOOL_GetFirstNodeOfSource(PlanningNode *planningPool, char nod
 }
 #endif
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_NumberOfNodesOfType);
+#else
+int PLANPOOL_NumberOfNodesOfType(PlanningNode *planningPool, char nodeType)
+{
+    int i;
+    int numNodesOfType;
+
+    numNodesOfType = 0;
+
+    for (i = 0; i < poolManagementData->numNodesInPool; i++, planningPool++)
+    {
+        if (planningPool->nodeType == nodeType)
+        {
+            numNodesOfType++;
+        }
+    }
+
+    return numNodesOfType;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_NumberOfNodesOfSource);
 
