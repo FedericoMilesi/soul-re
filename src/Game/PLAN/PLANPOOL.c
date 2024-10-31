@@ -187,7 +187,19 @@ PlanningNode *PLANPOOL_GetClosestNode(Position *pos, PlanningNode *planningPool,
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_AppropriatePair);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_AreTwoNodesConnected);
+int PLANPOOL_AreTwoNodesConnected(PlanningNode *node1, PlanningNode *node2, PlanningNode *planningPool)
+{
+    long node2Mask;
+
+    node2Mask = 1 << (node2 - planningPool);
+
+    if (((node1->connectionStatus & node2Mask)) && ((node1->connections & node2Mask)))
+    {
+        return 1;
+    }
+
+    return 0;
+}
 
 void PLANPOOL_MarkTwoNodesAsConnected(PlanningNode *node1, PlanningNode *node2, PlanningNode *planningPool)
 {
