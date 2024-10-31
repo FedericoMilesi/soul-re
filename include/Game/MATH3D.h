@@ -127,21 +127,6 @@ typedef enum MATH3D_AXIS
 	:                                     \
 	: "r"(r0), "r"(r1), "r"(r2))
 
-static inline long clamp(long v, long min, long max)
-{
-	if (v < min)
-	{
-		v = min;
-	}
-
-	if (v > max)
-	{
-		v = max;
-	}
-
-	return v;
-}
-
 long MATH3D_LengthXY(long x, long y);
 long MATH3D_FastSqrt0(long square);
 long MATH3D_LengthXYZ(long x, long y, long z);

@@ -205,11 +205,24 @@ void PLANPOOL_MarkTwoNodesAsConnected(PlanningNode *node1, PlanningNode *node2, 
 {
     int node1Index;
     int node2Index;
+    int temp; // not from decls.h
 
     node1Index = node1 - planningPool;
     node2Index = node2 - planningPool;
 
-    poolManagementData->distanceMatrix[node1Index][node2Index] = clamp(MATH3D_DistanceBetweenPositions(&node1->pos, &node2->pos), 0, 65536);
+    temp = MATH3D_DistanceBetweenPositions(&node1->pos, &node2->pos);
+
+    if (temp < 0)
+    {
+        temp = 0;
+    }
+
+    if (temp > 65536)
+    {
+        temp = 65536;
+    }
+
+    poolManagementData->distanceMatrix[node1Index][node2Index] = temp;
 
     node1->connectionStatus |= 1 << node2Index;
     node1->connections |= 1 << node2Index;
