@@ -71,7 +71,7 @@ void PLANSRCH_ExpandNode(PlanningNode *planningPool, PlanningNode *nodeToExpand)
                     newCost = 0x7FFF;
                 }
 
-                planningPool[i].cost = newCost;
+                planningPool[i].cost = (unsigned short)newCost;
 
                 planningPool[i].flags |= 0x1;
             }
