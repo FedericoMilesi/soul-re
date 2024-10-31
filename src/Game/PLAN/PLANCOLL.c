@@ -206,8 +206,8 @@ int PLANCOLL_DoesWaterPathUpExist(Position *startPos, Position *endPos, int coll
     diff.x = startPos->x - endPos->x;
     diff.y = startPos->y - endPos->y;
 
-    peakPos->x = endPos->x + ((diff.x * time_tot) / (time_ftop + time_tot));
-    peakPos->y = endPos->y + ((diff.y * time_tot) / (time_ftop + time_tot));
+    peakPos->x = (short)(endPos->x + ((diff.x * time_tot) / (time_ftop + time_tot)));
+    peakPos->y = (short)(endPos->y + ((diff.y * time_tot) / (time_ftop + time_tot)));
 
     return PLANCOLL_DoesLOSExistFinal(startPos, peakPos, collideType, passThroughHit, 0);
 }
