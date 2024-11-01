@@ -354,7 +354,30 @@ PlanningNode *PLANPOOL_GetClosestUnexploredValidNeighbor(PlanningNode *startNode
     return returnNode;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_ChangeNodePosition);
+void PLANPOOL_ChangeNodePosition(Position *newPos, PlanningNode *nodeToChange, PlanningNode *planningPool)
+{
+    int i;
+    unsigned char nodeToChangeMask;
+    int temp; // not from decls.h
+
+    temp = nodeToChange - planningPool;
+
+    if (nodeToChange != NULL)
+    {
+        nodeToChange->pos = *newPos;
+
+        nodeToChange->connectionStatus = 0;
+        nodeToChange->connections = 0;
+
+        nodeToChangeMask = 1 << temp;
+
+        for (i = 0; i < poolManagementData->numNodesInPool; i++)
+        {
+            planningPool[i].connectionStatus &= ~nodeToChangeMask;
+            planningPool[i].connections &= ~nodeToChangeMask;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_AddNodeToPool);
 
