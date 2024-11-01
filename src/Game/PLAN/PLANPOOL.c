@@ -414,4 +414,61 @@ PlanningNode *PLANPOOL_AddNodeToPool(Position *pos, PlanningNode *planningPool, 
     return nextAvailableNode;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_DeleteNodeFromPool);
+void PLANPOOL_DeleteNodeFromPool(PlanningNode *nodeToDelete, PlanningNode *planningPool)
+{
+    int indexOfNodeToDelete;
+    int lastNodeIndex;
+    long oldConnectionMask;
+    long newConnectionMask;
+    int i;
+    PlanningNode *lastNode;
+
+    if (nodeToDelete == NULL)
+    {
+        return;
+    }
+
+    lastNodeIndex = poolManagementData->numNodesInPool - 1;
+
+    lastNode = &planningPool[lastNodeIndex];
+
+    *nodeToDelete = *lastNode;
+
+    indexOfNodeToDelete = nodeToDelete - planningPool;
+
+    newConnectionMask = 1 << indexOfNodeToDelete;
+    oldConnectionMask = 1 << lastNodeIndex;
+
+    for (i = 0; i < (poolManagementData->numNodesInPool - 1); i++)
+    {
+        if ((planningPool[i].connectionStatus & oldConnectionMask))
+        {
+            planningPool[i].connectionStatus |= newConnectionMask;
+        }
+        else
+        {
+            planningPool[i].connectionStatus &= ~newConnectionMask;
+        }
+
+        planningPool[i].connectionStatus &= ~oldConnectionMask;
+
+        if ((planningPool[i].connections & oldConnectionMask))
+        {
+            planningPool[i].connections |= newConnectionMask;
+        }
+        else
+        {
+            planningPool[i].connections &= ~newConnectionMask;
+        }
+
+        planningPool[i].connections &= ~oldConnectionMask;
+    }
+
+    for (i = 0; i < (poolManagementData->numNodesInPool - 1); i++)
+    {
+        poolManagementData->distanceMatrix[indexOfNodeToDelete][i] = poolManagementData->distanceMatrix[lastNodeIndex][i];
+        poolManagementData->distanceMatrix[i][indexOfNodeToDelete] = poolManagementData->distanceMatrix[i][lastNodeIndex];
+    }
+
+    poolManagementData->numNodesInPool--;
+}
