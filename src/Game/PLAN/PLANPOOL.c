@@ -379,6 +379,39 @@ void PLANPOOL_ChangeNodePosition(Position *newPos, PlanningNode *nodeToChange, P
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_AddNodeToPool);
+PlanningNode *PLANPOOL_AddNodeToPool(Position *pos, PlanningNode *planningPool, short nodeType, short nodeID, long streamUnitID)
+{
+    PlanningNode *nextAvailableNode;
+    int i;
+
+    nextAvailableNode = NULL;
+
+    if (poolManagementData->numNodesInPool < 32)
+    {
+        nextAvailableNode = &planningPool[poolManagementData->numNodesInPool];
+
+        COPY_SVEC(Position, &nextAvailableNode->pos, Position, pos);
+
+        nextAvailableNode->connectionStatus = 1 << poolManagementData->numNodesInPool;
+        nextAvailableNode->connections = 0;
+
+        nextAvailableNode->flags = 0;
+
+        nextAvailableNode->nodeType = nodeType;
+
+        nextAvailableNode->id = nodeID;
+        nextAvailableNode->streamUnitID = streamUnitID;
+
+        poolManagementData->numNodesInPool++;
+
+        for (i = 0; i < poolManagementData->numNodesInPool; i++)
+        {
+            poolManagementData->distanceMatrix[poolManagementData->numNodesInPool - 1][i] = 0;
+            poolManagementData->distanceMatrix[i][poolManagementData->numNodesInPool - 1] = 0;
+        }
+    }
+
+    return nextAvailableNode;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_DeleteNodeFromPool);
