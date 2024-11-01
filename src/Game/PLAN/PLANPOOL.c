@@ -185,7 +185,81 @@ PlanningNode *PLANPOOL_GetClosestNode(Position *pos, PlanningNode *planningPool,
 }
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_AppropriatePair);
+int PLANPOOL_AppropriatePair(PlanningNode *node1, PlanningNode *node2)
+{
+    PlanningNode *temp;
+    int res;
+    int src;
+    int plc;
+    short type1;
+    short type2;
+    short placement1;
+    short placement2;
+    short source1;
+    short source2;
+
+    type1 = node1->nodeType;
+    type2 = node2->nodeType;
+
+    placement1 = (type1 >> 3) & 0x3;
+    placement2 = (type2 >> 3) & 0x3;
+
+    source1 = type1 & 0x7;
+    source2 = type2 & 0x7;
+
+    if (placement2 < placement1)
+    {
+        placement1 ^= placement2;
+        placement2 ^= placement1;
+        placement1 ^= placement2;
+
+        temp = node1;
+        node1 = node2;
+        node2 = temp;
+    }
+
+    if (source2 < source1)
+    {
+        source1 ^= source2;
+        source2 ^= source1;
+        source1 ^= source2;
+    }
+
+    plc = placement2 | (placement1 << 8);
+    src = source2 | (source1 << 8);
+
+    res = 1;
+
+    switch (plc)
+    {
+    case 2:
+        res = 0;
+        break;
+    case 3:
+        if (src != 1028)
+        {
+            res = 0;
+        }
+
+        break;
+    case 1:
+    case 258:
+        if ((src != 1028) || (node1->pos.z >= node2->pos.z) || (node2->pos.z >= (node1->pos.z + 800)) || (MATH3D_LengthXY(node1->pos.x - node2->pos.x, node1->pos.y - node2->pos.y) > 800))
+        {
+            res = 0;
+        }
+
+        break;
+    case 259:
+        res = 0;
+        break;
+    case 515:
+        res = 0;
+        break;
+    }
+
+    return res;
+}
 
 int PLANPOOL_AreTwoNodesConnected(PlanningNode *node1, PlanningNode *node2, PlanningNode *planningPool)
 {
