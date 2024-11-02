@@ -109,7 +109,34 @@ short PLANAPI_PairType(PlanningNode *node1, PlanningNode *node2)
     return placement2 | (placement1 << 8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_PassThroughHit);
+int PLANAPI_PassThroughHit(PlanningNode *node1, PlanningNode *node2)
+{
+    int src1;
+    int src2;
+    int res;
+
+    if (gameTrackerX.gameFlags < 0)
+    {
+        src1 = node1->nodeType & 0x7;
+        src2 = node2->nodeType & 0x7;
+
+        if (src2 < src1)
+        {
+            src1 ^= src2;
+            src2 ^= src1;
+            src1 ^= src2;
+        }
+
+        res = (src1 << 8) | src2;
+
+        if ((res == 260) || (res == 772) || (res == 516))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_UpdatePlanningDatabase);
 
