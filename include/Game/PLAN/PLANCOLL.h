@@ -29,5 +29,6 @@ typedef struct _fth
 
 int PLANCOLL_DoesStraightLinePathExist(Position *startPos, Position *endPos, int collideType);
 int PLANCOLL_DoesLOSExistFinal(Position *startPos, Position *endPos, int collideType, int passThroughHit, int zoffset);
+int PLANCOLL_FindTerrainHitFinal(PlanCollideInfo *pci, int *placement, int distBefore, int distAfter, int start, int end);
 
 #endif

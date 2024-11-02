@@ -4,6 +4,8 @@
 #include "Game/PLAN/PLANPOOL.h"
 #include "Game/GAMELOOP.h"
 #include "Game/TIMER.h"
+#include "Game/MATH3D.h"
+#include "Game/PLAN/PLANCOLL.h"
 
 // static long timerArray[10];
 long timerArray[10];
@@ -147,7 +149,51 @@ int PLANAPI_NumNodesInPool(void *planningPool)
     return poolManagementData->numNodesInPool;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_InitPlanMkrList);
+void PLANAPI_InitPlanMkrList(StreamUnit *streamUnit)
+{
+    int i;
+    int terrainFoundFlag;
+    Level *level;
+    unsigned short numPlanMkrs;
+    PlanMkr *planMkrList;
+
+    level = streamUnit->level;
+
+    planMkrList = level->PlanMarkerList;
+
+    numPlanMkrs = level->NumberOfPlanMarkers;
+
+    if (planMkrList != NULL)
+    {
+        for (i = 0; i < numPlanMkrs; i++)
+        {
+            PlanCollideInfo pci;
+
+            COPY_SVEC(Position, &pci.collidePos, Position, &planMkrList[i].pos);
+
+            if (!(planMkrList[i].id & 0x5000))
+            {
+                if ((planMkrList[i].id & 0x8000))
+                {
+                    terrainFoundFlag = PLANCOLL_FindTerrainHitFinal(&pci, NULL, -256, 640, 1, 4);
+                }
+                else if ((planMkrList[i].id & 0x2000))
+                {
+                    terrainFoundFlag = PLANCOLL_FindTerrainHitFinal(&pci, NULL, -256, 640, 5, 5);
+                }
+                else
+                {
+                    terrainFoundFlag = PLANCOLL_FindTerrainHitFinal(&pci, NULL, 128, -1024, 0, 0);
+                }
+
+                if (terrainFoundFlag != 0)
+                {
+                    COPY_SVEC(Position, &planMkrList[i].pos, Position, &pci.collidePos);
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_GetFlags);
 
