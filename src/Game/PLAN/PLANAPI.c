@@ -140,7 +140,12 @@ int PLANAPI_PassThroughHit(PlanningNode *node1, PlanningNode *node2)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_UpdatePlanningDatabase);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_NumNodesInPool);
+int PLANAPI_NumNodesInPool(void *planningPool)
+{
+    (void)planningPool;
+
+    return poolManagementData->numNodesInPool;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_InitPlanMkrList);
 
