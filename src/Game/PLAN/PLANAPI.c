@@ -91,7 +91,23 @@ INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_FindPathInGraphToTarge
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_InitPlanning);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_PairType);
+short PLANAPI_PairType(PlanningNode *node1, PlanningNode *node2)
+{
+    short placement1;
+    short placement2;
+
+    placement1 = (node1->nodeType >> 3) & 0x3;
+    placement2 = (node2->nodeType >> 3) & 0x3;
+
+    if (placement2 < placement1)
+    {
+        placement1 ^= placement2;
+        placement2 ^= placement1;
+        placement1 ^= placement2;
+    }
+
+    return placement2 | (placement1 << 8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_PassThroughHit);
 
