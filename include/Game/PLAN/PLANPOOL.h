@@ -8,5 +8,7 @@ int PLANPOOL_AreTwoNodesConnected(PlanningNode *node1, PlanningNode *node2, Plan
 int PLANPOOL_NumberOfNodesOfType(PlanningNode *planningPool, char nodeType);
 int PLANPOOL_NumberOfNodesOfSource(PlanningNode *planningPool, char nodeSource);
 void PLANPOOL_DeleteNodeFromPool(PlanningNode *nodeToDelete, PlanningNode *planningPool);
+PlanningNode *PLANPOOL_GetNodeByPosition(Position *currentPos, PlanningNode *planningPool);
+PlanningNode *PLANPOOL_GetFirstNodeOfSource(PlanningNode *planningPool, char nodeSource);
 
 #endif

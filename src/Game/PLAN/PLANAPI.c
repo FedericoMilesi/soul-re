@@ -2,6 +2,7 @@
 #include "Game/PLAN/PLAN.h"
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/PLAN/PLANPOOL.h"
+#include "Game/PLAN/ENMYPLAN.h"
 #include "Game/GAMELOOP.h"
 #include "Game/TIMER.h"
 #include "Game/MATH3D.h"
@@ -89,7 +90,17 @@ void PLANAPI_DeleteNodeFromPoolByUnit(long streamUnitID)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_FindPathInGraphToTarget);
+int PLANAPI_FindPathInGraphToTarget(Position *startPos, EnemyPlanData *planData, int validNodeTypes)
+{
+    PlanningNode *planningPool;
+    PlanningNode *startNode;
+
+    planningPool = gameTrackerX.planningPool;
+
+    startNode = PLANPOOL_GetNodeByPosition(startPos, planningPool);
+
+    PLANAPI_FindPathBetweenNodes(startNode, PLANPOOL_GetFirstNodeOfSource(planningPool, 3), planData, validNodeTypes);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_InitPlanning);
 
