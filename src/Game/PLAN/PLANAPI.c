@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/PLAN/PLAN.h"
+#include "Game/PLAN/PLANAPI.h"
 #include "Game/PLAN/PLANPOOL.h"
 #include "Game/GAMELOOP.h"
 #include "Game/TIMER.h"
@@ -63,7 +64,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_AddNodeOfTypeToPool);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_DeleteNodesFromPoolByType);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_DeleteNodeFromPoolByUnit);
+void PLANAPI_DeleteNodeFromPoolByUnit(long streamUnitID)
+{
+    PlanningNode *nodeToDelete;
+    PlanningNode *planningPool;
+    int i;
+
+    nodeToDelete = (PlanningNode *)gameTrackerX.planningPool;
+    planningPool = (PlanningNode *)gameTrackerX.planningPool;
+
+    for (i = 0; i < poolManagementData->numNodesInPool;)
+    {
+        if (nodeToDelete->streamUnitID == streamUnitID)
+        {
+            PLANPOOL_DeleteNodeFromPool(nodeToDelete, planningPool);
+        }
+        else
+        {
+            i++;
+            nodeToDelete++;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_FindPathInGraphToTarget);
 
