@@ -90,6 +90,8 @@
         "health.h": "c",
         "swim.h": "c",
         "attack.h": "c",
-        "steering.h": "c"
+        "steering.h": "c",
+        "timer.h": "c",
+        "planpool.h": "c"
     }
 }
