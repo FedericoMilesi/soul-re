@@ -93,8 +93,7 @@ void PLANAPI_DeleteNodeFromPoolByUnit(long streamUnitID)
     PlanningNode *planningPool;
     int i;
 
-    nodeToDelete = (PlanningNode *)gameTrackerX.planningPool;
-    planningPool = (PlanningNode *)gameTrackerX.planningPool;
+    nodeToDelete = planningPool = (PlanningNode *)gameTrackerX.planningPool;
 
     for (i = 0; i < poolManagementData->numNodesInPool;)
     {
