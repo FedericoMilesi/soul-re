@@ -2,7 +2,8 @@
 #define _VOICEXA_H_
 
 // size: 0x8
-typedef struct CdCommand {
+typedef struct CdCommand
+{
     // offset: 0000
     unsigned short flags;
     // offset: 0002
@@ -14,7 +15,8 @@ typedef struct CdCommand {
 } CdCommand;
 
 // size: 0x4
-typedef struct VoiceCommand {
+typedef struct VoiceCommand
+{
     // offset: 0000
     unsigned char voiceCmd;
     // offset: 0001
@@ -24,12 +26,14 @@ typedef struct VoiceCommand {
 } VoiceCommand;
 
 // size: 0x4
-typedef struct XAFileInfo {
+typedef struct XAFileInfo
+{
     int startPos;
 } XAFileInfo;
 
 // size: 0x128
-typedef struct XAVoiceTracker {
+typedef struct XAVoiceTracker
+{
     // offset: 0000 (4 bytes)
     struct CdlLOC currentPos;
     // offset: 0004
@@ -79,7 +83,8 @@ typedef struct XAVoiceTracker {
 } XAVoiceTracker;
 
 // size: 0x2
-typedef struct XAVoiceListEntry {
+typedef struct XAVoiceListEntry
+{
     unsigned short length;
 } XAVoiceListEntry;
 
@@ -89,5 +94,7 @@ void voiceCmdStop(XAVoiceTracker *vt, short cmdParam);
 void voiceCmdPause(XAVoiceTracker *vt, short cmdParam);
 void voiceCmdResume(XAVoiceTracker *vt, short cmdParam);
 void voiceCmdNull(XAVoiceTracker *vt, short cmdParam);
+void VOICEXA_Play(int voiceIndex, int queueRequests);
+int VOICEXA_IsPlaying();
 
 #endif

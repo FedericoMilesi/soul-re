@@ -3,6 +3,10 @@
 #include "Game/STRMLOAD.h"
 #include "Game/DEBUG.h"
 #include "Game/PSX/SUPPORT.h"
+#include "Game/FONT.h"
+#include "Game/TIMER.h"
+#include "Game/MEMPACK.h"
+#include "Game/VOICEXA.h"
 
 static LoadQueueEntry LoadQueue[40];
 
@@ -173,7 +177,213 @@ int STREAM_IsCdBusy(long *numberInQueue)
 static char D_800D19A4[] = "%s status %d\n";
 static char D_800D19B4[] = "(%d)";
 static char D_800D19BC[] = "Could not read directory hash %d\n";
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/STRMLOAD", STREAM_PollLoadQueue);
+#else
+int STREAM_PollLoadQueue()
+{
+    LOAD_ProcessReadQueue();
+
+    if (loadHead != NULL)
+    {
+        LoadQueueEntry *queueEntry;
+
+        queueEntry = loadHead;
+
+        if (gameTrackerX.debugFlags < 0)
+        {
+            FONT_Print("%s status %d\n", &queueEntry->loadEntry.fileName, queueEntry->status);
+        }
+
+        if ((!(gameTrackerX.gameFlags & 0x800)) || ((queueEntry->status != 1) && (queueEntry->status != 5) && (queueEntry->status != 8) && (queueEntry->status != 10)))
+        {
+            switch (queueEntry->status)
+            {
+            case 2:
+                if (LOAD_IsFileLoading() == 0)
+                {
+                    queueEntry->endLoadTime = TIMER_GetTimeMS() - queueEntry->endLoadTime;
+
+                    if (queueEntry->relocateBinary != 0)
+                    {
+                        long size;
+
+                        size = LOAD_RelocBinaryData(queueEntry->loadEntry.loadAddr, queueEntry->loadEntry.loadSize);
+
+                        if (queueEntry->mempackUsed != 0)
+                        {
+                            MEMPACK_Return((char *)queueEntry->loadEntry.loadAddr, size);
+                        }
+
+                        queueEntry->relocateBinary = 0;
+                    }
+
+                    if (queueEntry->loadEntry.retFunc != NULL)
+                    {
+                        queueEntry->status = 7;
+                    }
+                    else
+                    {
+                        queueEntry->status = 4;
+
+                        if (queueEntry->mempackUsed != 0)
+                        {
+                            MEMPACK_SetMemoryDoneStreamed((char *)queueEntry->loadEntry.loadAddr);
+                        }
+
+                        STREAM_RemoveQueueHead();
+                    }
+                }
+
+                break;
+            case 7:
+                queueEntry->status = 4;
+
+                STREAM_RemoveQueueHead();
+
+                if (queueEntry->mempackUsed != 0)
+                {
+                    MEMPACK_SetMemoryDoneStreamed((char *)queueEntry->loadEntry.loadAddr);
+                }
+
+                STREAM_NextLoadFromHead();
+
+                if (queueEntry->loadEntry.retFunc != NULL)
+                {
+                    void (*retFunc)(void *, void *, void *); // not from decls.h
+
+                    retFunc = queueEntry->loadEntry.retFunc;
+
+                    retFunc(queueEntry->loadEntry.loadAddr, queueEntry->loadEntry.retData, queueEntry->loadEntry.retData2);
+                }
+
+                STREAM_NextLoadAsNormal();
+                break;
+            case 1:
+                queueEntry->endLoadTime = TIMER_GetTimeMS();
+
+                LOAD_NonBlockingReadFile(&queueEntry->loadEntry);
+
+                if (LOAD_ChangeDirectoryFlag() != 0)
+                {
+                    LoadQueueEntry *newQueue;
+
+                    newQueue = STREAM_AddQueueEntryToHead();
+
+                    sprintf(&newQueue->loadEntry.fileName[0], "(%d)", queueEntry->loadEntry.dirHash);
+
+                    newQueue->loadEntry.dirHash = queueEntry->loadEntry.dirHash;
+                    newQueue->loadEntry.fileHash = 0;
+
+                    newQueue->status = 10;
+                }
+                else
+                {
+                    queueEntry->status = 2;
+
+                    if (queueEntry->mempackUsed != 0)
+                    {
+                        MEMPACK_SetMemoryBeingStreamed((char *)queueEntry->loadEntry.loadAddr);
+                    }
+
+                    if (queueEntry->loadEntry.retPointer != NULL)
+                    {
+                        *queueEntry->loadEntry.retPointer = queueEntry->loadEntry.loadAddr;
+                    }
+                }
+
+                break;
+            case 5:
+                queueEntry->loadEntry.loadAddr = LOAD_InitBuffers();
+
+                queueEntry->endLoadTime = TIMER_GetTimeMS();
+
+                LOAD_CD_ReadPartOfFile(&queueEntry->loadEntry);
+
+                if (LOAD_ChangeDirectoryFlag() != 0)
+                {
+                    LoadQueueEntry *newQueue;
+
+                    newQueue = STREAM_AddQueueEntryToHead();
+
+                    sprintf(&newQueue->loadEntry.fileName[0], "(%d)", queueEntry->loadEntry.dirHash);
+
+                    newQueue->loadEntry.dirHash = queueEntry->loadEntry.dirHash;
+                    newQueue->loadEntry.fileHash = 0;
+
+                    newQueue->status = 10;
+
+                    LOAD_CleanUpBuffers();
+                }
+                else
+                {
+                    queueEntry->status = 6;
+
+                    queueEntry->loadEntry.posInFile = 0;
+                }
+
+                break;
+            case 6:
+                if (LOAD_IsFileLoading() == 0)
+                {
+                    queueEntry->endLoadTime = TIMER_GetTimeMS() - queueEntry->endLoadTime;
+
+                    queueEntry->status = 4;
+
+                    STREAM_RemoveQueueHead();
+
+                    LOAD_CleanUpBuffers();
+
+                    if (queueEntry->loadEntry.retFunc == VRAM_TransferBufferToVram)
+                    {
+                        VRAM_LoadReturn(queueEntry->loadEntry.loadAddr, queueEntry->loadEntry.retData, queueEntry->loadEntry.retData2);
+                    }
+                }
+
+                break;
+            case 8:
+                queueEntry->status = 9;
+
+                VOICEXA_Play(queueEntry->loadEntry.fileHash, 0);
+                break;
+            case 9:
+                if (VOICEXA_IsPlaying() == 0)
+                {
+                    LOAD_InitCdStreamMode();
+
+                    STREAM_RemoveQueueHead();
+                }
+
+                break;
+            case 10:
+                queueEntry->endLoadTime = TIMER_GetTimeMS();
+
+                if (LOAD_ChangeDirectoryByID(queueEntry->loadEntry.dirHash) == 0)
+                {
+                    DEBUG_FatalError("Could not read directory hash %d\n", queueEntry->loadEntry.dirHash);
+                }
+
+                queueEntry->status = 11;
+                break;
+            case 11:
+                if (LOAD_IsFileLoading() == 0)
+                {
+                    queueEntry->endLoadTime = TIMER_GetTimeMS() - queueEntry->endLoadTime;
+
+                    STREAM_RemoveQueueHead();
+                }
+
+                break;
+            case 3:
+            case 4:
+            }
+        }
+    }
+
+    return numLoads;
+}
+#endif
 
 LoadQueueEntry *STREAM_SetUpQueueEntry(char *fileName, void *retFunc, void *retData, void *retData2, void **retPointer, int fromhead)
 {
@@ -257,7 +467,8 @@ void LOAD_LoadToAddress(char *fileName, void *loadAddr, long relocateBinary)
 
     currentEntry->mempackUsed = 0;
 
-    while (STREAM_PollLoadQueue() != 0);
+    while (STREAM_PollLoadQueue() != 0)
+        ;
 }
 
 void LOAD_NonBlockingBinaryLoad(char *fileName, void *retFunc, void *retData, void *retData2, void **retPointer, int memType)
@@ -313,7 +524,8 @@ long *LOAD_ReadFile(char *fileName, unsigned char memType)
 
     STREAM_QueueNonblockingLoads(fileName, memType, NULL, NULL, NULL, &loadAddr, 0);
 
-    while (STREAM_PollLoadQueue() != 0);
+    while (STREAM_PollLoadQueue() != 0)
+        ;
 
     return (long *)loadAddr;
 }
@@ -369,7 +581,7 @@ void LOAD_AbortFileLoad(char *fileName, void *retFunc)
     LoadQueueEntry *prev;
     long hash;
     typedef void (*ret)(long *, void *, void *); // not from decls.h
-    ret returnFunction; // not from decls.h
+    ret returnFunction;                          // not from decls.h
 
     if (loadHead != NULL)
     {
