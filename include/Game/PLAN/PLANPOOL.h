@@ -10,5 +10,6 @@ int PLANPOOL_NumberOfNodesOfSource(PlanningNode *planningPool, char nodeSource);
 void PLANPOOL_DeleteNodeFromPool(PlanningNode *nodeToDelete, PlanningNode *planningPool);
 PlanningNode *PLANPOOL_GetNodeByPosition(Position *currentPos, PlanningNode *planningPool);
 PlanningNode *PLANPOOL_GetFirstNodeOfSource(PlanningNode *planningPool, char nodeSource);
+int PLANPOOL_NumNodesInPlan(PlanningNode *goalNode, PlanningNode *planningPool);
 
 #endif

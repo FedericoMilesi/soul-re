@@ -14,7 +14,27 @@ long timerArray[10];
 // static long timerIndex;
 long timerIndex;
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_ConvertPlanIntoEnmyPlanDataFormat);
+void PLANAPI_ConvertPlanIntoEnmyPlanDataFormat(PlanningNode *goalNode, EnemyPlanData *planData, PlanningNode *planningPool)
+{
+    PlanningNode *currentNode;
+    int i;
+
+    currentNode = goalNode;
+
+    planData->numWayPoints = PLANPOOL_NumNodesInPlan(goalNode, planningPool);
+
+    for (i = planData->numWayPoints - 1; i >= 0; i--)
+    {
+        if (i < 8)
+        {
+            planData->wayPointArray[i] = currentNode->pos;
+            planData->nodeTypeArray[i] = currentNode->nodeType;
+            planData->nodeSkipArray[i] = 0;
+        }
+
+        currentNode = &planningPool[currentNode->parent];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_FindPathBetweenNodes);
 
