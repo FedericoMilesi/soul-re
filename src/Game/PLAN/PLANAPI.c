@@ -85,7 +85,27 @@ void PLANAPI_DoTimingCalcsAndDrawing(long startTime, PlanningNode *planningPool)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_AddNodeOfTypeToPool);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_DeleteNodesFromPoolByType);
+void PLANAPI_DeleteNodesFromPoolByType(int nodeSource)
+{
+    PlanningNode *planningPool;
+    PlanningNode *nodeToDelete;
+    int i;
+
+    planningPool = nodeToDelete = gameTrackerX.planningPool;
+
+    for (i = 0; i < poolManagementData->numNodesInPool;)
+    {
+        if ((nodeToDelete->nodeType & 0x7) == nodeSource)
+        {
+            PLANPOOL_DeleteNodeFromPool(nodeToDelete, planningPool);
+        }
+        else
+        {
+            i++;
+            nodeToDelete++;
+        }
+    }
+}
 
 void PLANAPI_DeleteNodeFromPoolByUnit(long streamUnitID)
 {
