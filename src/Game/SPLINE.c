@@ -291,6 +291,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNextPoint);
 } */
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetPreviousPoint);
+// TODO: migrate .sbss data to C in order to implement this code
+/* SVector *SplineGetPreviousPoint(Spline *spline, SplineDef *def)
+{
+    static SVector point;
+
+    if ((SplineGetPrev(spline, def) != 0) && (SplineGetData(spline, def, &point) != 0))
+    {
+        return &point;
+    }
+
+    return NULL;
+} */
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNearestPoint);
 
