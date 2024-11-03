@@ -649,3 +649,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetNextPoint);
 } */
 
 INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetPreviousPoint);
+// TODO: migrate .sbss data to C in order to implement this code
+/* SVector *SplineGetOffsetPreviousPoint(Spline *spline, SplineDef *def, long offset)
+{
+    static SVector point;
+
+    if ((SplineGetOffsetPrev(spline, def, offset) != 0) && (SplineGetData(spline, def, &point) != 0))
+    {
+        return &point;
+    }
+
+    return NULL;
+} */
