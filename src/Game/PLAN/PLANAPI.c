@@ -245,7 +245,30 @@ void PLANAPI_InitPlanMkrList(StreamUnit *streamUnit)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_GetFlags);
+int PLANAPI_GetFlags(int type)
+{
+    int chk;
+
+    switch (type)
+    {
+    case 20:
+        chk = 0x2000;
+        break;
+    case 28:
+        chk = 0x4000;
+        break;
+    case 12:
+        chk = 0x8000;
+        break;
+    case 5:
+        chk = 0x1000;
+        break;
+    default:
+        chk = 0;
+    }
+
+    return chk;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_FindNodePositionInUnit);
 
