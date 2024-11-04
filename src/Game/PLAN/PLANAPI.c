@@ -3,6 +3,7 @@
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/PLAN/PLANPOOL.h"
 #include "Game/PLAN/ENMYPLAN.h"
+#include "Game/PLAN/PLANSRCH.h"
 #include "Game/GAMELOOP.h"
 #include "Game/TIMER.h"
 #include "Game/MATH3D.h"
@@ -36,7 +37,32 @@ void PLANAPI_ConvertPlanIntoEnmyPlanDataFormat(PlanningNode *goalNode, EnemyPlan
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_FindPathBetweenNodes);
+int PLANAPI_FindPathBetweenNodes(PlanningNode *startNode, PlanningNode *goalNode, EnemyPlanData *planData, int validNodeTypes)
+{
+    PlanningNode *planningPool;
+    int successFlag;
+    PlanningNode *temp; // not from decls.h
+
+    planningPool = gameTrackerX.planningPool;
+
+    successFlag = 0;
+
+    if ((startNode != NULL) && (goalNode != NULL))
+    {
+        temp = PLANSRCH_FindPathInGraph(planningPool, startNode, goalNode, validNodeTypes);
+
+        if (temp != NULL)
+        {
+            PLANAPI_ConvertPlanIntoEnmyPlanDataFormat(temp, planData, planningPool);
+
+            successFlag = 1;
+
+            planData->goalUnitID = temp->streamUnitID;
+        }
+    }
+
+    return successFlag;
+}
 
 void PLANAPI_DoTimingCalcsAndDrawing(long startTime, PlanningNode *planningPool)
 {

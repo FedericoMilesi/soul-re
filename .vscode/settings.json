@@ -94,6 +94,7 @@
         "timer.h": "c",
         "planpool.h": "c",
         "plancoll.h": "c",
-        "enmyplan.h": "c"
+        "enmyplan.h": "c",
+        "plansrch.h": "c"
     }
 }
