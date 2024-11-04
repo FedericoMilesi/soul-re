@@ -270,6 +270,35 @@ int PLANAPI_GetFlags(int type)
     return chk;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_FindNodePositionInUnit);
+int PLANAPI_FindNodePositionInUnit(StreamUnit *streamUnit, Position *pos, int id, int type)
+{
+    Level *level;
+    int numPlanMkrs;
+    PlanMkr *planMkr;
+    int i;
+
+    if (streamUnit != NULL)
+    {
+        level = streamUnit->level;
+
+        planMkr = level->PlanMarkerList;
+
+        numPlanMkrs = level->NumberOfPlanMarkers;
+
+        id |= PLANAPI_GetFlags(type);
+
+        for (i = numPlanMkrs; i != 0; planMkr++, i--)
+        {
+            if (planMkr->id == id)
+            {
+                COPY_SVEC(Position, pos, Position, &planMkr->pos);
+
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_FindClosestNodePositionInUnit);
