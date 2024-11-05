@@ -710,10 +710,6 @@ void COLLIDE_PointAndInstance(PCollideInfo *pcollideInfo, Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndInstanceTrivialReject);
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndWorld);
-#else
 void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level)
 {
     int i;
@@ -882,7 +878,7 @@ void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level)
     {
         for (i = 0; i < 8; i++)
         {
-            instance = (Instance *)(&instanceList->group[dyna_clddyna[i]])->next;
+            instance = (Instance *)(&instanceList->group[dyna_cldstat[i]])->next;
 
             while (instance != NULL)
             {
@@ -896,7 +892,6 @@ void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level)
         }
     }
 }
-#endif
 
 long COLLIDE_ClosestPointInBoxToPoint(Position *boxPoint, HBox *hbox, SVector *point)
 {
