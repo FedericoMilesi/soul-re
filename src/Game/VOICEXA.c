@@ -279,7 +279,7 @@ void voiceCmdResume(XAVoiceTracker *vt, short cmdParam)
     }
 }
 
-void voiceCmdNull(struct XAVoiceTracker *vt, short cmdParam)
+void voiceCmdNull(XAVoiceTracker *vt, short cmdParam)
 {
     (void)vt;
     (void)cmdParam;

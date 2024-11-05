@@ -4,6 +4,7 @@
 #include "Game/RAZIEL/RAZLIB.h"
 #include "Game/RAZIEL/STEERING.h"
 #include "Game/RAZIEL/CONTROL.h"
+#include "Game/STATE.h"
 
 void StateHandlerWallGrab(CharacterState *In, int CurrentSection, intptr_t Data)
 {

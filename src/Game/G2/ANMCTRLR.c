@@ -6,6 +6,8 @@
 #include "Game/G2/ANMINTRP.h"
 #include "Game/MATH3D.h"
 #include "Game/HASM.h"
+#include "Game/G2/ANIMG2.h"
+#include "Game/G2/QUATG2.h"
 
 //static G2AnimControllerPool _controllerPool;
 G2AnimControllerPool _controllerPool;

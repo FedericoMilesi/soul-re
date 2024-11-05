@@ -6,6 +6,11 @@
 #include "Game/DEBUG.h"
 #include "Game/GAMEPAD.h"
 #include "Game/SCRIPT.h"
+#include "Game/GAMELOOP.h"
+#include "Game/STREAM.h"
+#include "Game/SOUND.h"
+#include "Game/INSTANCE.h"
+#include "Game/EVENT.h"
 
 static SavedInfoTracker savedInfoTracker;
 

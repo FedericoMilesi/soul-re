@@ -6,6 +6,7 @@
 #include "Game/SAVEINFO.h"
 #include "Game/LOAD3D.h"
 #include "Game/STRMLOAD.h"
+#include "Game/STREAM.h"
 
 extern int StCdIntrFlag;
 

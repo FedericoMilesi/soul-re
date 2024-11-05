@@ -8,6 +8,10 @@
 #include "Game/STATE.h"
 #include "Game/SIGNAL.h"
 #include "Game/PHYSOBS.h"
+#include "Game/STREAM.h"
+#include "Game/INSTANCE.h"
+#include "Game/FX.h"
+#include "Game/G2/QUATG2.h"
 
 void SetNoPtCollideInFamily(Instance *instance)
 {

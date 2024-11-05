@@ -3,40 +3,6 @@
 
 #include "common.h"
 
-// size: 0x8
-typedef struct burntTuneType {
-    // offset: 0000
-    int burntDist;
-    // offset: 0004
-    int fadeDelta;
-} burntTuneType;
-
-// size: 0x10
-typedef struct burntMessType {
-    // offset: 0000
-    int closestvert;
-    // offset: 0004
-    int closestdist;
-    // offset: 0008
-    int closestseg;
-    // offset: 000C (8 bytes)
-    struct burntTuneType *burntTune;
-} burntMessType;
-
-// size: 0x14
-typedef struct bloodyMessType {
-    // offset: 0000
-    int closestvert;
-    // offset: 0004
-    int closestdist;
-    // offset: 0008
-    int closestseg;
-    // offset: 000C
-    int bloodiedAVert;
-    // offset: 0010
-    int bloodIntensity;
-} bloodyMessType;
-
 void MON_DamageEffect(Instance *instance, evFXHitData *data);
 void MON_Flee(Instance *instance);
 void MON_Idle(Instance *instance);

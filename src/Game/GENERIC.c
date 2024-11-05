@@ -5,6 +5,8 @@
 #include "Game/SCRIPT.h"
 #include "Game/SAVEINFO.h"
 #include "Game/G2/ANMG2ILF.h"
+#include "Game/INSTANCE.h"
+#include "Game/STREAM.h"
 
 void GenericInit(Instance *instance, GameTracker *gameTracker)
 {

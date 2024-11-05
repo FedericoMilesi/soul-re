@@ -2,6 +2,8 @@
 #include "Game/RAZIEL/CONTROL.h"
 #include "Game/PLAYER.h"
 #include "Game/PHYSICS.h"
+#include "Game/GAMELOOP.h"
+#include "Game/INSTANCE.h"
 
 EXTERN STATIC Force *ExternalForces;
 

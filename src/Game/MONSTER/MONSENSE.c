@@ -5,6 +5,8 @@
 #include "Game/PHYSOBS.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/PHYSICS.h"
+#include "Game/GAMELOOP.h"
+#include "Game/INSTANCE.h"
 
 //static int gNumMonsters;
 int gNumMonsters;

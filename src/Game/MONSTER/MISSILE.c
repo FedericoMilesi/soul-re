@@ -4,6 +4,8 @@
 #include "Game/MONSTER/MISSILE.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/STATE.h"
+#include "Game/OBTABLE.h"
+#include "Game/INSTANCE.h"
 
 //static struct MissileGraphics MISSILE_objectTable[4];
 

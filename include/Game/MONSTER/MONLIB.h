@@ -2,21 +2,19 @@
 #define _MONLIB_H_
 
 #include "common.h"
-#include "Game/MONSTER/MONAPI.h"
-#include "Game/SAVEINFO.h"
 
 unsigned long MON_GetTime(Instance *instance);
 void MON_PlayRandomIdle(Instance *instance, int mode);
 void MON_TurnOnBodySpheres(Instance *instance);
 void MON_PlayAnimFromList(Instance *instance, char *animList, int animtype, int mode);
-void MON_SwitchState(Instance *instance, MonsterState state);
+void MON_SwitchState(Instance *instance, enum MonsterState state);
 int MON_TurnToPosition(Instance *instance, Position *position, short turnspeed);
 void MON_KillMonster(Instance *instance);
 void MON_TurnOffBodySpheres(Instance *instance);
 int MON_GetRandomDestinationInWorld(Instance *instance, Position *in, short r);
 void MON_StartSpecialFade(Instance *instance, int fadeLevel, int fadeTime);
-MonsterAnimation *MON_GetAnim(Instance *instance, char *animList, int index);
-void MON_PlayAnim(Instance *instance, MonsterAnim animtype, int mode);
+MonsterAnim *MON_GetAnim(Instance *instance, char *animList, int index);
+void MON_PlayAnim(Instance *instance, enum MonsterAnim animtype, int mode);
 void MON_ApplyPhysics(Instance *instance);
 void MON_BirthMana(Instance *instance);
 void MON_DisableHeadMove(Instance *instance);
@@ -36,7 +34,7 @@ Intro *MON_TestForTerrainImpale(Instance *instance, Terrain *terrain);
 void MON_CheckTerrainAndRespond(Instance *instance, BSPTree *bsp, TFace *tface);
 void MON_SetUpSaveInfo(Instance *instance, MonsterSaveInfo *saveData);
 void MON_GetSaveInfo(Instance *instance, MonsterSaveInfo *saveData);
-void MON_SwitchStateDoEntry(Instance *instance, MonsterState state);
+void MON_SwitchStateDoEntry(Instance *instance, enum MonsterState state);
 void MON_RelocateCoords(Instance *instance, SVector *offset);
 void MON_LookInDirection(Instance *instance, short tx, short tz);
 short MON_FacingOffset(Instance *instance, Instance *target);
@@ -51,7 +49,7 @@ void MON_BirthSoul(Instance *instance, int link);
 void MON_SoulSucked(Instance *instance);
 void MON_ChangeHumanOpinion(Instance *instance);
 void MON_DropAllObjects(Instance *instance);
-int MON_AnimPlaying(Instance *instance, MonsterAnim animtype);
+int MON_AnimPlaying(Instance *instance, enum MonsterAnim animtype);
 void MON_PlayCombatIdle(Instance *instance, int mode);
 int MON_ShouldIFlee(Instance *instance);
 void MON_GetPlanSlot(MonsterVars *mv);
@@ -61,6 +59,6 @@ void MON_UnlinkFromRaziel(Instance *instance);
 int MON_SetUpKnockBack(Instance *instance, Instance *enemy, evMonsterHitData *data);
 int MON_OnGround(Instance *instance);
 void MON_DoDrainEffects(Instance *instance, Instance *ei);
-int MON_ShouldIAttackInstance(struct _Instance *instance, struct _Instance *ei);
+int MON_ShouldIAttackInstance(Instance *instance, Instance *ei);
 
 #endif

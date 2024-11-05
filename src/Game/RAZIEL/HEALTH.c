@@ -7,6 +7,10 @@
 #include "Game/GAMEPAD.h"
 #include "Game/CAMERA.h"
 #include "Game/FX.h"
+#include "Game/INSTANCE.h"
+#include "Game/STATE.h"
+#include "Game/STREAM.h"
+#include "Game/SOUND.h"
 
 extern char D_800D1D1C[];
 void InitHealthSystem()

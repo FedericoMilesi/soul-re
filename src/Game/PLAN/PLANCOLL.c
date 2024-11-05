@@ -3,6 +3,8 @@
 #include "Game/MATH3D.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MEMPACK.h"
+#include "Game/STREAM.h"
+#include "Game/COLLIDE.h"
 
 // static FindTerrainHit directionList[6];
 FindTerrainHit directionList[6];

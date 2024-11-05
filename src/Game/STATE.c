@@ -4,6 +4,7 @@
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/MEMPACK.h"
 #include "Game/G2/INSTNCG2.h"
+#include "Game/INSTANCE.h"
 
 static char circBuf[4096];
 

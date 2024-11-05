@@ -478,7 +478,7 @@ int MATH3D_veclen2(int ix, int iy)
     return (((ix - (ix >> 5)) - (ix >> 7)) + (temp >> 2)) + (temp >> 6);
 }
 
-void MATH3D_RotateAxisToVector(MATRIX *dest, MATRIX *src, SVector *vec, MATH3D_AXIS axis)
+void MATH3D_RotateAxisToVector(MATRIX *dest, MATRIX *src, SVector *vec, enum MATH3D_AXIS axis)
 {
     MATRIX xform;
     G2Quat rot;
@@ -491,7 +491,7 @@ void MATH3D_RotateAxisToVector(MATRIX *dest, MATRIX *src, SVector *vec, MATH3D_A
 
     if ((unsigned int)axis >= AXIS_NEG_X)
     {
-        axis = (MATH3D_AXIS)((unsigned int)axis - AXIS_NEG_X);
+        axis = (enum MATH3D_AXIS)((unsigned int)axis - AXIS_NEG_X);
 
         px = -src->m[0][(unsigned int)axis];
         py = -src->m[1][(unsigned int)axis];

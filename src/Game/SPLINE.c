@@ -2,6 +2,7 @@
 #include "Game/SPLINE.h"
 #include "Game/MATH3D.h"
 #include "Game/PSX/PSX_G2/QUATVM.h"
+#include "Game/G2/QUATG2.h"
 
 long FRAC_BITS = 15;
 

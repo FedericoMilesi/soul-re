@@ -1,7 +1,7 @@
 #ifndef _LOAD3D_H_
 #define _LOAD3D_H_
 
-#include "Game/STRMLOAD.h"
+#include "common.h"
 
 void LOAD_CleanUpBuffers();
 void LOAD_StopLoad();

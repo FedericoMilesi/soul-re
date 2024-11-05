@@ -11,6 +11,10 @@
 #include "Game/MEMPACK.h"
 #include "Game/EVENT.h"
 #include "Game/STRMLOAD.h"
+#include "Game/STREAM.h"
+#include "Game/LIGHT3D.h"
+#include "Game/INSTANCE.h"
+#include "Game/STATE.h"
 
 DebugMenuLine levelSelectMenu[];
 DebugMenuLine debugRazielMenu[];

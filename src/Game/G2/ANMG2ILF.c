@@ -2,6 +2,7 @@
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/G2/ANMINTRP.h"
 #include "Game/G2/TIMERG2.h"
+#include "Game/G2/ANIMG2.h"
 
 short G2Anim_GetElapsedTime(G2Anim *anim)
 {

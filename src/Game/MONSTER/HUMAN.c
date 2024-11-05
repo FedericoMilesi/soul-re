@@ -9,6 +9,11 @@
 #include "Game/GAMEPAD.h"
 #include "Game/SAVEINFO.h"
 #include "Game/PSX/SUPPORT.h"
+#include "Game/MONSTER/MONAPI.h"
+#include "Game/OBTABLE.h"
+#include "Game/INSTANCE.h"
+#include "Game/STATE.h"
+#include "Game/SOUND.h"
 
 MonsterStateChoice HUMAN_StateChoiceTable[] = {
     { 9, { HUMAN_StunnedEntry, HUMAN_Stunned } },

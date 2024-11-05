@@ -9,6 +9,7 @@
 #include "Game/MEMPACK.h"
 #include "Game/MATH3D.h"
 #include "Game/DRAW.h"
+#include "Game/INSTANCE.h"
 
 EXTERN STATIC short HUD_Captured;
 

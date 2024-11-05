@@ -11,6 +11,13 @@
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/G2/INSTNCG2.h"
+#include "Game/GAMELOOP.h"
+#include "Game/OBTABLE.h"
+#include "Game/INSTANCE.h"
+#include "Game/SOUND.h"
+#include "Game/FX.h"
+#include "Game/COLLIDE.h"
+#include "Game/G2/QUATG2.h"
 
 void PHYSOB_PlayDropSound(Instance *instance)
 {
@@ -1651,7 +1658,7 @@ void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker)
                 if ((level != NULL) && (instance->position.z < level->waterZLevel))
                 {
                     PhysObProjectileProperties *ProjProp;
-                    PhysObProjectileData *ProjData;
+                    PhysObProjData *ProjData;
 
                     ProjProp = (PhysObProjectileProperties *)instance->data;
 
@@ -2621,7 +2628,7 @@ PhysObWeaponAttributes *PhysObGetWeapon(Instance *instance)
     if (CheckPhysObFamily(instance, 7) != 0)
     {
         PhysObProjectileProperties *Prop;
-        PhysObProjectileData *temp; // not from decls.h
+        PhysObProjData *temp; // not from decls.h
         evObjectBirthProjectileData *temp2; // not from decls.h
 
         Prop = (PhysObProjectileProperties *)instance->data;
@@ -3416,11 +3423,11 @@ void PhysicalRelocateTune(Object *object, long offset)
         if (properties->Properties.family == 7)
         {
             PhysObProjectileProperties *prop;
-            PhysObProjectileData *temp; // not from decls.h
+            PhysObProjData *temp; // not from decls.h
 
             prop = (PhysObProjectileProperties *)object->data;
 
-            prop->data = (PhysObProjectileData *)OFFSET_DATA(prop->data, offset);
+            prop->data = (PhysObProjData *)OFFSET_DATA(prop->data, offset);
 
             if (prop->data != NULL)
             {

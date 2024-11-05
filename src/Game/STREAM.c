@@ -30,6 +30,7 @@
 #include "Game/GAMEPAD.h"
 #include "Game/FONT.h"
 #include "Game/DRAW.h"
+#include "Game/LIST.h"
 
 short M_TrackClutUpdate;
 
@@ -66,7 +67,6 @@ short RENDER_currentStreamUnitID;
 
 static int s_zval;
 
-/* TODO: Move these function declarations over to STREAM.h */
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
 void RelocateTerrain(Terrain *terrain, SVector *offset);
@@ -79,9 +79,6 @@ void RelocateSFXMarkers(SFXMkr *sfxMkrList, int numSFXMkrs, SVector *offset);
 void RelocateInstances(SVector *offset);
 void RelocatePlanPool(PlanningNode *planPool, SVector *offset);
 void RelocateStreamPortals(StreamUnitPortal *StreamUnitList, int NumStreamUnits, SVector *offset);
-void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit);
-void MORPH_UpdateTrackingPoint(TFace *face, Level *level);
-BSPTree *STREAM_GetBspTree(StreamUnit *streamUnit, long bspNumber);
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName)
 {

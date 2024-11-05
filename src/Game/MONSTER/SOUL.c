@@ -11,6 +11,10 @@
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONMSG.h"
 #include "Game/MONSTER/MONSENSE.h"
+#include "Game/INSTANCE.h"
+#include "Game/COLLIDE.h"
+#include "Game/SOUND.h"
+#include "Game/STREAM.h"
 
 void SOUL_QueueHandler(Instance *instance)
 {
@@ -346,7 +350,7 @@ void SOUL_SoulSuck(Instance *instance)
                         int animIndex;
                         int animLength;
                         short duration;
-                        MonsterAnimation *animation;
+                        MonsterAnim *animation;
 
                         if (MON_AnimPlaying(instance, MONSTER_ANIM_SUCKED) == 0 && distance > 50)
                         {
