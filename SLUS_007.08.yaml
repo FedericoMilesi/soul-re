@@ -16,7 +16,7 @@ options:
   gp_value: 0x800D7598
   use_legacy_include_asm: False
   section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
-  auto_all_sections: []
+  auto_link_sections: []
   symbol_addrs_path:
     - symbol_addrs.txt
   reloc_addrs_path:
