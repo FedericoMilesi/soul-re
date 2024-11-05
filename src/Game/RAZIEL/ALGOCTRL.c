@@ -4,6 +4,7 @@
 #include "Game/MATH3D.h"
 #include "Game/INSTANCE.h"
 #include "Game/STATE.h"
+#include "Game/G2/QUATG2.h"
 
 EXTERN STATIC int AlgoControlFlag;
 

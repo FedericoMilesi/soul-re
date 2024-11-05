@@ -2,7 +2,6 @@
 #define _GAMEPAD_H_
 
 #include "common.h"
-#include "Game/GAMELOOP.h"
 
 extern ControllerPacket readGPBuffer1;
 

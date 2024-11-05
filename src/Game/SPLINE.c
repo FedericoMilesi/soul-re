@@ -2,8 +2,13 @@
 #include "Game/SPLINE.h"
 #include "Game/MATH3D.h"
 #include "Game/PSX/PSX_G2/QUATVM.h"
+#include "Game/G2/QUATG2.h"
 
 long FRAC_BITS = 15;
+
+unsigned long SplineGetData(Spline *spline, SplineDef *def, void *p);
+unsigned long SplineGetNext(Spline *spline, SplineDef *def);
+unsigned long SplineGetPrev(Spline *spline, SplineDef *def);
 
 void _SplineS2Pos(vecS *p, long s, SplineKey *key, SplineKey *key2)
 {
@@ -276,11 +281,12 @@ SVector *SplineGetFirstPoint(Spline *spline, SplineDef *def)
     return (SVector *)&spline->key->point;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNextPoint);
-// TODO: migrate .sbss data to C in order to implement this code
-/* SVector *SplineGetNextPoint(Spline *spline, SplineDef *def)
+SVector *SplineGetNextPoint(Spline *spline, SplineDef *def)
 {
+    static SVector nextrot; /*Unused*/
     static SVector point;
+
+    (void)nextrot;
 
     if ((SplineGetNext(spline, def) != 0) && (SplineGetData(spline, def, &point) != 0))
     {
@@ -288,11 +294,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNextPoint);
     }
 
     return NULL;
-} */
+}
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetPreviousPoint);
-// TODO: migrate .sbss data to C in order to implement this code
-/* SVector *SplineGetPreviousPoint(Spline *spline, SplineDef *def)
+SVector *SplineGetPreviousPoint(Spline *spline, SplineDef *def)
 {
     static SVector point;
 
@@ -302,15 +306,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetPreviousPoint);
     }
 
     return NULL;
-} */
+}
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNearestPoint);
-// TODO: migrate .sbss data to C in order to implement this code
-/* SVector *SplineGetNearestPoint(Spline *spline, SVector *point, SplineDef *def)
+SVector *SplineGetNearestPoint(Spline *spline, SVector *point, SplineDef *def)
 {
     static SVector dpoint;
+    static SVector p; /*Unused*/
     long dist;
-    long dist1;
     long closest_dist;
     int closest_keyframe;
     int adjacent_keyframe;
@@ -322,6 +324,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNearestPoint);
     SplineKey *key;
     Vector d;
     SplineDef tempdef;
+
+    (void)p;
 
     closest_dist = 0x7FFFFFFF;
 
@@ -465,7 +469,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNearestPoint);
     SplineGetData(spline, def, &dpoint);
 
     return &dpoint;
-} */
+}
 
 unsigned long SplineGetData(Spline *spline, SplineDef *def, void *p)
 {
@@ -795,9 +799,7 @@ unsigned long SplineGetOffsetPrev(Spline *spline, SplineDef *def, long fracOffse
     return movedSplineOk;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetNextPoint);
-// TODO: migrate .sbss data to C in order to implement this code
-/* SVector *SplineGetOffsetNextPoint(Spline *spline, SplineDef *def, long offset)
+SVector *SplineGetOffsetNextPoint(Spline *spline, SplineDef *def, long offset)
 {
     static SVector point;
 
@@ -807,11 +809,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetNextPoint);
     }
 
     return NULL;
-} */
+}
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetPreviousPoint);
-// TODO: migrate .sbss data to C in order to implement this code
-/* SVector *SplineGetOffsetPreviousPoint(Spline *spline, SplineDef *def, long offset)
+SVector *SplineGetOffsetPreviousPoint(Spline *spline, SplineDef *def, long offset)
 {
     static SVector point;
 
@@ -821,4 +821,4 @@ INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetPreviousPoint);
     }
 
     return NULL;
-} */
+}

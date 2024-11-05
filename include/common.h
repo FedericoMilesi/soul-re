@@ -18,7 +18,6 @@ typedef unsigned char u_char;
 
 #include "include_asm.h"
 #include "Game/TYPES.h"
-#include "Game/INSTANCE.h"
 #include "Libs/SDK.h"
 
 #define EXTERN extern

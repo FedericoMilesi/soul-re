@@ -6,6 +6,10 @@
 #include "Game/MEMPACK.h"
 #include "Game/GAMELOOP.h"
 #include "Game/CAMERA.h"
+#include "Game/STREAM.h"
+#include "Game/INSTANCE.h"
+#include "Game/SIGNAL.h"
+#include "Game/EVENT.h"
 
 long dyna_clddyna[8] = {
     0x0C, 0x0D, 0x0E, 0x0F, 0x1C, 0x1D, 0x1E, 0x1F};
@@ -706,10 +710,6 @@ void COLLIDE_PointAndInstance(PCollideInfo *pcollideInfo, Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndInstanceTrivialReject);
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndWorld);
-#else
 void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level)
 {
     int i;
@@ -878,7 +878,7 @@ void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level)
     {
         for (i = 0; i < 8; i++)
         {
-            instance = (Instance *)(&instanceList->group[dyna_clddyna[i]])->next;
+            instance = (Instance *)(&instanceList->group[dyna_cldstat[i]])->next;
 
             while (instance != NULL)
             {
@@ -892,7 +892,6 @@ void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level)
         }
     }
 }
-#endif
 
 long COLLIDE_ClosestPointInBoxToPoint(Position *boxPoint, HBox *hbox, SVector *point)
 {
@@ -1134,7 +1133,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndHFace);
 
 long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level)
 {
-    SandTScratch *CSpad;
+    struct SandTScratch *CSpad;
     void **stack;
     BSPNode *bspNode;
     Terrain *terrain;
@@ -1142,7 +1141,7 @@ long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level)
     void (*collideFunc)(); // not from decls.h
     short normal; // not from decls.h
 
-    CSpad = (SandTScratch *)getScratchAddr(114);
+    CSpad = (struct SandTScratch *)getScratchAddr(114);
 
     terrain = level->terrain;
 
@@ -1965,10 +1964,10 @@ void COLLIDE_SetBSPTreeFlag(CollideInfo *collideInfo, short flag)
 
 int COLLIDE_PointAndTfaceFunc(Terrain *terrain, BSPTree *bsp, SVector *orgNewPos, SVector *orgOldPos, TFace *tface, long ignoreAttr, long flags)
 {
-    PandTFScratch *CSpad;
+    struct PandTFScratch *CSpad;
     int result;
 
-    CSpad = (PandTFScratch *)getScratchAddr(16);
+    CSpad = (struct PandTFScratch *)getScratchAddr(16);
 
     result = 0;
 

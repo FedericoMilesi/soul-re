@@ -5,30 +5,24 @@
 #include "Game/PHYSOBS.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/PHYSICS.h"
+#include "Game/GAMELOOP.h"
+#include "Game/INSTANCE.h"
 
-//static int gNumMonsters;
-int gNumMonsters;
+STATIC int gNumMonsters;
 
-//static int gNumSpectralMonsters;
-int gNumSpectralMonsters;
+STATIC int gNumSpectralMonsters;
 
-//static int gNumMaterialMonsters;
-int gNumMaterialMonsters;
+STATIC int gNumMaterialMonsters;
 
-//static MonsterVars *monsterSenseArray[40];
-MonsterVars *monsterSenseArray[40];
+STATIC MonsterVars *monsterSenseArray[40];
 
-//static int lastSenseFrame;
-int lastSenseFrame;
+STATIC int lastSenseFrame;
 
-//static char monsterSensed[40];
-char monsterSensed[40];
+STATIC char monsterSensed[40];
 
-//static RadarInfo radarDir[8];
-RadarInfo radarDir[8];
+STATIC RadarInfo radarDir[8];
 
-//static unsigned char radarDirIndex[8];
-unsigned char radarDirIndex[8];
+STATIC unsigned char radarDirIndex[8];
 
 MonsterIR *MONSENSE_FindIR(MonsterVars *mv, Instance *instance)
 {

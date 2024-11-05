@@ -9,50 +9,51 @@
 #include "Game/MEMPACK.h"
 #include "Game/MATH3D.h"
 #include "Game/DRAW.h"
+#include "Game/INSTANCE.h"
 
 EXTERN STATIC short HUD_Captured;
 
-EXTERN STATIC short HUD_Count;
+STATIC short HUD_Count;
 
-EXTERN STATIC short HUD_Count_Overall;
+STATIC short HUD_Count_Overall;
 
-EXTERN STATIC short HUD_Pos_vel;
+STATIC short HUD_Pos_vel;
 
-EXTERN STATIC short HUD_Position;
+STATIC short HUD_Position;
 
-EXTERN STATIC short HUD_Rot_vel;
+STATIC short HUD_Rot_vel;
 
-EXTERN STATIC short HUD_Rotation;
+STATIC short HUD_Rotation;
 
-EXTERN STATIC short HUD_State;
+STATIC short HUD_State;
 
-EXTERN STATIC short HUD_Wait;
+STATIC short HUD_Wait;
 
-EXTERN STATIC int warpDraw;
+STATIC int warpDraw;
 
-EXTERN STATIC int glowdeg;
+STATIC int glowdeg;
 
-EXTERN STATIC SVector HUD_Cap_Pos;
+STATIC SVector HUD_Cap_Pos;
 
-EXTERN STATIC SVector HUD_Cap_Vel;
+STATIC SVector HUD_Cap_Vel;
 
 EXTERN STATIC short fx_going;
 
-EXTERN STATIC int fx_radius_old;
+STATIC int fx_radius_old;
 
-EXTERN STATIC int blast_range;
+STATIC int blast_range;
 
-EXTERN STATIC short glyph_trigger;
+STATIC short glyph_trigger;
 
-EXTERN STATIC short glyph_time;
+STATIC short glyph_time;
 
-EXTERN STATIC short glyph_cost;
+STATIC short glyph_cost;
 
-EXTERN STATIC int MANNA_Pickup_Time;
+STATIC int MANNA_Pickup_Time;
 
-EXTERN STATIC short MANNA_Position;
+STATIC short MANNA_Position;
 
-EXTERN STATIC short MANNA_Pos_vel;
+STATIC short MANNA_Pos_vel;
 
 FXBlastringEffect *fx_blastring;
 
@@ -271,10 +272,6 @@ void HUD_GetPlayerScreenPt(DVECTOR *center)
     PopMatrix();
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphDrawMenu);
-#else
 void GlyphDrawMenu(Instance *instance)
 {
     Position place;
@@ -404,7 +401,6 @@ void GlyphDrawMenu(Instance *instance)
 
     FX_DrawScreenPoly(2, (data->glyph_time / glyphtunedata->glyph_darkness) | (((data->glyph_time / glyphtunedata->glyph_darkness) << 16) | ((data->glyph_time / glyphtunedata->glyph_darkness) << 8)), 32);
 }
-#endif
 
 long GlyphTime(int time)
 {
@@ -462,10 +458,6 @@ void ShrinkGlyphMenu(Instance *instance)
     data->glyph_open = 0;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", EnlargeGlyphMenu);
-#else
 void EnlargeGlyphMenu(Instance *instance)
 {
     GlyphData *data;
@@ -502,7 +494,6 @@ void EnlargeGlyphMenu(Instance *instance)
 
     data->glyph_open = 1;
 }
-#endif
 
 void _GlyphOffProcess(Instance *instance, int data1, int data2)
 {

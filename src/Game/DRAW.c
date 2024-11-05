@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/DRAW.h"
+#include "Game/VRAM.h"
 
 SVECTOR shadow_vertices[11];
 

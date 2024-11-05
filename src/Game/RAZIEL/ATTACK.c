@@ -13,6 +13,10 @@
 #include "Game/RAZIEL/SWIM.h"
 #include "Game/REAVER.h"
 #include "Game/FX.h"
+#include "Game/GAMELOOP.h"
+#include "Game/INSTANCE.h"
+#include "Game/STREAM.h"
+#include "Game/SOUND.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerDecodeHold);
 

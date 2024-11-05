@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"
+#include "Game/EVENT.h"
 
 EXTERN STATIC short pause_redraw_flag;
 

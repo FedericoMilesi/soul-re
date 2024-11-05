@@ -76,7 +76,7 @@ void VWRAITH_PursueEntry(Instance *instance)
 
     MonsterVars *mv;
     MonsterAttributes *ma;
-    MonsterAnimation *mAnim;
+    MonsterAnim *mAnim;
 
     mv = (MonsterVars*) instance->extraData;
     
@@ -92,7 +92,7 @@ void VWRAITH_PursueEntry(Instance *instance)
     }
     
     ma = (MonsterAttributes*) instance->data;
-    mAnim = (MonsterAnimation*) ma->tunData;
+    mAnim = (MonsterAnim*) ma->tunData;
     
     MON_PlayAnimFromList(instance, ma->auxAnimList, (signed char) mAnim->index[2], 1);
 

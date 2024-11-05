@@ -7,14 +7,11 @@
 #include "Game/G2/ANMINTRP.h"
 #include "Game/HASM.h"
 
-//static G2AnimChanStatusBlockPool _chanStatusBlockPool;
-G2AnimChanStatusBlockPool _chanStatusBlockPool;
+STATIC G2AnimChanStatusBlockPool _chanStatusBlockPool;
 
-//static G2AnimInterpStateBlockPool _interpStateBlockPool;
-G2AnimInterpStateBlockPool _interpStateBlockPool;
+STATIC G2AnimInterpStateBlockPool _interpStateBlockPool;
 
-//static G2AnimControllerPool _controllerPool;
-G2AnimControllerPool _controllerPool;
+STATIC G2AnimControllerPool _controllerPool;
 
 G2Bool G2Anim_Install()
 {

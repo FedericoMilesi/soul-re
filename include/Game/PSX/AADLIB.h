@@ -1,7 +1,7 @@
 #ifndef _AADLIB_H_
 #define _AADLIB_H_
 
-#include "Game/SOUND.h"
+#include "common.h"
 
 int aadIsSfxLoaded(unsigned int toneID);
 int aadFreeDynamicSfx(int handle);

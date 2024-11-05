@@ -3,9 +3,10 @@
 #include "Game/MATH3D.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MEMPACK.h"
+#include "Game/STREAM.h"
+#include "Game/COLLIDE.h"
 
-// static FindTerrainHit directionList[6];
-FindTerrainHit directionList[6];
+STATIC FindTerrainHit directionList[6];
 
 int PLANCOLL_DoesLOSExistFinal(Position *startPos, Position *endPos, int collideType, int passThroughHit, int zoffset)
 {

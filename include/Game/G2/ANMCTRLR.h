@@ -1,48 +1,7 @@
 #ifndef _ANMCTRLR_H_
 #define _ANMCTRLR_H_
 
-#include "Game/G2/ANIMG2.h"
-#include "Game/G2/ANMINTRP.h"
-
-typedef struct _G2AnimController_Type
-{
-    unsigned short next;
-    unsigned char type;
-    unsigned char segNumber;
-    void *callbackData;
-    unsigned short flags;
-    short duration;
-    short elapsedTime;
-    struct _G2AnimAlphaTable_Type *alphaTable;
-    union {
-        struct {
-            unsigned long (*function)();
-            void *fnData;
-        } callback;
-        struct {
-            struct _G2SVector3_Type base;
-            struct _G2SVector3_Type offset;
-        } vector;
-        struct {
-            struct _G2Quat_Type src;
-            struct _G2Quat_Type dest;
-        } quat;
-    } data;
-} G2AnimController;
-
-// size: 0x10
-typedef struct _G2AnimControllerPool_Type {
-    // offset: 0000
-    unsigned short blockSize;
-    // offset: 0002
-    unsigned short stackTop;
-    // offset: 0004
-    unsigned short stackSize;
-    // offset: 0008
-    unsigned short *stack;
-    // offset: 000C (36 bytes)
-    struct _G2AnimController_Type *blockPool;
-} G2AnimControllerPool;
+#include "common.h"
 
 G2Bool G2Anim_IsControllerActive(G2Anim *anim, int segNumber, int type);
 void G2Anim_DisableController(G2Anim *anim, int segNumber, int type);

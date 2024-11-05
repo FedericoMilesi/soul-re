@@ -30,6 +30,7 @@
 #include "Game/GAMEPAD.h"
 #include "Game/FONT.h"
 #include "Game/DRAW.h"
+#include "Game/LIST.h"
 
 short M_TrackClutUpdate;
 
@@ -66,7 +67,6 @@ short RENDER_currentStreamUnitID;
 
 static int s_zval;
 
-/* TODO: Move these function declarations over to STREAM.h */
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
 void RelocateTerrain(Terrain *terrain, SVector *offset);
@@ -79,9 +79,6 @@ void RelocateSFXMarkers(SFXMkr *sfxMkrList, int numSFXMkrs, SVector *offset);
 void RelocateInstances(SVector *offset);
 void RelocatePlanPool(PlanningNode *planPool, SVector *offset);
 void RelocateStreamPortals(StreamUnitPortal *StreamUnitList, int NumStreamUnits, SVector *offset);
-void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit);
-void MORPH_UpdateTrackingPoint(TFace *face, Level *level);
-BSPTree *STREAM_GetBspTree(StreamUnit *streamUnit, long bspNumber);
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName)
 {
@@ -302,7 +299,6 @@ int STREAM_InList(char *name, char **nameList)
 
 int STREAM_IsSpecialMonster(char *name)
 {
-    // static char *mon[6] = {"wallcr", "aluka", "ronin", "sluagh", "vwraith", NULL};
     static char *mon[] = {"wallcr", "aluka", "ronin", "sluagh", "vwraith", NULL};
 
     return STREAM_InList(name, mon);
@@ -3885,7 +3881,7 @@ void DrawFogRectangle(RECT *cliprect, PrimPool *primPool, int otzpos, unsigned l
 
         // addPrim(drawot[otzpos], polyg4);
         *(int *)polyg4 = getaddr(&drawot[otzpos]) | 0x8000000;
-        *(int *)&drawot[otzpos] = (int)polyg4 & 0xFFFFFF;
+        drawot[otzpos] = (unsigned long *)((intptr_t)polyg4 & 0xFFFFFF);
     }
 }
 
@@ -4213,7 +4209,7 @@ void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStream
 
             // addPrim(curOT[3070], PortalClip);
             *(int *)PortalClip = getaddr(&curOT[3070]) | 0x2000000;
-            *(int *)&curOT[3070] = (int)PortalClip & 0xFFFFFF;
+            curOT[3070] = (unsigned long *)((intptr_t)PortalClip & 0xFFFFFF);
 
             if (!(toStreamUnit->flags & 0x8))
             {
@@ -4234,7 +4230,7 @@ void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStream
 
             // addPrim(curOT[1], PortalClip);
             *(int *)PortalClip = getaddr(&curOT[1]) | 0x2000000;
-            curOT[1] = (int)PortalClip & 0xFFFFFF;
+            curOT[1] = (unsigned long *)((intptr_t)PortalClip & 0xFFFFFF);
 
             hld = mainOT[s_zval];
 

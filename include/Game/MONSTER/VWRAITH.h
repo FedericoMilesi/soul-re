@@ -1,7 +1,7 @@
 #ifndef _VWRAITH_H_
 #define _VWRAITH_H_
 
-#include "Game/MONSTER/MONTABLE.h"
+#include "common.h"
 
 extern MonsterFunctionTable VWRAITH_FunctionTable;
 

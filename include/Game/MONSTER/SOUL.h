@@ -1,7 +1,7 @@
 #ifndef _SOUL_H_
 #define _SOUL_H_
 
-#include "Game/MONSTER/MONTABLE.h"
+#include "common.h"
 
 extern MonsterFunctionTable SOUL_FunctionTable;
 

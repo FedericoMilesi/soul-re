@@ -3,6 +3,6 @@
 
 #include "common.h"
 
-void StateHandlerSwim(struct __CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerSwim(CharacterState *In, int CurrentSection, intptr_t Data);
 
 #endif

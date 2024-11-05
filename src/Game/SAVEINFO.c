@@ -6,13 +6,16 @@
 #include "Game/DEBUG.h"
 #include "Game/GAMEPAD.h"
 #include "Game/SCRIPT.h"
+#include "Game/GAMELOOP.h"
+#include "Game/STREAM.h"
+#include "Game/SOUND.h"
+#include "Game/INSTANCE.h"
+#include "Game/EVENT.h"
 
 static SavedInfoTracker savedInfoTracker;
 
-//static int the_header_size;
 EXTERN STATIC int the_header_size;
 
-//static long numbufferedIntros;
 EXTERN STATIC long numbufferedIntros;
 
 static SavedBasic *bufferSavedIntroArray[64];

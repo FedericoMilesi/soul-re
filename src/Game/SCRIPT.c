@@ -6,6 +6,8 @@
 #include "Game/SCRIPT.h"
 #include "Game/G2/QUATG2.h"
 #include "Game/HASM.h"
+#include "Game/INSTANCE.h"
+#include "Game/STREAM.h"
 
 void SCRIPT_CombineEulerAngles(Rotation *combinedRotation, Rotation *inputRotation1, Rotation *inputRotation2)
 {

@@ -16,6 +16,10 @@
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/CAMERA.h"
 #include "Game/MEMPACK.h"
+#include "Game/SAVEINFO.h"
+#include "Game/GAMELOOP.h"
+#include "Game/STREAM.h"
+#include "Game/INSTANCE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 
@@ -409,7 +413,7 @@ void MON_Idle(Instance *instance)
 
         if (state != -1)
         {
-            MON_SwitchState(instance, (MonsterState)state);
+            MON_SwitchState(instance, (enum MonsterState)state);
         }
     }
     else if ((mv->auxFlags & 0x10000000))
@@ -1408,7 +1412,7 @@ void MON_DefaultInit(Instance *instance)
         }
     }
 
-    MON_SwitchState(instance, (MonsterState)state);
+    MON_SwitchState(instance, (enum MonsterState)state);
 }
 
 void MON_CleanUp(Instance *instance)

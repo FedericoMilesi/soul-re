@@ -16,7 +16,7 @@ options:
   gp_value: 0x800D7598
   use_legacy_include_asm: False
   section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
-  auto_all_sections: []
+  auto_link_sections: []
   symbol_addrs_path:
     - symbol_addrs.txt
   reloc_addrs_path:
@@ -274,7 +274,7 @@ segments:
       - {start: 0x0C28AC, type: comm, vram: 0x800D31D4, name: Game/PSX/MAIN}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D3664, name: Game/GENERIC}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D3670, name: Game/SOUND}
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D3910, name: Game/SPLINE}
+      - {start: 0x0C28AC, type: .sbss, vram: 0x800D3910, name: Game/SPLINE}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D3948, name: Game/FX}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D3C88, name: Game/MEMPACK}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D3C9C, name: Game/PSX/AADLIB}

@@ -3,6 +3,7 @@
 #include "Game/MONSTER/MONMSG.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/INSTANCE.h"
 
 int MON_GroundMoveQueueHandler(Instance *instance)
 {

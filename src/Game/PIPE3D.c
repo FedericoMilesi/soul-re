@@ -8,6 +8,8 @@
 #include "Game/LIGHT3D.h"
 #include "Game/STREAM.h"
 #include "Game/FX.h"
+#include "Game/INSTANCE.h"
+#include "Game/DRAW.h"
 
 long depthQBackColor; // not from decls.h
 
@@ -316,7 +318,7 @@ void PIPE3D_InstanceTransformAndDraw(Instance *instance, CameraCore *cameraCore,
 
                 if ((modelFadeValue < 4094) && (((instance->object->oflags2 & 0x1000)) || (pval < 4090)))
                 {
-                    primPool->nextPrim = gameTrackerX.drawAnimatedModelFunc(model, poolVertex, primPool, ot, vertexColor);
+                    primPool->nextPrim = ((DrawAnimatedModelFunc*)gameTrackerX.drawAnimatedModelFunc)(model, poolVertex, primPool, ot, vertexColor);
                 }
 
                 if (instance->petrifyValue != 0)
@@ -398,7 +400,7 @@ void PIPE3D_InstanceListTransformAndDrawFunc(StreamUnit *unit, unsigned long **o
 
                 if (instance->additionalDrawFunc != NULL)
                 {
-                    instance->additionalDrawFunc(cameraCore->wcTransform, instance, vertexPool, primPool, ot);
+                    ((AdditionalDrawFunc*)instance->additionalDrawFunc)(cameraCore->wcTransform, instance, vertexPool, primPool, ot);
                 }
 
                 gameTrackerX.visibleInstances++;
@@ -634,7 +636,7 @@ void PIPE3D_AnimateTerrainTextures(DrMoveAniTex *aniTextures, long req_frame, Pr
                     //addPrim(otl[0], prim);
 
                     *(int *)prim = getaddr(&otl[0]) | 0x5000000;
-                    *(int *)&otl[0] = (int)prim & 0xFFFFFF;
+                    otl[0] = (unsigned long *)((intptr_t)prim & 0xFFFFFF);
 
                     *(int *)&dest->pixCurrentX = *(int *)&src->pixSrcX;
 
@@ -654,7 +656,7 @@ void PIPE3D_AnimateTerrainTextures(DrMoveAniTex *aniTextures, long req_frame, Pr
                     //addPrim(otl[0], prim);
 
                     *(int *)prim = getaddr(&otl[0]) | 0x5000000;
-                    *(int *)&otl[0] = (int)prim & 0xFFFFFF;
+                    otl[0] = (unsigned long *)((intptr_t)prim & 0xFFFFFF);
 
                     prim += 24 / 4;
 

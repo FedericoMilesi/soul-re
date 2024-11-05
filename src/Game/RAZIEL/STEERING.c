@@ -6,6 +6,8 @@
 #include "Game/RAZIEL/RAZLIB.h"
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/GAMELOOP.h"
+#include "Game/STATE.h"
 
 EXTERN STATIC int ZoneDelta;
 
