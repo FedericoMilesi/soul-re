@@ -634,7 +634,97 @@ void SOUND_SetInstanceSoundVolume(SoundInstance *soundInst, long volumeChangeAmt
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processOneShotSound);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Play3dSound);
+unsigned long SOUND_Play3dSound(Position *position, int sfxToneID, int pitch, int maxVolume, int minVolDist)
+{
+    long dx;
+    long dy;
+    long dz;
+    long objDist;
+    long workMinVolDist;
+    int angle;
+    int quadrant;
+    int qpos;
+    int pan;
+    int volume;
+    int temp, temp2; // not from decls.h
+
+    if (maxVolume != 0)
+    {
+        if (minVolDist == 0)
+        {
+            return SndPlayVolPan(sfxToneID, maxVolume, 64, pitch);
+        }
+        else
+        {
+            if ((theCamera.mode == 5) && ((gameTrackerX.gameFlags & 0x10)))
+            {
+                workMinVolDist = minVolDist;
+
+                dx = position->x - theCamera.core.position.x;
+                dy = position->y - theCamera.core.position.y;
+                dz = position->z - theCamera.core.position.z;
+            }
+            else
+            {
+                workMinVolDist = minVolDist;
+
+                dx = position->x - theCamera.focusInstance->position.x;
+                dy = position->y - theCamera.focusInstance->position.y;
+                dz = position->z - theCamera.focusInstance->position.z;
+            }
+
+            objDist = MATH3D_FastSqrt0((dx * dx) + (dy * dy) + (dz * dz));
+
+            if (objDist <= workMinVolDist)
+            {
+                temp = ratan2(dy, dx) + 1024;
+
+                angle = theCamera.core.rotation.z - temp;
+
+                volume = (workMinVolDist - objDist) / (workMinVolDist / maxVolume);
+
+                quadrant = (angle & 0xFFF) >> 10;
+
+                qpos = angle & 0x3FF;
+
+                if (volume >= 128)
+                {
+                    volume = 127;
+                }
+
+                switch (quadrant)
+                {
+                case 0:
+                    pan = 63 - (qpos >> 4);
+                    break;
+                case 1:
+                    pan = qpos >> 4;
+                    break;
+                case 2:
+                    pan = (qpos >> 4) + 64;
+                    break;
+                default:
+                    pan = 127 - (qpos >> 4);
+                }
+
+                temp2 = (objDist << 8) / workMinVolDist;
+
+                if (pan < 64)
+                {
+                    pan = 63 - (((63 - pan) * temp2) >> 8);
+                }
+                else
+                {
+                    pan = (((pan - 64) * temp2) >> 8) + 64;
+                }
+
+                return SndPlayVolPan(sfxToneID, volume, pan, pitch);
+            }
+        }
+    }
+
+    return 0;
+}
 
 unsigned long SOUND_Update3dSound(Position *position, unsigned long handle, int pitch, int maxVolume, int minVolDist)
 {
