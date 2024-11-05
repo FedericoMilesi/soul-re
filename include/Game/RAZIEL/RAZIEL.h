@@ -3,11 +3,9 @@
 
 #include "common.h"
 
-//static Player Raziel;
-Player Raziel;
+STATIC Player Raziel;
 
-//static RazielData *PlayerData;
-RazielData *PlayerData;
+STATIC RazielData *PlayerData;
 
 int ControlFlag;
 

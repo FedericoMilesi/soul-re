@@ -14,10 +14,8 @@
 
 static SavedInfoTracker savedInfoTracker;
 
-//static int the_header_size;
 EXTERN STATIC int the_header_size;
 
-//static long numbufferedIntros;
 EXTERN STATIC long numbufferedIntros;
 
 static SavedBasic *bufferSavedIntroArray[64];

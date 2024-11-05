@@ -9,11 +9,9 @@
 #include "Game/MATH3D.h"
 #include "Game/PLAN/PLANCOLL.h"
 
-// static long timerArray[10];
-long timerArray[10];
+STATIC long timerArray[10];
 
-// static long timerIndex;
-long timerIndex;
+STATIC long timerIndex;
 
 void PLANAPI_ConvertPlanIntoEnmyPlanDataFormat(PlanningNode *goalNode, EnemyPlanData *planData, PlanningNode *planningPool)
 {

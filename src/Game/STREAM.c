@@ -299,7 +299,6 @@ int STREAM_InList(char *name, char **nameList)
 
 int STREAM_IsSpecialMonster(char *name)
 {
-    // static char *mon[6] = {"wallcr", "aluka", "ronin", "sluagh", "vwraith", NULL};
     static char *mon[] = {"wallcr", "aluka", "ronin", "sluagh", "vwraith", NULL};
 
     return STREAM_InList(name, mon);

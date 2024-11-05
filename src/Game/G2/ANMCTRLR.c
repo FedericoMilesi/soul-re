@@ -9,8 +9,7 @@
 #include "Game/G2/ANIMG2.h"
 #include "Game/G2/QUATG2.h"
 
-//static G2AnimControllerPool _controllerPool;
-G2AnimControllerPool _controllerPool;
+STATIC G2AnimControllerPool _controllerPool;
 
 void G2Anim_AttachControllerToSeg(G2Anim *anim, int segNumber, int type)
 {
