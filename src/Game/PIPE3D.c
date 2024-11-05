@@ -636,7 +636,7 @@ void PIPE3D_AnimateTerrainTextures(DrMoveAniTex *aniTextures, long req_frame, Pr
                     //addPrim(otl[0], prim);
 
                     *(int *)prim = getaddr(&otl[0]) | 0x5000000;
-                    *(int *)&otl[0] = (int)prim & 0xFFFFFF;
+                    otl[0] = (unsigned long *)((intptr_t)prim & 0xFFFFFF);
 
                     *(int *)&dest->pixCurrentX = *(int *)&src->pixSrcX;
 
@@ -656,7 +656,7 @@ void PIPE3D_AnimateTerrainTextures(DrMoveAniTex *aniTextures, long req_frame, Pr
                     //addPrim(otl[0], prim);
 
                     *(int *)prim = getaddr(&otl[0]) | 0x5000000;
-                    *(int *)&otl[0] = (int)prim & 0xFFFFFF;
+                    otl[0] = (unsigned long *)((intptr_t)prim & 0xFFFFFF);
 
                     prim += 24 / 4;
 

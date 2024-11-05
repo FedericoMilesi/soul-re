@@ -3915,7 +3915,7 @@ typedef struct __Event {
     // offset: 0x0000
     int ID;
     // offset: 0x0004
-    int Data;
+    intptr_t Data;
 }Message;
 
 // size: 0x88

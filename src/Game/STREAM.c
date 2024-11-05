@@ -3881,7 +3881,7 @@ void DrawFogRectangle(RECT *cliprect, PrimPool *primPool, int otzpos, unsigned l
 
         // addPrim(drawot[otzpos], polyg4);
         *(int *)polyg4 = getaddr(&drawot[otzpos]) | 0x8000000;
-        *(int *)&drawot[otzpos] = (int)polyg4 & 0xFFFFFF;
+        drawot[otzpos] = (unsigned long *)((intptr_t)polyg4 & 0xFFFFFF);
     }
 }
 
@@ -4209,7 +4209,7 @@ void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStream
 
             // addPrim(curOT[3070], PortalClip);
             *(int *)PortalClip = getaddr(&curOT[3070]) | 0x2000000;
-            *(int *)&curOT[3070] = (int)PortalClip & 0xFFFFFF;
+            curOT[3070] = (unsigned long *)((intptr_t)PortalClip & 0xFFFFFF);
 
             if (!(toStreamUnit->flags & 0x8))
             {
@@ -4230,7 +4230,7 @@ void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStream
 
             // addPrim(curOT[1], PortalClip);
             *(int *)PortalClip = getaddr(&curOT[1]) | 0x2000000;
-            curOT[1] = (int)PortalClip & 0xFFFFFF;
+            curOT[1] = (unsigned long *)((intptr_t)PortalClip & 0xFFFFFF);
 
             hld = mainOT[s_zval];
 
