@@ -272,10 +272,6 @@ void HUD_GetPlayerScreenPt(DVECTOR *center)
     PopMatrix();
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", GlyphDrawMenu);
-#else
 void GlyphDrawMenu(Instance *instance)
 {
     Position place;
@@ -405,7 +401,6 @@ void GlyphDrawMenu(Instance *instance)
 
     FX_DrawScreenPoly(2, (data->glyph_time / glyphtunedata->glyph_darkness) | (((data->glyph_time / glyphtunedata->glyph_darkness) << 16) | ((data->glyph_time / glyphtunedata->glyph_darkness) << 8)), 32);
 }
-#endif
 
 long GlyphTime(int time)
 {
