@@ -133,7 +133,7 @@ void MATH3D_RotationFromPosToPos(Position *from, Position *to, Rotation *rot);
 int MATH3D_ConeDetect(SVector *pos, int arc, int elevation);
 void MATH3D_Normalize(Normal *normal);
 short MATH3D_ElevationFromPosToPos(Position *from, Position *to);
-// void MATH3D_RotateAxisToVector(MATRIX *dest, MATRIX *src, SVector *vec, MATH3D_AXIS axis); TODO: results in non-matching binary if enabled
+void MATH3D_RotateAxisToVector(MATRIX *dest, MATRIX *src, SVector *vec, enum MATH3D_AXIS axis);
 long MATH3D_DistanceBetweenPositions(Position *pos1, Position *pos2);
 int MATH3D_veclen2(int ix, int iy);
 
