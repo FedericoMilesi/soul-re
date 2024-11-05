@@ -75,7 +75,84 @@ SoundEffectChannel *SndGetSfxChannel(int channelNum)
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessInstanceSounds);
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_EndInstanceSounds);
+void SOUND_EndInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl)
+{
+    int numSounds;
+    int i;
+    SoundEffectChannel *channel;
+
+    if ((sfxFileData == NULL) || (soundInstTbl == NULL) || (*sfxFileData++ != 190) || (*sfxFileData++ != 239))
+    {
+        return;
+    }
+
+    do
+    {
+        numSounds = *sfxFileData;
+
+        sfxFileData += 2;
+    } while (0); // this loop isn't really necessary (it's garbage), however the two lines inside of it are
+
+    for (i = 0; i < numSounds; i++)
+    {
+        switch (*sfxFileData)
+        {
+        default:
+            break;
+        case 0:
+            sfxFileData += (sfxFileData[1] * 2) + 18;
+
+            channel = SndGetSfxChannel(soundInstTbl[i].channel);
+
+            if (channel != NULL)
+            {
+                SndEndLoop(channel->handle);
+
+                SndCloseSfxChannel(soundInstTbl[i].channel);
+
+                soundInstTbl[i].channel = 0xFF;
+
+                soundInstTbl[i].state = 0;
+            }
+
+            break;
+        case 1:
+            sfxFileData += (sfxFileData[1] * 2) + 14;
+
+            channel = SndGetSfxChannel(soundInstTbl[i].channel);
+
+            if (channel != NULL)
+            {
+                SndEndLoop(channel->handle);
+
+                SndCloseSfxChannel(soundInstTbl[i].channel);
+
+                soundInstTbl[i].channel = 0xFF;
+
+                soundInstTbl[i].state = 0;
+            }
+
+            break;
+        case 2:
+        case 3:
+        case 4:
+            sfxFileData += (sfxFileData[1] * 2) + 14;
+
+            channel = SndGetSfxChannel(soundInstTbl[i].channel);
+
+            if (channel != NULL)
+            {
+                SndCloseSfxChannel(soundInstTbl[i].channel);
+
+                soundInstTbl[i].channel = 0xFF;
+
+                soundInstTbl[i].state = 0;
+            }
+
+            break;
+        }
+    }
+}
 
 int isOkayToPlaySound(int flags, int spectralPlane, int hidden, int burning)
 {
