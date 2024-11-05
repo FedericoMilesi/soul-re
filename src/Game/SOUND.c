@@ -30,6 +30,9 @@ int gSramFreeBlocks;
 
 SoundEffectChannel soundEffectChannelTbl[16];
 
+// static long objectOneShotTriggerTbl[3];
+long objectOneShotTriggerTbl[3];
+
 SoundEffectChannel *SndOpenSfxChannel(unsigned char *channelNum)
 {
     int i;
@@ -632,7 +635,150 @@ void SOUND_SetInstanceSoundVolume(SoundInstance *soundInst, long volumeChangeAmt
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processOneShotSound);
+void processOneShotSound(Position *position, int hidden, int burning, long *triggerFlags, SoundInstance *soundInst, ObjectOneShotSound *sound)
+{
+    SoundEffectChannel *channel;
+    // int sfxIDNum; unused
+    int sfxToneID;
+    long triggerMask;
+    int spectralPlane;
+
+    triggerMask = objectOneShotTriggerTbl[sound->type - 2];
+
+    spectralPlane = gameTrackerX.gameData.asmData.MorphType;
+
+    switch (soundInst->state & 0xF)
+    {
+    case 0:
+    default:
+        soundInst->channel = 0xFF;
+
+        soundInst->state = 1;
+
+        soundInst->delay = 0;
+        break;
+    case 1:
+        if ((*triggerFlags & triggerMask))
+        {
+            if (isOkayToPlaySound(sound->flags, spectralPlane, hidden, burning) != 0)
+            {
+                soundInst->delay = sound->initialDelay;
+
+                if (sound->initialDelayVariation != 0)
+                {
+                    soundInst->delay += sound->initialDelayVariation - (rand() % (sound->initialDelayVariation * 2));
+                }
+
+                if (soundInst->delay != 0)
+                {
+                    soundInst->state = 2;
+                }
+                else
+                {
+                    soundInst->state = 3;
+                }
+            }
+            else
+            {
+                *triggerFlags &= ~triggerMask;
+            }
+        }
+
+        break;
+    case 2:
+        if (soundInst->delay != 0)
+        {
+            soundInst->delay--;
+        }
+        else
+        {
+            soundInst->state = 3;
+        }
+
+        break;
+    case 3:
+        channel = SndGetSfxChannel(soundInst->channel);
+
+        if (channel != NULL)
+        {
+            if (SndIsPlayingOrRequested(channel->handle) == 0)
+            {
+                SndCloseSfxChannel(soundInst->channel);
+
+                soundInst->channel = 0xFF;
+
+                soundInst->state = 1;
+
+                *triggerFlags &= ~triggerMask;
+            }
+            else if (SndIsPlaying(channel->handle) != 0)
+            {
+                if ((soundInst->state & 0x10))
+                {
+                    soundInst->state &= ~0x10;
+
+                    if (SOUND_Update3dSound(position, channel->handle, channel->pitch, channel->volume, sound->minVolDistance) == 0)
+                    {
+                        SndEndLoop(channel->handle);
+
+                        SndCloseSfxChannel(soundInst->channel);
+
+                        soundInst->channel = 0xFF;
+
+                        soundInst->state = 1;
+
+                        *triggerFlags &= ~triggerMask;
+                    }
+                }
+                else
+                {
+                    soundInst->state |= 0x10;
+                }
+            }
+        }
+        else
+        {
+            channel = SndOpenSfxChannel((unsigned char *)soundInst);
+
+            if (channel != NULL)
+            {
+                channel->volume = sound->maxVolume;
+
+                if (sound->maxVolVariation != 0)
+                {
+                    channel->volume += sound->maxVolVariation - (rand() % (sound->maxVolVariation * 2));
+                }
+
+                channel->pitch = sound->pitch;
+
+                if (sound->pitchVariation != 0)
+                {
+                    channel->pitch += sound->pitchVariation - (rand() % (sound->pitchVariation * 2));
+                }
+
+                if ((sound->numSfxIDs != 0) && (sound->numSfxIDs != 1))
+                {
+                    sfxToneID = (rand() % sound->numSfxIDs);
+                }
+                else
+                {
+                    sfxToneID = 0;
+                }
+
+                channel->handle = SOUND_Play3dSound(position, ((unsigned short *)&sound[1])[sfxToneID], channel->pitch, channel->volume, sound->minVolDistance);
+
+                if (channel->handle == 0)
+                {
+                    SndCloseSfxChannel(soundInst->channel);
+
+                    soundInst->channel = 0xFF;
+                }
+            }
+        }
+
+        break;
+    }
+}
 
 unsigned long SOUND_Play3dSound(Position *position, int sfxToneID, int pitch, int maxVolume, int minVolDist)
 {
