@@ -10,5 +10,6 @@ void menu_push(menu_t *menu, int (*fn)());
 void menu_build(menu_t *menu);
 void menu_draw(menu_t *menu);
 void menu_run(menu_t *menu);
+void menu_process(menu_t *menu);
 
 #endif
