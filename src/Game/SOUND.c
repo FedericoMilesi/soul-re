@@ -440,7 +440,7 @@ void processEventSound(Position *position, SoundInstance *soundInst, ObjectEvent
                 sfxIDNum = (sound->numSfxIDs < 2) ? 0 : rand() % sound->numSfxIDs;
 
                 // TODO: second parameter is likely wrong
-                channel->handle = SOUND_Play3dSound(position, ((unsigned short *)(sound + 1))[sfxIDNum], channel->pitch, channel->volume, sound->minVolDistance);
+                channel->handle = SOUND_Play3dSound(position, ((unsigned short *)&sound[1])[sfxIDNum], channel->pitch, channel->volume, sound->minVolDistance);
 
                 if (channel->handle == 0)
                 {
@@ -765,6 +765,7 @@ void processOneShotSound(Position *position, int hidden, int burning, long *trig
                     sfxToneID = 0;
                 }
 
+                // TODO: second parameter is likely wrong
                 channel->handle = SOUND_Play3dSound(position, ((unsigned short *)&sound[1])[sfxToneID], channel->pitch, channel->volume, sound->minVolDistance);
 
                 if (channel->handle == 0)
