@@ -9,11 +9,13 @@ STATIC RazielData *PlayerData;
 
 int ControlFlag;
 
-EXTERN STATIC int PhysicsMode;
+STATIC int PhysicsMode;
 
 long RazielCommands[10];
 
-EXTERN STATIC long *PadData;
+STATIC long *PadData;
+
+STATIC int AutoFaceAngle;
 
 void RAZIEL_DebugHurtRaziel();
 void RAZIEL_DebugHealthSetScale(long healthScale);
