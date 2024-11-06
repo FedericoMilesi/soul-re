@@ -39,7 +39,7 @@ void InitHealthSystem()
         razSpectralShift();
     }
 
-    //if (razInBaseArea("under", sizeof("under") - 1) != 0)
+    // if (razInBaseArea("under", sizeof("under") - 1) != 0)
     if (razInBaseArea(D_800D1D1C, 5) != 0)
     {
         Raziel.HitPoints = 100;
@@ -344,15 +344,10 @@ void RAZIEL_DebugHealthSetScale(long healthScale)
     Raziel.HitPoints = (100000 * (short)healthScale) + 100000;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/HEALTH", RAZIEL_DebugManaSetMax);
-#else
 void RAZIEL_DebugManaSetMax(long manaScale)
 {
-    Raziel.GlyphManaMax = Raziel.GlyphManaBalls = (short)(manaScale * 4);
+    Raziel.GlyphManaBalls = Raziel.GlyphManaMax = (short)(manaScale * 4);
 }
-#endif
 
 void RAZIEL_DebugHealthFillUp()
 {
