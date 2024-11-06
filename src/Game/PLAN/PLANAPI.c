@@ -243,7 +243,134 @@ int PLANAPI_PassThroughHit(PlanningNode *node1, PlanningNode *node2)
     return 0;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_UpdatePlanningDatabase);
+#else
+void PLANAPI_UpdatePlanningDatabase(GameTracker *gameTracker, Instance *player)
+{
+    PlanningNode *planningPool;
+    PlanningNode *node1;
+    PlanningNode *node2;
+    long startTime;
+    int pathExistsAbove;
+    int pathExistsBelow;
+
+    planningPool = (PlanningNode *)gameTracker->planningPool;
+
+    startTime = (GetRCnt(0xF2000000) & 0xFFFF) | (gameTimer << 16);
+
+    gameTrackerX.plan_collide_override = 1;
+
+    switch (poolManagementData->state)
+    {
+    case 0:
+        PLAN_AddInitialNodes(planningPool, player);
+
+        poolManagementData->state = 1;
+        break;
+    case 1:
+        PLAN_AddOrRemoveNodes(planningPool, player);
+
+        poolManagementData->state = 2;
+        break;
+    case 2:
+        node1 = PLAN_FindNodeMostInNeedOfConnectivityExpansion(planningPool);
+        node2 = PLANPOOL_GetClosestUnexploredValidNeighbor(node1, planningPool);
+
+        poolManagementData->state = 1;
+
+        if ((node1 == NULL) || (node2 == NULL))
+        {
+            break;
+        }
+
+        if (MATH3D_LengthXYZ(node1->pos.x - node2->pos.x, node1->pos.y - node2->pos.y, node1->pos.z - node2->pos.z) < 6000)
+        {
+            poolManagementData->pairType = PLANAPI_PairType(node1, node2);
+
+            switch (poolManagementData->pairType)
+            {
+            case 0:
+            case 514:
+                pathExistsAbove = PLANCOLL_DoesLOSExistFinal(&node1->pos, &node2->pos, 0, PLANAPI_PassThroughHit(node1, node2), 256);
+                pathExistsBelow = PLANCOLL_DoesLOSExistFinal(&node1->pos, &node2->pos, 0, PLANAPI_PassThroughHit(node1, node2), -256);
+                break;
+            case 3:
+                if (((node1->nodeType >> 3) & 0x3) == poolManagementData->pairType)
+                {
+                    PlanningNode *temp;
+
+                    temp = node1;
+                    node1 = node2;
+                    node2 = temp;
+                }
+
+                pathExistsAbove = PLANCOLL_DoesWaterPathUpExist(&node1->pos, &node2->pos, 0, &poolManagementData->peakPos, PLANAPI_PassThroughHit(node1, node2));
+                pathExistsBelow = PLANCOLL_DoesLOSExistFinal(&node2->pos, &poolManagementData->peakPos, 0, PLANAPI_PassThroughHit(node1, node2), 0);
+                break;
+            default:
+                pathExistsAbove = pathExistsBelow = PLANCOLL_DoesLOSExistFinal(&node1->pos, &node2->pos, 0, PLANAPI_PassThroughHit(node1, node2), 0);
+            }
+
+            poolManagementData->expansionNode1 = node1;
+            poolManagementData->expansionNode2 = node2;
+
+            if ((pathExistsAbove != 0) && (pathExistsBelow != 0))
+            {
+                PLANPOOL_MarkTwoNodesAsConnected(node1, node2, planningPool);
+            }
+            else
+            {
+                PLANPOOL_MarkTwoNodesAsNotConnected(node1, node2, planningPool);
+            }
+
+            poolManagementData->state = 3;
+            break;
+        }
+
+        PLANPOOL_MarkTwoNodesAsNotConnected(node1, node2, planningPool);
+        PLANPOOL_MarkTwoNodesAsNotConnected(node2, node1, planningPool);
+        break;
+    case 3:
+        node1 = poolManagementData->expansionNode1;
+        node2 = poolManagementData->expansionNode2;
+
+        switch (poolManagementData->pairType)
+        {
+        case 0:
+        case 514:
+            pathExistsAbove = PLANCOLL_DoesLOSExistFinal(&node2->pos, &node1->pos, 0, PLANAPI_PassThroughHit(node2, node1), 256);
+            pathExistsBelow = PLANCOLL_DoesLOSExistFinal(&node2->pos, &node1->pos, 0, PLANAPI_PassThroughHit(node2, node1), -256);
+            break;
+        case 3:
+            pathExistsAbove = PLANCOLL_DoesWaterPathUpExist(&node2->pos, &node1->pos, 0, &poolManagementData->peakPos, PLANAPI_PassThroughHit(node2, node1));
+            pathExistsBelow = PLANCOLL_DoesLOSExistFinal(&node1->pos, &poolManagementData->peakPos, 0, PLANAPI_PassThroughHit(node2, node1), 0);
+            break;
+        default:
+            pathExistsAbove = pathExistsBelow = PLANCOLL_DoesLOSExistFinal(&node2->pos, &node1->pos, 0, PLANAPI_PassThroughHit(node2, node1), 0);
+        }
+
+        if ((pathExistsAbove != 0) && (pathExistsBelow != 0))
+        {
+            PLANPOOL_MarkTwoNodesAsConnected(node2, node1, planningPool);
+        }
+        else
+        {
+            PLANPOOL_MarkTwoNodesAsNotConnected(node2, node1, planningPool);
+        }
+
+        poolManagementData->state = 1;
+        break;
+    default:
+        poolManagementData->state = 1;
+    }
+
+    PLANAPI_DoTimingCalcsAndDrawing(startTime, planningPool);
+
+    gameTrackerX.plan_collide_override = 0;
+}
+#endif
 
 int PLANAPI_NumNodesInPool(void *planningPool)
 {

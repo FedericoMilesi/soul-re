@@ -10,5 +10,8 @@ void PLANPOOL_DeleteNodeFromPool(PlanningNode *nodeToDelete, PlanningNode *plann
 PlanningNode *PLANPOOL_GetNodeByPosition(Position *currentPos, PlanningNode *planningPool);
 PlanningNode *PLANPOOL_GetFirstNodeOfSource(PlanningNode *planningPool, char nodeSource);
 int PLANPOOL_NumNodesInPlan(PlanningNode *goalNode, PlanningNode *planningPool);
+PlanningNode *PLANPOOL_GetClosestUnexploredValidNeighbor(PlanningNode *startNode, PlanningNode *planningPool);
+void PLANPOOL_MarkTwoNodesAsConnected(PlanningNode *node1, PlanningNode *node2, PlanningNode *planningPool);
+void PLANPOOL_MarkTwoNodesAsNotConnected(PlanningNode *node1, PlanningNode *node2, PlanningNode *planningPool);
 
 #endif
