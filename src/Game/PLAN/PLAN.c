@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/PLAN/PLAN.h"
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/PLAN/PLANPOOL.h"
 #include "Game/MATH3D.h"
@@ -29,7 +30,21 @@ void PLAN_DeleteOutOfRangeNodesOfSource(PlanningNode *planningPool, Position *pl
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_AddOrRemoveRandomNodes);
+void PLAN_AddOrRemoveRandomNodes(PlanningNode *planningPool, Position *playerPos)
+{
+    int numNodeError;
+
+    numNodeError = poolManagementData->numNodesInPool - 16;
+
+    if (numNodeError < 0)
+    {
+        PLAN_AddRandomNode(planningPool, playerPos);
+    }
+    else if (numNodeError > 0)
+    {
+        PLAN_DeleteRandomNode(planningPool);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_AddInitialNodes);
 
