@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/PLAN/PLANPOOL.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_CalcMinDistFromExistingNodes);
 
@@ -8,7 +9,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_UpdatePlayerNode);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_AddRandomNode);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_DeleteRandomNode);
+void PLAN_DeleteRandomNode(PlanningNode *planningPool)
+{
+    PLANPOOL_DeleteNodeFromPool(PLANPOOL_GetFirstNodeOfSource(planningPool, 0), planningPool);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_DeleteOutOfRangeNodesOfSource);
 
