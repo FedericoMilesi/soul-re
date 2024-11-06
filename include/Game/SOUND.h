@@ -32,5 +32,8 @@ int isOkayToPlaySound(int flags, int spectralPlane, int hidden, int burning);
 SoundEffectChannel *SndOpenSfxChannel(unsigned char *channelNum);
 int SndIsPlaying(unsigned long handle);
 int SndIsPlayingOrRequested(unsigned long handle);
+void processPeriodicSound(Position *position, int livesInOnePlane, int inSpectral, int hidden, int burning, SoundInstance *soundInst, ObjectPeriodicSound *sound);
+void processEventSound(Position *position, SoundInstance *soundInst, ObjectEventSound *sound);
+void processOneShotSound(Position *position, int hidden, int burning, long *triggerFlags, SoundInstance *soundInst, ObjectOneShotSound *sound);
 
 #endif

@@ -73,7 +73,45 @@ SoundEffectChannel *SndGetSfxChannel(int channelNum)
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessInstanceSounds);
+void SOUND_ProcessInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl, Position *position, int livesInOnePlace, int inSpectral, int hidden, int burning, long *triggerFlags)
+{
+    int numSounds;
+    // int numSfxIDs; unused
+    int i;
+
+    if ((gameTrackerX.gameMode == 6) || (sfxFileData == NULL) || (soundInstTbl == NULL) || (*sfxFileData++ != 190) || (*sfxFileData++ != 239))
+    {
+        return;
+    }
+
+    numSounds = *sfxFileData;
+
+    sfxFileData += 2;
+
+    for (i = 0; i < numSounds; i++)
+    {
+        switch (*sfxFileData)
+        {
+        case 0:
+            processPeriodicSound(position, livesInOnePlace, inSpectral, hidden, burning, &soundInstTbl[i], (ObjectPeriodicSound *)sfxFileData);
+
+            sfxFileData += (sfxFileData[1] * 2) + 18;
+            break;
+        case 1:
+            processEventSound(position, &soundInstTbl[i], (ObjectEventSound *)sfxFileData);
+
+            sfxFileData += (sfxFileData[1] * 2) + 14;
+            break;
+        case 2:
+        case 3:
+        case 4:
+            processOneShotSound(position, hidden, burning, triggerFlags, &soundInstTbl[i], (ObjectOneShotSound *)sfxFileData);
+
+            sfxFileData += (sfxFileData[1] * 2) + 14;
+            break;
+        }
+    }
+}
 
 void SOUND_EndInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl)
 {
