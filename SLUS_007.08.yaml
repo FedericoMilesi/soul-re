@@ -218,7 +218,7 @@ segments:
       - [0x0C16A8, .sdata, Game/OBTABLE]
       - [0x0C16C0, sdata] # Unused
       - [0x0C1714, .sdata, Game/GENERIC]
-      - [0x0C1720, sdata, Game/SOUND]
+      - [0x0C1720, .sdata, Game/SOUND]
       - [0x0C17D4, .sdata, Game/SPLINE]
       - [0x0C17FC, sdata, Game/FX]
       - [0x0C186C, .sdata, Game/VM]

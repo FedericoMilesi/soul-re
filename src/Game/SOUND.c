@@ -8,30 +8,34 @@
 #include "Game/CAMERA.h"
 #include "Game/MATH3D.h"
 #include "Game/MEMPACK.h"
-#include "Game/STRMLOAD.h"
+#include "Game/STREAM.h"
+#include "Game/LOAD3D.h"
+#include "Game/PSX/SUPPORT.h"
 
-char soundBuffer[13256];
+/*.sdata*/
+int gSramFullAlarm = 0;
 
-MusicLoadInfo musicInfo;
+static int gSramFullMsgCnt = 0;
 
-int gSramFullAlarm;
+long objectOneShotTriggerTbl[3] = {0x1000, 0x2000, 0x4000};
 
-EXTERN STATIC int gSramFullMsgCnt;
-
-int gSramTotalUsed;
-
-int gSramUsedBlocks;
-
-int gSramTotalFree;
-
+/*.sbss*/
 int gSramLargestFree;
-
-int gSramFreeBlocks;
 
 SoundEffectChannel soundEffectChannelTbl[16];
 
-// static long objectOneShotTriggerTbl[3];
-long objectOneShotTriggerTbl[3];
+int gSramFreeBlocks;
+
+int gSramUsedBlocks;
+
+int gSramTotalUsed;
+
+int gSramTotalFree;
+
+MusicLoadInfo musicInfo;
+
+/*.bss*/
+char soundBuffer[13256];
 
 SoundEffectChannel *SndOpenSfxChannel(unsigned char *channelNum)
 {
@@ -1381,12 +1385,6 @@ int SOUND_IsMusicLoading()
     return temp;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessMusicLoad);
-/* TODO: this function needs .sbss and .sdata migration of this file to C
-extern char D_800D0F34[];
-char D_800D0F4C[65565] = "m";
-char D_800D0F68[65565] = "m";
-extern char D_800D0F84[];
 void SOUND_ProcessMusicLoad()
 {
     char musicName[8];
@@ -1453,16 +1451,13 @@ void SOUND_ProcessMusicLoad()
                         {
                             if ((unsigned char)musicInfo.currentMusicName[0] != 0)
                             {
-                                // sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicName, musicName);
-                                sprintf(sndFileName, D_800D0F34, musicName, musicName);
+                                sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicName, musicName);
 
                                 if (LOAD_DoesFileExist(sndFileName) != 0)
                                 {
                                     strcpy(musicInfo.currentMusicName, musicName);
-                                    // strcpy(sndFileName, "\\kain2\\music\\uwtr\\uwtr.snd");
-                                    memcpy(sndFileName, D_800D0F4C, 27);
-                                    // strcpy(smpFileName, "\\kain2\\music\\uwtr\\uwtr.smp");
-                                    memcpy(smpFileName, D_800D0F68, 27);
+                                    strcpy(sndFileName, "\\kain2\\music\\uwtr\\uwtr.snd");
+                                    strcpy(smpFileName, "\\kain2\\music\\uwtr\\uwtr.smp");
 
                                     musicInfo.state = 3;
                                     musicInfo.nextState = 4;
@@ -1472,10 +1467,8 @@ void SOUND_ProcessMusicLoad()
                             }
                             else
                             {
-                                // sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicName, musicName);
-                                sprintf(sndFileName, D_800D0F34, musicName, musicName);
-                                // sprintf(smpFileName, "\\kain2\\music\\%s\\%s.smp", musicName, musicName);
-                                sprintf(smpFileName, D_800D0F84, musicName, musicName);
+                                sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicName, musicName);
+                                sprintf(smpFileName, "\\kain2\\music\\%s\\%s.smp", musicName, musicName);
 
                                 if (LOAD_DoesFileExist(sndFileName) != 0)
                                 {
@@ -1536,10 +1529,8 @@ void SOUND_ProcessMusicLoad()
     case 6:
         if (aadMem->sramDefragInfo.status == 0)
         {
-            // sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicInfo.currentMusicName, musicInfo.currentMusicName);
-            sprintf(sndFileName, D_800D0F34, musicInfo.currentMusicName, musicInfo.currentMusicName);
-            // sprintf(smpFileName, "\\kain2\\music\\%s\\%s.smp", musicInfo.currentMusicName, musicInfo.currentMusicName);
-            sprintf(smpFileName, D_800D0F84, musicInfo.currentMusicName, musicInfo.currentMusicName);
+            sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicInfo.currentMusicName, musicInfo.currentMusicName);
+            sprintf(smpFileName, "\\kain2\\music\\%s\\%s.smp", musicInfo.currentMusicName, musicInfo.currentMusicName);
 
             aadLoadDynamicSoundBank(sndFileName, smpFileName, 0, 1, musicLoadReturnFunc);
 
@@ -1594,9 +1585,8 @@ void SOUND_ProcessMusicLoad()
         musicInfo.state = 0;
         break;
     }
-} */
+}
 
-extern char D_800D0F9C[];
 void SOUND_UpdateSound()
 {
     aadProcessLoadQueue();
@@ -1612,8 +1602,7 @@ void SOUND_UpdateSound()
             gSramFullMsgCnt--;
         }
 
-        // FONT_Print("$\n\n\n\n\n\n\n\n\n\nsound memory full!\nu = % d % d f = % d % d lf = % d", gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
-        FONT_Print(D_800D0F9C, gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
+        FONT_Print("$\n\n\n\n\n\n\n\n\n\nsound memory full!\nu=%d %d f=%d %d lf=%d\n", gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
     }
 
     if ((unsigned char)gameTrackerX.sound.gMusicOn != 0)
