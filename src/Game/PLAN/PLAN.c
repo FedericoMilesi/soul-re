@@ -48,6 +48,21 @@ void PLAN_AddOrRemoveRandomNodes(PlanningNode *planningPool, Position *playerPos
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_AddInitialNodes);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_AddOrRemoveNodes);
+void PLAN_AddOrRemoveNodes(PlanningNode *planningPool, Instance *player)
+{
+    if (MATH3D_LengthXYZ(player->position.x - poolManagementData->playerPosAtLastPlanMkrUpdate.x, player->position.y - poolManagementData->playerPosAtLastPlanMkrUpdate.y, player->position.z - poolManagementData->playerPosAtLastPlanMkrUpdate.z) > 500)
+    {
+        PLAN_UpdatePlayerNode(planningPool, &player->position);
+        PLAN_UpdatePlanMkrNodes(planningPool, &player->position);
+
+        PLAN_DeleteOutOfRangeNodesOfSource(planningPool, &player->position, 0, 12000);
+        PLAN_DeleteOutOfRangeNodesOfSource(planningPool, &player->position, 2, 12000);
+        PLAN_DeleteOutOfRangeNodesOfSource(planningPool, &player->position, 3, 12000);
+
+        poolManagementData->playerPosAtLastPlanMkrUpdate = player->position;
+    }
+
+    PLAN_AddOrRemoveRandomNodes(planningPool, &player->position);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_FindNodeMostInNeedOfConnectivityExpansion);
