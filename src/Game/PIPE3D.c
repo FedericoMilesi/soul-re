@@ -10,6 +10,7 @@
 #include "Game/FX.h"
 #include "Game/INSTANCE.h"
 #include "Game/DRAW.h"
+#include "Game/G2/QUATG2.h"
 
 long depthQBackColor; // not from decls.h
 
@@ -228,7 +229,7 @@ void PIPE3D_InstanceTransformAndDraw(Instance *instance, CameraCore *cameraCore,
         CVECTOR *vertexColor;
         long spadOffset;
         long spadFree;
-        //long allocSize; unused
+        // long allocSize; unused
 
         LIGHT_PresetInstanceLight(instance, 2048, &lm);
 
@@ -318,7 +319,7 @@ void PIPE3D_InstanceTransformAndDraw(Instance *instance, CameraCore *cameraCore,
 
                 if ((modelFadeValue < 4094) && (((instance->object->oflags2 & 0x1000)) || (pval < 4090)))
                 {
-                    primPool->nextPrim = ((DrawAnimatedModelFunc*)gameTrackerX.drawAnimatedModelFunc)(model, poolVertex, primPool, ot, vertexColor);
+                    primPool->nextPrim = ((DrawAnimatedModelFunc *)gameTrackerX.drawAnimatedModelFunc)(model, poolVertex, primPool, ot, vertexColor);
                 }
 
                 if (instance->petrifyValue != 0)
@@ -361,8 +362,7 @@ void PIPE3D_InstanceListTransformAndDrawFunc(StreamUnit *unit, unsigned long **o
 
         dpv[0].vx -= cameraCore->vvPlaneConsts[0];
 
-        if ((-maxRad < dpv[0].vx) && (dpv[0].vx < (cameraCore->farPlane + maxRad)) && (-maxRad < (dpv[0].vy - cameraCore->vvPlaneConsts[1]))
-        && (-maxRad < (dpv[0].vz - cameraCore->vvPlaneConsts[2])))
+        if ((-maxRad < dpv[0].vx) && (dpv[0].vx < (cameraCore->farPlane + maxRad)) && (-maxRad < (dpv[0].vy - cameraCore->vvPlaneConsts[1])) && (-maxRad < (dpv[0].vz - cameraCore->vvPlaneConsts[2])))
         {
             gte_SetRotMatrix(&cameraCore->vvNormalWorVecMat[1]);
             gte_ldv0(&bsPos);
@@ -400,7 +400,7 @@ void PIPE3D_InstanceListTransformAndDrawFunc(StreamUnit *unit, unsigned long **o
 
                 if (instance->additionalDrawFunc != NULL)
                 {
-                    ((AdditionalDrawFunc*)instance->additionalDrawFunc)(cameraCore->wcTransform, instance, vertexPool, primPool, ot);
+                    ((AdditionalDrawFunc *)instance->additionalDrawFunc)(cameraCore->wcTransform, instance, vertexPool, primPool, ot);
                 }
 
                 gameTrackerX.visibleInstances++;
@@ -449,10 +449,6 @@ void PIPE3D_InstanceListTransformAndDraw(StreamUnit *unit, GameTracker *gameTrac
     }
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PIPE3D", PIPE3D_TransformFromZAxis);
-#else
 void PIPE3D_TransformFromZAxis(MATRIX *transform, SVector *normal)
 {
     G2EulerAngles ea1;
@@ -483,8 +479,8 @@ void PIPE3D_TransformFromZAxis(MATRIX *transform, SVector *normal)
         return;
     }
 
-    xprod.x = (short *)-normal->y;
-    xprod.y = (short *)normal->x;
+    xprod.x = (intptr_t)((short *)(intptr_t)-normal->y);
+    xprod.y = (intptr_t)((short *)(intptr_t)normal->x);
     xprod.z = 0;
 
     MATH3D_Normalize((Normal *)&xprod);
@@ -511,7 +507,6 @@ void PIPE3D_TransformFromZAxis(MATRIX *transform, SVector *normal)
 
     RotMatrix((SVECTOR *)&ea1, transform);
 }
-#endif
 
 void PIPE3D_CalcWorldToSplitPlaneTransform(MATRIX *wpTransform, SVector *normal, SVector *translation)
 {
@@ -633,7 +628,7 @@ void PIPE3D_AnimateTerrainTextures(DrMoveAniTex *aniTextures, long req_frame, Pr
                     prim[4] = ((int *)dest)[0];
                     prim[5] = ((int *)dest)[1];
 
-                    //addPrim(otl[0], prim);
+                    // addPrim(otl[0], prim);
 
                     *(int *)prim = getaddr(&otl[0]) | 0x5000000;
                     otl[0] = (unsigned long *)((intptr_t)prim & 0xFFFFFF);
@@ -653,7 +648,7 @@ void PIPE3D_AnimateTerrainTextures(DrMoveAniTex *aniTextures, long req_frame, Pr
                     prim[4] = *(int *)&dest->clutDstX;
                     prim[5] = *(int *)&dest->clutW;
 
-                    //addPrim(otl[0], prim);
+                    // addPrim(otl[0], prim);
 
                     *(int *)prim = getaddr(&otl[0]) | 0x5000000;
                     otl[0] = (unsigned long *)((intptr_t)prim & 0xFFFFFF);
