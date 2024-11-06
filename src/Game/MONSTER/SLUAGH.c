@@ -1,8 +1,27 @@
 #include "common.h"
 #include "Game/FX.h"
+#include "Game/MONSTER/SLUAGH.h"
+#include "Game/MONSTER/SOUL.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONSTER.h"
+
+MonsterStateChoice SLUAGH_StateChoiceTable[] = {
+    {6, {SLUAGH_AttackEntry, SLUAGH_Attack}},
+    {0x10, {SLUAGH_DeathEntry, SLUAGH_Death}},
+    {0xA, {SOUL_SoulSuckEntry, SOUL_SoulSuck}},
+    {-1, {NULL, NULL}},
+};
+
+MonsterStateChoice SOUL_StateChoiceTable[] = {
+    {0, {SOUL_BirthEntry, SOUL_Birth}},
+    {0x13, {SOUL_FleeEntry, SOUL_Flee}},
+    {2, {SOUL_IdleEntry, SOUL_Idle}},
+    {5, {SOUL_WanderEntry, SOUL_Wander}},
+    {0xA, {SOUL_SoulSuckEntry, SOUL_SoulSuck}},
+    {0x17, {SOUL_ReanimateEntry, SOUL_Reanimate}},
+    {-1, {NULL, NULL}},
+};
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_Query);
 
@@ -20,7 +39,6 @@ void SLUAGH_Init(Instance *instance)
     ma = (MonsterAttributes *)instance->data;
     hitpoints = mv->hitPoints;
 
-
     color = FX_GetHealthColor(hitpoints / 4096);
     mv->effect = FX_DoInstanceOneSegmentGlow(instance, ma->headSegment, &color, 1, 0x4B0, 0x68, 0x70);
 
@@ -28,7 +46,6 @@ void SLUAGH_Init(Instance *instance)
     mv->soulJuice = 8192;
     mv->auxFlags &= ~1;
     mv->mvFlags |= 0x02002000;
-
 }
 
 void SLUAGH_DeathEntry(Instance *instance)
