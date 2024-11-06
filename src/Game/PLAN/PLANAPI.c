@@ -13,6 +13,8 @@ STATIC long timerArray[10];
 
 STATIC long timerIndex;
 
+STATIC PoolManagementData poolManagementDataStorage;
+
 void PLANAPI_ConvertPlanIntoEnmyPlanDataFormat(PlanningNode *goalNode, EnemyPlanData *planData, PlanningNode *planningPool)
 {
     PlanningNode *currentNode;
@@ -165,7 +167,34 @@ int PLANAPI_FindPathInGraphToTarget(Position *startPos, EnemyPlanData *planData,
     PLANAPI_FindPathBetweenNodes(startNode, PLANPOOL_GetFirstNodeOfSource(planningPool, 3), planData, validNodeTypes);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_InitPlanning);
+void PLANAPI_InitPlanning(void *planningPool)
+{
+    int i;
+    int j;
+
+    poolManagementData = &poolManagementDataStorage;
+
+    poolManagementData->state = 0;
+
+    poolManagementData->numNodesInPool = 0;
+
+    poolManagementData->distanceMatrix = (unsigned short(*)[32])((intptr_t)planningPool + (sizeof(PlanningNode) * 32));
+
+    for (i = 0; i < 32; i++)
+    {
+        for (j = 0; j < 32; j++)
+        {
+            poolManagementData->distanceMatrix[i][j] = 0;
+        }
+    }
+
+    for (i = 0; i < 10; i++)
+    {
+        timerArray[i] = 0;
+    }
+
+    timerIndex = 0;
+}
 
 short PLANAPI_PairType(PlanningNode *node1, PlanningNode *node2)
 {
