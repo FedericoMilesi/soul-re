@@ -10,14 +10,12 @@ void SBSP_IntroduceInstances(Terrain *terrain, int unitID)
 
     intro = terrain->introList;
 
-    for (i = terrain->numIntros; i != 0; i--)
+    for (i = terrain->numIntros; i != 0; i--, intro++)
     {
         if (!(intro->flags & 0x4008))
         {
             INSTANCE_IntroduceInstance(intro, unitID);
         }
-
-        intro++;
     }
 }
 
@@ -25,5 +23,6 @@ void SBSP_IntroduceInstancesAndLights(Terrain *terrain, CameraCore *cameraCore, 
 {
     (void)cameraCore;
     (void)lightInfo;
+
     SBSP_IntroduceInstances(terrain, unitID);
 }
