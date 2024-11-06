@@ -474,7 +474,7 @@ int SteerAutoFace(Instance *instance, long *controlCommand)
 {
     short angle;
     int rc;
-    //Instance *target; unused
+    // Instance *target; unused
     G2SVector3 autoFaceRot;
     int diff;
     int predict;
@@ -647,10 +647,6 @@ void SteerDisableAutoFace(Instance *instance)
     Raziel.autoFaceAnim = -1;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/STEERING", SteerSwitchMode);
-#else
 void SteerSwitchMode(Instance *instance, int mode)
 {
     switch (Raziel.steeringMode)
@@ -771,7 +767,6 @@ void SteerSwitchMode(Instance *instance, int mode)
 
     Raziel.steeringMode = mode;
 }
-#endif
 
 void razInitWallCrawlSteering(Instance *instance)
 {
@@ -829,3 +824,5 @@ void razDeinitWallCrawlSteering(Instance *instance)
     G2Anim_InterpDisableController(&instance->anim, 50, 76, 300);
     G2Anim_InterpDisableController(&instance->anim, 58, 76, 300);
 }
+
+INCLUDE_RODATA("src", force_rodata_alignment);

@@ -106,6 +106,9 @@ $(BUILD_DIR)/src/Game/STREAM.c.o: CFLAGS += -fno-builtin
 $(BUILD_DIR)/src/Game/SIGNAL.c.o: CFLAGS += -fno-builtin
 $(BUILD_DIR)/src/Game/CINEMA/CINEPSX.c.o: CFLAGS += -G0
 $(BUILD_DIR)/src/Game/MCARD/MEMCARD.c.o: CFLAGS += -G0
+$(BUILD_DIR)/src/Game/PLAN/ENMYPLAN.c.o: CFLAGS += -funsigned-char
+$(BUILD_DIR)/src/Game/STRMLOAD.c.o: CFLAGS += -funsigned-char
+$(BUILD_DIR)/src/Game/PLAN/PLANPOOL.c.o: CFLAGS += -funsigned-char
 
 all: $(EXE)
 

@@ -39,10 +39,6 @@ int PLANPOOL_NumConnectionsForNode(PlanningNode *node)
     return PLANPOOL_CountBitsSetInLong(node->connections);
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_GetFirstNodeOfSource);
-#else
 PlanningNode *PLANPOOL_GetFirstNodeOfSource(PlanningNode *planningPool, char nodeSource)
 {
     int i;
@@ -57,12 +53,7 @@ PlanningNode *PLANPOOL_GetFirstNodeOfSource(PlanningNode *planningPool, char nod
 
     return NULL;
 }
-#endif
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_NumberOfNodesOfType);
-#else
 int PLANPOOL_NumberOfNodesOfType(PlanningNode *planningPool, char nodeType)
 {
     int i;
@@ -80,12 +71,7 @@ int PLANPOOL_NumberOfNodesOfType(PlanningNode *planningPool, char nodeType)
 
     return numNodesOfType;
 }
-#endif
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_NumberOfNodesOfSource);
-#else
 int PLANPOOL_NumberOfNodesOfSource(PlanningNode *planningPool, char nodeSource)
 {
     int i;
@@ -103,7 +89,6 @@ int PLANPOOL_NumberOfNodesOfSource(PlanningNode *planningPool, char nodeSource)
 
     return numNodesOfSource;
 }
-#endif
 
 PlanningNode *PLANPOOL_GetNodeWithID(PlanningNode *planningPool, int type, int id, long suID)
 {
@@ -147,10 +132,6 @@ PlanningNode *PLANPOOL_GetNodeByPosition(Position *currentPos, PlanningNode *pla
     return returnNode;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANPOOL", PLANPOOL_GetClosestNode);
-#else
 PlanningNode *PLANPOOL_GetClosestNode(Position *pos, PlanningNode *planningPool, char distanceType)
 {
     int i;
@@ -183,7 +164,6 @@ PlanningNode *PLANPOOL_GetClosestNode(Position *pos, PlanningNode *planningPool,
 
     return closestNode;
 }
-#endif
 
 int PLANPOOL_AppropriatePair(PlanningNode *node1, PlanningNode *node2)
 {
