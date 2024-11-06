@@ -1382,6 +1382,219 @@ int SOUND_IsMusicLoading()
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessMusicLoad);
+/* TODO: this function needs .sbss and .sdata migration of this file to C
+extern char D_800D0F34[];
+char D_800D0F4C[65565] = "m";
+char D_800D0F68[65565] = "m";
+extern char D_800D0F84[];
+void SOUND_ProcessMusicLoad()
+{
+    char musicName[8];
+    char sndFileName[32];
+    char smpFileName[32];
+    MusicLoadCmd *cmd;
+    Level *level;
+
+    switch (musicInfo.state)
+    {
+    case 0:
+        if (musicInfo.numCmdsInQueue != 0)
+        {
+            cmd = &musicInfo.commandQueue[musicInfo.commandOut];
+
+            if (cmd->type == 0)
+            {
+                musicInfo.state = 11;
+                musicInfo.nextState = 13;
+
+                musicInfo.currentMusicPlane = cmd->data;
+
+                aadStartMusicMasterVolFade(0, -3, musicFadeoutReturnFunc);
+            }
+
+            musicInfo.commandOut = (musicInfo.commandOut + 1) & 0x3;
+
+            musicInfo.numCmdsInQueue--;
+        }
+        else if (musicInfo.checkMusicDelay == 0)
+        {
+            if (aadMem->sramDefragInfo.status == 0)
+            {
+                musicInfo.checkMusicDelay = 30;
+
+                level = STREAM_GetLevelWithID(gameTrackerX.playerInstance->currentStreamUnitID);
+
+                if (level != NULL)
+                {
+                    if (level->dynamicMusicName != NULL)
+                    {
+                        musicName[0] = level->dynamicMusicName[0];
+                        musicName[1] = level->dynamicMusicName[1];
+
+                        if (musicInfo.currentMusicPlane == -1)
+                        {
+                            musicInfo.currentMusicPlane = gameTrackerX.gameData.asmData.MorphType;
+                        }
+
+                        if (musicInfo.currentMusicPlane != 0)
+                        {
+                            musicName[2] = 's';
+                            musicName[3] = 'p';
+                        }
+                        else
+                        {
+                            musicName[2] = 'm';
+                            musicName[3] = 'a';
+                        }
+
+                        musicName[4] = 0;
+
+                        if (strcmpi(musicName, musicInfo.currentMusicName) != 0)
+                        {
+                            if ((unsigned char)musicInfo.currentMusicName[0] != 0)
+                            {
+                                // sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicName, musicName);
+                                sprintf(sndFileName, D_800D0F34, musicName, musicName);
+
+                                if (LOAD_DoesFileExist(sndFileName) != 0)
+                                {
+                                    strcpy(musicInfo.currentMusicName, musicName);
+                                    // strcpy(sndFileName, "\\kain2\\music\\uwtr\\uwtr.snd");
+                                    memcpy(sndFileName, D_800D0F4C, 27);
+                                    // strcpy(smpFileName, "\\kain2\\music\\uwtr\\uwtr.smp");
+                                    memcpy(smpFileName, D_800D0F68, 27);
+
+                                    musicInfo.state = 3;
+                                    musicInfo.nextState = 4;
+
+                                    aadLoadDynamicSoundBank(sndFileName, smpFileName, 1, 0, musicLoadReturnFunc);
+                                }
+                            }
+                            else
+                            {
+                                // sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicName, musicName);
+                                sprintf(sndFileName, D_800D0F34, musicName, musicName);
+                                // sprintf(smpFileName, "\\kain2\\music\\%s\\%s.smp", musicName, musicName);
+                                sprintf(smpFileName, D_800D0F84, musicName, musicName);
+
+                                if (LOAD_DoesFileExist(sndFileName) != 0)
+                                {
+                                    strcpy(musicInfo.currentMusicName, musicName);
+
+                                    musicInfo.state = 1;
+                                    musicInfo.nextState = 2;
+
+                                    aadLoadDynamicSoundBank(sndFileName, smpFileName, 0, 1, musicLoadReturnFunc);
+                                }
+                            }
+                        }
+                    }
+                    else if ((unsigned char)musicInfo.currentMusicName[0] != 0)
+                    {
+                        musicInfo.currentMusicName[0] = 0;
+
+                        musicInfo.state = 11;
+                        musicInfo.nextState = 12;
+
+                        aadStartMusicMasterVolFade(0, -1, musicFadeoutReturnFunc);
+                    }
+                }
+            }
+        }
+        else
+        {
+            musicInfo.checkMusicDelay--;
+        }
+
+        break;
+    case 2:
+        if (aadAssignDynamicSequence(0, 0, 0) == 0)
+        {
+            aadStartSlot(0);
+        }
+
+        musicInfo.state = 0;
+        break;
+    case 4:
+        if (musicInfo.errorStatus == 0)
+        {
+            musicInfo.state = 5;
+            musicInfo.nextState = 6;
+
+            musicInfo.bankLoaded = 1;
+
+            aadInstallEndSequenceCallback(musicEndCallbackFunc, 0);
+
+            aadSetUserVariable(127, 1);
+        }
+        else
+        {
+            musicInfo.state = 0;
+        }
+
+        break;
+    case 6:
+        if (aadMem->sramDefragInfo.status == 0)
+        {
+            // sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicInfo.currentMusicName, musicInfo.currentMusicName);
+            sprintf(sndFileName, D_800D0F34, musicInfo.currentMusicName, musicInfo.currentMusicName);
+            // sprintf(smpFileName, "\\kain2\\music\\%s\\%s.smp", musicInfo.currentMusicName, musicInfo.currentMusicName);
+            sprintf(smpFileName, D_800D0F84, musicInfo.currentMusicName, musicInfo.currentMusicName);
+
+            aadLoadDynamicSoundBank(sndFileName, smpFileName, 0, 1, musicLoadReturnFunc);
+
+            musicInfo.state = 7;
+            musicInfo.nextState = 8;
+        }
+
+        break;
+    case 8:
+        if (musicInfo.errorStatus == 0)
+        {
+            musicInfo.state = 9;
+            musicInfo.nextState = 10;
+
+            musicInfo.bankLoaded = 0;
+
+            aadInstallEndSequenceCallback(musicEndCallbackFunc, 0);
+
+            aadSetUserVariable(127, 1);
+        }
+        else
+        {
+            musicInfo.state = 0;
+        }
+
+        break;
+    case 10:
+        aadFreeDynamicSoundBank(1);
+
+        musicInfo.state = 0;
+        break;
+    case 12:
+        aadStopAllSlots();
+
+        aadFreeDynamicSoundBank(0);
+
+        aadStartMusicMasterVolFade(gameTrackerX.sound.gMusicVol, 1, NULL);
+
+        musicInfo.state = 0;
+        break;
+    case 13:
+        aadStopAllSlots();
+
+        aadFreeDynamicSoundBank(0);
+
+        aadStartMusicMasterVolFade(gameTrackerX.sound.gMusicVol, 1, NULL);
+
+        musicInfo.currentMusicName[0] = 0;
+
+        musicInfo.checkMusicDelay = 0;
+
+        musicInfo.state = 0;
+        break;
+    }
+} */
 
 extern char D_800D0F9C[];
 void SOUND_UpdateSound()
