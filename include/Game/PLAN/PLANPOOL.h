@@ -18,5 +18,7 @@ int PLANPOOL_NumConnectionsExaminedForNode(PlanningNode *node);
 PlanningNode *PLANPOOL_AddNodeToPool(Position *pos, PlanningNode *planningPool, short nodeType, short nodeID, long streamUnitID);
 void PLANPOOL_ChangeNodePosition(Position *newPos, PlanningNode *nodeToChange, PlanningNode *planningPool);
 PlanningNode *PLANPOOL_GetNodeWithID(PlanningNode *planningPool, int type, int id, long suID);
+// PlanningNode *PLANPOOL_GetClosestNode(Position *pos, PlanningNode *planningPool, char distanceType);
+int PLANPOOL_GetClosestNode(); // TODO: this fake matches PLAN_CalcMinDistFromExistingNodes, try to get that function to work with the definition above.
 
 #endif

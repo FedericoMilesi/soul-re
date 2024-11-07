@@ -9,7 +9,32 @@
 #include "Game/GAMELOOP.h"
 #include "Game/MEMPACK.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_CalcMinDistFromExistingNodes);
+long PLAN_CalcMinDistFromExistingNodes(Position *pos, PlanningNode *planningPool, int distanceType)
+{
+    PlanningNode *closestNode;
+    long minDist;
+
+    // TODO: needs to match via including the proper definition for the function below
+    closestNode = (PlanningNode *)(intptr_t)PLANPOOL_GetClosestNode(pos, planningPool, distanceType);
+
+    if (closestNode != NULL)
+    {
+        if (distanceType == 0)
+        {
+            minDist = MATH3D_LengthXY(pos->x - closestNode->pos.x, pos->y - closestNode->pos.y);
+        }
+        else
+        {
+            minDist = MATH3D_LengthXYZ(pos->x - closestNode->pos.x, pos->y - closestNode->pos.y, pos->z - closestNode->pos.z);
+        }
+    }
+    else
+    {
+        minDist = 0x7FFFFFFF;
+    }
+
+    return minDist;
+}
 
 void PLAN_UpdatePlanMkrNodes(PlanningNode *planningPool, Position *playerPos)
 {
