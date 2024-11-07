@@ -45,7 +45,7 @@ int PLANAPI_FindPathBetweenNodes(PlanningNode *startNode, PlanningNode *goalNode
     int successFlag;
     PlanningNode *temp; // not from decls.h
 
-    planningPool = gameTrackerX.planningPool;
+    planningPool = (PlanningNode *)gameTrackerX.planningPool;
 
     successFlag = 0;
 
