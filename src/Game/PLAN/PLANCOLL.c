@@ -6,7 +6,44 @@
 #include "Game/STREAM.h"
 #include "Game/COLLIDE.h"
 
-STATIC FindTerrainHit directionList[6];
+static FindTerrainHit directionList[6] = {
+    {
+        0,
+        0,
+        1,
+        0,
+    },
+    {
+        1,
+        0,
+        0,
+        1,
+    },
+    {
+        0,
+        1,
+        0,
+        1,
+    },
+    {
+        0xFF,
+        0,
+        0,
+        1,
+    },
+    {
+        0,
+        0xFF,
+        0,
+        1,
+    },
+    {
+        0,
+        0,
+        0xFF,
+        2,
+    },
+};
 
 int PLANCOLL_DoesLOSExistFinal(Position *startPos, Position *endPos, int collideType, int passThroughHit, int zoffset)
 {

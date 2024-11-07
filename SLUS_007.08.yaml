@@ -247,7 +247,7 @@ segments:
       - [0x0C23D0, sdata, Game/MONSTER/WORSHIP]
       - [0x0C23F0, .sdata, Game/MONSTER/MBMISS]
       - [0x0C2408, .sdata, Game/G2/QUATG2]
-      - [0x0C2418, sdata, Game/PLAN/PLANCOLL]
+      - [0x0C2418, .sdata, Game/PLAN/PLANCOLL]
       - [0x0C2430, sdata] # Game/RAZIEL/* include C files?
       - [0x0C25C4, .sdata, Game/UNDRWRLD]
       - [0x0C25D8, sdata, Game/SAVEINFO]
