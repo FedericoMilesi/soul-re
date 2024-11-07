@@ -7,10 +7,94 @@
 #include "Game/STREAM.h"
 #include "Game/COLLIDE.h"
 #include "Game/GAMELOOP.h"
+#include "Game/MEMPACK.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_CalcMinDistFromExistingNodes);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_UpdatePlanMkrNodes);
+void PLAN_UpdatePlanMkrNodes(PlanningNode *planningPool, Position *playerPos)
+{
+    int i;
+    int d;
+    long zDiff;
+    StreamUnit *streamUnit;
+    int temp; // not from decls.h
+
+    streamUnit = &StreamTracker.StreamList[0];
+
+    for (d = 0; d < 16; d++, streamUnit++)
+    {
+        if ((streamUnit->used == 2) && (MEMPACK_MemoryValidFunc((char *)streamUnit->level) != 0))
+        {
+            int numPlanMkrs;
+            PlanMkr *planMkr;
+            long suID;
+
+            planMkr = streamUnit->level->PlanMarkerList;
+
+            numPlanMkrs = streamUnit->level->NumberOfPlanMarkers;
+
+            suID = streamUnit->StreamUnitID;
+
+            if (numPlanMkrs != 0)
+            {
+                for (i = 0; i < numPlanMkrs; i++, planMkr++)
+                {
+                    long nodeType;
+                    long nodeID;
+
+                    temp = MATH3D_LengthXY(planMkr->pos.x - playerPos->x, planMkr->pos.y - playerPos->y);
+
+                    zDiff = abs(playerPos->z - planMkr->pos.z);
+
+                    if ((temp < 8000) && (zDiff < 4000))
+                    {
+                        nodeID = planMkr->id & ~0xF000;
+
+                        if (!(planMkr->id & 0x1000))
+                        {
+                            if ((planMkr->id & 0x8000))
+                            {
+                                nodeType = 12;
+                            }
+                            else if ((planMkr->id & 0x4000))
+                            {
+                                nodeType = 28;
+                            }
+                            else if ((planMkr->id & 0x2000))
+                            {
+                                nodeType = 20;
+                            }
+                            else
+                            {
+                                nodeType = 4;
+                            }
+
+                            if (PLANPOOL_GetNodeWithID(planningPool, nodeType, nodeID, suID) == 0)
+                            {
+                                PLANPOOL_AddNodeToPool(&planMkr->pos, planningPool, nodeType, nodeID, streamUnit->StreamUnitID);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (i = 0; i < poolManagementData->numNodesInPool; i++)
+    {
+        if ((planningPool[i].nodeType & 0x7) == 4)
+        {
+            temp = MATH3D_LengthXY(planningPool[i].pos.x - playerPos->x, planningPool[i].pos.y - playerPos->y);
+
+            zDiff = abs(playerPos->z - planningPool[i].pos.z);
+
+            if ((temp > 10000) || (zDiff > 5000))
+            {
+                PLANPOOL_DeleteNodeFromPool(&planningPool[i], planningPool);
+            }
+        }
+    }
+}
 
 void PLAN_UpdatePlayerNode(PlanningNode *planningPool, Position *playerPos)
 {
