@@ -125,6 +125,7 @@ int ENMYPLAN_PathClear(Position *pos, Position *target)
     int oldPCO;
     Position *tpos;
     Position newTarget;
+    int temp; // not from decls.h
 
     oldPCO = gameTrackerX.plan_collide_override;
 
@@ -154,9 +155,11 @@ int ENMYPLAN_PathClear(Position *pos, Position *target)
         tpos = target;
     }
 
-    PLANCOLL_DoesStraightLinePathExist(pos, tpos, 0);
+    temp = PLANCOLL_DoesStraightLinePathExist(pos, tpos, 0);
 
     gameTrackerX.plan_collide_override = oldPCO;
+
+    return temp;
 }
 
 int ENMYPLAN_MoveToTargetFinal(Instance *instance, Position *outputPos, int slotID, Position *targetPos, int validNodeTypes)
@@ -403,7 +406,7 @@ void ENMYPLAN_RelocatePlanPositions(int slotID, Position *offset)
     int i;
     int numWayPoints;
 
-    pool = gameTrackerX.enemyPlanPool;
+    pool = (EnemyPlanSlotData *)gameTrackerX.enemyPlanPool;
 
     planSlot = &pool[slotID];
 
