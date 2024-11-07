@@ -96,7 +96,7 @@ void PLAN_UpdatePlanMkrNodes(PlanningNode *planningPool, Position *playerPos)
 
                             if (PLANPOOL_GetNodeWithID(planningPool, nodeType, nodeID, suID) == 0)
                             {
-                                PLANPOOL_AddNodeToPool(&planMkr->pos, planningPool, nodeType, nodeID, streamUnit->StreamUnitID);
+                                PLANPOOL_AddNodeToPool(&planMkr->pos, planningPool, (short)nodeType, (short)nodeID, streamUnit->StreamUnitID);
                             }
                         }
                     }
