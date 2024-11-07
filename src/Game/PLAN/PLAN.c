@@ -4,6 +4,8 @@
 #include "Game/PLAN/PLANPOOL.h"
 #include "Game/PLAN/PLANCOLL.h"
 #include "Game/MATH3D.h"
+#include "Game/STREAM.h"
+#include "Game/COLLIDE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_CalcMinDistFromExistingNodes);
 
@@ -11,7 +13,40 @@ INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_UpdatePlanMkrNodes);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_UpdatePlayerNode);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_AddRandomNode);
+void PLAN_AddRandomNode(PlanningNode *planningPool, Position *playerPos)
+{
+    int i;
+    PlanCollideInfo pci;
+    int successFlag;
+
+    successFlag = 0;
+
+    for (i = 0; i < 5; i++)
+    {
+        COPY_SVEC(Position, &pci.collidePos, Position, playerPos);
+
+        pci.collidePos.x += (rand() % 24000) - 12000;
+        pci.collidePos.y += (rand() % 24000) - 12000;
+
+        if ((MATH3D_LengthXYZ(playerPos->x - pci.collidePos.x, playerPos->y - pci.collidePos.y, playerPos->z - pci.collidePos.z) < 12000) && (PLAN_CalcMinDistFromExistingNodes(&pci.collidePos, planningPool, 0) > 1000))
+        {
+            successFlag = 1;
+            break;
+        }
+    }
+
+    if ((successFlag == 1) && ((PLANCOLL_FindTerrainHitFinal(&pci, NULL, 256, -2000, 0, 0) != 0) || (PLANCOLL_FindTerrainHitFinal(&pci, NULL, 2000, 0, 0, 0) != 0)))
+    {
+        SVector normal;
+
+        COLLIDE_GetNormal(pci.tFace->normal, (short *)STREAM_GetLevelWithID(pci.StreamUnitID)->terrain->normalList, &normal);
+
+        if (normal.z > 2048)
+        {
+            PLANPOOL_AddNodeToPool(&pci.collidePos, planningPool, 0, 0, pci.StreamUnitID);
+        }
+    }
+}
 
 void PLAN_DeleteRandomNode(PlanningNode *planningPool)
 {
