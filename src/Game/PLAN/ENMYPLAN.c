@@ -57,7 +57,7 @@ void ENMYPLAN_ReleasePlanningWorkspace(int slotID)
 {
     EnemyPlanSlotData *pool;
 
-    pool = gameTrackerX.enemyPlanPool;
+    pool = (EnemyPlanSlotData *)gameTrackerX.enemyPlanPool;
 
     if (slotID >= 0)
     {
