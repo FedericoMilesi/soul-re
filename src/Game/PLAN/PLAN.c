@@ -65,4 +65,28 @@ void PLAN_AddOrRemoveNodes(PlanningNode *planningPool, Instance *player)
     PLAN_AddOrRemoveRandomNodes(planningPool, &player->position);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_FindNodeMostInNeedOfConnectivityExpansion);
+PlanningNode *PLAN_FindNodeMostInNeedOfConnectivityExpansion(PlanningNode *planningPool)
+{
+    int i;
+    int numConnections;
+    int minNumConnections;
+    PlanningNode *nodeToReturn;
+
+    minNumConnections = 65535;
+
+    nodeToReturn = NULL;
+
+    for (i = 0; i < poolManagementData->numNodesInPool; i++)
+    {
+        numConnections = PLANPOOL_NumConnectionsForNode(&planningPool[i]);
+
+        if ((numConnections < minNumConnections) && (PLANPOOL_NumConnectionsExaminedForNode(&planningPool[i]) != poolManagementData->numNodesInPool))
+        {
+            minNumConnections = numConnections;
+
+            nodeToReturn = &planningPool[i];
+        }
+    }
+
+    return nodeToReturn;
+}

@@ -13,5 +13,7 @@ int PLANPOOL_NumNodesInPlan(PlanningNode *goalNode, PlanningNode *planningPool);
 PlanningNode *PLANPOOL_GetClosestUnexploredValidNeighbor(PlanningNode *startNode, PlanningNode *planningPool);
 void PLANPOOL_MarkTwoNodesAsConnected(PlanningNode *node1, PlanningNode *node2, PlanningNode *planningPool);
 void PLANPOOL_MarkTwoNodesAsNotConnected(PlanningNode *node1, PlanningNode *node2, PlanningNode *planningPool);
+int PLANPOOL_NumConnectionsForNode(PlanningNode *node);
+int PLANPOOL_NumConnectionsExaminedForNode(PlanningNode *node);
 
 #endif
