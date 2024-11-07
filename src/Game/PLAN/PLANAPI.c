@@ -75,7 +75,7 @@ void PLANAPI_DoTimingCalcsAndDrawing(long startTime, PlanningNode *planningPool)
     minTime = 0x7FFFFFFF;
     maxTime = 0;
 
-    timerArray[timerIndex] = TIMER_TimeDiff(startTime);
+    timerArray[timerIndex] = (long)TIMER_TimeDiff(startTime);
 
     for (i = 0; i < 10; i++)
     {
