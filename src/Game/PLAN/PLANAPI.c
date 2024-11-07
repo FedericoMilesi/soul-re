@@ -31,7 +31,7 @@ void PLANAPI_ConvertPlanIntoEnmyPlanDataFormat(PlanningNode *goalNode, EnemyPlan
         if (i < 8)
         {
             planData->wayPointArray[i] = currentNode->pos;
-            planData->nodeTypeArray[i] = currentNode->nodeType;
+            planData->nodeTypeArray[i] = (unsigned char)currentNode->nodeType;
             planData->nodeSkipArray[i] = 0;
         }
 
