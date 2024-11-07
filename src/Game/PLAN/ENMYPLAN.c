@@ -175,7 +175,7 @@ int ENMYPLAN_MoveToTargetFinal(Instance *instance, Position *outputPos, int slot
     Position *nextNextWayPointPos;
     int temp; // not from decls.h
 
-    pool = gameTrackerX.enemyPlanPool;
+    pool = (EnemyPlanSlotData *)gameTrackerX.enemyPlanPool;
 
     gameTrackerX.plan_collide_override = 1;
 
