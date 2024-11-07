@@ -1,6 +1,6 @@
 #include "common.h"
 #include "Game/PLAN/PLAN.h"
-#include "Game/PLAN/PLANAPI.h"
+// #include "Game/PLAN/PLANAPI.h"
 #include "Game/PLAN/PLANPOOL.h"
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/PLAN/PLANSRCH.h"
@@ -9,11 +9,13 @@
 #include "Game/MATH3D.h"
 #include "Game/PLAN/PLANCOLL.h"
 
+STATIC PoolManagementData poolManagementDataStorage;
+
 STATIC long timerArray[10];
 
 STATIC long timerIndex;
 
-STATIC PoolManagementData poolManagementDataStorage;
+STATIC PoolManagementData *poolManagementData;
 
 void PLANAPI_ConvertPlanIntoEnmyPlanDataFormat(PlanningNode *goalNode, EnemyPlanData *planData, PlanningNode *planningPool)
 {
