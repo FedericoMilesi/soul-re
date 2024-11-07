@@ -59,7 +59,7 @@ int PLANAPI_FindPathBetweenNodes(PlanningNode *startNode, PlanningNode *goalNode
 
             successFlag = 1;
 
-            planData->goalUnitID = temp->streamUnitID;
+            planData->goalUnitID = (short)temp->streamUnitID;
         }
     }
 
