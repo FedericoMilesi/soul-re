@@ -367,7 +367,7 @@ int ENMYPLAN_GetNodeTypeOfNextWaypoint(int slotID)
     EnemyPlanSlotData *pool;
     EnemyPlanSlotData *planSlot;
 
-    pool = gameTrackerX.enemyPlanPool;
+    pool = (EnemyPlanSlotData *)gameTrackerX.enemyPlanPool;
 
     if (ValidSlotAndState(pool, slotID) != 0)
     {
