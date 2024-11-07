@@ -384,7 +384,7 @@ int ENMYPLAN_GetPosOfNextWaypoint(int slotID, Position *pos)
     EnemyPlanSlotData *pool;
     EnemyPlanSlotData *planSlot;
 
-    pool = gameTrackerX.enemyPlanPool;
+    pool = (EnemyPlanSlotData *)gameTrackerX.enemyPlanPool;
 
     if (ValidSlotAndState(pool, slotID) != 0)
     {
