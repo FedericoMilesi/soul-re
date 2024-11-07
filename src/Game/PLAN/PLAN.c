@@ -2,6 +2,7 @@
 #include "Game/PLAN/PLAN.h"
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/PLAN/PLANPOOL.h"
+#include "Game/PLAN/PLANCOLL.h"
 #include "Game/MATH3D.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_CalcMinDistFromExistingNodes);
@@ -46,7 +47,20 @@ void PLAN_AddOrRemoveRandomNodes(PlanningNode *planningPool, Position *playerPos
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_AddInitialNodes);
+void PLAN_AddInitialNodes(PlanningNode *planningPool, Instance *player)
+{
+    PlanCollideInfo pci;
+
+    COPY_SVEC(Position, &pci.collidePos, Position, &player->position);
+
+    PLANCOLL_FindTerrainHitFinal(&pci, NULL, 256, -1024, 0, 0);
+
+    PLANPOOL_AddNodeToPool(&pci.collidePos, planningPool, 1, 0, player->currentStreamUnitID);
+
+    PLAN_UpdatePlanMkrNodes(planningPool, &player->position);
+
+    poolManagementData->playerPosAtLastPlanMkrUpdate = player->position;
+}
 
 void PLAN_AddOrRemoveNodes(PlanningNode *planningPool, Instance *player)
 {
