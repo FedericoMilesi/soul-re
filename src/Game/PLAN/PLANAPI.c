@@ -481,4 +481,75 @@ int PLANAPI_FindNodePositionInUnit(StreamUnit *streamUnit, Position *pos, int id
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_FindClosestNodePositionInUnit);
+int PLANAPI_FindClosestNodePositionInUnit(StreamUnit *streamUnit, Position *target, Position *pos, int offset, int max, int type, int distanceCheck)
+{
+    Level *level;
+    int numPlanMkrs;
+    PlanMkr *planMkr;
+    Position *ptr;
+    int dist;
+    int min_dist;
+    int chk;
+    int res;
+    int i;
+
+    ptr = NULL;
+
+    min_dist = 0x7FFF;
+
+    level = streamUnit->level;
+
+    planMkr = level->PlanMarkerList;
+
+    numPlanMkrs = level->NumberOfPlanMarkers;
+
+    res = 0;
+
+    chk = PLANAPI_GetFlags(type);
+
+    for (i = numPlanMkrs; i > 0; i--, planMkr++)
+    {
+        if ((planMkr->id & chk))
+        {
+            if (distanceCheck == 0)
+            {
+                dist = MATH3D_LengthXY(target->x - planMkr->pos.x, target->y - planMkr->pos.y);
+            }
+            else
+            {
+                dist = MATH3D_LengthXYZ(target->x - planMkr->pos.x, target->y - planMkr->pos.y, target->z - planMkr->pos.z);
+            }
+
+            if (dist < max)
+            {
+                dist = abs(dist - offset);
+
+                if (dist < min_dist)
+                {
+                    min_dist = dist;
+
+                    ptr = &planMkr->pos;
+
+                    res = 1;
+                }
+            }
+        }
+    }
+
+    if (res != 0)
+    {
+        short _x1;
+        short _y1;
+        short _z1;
+
+        _x1 = ptr->x;
+        _y1 = ptr->y;
+        _z1 = ptr->z;
+
+        pos->x = _x1;
+        pos->y = _y1;
+        pos->z = _z1;
+    }
+
+    return res;
+}
