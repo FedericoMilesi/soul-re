@@ -6,12 +6,55 @@
 #include "Game/MATH3D.h"
 #include "Game/STREAM.h"
 #include "Game/COLLIDE.h"
+#include "Game/GAMELOOP.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_CalcMinDistFromExistingNodes);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_UpdatePlanMkrNodes);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLAN", PLAN_UpdatePlayerNode);
+void PLAN_UpdatePlayerNode(PlanningNode *planningPool, Position *playerPos)
+{
+    PlanningNode *playerNode;
+    int nodePlacement;
+    int foundHit;
+    PlanCollideInfo pci;
+
+    playerNode = PLANPOOL_GetFirstNodeOfSource(planningPool, 1);
+
+    if (playerNode != NULL)
+    {
+        foundHit = PLANCOLL_CheckUnderwaterPoint(playerPos);
+
+        if (foundHit != -1)
+        {
+            PLANPOOL_ChangeNodePosition(playerPos, playerNode, planningPool);
+
+            playerNode->nodeType = 25;
+
+            playerNode->streamUnitID = foundHit;
+            return;
+        }
+
+        COPY_SVEC(Position, &pci.collidePos, Position, playerPos);
+
+        if (PLANCOLL_FindTerrainHitFinal(&pci, &nodePlacement, 256, -640, 0, 5) != 0)
+        {
+            PLANPOOL_ChangeNodePosition(&pci.collidePos, playerNode, planningPool);
+
+            playerNode->nodeType = ((nodePlacement & 0x3) << 3) | 0x1;
+
+            playerNode->streamUnitID = pci.StreamUnitID;
+        }
+        else if (MATH3D_LengthXYZ(playerPos->x - playerNode->pos.x, playerPos->y - playerNode->pos.y, playerPos->z - playerNode->pos.z) > 12000)
+        {
+            PLANPOOL_ChangeNodePosition(playerPos, playerNode, planningPool);
+
+            playerNode->nodeType = 1;
+
+            playerNode->streamUnitID = gameTrackerX.playerInstance->currentStreamUnitID;
+        }
+    }
+}
 
 void PLAN_AddRandomNode(PlanningNode *planningPool, Position *playerPos)
 {

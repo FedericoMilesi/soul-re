@@ -16,5 +16,6 @@ void PLANPOOL_MarkTwoNodesAsNotConnected(PlanningNode *node1, PlanningNode *node
 int PLANPOOL_NumConnectionsForNode(PlanningNode *node);
 int PLANPOOL_NumConnectionsExaminedForNode(PlanningNode *node);
 PlanningNode *PLANPOOL_AddNodeToPool(Position *pos, PlanningNode *planningPool, short nodeType, short nodeID, long streamUnitID);
+void PLANPOOL_ChangeNodePosition(Position *newPos, PlanningNode *nodeToChange, PlanningNode *planningPool);
 
 #endif
