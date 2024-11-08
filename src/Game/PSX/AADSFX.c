@@ -1,7 +1,16 @@
 #include "common.h"
 #include "Game/PSX/AADSFX.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadPlaySfx);
+unsigned long aadPlaySfx(unsigned int toneID, int volume, int pan, int pitchOffset)
+{
+    unsigned long handle;
+
+    handle = createSfxHandle(toneID);
+
+    aadPutSfxCommand(0, volume, pan, handle, (short)pitchOffset);
+
+    return handle;
+}
 
 unsigned long aadStopSfx(unsigned long handle)
 {
