@@ -190,6 +190,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdLockVoice);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetVoiceAttr);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetVoiceKeyOn);
+void sfxCmdSetVoiceKeyOn(AadSfxCommand *sfxCmd)
+{
+    aadMem->voiceKeyOnRequest |= sfxCmd->ulongParam;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetVoiceKeyOff);
