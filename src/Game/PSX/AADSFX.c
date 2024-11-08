@@ -24,6 +24,7 @@ void aadStopAllSfx()
 {
     aadPutSfxCommand(4, 0, 0, 0, 0);
 }
+
 // Matches 100% on decomp.me but differs on this project
 #ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxPlaying);
@@ -47,7 +48,42 @@ int aadIsSfxPlaying(unsigned long handle)
 }
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxPlayingOrRequested);
+int aadIsSfxPlayingOrRequested(unsigned long handle)
+{
+    int commandOut;
+    int i;
+    AadSfxCommand *sfxCmd;
+
+    EnterCriticalSection();
+
+    commandOut = aadMem->sfxSlot.commandOut;
+
+    for (i = aadMem->sfxSlot.commandsInQueue; i != 0; i--)
+    {
+        sfxCmd = &aadMem->sfxSlot.commandQueue[commandOut];
+
+        if (sfxCmd->statusByte == 0)
+        {
+            if (sfxCmd->ulongParam == handle)
+            {
+                ExitCriticalSection();
+
+                return 1;
+            }
+        }
+
+        commandOut++;
+
+        if (commandOut == 32)
+        {
+            commandOut = 0;
+        }
+    }
+
+    ExitCriticalSection();
+
+    return aadIsSfxPlaying(handle);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxTypePlaying);
 
