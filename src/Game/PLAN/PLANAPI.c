@@ -119,7 +119,7 @@ void PLANAPI_DeleteNodesFromPoolByType(int nodeSource)
     PlanningNode *nodeToDelete;
     int i;
 
-    planningPool = nodeToDelete = gameTrackerX.planningPool;
+    planningPool = nodeToDelete = (PlanningNode *)gameTrackerX.planningPool;
 
     for (i = 0; i < poolManagementData->numNodesInPool;)
     {
