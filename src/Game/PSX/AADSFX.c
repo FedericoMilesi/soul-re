@@ -85,7 +85,28 @@ int aadIsSfxPlayingOrRequested(unsigned long handle)
     return aadIsSfxPlaying(handle);
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxTypePlaying);
+#else
+int aadIsSfxTypePlaying(unsigned int toneID)
+{
+    AadSynthVoice *voice;
+    int i;
+
+    for (i = 0; i < 24; i++)
+    {
+        voice = &aadMem->synthVoice[i];
+
+        if ((voice->voiceID == 208) && ((unsigned short)voice->handle == (unsigned short)toneID) && ((aadMem->voiceStatus[i] != 0) && (aadMem->voiceStatus[i] != 2)))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxTypePlayingOrRequested);
 
