@@ -111,7 +111,37 @@ void PLANAPI_DoTimingCalcsAndDrawing(long startTime, PlanningNode *planningPool)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_AddNodeOfTypeToPool);
+int PLANAPI_AddNodeOfTypeToPool(Position *pos, int type)
+{
+    PlanningNode *planningPool;
+    int foundHit;
+    int nodePlacement;
+    PlanCollideInfo pci;
+
+    planningPool = (PlanningNode *)gameTrackerX.planningPool;
+
+    foundHit = PLANCOLL_CheckUnderwaterPoint(pos);
+
+    if (foundHit != -1)
+    {
+        PLANPOOL_AddNodeToPool(pos, planningPool, (type & 0x7) | 0x18, 0, foundHit);
+
+        return 1;
+    }
+
+    COPY_SVEC(Position, &pci.collidePos, Position, pos);
+
+    foundHit = PLANCOLL_FindTerrainHitFinal(&pci, &nodePlacement, 256, -640, 0, 5);
+
+    if (foundHit != 0)
+    {
+        PLANPOOL_AddNodeToPool(&pci.collidePos, planningPool, ((nodePlacement & 0x3) << 3) | (type & 0x7), 0, pci.StreamUnitID);
+
+        return 1;
+    }
+
+    return 0;
+}
 
 void PLANAPI_DeleteNodesFromPoolByType(int nodeSource)
 {
