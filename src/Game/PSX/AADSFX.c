@@ -152,7 +152,17 @@ unsigned long aadSetSfxVolPanPitch(unsigned long handle, int volume, int pan, in
     return handle;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", createSfxHandle);
+unsigned long createSfxHandle(unsigned int toneID)
+{
+    aadMem->sfxSlot.handleCounter++;
+
+    if (aadMem->sfxSlot.handleCounter == 0)
+    {
+        aadMem->sfxSlot.handleCounter += 1;
+    }
+
+    return (aadMem->sfxSlot.handleCounter << 16) | (unsigned short)toneID;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadPutSfxCommand);
 
