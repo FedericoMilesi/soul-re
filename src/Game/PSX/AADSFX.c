@@ -3,7 +3,12 @@
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadPlaySfx);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadStopSfx);
+unsigned long aadStopSfx(unsigned long handle)
+{
+    aadPutSfxCommand(1, 0, 0, handle, 0);
+
+    return handle;
+}
 
 void aadStopAllSfx()
 {
