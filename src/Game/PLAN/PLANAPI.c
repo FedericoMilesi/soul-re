@@ -162,7 +162,7 @@ int PLANAPI_FindPathInGraphToTarget(Position *startPos, EnemyPlanData *planData,
     PlanningNode *planningPool;
     PlanningNode *startNode;
 
-    planningPool = gameTrackerX.planningPool;
+    planningPool = (PlanningNode *)gameTrackerX.planningPool;
 
     startNode = PLANPOOL_GetNodeByPosition(startPos, planningPool);
 
