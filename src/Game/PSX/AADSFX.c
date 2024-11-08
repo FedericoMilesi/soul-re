@@ -8,7 +8,7 @@ unsigned long aadPlaySfx(unsigned int toneID, int volume, int pan, int pitchOffs
 
     handle = createSfxHandle(toneID);
 
-    aadPutSfxCommand(0, volume, pan, handle, (short)pitchOffset);
+    aadPutSfxCommand(0, volume, pan, handle, pitchOffset);
 
     return handle;
 }
