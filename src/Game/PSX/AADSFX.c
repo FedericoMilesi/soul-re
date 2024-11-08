@@ -145,7 +145,12 @@ int aadIsSfxTypePlayingOrRequested(unsigned int sfxToneID)
     return aadIsSfxTypePlaying(sfxToneID);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadSetSfxVolPanPitch);
+unsigned long aadSetSfxVolPanPitch(unsigned long handle, int volume, int pan, int pitch)
+{
+    aadPutSfxCommand(3, volume & 0xFF, pan & 0xFF, handle, pitch);
+
+    return handle;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", createSfxHandle);
 
