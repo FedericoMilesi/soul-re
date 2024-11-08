@@ -1,10 +1,14 @@
 #include "common.h"
+#include "Game/PSX/AADSFX.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadPlaySfx);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadStopSfx);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadStopAllSfx);
+void aadStopAllSfx()
+{
+    aadPutSfxCommand(4, 0, 0, 0, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxPlaying);
 
