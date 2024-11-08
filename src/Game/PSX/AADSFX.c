@@ -195,4 +195,8 @@ void sfxCmdSetVoiceKeyOn(AadSfxCommand *sfxCmd)
     aadMem->voiceKeyOnRequest |= sfxCmd->ulongParam;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetVoiceKeyOff);
+void sfxCmdSetVoiceKeyOff(AadSfxCommand *sfxCmd)
+{
+    aadMem->voiceKeyOffRequest |= sfxCmd->ulongParam;
+    aadMem->voiceKeyOnRequest &= ~sfxCmd->ulongParam;
+}
