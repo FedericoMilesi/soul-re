@@ -166,7 +166,7 @@ int PLANAPI_FindPathInGraphToTarget(Position *startPos, EnemyPlanData *planData,
 
     startNode = PLANPOOL_GetNodeByPosition(startPos, planningPool);
 
-    PLANAPI_FindPathBetweenNodes(startNode, PLANPOOL_GetFirstNodeOfSource(planningPool, 3), planData, validNodeTypes);
+    return PLANAPI_FindPathBetweenNodes(startNode, PLANPOOL_GetFirstNodeOfSource(planningPool, 3), planData, validNodeTypes);
 }
 
 void PLANAPI_InitPlanning(void *planningPool)
