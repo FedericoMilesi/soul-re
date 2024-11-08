@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/PSX/AADSFX.h"
+#include "Game/PSX/AADLIB.h"
 
 unsigned long aadPlaySfx(unsigned int toneID, int volume, int pan, int pitchOffset)
 {
@@ -23,8 +24,28 @@ void aadStopAllSfx()
 {
     aadPutSfxCommand(4, 0, 0, 0, 0);
 }
-
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxPlaying);
+#else
+int aadIsSfxPlaying(unsigned long handle)
+{
+    AadSynthVoice *voice;
+    int i;
+
+    for (i = 0; i < 24; i++)
+    {
+        voice = &aadMem->synthVoice[i];
+
+        if ((voice->voiceID == 208) && ((aadMem->voiceStatus[i] != 0) && (aadMem->voiceStatus[i] != 2)) && (voice->handle == handle))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxPlayingOrRequested);
 
