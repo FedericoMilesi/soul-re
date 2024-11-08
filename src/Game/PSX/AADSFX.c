@@ -108,7 +108,42 @@ int aadIsSfxTypePlaying(unsigned int toneID)
 }
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxTypePlayingOrRequested);
+int aadIsSfxTypePlayingOrRequested(unsigned int sfxToneID)
+{
+    int commandOut;
+    int i;
+    AadSfxCommand *sfxCmd;
+
+    EnterCriticalSection();
+
+    commandOut = aadMem->sfxSlot.commandOut;
+
+    for (i = aadMem->sfxSlot.commandsInQueue; i != 0; i--)
+    {
+        sfxCmd = &aadMem->sfxSlot.commandQueue[commandOut];
+
+        if (sfxCmd->statusByte == 0)
+        {
+            if ((unsigned short)sfxCmd->ulongParam == sfxToneID)
+            {
+                ExitCriticalSection();
+
+                return 1;
+            }
+        }
+
+        commandOut++;
+
+        if (commandOut == 32)
+        {
+            commandOut = 0;
+        }
+    }
+
+    ExitCriticalSection();
+
+    return aadIsSfxTypePlaying(sfxToneID);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadSetSfxVolPanPitch);
 
