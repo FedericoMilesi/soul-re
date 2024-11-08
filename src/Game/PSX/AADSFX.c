@@ -2,6 +2,8 @@
 #include "Game/PSX/AADSFX.h"
 #include "Game/PSX/AADLIB.h"
 
+STATIC void (*sfxCmdFunction[9])();
+
 unsigned long aadPlaySfx(unsigned int toneID, int volume, int pan, int pitchOffset)
 {
     unsigned long handle;
@@ -166,7 +168,13 @@ unsigned long createSfxHandle(unsigned int toneID)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadPutSfxCommand);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadExecuteSfxCommand);
+void aadExecuteSfxCommand(AadSfxCommand *sfxCmd)
+{
+    if (sfxCmd->statusByte < 9)
+    {
+        sfxCmdFunction[sfxCmd->statusByte](sfxCmd);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdPlayTone);
 
