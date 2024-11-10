@@ -5,6 +5,8 @@
 
 STATIC void (*sfxCmdFunction[9])();
 
+STATIC AadProgramAtr aadDummySfxProgram;
+
 unsigned long aadPlaySfx(unsigned int toneID, int volume, int pan, int pitchOffset)
 {
     unsigned long handle;
@@ -177,7 +179,68 @@ void aadExecuteSfxCommand(AadSfxCommand *sfxCmd)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdPlayTone);
+void sfxCmdPlayTone(AadSfxCommand *sfxCmd)
+{
+    unsigned long handle;
+    AadProgramAtr *progAtr;
+    AadToneAtr *toneAtr;
+    AadSynthVoice *voice;
+    unsigned short midiNote;
+    unsigned long waveAddr;
+    AadLoadedSfxToneAttr *sfxToneAttr;
+    AadLoadedSfxWaveAttr *sfxWaveAttr;
+    int i;
+
+    handle = sfxCmd->ulongParam;
+
+    i = aadMem->sfxToneMasterList[handle & 0xFFFF];
+
+    if (i < 254)
+    {
+        sfxToneAttr = &aadMem->sfxToneAttrTbl[i];
+
+        i = aadMem->sfxWaveMasterList[sfxToneAttr->waveID];
+
+        if (i < 254)
+        {
+            sfxWaveAttr = &aadMem->sfxWaveAttrTbl[i];
+
+            waveAddr = aadGetSramBlockAddr(sfxWaveAttr->sramHandle);
+
+            toneAtr = &sfxToneAttr->toneAttr;
+
+            midiNote = toneAtr->minNote;
+
+            progAtr = &aadDummySfxProgram;
+
+            voice = aadAllocateVoice(sfxToneAttr->toneAttr.priority);
+
+            if (voice != NULL)
+            {
+                aadPlayTone(toneAtr, waveAddr, progAtr, midiNote, 127, sfxCmd->dataByte[0], sfxCmd->dataByte[1], aadMem->sfxSlot.sfxVolume, aadMem->sfxMasterVol, voice, sfxCmd->shortParam);
+
+                voice->handle = handle;
+
+                voice->voiceID = 208;
+
+                voice->priority = toneAtr->priority;
+
+                voice->note = midiNote;
+
+                voice->program = toneAtr->parentProgram;
+
+                voice->volume = 127;
+
+                voice->updateVol = sfxCmd->dataByte[0];
+
+                voice->pan = sfxCmd->dataByte[1];
+
+                voice->progAtr = progAtr;
+                voice->toneAtr = toneAtr;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdStopTone);
 
