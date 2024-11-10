@@ -181,7 +181,36 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdPlayTone);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdStopTone);
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdStopAllTones);
+#else
+void sfxCmdStopAllTones(AadSfxCommand *sfxCmd)
+{
+    AadSynthVoice *voice;
+    unsigned long vmask;
+    unsigned short i;
+
+    (void)sfxCmd;
+
+    vmask = 0;
+
+    for (i = 0; i < 24; i++)
+    {
+        voice = &aadMem->synthVoice[i];
+
+        if ((voice->voiceID == 208) && ((aadMem->voiceStatus[i] != 0) && (aadMem->voiceStatus[i] != 2)))
+        {
+            voice->voiceID = 0xFF;
+
+            vmask |= voice->voiceMask;
+        }
+    }
+
+    aadMem->voiceKeyOffRequest |= vmask;
+    aadMem->voiceKeyOnRequest &= ~vmask;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetToneVolumeAndPan);
 
