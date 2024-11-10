@@ -308,10 +308,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetToneVolPanPitch);
 
 void sfxCmdLockVoice(AadSfxCommand *sfxCmd)
 {
-    void (*callbackProc)();
+    // void (*callbackProc)();
     AadSynthVoice *voice;
+    typedef void *(*func)(unsigned long); // not from decls.h
+    func callbackProc;                    // not from decls.h
 
-    callbackProc = (void *)sfxCmd->ulongParam;
+    callbackProc = (func)sfxCmd->ulongParam;
 
     voice = aadAllocateVoice(255);
 
