@@ -187,7 +187,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetToneVolumeAndPan);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetToneVolPanPitch);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdLockVoice);
+void sfxCmdLockVoice(AadSfxCommand *sfxCmd)
+{
+    void (*callbackProc)();
+    AadSynthVoice *voice;
+
+    callbackProc = (void *)sfxCmd->ulongParam;
+
+    voice = aadAllocateVoice(255);
+
+    if (voice != NULL)
+    {
+        voice->flags |= 0x1;
+
+        callbackProc(voice->voiceMask);
+    }
+    else
+    {
+        callbackProc(0);
+    }
+}
 
 void sfxCmdSetVoiceAttr(AadSfxCommand *sfxCmd)
 {
