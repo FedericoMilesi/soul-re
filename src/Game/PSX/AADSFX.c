@@ -169,7 +169,34 @@ unsigned long createSfxHandle(unsigned int toneID)
     return (aadMem->sfxSlot.handleCounter << 16) | (unsigned short)toneID;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadPutSfxCommand);
+void aadPutSfxCommand(int statusByte, int dataByte0, int dataByte1, unsigned long ulongParam, short shortParam)
+{
+    AadSfxCommand *sfxCmd;
+
+    if ((aadMem->sfxSlot.commandsInQueue < 30) || (statusByte = 4, (aadMem->sfxSlot.commandsInQueue < 31)))
+    {
+        EnterCriticalSection();
+
+        sfxCmd = &aadMem->sfxSlot.commandQueue[aadMem->sfxSlot.commandIn];
+
+        sfxCmd->statusByte = statusByte;
+
+        sfxCmd->dataByte[0] = dataByte0;
+        sfxCmd->dataByte[1] = dataByte1;
+
+        sfxCmd->ulongParam = ulongParam;
+        sfxCmd->shortParam = shortParam;
+
+        if (aadMem->sfxSlot.commandIn++ == 31)
+        {
+            aadMem->sfxSlot.commandIn = 0;
+        }
+
+        aadMem->sfxSlot.commandsInQueue++;
+
+        ExitCriticalSection();
+    }
+}
 
 void aadExecuteSfxCommand(AadSfxCommand *sfxCmd)
 {
