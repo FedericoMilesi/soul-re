@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/PSX/AADSFX.h"
 #include "Game/PSX/AADLIB.h"
+#include "Game/PSX/AADVOICE.h"
 
 STATIC void (*sfxCmdFunction[9])();
 
@@ -188,7 +189,33 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetToneVolPanPitch);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdLockVoice);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetVoiceAttr);
+void sfxCmdSetVoiceAttr(AadSfxCommand *sfxCmd)
+{
+    unsigned long v;
+    unsigned long vmask;
+    SpuVoiceAttr *voiceAttr;
+
+    v = 0;
+
+    voiceAttr = (SpuVoiceAttr *)sfxCmd->ulongParam;
+
+    vmask = 1;
+
+    for (; v < 24; v++)
+    {
+        if ((vmask & voiceAttr->voice))
+        {
+            break;
+        }
+
+        vmask *= 2;
+    }
+
+    SpuSetVoiceVolume(v, voiceAttr->volume.left, voiceAttr->volume.right);
+    SpuSetVoicePitch(v, voiceAttr->pitch);
+    SpuSetVoiceStartAddr(v, voiceAttr->addr);
+    SpuSetVoiceADSR1ADSR2(v, voiceAttr->adsr1, voiceAttr->adsr2);
+}
 
 void sfxCmdSetVoiceKeyOn(AadSfxCommand *sfxCmd)
 {

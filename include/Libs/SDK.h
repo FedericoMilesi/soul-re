@@ -284,7 +284,7 @@ void EnterCriticalSection();
 void ExitCriticalSection();
 int GetRCnt(int);
 void ClearOTagR(unsigned long *, int);
-MATRIX* RotMatrix(SVECTOR *, MATRIX *);
+MATRIX *RotMatrix(SVECTOR *, MATRIX *);
 long ratan2(long y, long x);
 MATRIX *RotMatrixX(long r, MATRIX *m);
 MATRIX *RotMatrixY(long r, MATRIX *m);
@@ -338,5 +338,7 @@ long SpuClearReverbWorkArea(long mode);
 void SpuQuit(void);
 void SpuSetVoicePitch(int vNum, unsigned short pitch);
 void SpuGetVoicePitch(int vNum, unsigned short *pitch);
+void SpuSetVoiceStartAddr(int vNum, unsigned long startAddr);
+void SpuSetVoiceVolume(int vNum, short volL, short volR);
 
 #endif
