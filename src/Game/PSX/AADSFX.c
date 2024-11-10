@@ -280,11 +280,9 @@ void sfxCmdStopTone(AadSfxCommand *sfxCmd)
     unsigned short i;
     unsigned long vmask;
 
-    (void)sfxCmd;
-
     vmask = 0;
 
-    handle = voice->handle;
+    handle = sfxCmd->ulongParam;
 
     for (i = 0; i < 24; i++)
     {
