@@ -269,7 +269,39 @@ void sfxCmdPlayTone(AadSfxCommand *sfxCmd)
     }
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdStopTone);
+#else
+void sfxCmdStopTone(AadSfxCommand *sfxCmd)
+{
+    unsigned long handle;
+    AadSynthVoice *voice;
+    unsigned short i;
+    unsigned long vmask;
+
+    (void)sfxCmd;
+
+    vmask = 0;
+
+    handle = voice->handle;
+
+    for (i = 0; i < 24; i++)
+    {
+        voice = &aadMem->synthVoice[i];
+
+        if ((voice->voiceID == 208) && (voice->handle == handle) && ((aadMem->voiceStatus[i] != 0) && (aadMem->voiceStatus[i] != 2)))
+        {
+            voice->voiceID = 0xFF;
+
+            vmask |= voice->voiceMask;
+        }
+    }
+
+    aadMem->voiceKeyOffRequest |= vmask;
+    aadMem->voiceKeyOnRequest &= ~vmask;
+}
+#endif
 
 // Matches 100% on decomp.me but differs on this project
 #ifndef NON_MATCHING
