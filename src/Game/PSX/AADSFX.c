@@ -252,7 +252,7 @@ void sfxCmdPlayTone(AadSfxCommand *sfxCmd)
 
                 voice->priority = toneAtr->priority;
 
-                voice->note = midiNote;
+                voice->note = (unsigned char)midiNote;
 
                 voice->program = toneAtr->parentProgram;
 
