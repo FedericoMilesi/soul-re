@@ -275,10 +275,6 @@ int PLANAPI_PassThroughHit(PlanningNode *node1, PlanningNode *node2)
     return 0;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PLAN/PLANAPI", PLANAPI_UpdatePlanningDatabase);
-#else
 void PLANAPI_UpdatePlanningDatabase(GameTracker *gameTracker, Instance *player)
 {
     PlanningNode *planningPool;
@@ -402,7 +398,6 @@ void PLANAPI_UpdatePlanningDatabase(GameTracker *gameTracker, Instance *player)
 
     gameTrackerX.plan_collide_override = 0;
 }
-#endif
 
 int PLANAPI_NumNodesInPool(void *planningPool)
 {
