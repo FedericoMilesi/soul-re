@@ -109,6 +109,8 @@ $(BUILD_DIR)/src/Game/MCARD/MEMCARD.c.o: CFLAGS += -G0
 $(BUILD_DIR)/src/Game/PLAN/ENMYPLAN.c.o: CFLAGS += -funsigned-char
 $(BUILD_DIR)/src/Game/STRMLOAD.c.o: CFLAGS += -funsigned-char
 $(BUILD_DIR)/src/Game/PLAN/PLANPOOL.c.o: CFLAGS += -funsigned-char
+$(BUILD_DIR)/src/Game/PLAN/PLANAPI.c.o: CFLAGS += -funsigned-char
+$(BUILD_DIR)/src/Game/PSX/AADSFX.c.o: CFLAGS += -funsigned-char
 
 all: $(EXE)
 

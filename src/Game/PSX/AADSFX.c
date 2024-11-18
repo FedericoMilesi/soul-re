@@ -30,10 +30,6 @@ void aadStopAllSfx()
     aadPutSfxCommand(4, 0, 0, 0, 0);
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxPlaying);
-#else
 int aadIsSfxPlaying(unsigned long handle)
 {
     AadSynthVoice *voice;
@@ -51,7 +47,6 @@ int aadIsSfxPlaying(unsigned long handle)
 
     return 0;
 }
-#endif
 
 int aadIsSfxPlayingOrRequested(unsigned long handle)
 {
@@ -90,10 +85,6 @@ int aadIsSfxPlayingOrRequested(unsigned long handle)
     return aadIsSfxPlaying(handle);
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", aadIsSfxTypePlaying);
-#else
 int aadIsSfxTypePlaying(unsigned int toneID)
 {
     AadSynthVoice *voice;
@@ -111,7 +102,6 @@ int aadIsSfxTypePlaying(unsigned int toneID)
 
     return 0;
 }
-#endif
 
 int aadIsSfxTypePlayingOrRequested(unsigned int sfxToneID)
 {
@@ -269,10 +259,6 @@ void sfxCmdPlayTone(AadSfxCommand *sfxCmd)
     }
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdStopTone);
-#else
 void sfxCmdStopTone(AadSfxCommand *sfxCmd)
 {
     unsigned long handle;
@@ -299,12 +285,7 @@ void sfxCmdStopTone(AadSfxCommand *sfxCmd)
     aadMem->voiceKeyOffRequest |= vmask;
     aadMem->voiceKeyOnRequest &= ~vmask;
 }
-#endif
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdStopAllTones);
-#else
 void sfxCmdStopAllTones(AadSfxCommand *sfxCmd)
 {
     AadSynthVoice *voice;
@@ -330,7 +311,6 @@ void sfxCmdStopAllTones(AadSfxCommand *sfxCmd)
     aadMem->voiceKeyOffRequest |= vmask;
     aadMem->voiceKeyOnRequest &= ~vmask;
 }
-#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSFX", sfxCmdSetToneVolumeAndPan);
 
