@@ -11,6 +11,7 @@
 #include "Game/SOUND.h"
 #include "Game/INSTANCE.h"
 #include "Game/EVENT.h"
+#include "Game/MATH3D.h"
 
 static SavedInfoTracker savedInfoTracker;
 
@@ -216,9 +217,68 @@ long SAVE_SaveableInstance(Instance *instance)
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateSavedIntro);
+SavedIntro *SAVE_UpdateSavedIntro(Instance *instance, Level *level, SavedIntro *savedIntro, evControlSaveDataData *extraData)
+{
+    Position *levelOffset;
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateSavedIntroWithIntro);
+    levelOffset = &level->terrain->BSPTreeArray->globalOffset;
+    if (savedIntro)
+    {
+        memcpy(savedIntro->name, instance->introName, 8);
+        savedIntro->savedID = 1;
+        savedIntro->introUniqueID = (short)instance->introUniqueID;
+        savedIntro->streamUnitID = (short)instance->currentStreamUnitID;
+        savedIntro->birthUnitID = (short)instance->birthStreamUnitID;
+        SUB_SVEC(Position, &savedIntro->position, Position, &instance->position, Position, levelOffset);
+        SAVE_GetInstanceRotation(instance, &savedIntro->smallRotation);
+        savedIntro->flags = instance->flags;
+        savedIntro->flags2 = instance->flags2;
+        savedIntro->specturalLightGroup = instance->spectralLightGroup;
+        savedIntro->lightGroup = instance->lightGroup;
+        savedIntro->attachedUniqueID = (short)instance->attachedID;
+        if (extraData)
+        {
+            memcpy(savedIntro + 1, extraData->data, extraData->length);
+        }
+    }
+    return savedIntro;
+}
+
+SavedIntroWithIntro *SAVE_UpdateSavedIntroWithIntro(Instance *instance, Level *level, SavedIntroWithIntro *savedIntro, evControlSaveDataData *extraData)
+{ 
+	Position* levelOffset;
+
+	levelOffset = &level->terrain->BSPTreeArray->globalOffset;
+    
+	if ((savedIntro != NULL) && (instance->intro != NULL))
+	{
+		savedIntro->savedID = 7;
+        
+		savedIntro->introOffset = instance->intro - level->introList;
+        
+		savedIntro->introUniqueID = (short)instance->introUniqueID;
+		savedIntro->birthUnitID = (short)instance->birthStreamUnitID;
+        
+        SUB_SVEC(Position, &savedIntro->position, Position, &instance->position, Position, levelOffset);
+        
+		SAVE_GetInstanceRotation(instance, &savedIntro->smallRotation);
+        
+		savedIntro->flags = instance->flags;
+		savedIntro->flags2 = instance->flags2;
+        
+		savedIntro->specturalLightGroup = instance->spectralLightGroup;
+		savedIntro->lightGroup = instance->lightGroup;
+        
+		savedIntro->attachedUniqueID = (unsigned short)instance->attachedID;
+        
+		if (extraData != NULL)
+		{
+			memcpy(&savedIntro[1], extraData->data, extraData->length); // TODO: first parameter unlikely, perhaps savedIntro was casted?
+		}
+	}
+    
+	return savedIntro;
+}
 
 SavedBasic *SAVE_GetSavedEvent(long areaID, long eventNumber)
 {
@@ -510,7 +570,116 @@ void SAVE_DeleteBlock(SavedBasic *savedBlock)
     savedInfoTracker.InfoEnd -= size;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_Instance);
+void SAVE_Instance(Instance *instance, Level *level)
+{
+	SavedIntro* savedIntro;
+	evControlSaveDataData* extraData;
+	long extraSize;
+	long saveType;
+	SavedIntroSmall* savedSmallIntro;
+	SavedIntroWithIntro* savedIntroWithIntro;
+	SavedIntroSpline* savedIntroSpline;
+	MultiSpline* multi; 
+    
+	extraSize = 0;
+    
+	saveType = SAVE_SaveableInstance(instance);
+    
+	if (saveType != 0)
+	{
+		if ((instance->flags2 & 0x4))
+		{
+			SAVE_DeleteInstance(instance);
+            
+			extraData = (evControlSaveDataData*)INSTANCE_Query(instance, 24);
+            
+			if (extraData != NULL)
+			{
+				savedSmallIntro = (SavedIntroSmall*)SAVE_GetSavedBlock(5, extraData->length);
+                
+				if (savedSmallIntro != NULL)
+				{
+					savedSmallIntro->introUniqueID = (short)instance->introUniqueID;
+                    
+					memcpy(&((evControlSaveDataData*)savedSmallIntro)->data, extraData->data, extraData->length); 
+				}
+			}
+		}
+		else if (saveType == 1)
+		{
+			SAVE_DeleteInstance(instance);
+            
+			extraData = (evControlSaveDataData*)INSTANCE_Query(instance, 24);
+            
+			if (extraData != NULL)
+			{
+				extraSize = extraData->length;
+			}
+            
+			savedIntro = (SavedIntro*)SAVE_GetSavedBlock(1, extraSize);
+            
+			if (savedIntro != NULL)
+			{
+				SAVE_UpdateSavedIntro(instance, level, savedIntro, extraData);
+			}
+		}
+		else if (saveType == 2)
+		{
+			SAVE_DeleteInstance(instance);
+            
+			extraData = (evControlSaveDataData*)INSTANCE_Query(instance, 24);
+            
+			if (extraData != NULL)
+			{
+				extraSize = extraData->length;
+			}
+            
+			savedIntroWithIntro = (SavedIntroWithIntro*)SAVE_GetSavedBlock(7, extraSize);
+            
+			if (savedIntroWithIntro != NULL)
+			{
+				SAVE_UpdateSavedIntroWithIntro(instance, level, savedIntroWithIntro, extraData);
+			}
+		}
+		else if (saveType == 3)
+		{
+			SAVE_DeleteInstance(instance);
+            
+			savedIntroSpline = (SavedIntroSpline*)SAVE_GetSavedBlock(8, 0);
+            
+			if (savedIntroSpline != NULL)
+			{
+				multi = SCRIPT_GetMultiSpline(instance, NULL, NULL);
+                
+				if (multi != NULL)
+				{
+					instance->splineFlags &= ~0x180;
+                    
+					if ((instance->flags & 0x1000000))
+					{
+						instance->splineFlags |= 0x80;
+					}
+                    
+					if ((instance->flags & 0x2000000))
+					{
+						instance->splineFlags |= 0x100;
+					}
+                    
+					savedIntroSpline->savedID = 8;
+                    
+					savedIntroSpline->introUniqueID = (short)instance->introUniqueID;
+                    
+					savedIntroSpline->splineFlags = instance->splineFlags;
+                    
+					savedIntroSpline->splineKeyFrame = (short)INSTANCE_GetSplineFrameNumber(instance, multi);
+                    
+					savedIntroSpline->splineClipBeg = instance->clipBeg;
+					savedIntroSpline->splineClipEnd = instance->clipEnd;
+				}
+			}
+		}
+	}
+}
 
 void SAVE_DeleteInstance(Instance *instance)
 {
