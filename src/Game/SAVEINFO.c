@@ -13,17 +13,31 @@
 #include "Game/EVENT.h"
 #include "Game/MATH3D.h"
 
+GlobalSaveTracker *GlobalSave = NULL;
+
+static long numbufferedIntros = 0;
+
+static int the_header_size = 0;
+
+long SaveArraySize[10] = {
+    0,
+    sizeof(SavedIntro),
+    sizeof(SavedInfoTracker),
+    sizeof(SavedLevel),
+    sizeof(SavedDeadDeadBits),
+    sizeof(SavedIntroSmall),
+    sizeof(GlobalSaveTracker),
+    sizeof(SavedIntroWithIntro),
+    sizeof(SavedIntroSpline),
+    sizeof(SavedEventSmallVars)
+};
+
 static SavedInfoTracker savedInfoTracker;
-
-EXTERN STATIC int the_header_size;
-
-EXTERN STATIC long numbufferedIntros;
 
 static SavedBasic *bufferSavedIntroArray[64];
 
 long DoMainMenu;
 
-long SaveArraySize[10];
 
 void SAVE_GetInstanceRotation(Instance *instance, SmallRotation *vector)
 {
@@ -95,9 +109,6 @@ void SAVE_Init(GameTracker *gt)
     SAVE_ClearMemory(gt);
 }
 
-extern char D_800D1E0C[];
-extern char D_800D1E24[];
-extern char D_800D1E44[];
 void *SAVE_GetSavedBlock(long saveType, long extraSize)
 {
     SavedBasic *savedInfo;
@@ -108,8 +119,7 @@ void *SAVE_GetSavedBlock(long saveType, long extraSize)
 
     if (saveType >= 10)
     {
-        //DEBUG_FatalError("illegal save type %d\n", saveType);
-        DEBUG_FatalError(D_800D1E0C, saveType);
+        DEBUG_FatalError("illegal save type %d\n", saveType);
     }
 
     sizeOfSave = SaveArraySize[saveType] + extraSize;
@@ -120,8 +130,7 @@ void *SAVE_GetSavedBlock(long saveType, long extraSize)
 
     if (sizeOfSave >= 1021)
     {
-        //DEBUG_FatalError("save %d is too big! (type %d)\n", sizeOfSave, saveType);
-        DEBUG_FatalError(D_800D1E24, sizeOfSave, saveType);
+        DEBUG_FatalError("save %d is too big! (type %d)\n", sizeOfSave, saveType);
     }
 
     do
@@ -140,8 +149,7 @@ void *SAVE_GetSavedBlock(long saveType, long extraSize)
         }
         else if (SAVE_PurgeAMemoryBlock() == 0)
         {
-            //DEBUG_FatalError("ran out of saved memory. needed %d, used %d. increase from % d\n", sizeOfSave, savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd, 24576);
-            DEBUG_FatalError(D_800D1E44, sizeOfSave, savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd, 24576);
+            DEBUG_FatalError("ran out of saved memory. needed %d, used %d.\nincrease from %d\n", sizeOfSave, savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd, 24576);
 
             done = 1;
         }
@@ -864,13 +872,11 @@ void SAVE_UpdateGlobalSaveTracker()
     }
 }
 
-extern char D_800D1E84[];
 void SAVE_RestoreGlobalSaveTracker()
 {
     if (GlobalSave->saveVersion != 21793)
     {
-        //DEBUG_FatalError("error: old save game\n");
-        DEBUG_FatalError(D_800D1E84);
+        DEBUG_FatalError("error: old save game\n");
     }
     else
     {
@@ -936,7 +942,6 @@ void SAVE_SaveGame()
     GlobalSave->sizeUsedInBlock = *(unsigned short *)&savedInfoTracker.InfoEnd - *(unsigned short *)&savedInfoTracker.InfoStart;
 }
 
-extern char D_800D1E9C[];
 void SAVE_RestoreGame()
 {
     gameTrackerX.streamFlags |= 0x200000;
@@ -946,8 +951,7 @@ void SAVE_RestoreGame()
 
     savedInfoTracker.InfoEnd = &savedInfoTracker.InfoStart[GlobalSave->sizeUsedInBlock];
 
-    //GAMELOOP_RequestLevelChange("under", 1, &gameTrackerX);
-    GAMELOOP_RequestLevelChange(D_800D1E9C, 1, &gameTrackerX);
+    GAMELOOP_RequestLevelChange("under", 1, &gameTrackerX);
 }
 
 void SAVE_DebugSaveGame()
@@ -958,8 +962,7 @@ void SAVE_LoadSaveGame()
 {
     gameTrackerX.streamFlags |= 0x200000;
 
-    //GAMELOOP_RequestLevelChange("under", 1, &gameTrackerX);
-    GAMELOOP_RequestLevelChange(D_800D1E9C, 1, &gameTrackerX);
+    GAMELOOP_RequestLevelChange("under", 1, &gameTrackerX);
 
     gameTrackerX.gameMode = 0;
 }
@@ -969,3 +972,4 @@ long SAVE_SizeOfFreeSpace()
     return savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd;
 }
 
+char monVersion[] = "Jun 30 1999";
