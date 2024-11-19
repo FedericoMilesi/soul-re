@@ -57,7 +57,7 @@ LD       := $(CROSS)ld -EL
 OBJCOPY  := $(CROSS)objcopy
 STRIP    := $(CROSS)strip
 CPP      := $(CROSS)cpp
-CC       := tools/gcc2.8.1-mipsel/cc1
+CC       := tools/gcc-2.8.1-psx/cc1
 CC_HOST  := gcc
 
 PRINT := printf '
@@ -77,8 +77,7 @@ ENDLINE := \n'
 ### Compiler Options ###
 
 ASFLAGS        := -Iinclude -march=r3000 -mtune=r3000 -no-pad-sections
-CFLAGS         := -O2 -G4096 -fpeephole -ffunction-cse -fkeep-static-consts -fpcc-struct-return \
-                  -fcommon -fgnu-linker -msplit-addresses -mgas -mgpOPT -mgpopt -msoft-float -gcoff -quiet -fsigned-char
+CFLAGS         := -O2 -G4096 -gcoff -quiet -fsigned-char
 CPPFLAGS       := -Iinclude -DTARGET_PSX
 LDFLAGS        := -T undefined_syms.txt -T undefined_funcs.txt -T $(BUILD_DIR)/$(LD_SCRIPT) -Map $(LD_MAP) \
                   --no-check-sections -nostdlib
