@@ -2223,7 +2223,7 @@ long CAMERA_ACNoForcedMovement(Camera *camera, CameraCollisionInfo *colInfo)
     short playerSamePos;
     short angle;
     int temp, temp2; // not from decls.h
-    short temp3; // not from decls.h
+    short temp3;     // not from decls.h
 
     hit = 0;
 
@@ -2419,7 +2419,9 @@ long CAMERA_ACNoForcedMovement(Camera *camera, CameraCollisionInfo *colInfo)
     {
         CAMERA_update_dist_debounced(camera, colInfo->lenCenterToExtend);
 
-        do {} while (0); // garbage code for reordering
+        do
+        {
+        } while (0); // garbage code for reordering
 
         hit = 1;
     }
@@ -3445,7 +3447,40 @@ void CAMERA_UpdateFocusTilt(Camera *camera)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusRoll);
+void CAMERA_UpdateFocusRoll(Camera *camera)
+{
+    long tmp_inc;
+    int temp; // not from decls.h
+
+    if (roll_inc != 0)
+    {
+        if (gameTrackerX.timeMult != 4096)
+        {
+            temp = (roll_inc / 32) * gameTrackerX.timeMult;
+
+            tmp_inc = temp / 128;
+        }
+        else
+        {
+            tmp_inc = roll_inc;
+        }
+
+        if (CAMERA_AngleDifference(current_roll_amount / 4096, roll_target / 4096) <= abs(tmp_inc / 4096))
+        {
+            current_roll_amount = roll_target;
+
+            roll_inc = 0;
+        }
+        else
+        {
+            current_roll_amount += tmp_inc;
+        }
+
+        current_roll_amount &= 0xFFFFFF;
+    }
+
+    camera->core.rotation.y = current_roll_amount / 4096;
+}
 
 void CAMERA_UpdateFocusRotate(Camera *camera)
 {
