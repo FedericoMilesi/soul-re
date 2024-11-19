@@ -340,5 +340,6 @@ void SpuSetVoicePitch(int vNum, unsigned short pitch);
 void SpuGetVoicePitch(int vNum, unsigned short *pitch);
 void SpuSetVoiceStartAddr(int vNum, unsigned long startAddr);
 void SpuSetVoiceVolume(int vNum, short volL, short volR);
+void SpuSetVoiceADSRAttr(int vNum, unsigned short AR, unsigned short DR, unsigned short SR, unsigned short RR, unsigned short SL, long ARmode, long SRmode, long RRmode);
 
 #endif
