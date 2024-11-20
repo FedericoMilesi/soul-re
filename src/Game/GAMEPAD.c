@@ -56,4 +56,15 @@ void GAMEPAD_SaveControllers()
     memcpy(&overrideData, &gameTrackerX.controlData, sizeof(overrideData));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_RestoreControllers);
+void GAMEPAD_RestoreControllers()
+{
+    if (gpSaved != 0)
+    {
+        gpSaved = 0;
+
+        memcpy(&gameTrackerX.controlData, &overrideData, sizeof(overrideData));
+        memcpy(&gameTrackerX.controlCommand, &overrideCommand, sizeof(overrideCommand));
+
+        gameTrackerX.controlCommand[0][0] |= 0x80;
+    }
+}
