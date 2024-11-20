@@ -1366,7 +1366,21 @@ void DEBUG_PageFlip()
     PutDispEnv((DISPENV *)gameTrackerX.disp);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FatalError);
+void DEBUG_FatalError(const char* fmt, ...)
+{
+	char msg[256];
+	va_list ap;
+
+	FONT_Flush();
+
+	va_start(ap, fmt);
+	vsprintf(msg, fmt, ap);
+	FONT_Print(msg);
+    va_end(ap);
+
+    DEBUG_PageFlip();
+    _break(0x407);
+}
 
 void DEBUG_ProcessSecondController(GameTracker *gameTracker)
 {

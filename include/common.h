@@ -9,11 +9,14 @@ typedef	unsigned long u_long;
 typedef unsigned short u_short;
 typedef unsigned char u_char;
 #define NULL (void*)0
+#include "Libs/STDARG.h"
+#include "Libs/STRING.h"
 #else
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #endif
 
 #include "include_asm.h"

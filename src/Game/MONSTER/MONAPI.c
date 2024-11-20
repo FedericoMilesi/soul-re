@@ -1,5 +1,4 @@
 #include "common.h"
-#include "Libs/STRING.h"
 #include "Game/SAVEINFO.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MONSTER/MONSTER.h"

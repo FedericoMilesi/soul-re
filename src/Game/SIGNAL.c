@@ -7,7 +7,6 @@
 #include "Game/PSX/SUPPORT.h"
 #include "Game/SOUND.h"
 #include "Game/SAVEINFO.h"
-#include "Libs/STRING.h"
 #include "Game/INSTANCE.h"
 
 /*Unused*/ void (*HandleGlobalValueSignal[1])() = {SOUND_HandleGlobalValueSignal};
