@@ -825,4 +825,4 @@ void razDeinitWallCrawlSteering(Instance *instance)
     G2Anim_InterpDisableController(&instance->anim, 58, 76, 300);
 }
 
-INCLUDE_RODATA("src", force_rodata_alignment);
+FORCE_RODATA_ALIGNMENT;

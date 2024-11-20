@@ -1,3 +1,15 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MCASSERT", mcassert);
+void mcassert(char *exp, char *file, long line)
+{
+    if (exp != NULL)
+    {
+        printf("%s:%ld: %s\n", file, line, exp);
+    }
+    else
+    {
+        printf("%s:%ld: assertion failure\n", file, line);
+    }
+
+    _break(0x407);
+}

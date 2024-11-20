@@ -516,4 +516,4 @@ long UpdateAutoFaceAngle(Instance *player, Instance *instance)
     return (rc + 3072) & 0xFFF;
 }
 
-INCLUDE_RODATA("src", force_rodata_alignment);
+FORCE_RODATA_ALIGNMENT;

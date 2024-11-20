@@ -23,7 +23,6 @@
 #include "Game/MATH3D.h"
 #include "Game/PLAN/PLAN.h"
 #include "Game/PSX/SUPPORT.h"
-#include "Libs/STRING.h"
 #include "Game/COLLIDE.h"
 #include "Game/SOUND.h"
 #include "Game/VM.h"

@@ -17,6 +17,8 @@
 #include "Game/STATE.h"
 #include "Game/MENU/MENU.h"
 
+typedef int (*fptr)();
+
 DebugMenuLine levelSelectMenu[];
 DebugMenuLine debugRazielMenu[];
 DebugMenuLine cameraMenu[];
@@ -30,7 +32,6 @@ DebugMenuLine mainMenu[];
 DebugMenuLine BossAreasMenu[];
 DebugMenuLine level2SelectMenu[];
 DebugMenuLine pauseMenu[];
-DebugMenuLine debugSoundMenu[0]; // TODO: decls.h has an array of size 1 for this variable
 
 static char pauseFormatString[20] = "-abs 256 40 -center";
 static char mainFormatString[20] = "-abs 160 40 -center";
@@ -519,9 +520,7 @@ static int cem_line_width = 0xF0;
 static int cem_line_leading = 0xC;
 static int cem_item_leading = 0x10;
 
-DISPENV disp[2];
-
-short debugOrgFogFar;
+DebugMenuLine debugSoundMenu[0]; // TODO: decls.h has an array of size 1 for this variable (gp_rel issue)
 
 short debugOrgFogNear;
 
@@ -530,6 +529,17 @@ unsigned char debugOrgFogRed;
 unsigned char debugOrgFogGrn;
 
 unsigned char debugOrgFogBlu;
+
+short debugOrgFogFar;
+
+DebugMenuLine statsMenu[1];
+
+unsigned long debugRazielFlags1;
+
+unsigned long debugRazielFlags2;
+
+unsigned long debugRazielFlags3;
+
 
 void DEBUG_SetGameTime(long *var)
 {
@@ -726,7 +736,7 @@ void DEBUG_ExitMenus()
 {
     currentMenu[DEBUG_MenuCountLength(currentMenu)].lower = debugMenuChoice;
 
-    if ((unsigned char)gameTrackerX.sound.gMusicOn == 0)
+    if (gameTrackerX.sound.gMusicOn == 0)
     {
         SOUND_MusicOff();
 
@@ -737,7 +747,7 @@ void DEBUG_ExitMenus()
         SOUND_MusicOn();
     }
 
-    if ((unsigned char)gameTrackerX.sound.gSfxOn == 0)
+    if (gameTrackerX.sound.gSfxOn == 0)
     {
         SOUND_SfxOff();
     }
@@ -779,7 +789,6 @@ void handle_line_type_long(GameTracker *gt, DebugMenuLine *line)
 {
     long *command;
     int incr;
-    typedef void *(*fptr)(); // not from decls.h
 
     command = &gt->controlCommand[0][0];
 
@@ -807,21 +816,21 @@ void handle_line_type_long(GameTracker *gt, DebugMenuLine *line)
             incr = -incr;
         }
 
-        *(long *)line->var_address += incr;
+        *line->var_address += incr;
 
-        if (*(long *)line->var_address < line->lower)
+        if (*line->var_address < line->lower)
         {
-            *(long *)line->var_address = line->lower;
+            *line->var_address = line->lower;
         }
 
-        if (*(long *)line->var_address > line->upper)
+        if (*line->var_address > line->upper)
         {
-            *(long *)line->var_address = line->upper;
+            *line->var_address = line->upper;
         }
 
         if (line->bit_mask != 0)
         {
-            ((fptr)line->bit_mask)((long *)line->var_address);
+            ((fptr)line->bit_mask)(line->var_address);
         }
     }
 }
@@ -840,8 +849,9 @@ void handle_line_type_bit(GameTracker *gt, DebugMenuLine *line)
 
 void handle_line_type_action(GameTracker *gt, DebugMenuLine *line)
 {
-    typedef int (*fptr)(); // not from decls.h
-    //int ok; // unused
+    int ok;
+
+    (void)ok;
 
     if ((gt->controlCommand[0][1] & 0x80))
     {
@@ -872,24 +882,21 @@ void handle_line_type_action_with_line(GameTracker *gt, DebugMenuLine *line)
 
     if (ctrl != option_ctrl_none)
     {
-        typedef void *(*fptr)(); // not from decls.h
-
         ((fptr)line->var_address)(gt, line);
     }
 }
 
 void handle_line_type_menu(GameTracker *gt, DebugMenuLine *line)
 {
-    typedef int (*fptr)(); // not from decls.h
-    fptr ok; // modified from decls.h
+    int ok;
+
+    (void)ok;
 
     if ((gt->controlCommand[0][1] & 0x80))
     {
-        ok = (fptr)line->bit_mask;
-
-        if (ok != 0)
+        if (line->bit_mask != 0)
         {
-            ok();
+            ((fptr)line->bit_mask)();
         }
 
         get_last_menu_line(line)->lower = debugMenuChoice;
@@ -983,44 +990,85 @@ void set_user_leading()
 
 int isdigit(char c)
 {
-    unsigned char temp; // not from decls.h
-
-    temp = c - '0';
-
-    return temp <= ('9' - '0');
+    return (c >= '0') && (c <= '9');
 }
 
-/*TODO: migrate to adjust_format*/
-static char D_800D0164[] = "-abs ";
-static char D_800D016C[] = "-rel ";
-static char D_800D0174[] = "-center";
-static char D_800D017C[] = "unknown format control: %s\n";
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", adjust_format);
+void adjust_format(char *str, debug_format_t *adj)
+{
+    while (*str != 0)
+    {
+        char *p;
+        int x;
+        int y;
+
+        if ((strncmp(str, "-abs ", strlen("-abs ")) == 0) || (strncmp(str, "-rel ", strlen("-rel ")) == 0))
+        {
+            p = str + 5;
+            x = 0;
+            y = 0;
+            while (isdigit(*p))
+            {
+                x = (x * 10) + *p - '0';
+                p++;
+            }
+            if (*p != 0)
+            {
+                p++;
+            }
+            while (isdigit(*p))
+            {
+                y = (y * 10) + *p - '0';
+                p++;
+            }
+            if (*p != 0)
+            {
+                p++;
+            }
+            if (strncmp(str, "-abs ", strlen("-abs ")) == 0)
+            {
+                adj->xpos = x;
+                adj->ypos = y;
+            }
+            else
+            {
+                adj->xpos = adj->xpos + x;
+                adj->ypos = adj->ypos + y;
+            }
+            str = p;
+            continue;
+        }
+        if (strncmp(str, "-center", strlen("-center")) != 0)
+        {
+            printf("unknown format control: %s\n", str);
+            return;
+        }
+        adj->is_centered = 1;
+        str += 7;
+    }
+}
 
 char *find_eol(char *text)
 {
-    unsigned char *temp; // not from decls.h
-
-    for (temp = (unsigned char *)text; *temp != '\0'; temp++)
+    for (; *text != '\0'; text++)
     {
-        if (*temp == '\n')
+        if (*text == '\n')
         {
             break;
         }
     }
 
-    return (char *)temp;
+    return text;
 }
 
 void draw_menu_item(GameTracker *gt, debug_format_t *fmt, char *text)
 {
-    char *eol;
-    unsigned char c; // modified from decls.h
-
     (void)gt;
 
     while (1)
     {
+        char *eol;
+        char c;
+
         eol = find_eol(text);
 
         c = eol[0];
@@ -1060,120 +1108,188 @@ void draw_menu_item(GameTracker *gt, debug_format_t *fmt, char *text)
     fmt->ypos += cem_item_leading;
 }
 
-/*TODO: migrate to draw_menu*/
-static char D_800D0198[] = ">";
-static char D_800D019C[] = "YES";
-static char D_800D01A0[] = "NO";
-static char D_800D01A4[] = "%d";
-void draw_menu(GameTracker *gt, DebugMenuLine *menu);
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", draw_menu);
-
-void DEBUG_Menu(struct GameTracker* gt)
+void draw_menu(GameTracker *gt, DebugMenuLine *menu)
 {
-	struct DebugMenuLine* menu;
-	int choice;
+    debug_format_t fmt2; // not from decls.h
+    debug_format_t fmt;
+    int i;
 
-    
-	menu = currentMenu;
-	choice = debugMenuChoice;
-    
+    fmt.xpos = cem_x_base;
+    fmt.ypos = cem_y_base;
+    fmt.is_centered = 0;
 
-	if (menu == mainMenu || menu == pauseMenu)
-	{
-		menu_process(gt->menu);
-	}
-	else
-	{
-		if (pre_process_functions(gt, menu) == 0)
-		{
-			while (menu[debugMenuChoice].type >= DEBUG_LINE_TYPE_FORMAT)
-			{
-				debugMenuChoice++;
-			}
+    fmt2 = fmt;
 
-			draw_menu(gt, menu);
-			maybe_change_menu_choice(gt, menu);
+    if (menu[0].type == DEBUG_LINE_TYPE_FORMAT)
+    {
+        menu[0].text = the_format_string;
+        set_user_leading();
+    }
+    else
+    {
+        set_debug_leading();
+    }
 
-			if (debugMenuChoice == choice)
-			{
-				process_menu_line(gt, menu);
+    for (i = 0; menu[i].type != DEBUG_LINE_TYPE_ENDLIST; i++)
+    {
+        int xpos = fmt2.xpos;
+        int ypos = fmt2.ypos;
 
-				if (currentMenu == menu)
-				{
-					post_process_functions(gt, menu);
-				}
-			}
-		}
-	}
+        if (menu[i].type == DEBUG_LINE_TYPE_FORMAT)
+        {
+            adjust_format(menu[i].text, &fmt2);
+        }
+        else
+        {
+            if (debugMenuChoice == i)
+            {
+                if (fmt2.is_centered != 0)
+                {
+                    FONT_SetCursor((xpos - (cem_line_width >> 1)) - cem_cursor_width, ypos);
+                }
+                else
+                {
+                    FONT_SetCursor(xpos - cem_cursor_width, ypos);
+                }
+                FONT_Print(">");
+            }
+
+            draw_menu_item(gt, &fmt2, menu[i].text);
+
+            if (fmt2.is_centered != 0)
+            {
+                FONT_SetCursor(xpos + (cem_line_width >> 1), ypos);
+            }
+            else
+            {
+                FONT_SetCursor(xpos + cem_line_width, ypos);
+            }
+            switch (menu[i].type)
+            {
+            case DEBUG_LINE_TYPE_BIT:
+                if ((menu[i].var_address[0] & menu[i].bit_mask) == menu[i].bit_mask)
+                {
+                    FONT_Print("YES");
+                }
+                else
+                {
+                    FONT_Print("NO");
+                }
+                break;
+            case DEBUG_LINE_TYPE_LONG:
+                FONT_Print("%d", menu[i].var_address[0]);
+                break;
+            default:
+                break;
+            }
+        }
+    }
+}
+
+void DEBUG_Menu(GameTracker *gt)
+{
+    DebugMenuLine *menu;
+    int choice;
+
+    menu = currentMenu;
+    choice = debugMenuChoice;
+
+    if (menu == mainMenu || menu == pauseMenu)
+    {
+        menu_process(gt->menu);
+    }
+    else
+    {
+        if (pre_process_functions(gt, menu) == 0)
+        {
+            while (menu[debugMenuChoice].type >= DEBUG_LINE_TYPE_FORMAT)
+            {
+                debugMenuChoice++;
+            }
+
+            draw_menu(gt, menu);
+            maybe_change_menu_choice(gt, menu);
+
+            if (debugMenuChoice == choice)
+            {
+                process_menu_line(gt, menu);
+
+                if (currentMenu == menu)
+                {
+                    post_process_functions(gt, menu);
+                }
+            }
+        }
+    }
 }
 
 void DEBUG_DisplayStatus(GameTracker *gameTracker)
 {
-	int deg;
-	long numberInQueue;
+    int deg;
+    long numberInQueue;
 
-	STREAM_GetLevelWithID(gameTracker->playerInstance->currentStreamUnitID);
+    STREAM_GetLevelWithID(gameTracker->playerInstance->currentStreamUnitID);
 
-	if ((gameTracker->debugFlags & 0x40000000))
-	{
-		EVENT_PrintVars();
-	}
+    if ((gameTracker->debugFlags & 0x40000000))
+    {
+        EVENT_PrintVars();
+    }
 
-	if ((gameTracker->debugFlags & 0x4000004))
-	{
-		if ((gameTracker->debugFlags & 0x4000000))
-		{
-			FONT_Print("$@EF\n FRTE %d ", (1000000 / gameTracker->totalTime) + 1);
-			FONT_Print(" INS  %d", gameTracker->visibleInstances);
-			FONT_Print("/%d\n", gameTracker->instanceList->numInstances + 1);
-		}
-		else
-		{
-			FONT_Print("$@KG\n FRTE %d\n", (1000000 / gameTracker->totalTime) + 1);
-		}
-		
-		FONT_Print(" Focus XYZ(%d,%d,%d)\n", theCamera.focusInstance->position.x, theCamera.focusInstance->position.y, theCamera.focusInstance->position.z);
-		
-		if ((gameTracker->debugFlags & 0x4))
-		{
-			if (gameTracker->idleTime != 0)
-			{
-				FONT_Print(" IDLE %d PCT\n", (gameTracker->idleTime * 100) / 33333);
-			}
-			else
-			{
-				FONT_Print(" IDLE ZERO\n");
-			}
+    if ((gameTracker->debugFlags & 0x4000004))
+    {
+        if ((gameTracker->debugFlags & 0x4000000))
+        {
+            FONT_Print("$@EF\n FRTE %d ", (1000000 / gameTracker->totalTime) + 1);
+            FONT_Print(" INS  %d", gameTracker->visibleInstances);
+            FONT_Print("/%d\n", gameTracker->instanceList->numInstances + 1);
+        }
+        else
+        {
+            FONT_Print("$@KG\n FRTE %d\n", (1000000 / gameTracker->totalTime) + 1);
+        }
 
-			FONT_Print(" DRAW %d\n", gameTracker->drawTime);
-			FONT_Print(" Far Plane =%d\n", theCamera.core.farPlane);
-			FONT_Print(" Fog Near = %d Fog Far = %d\n", gameTracker->level->fogNear, gameTracker->level->fogFar);
-			FONT_Print("Military Time %04d\n", gameTrackerX.timeOfDay);
-		}
+        FONT_Print(" Focus XYZ(%d,%d,%d)\n", theCamera.focusInstance->position.x, theCamera.focusInstance->position.y, theCamera.focusInstance->position.z);
 
-		FONT_Print(" FMEM %d  FreeSaveMem %d\n", MEMPACK_ReportFreeMemory(), SAVE_SizeOfFreeSpace());
-		FONT_Print(" AREA DRM = %s\n", gameTracker->baseAreaName);
-        
+        if ((gameTracker->debugFlags & 0x4))
+        {
+            if (gameTracker->idleTime != 0)
+            {
+                FONT_Print(" IDLE %d PCT\n", (gameTracker->idleTime * 100) / 33333);
+            }
+            else
+            {
+                FONT_Print(" IDLE ZERO\n");
+            }
+
+            FONT_Print(" DRAW %d\n", gameTracker->drawTime);
+            FONT_Print(" Far Plane =%d\n", theCamera.core.farPlane);
+            FONT_Print(" Fog Near = %d Fog Far = %d\n", gameTracker->level->fogNear, gameTracker->level->fogFar);
+            FONT_Print("Military Time %04d\n", gameTrackerX.timeOfDay);
+        }
+
+        FONT_Print(" FMEM %d  FreeSaveMem %d\n", MEMPACK_ReportFreeMemory(), SAVE_SizeOfFreeSpace());
+        FONT_Print(" AREA DRM = %s\n", gameTracker->baseAreaName);
+
         deg = theCamera.core.rotation.x;
-        
-        if (deg > 2048) 
+
+        if (deg > 2048)
         {
             deg = (4096 - deg);
         }
-        else 
+        else
         {
             deg = -deg;
         }
-           
-        deg = (deg * 360) / 4096;
-        
-		FONT_Print(" CAM TILT %d DIST %d\n", deg, theCamera.targetFocusDistance);
-	}
 
-	if ((gameTracker->debugFlags < 0) && (STREAM_IsCdBusy(&numberInQueue) != 0))
-	{
+        deg = (deg * 360) / 4096;
+
+        FONT_Print(" CAM TILT %d DIST %d\n", deg, theCamera.targetFocusDistance);
+    }
+
+    if ((gameTracker->debugFlags < 0) && (STREAM_IsCdBusy(&numberInQueue) != 0))
+    {
         FONT_Print("Loading From CD: In Queue(%d)\n", numberInQueue);
-	}
+    }
 }
 
 void DEBUG_DrawShrinkCels()
@@ -1222,16 +1338,16 @@ void DEBUG_LevelSelectNew()
 {
     char *name;
     short number;
-    unsigned char *p; // modified from decls.h
+    char *p;
     char saveChar;
 
     saveChar = 0;
 
-    p = (unsigned char *)currentMenu[debugMenuChoice].text;
+    p = currentMenu[debugMenuChoice].text;
 
     number = (short)currentMenu[debugMenuChoice].lower;
 
-    name = (char *)p;
+    name = p;
 
     for (; *p != '\0'; p++)
     {
@@ -1286,8 +1402,8 @@ static long D_800D039C = 0;
 void DEBUG_ViewVram(GameTracker *gameTracker)
 {
     long *controlCommand;
-    //static int xPos;
-    //static int yPos;
+    // static int xPos;
+    // static int yPos;
 
     controlCommand = &gameTracker->controlCommand[0][0];
 
@@ -1366,7 +1482,21 @@ void DEBUG_PageFlip()
     PutDispEnv((DISPENV *)gameTrackerX.disp);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", DEBUG_FatalError);
+void DEBUG_FatalError(const char *fmt, ...)
+{
+    char msg[256];
+    va_list ap;
+
+    FONT_Flush();
+
+    va_start(ap, fmt);
+    vsprintf(msg, fmt, ap);
+    FONT_Print(msg);
+    va_end(ap);
+
+    DEBUG_PageFlip();
+    _break(0x407);
+}
 
 void DEBUG_ProcessSecondController(GameTracker *gameTracker)
 {
@@ -1440,6 +1570,5 @@ void DEBUG_DoAreaProtection()
 {
     while (checkagain() != 0)
     {
-
     }
 }
