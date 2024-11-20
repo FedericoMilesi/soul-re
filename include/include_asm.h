@@ -30,10 +30,20 @@
         ".section .text" \
     )
 #endif
+
+#ifndef FORCE_RODATA_ALIGNMENT
+#define FORCE_RODATA_ALIGNMENT \
+   __asm__( \
+        ".section .rodata\n" \
+        ".word 0x00000000" \
+    )
+#endif
+
 __asm__(".include \"include/macro.inc\"\n");
 #else
 #define INCLUDE_ASM(FOLDER, NAME)
 #define INCLUDE_RODATA(FOLDER, NAME)
+#define FORCE_RODATA_ALIGNMENT
 #endif
 
 #endif

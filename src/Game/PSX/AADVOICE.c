@@ -1,10 +1,6 @@
 #include "common.h"
 #include "Game/PSX/AADLIB.h"
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADVOICE", aadAllocateVoice);
-#else
 AadSynthVoice *aadAllocateVoice(int priority)
 {
     int i;
@@ -71,7 +67,6 @@ AadSynthVoice *aadAllocateVoice(int priority)
 
     return NULL;
 }
-#endif
 
 void SpuSetVoiceADSR1ADSR2(int vNum, unsigned short adsr1, unsigned short adsr2)
 {

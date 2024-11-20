@@ -20,6 +20,8 @@
 #define kabs(a) ((a) > 0 ? (a) : -(a))
 #endif
 
+#define _break(CODE) __asm__("break "#CODE)
+
 #define getScratchAddr(offset) ((unsigned long *)(0x1f800000 + (offset) * 4))
 
 #define getTPage(tp, abr, x, y)                                                                 \
