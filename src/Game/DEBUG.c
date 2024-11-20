@@ -736,7 +736,7 @@ void DEBUG_ExitMenus()
 {
     currentMenu[DEBUG_MenuCountLength(currentMenu)].lower = debugMenuChoice;
 
-    if ((unsigned char)gameTrackerX.sound.gMusicOn == 0)
+    if (gameTrackerX.sound.gMusicOn == 0)
     {
         SOUND_MusicOff();
 
@@ -747,7 +747,7 @@ void DEBUG_ExitMenus()
         SOUND_MusicOn();
     }
 
-    if ((unsigned char)gameTrackerX.sound.gSfxOn == 0)
+    if (gameTrackerX.sound.gSfxOn == 0)
     {
         SOUND_SfxOff();
     }

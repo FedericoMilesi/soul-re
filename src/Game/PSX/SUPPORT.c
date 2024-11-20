@@ -13,27 +13,24 @@ int atoi(const char *str)
 {
     int val;
     int neg;
-    unsigned char *temp; // not from decls.h
-
-    temp = (unsigned char *)str;
 
     val = 0;
 
     neg = 0;
 
-    if (*temp == '-')
+    if (*str == '-')
     {
-        temp++;
+        str++;
 
         neg = 1;
     }
 
-    while (*temp != 0)
+    while (*str != 0)
     {
         val *= 10;
-        val += *temp - '0';
+        val += *str - '0';
 
-        temp++;
+        str++;
     }
 
     if (neg != 0)
@@ -63,8 +60,8 @@ int strcmpi(char *s1, char *s2)
 
     do
     {
-        c1 = mytolower((unsigned char)*s1++);
-        c2 = mytolower((unsigned char)*s2++);
+        c1 = mytolower(*s1++);
+        c2 = mytolower(*s2++);
 
         if (c1 != c2)
         {

@@ -929,7 +929,7 @@ Instance *INSTANCE_BirthObject(Instance *parent, Object *object, int modelNum)
 
         for (i = 0; i < (int)strlen(instance->introName); i++)
         {
-            if ((unsigned char)instance->introName[i] == '_')
+            if (instance->introName[i] == '_')
             {
                 instance->introName[i] = 0;
                 break;

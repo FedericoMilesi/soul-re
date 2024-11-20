@@ -1171,7 +1171,7 @@ void SOUND_SetVoiceVolume(int newVolume)
 
 void SOUND_PauseAllSound()
 {
-    if ((unsigned char)gameTrackerX.sound.soundsLoaded != 0)
+    if (gameTrackerX.sound.soundsLoaded != 0)
     {
         aadShutdownReverb();
 
@@ -1181,7 +1181,7 @@ void SOUND_PauseAllSound()
 
 void SOUND_ResumeAllSound()
 {
-    if ((unsigned char)gameTrackerX.sound.soundsLoaded != 0)
+    if (gameTrackerX.sound.soundsLoaded != 0)
     {
         aadInitReverb();
 
@@ -1191,7 +1191,7 @@ void SOUND_ResumeAllSound()
 
 void SOUND_StopAllSound()
 {
-    if ((unsigned char)gameTrackerX.sound.soundsLoaded != 0)
+    if (gameTrackerX.sound.soundsLoaded != 0)
     {
         aadStopAllSfx();
         aadStopAllSlots();
@@ -1204,7 +1204,7 @@ void SOUND_StopAllSound()
 
 void SOUND_ResetAllSound()
 {
-    if ((unsigned char)gameTrackerX.sound.soundsLoaded != 0)
+    if (gameTrackerX.sound.soundsLoaded != 0)
     {
         SOUND_StopAllSound();
 
@@ -1265,7 +1265,7 @@ int SndTypeIsPlayingOrRequested(unsigned int sfxToneID)
 
 unsigned long SndPlay(unsigned int sample)
 {
-    if ((unsigned char)gameTrackerX.sound.gSfxOn != 0)
+    if (gameTrackerX.sound.gSfxOn != 0)
     {
         return aadPlaySfx(sample, 90, 64, 0);
     }
@@ -1280,7 +1280,7 @@ void SndEndLoop(unsigned long handle)
 
 unsigned long SndPlayVolPan(unsigned int sample, unsigned short vol, unsigned short pan, short pitch)
 {
-    if ((unsigned char)gameTrackerX.sound.gSfxOn != 0)
+    if (gameTrackerX.sound.gSfxOn != 0)
     {
         return aadPlaySfx(sample, vol & 0xFFFF, pan & 0xFFFF, pitch);
     }
@@ -1290,7 +1290,7 @@ unsigned long SndPlayVolPan(unsigned int sample, unsigned short vol, unsigned sh
 
 unsigned long SndUpdateVolPanPitch(unsigned long handle, unsigned short vol, unsigned short pan, short pitch)
 {
-    if ((handle != 0) && ((unsigned char)gameTrackerX.sound.gSfxOn != 0))
+    if ((handle != 0) && (gameTrackerX.sound.gSfxOn != 0))
     {
         return aadSetSfxVolPanPitch(handle, vol, pan, pitch);
     }
@@ -1449,7 +1449,7 @@ void SOUND_ProcessMusicLoad()
 
                         if (strcmpi(musicName, musicInfo.currentMusicName) != 0)
                         {
-                            if ((unsigned char)musicInfo.currentMusicName[0] != 0)
+                            if (musicInfo.currentMusicName[0] != 0)
                             {
                                 sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicName, musicName);
 
@@ -1482,7 +1482,7 @@ void SOUND_ProcessMusicLoad()
                             }
                         }
                     }
-                    else if ((unsigned char)musicInfo.currentMusicName[0] != 0)
+                    else if (musicInfo.currentMusicName[0] != 0)
                     {
                         musicInfo.currentMusicName[0] = 0;
 
@@ -1605,7 +1605,7 @@ void SOUND_UpdateSound()
         FONT_Print("$\n\n\n\n\n\n\n\n\n\nsound memory full!\nu=%d %d f=%d %d lf=%d\n", gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
     }
 
-    if ((unsigned char)gameTrackerX.sound.gMusicOn != 0)
+    if (gameTrackerX.sound.gMusicOn != 0)
     {
         SOUND_ProcessMusicLoad();
     }
@@ -1613,7 +1613,7 @@ void SOUND_UpdateSound()
 
 void SOUND_PlaneShift(int newPlane)
 {
-    if ((unsigned char)gameTrackerX.sound.gMusicOn != 0)
+    if (gameTrackerX.sound.gMusicOn != 0)
     {
         SOUND_PutMusicCommand(0, newPlane);
     }
