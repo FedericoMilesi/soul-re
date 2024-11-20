@@ -377,7 +377,6 @@ long COLLIDE_IntersectLineAndBox(SVector *point0, SVector *normal0, SVector *poi
     collide_normal0 = normal0;
     collide_normal1 = normal1;
 
-
     SUB_LVEC(Vector, &line, SVector, end, SVector, start);
     normal.x = -4096;
     normal.y = 0;
@@ -708,7 +707,29 @@ void COLLIDE_PointAndInstance(PCollideInfo *pcollideInfo, Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_PointAndInstanceTrivialReject);
+void COLLIDE_PointAndInstanceTrivialReject(PCollideInfo *pcollideInfo, Instance *instance)
+{
+    Vector *dv;
+    SVector linePoint;
+
+    dv = (Vector *)getScratchAddr(0);
+
+    if ((MEMPACK_MemoryValidFunc((char *)instance->object) != 0) && (!(instance->flags & 0x40)) && (instance->hModelList != NULL) && ((!(pcollideInfo->collideType & 0x40)) || (!(instance->object->oflags2 & 0x40))))
+    {
+        COLLIDE_NearestPointOnLine_S(&linePoint, pcollideInfo->oldPoint, pcollideInfo->newPoint, &instance->position);
+
+        SUB_LVEC(Vector, dv, SVector, &linePoint, Position, &instance->position);
+
+        dv->x >>= 1;
+        dv->y >>= 1;
+        dv->z >>= 1;
+
+        if ((((dv->x * dv->x) + (dv->y * dv->y) + (dv->z * dv->z)) < (instance->object->modelList[instance->currentModel]->maxRadSq >> 2)) && (instance->matrix != NULL))
+        {
+            COLLIDE_PointAndInstance(pcollideInfo, instance);
+        }
+    }
+}
 
 void COLLIDE_PointAndWorld(PCollideInfo *pcollideInfo, Level *level)
 {
@@ -1139,7 +1160,7 @@ long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level)
     Terrain *terrain;
     long curTree;
     void (*collideFunc)(); // not from decls.h
-    short normal; // not from decls.h
+    short normal;          // not from decls.h
 
     CSpad = (struct SandTScratch *)getScratchAddr(114);
 
@@ -1222,9 +1243,7 @@ long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level)
 
         bsp = &terrain->BSPTreeArray[curTree];
 
-        if ((((bsp->ID >= 0) && ((!(bsp->flags & 0x4000)) || (gameTrackerX.raziel_collide_override != 0)))
-            && ((!(bsp->flags & 0x2000)) || ((unsigned char)gameTrackerX.monster_collide_override != 0)))
-        && ((!(bsp->flags & 0x102)) || (((bsp->flags & 0xE0)) && ((INSTANCE_Query(CSpad->instance, 1) & 0x2)))))
+        if ((((bsp->ID >= 0) && ((!(bsp->flags & 0x4000)) || (gameTrackerX.raziel_collide_override != 0))) && ((!(bsp->flags & 0x2000)) || ((unsigned char)gameTrackerX.monster_collide_override != 0))) && ((!(bsp->flags & 0x102)) || (((bsp->flags & 0xE0)) && ((INSTANCE_Query(CSpad->instance, 1) & 0x2)))))
         {
             CSpad->collideInfo.bspID = bsp->ID;
 
@@ -1260,9 +1279,7 @@ long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level)
 
                     point = (SVector *)&CSpad->midPoint;
 
-                    temp = (point->x - (short)CSpad->midRadius < box->maxX) && (point->x + (short)CSpad->midRadius > box->minX)
-                        && (point->y - (short)CSpad->midRadius < box->maxY) && (point->y + (short)CSpad->midRadius > box->minY)
-                        && (point->z - (short)CSpad->midRadius < box->maxZ) && (point->z + (short)CSpad->midRadius > box->minZ);
+                    temp = (point->x - (short)CSpad->midRadius < box->maxX) && (point->x + (short)CSpad->midRadius > box->minX) && (point->y - (short)CSpad->midRadius < box->maxY) && (point->y + (short)CSpad->midRadius > box->minY) && (point->z - (short)CSpad->midRadius < box->maxZ) && (point->z + (short)CSpad->midRadius > box->minZ);
 
                     if (temp != 0)
                     {
@@ -1275,9 +1292,7 @@ long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level)
 
                         for (CSpad->i = bspNode->c, tface = *(TFace **)&bspNode->a; CSpad->i != 0; CSpad->i--, tface++)
                         {
-                            if (((!(tface->attr & CSpad->collide_ignoreAttr)) || ((tface->attr & CSpad->collide_acceptAttr)))
-                            && ((tface->textoff == 0xFFFF) || (!(((TextureFT3 *)((char *)terrain->StartTextureList + tface->textoff))->attr & 0x2000)))
-                            && (!(tface->attr & 0x8)))
+                            if (((!(tface->attr & CSpad->collide_ignoreAttr)) || ((tface->attr & CSpad->collide_acceptAttr))) && ((tface->textoff == 0xFFFF) || (!(((TextureFT3 *)((char *)terrain->StartTextureList + tface->textoff))->attr & 0x2000))) && (!(tface->attr & 0x8)))
                             {
                                 if ((CSpad->in_spectral == 2) && (tface->normal != terrain->morphNormalIdx[(int)(tface - terrain->faceList)]))
                                 {
@@ -1323,8 +1338,7 @@ long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level)
                                     gte_nrtv0();
                                     gte_stlvnl(&CSpad->dpv);
 
-                                    if ((CSpad->dpv.x <= CSpad->dpv.y) && ((CSpad->dpv.x - CSpad->dpv.z) < CSpad->sphere.radius)
-                                    && ((CSpad->dpv.y - CSpad->dpv.z) >= -CSpad->sphere.radius))
+                                    if ((CSpad->dpv.x <= CSpad->dpv.y) && ((CSpad->dpv.x - CSpad->dpv.z) < CSpad->sphere.radius) && ((CSpad->dpv.y - CSpad->dpv.z) >= -CSpad->sphere.radius))
                                     {
                                         CSpad->hfaceInfo.hface = (HFace *)tface;
 
@@ -1335,7 +1349,7 @@ long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level)
                                         CSpad->hfaceInfo.normal = *(SVector *)&CSpad->normal;
 
                                         if (COLLIDE_SphereAndHFace(&CSpad->sphere, (Position *)&CSpad->oldPos, &CSpad->hfaceInfo,
-                                            (SVector *)&CSpad->collideInfo.point1, &CSpad->edge) != 0)
+                                                                   (SVector *)&CSpad->collideInfo.point1, &CSpad->edge) != 0)
                                         {
                                             CSpad->collideInfo.flags = 0;
 
@@ -2036,9 +2050,7 @@ int COLLIDE_PointAndTfaceFunc(Terrain *terrain, BSPTree *bsp, SVector *orgNewPos
             CSpad->dpv.x -= CSpad->dpv.z;
             CSpad->dpv.y -= CSpad->dpv.z;
 
-            if ((((CSpad->dpv.x < 0) && (CSpad->dpv.y >= 0)) || (((flags & 0x1)) && (CSpad->dpv.x > 0) && (CSpad->dpv.y <= 0)))
-            && (COLLIDE_IntersectLineAndPlane_S(&CSpad->planePoint, (Position *)&CSpad->oldPos, (Position *)&CSpad->newPos, &CSpad->normal, CSpad->dpv.z) != 0)
-            && (COLLIDE_PointInTriangle(vertex0, vertex1, (SVector *)&terrain->vertexList[tface->face.v2], &CSpad->planePoint, &CSpad->normal) != 0))
+            if ((((CSpad->dpv.x < 0) && (CSpad->dpv.y >= 0)) || (((flags & 0x1)) && (CSpad->dpv.x > 0) && (CSpad->dpv.y <= 0))) && (COLLIDE_IntersectLineAndPlane_S(&CSpad->planePoint, (Position *)&CSpad->oldPos, (Position *)&CSpad->newPos, &CSpad->normal, CSpad->dpv.z) != 0) && (COLLIDE_PointInTriangle(vertex0, vertex1, (SVector *)&terrain->vertexList[tface->face.v2], &CSpad->planePoint, &CSpad->normal) != 0))
             {
                 result = 1;
 
