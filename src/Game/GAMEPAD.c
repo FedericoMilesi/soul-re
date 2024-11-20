@@ -2,6 +2,12 @@
 #include "Game/GAMEPAD.h"
 #include "Game/GAMELOOP.h"
 
+STATIC int gpSaved;
+
+STATIC long overrideData[5][2];
+
+STATIC long overrideCommand[5][2];
+
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Commands);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_ControllerIsDualShock);
@@ -42,6 +48,12 @@ void GAMEPAD_Process(GameTracker *gameTracker)
     GAMEPAD_Commands((long(*)[5])gameTracker->controlCommand, (long(*)[5])gameTracker->controlData, 1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_SaveControllers);
+void GAMEPAD_SaveControllers()
+{
+    gpSaved = 1;
+
+    memcpy(&overrideCommand, &gameTrackerX.controlCommand, sizeof(overrideCommand));
+    memcpy(&overrideData, &gameTrackerX.controlData, sizeof(overrideData));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_RestoreControllers);
