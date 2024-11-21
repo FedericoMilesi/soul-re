@@ -69,6 +69,50 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Detect);
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Init);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", PSXPAD_TranslateData);
+// TODO: function needs .sdata migration to be implemented
+/*void PSXPAD_TranslateData(long *data, unsigned short padData, unsigned short lastData)
+{
+    int i;
+    JoypadMapping table[16] = {0x0010, 0x0001,
+                               0x0040, 0x0002,
+                               0x0080, 0x0004,
+                               0x0020, 0x0008,
+                               0x1000, 0x0010,
+                               0x4000, 0x0080,
+                               0x8000, 0x0020,
+                               0x2000, 0x0040,
+                               0x0400, 0x0100,
+                               0x0100, 0x0400,
+                               0x0800, 0x0200,
+                               0x0200, 0x0800,
+                               0x0002, 0x1000,
+                               0x0004, 0x2000,
+                               0x0008, 0x4000,
+                               0x0001, 0x8000};
+    unsigned short padButton;
+    unsigned short logicalButton;
+
+    for (i = 0; i < 16; i++)
+    {
+        padButton = table[i].psxData;
+
+        logicalButton = table[i].translation;
+
+        if (!(padData & padButton))
+        {
+            data[0] |= logicalButton;
+
+            if ((lastData & padButton))
+            {
+                data[1] |= logicalButton;
+            }
+        }
+        else if (!(lastData & padButton))
+        {
+            data[2] |= logicalButton;
+        }
+    }
+}*/
 
 unsigned short GAMEPAD_RemapAnalogueButtons(unsigned short in)
 {
