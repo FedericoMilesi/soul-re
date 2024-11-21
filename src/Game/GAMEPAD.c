@@ -13,6 +13,10 @@ STATIC long overrideCommand[5][2];
 
 int gamePadControllerOut;
 
+STATIC short dualshock_onflag;
+
+STATIC int dualShock;
+
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Commands);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_ControllerIsDualShock);
@@ -39,7 +43,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", PSXPAD_TranslateData);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_RemapAnalogueButtons);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_DetectInit);
+void GAMEPAD_DetectInit()
+{
+    int orgdualshock_onflag;
+
+    orgdualshock_onflag = dualshock_onflag;
+
+    GAMEPAD_Detect();
+
+    if ((dualShock != 0) && (orgdualshock_onflag != 0))
+    {
+        GAMEPAD_EnableDualShock();
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_GetData);
 
