@@ -4,6 +4,10 @@
 #include "common.h"
 /*TODO: Remove LIBS/ when adding PSYQ headers*/
 
+#define PadStateFindPad 1
+#define PadStateReqInfo 4
+#define PadStateExecCmd 5
+
 #ifndef MIN
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
@@ -20,7 +24,7 @@
 #define kabs(a) ((a) > 0 ? (a) : -(a))
 #endif
 
-#define _break(CODE) __asm__("break "#CODE)
+#define _break(CODE) __asm__("break " #CODE)
 
 #define getScratchAddr(offset) ((unsigned long *)(0x1f800000 + (offset) * 4))
 
@@ -343,5 +347,6 @@ void SpuGetVoicePitch(int vNum, unsigned short *pitch);
 void SpuSetVoiceStartAddr(int vNum, unsigned long startAddr);
 void SpuSetVoiceVolume(int vNum, short volL, short volR);
 void SpuSetVoiceADSRAttr(int vNum, unsigned short AR, unsigned short DR, unsigned short SR, unsigned short RR, unsigned short SL, long ARmode, long SRmode, long RRmode);
+int PadGetState(int);
 
 #endif

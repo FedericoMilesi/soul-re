@@ -17,5 +17,7 @@ void GAMEPAD_EnableDualShock();
 void GAMEPAD_DisableDualShock();
 int GAMEPAD_DualShockEnabled();
 void GAMEPAD_Detect();
+void PSXPAD_TranslateData(long *data, unsigned short padData, unsigned short lastData);
+void GAMEPAD_HandleDualShock();
 
 #endif
