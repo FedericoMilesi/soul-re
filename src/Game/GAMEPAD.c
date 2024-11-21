@@ -17,6 +17,8 @@ STATIC short dualshock_onflag;
 
 STATIC int dualShock;
 
+STATIC short align_flag;
+
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Commands);
 
 int GAMEPAD_ControllerIsDualShock()
@@ -31,7 +33,12 @@ int GAMEPAD_DualShockEnabled()
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_DisableDualShock);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_EnableDualShock);
+void GAMEPAD_EnableDualShock()
+{
+    dualshock_onflag = 1;
+
+    align_flag = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_HandleDualShock);
 
