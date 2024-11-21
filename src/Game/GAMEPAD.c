@@ -41,7 +41,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Init);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", PSXPAD_TranslateData);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_RemapAnalogueButtons);
+unsigned short GAMEPAD_RemapAnalogueButtons(unsigned short in)
+{
+    in = ~in;
+
+    return ~(((in & 0x800) << 1) | ((in & 0x400) << 5) | ((in & 0x200) << 1) | ((in & 0x8000) >> 6) | ((in & 0x1000) >> 1) | (in & 0x61F9));
+}
 
 void GAMEPAD_DetectInit()
 {
