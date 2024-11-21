@@ -19,7 +19,10 @@ STATIC int dualShock;
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Commands);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_ControllerIsDualShock);
+int GAMEPAD_ControllerIsDualShock()
+{
+    return dualShock;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_DualShockEnabled);
 
