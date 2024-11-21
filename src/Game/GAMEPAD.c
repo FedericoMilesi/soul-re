@@ -24,7 +24,10 @@ int GAMEPAD_ControllerIsDualShock()
     return dualShock;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_DualShockEnabled);
+int GAMEPAD_DualShockEnabled()
+{
+    return dualshock_onflag;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_DisableDualShock);
 
