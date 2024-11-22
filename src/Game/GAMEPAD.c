@@ -124,7 +124,67 @@ void GAMEPAD_Shock1(int motor1_speed, int motor1_time)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Detect);
+void GAMEPAD_Detect()
+{
+    int padState;
+    int count;
+    int count1;
+
+    count1 = 0;
+
+    dualshock0_time = 0;
+    dualshock1_time = 0;
+
+    align_flag = 0;
+    dualshock_onflag = 0;
+
+    ignoreFind = 0;
+
+    dualShock = 0;
+
+    do
+    {
+        for (count = 0; count < 5; count++)
+        {
+            VSync(0);
+
+            padState = PadGetState(0);
+
+            if (padState != PadStateDiscon)
+            {
+                break;
+            }
+        }
+
+        if (padState == PadStateReqInfo)
+        {
+            dualShock = 1;
+        }
+
+        count1++;
+
+        if (count1 >= 31)
+        {
+            ignoreFind = 1;
+            break;
+        }
+    } while ((padState == PadStateFindPad) || (padState == PadStateReqInfo) || (padState == PadStateExecCmd));
+
+    if (dualShock != 0)
+    {
+        for (count = 0; count < 30; count++)
+        {
+            VSync(0);
+
+            if (PadGetState(0) == PadStateStable)
+            {
+                break;
+            }
+        }
+    }
+
+    VSync(3);
+}
 
 void GAMEPAD_Init()
 {

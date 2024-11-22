@@ -4,9 +4,13 @@
 #include "common.h"
 /*TODO: Remove LIBS/ when adding PSYQ headers*/
 
+#define PadStateDiscon 0
 #define PadStateFindPad 1
+#define PadStateFindCTP1 2
+#define PadStateFindCTP2 3
 #define PadStateReqInfo 4
 #define PadStateExecCmd 5
+#define PadStateStable 6
 
 #ifndef MIN
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
