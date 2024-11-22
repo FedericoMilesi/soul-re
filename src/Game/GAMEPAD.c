@@ -35,6 +35,8 @@ unsigned char controllerType[2];
 
 unsigned short lastData[2];
 
+long gDummyCommand[2][2];
+
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Commands);
 
 int GAMEPAD_ControllerIsDualShock()
@@ -66,7 +68,30 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Shock1);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Detect);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Init);
+void GAMEPAD_Init()
+{
+    PadInitDirect(&readGPBuffer1.transStatus, &readGPBuffer2.transStatus);
+
+    PadStartCom();
+
+    GAMEPAD_Detect();
+
+    memset(&gDummyCommand, 0, sizeof(gDummyCommand));
+    memset(&readGPBuffer1, 0, sizeof(readGPBuffer1));
+    memset(&readGPBuffer2, 0, sizeof(readGPBuffer2));
+
+    readGPBuffer1.data.pad = -1;
+    readGPBuffer1.transStatus = 0;
+
+    readGPBuffer2.data.pad = -1;
+    readGPBuffer2.transStatus = 0;
+
+    gpbuffer1.data.pad = -1;
+    gpbuffer1.transStatus = 0;
+
+    gpbuffer2.data.pad = -1;
+    gpbuffer2.transStatus = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", PSXPAD_TranslateData);
 // TODO: function needs .sdata migration to be implemented
