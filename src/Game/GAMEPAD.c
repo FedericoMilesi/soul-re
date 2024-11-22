@@ -66,7 +66,20 @@ void GAMEPAD_EnableDualShock()
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_HandleDualShock);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Shock);
+void GAMEPAD_Shock(int motor0_speed, int motor0_time, int motor1_speed, int motor1_time)
+{
+    if (dualshock_onflag != 0)
+    {
+        dualshock0_time = motor0_time;
+        dualshock_motors[0] = motor0_speed;
+
+        dualshock1_time = motor1_time;
+        dualshock_motors[1] = motor1_speed;
+
+        // PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
+        PadSetAct(0, dualshock_motors, 2);
+    }
+}
 
 void GAMEPAD_Shock0(int motor0_speed, int motor0_time)
 {
