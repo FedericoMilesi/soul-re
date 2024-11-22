@@ -37,6 +37,10 @@ unsigned short lastData[2];
 
 long gDummyCommand[2][2];
 
+STATIC long dualshock1_time;
+
+unsigned char dualshock_motors[8924 + 2];
+
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Commands);
 
 int GAMEPAD_ControllerIsDualShock()
@@ -64,7 +68,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Shock);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Shock0);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Shock1);
+void GAMEPAD_Shock1(int motor1_speed, int motor1_time)
+{
+    if (dualshock_onflag != 0)
+    {
+        dualshock1_time = motor1_time;
+
+        dualshock_motors[1] = motor1_speed;
+
+        // PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
+        PadSetAct(0, dualshock_motors, 2);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Detect);
 

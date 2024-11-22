@@ -350,5 +350,6 @@ void SpuSetVoiceADSRAttr(int vNum, unsigned short AR, unsigned short DR, unsigne
 int PadGetState(int);
 void PadInitDirect(unsigned char *, unsigned char *);
 void PadStartCom(void);
+void PadSetAct(int, unsigned char *, int);
 
 #endif
