@@ -55,7 +55,24 @@ int GAMEPAD_DualShockEnabled()
     return dualshock_onflag;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_DisableDualShock);
+#else
+void GAMEPAD_DisableDualShock()
+{
+    dualshock_onflag = 0;
+
+    dualshock_motors[1] = 0;
+    dualshock_motors[0] = 0;
+
+    dualshock0_time = 0;
+    dualshock1_time = 0;
+
+    // PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
+    PadSetAct(0, dualshock_motors, 2);
+}
+#endif
 
 void GAMEPAD_EnableDualShock()
 {
