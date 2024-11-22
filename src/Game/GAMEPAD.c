@@ -5,19 +5,24 @@
 #include "Game/MENU/MENU.h"
 #include "Game/LOCAL/LOCALSTR.h"
 
-STATIC int gpSaved;
+//.sdata
+static short align_flag = 0;
 
+static short dualshock_onflag = 0;
+
+static int dualShock = 0;
+
+//.data
+unsigned char dualshock_motors[] = {0, 0};
+
+unsigned char dualshock_align[] = {0x00, 0x01, 0xFF, 0xFF, 0xFF, 0xFF};
+
+//.sbss
 STATIC long overrideData[5][2];
 
 STATIC long overrideCommand[5][2];
 
 int gamePadControllerOut;
-
-STATIC short dualshock_onflag;
-
-STATIC int dualShock;
-
-STATIC short align_flag;
 
 STATIC int ignoreFind;
 
@@ -33,15 +38,11 @@ ControllerPacket gpbuffer2;
 
 unsigned char controllerType[2];
 
-unsigned short lastData[2];
-
 long gDummyCommand[2][2];
 
 STATIC long dualshock0_time;
 
 STATIC long dualshock1_time;
-
-unsigned char dualshock_motors[8924 + 2];
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_Commands);
 
@@ -55,10 +56,6 @@ int GAMEPAD_DualShockEnabled()
     return dualshock_onflag;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_DisableDualShock);
-#else
 void GAMEPAD_DisableDualShock()
 {
     dualshock_onflag = 0;
@@ -66,13 +63,11 @@ void GAMEPAD_DisableDualShock()
     dualshock_motors[1] = 0;
     dualshock_motors[0] = 0;
 
-    dualshock0_time = 0;
     dualshock1_time = 0;
+    dualshock0_time = 0;
 
-    // PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
-    PadSetAct(0, dualshock_motors, 2);
+    PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
 }
-#endif
 
 void GAMEPAD_EnableDualShock()
 {
@@ -93,8 +88,7 @@ void GAMEPAD_Shock(int motor0_speed, int motor0_time, int motor1_speed, int moto
         dualshock1_time = motor1_time;
         dualshock_motors[1] = motor1_speed;
 
-        // PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
-        PadSetAct(0, dualshock_motors, 2);
+        PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
     }
 }
 
@@ -106,8 +100,7 @@ void GAMEPAD_Shock0(int motor0_speed, int motor0_time)
 
         dualshock_motors[0] = motor0_speed;
 
-        // PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
-        PadSetAct(0, dualshock_motors, 2);
+        PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
     }
 }
 
@@ -119,8 +112,7 @@ void GAMEPAD_Shock1(int motor1_speed, int motor1_time)
 
         dualshock_motors[1] = motor1_speed;
 
-        // PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
-        PadSetAct(0, dualshock_motors, 2);
+        PadSetAct(0, dualshock_motors, sizeof(dualshock_motors));
     }
 }
 
@@ -211,27 +203,25 @@ void GAMEPAD_Init()
     gpbuffer2.transStatus = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", PSXPAD_TranslateData);
-// TODO: function needs .sdata migration to be implemented
-/*void PSXPAD_TranslateData(long *data, unsigned short padData, unsigned short lastData)
+void PSXPAD_TranslateData(long *data, unsigned short padData, unsigned short lastData)
 {
     int i;
-    JoypadMapping table[16] = {0x0010, 0x0001,
-                               0x0040, 0x0002,
-                               0x0080, 0x0004,
-                               0x0020, 0x0008,
-                               0x1000, 0x0010,
-                               0x4000, 0x0080,
-                               0x8000, 0x0020,
-                               0x2000, 0x0040,
-                               0x0400, 0x0100,
-                               0x0100, 0x0400,
-                               0x0800, 0x0200,
-                               0x0200, 0x0800,
-                               0x0002, 0x1000,
-                               0x0004, 0x2000,
-                               0x0008, 0x4000,
-                               0x0001, 0x8000};
+    JoypadMapping table[16] = {{0x0010, 0x0001},
+                               {0x0040, 0x0002},
+                               {0x0080, 0x0004},
+                               {0x0020, 0x0008},
+                               {0x1000, 0x0010},
+                               {0x4000, 0x0080},
+                               {0x8000, 0x0020},
+                               {0x2000, 0x0040},
+                               {0x0400, 0x0100},
+                               {0x0100, 0x0400},
+                               {0x0800, 0x0200},
+                               {0x0200, 0x0800},
+                               {0x0002, 0x1000},
+                               {0x0004, 0x2000},
+                               {0x0008, 0x4000},
+                               {0x0001, 0x8000}};
     unsigned short padButton;
     unsigned short logicalButton;
 
@@ -255,7 +245,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", PSXPAD_TranslateData);
             data[2] |= logicalButton;
         }
     }
-}*/
+}
 
 unsigned short GAMEPAD_RemapAnalogueButtons(unsigned short in)
 {
@@ -277,6 +267,8 @@ void GAMEPAD_DetectInit()
         GAMEPAD_EnableDualShock();
     }
 }
+
+unsigned short lastData[2] = {0};
 
 void GAMEPAD_GetData(long (*data)[5])
 {
@@ -390,6 +382,8 @@ void GAMEPAD_Process(GameTracker *gameTracker)
     GAMEPAD_Commands((long(*)[5])gameTracker->controlCommand, (long(*)[5])gameTracker->controlData, 0);
     GAMEPAD_Commands((long(*)[5])gameTracker->controlCommand, (long(*)[5])gameTracker->controlData, 1);
 }
+
+static int gpSaved = 0;
 
 void GAMEPAD_SaveControllers()
 {

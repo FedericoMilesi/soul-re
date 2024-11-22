@@ -355,5 +355,6 @@ int PadGetState(int);
 void PadInitDirect(unsigned char *, unsigned char *);
 void PadStartCom(void);
 void PadSetAct(int, unsigned char *, int);
+void SetFarColor(long rfc, long gfc, long bfc);
 
 #endif

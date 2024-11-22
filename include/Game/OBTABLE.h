@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-extern ObjectAccess objectAccess[8924+28];
+extern ObjectAccess objectAccess[];
 
 void OBTABLE_GetInstanceAdditionalCollideFunc(Instance *instance);
 void OBTABLE_GetInstanceMessageFunc(Instance *instance);

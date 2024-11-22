@@ -21,5 +21,6 @@ int LOAD_ChangeDirectoryFlag();
 void LOAD_CD_ReadPartOfFile(NonBlockLoadEntry *loadEntry);
 int LOAD_ChangeDirectoryByID(int id);
 void *LOAD_InitBuffers();
+void LOAD_DumpCurrentDir();
 
 #endif

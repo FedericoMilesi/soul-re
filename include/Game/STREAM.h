@@ -8,7 +8,8 @@
 
 STracker StreamTracker;
 WarpRoom WarpRoomArray[14];
-long CurrentWarpNumber;
+extern long CurrentWarpNumber;
+extern short RENDER_currentStreamUnitID;
 
 Level *STREAM_GetLevelWithID(long id);
 void STREAM_RelocateInstance(Instance *instance, SVector *offset);
@@ -50,5 +51,7 @@ int WARPGATE_IsObjectOnWarpSide(Instance *instance);
 int STREAM_IsMorphInProgress();
 long STREAM_GetWaterZLevel(Level *level, Instance *instance);
 void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit);
+int InsertGlobalObject(char *name, GameTracker *gameTracker);
+void WARPGATE_Init();
 
 #endif

@@ -48,5 +48,6 @@ void FooBar(G2AnimSection *section, G2Anim *anim, int decompressedKey, int targe
 void _G2AnimSection_InitStatus(G2AnimSection *section, G2Anim *anim);
 short G2AnimSection_RewindOverInterval(G2AnimSection *section, short interval);
 short G2AnimSection_AdvanceOverInterval(G2AnimSection *section, short interval);
+void G2Anim_ResetInternalState();
 
 #endif
