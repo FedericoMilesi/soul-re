@@ -35,5 +35,6 @@ void FX_StopGlowEffect(FXGlowEffect *glowEffect, int fadeout_time);
 void FX_Health_Spiral(int number, int current_health, int max_health);
 void FX_StartConstrict(Instance *instance, SVector *constrict_point, short startSegment, short endSegment);
 void FX_EndConstrict(int ConstrictEnemyFlag, Instance *instance);
+void FX_Init(FXTracker *fxTracker);
 
 #endif

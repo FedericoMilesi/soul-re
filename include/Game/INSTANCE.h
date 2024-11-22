@@ -29,5 +29,6 @@ int INSTANCE_GetFadeValue(Instance *instance);
 INICommand *INSTANCE_FindIntroCommand(Instance *instance, int cmd);
 Instance *INSTANCE_IntroduceSavedInstance(SavedIntro *savedIntro, StreamUnit *streamUnit, int *deleted);
 Instance *INSTANCE_IntroduceSavedInstanceWithIntro(SavedIntroWithIntro *savedIntro, StreamUnit *streamUnit, int *deleted);
+void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool);
 
 #endif

@@ -1396,39 +1396,36 @@ void DEBUG_EndViewVram(GameTracker *gameTracker)
 /*Unused*/ static char D_800D031C[] = "Sfx ID %3d **LOAD ERROR**\n";
 /*Unused*/ static char D_800D0338[] = "\n%ld sfx loaded (%ld waves) using %ld bytes SRAM\nFree Sram:%ld  Largest Free Sram Block:%ld\n";
 
-/*TODO: migrate to DEBUG_ViewVram*/
-static long D_800D0398 = 0;
-static long D_800D039C = 0;
 void DEBUG_ViewVram(GameTracker *gameTracker)
 {
     long *controlCommand;
-    // static int xPos;
-    // static int yPos;
+    static int xPos = 0;
+    static int yPos = 0;
 
     controlCommand = &gameTracker->controlCommand[0][0];
 
-    if (((controlCommand[1] & 0x1)) && (D_800D039C >= 0))
+    if (((controlCommand[1] & 0x1)) && (yPos >= 0))
     {
-        D_800D039C -= 32;
+        yPos -= 32;
     }
 
-    if (((controlCommand[1] & 0x2)) && (D_800D039C < 272))
+    if (((controlCommand[1] & 0x2)) && (yPos < 272))
     {
-        D_800D039C += 32;
+        yPos += 32;
     }
 
-    if (((controlCommand[1] & 0x4)) && (D_800D0398 >= 0))
+    if (((controlCommand[1] & 0x4)) && (xPos >= 0))
     {
-        D_800D0398 -= 32;
+        xPos -= 32;
     }
 
-    if (((controlCommand[1] & 0x8)) && (D_800D0398 < 512))
+    if (((controlCommand[1] & 0x8)) && (xPos < 512))
     {
-        D_800D0398 += 32;
+        xPos += 32;
     }
 
-    SetDefDispEnv(&disp[0], D_800D0398, D_800D039C, 512, 240);
-    SetDefDispEnv(&disp[1], D_800D0398, D_800D039C, 512, 240);
+    SetDefDispEnv(&disp[0], xPos, yPos, 512, 240);
+    SetDefDispEnv(&disp[1], xPos, yPos, 512, 240);
 
     gameTracker->playerInstance->flags |= 0x100;
 }

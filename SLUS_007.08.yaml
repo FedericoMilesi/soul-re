@@ -180,7 +180,7 @@ segments:
 
       - [0x0B8890, .data, Game/DEBUG]
       - [0x0BA7C0, data, Game/FONT]
-      - [0x0BA9F4, data, Game/GAMELOOP]
+      - [0x0BA9F4, .data, Game/GAMELOOP]
       - [0x0BAA1C, .data, Game/GAMEPAD]
       - [0x0BAA28, data]
       - [0x0BCBF8, .data, Game/STREAM]
@@ -205,7 +205,7 @@ segments:
       - [0x0C0D6C, .sdata, Game/COLLIDE]
       - [0x0C0DDC, sdata] # HASM_1/DRAW
       - [0x0C0E38, sdata, Game/FONT]
-      - [0x0C0F0C, sdata, Game/GAMELOOP]
+      - [0x0C0F0C, .sdata, Game/GAMELOOP]
       - [0x0C0FC0, .sdata, Game/GAMEPAD]
       - [0x0C1010, .sdata, Game/INSTANCE]
       - [0x0C10C8, sdata, Game/LIGHT3D]
