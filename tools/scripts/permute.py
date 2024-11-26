@@ -7,8 +7,10 @@ from io import BytesIO
 import subprocess
 import tempfile
 import zipfile
+import json
 import sys
 import os
+import re
 
 def download_decompme(url_str, dir):
     try:
@@ -33,14 +35,41 @@ def download_decompme(url_str, dir):
         print("Failed to download scratch from decomp.me")
         sys.exit(1)
 
-def get_function_name(path):
+def get_diff_label_and_cflags(path):
     f = open(path, 'r')
-    lines = f.readlines()
+    meta = json.load(f)
     f.close()
-    for line in reversed(lines):
-        if 'glabel' in line:
-            return line.split()[1]
-    return None
+    cflags = meta['compiler_flags'].split()
+    for cflag in cflags[:]:
+        if cflag.startswith('-Wa') or cflag.startswith('--') or ',' in cflag:
+            cflags.remove(cflag)
+
+    return meta['diff_label'], cflags, 
+
+def fixup_asm(path, diff_label):
+    f = open(path, 'r')
+    txt = f.read()
+    f.close()
+
+    x = re.search('.*glabel.*'+diff_label, txt)
+    
+    f = open(path, 'w')
+    f.write('.set noat\n')
+    f.write('.set noreorder\n\n')
+    if not x:
+        f.write('glabel '+diff_label+'\n')
+    f.write(txt)
+    f.close()
+
+def create_permuter_settings(cflags):
+    f = open('permuter_settings.toml.in', 'r')
+    txt = f.read()
+    f.close()
+
+    txt = txt.replace('$CFLAGS', ' '.join(cflags))
+    f = open('permuter_settings.toml', 'w')
+    f.write(txt)
+    f.close()
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -64,7 +93,11 @@ if __name__ == "__main__":
     
     code = os.path.join(tempdir.name, 'func.c')
     target = os.path.join(tempdir.name, 'target.s')
-    nonmatching = os.path.join('nonmatchings', get_function_name(target))
+    meta = os.path.join(tempdir.name, 'metadata.json')
+    diff_label, cflags = get_diff_label_and_cflags(meta)
+    nonmatching = os.path.join('nonmatchings', diff_label)
+    fixup_asm(target, diff_label)
+    create_permuter_settings(cflags)
     
     subprocess.run(['tools/decomp-permuter/import.py', code, target])
     tempdir.cleanup()
