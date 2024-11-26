@@ -162,12 +162,12 @@ void AlgorithmicNeck(Instance *Player, Instance *Target)
         Rot1.z = Player->rotation.z - 512;
     }
 
-    if ((unsigned short)(Rot1.x - 513) < 1535U)
+    if ((Rot1.x > 512) && (Rot1.x < 2048))
     {
         Rot1.x = 512;
     }
 
-    if ((unsigned short)(Rot1.x - 2049) < 1389U)
+    if ((Rot1.x > 2048) && (Rot1.x < 3438))
     {
         Rot1.x = 3438;
     }

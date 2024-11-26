@@ -490,7 +490,7 @@ void UpdateEngagementList(evCollideInstanceStatsData *Ptr, Player *player)
         }
     }
 
-    if (((Ptr->instance->object->oflags2 & 0x1000000)) && (!(Ptr->instance->flags & 0x800)) && (gameTrackerX.gameData.asmData.MorphType != 0) && (Raziel.CurrentPlane == 2) && (Ptr->xyDistance < 450) && ((Ptr->zDelta + 63) < 127U))
+    if (((Ptr->instance->object->oflags2 & 0x1000000)) && (!(Ptr->instance->flags & 0x800)) && (gameTrackerX.gameData.asmData.MorphType != 0) && (Raziel.CurrentPlane == 2) && (Ptr->xyDistance < 450) && ((Ptr->zDelta > -64) && (Ptr->zDelta < 64)))
     {
         Raziel.Senses.Flags |= 0x40;
         Raziel.Senses.Portal = Ptr->instance;

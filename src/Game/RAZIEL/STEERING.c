@@ -134,25 +134,25 @@ int DecodeDirection(int Source, int Destination, short *Difference, short *Zone)
 
     *Difference = AngleDiff((short)Destination, (short)Source);
 
-    if ((unsigned short)(*Difference + 511) < 1023)
+    if ((*Difference > -512) && (*Difference < 512))
     {
         *Zone = 0;
 
         rc = 0x10000001;
     }
-    else if ((unsigned short)(*Difference - 512) < 1024)
+    else if ((*Difference >= 512) && (*Difference < 1536))
     {
         *Zone = 1024;
 
         rc = 0x10000004;
     }
-    else if ((unsigned short)(*Difference + 1535) < 1024)
+    else if ((*Difference > -1536) && (*Difference <= -512))
     {
         *Zone = -1024;
 
         rc = 0x10000002;
     }
-    else if ((short)*Difference > 1535)
+    else if (*Difference > 1535)
     {
         *Zone = 2048;
 
@@ -300,11 +300,15 @@ int ProcessMovement(Instance *instance, long *controlCommand, GameTracker *GT)
         {
             if ((Raziel.Senses.EngagedMask & 0x40))
             {
+                int temp;
+
                 SteerDisableAutoFace(instance);
 
                 angle = MATH3D_AngleFromPosToPos(&instance->position, &Raziel.Senses.EngagedList[6].instance->position);
 
-                if (((unsigned int)(MON_FacingOffset(Raziel.Senses.EngagedList[6].instance, instance) & 0xFFF) - 683) >= 2731U)
+                temp = MON_FacingOffset(Raziel.Senses.EngagedList[6].instance, instance) & 0xFFF;
+
+                if ((temp < 683) || (temp >= 3414))
                 {
                     Raziel.steeringVelocity = 128;
 
@@ -490,7 +494,7 @@ int SteerAutoFace(Instance *instance, long *controlCommand)
 
     diff = AngleDiff(angle, Raziel.LastBearing);
 
-    if (((unsigned int)diff + 383) < 767)
+    if ((diff > -384) && (diff < 384))
     {
         predict = 1;
 
@@ -498,7 +502,7 @@ int SteerAutoFace(Instance *instance, long *controlCommand)
         Raziel.autoFaceRootAngle = 0;
     }
 
-    if (((unsigned int)diff + 1535) < 1152)
+    if ((diff > -1536) && (diff <= -384))
     {
         predict = 2;
 
@@ -506,7 +510,7 @@ int SteerAutoFace(Instance *instance, long *controlCommand)
         Raziel.autoFaceRootAngle = 1024;
     }
 
-    if (((unsigned int)diff - 384) < 1152)
+    if ((diff >= 384) && (diff < 1536))
     {
         predict = 4;
 
@@ -514,7 +518,7 @@ int SteerAutoFace(Instance *instance, long *controlCommand)
         Raziel.autoFaceRootAngle = -1024;
     }
 
-    if (((unsigned int)diff + 1535) > 3070)
+    if ((diff <= -1536) || (diff >= 1536))
     {
         predict = 3;
 

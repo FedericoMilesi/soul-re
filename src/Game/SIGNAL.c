@@ -145,7 +145,7 @@ long SIGNAL_HandleStreamLevel(Instance *instance, Signal *signal)
 
         curStreamUnit = STREAM_GetStreamUnitWithID(instance->currentStreamUnitID);
 
-        if ((gameTrackerX.currentTime - lastTimeCrossed) < 101U)
+        if ((gameTrackerX.currentTime - lastTimeCrossed) <= 100)
         {
             return 1;
         }
