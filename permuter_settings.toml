@@ -1,0 +1,10 @@
+compiler_type = "gcc"
+compiler_command = "mips-linux-gnu-cpp -Iinclude -DTARGET_PSX -ffreestanding | tools/gcc-2.8.1-psx/cc1 -O2 -G4096 -fpeephole -ffunction-cse -fkeep-static-consts -fpcc-struct-return -fcommon -fgnu-linker -msplit-addresses -mgas -mgpOPT -mgpopt -msoft-float -gcoff -quiet | python3 tools/maspsx/maspsx.py --use-comm-section --aspsx-version=2.81 -G4096 | mips-linux-gnu-as -EL -Iinclude -march=r3000 -mtune=r3000 -no-pad-sections"
+asm_prelude_file = "include/macro.inc"
+assembler_command = "mips-linux-gnu-as -EL -Iinclude -march=r3000 -mtune=r3000 -no-pad-sections"
+
+[preserve_macros]
+"gte_.+" = "void"
+
+[decompme.compilers]
+"tools/gcc2.8.1-mipsel/cc1" = "gcc2.8.1-psx"
