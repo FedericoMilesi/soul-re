@@ -2861,7 +2861,55 @@ int CAMERA_FindLinePoint(Position *point, SVector *linept1, SVector *linept2, in
     return hits;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineGetNearestPoint2);
+void CAMERA_SplineGetNearestPoint2(Camera *camera, Spline *spline, SVector *point, int *currkey, SVector *ret_dpoint)
+{
+    SplineKey *key;
+    int n;
+    int target_dist_sq;
+    long dist;
+
+    key = spline->key;
+
+    COPY_SVEC(SVector, ret_dpoint, Position, &camera->core.position);
+
+    dist = 0x7FFFFFFF;
+
+    target_dist_sq = camera->targetFocusDistance;
+    target_dist_sq *= target_dist_sq;
+
+    for (n = 0; n < (spline->numkeys - 1); n++)
+    {
+        if ((n >= 0) && ((spline->numkeys - 2) >= n))
+        {
+            SVector point1;
+            SVector point2;
+            SVector results[2];
+            int i;
+            int hits;
+
+            COPY_SVEC(SVector, &point1, vecS, &key[n].point);
+            COPY_SVEC(SVector, &point2, vecS, &key[n + 1].point);
+
+            hits = CAMERA_FindLinePoint(&camera->targetFocusPoint, &point1, &point2, target_dist_sq, results);
+
+            for (i = 0; i < hits; i++)
+            {
+                int tmpdist;
+
+                tmpdist = CAMERA_GetDistSq(point, &results[i]);
+
+                if (tmpdist < dist)
+                {
+                    COPY_SVEC(SVector, ret_dpoint, SVector, &results[i]);
+
+                    dist = tmpdist;
+
+                    *currkey = n;
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineGetNearestPoint);
 
