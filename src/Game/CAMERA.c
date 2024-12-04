@@ -2879,7 +2879,7 @@ void CAMERA_SplineGetNearestPoint2(Camera *camera, Spline *spline, SVector *poin
 
     for (n = 0; n < (spline->numkeys - 1); n++)
     {
-        if ((n >= 0) && ((spline->numkeys - 2) >= n))
+        if ((n >= 0) && (n <= (spline->numkeys - 2)))
         {
             SVector point1;
             SVector point2;
