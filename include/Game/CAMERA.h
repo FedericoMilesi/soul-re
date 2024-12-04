@@ -62,6 +62,7 @@ void CAMERA_SetLookRot(Camera *camera, int x_rotation, int z_rotation);
 void CAMERA_StartSwimThrowMode(Camera *camera);
 void CAMERA_Initialize(Camera *camera);
 void CAMERA_SetInstanceFocus(Camera *camera, Instance *instance);
+void CAMERA_CalcFocusOffset(SVector *offset, Camera *camera);
 
 extern int CameraCenterDelay;
 Camera theCamera;

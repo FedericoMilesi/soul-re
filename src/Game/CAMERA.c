@@ -1180,7 +1180,71 @@ void CAMERA_CalcPosition(Position *position, Position *base, Rotation *rotation,
     COPY_SVEC(Position, position, Vector, &vectorPos);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetFocus);
+void CAMERA_SetFocus(Camera *camera, Position *targetfocusPoint)
+{
+    Instance *focusInstance;
+    Model *model;
+    SVector temp1;
+    SVector offset;
+    SVector *segPosVector;
+    Vector temp2;
+
+    focusInstance = camera->focusInstance;
+
+    if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x4000000)))
+    {
+        model = focusInstance->object->modelList[focusInstance->currentModel];
+
+        segPosVector = (SVector *)&model->segmentList[1].px;
+
+        COPY_SVEC(SVector, &temp1, SVector, segPosVector);
+
+        ApplyMatrix(&focusInstance->matrix[1], (SVECTOR *)&temp1, (VECTOR *)&temp2);
+
+        COPY_SVEC(Position, targetfocusPoint, Position, &focusInstance->position);
+
+        if ((camera->flags & 0x10000))
+        {
+            ADD_SVEC(Position, targetfocusPoint, Position, targetfocusPoint, SVector, &temp1);
+
+            if ((INSTANCE_Query(focusInstance, 9) & 0x40))
+            {
+                targetfocusPoint->z += 192;
+            }
+        }
+
+        camera->real_focuspoint = *targetfocusPoint;
+
+        camera->focuspoint_fallz = targetfocusPoint->z;
+    }
+    else
+    {
+        Instance *instance;
+        SVector output;
+
+        if (((camera->instance_mode & 0x2000000)) && ((camera->mode >= 12) && (camera->mode < 14)) && ((instance = (Instance *)INSTANCE_Query(focusInstance, 34)) != NULL))
+        {
+            LoadAverageShort12((SVECTOR *)&instance->position, (SVECTOR *)&focusInstance->position, 4096 - combat_cam_weight, combat_cam_weight, (SVECTOR *)&output);
+
+            COPY_SVEC(Position, targetfocusPoint, SVector, &output);
+        }
+        else
+        {
+            COPY_SVEC(Position, targetfocusPoint, Position, &focusInstance->position);
+        }
+
+        CAMERA_CalcFocusOffset(&offset, camera);
+
+        ADD_SVEC(Position, targetfocusPoint, Position, targetfocusPoint, SVector, &offset);
+
+        camera->real_focuspoint = *targetfocusPoint;
+
+        if ((!(camera->instance_mode & 0x2038)) || (((camera->instance_mode & 0x2000)) && (camera->focusInstanceVelVec.z > 70)))
+        {
+            camera->focuspoint_fallz = targetfocusPoint->z;
+        }
+    }
+}
 
 void CAMERA_Lock(Camera *camera, long lock)
 {
