@@ -914,8 +914,58 @@ int num_menu_items(DebugMenuLine *menu)
     return nitems;
 }
 
-void maybe_change_menu_choice(GameTracker *gt, DebugMenuLine *menu);
-INCLUDE_ASM("asm/nonmatchings/Game/DEBUG", maybe_change_menu_choice);
+void maybe_change_menu_choice(GameTracker *gt, DebugMenuLine *menu)
+{
+    long *command;
+    int choice;
+    int nitems;
+    int incr;
+    int temp; // not from decls.h
+
+    command = gt->controlCommand[0];
+
+    choice = debugMenuChoice;
+
+    nitems = num_menu_items(menu);
+
+    if (!((unsigned long)command[1] & 0x1))
+    {
+        incr = (unsigned long)command[1] >> 1;
+
+        incr &= 0x1;
+    }
+    else
+    {
+        incr = -1;
+    }
+
+    if ((incr != 0) && (choice >= 0))
+    {
+        temp = debugMenuChoice;
+
+        while (1)
+        {
+            choice = (choice + nitems + incr) % nitems;
+
+            if (choice != temp)
+            {
+                if (menu[choice].type >= DEBUG_LINE_TYPE_FORMAT)
+                {
+                    continue;
+                }
+
+                if (choice != debugMenuChoice)
+                {
+                    SndPlay(5);
+
+                    debugMenuChoice = choice;
+                }
+            }
+
+            break;
+        }
+    }
+}
 
 void handle_line_type_long(GameTracker *gt, DebugMenuLine *line)
 {
