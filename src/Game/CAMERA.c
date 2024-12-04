@@ -2543,11 +2543,72 @@ long CAMERA_AbsoluteCollision(Camera *camera, CameraCollisionInfo *colInfo)
     return hit;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 /*TODO: migrate to CAMERA_update_z_damped*/
 static short D_800D03F6 = 0; // upvel
 static short D_800D03F8 = 0; // upaccl
 static short D_800D03FA = 0; // upmaxVel
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_update_z_damped);
+#else
+short CAMERA_update_z_damped(Camera *camera, short current, short target)
+{
+    static short upvel = 0;
+    static short upaccl = 0;
+    static short upmaxVel = 0;
+    short current_tmp;
+
+    current_tmp = current;
+
+    if (current > target)
+    {
+        if (((camera->instance_mode & 0x1038)) && (camera->real_focuspoint.z >= camera->focuspoint_fallz))
+        {
+            upmaxVel = ABS(current - target) / 6;
+        }
+        else
+        {
+            upmaxVel = ABS(current - target) * 2;
+        }
+
+        CriticalDampValue(1, &current_tmp, target, &upvel, &upaccl, upmaxVel);
+    }
+    else if (ABS(current - target) >= 5)
+    {
+        if ((camera->instance_mode & 0x100))
+        {
+            upmaxVel = ABS(current - target) / 6;
+
+            if (upmaxVel < 50)
+            {
+                upmaxVel = 50;
+            }
+        }
+        else
+        {
+            upmaxVel = ABS(current - target) / 6;
+        }
+
+        if (ABS(current - target) < upmaxVel)
+        {
+            upmaxVel = ABS(current - target);
+        }
+
+        CriticalDampValue(1, &current_tmp, target, &upvel, &upaccl, upmaxVel);
+    }
+    else
+    {
+        upaccl = 0;
+
+        upvel = 0;
+        upmaxVel = 0;
+
+        return current;
+    }
+
+    return current_tmp;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CombatCamDist);
 
