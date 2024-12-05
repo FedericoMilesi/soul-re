@@ -38,6 +38,8 @@ SVector *collide_normal1;
 
 SVector collide_localPoint;
 
+MATRIX *collide_lwTransform;
+
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal)
 {
     Triangle2D *triangle;
@@ -1235,7 +1237,480 @@ long COLLIDE_SphereAndHBox(HBox *hbox, Sphere *sphere, Position *oldPos, SVector
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_Instance1SpheresToInstance2);
+void COLLIDE_Instance1SpheresToInstance2(Instance *instance1, Instance *instance2, long sphereToSphere)
+{
+    MATRIX *wsTransform2;
+    MATRIX *oldWSTransform2;
+    Position *spherePos;
+    Vector *line;
+    Vector *offset;
+    Vector *tempVec;
+    Vector *sSpherePos1;
+    Vector *oldSSpherePos1;
+    SVector *svec;
+    Sphere *sSphere1;
+    Sphere *oldSSphere1;
+    Sphere *wSphere1;
+    Sphere *wSphere2;
+    Sphere *oldWSphere1;
+    Sphere *oldWSphere2;
+    CollideInfo *collideInfo;
+    HFaceInfo *hfaceInfo;
+    MATRIX *swTransform1;
+    MATRIX *swTransform2;
+    MATRIX *oldSWTransform1;
+    MATRIX *oldSWTransform2;
+    HSphere *hsphere1;
+    HSphere *hsphere2;
+    HFace *hface;
+    long flag;
+    long edge;
+    HModel *hmodel1;
+    HModel *hmodel2;
+    HPrim *hprim1;
+    HPrim *hprim2;
+    int i;
+    void (*collideFunc)();
+
+    (void)sphereToSphere;
+
+    wsTransform2 = (MATRIX *)getScratchAddr(50);
+    oldWSTransform2 = (MATRIX *)getScratchAddr(66);
+
+    spherePos = (Position *)getScratchAddr(74);
+
+    line = (Vector *)getScratchAddr(82);
+
+    offset = (Vector *)getScratchAddr(86);
+
+    tempVec = (Vector *)getScratchAddr(90);
+
+    sSpherePos1 = (Vector *)getScratchAddr(98);
+    oldSSpherePos1 = (Vector *)getScratchAddr(102);
+
+    svec = (SVector *)getScratchAddr(106);
+
+    sSphere1 = (Sphere *)getScratchAddr(108);
+    oldSSphere1 = (Sphere *)getScratchAddr(111);
+
+    wSphere1 = (Sphere *)getScratchAddr(120);
+    wSphere2 = (Sphere *)getScratchAddr(123);
+
+    oldWSphere1 = (Sphere *)getScratchAddr(126);
+    oldWSphere2 = (Sphere *)getScratchAddr(129);
+
+    collideInfo = (CollideInfo *)getScratchAddr(132);
+    hfaceInfo = (HFaceInfo *)getScratchAddr(144);
+
+    hmodel1 = &instance1->hModelList[instance1->currentModel];
+
+    if ((instance1->hModelList != NULL) && (instance2->hModelList != NULL))
+    {
+        hmodel2 = &instance2->hModelList[instance2->currentModel];
+
+        if (hmodel2->numHPrims != 0)
+        {
+            for (i = hmodel1->numHPrims, hprim1 = hmodel1->hPrimList; i != 0; i--, hprim1++)
+            {
+                if (((hprim1->hpFlags & 0x1)) && ((hprim1->withFlags & 0x4)) && (hprim1->type == 1))
+                {
+                    int i;
+
+                    swTransform1 = &instance1->matrix[hprim1->segment];
+                    oldSWTransform1 = &instance1->oldMatrix[hprim1->segment];
+
+                    hsphere1 = hprim1->data.hsphere;
+
+                    SetRotMatrix(swTransform1);
+                    SetTransMatrix(swTransform1);
+
+                    RotTrans((SVECTOR *)&hsphere1->position, (VECTOR *)tempVec, &flag);
+
+                    wSphere1->position.x = tempVec->x;
+                    wSphere1->position.y = tempVec->y;
+                    wSphere1->position.z = tempVec->z;
+
+                    SetRotMatrix(oldSWTransform1);
+                    SetTransMatrix(oldSWTransform1);
+
+                    RotTrans((SVECTOR *)&hsphere1->position, (VECTOR *)tempVec, &flag);
+
+                    oldWSphere1->position.x = tempVec->x;
+                    oldWSphere1->position.y = tempVec->y;
+                    oldWSphere1->position.z = tempVec->z;
+
+                    for (i = hmodel2->numHPrims, hprim2 = hmodel2->hPrimList; i != 0; i--, hprim2++)
+                    {
+                        if (((hprim2->hpFlags & 0x1)) && ((hprim2->hpFlags & 0x4)))
+                        {
+                            swTransform2 = &instance2->matrix[hprim2->segment];
+                            oldSWTransform2 = &instance2->oldMatrix[hprim2->segment];
+
+                            if ((hprim2->type == 1) && ((hprim1->withFlags & 0x20)) && ((hprim2->withFlags & 0x20)))
+                            {
+                                hsphere2 = hprim2->data.hsphere;
+
+                                SetRotMatrix(swTransform2);
+                                SetTransMatrix(swTransform2);
+
+                                RotTrans((SVECTOR *)&hsphere2->position, (VECTOR *)tempVec, &flag);
+
+                                wSphere2->position.x = tempVec->x;
+                                wSphere2->position.y = tempVec->y;
+                                wSphere2->position.z = tempVec->z;
+
+                                SetRotMatrix(oldSWTransform2);
+                                SetTransMatrix(oldSWTransform2);
+
+                                RotTrans((SVECTOR *)&hsphere2->position, (VECTOR *)tempVec, &flag);
+
+                                oldWSphere2->position.x = tempVec->x;
+                                oldWSphere2->position.y = tempVec->y;
+                                oldWSphere2->position.z = tempVec->z;
+
+                                line->x = wSphere1->position.x - wSphere2->position.x;
+                                line->y = wSphere1->position.y - wSphere2->position.y;
+                                line->z = wSphere1->position.z - wSphere2->position.z;
+
+                                if (((line->x * line->x) + (line->y * line->y) + (line->z * line->z)) < ((hsphere1->radius + hsphere2->radius) * (hsphere1->radius + hsphere2->radius)))
+                                {
+                                    long len;
+                                    long a;
+                                    long b;
+                                    long c;
+
+                                    a = abs(line->x);
+                                    b = abs(line->y);
+                                    c = abs(line->z);
+
+                                    MATH3D_Sort3VectorCoords(&a, &b, &c);
+
+                                    len = (c * 30) + (b * 12) + (a * 9);
+
+                                    if (len != 0)
+                                    {
+                                        if (hsphere1->radius < hsphere2->radius)
+                                        {
+                                            short _x1;
+                                            short _y1;
+                                            short _z1;
+                                            Position *_v1;
+
+                                            _v1 = &hsphere1->position;
+
+                                            _x1 = _v1->x;
+                                            _y1 = _v1->y;
+                                            _z1 = _v1->z;
+
+                                            collide_localPoint.x = _x1;
+                                            collide_localPoint.y = _y1;
+                                            collide_localPoint.z = _z1;
+
+                                            collide_lwTransform = swTransform1;
+                                        }
+                                        else
+                                        {
+                                            short _x1;
+                                            short _y1;
+                                            short _z1;
+                                            Position *temp; // not from decls.h
+
+                                            temp = &hsphere2->position;
+
+                                            _x1 = temp->x;
+                                            _y1 = temp->y;
+                                            _z1 = temp->z;
+
+                                            collide_localPoint.x = _x1;
+                                            collide_localPoint.y = _y1;
+                                            collide_localPoint.z = _z1;
+
+                                            collide_lwTransform = swTransform2;
+                                        }
+
+                                        line->x *= (hsphere1->radius + hsphere2->radius) - (len >> 5);
+                                        line->y *= (hsphere1->radius + hsphere2->radius) - (len >> 5);
+                                        line->z *= (hsphere1->radius + hsphere2->radius) - (len >> 5);
+
+                                        collideInfo->type0 = 1;
+                                        collideInfo->type1 = 1;
+
+                                        collideInfo->offset.x = (line->x << 5) / len;
+                                        collideInfo->offset.y = (line->y << 5) / len;
+                                        collideInfo->offset.z = (line->z << 5) / len;
+
+                                        if (instance1->collideFunc != NULL)
+                                        {
+                                            collideInfo->prim0 = hsphere1;
+                                            collideInfo->prim1 = hsphere2;
+
+                                            collideInfo->inst0 = instance1;
+                                            collideInfo->inst1 = instance2;
+
+                                            collideInfo->segment = hprim1->segment;
+
+                                            instance1->collideInfo = collideInfo;
+
+                                            instance1->collideFunc(instance1, &gameTrackerX);
+                                        }
+
+                                        if (instance2->collideFunc != NULL)
+                                        {
+                                            collideInfo->prim0 = hsphere2;
+                                            collideInfo->prim1 = hsphere1;
+
+                                            collideInfo->inst0 = instance2;
+                                            collideInfo->inst1 = instance1;
+
+                                            collideInfo->offset.x = -collideInfo->offset.x;
+                                            collideInfo->offset.y = -collideInfo->offset.y;
+                                            collideInfo->offset.z = -collideInfo->offset.z;
+
+                                            collideInfo->segment = hprim2->segment;
+
+                                            instance2->collideInfo = collideInfo;
+
+                                            instance2->collideFunc(instance2, &gameTrackerX);
+                                        }
+                                    }
+                                }
+                            }
+                            else if ((hprim2->type == 2) || (hprim2->type == 5))
+                            {
+                                Model *model2;
+
+                                model2 = instance2->object->modelList[instance2->currentModel];
+
+                                hfaceInfo->flags = 0;
+
+                                PIPE3D_InvertTransform(wsTransform2, swTransform2);
+
+                                SetRotMatrix(wsTransform2);
+                                SetTransMatrix(wsTransform2);
+
+                                RotTrans((SVECTOR *)wSphere1, (VECTOR *)sSpherePos1, &flag);
+
+                                sSphere1->position.x = sSpherePos1->x;
+                                sSphere1->position.y = sSpherePos1->y;
+                                sSphere1->position.z = sSpherePos1->z;
+
+                                sSphere1->radius = hsphere1->radius;
+                                sSphere1->radiusSquared = hsphere1->radiusSquared;
+
+                                PIPE3D_InvertTransform(oldWSTransform2, oldSWTransform2);
+
+                                SetRotMatrix(oldWSTransform2);
+                                SetTransMatrix(oldWSTransform2);
+
+                                RotTrans((SVECTOR *)oldWSphere1, (VECTOR *)oldSSpherePos1, &flag);
+
+                                oldSSphere1->position.x = oldSSpherePos1->x;
+                                oldSSphere1->position.y = oldSSpherePos1->y;
+                                oldSSphere1->position.z = oldSSpherePos1->z;
+
+                                if ((hprim2->type == 2) && ((hprim1->withFlags & 0x40)) && ((hprim2->withFlags & 0x20)))
+                                {
+                                    hface = hprim2->data.hface;
+
+                                    hfaceInfo->flags = 0;
+
+                                    spherePos->x = sSphere1->position.x;
+                                    spherePos->y = sSphere1->position.y;
+                                    spherePos->z = sSphere1->position.z;
+
+                                    hfaceInfo->hface = hface;
+
+                                    hfaceInfo->vertex0 = (HVertex *)&model2->vertexList[hface->v0];
+                                    hfaceInfo->vertex1 = (HVertex *)&model2->vertexList[hface->v1];
+                                    hfaceInfo->vertex2 = (HVertex *)&model2->vertexList[hface->v2];
+
+                                    COLLIDE_GetNormal(hface->normal, (short *)model2->normalList, &hfaceInfo->normal);
+
+                                    if (COLLIDE_SphereAndHFace(sSphere1, (Position *)oldSSphere1, hfaceInfo, (SVector *)&collideInfo->point1, &edge) != 0)
+                                    {
+                                        svec->x = sSphere1->position.x - spherePos->x;
+                                        svec->y = sSphere1->position.y - spherePos->y;
+                                        svec->z = sSphere1->position.z - spherePos->z;
+
+                                        gte_SetRotMatrix(swTransform2);
+                                        gte_ldv0(svec);
+                                        gte_nrtv0();
+                                        gte_stlvnl(offset);
+
+                                        collideInfo->point0 = collideInfo->point1;
+
+                                        collideFunc = instance2->collideFunc;
+
+                                        if (collideFunc != NULL)
+                                        {
+                                            collideInfo->flags = 0;
+
+                                            if (edge != 0)
+                                            {
+                                                collideInfo->flags = 0x4;
+                                            }
+                                            else
+                                            {
+                                                collideInfo->flags = 0x8;
+                                            }
+
+                                            collideInfo->type0 = 2;
+                                            collideInfo->type1 = 1;
+
+                                            collideInfo->prim0 = hface;
+                                            collideInfo->prim1 = hsphere1;
+
+                                            collideInfo->inst0 = instance2;
+                                            collideInfo->inst1 = instance1;
+
+                                            collideInfo->offset.x = -offset->x;
+                                            collideInfo->offset.y = -offset->y;
+                                            collideInfo->offset.z = -offset->z;
+
+                                            collideInfo->segment = hprim2->segment;
+
+                                            instance2->collideInfo = collideInfo;
+
+                                            collideFunc(instance2, &gameTrackerX);
+                                        }
+
+                                        collideFunc = instance1->collideFunc;
+
+                                        if (collideFunc != NULL)
+                                        {
+                                            collideInfo->flags = 0;
+
+                                            if (edge != 0)
+                                            {
+                                                collideInfo->flags = 0x1;
+                                            }
+                                            else
+                                            {
+                                                collideInfo->flags = 0x2;
+                                            }
+
+                                            collideInfo->type0 = 1;
+                                            collideInfo->type1 = 2;
+
+                                            collideInfo->prim0 = hsphere1;
+                                            collideInfo->prim1 = hface;
+
+                                            collideInfo->inst0 = instance1;
+                                            collideInfo->inst1 = instance2;
+
+                                            collideInfo->offset.x = offset->x;
+                                            collideInfo->offset.y = offset->y;
+                                            collideInfo->offset.z = offset->z;
+
+                                            collideInfo->segment = hprim1->segment;
+
+                                            instance1->collideInfo = collideInfo;
+
+                                            collideFunc(instance1, &gameTrackerX);
+                                        }
+
+                                        spherePos->x = sSphere1->position.x;
+                                        spherePos->y = sSphere1->position.y;
+                                        spherePos->z = sSphere1->position.z;
+                                    }
+                                }
+                                else if ((hprim2->type == 5) && ((hprim1->withFlags & 0x10)) && ((hprim2->withFlags & 0x20)))
+                                {
+                                    HBox *hbox;
+                                    HBox *temp; // not from decls.h
+
+                                    hbox = hprim2->data.hbox;
+
+                                    temp = hbox;
+
+                                    hbox->maxX = (hbox->refMaxX * instance2->scale.x) >> 12;
+                                    hbox->maxY = (hbox->refMaxY * instance2->scale.y) >> 12;
+                                    hbox->maxZ = (hbox->refMaxZ * instance2->scale.z) >> 12;
+
+                                    hbox->minX = (hbox->refMinX * instance2->scale.x) >> 12;
+                                    hbox->minY = (hbox->refMinY * instance2->scale.y) >> 12;
+                                    hbox->minZ = (hbox->refMinZ * instance2->scale.z) >> 12;
+
+                                    spherePos->x = sSphere1->position.x;
+                                    spherePos->y = sSphere1->position.y;
+                                    spherePos->z = sSphere1->position.z;
+
+                                    if (COLLIDE_SphereAndHBox(hbox, sSphere1, (Position *)oldSSphere1, (SVector *)&collideInfo->point0) != 0)
+                                    {
+                                        svec->x = sSphere1->position.x - spherePos->x;
+                                        svec->y = sSphere1->position.y - spherePos->y;
+                                        svec->z = sSphere1->position.z - spherePos->z;
+
+                                        gte_SetRotMatrix(swTransform2);
+                                        gte_ldv0(svec);
+                                        gte_nrtv0();
+                                        gte_stlvnl(offset);
+
+                                        collideFunc = instance2->collideFunc;
+
+                                        collide_lwTransform = swTransform2;
+
+                                        if (collideFunc != NULL)
+                                        {
+                                            collideInfo->flags = 0x2;
+
+                                            collideInfo->type0 = 5;
+                                            collideInfo->type1 = 1;
+
+                                            collideInfo->prim0 = temp;
+                                            collideInfo->prim1 = hsphere1;
+
+                                            collideInfo->inst0 = instance2;
+                                            collideInfo->inst1 = instance1;
+
+                                            collideInfo->offset.x = -offset->x;
+                                            collideInfo->offset.y = -offset->y;
+                                            collideInfo->offset.z = -offset->z;
+
+                                            collideInfo->segment = hprim2->segment;
+
+                                            instance2->collideInfo = collideInfo;
+
+                                            collideFunc(instance2, &gameTrackerX);
+                                        }
+
+                                        collideFunc = instance1->collideFunc;
+
+                                        if (collideFunc != NULL)
+                                        {
+                                            collideInfo->flags = 0;
+
+                                            collideInfo->type0 = 1;
+                                            collideInfo->type1 = 5;
+
+                                            collideInfo->prim0 = hsphere1;
+                                            collideInfo->prim1 = temp;
+
+                                            collideInfo->inst0 = instance1;
+                                            collideInfo->inst1 = instance2;
+
+                                            collideInfo->flags |= 0x8;
+
+                                            collideInfo->offset.x = offset->x;
+                                            collideInfo->offset.y = offset->y;
+                                            collideInfo->offset.z = offset->z;
+
+                                            collideInfo->segment = hprim1->segment;
+
+                                            instance1->collideInfo = collideInfo;
+
+                                            collideFunc(instance1, &gameTrackerX);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 void COLLIDE_Instances(Instance *instance1, Instance *instance2)
 {
