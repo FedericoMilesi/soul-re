@@ -1,381 +1,402 @@
 #ifndef _TYPES_H_
 #define _TYPES_H_
 
-typedef enum _G2Bool_Enum {
+typedef enum _G2Bool_Enum
+{
     G2FALSE = 0,
-}G2Bool;
+} G2Bool;
 
-typedef enum DEBUG_LINE_TYPE {
-    DEBUG_LINE_TYPE_BIT              = 0,
-    DEBUG_LINE_TYPE_LONG             = 1,
-    DEBUG_LINE_TYPE_ACTION           = 2,
+typedef enum DEBUG_LINE_TYPE
+{
+    DEBUG_LINE_TYPE_BIT = 0,
+    DEBUG_LINE_TYPE_LONG = 1,
+    DEBUG_LINE_TYPE_ACTION = 2,
     DEBUG_LINE_TYPE_ACTION_WITH_LINE = 3,
-    DEBUG_LINE_TYPE_MENU             = 4,
-    DEBUG_LINE_TYPE_ENDLIST          = 5,
-    DEBUG_LINE_TYPE_FORMAT           = 6,
-    DEBUG_LINE_TYPE_INFO             = 7,
-}DEBUG_LINE_TYPE;
+    DEBUG_LINE_TYPE_MENU = 4,
+    DEBUG_LINE_TYPE_ENDLIST = 5,
+    DEBUG_LINE_TYPE_FORMAT = 6,
+    DEBUG_LINE_TYPE_INFO = 7,
+} DEBUG_LINE_TYPE;
 
-typedef enum option_ctrl_t {
-    option_ctrl_bogus      = 0,
-    option_ctrl_none       = 1,
-    option_ctrl_select     = 2,
-    option_ctrl_left       = 3,
-    option_ctrl_right      = 4,
+typedef enum option_ctrl_t
+{
+    option_ctrl_bogus = 0,
+    option_ctrl_none = 1,
+    option_ctrl_select = 2,
+    option_ctrl_left = 3,
+    option_ctrl_right = 4,
     option_ctrl_num_states = 5,
-}option_ctrl_t;
+} option_ctrl_t;
 
-typedef enum _G2AnimCallbackMsg_Enum {
-    G2ANIM_MSG_DONE                = 1,
-    G2ANIM_MSG_LOOPPOINT           = 2,
-    G2ANIM_MSG_SECTION_INTERPDONE  = 3,
+typedef enum _G2AnimCallbackMsg_Enum
+{
+    G2ANIM_MSG_DONE = 1,
+    G2ANIM_MSG_LOOPPOINT = 2,
+    G2ANIM_MSG_SECTION_INTERPDONE = 3,
     G2ANIM_MSG_SEGCTRLR_INTERPDONE = 4,
-    G2ANIM_MSG_SWALARMSET          = 5,
-    G2ANIM_MSG_PLAYEFFECT          = 6,
-}G2AnimCallbackMsg;
+    G2ANIM_MSG_SWALARMSET = 5,
+    G2ANIM_MSG_PLAYEFFECT = 6,
+} G2AnimCallbackMsg;
 
-enum MATH3D_AXIS {
-    AXIS_X     = 0,
-    AXIS_Y     = 1,
-    AXIS_Z     = 2,
+enum MATH3D_AXIS
+{
+    AXIS_X = 0,
+    AXIS_Y = 1,
+    AXIS_Z = 2,
     AXIS_NEG_X = 3,
     AXIS_NEG_Y = 4,
     AXIS_NEG_Z = 5,
 };
 
-enum MonsterAnim {
-    MONSTER_ANIM_HIT1               = 0,
-    MONSTER_ANIM_HIT2               = 1,
-    MONSTER_ANIM_WALK               = 2,
-    MONSTER_ANIM_RUN                = 3,
-    MONSTER_ANIM_GRABBED            = 4,
-    MONSTER_ANIM_STUNNED            = 5,
-    MONSTER_ANIM_JUMPFORWARD        = 6,
-    MONSTER_ANIM_JUMPBACK           = 7,
-    MONSTER_ANIM_JUMPLEFT           = 8,
-    MONSTER_ANIM_JUMPRIGHT          = 9,
-    MONSTER_ANIM_STANCE_HEALTHY     = 10,
-    MONSTER_ANIM_STANCE_VULNERABLE  = 11,
-    MONSTER_ANIM_STUNNED_RECOVERY   = 12,
-    MONSTER_ANIM_IMPALED            = 13,
-    MONSTER_ANIM_STRUGGLE           = 14,
-    MONSTER_ANIM_BREAKHOLD          = 15,
-    MONSTER_ANIM_THROWN             = 16,
-    MONSTER_ANIM_IMPACT             = 17,
-    MONSTER_ANIM_LANDONFEET         = 18,
-    MONSTER_ANIM_FALL               = 19,
-    MONSTER_ANIM_BREAKFALL          = 20,
-    MONSTER_ANIM_SPINLAND           = 21,
-    MONSTER_ANIM_IMPALEDEATH        = 22,
-    MONSTER_ANIM_GETUP              = 23,
-    MONSTER_ANIM_GENERALDEATH       = 24,
+enum MonsterAnim
+{
+    MONSTER_ANIM_HIT1 = 0,
+    MONSTER_ANIM_HIT2 = 1,
+    MONSTER_ANIM_WALK = 2,
+    MONSTER_ANIM_RUN = 3,
+    MONSTER_ANIM_GRABBED = 4,
+    MONSTER_ANIM_STUNNED = 5,
+    MONSTER_ANIM_JUMPFORWARD = 6,
+    MONSTER_ANIM_JUMPBACK = 7,
+    MONSTER_ANIM_JUMPLEFT = 8,
+    MONSTER_ANIM_JUMPRIGHT = 9,
+    MONSTER_ANIM_STANCE_HEALTHY = 10,
+    MONSTER_ANIM_STANCE_VULNERABLE = 11,
+    MONSTER_ANIM_STUNNED_RECOVERY = 12,
+    MONSTER_ANIM_IMPALED = 13,
+    MONSTER_ANIM_STRUGGLE = 14,
+    MONSTER_ANIM_BREAKHOLD = 15,
+    MONSTER_ANIM_THROWN = 16,
+    MONSTER_ANIM_IMPACT = 17,
+    MONSTER_ANIM_LANDONFEET = 18,
+    MONSTER_ANIM_FALL = 19,
+    MONSTER_ANIM_BREAKFALL = 20,
+    MONSTER_ANIM_SPINLAND = 21,
+    MONSTER_ANIM_IMPALEDEATH = 22,
+    MONSTER_ANIM_GETUP = 23,
+    MONSTER_ANIM_GENERALDEATH = 24,
     MONSTER_ANIM_MISSILEIMPALEDEATH = 25,
-    MONSTER_ANIM_SURPRISED          = 26,
-    MONSTER_ANIM_AGONY              = 27,
-    MONSTER_ANIM_PUPATE             = 28,
-    MONSTER_ANIM_NOTICE             = 29,
-    MONSTER_ANIM_SOULSUCK           = 30,
-    MONSTER_ANIM_IMPALEHORZ         = 31,
-    MONSTER_ANIM_IMPALEVERT         = 32,
-    MONSTER_ANIM_SOULOUTGRND        = 33,
-    MONSTER_ANIM_SOULOUTHORZ        = 34,
-    MONSTER_ANIM_SOULOUTVERT        = 35,
-    MONSTER_ANIM_FALLOVER           = 36,
-    MONSTER_ANIM_EMBRACE            = 37,
-    MONSTER_ANIM_SHOVE              = 38,
-    MONSTER_ANIM_FLIPSWITCH         = 39,
-    MONSTER_ANIM_EVADELEFT          = 40,
-    MONSTER_ANIM_EVADERIGHT         = 41,
-    MONSTER_ANIM_ALARM              = 42,
-    MONSTER_ANIM_DEAF               = 43,
-    MONSTER_ANIM_BLIND              = 44,
-    MONSTER_ANIM_SUCKED             = 45,
-    MONSTER_NUM_ANIMS               = 46,
+    MONSTER_ANIM_SURPRISED = 26,
+    MONSTER_ANIM_AGONY = 27,
+    MONSTER_ANIM_PUPATE = 28,
+    MONSTER_ANIM_NOTICE = 29,
+    MONSTER_ANIM_SOULSUCK = 30,
+    MONSTER_ANIM_IMPALEHORZ = 31,
+    MONSTER_ANIM_IMPALEVERT = 32,
+    MONSTER_ANIM_SOULOUTGRND = 33,
+    MONSTER_ANIM_SOULOUTHORZ = 34,
+    MONSTER_ANIM_SOULOUTVERT = 35,
+    MONSTER_ANIM_FALLOVER = 36,
+    MONSTER_ANIM_EMBRACE = 37,
+    MONSTER_ANIM_SHOVE = 38,
+    MONSTER_ANIM_FLIPSWITCH = 39,
+    MONSTER_ANIM_EVADELEFT = 40,
+    MONSTER_ANIM_EVADERIGHT = 41,
+    MONSTER_ANIM_ALARM = 42,
+    MONSTER_ANIM_DEAF = 43,
+    MONSTER_ANIM_BLIND = 44,
+    MONSTER_ANIM_SUCKED = 45,
+    MONSTER_NUM_ANIMS = 46,
 };
 
-enum MonsterState {
-    MONSTER_STATE_BIRTH              = 0,
-    MONSTER_STATE_PURSUE             = 1,
-    MONSTER_STATE_IDLE               = 2,
-    MONSTER_STATE_MISSILEHIT         = 3,
-    MONSTER_STATE_FALL               = 4,
-    MONSTER_STATE_WANDER             = 5,
-    MONSTER_STATE_ATTACK             = 6,
-    MONSTER_STATE_IMPALEDEATH        = 7,
-    MONSTER_STATE_HIT                = 8,
-    MONSTER_STATE_STUNNED            = 9,
-    MONSTER_STATE_GRABBED            = 10,
-    MONSTER_STATE_THROWN             = 11,
-    MONSTER_STATE_IMPACT             = 12,
-    MONSTER_STATE_COMBAT             = 13,
-    MONSTER_STATE_BREAKHOLD          = 14,
-    MONSTER_STATE_LANDONFEET         = 15,
-    MONSTER_STATE_GENERALDEATH       = 16,
-    MONSTER_STATE_ENVIRONMENTDAMAGE  = 17,
-    MONSTER_STATE_LANDINWATER        = 18,
-    MONSTER_STATE_FLEE               = 19,
-    MONSTER_STATE_HIDE               = 20,
-    MONSTER_STATE_SURPRISEATTACK     = 21,
-    MONSTER_STATE_PARRY              = 22,
-    MONSTER_STATE_DEAD               = 23,
-    MONSTER_STATE_SURPRISED          = 24,
-    MONSTER_STATE_NOTICE             = 25,
-    MONSTER_STATE_PUPATE             = 26,
-    MONSTER_STATE_EMBRACE            = 27,
-    MONSTER_STATE_PROJECTILE         = 28,
+enum MonsterState
+{
+    MONSTER_STATE_BIRTH = 0,
+    MONSTER_STATE_PURSUE = 1,
+    MONSTER_STATE_IDLE = 2,
+    MONSTER_STATE_MISSILEHIT = 3,
+    MONSTER_STATE_FALL = 4,
+    MONSTER_STATE_WANDER = 5,
+    MONSTER_STATE_ATTACK = 6,
+    MONSTER_STATE_IMPALEDEATH = 7,
+    MONSTER_STATE_HIT = 8,
+    MONSTER_STATE_STUNNED = 9,
+    MONSTER_STATE_GRABBED = 10,
+    MONSTER_STATE_THROWN = 11,
+    MONSTER_STATE_IMPACT = 12,
+    MONSTER_STATE_COMBAT = 13,
+    MONSTER_STATE_BREAKHOLD = 14,
+    MONSTER_STATE_LANDONFEET = 15,
+    MONSTER_STATE_GENERALDEATH = 16,
+    MONSTER_STATE_ENVIRONMENTDAMAGE = 17,
+    MONSTER_STATE_LANDINWATER = 18,
+    MONSTER_STATE_FLEE = 19,
+    MONSTER_STATE_HIDE = 20,
+    MONSTER_STATE_SURPRISEATTACK = 21,
+    MONSTER_STATE_PARRY = 22,
+    MONSTER_STATE_DEAD = 23,
+    MONSTER_STATE_SURPRISED = 24,
+    MONSTER_STATE_NOTICE = 25,
+    MONSTER_STATE_PUPATE = 26,
+    MONSTER_STATE_EMBRACE = 27,
+    MONSTER_STATE_PROJECTILE = 28,
     MONSTER_STATE_TERRAINIMPALEDEATH = 29,
-    MONSTER_STATE_PETRIFIED          = 30,
-    MONSTER_NUM_STATES               = 31,
+    MONSTER_STATE_PETRIFIED = 30,
+    MONSTER_NUM_STATES = 31,
 };
 
-typedef enum language_t {
-    language_english    = 0,
-    language_french     = 1,
-    language_german     = 2,
-    language_italian    = 3,
-    language_spanish    = 4,
+typedef enum language_t
+{
+    language_english = 0,
+    language_french = 1,
+    language_german = 2,
+    language_italian = 3,
+    language_spanish = 4,
     language_num_states = 5,
-    language_default    = 0xFFFFFFFF,
-}language_t;
+    language_default = 0xFFFFFFFF,
+} language_t;
 
-typedef enum localstr_t {
-    LOCALSTR_BOGUS                  = 0,
-    LOCALSTR_format_card            = 1,
-    LOCALSTR_accessing_card         = 2,
-    LOCALSTR_back                   = 3,
-    LOCALSTR_cancel                 = 4,
-    LOCALSTR_choose_load_file       = 5,
-    LOCALSTR_choose_save_file       = 6,
-    LOCALSTR_confirm                = 7,
-    LOCALSTR_continue               = 8,
-    LOCALSTR_controller             = 9,
-    LOCALSTR_create_file            = 10,
-    LOCALSTR_creating               = 11,
-    LOCALSTR_demos                  = 12,
-    LOCALSTR_do_not_remove_card     = 13,
-    LOCALSTR_done                   = 14,
-    LOCALSTR_exit_game              = 15,
-    LOCALSTR_formatting             = 16,
-    LOCALSTR_go_back                = 17,
-    LOCALSTR_insert_card            = 18,
-    LOCALSTR_insert_card_free       = 19,
-    LOCALSTR_invalid_card           = 20,
-    LOCALSTR_load_failed            = 21,
-    LOCALSTR_load_game              = 22,
-    LOCALSTR_loading                = 23,
-    LOCALSTR_music                  = 24,
-    LOCALSTR_new_game               = 25,
-    LOCALSTR_no                     = 26,
-    LOCALSTR_no_card                = 27,
-    LOCALSTR_card_full              = 28,
+typedef enum localstr_t
+{
+    LOCALSTR_BOGUS = 0,
+    LOCALSTR_format_card = 1,
+    LOCALSTR_accessing_card = 2,
+    LOCALSTR_back = 3,
+    LOCALSTR_cancel = 4,
+    LOCALSTR_choose_load_file = 5,
+    LOCALSTR_choose_save_file = 6,
+    LOCALSTR_confirm = 7,
+    LOCALSTR_continue = 8,
+    LOCALSTR_controller = 9,
+    LOCALSTR_create_file = 10,
+    LOCALSTR_creating = 11,
+    LOCALSTR_demos = 12,
+    LOCALSTR_do_not_remove_card = 13,
+    LOCALSTR_done = 14,
+    LOCALSTR_exit_game = 15,
+    LOCALSTR_formatting = 16,
+    LOCALSTR_go_back = 17,
+    LOCALSTR_insert_card = 18,
+    LOCALSTR_insert_card_free = 19,
+    LOCALSTR_invalid_card = 20,
+    LOCALSTR_load_failed = 21,
+    LOCALSTR_load_game = 22,
+    LOCALSTR_loading = 23,
+    LOCALSTR_music = 24,
+    LOCALSTR_new_game = 25,
+    LOCALSTR_no = 26,
+    LOCALSTR_no_card = 27,
+    LOCALSTR_card_full = 28,
     LOCALSTR_card_not_enough_blocks = 29,
-    LOCALSTR_ok                     = 30,
-    LOCALSTR_options                = 31,
-    LOCALSTR_overwrite_game         = 32,
-    LOCALSTR_paused                 = 33,
-    LOCALSTR_press_start            = 34,
-    LOCALSTR_query_format_card      = 35,
-    LOCALSTR_query_overwrite        = 36,
-    LOCALSTR_query_quit             = 37,
-    LOCALSTR_quit_game              = 38,
-    LOCALSTR_resume_game            = 39,
-    LOCALSTR_save_failed            = 40,
-    LOCALSTR_save_game              = 41,
-    LOCALSTR_save_ok                = 42,
-    LOCALSTR_saving                 = 43,
-    LOCALSTR_sound                  = 44,
-    LOCALSTR_start_game             = 45,
-    LOCALSTR_start_new_game         = 46,
-    LOCALSTR_try_card_again         = 47,
-    LOCALSTR_unformatted_card       = 48,
-    LOCALSTR_vibration_off          = 49,
-    LOCALSTR_vibration_on           = 50,
-    LOCALSTR_voice                  = 51,
-    LOCALSTR_warning_one            = 52,
-    LOCALSTR_warning_two            = 53,
-    LOCALSTR_yes                    = 54,
-    LOCALSTR_Hint0                  = 55,
-    LOCALSTR_Hint1                  = 56,
-    LOCALSTR_Hint2                  = 57,
-    LOCALSTR_Hint3                  = 58,
-    LOCALSTR_Hint4                  = 59,
-    LOCALSTR_Hint5                  = 60,
-    LOCALSTR_Hint6                  = 61,
-    LOCALSTR_Hint7                  = 62,
-    LOCALSTR_Hint8                  = 63,
-    LOCALSTR_Hint9                  = 64,
-    LOCALSTR_Hint10                 = 65,
-    LOCALSTR_Hint11                 = 66,
-    LOCALSTR_Hint12                 = 67,
-    LOCALSTR_Hint13                 = 68,
-    LOCALSTR_Hint14                 = 69,
-    LOCALSTR_Hint15                 = 70,
-    LOCALSTR_Hint16                 = 71,
-    LOCALSTR_Hint17                 = 72,
-    LOCALSTR_Hint18                 = 73,
-    LOCALSTR_Hint19                 = 74,
-    LOCALSTR_Hint20                 = 75,
-    LOCALSTR_Hint21                 = 76,
-    LOCALSTR_Hint22                 = 77,
-    LOCALSTR_Hint23                 = 78,
-    LOCALSTR_Hint24                 = 79,
-    LOCALSTR_Hint25                 = 80,
-    LOCALSTR_Hint26                 = 81,
-    LOCALSTR_Hint27                 = 82,
-    LOCALSTR_Hint28                 = 83,
-    LOCALSTR_Hint29                 = 84,
-    LOCALSTR_Hint30                 = 85,
-    LOCALSTR_Hint31                 = 86,
-    LOCALSTR_Hint32                 = 87,
-    LOCALSTR_Hint33                 = 88,
-    LOCALSTR_Hint34                 = 89,
-    LOCALSTR_Hint35                 = 90,
-    LOCALSTR_Hint36                 = 91,
-    LOCALSTR_Hint37                 = 92,
-    LOCALSTR_Hint38                 = 93,
-    LOCALSTR_Hint39                 = 94,
-    LOCALSTR_Hint40                 = 95,
-    LOCALSTR_Hint41                 = 96,
-    LOCALSTR_Hint42                 = 97,
-    LOCALSTR_Hint43                 = 98,
-    LOCALSTR_Hint44                 = 99,
-    LOCALSTR_Hint45                 = 100,
-    LOCALSTR_Hint46                 = 101,
-    LOCALSTR_Hint47                 = 102,
-    LOCALSTR_Hint48                 = 103,
-    LOCALSTR_Hint49                 = 104,
-    LOCALSTR_Hint50                 = 105,
-    LOCALSTR_Hint51                 = 106,
-    LOCALSTR_Hint52                 = 107,
-    LOCALSTR_EndOfHintStrings       = 108,
-    LOCALSTR_no_controller          = 109,
-    LOCALSTR_NUM_ITEMS              = 110,
-}localstr_t;
+    LOCALSTR_ok = 30,
+    LOCALSTR_options = 31,
+    LOCALSTR_overwrite_game = 32,
+    LOCALSTR_paused = 33,
+    LOCALSTR_press_start = 34,
+    LOCALSTR_query_format_card = 35,
+    LOCALSTR_query_overwrite = 36,
+    LOCALSTR_query_quit = 37,
+    LOCALSTR_quit_game = 38,
+    LOCALSTR_resume_game = 39,
+    LOCALSTR_save_failed = 40,
+    LOCALSTR_save_game = 41,
+    LOCALSTR_save_ok = 42,
+    LOCALSTR_saving = 43,
+    LOCALSTR_sound = 44,
+    LOCALSTR_start_game = 45,
+    LOCALSTR_start_new_game = 46,
+    LOCALSTR_try_card_again = 47,
+    LOCALSTR_unformatted_card = 48,
+    LOCALSTR_vibration_off = 49,
+    LOCALSTR_vibration_on = 50,
+    LOCALSTR_voice = 51,
+    LOCALSTR_warning_one = 52,
+    LOCALSTR_warning_two = 53,
+    LOCALSTR_yes = 54,
+    LOCALSTR_Hint0 = 55,
+    LOCALSTR_Hint1 = 56,
+    LOCALSTR_Hint2 = 57,
+    LOCALSTR_Hint3 = 58,
+    LOCALSTR_Hint4 = 59,
+    LOCALSTR_Hint5 = 60,
+    LOCALSTR_Hint6 = 61,
+    LOCALSTR_Hint7 = 62,
+    LOCALSTR_Hint8 = 63,
+    LOCALSTR_Hint9 = 64,
+    LOCALSTR_Hint10 = 65,
+    LOCALSTR_Hint11 = 66,
+    LOCALSTR_Hint12 = 67,
+    LOCALSTR_Hint13 = 68,
+    LOCALSTR_Hint14 = 69,
+    LOCALSTR_Hint15 = 70,
+    LOCALSTR_Hint16 = 71,
+    LOCALSTR_Hint17 = 72,
+    LOCALSTR_Hint18 = 73,
+    LOCALSTR_Hint19 = 74,
+    LOCALSTR_Hint20 = 75,
+    LOCALSTR_Hint21 = 76,
+    LOCALSTR_Hint22 = 77,
+    LOCALSTR_Hint23 = 78,
+    LOCALSTR_Hint24 = 79,
+    LOCALSTR_Hint25 = 80,
+    LOCALSTR_Hint26 = 81,
+    LOCALSTR_Hint27 = 82,
+    LOCALSTR_Hint28 = 83,
+    LOCALSTR_Hint29 = 84,
+    LOCALSTR_Hint30 = 85,
+    LOCALSTR_Hint31 = 86,
+    LOCALSTR_Hint32 = 87,
+    LOCALSTR_Hint33 = 88,
+    LOCALSTR_Hint34 = 89,
+    LOCALSTR_Hint35 = 90,
+    LOCALSTR_Hint36 = 91,
+    LOCALSTR_Hint37 = 92,
+    LOCALSTR_Hint38 = 93,
+    LOCALSTR_Hint39 = 94,
+    LOCALSTR_Hint40 = 95,
+    LOCALSTR_Hint41 = 96,
+    LOCALSTR_Hint42 = 97,
+    LOCALSTR_Hint43 = 98,
+    LOCALSTR_Hint44 = 99,
+    LOCALSTR_Hint45 = 100,
+    LOCALSTR_Hint46 = 101,
+    LOCALSTR_Hint47 = 102,
+    LOCALSTR_Hint48 = 103,
+    LOCALSTR_Hint49 = 104,
+    LOCALSTR_Hint50 = 105,
+    LOCALSTR_Hint51 = 106,
+    LOCALSTR_Hint52 = 107,
+    LOCALSTR_EndOfHintStrings = 108,
+    LOCALSTR_no_controller = 109,
+    LOCALSTR_NUM_ITEMS = 110,
+} localstr_t;
 
-typedef enum menu_ctrl_t {
-    menu_ctrl_none      = 0,
-    menu_ctrl_up        = 1,
-    menu_ctrl_down      = 2,
-    menu_ctrl_left      = 3,
-    menu_ctrl_right     = 4,
-    menu_ctrl_engage    = 5,
-    menu_ctrl_cancel    = 6,
-    menu_ctrl_start     = 7,
+typedef enum menu_ctrl_t
+{
+    menu_ctrl_none = 0,
+    menu_ctrl_up = 1,
+    menu_ctrl_down = 2,
+    menu_ctrl_left = 3,
+    menu_ctrl_right = 4,
+    menu_ctrl_engage = 5,
+    menu_ctrl_cancel = 6,
+    menu_ctrl_start = 7,
     menu_ctrl_num_items = 8,
-}menu_ctrl_t;
+} menu_ctrl_t;
 
-typedef enum menu_sound_t {
-    menu_sound_none    = 0,
+typedef enum menu_sound_t
+{
+    menu_sound_none = 0,
     menu_sound_default = 1,
-    menu_sound_select  = 2,
-    menu_sound_adjust  = 3,
-    menu_sound_engage  = 4,
-    menu_sound_pop     = 5,
-}menu_sound_t;
+    menu_sound_select = 2,
+    menu_sound_adjust = 3,
+    menu_sound_engage = 4,
+    menu_sound_pop = 5,
+} menu_sound_t;
 
-typedef enum sfx_t {
+typedef enum sfx_t
+{
     sfx_sound = 0,
     sfx_music = 1,
     sfx_voice = 2,
     sfx_error = 3,
-}sfx_t;
+} sfx_t;
 
-typedef enum bdepth {
-    TIM_4BIT  = 0,
-    TIM_8BIT  = 1,
+typedef enum bdepth
+{
+    TIM_4BIT = 0,
+    TIM_8BIT = 1,
     TIM_16BIT = 2,
-}bdepth;
+} bdepth;
 
-typedef enum mcpsx_err_t {
-    mcpsx_err_none           = 0,
+typedef enum mcpsx_err_t
+{
+    mcpsx_err_none = 0,
     mcpsx_err_card_not_exist = 1,
-    mcpsx_err_card_invalid   = 2,
-    mcpsx_err_new_card       = 3,
-    mcpsx_err_not_format     = 4,
+    mcpsx_err_card_invalid = 2,
+    mcpsx_err_new_card = 3,
+    mcpsx_err_not_format = 4,
     mcpsx_err_file_not_exist = 5,
     mcpsx_err_already_exists = 6,
-    mcpsx_err_block_full     = 7,
-    mcpsx_err_busy           = 8,
-    mcpsx_err_num_items      = 9,
-}mcpsx_err_t;
+    mcpsx_err_block_full = 7,
+    mcpsx_err_busy = 8,
+    mcpsx_err_num_items = 9,
+} mcpsx_err_t;
 
-typedef enum mcpsx_func_t {
-    func_none        = 0,
-    func_exist       = 1,
-    func_accept      = 2,
-    func_read_file   = 3,
-    func_write_file  = 4,
+typedef enum mcpsx_func_t
+{
+    func_none = 0,
+    func_exist = 1,
+    func_accept = 2,
+    func_read_file = 3,
+    func_write_file = 4,
     func_create_file = 5,
     func_delete_file = 6,
-    func_format      = 7,
-    func_unformat    = 8,
-    func_directory   = 9,
-    func_num_items   = 10,
-}mcpsx_func_t;
+    func_format = 7,
+    func_unformat = 8,
+    func_directory = 9,
+    func_num_items = 10,
+} mcpsx_func_t;
 
-typedef enum mcpsx_sync_t {
-    sync_busy      = 0,
-    sync_done      = 1,
-    sync_func      = 2,
+typedef enum mcpsx_sync_t
+{
+    sync_busy = 0,
+    sync_done = 1,
+    sync_func = 2,
     sync_num_items = 3,
-    sync_idle      = 0xFFFFFFFF,
-}mcpsx_sync_t;
+    sync_idle = 0xFFFFFFFF,
+} mcpsx_sync_t;
 
-typedef enum mcpsx_mode_t {
-    mode_bogus       = 0,
+typedef enum mcpsx_mode_t
+{
+    mode_bogus = 0,
     mode_initialized = 1,
-    mode_running     = 2,
-    mode_terminated  = 3,
-    mode_num_items   = 4,
-}mcpsx_mode_t;
+    mode_running = 2,
+    mode_terminated = 3,
+    mode_num_items = 4,
+} mcpsx_mode_t;
 
-typedef enum state_t {
+typedef enum state_t
+{
     fsmcard_card_not_exist = 0,
-    fsmcard_card_invalid   = 1,
-    fsmcard_not_format     = 2,
-    fsmcard_new_card       = 3,
-    fsmcard_directory      = 4,
-    fsmcard_ready          = 5,
-    fsmcard_format         = 6,
-    fsmcard_unformat       = 7,
-    fsmcard_delete         = 8,
-    fsmcard_create         = 9,
-    fsmcard_write          = 10,
-    fsmcard_read           = 11,
-    fsmcard_error          = 12,
-    fsmcard_num_items      = 13,
-}fsmcard_t;
+    fsmcard_card_invalid = 1,
+    fsmcard_not_format = 2,
+    fsmcard_new_card = 3,
+    fsmcard_directory = 4,
+    fsmcard_ready = 5,
+    fsmcard_format = 6,
+    fsmcard_unformat = 7,
+    fsmcard_delete = 8,
+    fsmcard_create = 9,
+    fsmcard_write = 10,
+    fsmcard_read = 11,
+    fsmcard_error = 12,
+    fsmcard_num_items = 13,
+} fsmcard_t;
 
-typedef enum mcard_status_t {
+typedef enum mcard_status_t
+{
     mcard_status_card_not_exist = 0,
-    mcard_status_card_invalid   = 1,
-    mcard_status_not_format     = 2,
-    mcard_status_new_card       = 3,
-    mcard_status_ready          = 4,
-    mcard_status_accessing      = 5,
-    mcard_status_error          = 6,
-    mcard_status_num_items      = 7,
-}mcard_status_t;
+    mcard_status_card_invalid = 1,
+    mcard_status_not_format = 2,
+    mcard_status_new_card = 3,
+    mcard_status_ready = 4,
+    mcard_status_accessing = 5,
+    mcard_status_error = 6,
+    mcard_status_num_items = 7,
+} mcard_status_t;
 
-typedef enum fsm_t {
-    fsm_card_not_exist  = 0,
-    fsm_card_invalid    = 1,
-    fsm_not_format      = 2,
-    fsm_new_card        = 3,
-    fsm_ready           = 4,
-    fsm_format          = 5,
-    fsm_start           = 6,
-    fsm_loading         = 7,
+typedef enum fsm_t
+{
+    fsm_card_not_exist = 0,
+    fsm_card_invalid = 1,
+    fsm_not_format = 2,
+    fsm_new_card = 3,
+    fsm_ready = 4,
+    fsm_format = 5,
+    fsm_start = 6,
+    fsm_loading = 7,
     fsm_query_overwrite = 8,
-    fsm_overwrite       = 9,
-    fsm_saving          = 10,
-    fsm_create          = 11,
-    fsm_save_complete   = 12,
-    fsm_num_items       = 13,
-}fsm_t;
+    fsm_overwrite = 9,
+    fsm_saving = 10,
+    fsm_create = 11,
+    fsm_save_complete = 12,
+    fsm_num_items = 13,
+} fsm_t;
 
 // size: 0xC0
-struct TCB {
+struct TCB
+{
     // offset: 0x0000
     long status;
     // offset: 0x0004
@@ -387,7 +408,8 @@ struct TCB {
 };
 
 // size: 0x3C
-struct EXEC {
+struct EXEC
+{
     // offset: 0x0000
     unsigned long pc0;
     // offset: 0x0004
@@ -421,7 +443,8 @@ struct EXEC {
 };
 
 // size: 0x28
-struct DIRENTRY {
+struct DIRENTRY
+{
     // offset: 0x0000 (20 bytes)
     char name[20];
     // offset: 0x0014
@@ -437,15 +460,17 @@ struct DIRENTRY {
 };
 
 // size: 0x20
-typedef struct MATRIX {
+typedef struct MATRIX
+{
     // offset: 0x0000 (18 bytes)
     short m[3][3];
     // offset: 0x0014 (12 bytes)
     long t[3];
-}MATRIX,Transform;
+} MATRIX, Transform;
 
 // size: 0x10
-typedef struct VECTOR {
+typedef struct VECTOR
+{
     // offset: 0x0000
     long vx;
     // offset: 0x0004
@@ -454,10 +479,11 @@ typedef struct VECTOR {
     long vz;
     // offset: 0x000C
     long pad;
-}VECTOR;
+} VECTOR;
 
 // size: 0x8
-typedef struct SVECTOR {
+typedef struct SVECTOR
+{
     // offset: 0x0000
     short vx;
     // offset: 0x0002
@@ -466,10 +492,11 @@ typedef struct SVECTOR {
     short vz;
     // offset: 0x0006
     short pad;
-}SVECTOR;
+} SVECTOR;
 
 // size: 0x4
-typedef struct CVECTOR {
+typedef struct CVECTOR
+{
     // offset: 0x0000
     unsigned char r;
     // offset: 0x0001
@@ -478,18 +505,20 @@ typedef struct CVECTOR {
     unsigned char b;
     // offset: 0x0003
     unsigned char cd;
-}CVECTOR;
+} CVECTOR;
 
 // size: 0x4
-typedef struct DVECTOR {
+typedef struct DVECTOR
+{
     // offset: 0x0000
     short vx;
     // offset: 0x0002
     short vy;
-}DVECTOR;
+} DVECTOR;
 
 // size: 0x18
-typedef struct RVECTOR {
+typedef struct RVECTOR
+{
     // offset: 0x0000 (8 bytes)
     SVECTOR v;
     // offset: 0x0008 (2 bytes)
@@ -502,10 +531,11 @@ typedef struct RVECTOR {
     DVECTOR sxy;
     // offset: 0x0014
     unsigned long sz;
-}RVECTOR;
+} RVECTOR;
 
 // size: 0x58
-typedef struct CRVECTOR3 {
+typedef struct CRVECTOR3
+{
     // offset: 0x0000 (24 bytes)
     RVECTOR r01;
     // offset: 0x0018 (24 bytes)
@@ -520,10 +550,11 @@ typedef struct CRVECTOR3 {
     RVECTOR *r2;
     // offset: 0x0054
     unsigned long *rtn;
-}CRVECTOR3;
+} CRVECTOR3;
 
 // size: 0x8C
-typedef struct CRVECTOR4 {
+typedef struct CRVECTOR4
+{
     // offset: 0x0000 (24 bytes)
     RVECTOR r01;
     // offset: 0x0018 (24 bytes)
@@ -544,10 +575,11 @@ typedef struct CRVECTOR4 {
     RVECTOR *r3;
     // offset: 0x0088
     unsigned long *rtn;
-}CRVECTOR4;
+} CRVECTOR4;
 
 // size: 0x8
-typedef struct RECT {
+typedef struct RECT
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -556,22 +588,24 @@ typedef struct RECT {
     short w;
     // offset: 0x0006
     short h;
-}RECT;
+} RECT;
 
 // size: 0x40
-typedef struct DR_ENV {
+typedef struct DR_ENV
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004 (60 bytes)
     unsigned long code[15];
-}DR_ENV;
+} DR_ENV;
 
 // size: 0x8
-typedef struct P_TAG {
+typedef struct P_TAG
+{
     // offset: 0x0000
-    unsigned int addr:24;
+    unsigned int addr : 24;
     // offset: 0x0003
-    unsigned int len:8;
+    unsigned int len : 8;
     // offset: 0x0004
     unsigned char r0;
     // offset: 0x0005
@@ -580,10 +614,11 @@ typedef struct P_TAG {
     unsigned char b0;
     // offset: 0x0007
     unsigned char code;
-}P_TAG;
+} P_TAG;
 
 // size: 0x4
-typedef struct CdlLOC {
+typedef struct CdlLOC
+{
     // offset: 0x0000
     unsigned char minute;
     // offset: 0x0001
@@ -592,56 +627,62 @@ typedef struct CdlLOC {
     unsigned char sector;
     // offset: 0x0003
     unsigned char track;
-}CdlLOC;
+} CdlLOC;
 
 // size: 0x8
-typedef struct NodeType {
+typedef struct NodeType
+{
     // offset: 0x0000 (4 bytes)
     struct NodeType *prev;
     // offset: 0x0004 (4 bytes)
     struct NodeType *next;
-}NodeType;
+} NodeType;
 
 // size: 0x6
-typedef struct _Vertex {
+typedef struct _Vertex
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
     short y;
     // offset: 0x0004
     short z;
-}Vertex;
+} Vertex;
 
 // size: 0x8
-typedef struct _MVertex {
+typedef struct _MVertex
+{
     // offset: 0x0000 (6 bytes)
     Vertex vertex;
     // offset: 0x0006
     unsigned short normal;
-}MVertex;
+} MVertex;
 
 // size: 0x6
-typedef struct _SVectorNoPad {
+typedef struct _SVectorNoPad
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
     short y;
     // offset: 0x0004
     short z;
-}SVectorNoPad;
+} SVectorNoPad;
 
 // size: 0x6
-typedef struct _Face {
+typedef struct _Face
+{
     // offset: 0x0000
     unsigned short v0;
     // offset: 0x0002
     unsigned short v1;
     // offset: 0x0004
     unsigned short v2;
-}Face;
+} Face;
 
 // size: 0xC
-typedef struct _MFace {
+typedef struct _MFace
+{
     // offset: 0x0000 (6 bytes)
     Face face;
     // offset: 0x0006
@@ -650,10 +691,11 @@ typedef struct _MFace {
     unsigned char flags;
     // offset: 0x0008
     long color;
-}MFace;
+} MFace;
 
 // size: 0xC
-typedef struct _HFace {
+typedef struct _HFace
+{
     // offset: 0x0000
     short v0;
     // offset: 0x0002
@@ -668,20 +710,22 @@ typedef struct _HFace {
     unsigned short normal;
     // offset: 0x000A
     unsigned short n0;
-}HFace;
+} HFace;
 
 // size: 0x6
-typedef struct _Position {
+typedef struct _Position
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
     short y;
     // offset: 0x0004
     short z;
-}Position;
+} Position;
 
 // size: 0x14
-typedef struct _HSphere {
+typedef struct _HSphere
+{
     // offset: 0x0000
     long attr;
     // offset: 0x0004
@@ -696,10 +740,11 @@ typedef struct _HSphere {
     unsigned short radius;
     // offset: 0x0010
     unsigned long radiusSquared;
-}HSphere;
+} HSphere;
 
 // size: 0x1C
-typedef struct _HBox {
+typedef struct _HBox
+{
     // offset: 0x0000
     short flags;
     // offset: 0x0002
@@ -730,10 +775,11 @@ typedef struct _HBox {
     short refMaxY;
     // offset: 0x001A
     short refMaxZ;
-}HBox;
+} HBox;
 
 // size: 0x18
-typedef struct _HInfo {
+typedef struct _HInfo
+{
     // offset: 0x0000
     long numHFaces;
     // offset: 0x0004 (4 bytes)
@@ -746,10 +792,11 @@ typedef struct _HInfo {
     long numHBoxes;
     // offset: 0x0014 (4 bytes)
     HBox *hboxList;
-}HInfo;
+} HInfo;
 
 // size: 0x18
-typedef struct _Segment {
+typedef struct _Segment
+{
     // offset: 0x0000
     long flags;
     // offset: 0x0004
@@ -770,10 +817,11 @@ typedef struct _Segment {
     short parent;
     // offset: 0x0014 (4 bytes)
     HInfo *hInfo;
-}Segment;
+} Segment;
 
 // size: 0x10
-typedef struct TextureMT3 {
+typedef struct TextureMT3
+{
     // offset: 0x0000
     unsigned char u0;
     // offset: 0x0001
@@ -796,48 +844,53 @@ typedef struct TextureMT3 {
     char sortPush;
     // offset: 0x000C
     long color;
-}TextureMT3;
+} TextureMT3;
 
 // size: 0xC
-typedef struct AniTexInfo {
+typedef struct AniTexInfo
+{
     // offset: 0x0000 (4 bytes)
     TextureMT3 *texture;
     // offset: 0x0004
     long numFrames;
     // offset: 0x0008
     long speed;
-}AniTexInfo;
+} AniTexInfo;
 
 // size: 0x10
-typedef struct AniTex {
+typedef struct AniTex
+{
     // offset: 0x0000
     long numAniTextues;
     // offset: 0x0004 (12 bytes)
     AniTexInfo aniTexInfo;
-}AniTex;
+} AniTex;
 
 // size: 0x6
-typedef struct vecS {
+typedef struct vecS
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
     short y;
     // offset: 0x0004
     short z;
-}vecS;
+} vecS;
 
 // size: 0xC
-typedef struct vecL {
+typedef struct vecL
+{
     // offset: 0x0000
     long x;
     // offset: 0x0004
     long y;
     // offset: 0x0008
     long z;
-}vecL;
+} vecL;
 
 // size: 0x20
-typedef struct SplineKey {
+typedef struct SplineKey
+{
     // offset: 0x0000
     short count;
     // offset: 0x0002 (6 bytes)
@@ -846,10 +899,11 @@ typedef struct SplineKey {
     vecL dd;
     // offset: 0x0014 (12 bytes)
     vecL ds;
-}SplineKey;
+} SplineKey;
 
 // size: 0x8
-typedef struct Spline {
+typedef struct Spline
+{
     // offset: 0x0000 (4 bytes)
     SplineKey *key;
     // offset: 0x0004
@@ -858,10 +912,11 @@ typedef struct Spline {
     unsigned char type;
     // offset: 0x0007
     unsigned char flags;
-}Spline;
+} Spline;
 
 // size: 0x8
-typedef struct _G2Quat_Type {
+typedef struct _G2Quat_Type
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -870,18 +925,20 @@ typedef struct _G2Quat_Type {
     short z;
     // offset: 0x0006
     short w;
-}G2Quat;
+} G2Quat;
 
 // size: 0xA
-typedef struct SplineRotKey {
+typedef struct SplineRotKey
+{
     // offset: 0x0000
     short count;
     // offset: 0x0002 (8 bytes)
     G2Quat q;
-}SplineRotKey;
+} SplineRotKey;
 
 // size: 0x8
-typedef struct RSpline {
+typedef struct RSpline
+{
     // offset: 0x0000 (4 bytes)
     SplineRotKey *key;
     // offset: 0x0004
@@ -890,20 +947,22 @@ typedef struct RSpline {
     unsigned char type;
     // offset: 0x0007
     unsigned char flags;
-}RSpline;
+} RSpline;
 
 // size: 0x8
-typedef struct SplineDef {
+typedef struct SplineDef
+{
     // offset: 0x0000
     short currkey;
     // offset: 0x0002
     unsigned short denomFlag;
     // offset: 0x0004
     long fracCurr;
-}SplineDef;
+} SplineDef;
 
 // size: 0x50
-typedef struct MultiSpline {
+typedef struct MultiSpline
+{
     // offset: 0x0000 (4 bytes)
     Spline *positional;
     // offset: 0x0004 (4 bytes)
@@ -922,10 +981,11 @@ typedef struct MultiSpline {
     SplineDef curColor;
     // offset: 0x0030 (32 bytes)
     MATRIX curRotMatrix;
-}MultiSpline;
+} MultiSpline;
 
 // size: 0x38
-typedef struct _Model {
+typedef struct _Model
+{
     // offset: 0x0000
     long numVertices;
     // offset: 0x0004 (4 bytes)
@@ -956,20 +1016,22 @@ typedef struct _Model {
     TextureMT3 *startTextures;
     // offset: 0x0034 (4 bytes)
     TextureMT3 *endTextures;
-}Model;
+} Model;
 
 // size: 0x4
-typedef struct _G2AnimFxHeader_Type {
+typedef struct _G2AnimFxHeader_Type
+{
     // offset: 0x0000
     unsigned char sizeAndSection;
     // offset: 0x0001
     char type;
     // offset: 0x0002
     unsigned short keyframeID;
-}G2AnimFxHeader;
+} G2AnimFxHeader;
 
 // size: 0x14
-typedef struct _G2AnimKeylist_Type {
+typedef struct _G2AnimKeylist_Type
+{
     // offset: 0x0000
     unsigned char sectionCount;
     // offset: 0x0001
@@ -994,18 +1056,20 @@ typedef struct _G2AnimKeylist_Type {
     G2AnimFxHeader *fxList;
     // offset: 0x0014
     unsigned short *sectionData[0];
-}G2AnimKeylist;
+} G2AnimKeylist;
 
 // size: 0x4
-typedef struct ObjectEffect {
+typedef struct ObjectEffect
+{
     // offset: 0x0000
     unsigned char effectNumber;
     // offset: 0x0001 (3 bytes)
     unsigned char modifierList[3];
-}ObjectEffect,AnimEffectData;
+} ObjectEffect, AnimEffectData;
 
 // size: 0x8
-typedef struct VramSize {
+typedef struct VramSize
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -1014,10 +1078,11 @@ typedef struct VramSize {
     short w;
     // offset: 0x0006
     short h;
-}VramSize;
+} VramSize;
 
 // size: 0x4C
-typedef struct Object {
+typedef struct Object
+{
     // offset: 0x0000
     long oflags;
     // offset: 0x0004
@@ -1066,10 +1131,11 @@ typedef struct Object {
     void *relocModule;
     // offset: 0x0044 (8 bytes)
     VramSize vramSize;
-}Object;
+} Object;
 
 // size: 0x8
-typedef struct _Rotation {
+typedef struct _Rotation
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -1078,10 +1144,11 @@ typedef struct _Rotation {
     short z;
     // offset: 0x0006
     short pad;
-}Rotation;
+} Rotation;
 
 // size: 0x4C
-typedef struct Intro {
+typedef struct Intro
+{
     // offset: 0x0000 (16 bytes)
     char name[16];
     // offset: 0x0010
@@ -1114,20 +1181,22 @@ typedef struct Intro {
     Position spectralPosition;
     // offset: 0x004A
     short spad;
-}Intro;
+} Intro;
 
 // size: 0x3
-typedef struct SoundInstance {
+typedef struct SoundInstance
+{
     // offset: 0x0000
     unsigned char channel;
     // offset: 0x0001
     unsigned char state;
     // offset: 0x0002
     unsigned char delay;
-}SoundInstance;
+} SoundInstance;
 
 // size: 0x8
-typedef struct _SVector {
+typedef struct _SVector
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -1136,10 +1205,11 @@ typedef struct _SVector {
     short z;
     // offset: 0x0006
     short pad;
-}SVector;
+} SVector;
 
 // size: 0xC
-typedef struct _TFace {
+typedef struct _TFace
+{
     // offset: 0x0000 (6 bytes)
     Face face;
     // offset: 0x0006
@@ -1150,10 +1220,11 @@ typedef struct _TFace {
     unsigned short normal;
     // offset: 0x000A
     unsigned short textoff;
-}TFace;
+} TFace;
 
 // size: 0x8
-typedef struct _Normal {
+typedef struct _Normal
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -1162,10 +1233,11 @@ typedef struct _Normal {
     short z;
     // offset: 0x0006
     short pad;
-}Normal;
+} Normal;
 
 // size: 0x8
-typedef struct _HPrim {
+typedef struct _HPrim
+{
     // offset: 0x0000
     unsigned char hpFlags;
     // offset: 0x0001
@@ -1175,7 +1247,8 @@ typedef struct _HPrim {
     // offset: 0x0003
     unsigned char segment;
     // offset: 0x0004 (4 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (4 bytes)
         HSphere *hsphere;
         // offset: 0x0000 (4 bytes)
@@ -1183,18 +1256,20 @@ typedef struct _HPrim {
         // offset: 0x0000 (4 bytes)
         HFace *hface;
     } data;
-}HPrim;
+} HPrim;
 
 // size: 0x8
-typedef struct _HModel {
+typedef struct _HModel
+{
     // offset: 0x0000 (4 bytes)
     HPrim *hPrimList;
     // offset: 0x0004
     long numHPrims;
-}HModel;
+} HModel;
 
 // size: 0xC
-typedef struct _TVertex {
+typedef struct _TVertex
+{
     // offset: 0x0000 (6 bytes)
     Vertex vertex;
     // offset: 0x0006
@@ -1207,10 +1282,11 @@ typedef struct _TVertex {
     unsigned char b0;
     // offset: 0x000B
     unsigned char code;
-}TVertex;
+} TVertex;
 
 // size: 0x8
-typedef struct DrMoveAniTexSrcInfo {
+typedef struct DrMoveAniTexSrcInfo
+{
     // offset: 0x0000
     short pixSrcX;
     // offset: 0x0002
@@ -1219,10 +1295,11 @@ typedef struct DrMoveAniTexSrcInfo {
     short clutSrcX;
     // offset: 0x0006
     short clutSrcY;
-}DrMoveAniTexSrcInfo;
+} DrMoveAniTexSrcInfo;
 
 // size: 0x28
-typedef struct DrMoveAniTexDestInfo {
+typedef struct DrMoveAniTexDestInfo
+{
     // offset: 0x0000
     short pixDstX;
     // offset: 0x0002
@@ -1253,18 +1330,20 @@ typedef struct DrMoveAniTexDestInfo {
     long speed;
     // offset: 0x0020 (8 bytes)
     DrMoveAniTexSrcInfo frame;
-}DrMoveAniTexDestInfo;
+} DrMoveAniTexDestInfo;
 
 // size: 0x8
-typedef struct DrMoveAniTex {
+typedef struct DrMoveAniTex
+{
     // offset: 0x0000
     long numAniTextues;
     // offset: 0x0004 (4 bytes)
     DrMoveAniTexDestInfo *aniTexInfo;
-}DrMoveAniTex;
+} DrMoveAniTex;
 
 // size: 0xC
-typedef struct TextureFT3 {
+typedef struct TextureFT3
+{
     // offset: 0x0000
     unsigned char u0;
     // offset: 0x0001
@@ -1283,10 +1362,11 @@ typedef struct TextureFT3 {
     unsigned char v2;
     // offset: 0x000A
     unsigned short attr;
-}TextureFT3;
+} TextureFT3;
 
 // size: 0xE
-typedef struct _MorphVertex {
+typedef struct _MorphVertex
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -1301,24 +1381,27 @@ typedef struct _MorphVertex {
     short hy;
     // offset: 0x000C
     short hz;
-}MorphVertex;
+} MorphVertex;
 
 // size: 0x2
-typedef struct _MorphColor {
+typedef struct _MorphColor
+{
     // offset: 0x0000
     short morphColor15;
-}MorphColor;
+} MorphColor;
 
 // size: 0x8
-typedef struct _Sphere_noSq {
+typedef struct _Sphere_noSq
+{
     // offset: 0x0000 (6 bytes)
     Position position;
     // offset: 0x0006
     unsigned short radius;
-}Sphere_noSq;
+} Sphere_noSq;
 
 // size: 0x2C
-typedef struct _BSPNode {
+typedef struct _BSPNode
+{
     // offset: 0x0000 (8 bytes)
     Sphere_noSq sphere;
     // offset: 0x0008
@@ -1345,10 +1428,11 @@ typedef struct _BSPNode {
     short front_material_error;
     // offset: 0x002A
     short back_material_error;
-}BSPNode,SBSPNode;
+} BSPNode, SBSPNode;
 
 // size: 0xC
-typedef struct _BoundingBox {
+typedef struct _BoundingBox
+{
     // offset: 0x0000
     short minX;
     // offset: 0x0002
@@ -1361,10 +1445,11 @@ typedef struct _BoundingBox {
     short maxY;
     // offset: 0x000A
     short maxZ;
-}BoundingBox;
+} BoundingBox;
 
 // size: 0x30
-typedef struct _BSPLeaf {
+typedef struct _BSPLeaf
+{
     // offset: 0x0000 (8 bytes)
     Sphere_noSq sphere;
     // offset: 0x0008 (4 bytes)
@@ -1379,10 +1464,11 @@ typedef struct _BSPLeaf {
     BoundingBox spectralBox;
     // offset: 0x0028 (8 bytes)
     Sphere_noSq spectralSphere;
-}BSPLeaf;
+} BSPLeaf;
 
 // size: 0x24
-typedef struct BSPTree {
+typedef struct BSPTree
+{
     // offset: 0x0000 (4 bytes)
     BSPNode *bspRoot;
     // offset: 0x0004 (4 bytes)
@@ -1401,10 +1487,11 @@ typedef struct BSPTree {
     long splineID;
     // offset: 0x0020 (4 bytes)
     struct _Instance *instanceSpline;
-}BSPTree;
+} BSPTree;
 
 // size: 0x18
-typedef struct _CameraKey {
+typedef struct _CameraKey
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -1429,10 +1516,11 @@ typedef struct _CameraKey {
     short tz;
     // offset: 0x0016
     short pad;
-}CameraKey;
+} CameraKey;
 
 // size: 0x8
-typedef struct _BVertex {
+typedef struct _BVertex
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -1441,10 +1529,11 @@ typedef struct _BVertex {
     short z;
     // offset: 0x0006
     short pad;
-}BVertex;
+} BVertex;
 
 // size: 0xC
-typedef struct _BFace {
+typedef struct _BFace
+{
     // offset: 0x0000
     short v0;
     // offset: 0x0002
@@ -1455,10 +1544,11 @@ typedef struct _BFace {
     short pad;
     // offset: 0x0008 (4 bytes)
     TextureFT3 *texture;
-}BFace;
+} BFace;
 
 // size: 0x18
-typedef struct _BGObject {
+typedef struct _BGObject
+{
     // offset: 0x0000
     short flags;
     // offset: 0x0002
@@ -1477,21 +1567,25 @@ typedef struct _BGObject {
     short radius;
     // offset: 0x0014
     long numVertices;
-}BGObject;
+} BGObject;
 
 /*struct MultiSignal {
 };*/
 
 // size: 0x1C
-typedef struct Signal {
+typedef struct Signal
+{
     // offset: 0x0000
     long id;
     // offset: 0x0004 (24 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (12 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000 (4 bytes)
-            union {
+            union
+            {
                 // offset: 0x0000
                 long l;
                 // offset: 0x0000 (4 bytes)
@@ -1503,7 +1597,8 @@ typedef struct Signal {
         // offset: 0x0000 (4 bytes)
         CameraKey *cameraKey;
         // offset: 0x0000 (16 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             short x;
             // offset: 0x0002
@@ -1516,21 +1611,24 @@ typedef struct Signal {
             SVector offset;
         } teleport;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long index;
             // offset: 0x0004
             long value;
         } cameraValue;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long index;
             // offset: 0x0004
             long value;
         } miscValue;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long index;
             // offset: 0x0004
@@ -1557,7 +1655,8 @@ typedef struct Signal {
         // offset: 0x0000
         long cameraTimer;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long time;
             // offset: 0x0004
@@ -1572,7 +1671,8 @@ typedef struct Signal {
         // offset: 0x0000 (8 bytes)
         long value[2];
         // offset: 0x0000 (12 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long action;
             // offset: 0x0004 (8 bytes)
@@ -1583,7 +1683,8 @@ typedef struct Signal {
         // offset: 0x0000
         long deathZ;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             void *intro;
             // offset: 0x0004
@@ -1596,14 +1697,16 @@ typedef struct Signal {
         // offset: 0x0000
         long fogFar;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             void *intro;
             // offset: 0x0004
             long frame;
         } gotoFrame;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             void *intro;
             // offset: 0x0004
@@ -1612,7 +1715,8 @@ typedef struct Signal {
         // offset: 0x0000
         void *vmObject;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             unsigned char target;
             // offset: 0x0001
@@ -1633,14 +1737,16 @@ typedef struct Signal {
         // offset: 0x0000 (4 bytes)
         struct Signal *gosubLabel;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long timer;
             // offset: 0x0004
             long action;
         } control;
         // offset: 0x0000 (12 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             short index;
             // offset: 0x0002
@@ -1651,7 +1757,8 @@ typedef struct Signal {
             struct MultiSignal *downSignal;
         } zSignal;
         // offset: 0x0000 (24 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long currentnum;
             // offset: 0x0004
@@ -1660,7 +1767,8 @@ typedef struct Signal {
             char toname[16];
         } StreamLevel;
         // offset: 0x0000 (12 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             char num;
             // offset: 0x0001
@@ -1677,14 +1785,16 @@ typedef struct Signal {
             Object *object;
         } shards;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long index;
             // offset: 0x0004
             void *intro;
         } cameraSpline;
         // offset: 0x0000 (4 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             short type;
             // offset: 0x0002
@@ -1693,21 +1803,24 @@ typedef struct Signal {
         // offset: 0x0000
         long voiceSitId;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long time;
             // offset: 0x0004
             void *intro;
         } introFX;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             void *intro;
             // offset: 0x0004 (4 bytes)
             struct Signal *gotoLabel;
         } introActive;
         // offset: 0x0000 (18 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000 (9 bytes)
             char world[9];
             // offset: 0x0009 (9 bytes)
@@ -1716,14 +1829,16 @@ typedef struct Signal {
         // offset: 0x0000
         long blendStart;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000 (4 bytes)
             struct Signal *signal;
             // offset: 0x0004
             long times;
         } setTimes;
         // offset: 0x0000 (4 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             unsigned char r;
             // offset: 0x0001
@@ -1734,7 +1849,8 @@ typedef struct Signal {
             unsigned char pad;
         } color;
         // offset: 0x0000 (12 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             short x;
             // offset: 0x0002
@@ -1749,10 +1865,11 @@ typedef struct Signal {
         // offset: 0x0000
         long slideAngle;
     } data;
-}Signal;
+} Signal;
 
 // size: 0x388
-typedef struct _MultiSignal {
+typedef struct _MultiSignal
+{
     // offset: 0x0000
     long numSignals;
     // offset: 0x0004
@@ -1761,10 +1878,11 @@ typedef struct _MultiSignal {
     short flags;
     // offset: 0x0008 (896 bytes)
     Signal signalList[32];
-}MultiSignal;
+} MultiSignal;
 
 // size: 0x54
-typedef struct _Terrain {
+typedef struct _Terrain
+{
     // offset: 0x0000
     short UnitChangeFlags;
     // offset: 0x0002
@@ -1809,10 +1927,11 @@ typedef struct _Terrain {
     short *morphNormalIdx;
     // offset: 0x0050 (4 bytes)
     MultiSignal *signals;
-}Terrain;
+} Terrain;
 
 // size: 0xC
-typedef struct _PlaneConstants {
+typedef struct _PlaneConstants
+{
     // offset: 0x0000
     short a;
     // offset: 0x0002
@@ -1823,64 +1942,71 @@ typedef struct _PlaneConstants {
     short flags;
     // offset: 0x0008
     long d;
-}PlaneConstants;
+} PlaneConstants;
 
 // size: 0x6
-typedef struct _G2SVector3_Type {
+typedef struct _G2SVector3_Type
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
     short y;
     // offset: 0x0004
     short z;
-}G2SVector3;
+} G2SVector3;
 
 // size: 0xC
-typedef struct _G2LVector3_Type {
+typedef struct _G2LVector3_Type
+{
     // offset: 0x0000
     long x;
     // offset: 0x0004
     long y;
     // offset: 0x0008
     long z;
-}G2LVector3;
+} G2LVector3;
 
 // size: 0x20
-typedef struct _G2Matrix_Type {
+typedef struct _G2Matrix_Type
+{
     // offset: 0x0000 (18 bytes)
     short rotScale[3][3];
     // offset: 0x0012
     short scaleFlag;
     // offset: 0x0014 (12 bytes)
     G2LVector3 trans;
-}G2Matrix;
+} G2Matrix;
 
 // size: 0x4
-typedef struct _G2AnimChanStatus_Type {
+typedef struct _G2AnimChanStatus_Type
+{
     // offset: 0x0000
     short keyData;
     // offset: 0x0002
     short index;
-}G2AnimChanStatus;
+} G2AnimChanStatus;
 
 // size: 0x24
-typedef struct _G2AnimChanStatusBlock_Type {
+typedef struct _G2AnimChanStatusBlock_Type
+{
     // offset: 0x0000 (4 bytes)
     struct _G2AnimChanStatusBlock_Type *next;
     // offset: 0x0004 (32 bytes)
     G2AnimChanStatus chunks[8];
-}G2AnimChanStatusBlock;
+} G2AnimChanStatusBlock;
 
 // size: 0x4
-typedef struct _G2AnimAlphaTable_Type {
+typedef struct _G2AnimAlphaTable_Type
+{
     // offset: 0x0000
     unsigned short size;
     // offset: 0x0004
     long data[0];
-}G2AnimAlphaTable;
+} G2AnimAlphaTable;
 
 // size: 0x28
-typedef struct _G2AnimQuatInfo_Type {
+typedef struct _G2AnimQuatInfo_Type
+{
     // offset: 0x0000 (8 bytes)
     G2Quat srcQuat;
     // offset: 0x0008 (8 bytes)
@@ -1893,18 +2019,20 @@ typedef struct _G2AnimQuatInfo_Type {
     G2SVector3 srcTrans;
     // offset: 0x0022 (6 bytes)
     G2SVector3 destTrans;
-}G2AnimQuatInfo;
+} G2AnimQuatInfo;
 
 // size: 0xA4
-typedef struct _G2AnimInterpStateBlock_Type {
+typedef struct _G2AnimInterpStateBlock_Type
+{
     // offset: 0x0000 (4 bytes)
     struct _G2AnimInterpStateBlock_Type *next;
     // offset: 0x0004 (160 bytes)
     G2AnimQuatInfo quatInfo[4];
-}G2AnimInterpStateBlock;
+} G2AnimInterpStateBlock;
 
 // size: 0xC
-typedef struct _G2AnimInterpInfo_Type {
+typedef struct _G2AnimInterpInfo_Type
+{
     // offset: 0x0000
     short duration;
     // offset: 0x0002
@@ -1913,10 +2041,11 @@ typedef struct _G2AnimInterpInfo_Type {
     G2AnimAlphaTable *alphaTable;
     // offset: 0x0008 (4 bytes)
     G2AnimInterpStateBlock *stateBlockList;
-}G2AnimInterpInfo;
+} G2AnimInterpInfo;
 
 // size: 0x30
-typedef struct _G2AnimSection_Type {
+typedef struct _G2AnimSection_Type
+{
     // offset: 0x0000
     unsigned char flags;
     // offset: 0x0001
@@ -1951,10 +2080,11 @@ typedef struct _G2AnimSection_Type {
     G2AnimChanStatusBlock *chanStatusBlockList;
     // offset: 0x002C (4 bytes)
     G2AnimInterpInfo *interpInfo;
-}G2AnimSection;
+} G2AnimSection;
 
 // size: 0xB4
-typedef struct _G2Anim_Type {
+typedef struct _G2Anim_Type
+{
     // offset: 0x0000
     unsigned char sectionCount;
     // offset: 0x0001
@@ -1977,10 +2107,11 @@ typedef struct _G2Anim_Type {
     unsigned long disabledBits[3];
     // offset: 0x0024 (144 bytes)
     G2AnimSection section[3];
-}G2Anim;
+} G2Anim;
 
 // size: 0xC
-typedef struct EventAliasCommandStruct {
+typedef struct EventAliasCommandStruct
+{
     // offset: 0x0000 (4 bytes)
     struct _Instance *hostInstance;
     // offset: 0x0004
@@ -1991,10 +2122,11 @@ typedef struct EventAliasCommandStruct {
     short interpframes;
     // offset: 0x000A
     short speed;
-}EventAliasCommandStruct;
+} EventAliasCommandStruct;
 
 // size: 0x29C
-typedef struct _Instance {
+typedef struct _Instance
+{
     // offset: 0x0000 (8 bytes)
     NodeType node;
     // offset: 0x0008 (4 bytes)
@@ -2203,10 +2335,11 @@ typedef struct _Instance {
     long light_color;
     // offset: 0x0298 (4 bytes)
     CVECTOR *perVertexColor;
-}Instance;
+} Instance;
 
 // size: 0x14
-typedef struct LightInstance {
+typedef struct LightInstance
+{
     // offset: 0x0000 (4 bytes)
     Instance *lightInstance;
     // offset: 0x0004
@@ -2221,10 +2354,11 @@ typedef struct LightInstance {
     unsigned char segment;
     // offset: 0x0013
     unsigned char flags;
-}LightInstance;
+} LightInstance;
 
 // size: 0x20
-typedef struct _GameTrackerASMData_Type {
+typedef struct _GameTrackerASMData_Type
+{
     // offset: 0x0000
     long drawBackFaces;
     // offset: 0x0004
@@ -2235,16 +2369,18 @@ typedef struct _GameTrackerASMData_Type {
     short MorphType;
     // offset: 0x000C (20 bytes)
     LightInstance lightInstances[1];
-}GameTrackerASMData;
+} GameTrackerASMData;
 
 // size: 0x20
-typedef struct _GameData_Type {
+typedef struct _GameData_Type
+{
     // offset: 0x0000 (32 bytes)
     GameTrackerASMData asmData;
-}GameData;
+} GameData;
 
 // size: 0x8
-typedef struct MemHeader {
+typedef struct MemHeader
+{
     // offset: 0x0000
     unsigned short magicNumber;
     // offset: 0x0002
@@ -2253,10 +2389,11 @@ typedef struct MemHeader {
     unsigned char memType;
     // offset: 0x0004
     unsigned long memSize;
-}MemHeader;
+} MemHeader;
 
 // size: 0x4
-typedef struct _RGBAColor {
+typedef struct _RGBAColor
+{
     // offset: 0x0000
     unsigned char r;
     // offset: 0x0001
@@ -2265,28 +2402,31 @@ typedef struct _RGBAColor {
     unsigned char b;
     // offset: 0x0003
     unsigned char a;
-}RGBAColor;
+} RGBAColor;
 
 // size: 0x8
-typedef struct _PVertex {
+typedef struct _PVertex
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
     short y;
     // offset: 0x0004
     long otz;
-}PVertex;
+} PVertex;
 
 // size: 0x18C0
-typedef struct _VertexPool {
+typedef struct _VertexPool
+{
     // offset: 0x0000 (4224 bytes)
     PVertex vertex[528];
     // offset: 0x1080 (2112 bytes)
     CVECTOR color[528];
-}VertexPool;
+} VertexPool;
 
 // size: 0x1770C
-typedef struct _PrimPool {
+typedef struct _PrimPool
+{
     // offset: 0x0000
     long numPrims;
     // offset: 0x0004
@@ -2295,20 +2435,22 @@ typedef struct _PrimPool {
     unsigned long *lastPrim;
     // offset: 0x000C (96000 bytes)
     unsigned long prim[24000];
-}PrimPool;
+} PrimPool;
 
 // size: 0xC
-typedef struct _Sphere {
+typedef struct _Sphere
+{
     // offset: 0x0000 (6 bytes)
     Position position;
     // offset: 0x0006
     unsigned short radius;
     // offset: 0x0008
     unsigned long radiusSquared;
-}Sphere;
+} Sphere;
 
 // size: 0x9C9C
-typedef struct _InstancePool {
+typedef struct _InstancePool
+{
     // offset: 0x0000
     long nextInstanceID;
     // offset: 0x0004
@@ -2317,10 +2459,11 @@ typedef struct _InstancePool {
     Instance instance[60];
     // offset: 0x9C98 (4 bytes)
     Instance *first_free;
-}InstancePool;
+} InstancePool;
 
 // size: 0x10C
-typedef struct _InstanceList {
+typedef struct _InstanceList
+{
     // offset: 0x0000
     long numInstances;
     // offset: 0x0004 (4 bytes)
@@ -2329,10 +2472,11 @@ typedef struct _InstanceList {
     InstancePool *pool;
     // offset: 0x000C (256 bytes)
     NodeType group[32];
-}InstanceList;
+} InstanceList;
 
 // size: 0x24
-typedef struct _ObjectTracker {
+typedef struct _ObjectTracker
+{
     // offset: 0x0000 (16 bytes)
     char name[16];
     // offset: 0x0010 (4 bytes)
@@ -2347,10 +2491,11 @@ typedef struct _ObjectTracker {
     char numObjectsUsing;
     // offset: 0x001D (7 bytes)
     char objectsUsing[7];
-}ObjectTracker;
+} ObjectTracker;
 
 // size: 0x18
-typedef struct CDLight {
+typedef struct CDLight
+{
     // offset: 0x0000 (8 bytes)
     NodeType node;
     // offset: 0x0008
@@ -2363,61 +2508,68 @@ typedef struct CDLight {
     unsigned char flags;
     // offset: 0x000C (12 bytes)
     Sphere sphere;
-}CDLight;
+} CDLight;
 
 // size: 0x40
-typedef struct LightGroup {
+typedef struct LightGroup
+{
     // offset: 0x0000 (32 bytes)
     MATRIX lightMatrix;
     // offset: 0x0020 (32 bytes)
     MATRIX colorMatrix;
-}LightGroup;
+} LightGroup;
 
 // size: 0xC
-typedef struct LightList {
+typedef struct LightList
+{
     // offset: 0x0000 (4 bytes)
     CVECTOR ambient;
     // offset: 0x0004
     long numLightGroups;
     // offset: 0x0008 (4 bytes)
     LightGroup *lightGroupList;
-}LightList;
+} LightList;
 
 // size: 0x6
-typedef struct _VMOffset {
+typedef struct _VMOffset
+{
     // offset: 0x0000
     short dx;
     // offset: 0x0002
     short dy;
     // offset: 0x0004
     short dz;
-}VMMoveOffset;
+} VMMoveOffset;
 
 // size: 0x3
-typedef struct _VMColorOffset {
+typedef struct _VMColorOffset
+{
     // offset: 0x0000
     char dr;
     // offset: 0x0001
     char dg;
     // offset: 0x0002
     char db;
-}VMColorOffset;
+} VMColorOffset;
 
 // size: 0xC
-typedef struct _VMOffsetTable {
+typedef struct _VMOffsetTable
+{
     // offset: 0x0000
     long numVMOffsets;
     // offset: 0x0004 (6 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (6 bytes)
         VMMoveOffset moveOffsets;
         // offset: 0x0000 (3 bytes)
         VMColorOffset colorOffsets;
     } offsets;
-}VMOffsetTable;
+} VMOffsetTable;
 
 // size: 0x8
-typedef struct _VMInterpolated {
+typedef struct _VMInterpolated
+{
     // offset: 0x0000
     short tvIdx;
     // offset: 0x0002
@@ -2426,10 +2578,11 @@ typedef struct _VMInterpolated {
     short endIdx;
     // offset: 0x0006
     short time;
-}VMInterpolated;
+} VMInterpolated;
 
 // size: 0x3C
-typedef struct _VMObject {
+typedef struct _VMObject
+{
     // offset: 0x0000
     unsigned short flags;
     // offset: 0x0002
@@ -2466,10 +2619,11 @@ typedef struct _VMObject {
     VMInterpolated *vminterpolatedList;
     // offset: 0x0038
     char *name;
-}VMObject;
+} VMObject;
 
 // size: 0x28
-typedef struct SpotLight {
+typedef struct SpotLight
+{
     // offset: 0x0000 (8 bytes)
     NodeType node;
     // offset: 0x0008
@@ -2494,10 +2648,11 @@ typedef struct SpotLight {
     short cosFalloffAngle;
     // offset: 0x0026
     short attenuationScale;
-}SpotLight;
+} SpotLight;
 
 // size: 0x18
-typedef struct PointLight {
+typedef struct PointLight
+{
     // offset: 0x0000 (8 bytes)
     NodeType node;
     // offset: 0x0008
@@ -2514,20 +2669,22 @@ typedef struct PointLight {
     short radius;
     // offset: 0x0014
     long radiusSquared;
-}PointLight;
+} PointLight;
 
 // size: 0xC
-typedef struct _VGroup {
+typedef struct _VGroup
+{
     // offset: 0x0000
     long id;
     // offset: 0x0004
     long numVertices;
     // offset: 0x0008 (4 bytes)
     TVertex **vertexList;
-}VGroup;
+} VGroup;
 
 // size: 0x8
-typedef struct _HotSpot {
+typedef struct _HotSpot
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -2536,26 +2693,29 @@ typedef struct _HotSpot {
     short z;
     // offset: 0x0006
     short id;
-}HotSpot;
+} HotSpot;
 
 // size: 0x2
-typedef struct EventBasicObject {
+typedef struct EventBasicObject
+{
     // offset: 0x0000
     short id;
-}EventBasicObject;
+} EventBasicObject;
 
 // size: 0x8
-typedef struct ScriptPCode {
+typedef struct ScriptPCode
+{
     // offset: 0x0000
     unsigned short sizeOfPcodeStream;
     // offset: 0x0002
     unsigned short conditionBits;
     // offset: 0x0004
     short *data;
-}ScriptPCode;
+} ScriptPCode;
 
 // size: 0x1C
-typedef struct Event {
+typedef struct Event
+{
     // offset: 0x0000
     short eventNumber;
     // offset: 0x0002
@@ -2572,26 +2732,29 @@ typedef struct Event {
     ScriptPCode **conditionalList;
     // offset: 0x0018 (4 bytes)
     ScriptPCode **actionList;
-}Event;
+} Event;
 
 // size: 0x8
-typedef struct EventPointers {
+typedef struct EventPointers
+{
     // offset: 0x0000
     long numPuzzles;
     // offset: 0x0004 (4 bytes)
     Event *eventInstances[1];
-}EventPointers;
+} EventPointers;
 
 // size: 0x8
-typedef struct _PlanMkr {
+typedef struct _PlanMkr
+{
     // offset: 0x0000 (6 bytes)
     Position pos;
     // offset: 0x0006
     short id;
-}PlanMkr;
+} PlanMkr;
 
 // size: 0x24
-typedef struct _SFXMkr {
+typedef struct _SFXMkr
+{
     // offset: 0x0000
     unsigned char *soundData;
     // offset: 0x0004
@@ -2606,18 +2769,20 @@ typedef struct _SFXMkr {
     long livesInOnePlace;
     // offset: 0x0020
     long inSpectral;
-}SFXMkr;
+} SFXMkr;
 
 // size: 0x4
-typedef struct TClassAttr {
+typedef struct TClassAttr
+{
     // offset: 0x0000
     short flags;
     // offset: 0x0002
     unsigned short sound;
-}TClassAttr;
+} TClassAttr;
 
 // size: 0x188
-typedef struct Level {
+typedef struct Level
+{
     // offset: 0x0000 (4 bytes)
     Terrain *terrain;
     // offset: 0x0004 (4 bytes)
@@ -2794,10 +2959,11 @@ typedef struct Level {
     LightGroup *razielLightGroup;
     // offset: 0x0184 (4 bytes)
     LightGroup *razielSpectralLightGroup;
-}Level;
+} Level;
 
 // size: 0x70
-typedef struct _SavedCinematic {
+typedef struct _SavedCinematic
+{
     // offset: 0x0000 (6 bytes)
     Position position;
     // offset: 0x0006 (6 bytes)
@@ -2836,10 +3002,11 @@ typedef struct _SavedCinematic {
     MultiSpline *targetSpline;
     // offset: 0x006C (4 bytes)
     Level *level;
-}SavedCinematic;
+} SavedCinematic;
 
 // size: 0x47C
-typedef struct LightInfo {
+typedef struct LightInfo
+{
     // offset: 0x0000
     long numPointLights;
     // offset: 0x0004 (768 bytes)
@@ -2862,10 +3029,11 @@ typedef struct LightInfo {
     NodeType activeSpotLightList;
     // offset: 0x0478
     long numSavedColors;
-}LightInfo;
+} LightInfo;
 
 // size: 0x4
-typedef struct _ColorType {
+typedef struct _ColorType
+{
     // offset: 0x0000
     unsigned char r;
     // offset: 0x0001
@@ -2874,10 +3042,11 @@ typedef struct _ColorType {
     unsigned char b;
     // offset: 0x0003
     unsigned char code;
-}ColorType;
+} ColorType;
 
 // size: 0xE0
-typedef struct _CameraCore_Type {
+typedef struct _CameraCore_Type
+{
     // offset: 0x0000 (6 bytes)
     Position position;
     // offset: 0x0006
@@ -2928,18 +3097,20 @@ typedef struct _CameraCore_Type {
     Position nondebugPos;
     // offset: 0x00DC
     short pad6;
-}CameraCore;
+} CameraCore;
 
 // size: 0x4
-typedef struct SpuVolume {
+typedef struct SpuVolume
+{
     // offset: 0x0000
     short left;
     // offset: 0x0002
     short right;
-}SpuVolume;
+} SpuVolume;
 
 // size: 0x40
-typedef struct SpuVoiceAttr {
+typedef struct SpuVoiceAttr
+{
     // offset: 0x0000
     unsigned long voice;
     // offset: 0x0004
@@ -2982,20 +3153,22 @@ typedef struct SpuVoiceAttr {
     unsigned short adsr1;
     // offset: 0x003C
     unsigned short adsr2;
-}SpuVoiceAttr;
+} SpuVoiceAttr;
 
 // size: 0xC
-typedef struct SpuExtAttr {
+typedef struct SpuExtAttr
+{
     // offset: 0x0000 (4 bytes)
     SpuVolume volume;
     // offset: 0x0004
     long reverb;
     // offset: 0x0008
     long mix;
-}SpuExtAttr;
+} SpuExtAttr;
 
 // size: 0x10
-typedef struct SpuStVoiceAttr {
+typedef struct SpuStVoiceAttr
+{
     // offset: 0x0000
     char status;
     // offset: 0x0001
@@ -3010,10 +3183,11 @@ typedef struct SpuStVoiceAttr {
     unsigned long buf_addr;
     // offset: 0x000C
     unsigned long data_addr;
-}SpuStVoiceAttr;
+} SpuStVoiceAttr;
 
 // size: 0x28
-typedef struct AadSoundBankHdr {
+typedef struct AadSoundBankHdr
+{
     // offset: 0x0000
     unsigned long bankID;
     // offset: 0x0004
@@ -3034,10 +3208,11 @@ typedef struct AadSoundBankHdr {
     int reverbMode;
     // offset: 0x0024
     int reverbDepth;
-}AadSoundBankHdr;
+} AadSoundBankHdr;
 
 // size: 0x8
-typedef struct AadProgramAtr {
+typedef struct AadProgramAtr
+{
     // offset: 0x0000
     unsigned short numTones;
     // offset: 0x0002
@@ -3048,10 +3223,11 @@ typedef struct AadProgramAtr {
     unsigned char panPosition;
     // offset: 0x0006
     unsigned short unused;
-}AadProgramAtr;
+} AadProgramAtr;
 
 // size: 0x10
-typedef struct AadToneAtr {
+typedef struct AadToneAtr
+{
     // offset: 0x0000
     unsigned char priority;
     // offset: 0x0001
@@ -3078,10 +3254,11 @@ typedef struct AadToneAtr {
     unsigned short adsr2;
     // offset: 0x000E
     short waveIndex;
-}AadToneAtr;
+} AadToneAtr;
 
 // size: 0x14
-typedef struct _AadDynSfxFileHdr {
+typedef struct _AadDynSfxFileHdr
+{
     // offset: 0x0000
     unsigned long snfID;
     // offset: 0x0004
@@ -3096,10 +3273,11 @@ typedef struct _AadDynSfxFileHdr {
     struct _AadDynSfxFileHdr *prevDynSfxFile;
     // offset: 0x0010 (4 bytes)
     struct _AadDynSfxFileHdr *nextDynSfxFile;
-}AadDynSfxSnfFileHdr;
+} AadDynSfxSnfFileHdr;
 
 // size: 0x18
-typedef struct AadDynSfxAttr {
+typedef struct AadDynSfxAttr
+{
     // offset: 0x0000
     unsigned short sfxID;
     // offset: 0x0002
@@ -3108,10 +3286,11 @@ typedef struct AadDynSfxAttr {
     AadToneAtr toneAttr;
     // offset: 0x0014
     unsigned long waveSize;
-}AadDynSfxAttr;
+} AadDynSfxAttr;
 
 // size: 0x18
-typedef struct AadTempoCounter {
+typedef struct AadTempoCounter
+{
     // offset: 0x0000
     unsigned long currentTick;
     // offset: 0x0004
@@ -3126,10 +3305,11 @@ typedef struct AadTempoCounter {
     unsigned short ppqn;
     // offset: 0x0014
     unsigned long quarterNoteTime;
-}AadTempoCounter;
+} AadTempoCounter;
 
 // size: 0xC
-typedef struct AadSeqEvent {
+typedef struct AadSeqEvent
+{
     // offset: 0x0000
     unsigned long deltaTime;
     // offset: 0x0004
@@ -3138,10 +3318,11 @@ typedef struct AadSeqEvent {
     unsigned char statusByte;
     // offset: 0x0006 (6 bytes)
     char dataByte[6];
-}AadSeqEvent;
+} AadSeqEvent;
 
 // size: 0x5D0
-typedef struct _AadSequenceSlot {
+typedef struct _AadSequenceSlot
+{
     // offset: 0x0000 (24 bytes)
     AadTempoCounter tempo;
     // offset: 0x0018 (768 bytes)
@@ -3218,10 +3399,11 @@ typedef struct _AadSequenceSlot {
     unsigned char panPosition[16];
     // offset: 0x05C0 (16 bytes)
     char transpose[16];
-}AadSequenceSlot;
+} AadSequenceSlot;
 
 // size: 0xC
-typedef struct AadSfxCommand {
+typedef struct AadSfxCommand
+{
     // offset: 0x0000
     unsigned char statusByte;
     // offset: 0x0001 (3 bytes)
@@ -3232,10 +3414,11 @@ typedef struct AadSfxCommand {
     short shortParam;
     // offset: 0x000A
     unsigned short unused;
-}AadSfxCommand;
+} AadSfxCommand;
 
 // size: 0x188
-typedef struct AadSfxSlot {
+typedef struct AadSfxSlot
+{
     // offset: 0x0000 (384 bytes)
     AadSfxCommand commandQueue[32];
     // offset: 0x0180
@@ -3250,10 +3433,11 @@ typedef struct AadSfxSlot {
     unsigned char sfxVolume;
     // offset: 0x0187
     unsigned char sfxPan;
-}AadSfxSlot;
+} AadSfxSlot;
 
 // size: 0x1C
-typedef struct AadSynthVoice {
+typedef struct AadSynthVoice
+{
     // offset: 0x0000
     unsigned long voiceMask;
     // offset: 0x0004
@@ -3284,10 +3468,11 @@ typedef struct AadSynthVoice {
     AadToneAtr *toneAtr;
     // offset: 0x0018 (4 bytes)
     AadProgramAtr *progAtr;
-}AadSynthVoice;
+} AadSynthVoice;
 
 // size: 0x1C
-typedef struct AadDynamicLoadRequest {
+typedef struct AadDynamicLoadRequest
+{
     // offset: 0x0000
     int type;
     // offset: 0x0004
@@ -3298,10 +3483,11 @@ typedef struct AadDynamicLoadRequest {
     long flags;
     // offset: 0x0010 (12 bytes)
     char fileName[12];
-}AadDynamicLoadRequest;
+} AadDynamicLoadRequest;
 
 // size: 0x58
-typedef struct AadDynamicBankLoadInfo {
+typedef struct AadDynamicBankLoadInfo
+{
     // offset: 0x0000 (32 bytes)
     char sndFileName[32];
     // offset: 0x0020 (32 bytes)
@@ -3318,10 +3504,11 @@ typedef struct AadDynamicBankLoadInfo {
     unsigned long nextSramAddr;
     // offset: 0x0054
     unsigned long flags;
-}AadDynamicBankLoadInfo;
+} AadDynamicBankLoadInfo;
 
 // size: 0x94
-typedef struct AadDynamicSfxLoadInfo {
+typedef struct AadDynamicSfxLoadInfo
+{
     // offset: 0x0000 (40 bytes)
     char snfFileName[40];
     // offset: 0x0028 (40 bytes)
@@ -3350,10 +3537,11 @@ typedef struct AadDynamicSfxLoadInfo {
     AadDynSfxSnfFileHdr *snfFile;
     // offset: 0x007C (24 bytes)
     AadDynSfxAttr attr;
-}AadDynamicSfxLoadInfo;
+} AadDynamicSfxLoadInfo;
 
 // size: 0x8
-typedef struct AadNewSramBlockDesc {
+typedef struct AadNewSramBlockDesc
+{
     // offset: 0x0000
     unsigned short waveID;
     // offset: 0x0002
@@ -3364,30 +3552,33 @@ typedef struct AadNewSramBlockDesc {
     unsigned char prevIndex;
     // offset: 0x0007
     unsigned char nextIndex;
-}AadNewSramBlockDesc;
+} AadNewSramBlockDesc;
 
 // size: 0x14
-typedef struct AadLoadedSfxToneAttr {
+typedef struct AadLoadedSfxToneAttr
+{
     // offset: 0x0000
     unsigned short referenceCount;
     // offset: 0x0002
     unsigned short waveID;
     // offset: 0x0004 (16 bytes)
     AadToneAtr toneAttr;
-}AadLoadedSfxToneAttr;
+} AadLoadedSfxToneAttr;
 
 // size: 0x4
-typedef struct AadLoadedSfxWaveAttr {
+typedef struct AadLoadedSfxWaveAttr
+{
     // offset: 0x0000
     unsigned short referenceCount;
     // offset: 0x0002
     unsigned char unused;
     // offset: 0x0003
     unsigned char sramHandle;
-}AadLoadedSfxWaveAttr;
+} AadLoadedSfxWaveAttr;
 
 // size: 0x20
-typedef struct AadSramDefragInfo {
+typedef struct AadSramDefragInfo
+{
     // offset: 0x0000
     int status;
     // offset: 0x0004
@@ -3404,28 +3595,31 @@ typedef struct AadSramDefragInfo {
     unsigned long moveSize;
     // offset: 0x001C
     unsigned long readSize;
-}AadSramDefragInfo;
+} AadSramDefragInfo;
 
 // size: 0xC
-typedef struct AadVolFader {
+typedef struct AadVolFader
+{
     // offset: 0x0000
     int volumeStep;
     // offset: 0x0004
     int targetVolume;
     // offset: 0x0008
     void (*fadeCompleteCallback)();
-}AadVolFader;
+} AadVolFader;
 
 // size: 0x8
-typedef struct MusicLoadCmd {
+typedef struct MusicLoadCmd
+{
     // offset: 0x0000
     int type;
     // offset: 0x0004
     int data;
-}MusicLoadCmd;
+} MusicLoadCmd;
 
 // size: 0x14
-typedef struct gSoundData {
+typedef struct gSoundData
+{
     // offset: 0x0000
     unsigned long gMasterVol;
     // offset: 0x0004
@@ -3442,10 +3636,11 @@ typedef struct gSoundData {
     char gVoiceOn;
     // offset: 0x0013
     char soundsLoaded;
-}gSoundData;
+} gSoundData;
 
 // size: 0x1C
-typedef struct menu_format_t {
+typedef struct menu_format_t
+{
     // offset: 0x0000
     int xpos;
     // offset: 0x0004
@@ -3460,20 +3655,22 @@ typedef struct menu_format_t {
     int center;
     // offset: 0x0018
     int border;
-}menu_format_t;
+} menu_format_t;
 
 // size: 0x24
-typedef struct menu_stack_t {
+typedef struct menu_stack_t
+{
     // offset: 0x0000
     int (*fn)();
     // offset: 0x0004
     int index;
     // offset: 0x0008 (28 bytes)
     menu_format_t format;
-}menu_stack_t;
+} menu_stack_t;
 
 // size: 0x10
-typedef struct menu_item_t {
+typedef struct menu_item_t
+{
     // offset: 0x0000
     char *text;
     // offset: 0x0004
@@ -3482,10 +3679,11 @@ typedef struct menu_item_t {
     long parameter;
     // offset: 0x000C
     long flags;
-}menu_item_t;
+} menu_item_t;
 
 // size: 0x388
-typedef struct menu_t {
+typedef struct menu_t
+{
     // offset: 0x0000
     int nmenus;
     // offset: 0x0004
@@ -3502,10 +3700,11 @@ typedef struct menu_t {
     void (*drawfn)();
     // offset: 0x0384
     void *opaque;
-}menu_t;
+} menu_t;
 
 // size: 0x24
-typedef struct mcmenu_table_t {
+typedef struct mcmenu_table_t
+{
     // offset: 0x0000
     int (*data_size)();
     // offset: 0x0004
@@ -3524,20 +3723,23 @@ typedef struct mcmenu_table_t {
     int (*pause)();
     // offset: 0x0020
     char *versionID;
-}mcmenu_table_t;
+} mcmenu_table_t;
 
 // size: 0x18
-typedef struct mcpsx_directory_t {
+typedef struct mcpsx_directory_t
+{
     // offset: 0x0000 (20 bytes)
     char name[20];
     // offset: 0x0014
     int nbytes;
-}mcpsx_directory_t;
+} mcpsx_directory_t;
 
 // size: 0x38
-typedef struct mcpsx_t {
+typedef struct mcpsx_t
+{
     // offset: 0x0000 (20 bytes)
-    struct {
+    struct
+    {
         // offset: 0x0000 (4 bytes)
         mcpsx_mode_t mode;
         // offset: 0x0004 (4 bytes)
@@ -3550,7 +3752,8 @@ typedef struct mcpsx_t {
         int observed;
     } state;
     // offset: 0x0014 (32 bytes)
-    struct {
+    struct
+    {
         // offset: 0x0000
         long channel;
         // offset: 0x0004
@@ -3570,12 +3773,14 @@ typedef struct mcpsx_t {
     } params;
     // offset: 0x0034
     void *opaque;
-}mcpsx_t;
+} mcpsx_t;
 
 // size: 0x34
-typedef struct mcard_t {
+typedef struct mcard_t
+{
     // offset: 0x0000 (16 bytes)
-    struct {
+    struct
+    {
         // offset: 0x0000 (4 bytes)
         mcpsx_err_t err;
         // offset: 0x0004 (4 bytes)
@@ -3586,7 +3791,8 @@ typedef struct mcard_t {
         int not_exists;
     } state;
     // offset: 0x0010 (28 bytes)
-    struct {
+    struct
+    {
         // offset: 0x0000
         long parameter;
         // offset: 0x0004
@@ -3606,12 +3812,14 @@ typedef struct mcard_t {
     mcpsx_t *mcpsx;
     // offset: 0x0030
     void *opaque;
-}mcard_t;
+} mcard_t;
 
 // size: 0x194
-typedef struct mcmenu_t {
+typedef struct mcmenu_t
+{
     // offset: 0x0000 (20 bytes)
-    struct {
+    struct
+    {
         // offset: 0x0000 (4 bytes)
         fsm_t fsm;
         // offset: 0x0004 (4 bytes)
@@ -3624,7 +3832,8 @@ typedef struct mcmenu_t {
         int slot;
     } state;
     // offset: 0x0014 (376 bytes)
-    struct {
+    struct
+    {
         // offset: 0x0000
         int nblocks;
         // offset: 0x0004
@@ -3640,10 +3849,11 @@ typedef struct mcmenu_t {
     mcard_t *mcard;
     // offset: 0x0190
     void *opaque;
-}mcmenu_t;
+} mcmenu_t;
 
 // size: 0x10
-typedef struct memcard_t {
+typedef struct memcard_t
+{
     // offset: 0x0000 (4 bytes)
     Object *object;
     // offset: 0x0004 (4 bytes)
@@ -3654,10 +3864,11 @@ typedef struct memcard_t {
     short running;
     // offset: 0x000E
     short wrongVerison;
-}memcard_t;
+} memcard_t;
 
 // size: 0x270
-typedef struct GameTracker {
+typedef struct GameTracker
+{
     // offset: 0x0000 (32 bytes)
     GameData gameData;
     // offset: 0x0020 (4 bytes)
@@ -3884,10 +4095,11 @@ typedef struct GameTracker {
     char monster_collide_override;
     // offset: 0x026F
     char pad;
-}GameTracker;
+} GameTracker;
 
 // size: 0xC
-typedef struct _HVertex {
+typedef struct _HVertex
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -3898,38 +4110,42 @@ typedef struct _HVertex {
     short normal;
     // offset: 0x0008
     long pad;
-}HVertex;
+} HVertex;
 
 // size: 0x8
-typedef struct _MONAPI_Regenerator {
+typedef struct _MONAPI_Regenerator
+{
     // offset: 0x0000
     unsigned long regenTime;
     // offset: 0x0004
     short introUniqueID;
     // offset: 0x0006
     short streamUnitID;
-}MONAPI_Regenerator;
+} MONAPI_Regenerator;
 
 // size: 0x8
-typedef struct __Event {
+typedef struct __Event
+{
     // offset: 0x0000
     int ID;
     // offset: 0x0004
     intptr_t Data;
-}Message;
+} Message;
 
 // size: 0x88
-typedef struct __MessageQueue {
+typedef struct __MessageQueue
+{
     // offset: 0x0000
     int Head;
     // offset: 0x0004
     int Tail;
     // offset: 0x0008 (128 bytes)
     Message Queue[16];
-}MessageQueue;
+} MessageQueue;
 
 // size: 0x11C
-typedef struct __State {
+typedef struct __State
+{
     // offset: 0x0000
     void (*Process)();
     // offset: 0x0004 (136 bytes)
@@ -3940,14 +4156,15 @@ typedef struct __State {
     int Data1;
     // offset: 0x0118
     int Data2;
-}State;
+} State;
 
 // size: 0x4
 /*typedef struct _physadr {
 }*physadr;*/
 
 // size: 0x18
-typedef struct POLY_F4 {
+typedef struct POLY_F4
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -3974,20 +4191,22 @@ typedef struct POLY_F4 {
     short x3;
     // offset: 0x0016
     short y3;
-}POLY_F4;
+} POLY_F4;
 
 // size: 0x6
-typedef struct _SmallRotation {
+typedef struct _SmallRotation
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
     short y;
     // offset: 0x0004
     short z;
-}SmallRotation;
+} SmallRotation;
 
 // size: 0x4C4
-typedef struct Camera {
+typedef struct Camera
+{
     // offset: 0x0000 (224 bytes)
     CameraCore core;
     // offset: 0x00E0
@@ -4169,9 +4388,11 @@ typedef struct Camera {
     // offset: 0x0420 (4 bytes)
     MultiSpline *Spline01;
     // offset: 0x0424 (96 bytes)
-    struct {
+    struct
+    {
         // offset: 0x0000 (28 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000 (4 bytes)
             MultiSpline *posSpline;
             // offset: 0x0004 (4 bytes)
@@ -4188,7 +4409,8 @@ typedef struct Camera {
             int splinecam_helpkey;
         } Cinematic;
         // offset: 0x001C (20 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000 (6 bytes)
             Position offset;
             // offset: 0x0006 (8 bytes)
@@ -4197,7 +4419,8 @@ typedef struct Camera {
             long focusDistance;
         } Idle;
         // offset: 0x0030 (28 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000 (4 bytes)
             TFace *tface;
             // offset: 0x0004 (4 bytes)
@@ -4210,7 +4433,8 @@ typedef struct Camera {
             SVector oldFocusInstancePos;
         } Behind;
         // offset: 0x004C (20 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long stopTimer;
             // offset: 0x0004
@@ -4273,10 +4497,11 @@ typedef struct Camera {
     short lead_accl;
     // offset: 0x04C2
     short lead_timer;
-}Camera;
+} Camera;
 
 // size: 0x18
-typedef struct DebugMenuLine {
+typedef struct DebugMenuLine
+{
     // offset: 0x0000 (4 bytes)
     DEBUG_LINE_TYPE type;
     // offset: 0x0004
@@ -4289,10 +4514,11 @@ typedef struct DebugMenuLine {
     long *var_address;
     // offset: 0x0014
     long bit_mask;
-}DebugMenuLine;
+} DebugMenuLine;
 
 // size: 0x40
-typedef struct _StreamUnit {
+typedef struct _StreamUnit
+{
     // offset: 0x0000
     long StreamUnitID;
     // offset: 0x0004
@@ -4325,10 +4551,11 @@ typedef struct _StreamUnit {
     short sfxFileHandle;
     // offset: 0x003E
     short pad;
-}StreamUnit;
+} StreamUnit;
 
 // size: 0x1C
-typedef struct _BlockVramEntry {
+typedef struct _BlockVramEntry
+{
     // offset: 0x0000 (4 bytes)
     struct _BlockVramEntry *next;
     // offset: 0x0004
@@ -4350,7 +4577,8 @@ typedef struct _BlockVramEntry {
     // offset: 0x0014
     long area;
     // offset: 0x0018 (4 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (4 bytes)
         StreamUnit *streamUnit;
         // offset: 0x0000 (4 bytes)
@@ -4358,10 +4586,11 @@ typedef struct _BlockVramEntry {
         // offset: 0x0000 (4 bytes)
         struct _ButtonTexture *button;
     } udata;
-}BlockVramEntry;
+} BlockVramEntry;
 
 // size: 0x10
-typedef struct _ButtonTexture {
+typedef struct _ButtonTexture
+{
     // offset: 0x0000
     short tpage;
     // offset: 0x0002
@@ -4374,10 +4603,11 @@ typedef struct _ButtonTexture {
     BlockVramEntry *vramBlock;
     // offset: 0x000C
     long xshift;
-}ButtonTexture;
+} ButtonTexture;
 
 // size: 0x6
-typedef struct FontChar {
+typedef struct FontChar
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -4386,10 +4616,11 @@ typedef struct FontChar {
     char c;
     // offset: 0x0005
     char color;
-}FontChar;
+} FontChar;
 
 // size: 0x10
-typedef struct _BigFileEntry {
+typedef struct _BigFileEntry
+{
     // offset: 0x0000
     long fileHash;
     // offset: 0x0004
@@ -4398,28 +4629,31 @@ typedef struct _BigFileEntry {
     long filePos;
     // offset: 0x000C
     long checkSumFull;
-}BigFileEntry;
+} BigFileEntry;
 
 // size: 0x8
-typedef struct _BigFileDirEntry {
+typedef struct _BigFileDirEntry
+{
     // offset: 0x0000
     short streamUnitID;
     // offset: 0x0002
     short numFiles;
     // offset: 0x0004
     long subDirOffset;
-}BigFileDirEntry;
+} BigFileDirEntry;
 
 // size: 0x4
-typedef struct _BigFileDir {
+typedef struct _BigFileDir
+{
     // offset: 0x0000
     long numFiles;
     // offset: 0x0004
     BigFileEntry fileList[0];
-}BigFileDir;
+} BigFileDir;
 
 // size: 0x24
-typedef struct _BigFile {
+typedef struct _BigFile
+{
     // offset: 0x0000
     long bigfileBaseOffset;
     // offset: 0x0004 (4 bytes)
@@ -4438,10 +4672,11 @@ typedef struct _BigFile {
     long numSubDirs;
     // offset: 0x0020 (4 bytes)
     BigFileDirEntry *subDirList;
-}BigFile;
+} BigFile;
 
 // size: 0x64
-typedef struct _NonBlockLoadEntry {
+typedef struct _NonBlockLoadEntry
+{
     // offset: 0x0000
     long fileHash;
     // offset: 0x0004
@@ -4470,10 +4705,11 @@ typedef struct _NonBlockLoadEntry {
     void **retPointer;
     // offset: 0x0034 (48 bytes)
     char fileName[48];
-}NonBlockLoadEntry;
+} NonBlockLoadEntry;
 
 // size: 0x2C
-typedef struct _ReadQueueEntry {
+typedef struct _ReadQueueEntry
+{
     // offset: 0x0000
     long readStartPos;
     // offset: 0x0004
@@ -4496,20 +4732,22 @@ typedef struct _ReadQueueEntry {
     void *retData;
     // offset: 0x0028
     void *retData2;
-}ReadQueueEntry;
+} ReadQueueEntry;
 
 // size: 0x2C
-typedef struct _FX_MATRIX {
+typedef struct _FX_MATRIX
+{
     // offset: 0x0000 (8 bytes)
     NodeType node;
     // offset: 0x0008
     long flags;
     // offset: 0x000C (32 bytes)
     Transform lwTransform;
-}FX_MATRIX;
+} FX_MATRIX;
 
 // size: 0x68
-typedef struct _FX_PRIM {
+typedef struct _FX_PRIM
+{
     // offset: 0x0000 (8 bytes)
     NodeType node;
     // offset: 0x0008 (4 bytes)
@@ -4557,16 +4795,19 @@ typedef struct _FX_PRIM {
     // offset: 0x005A
     short work3;
     // offset: 0x005C (12 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000 (4 bytes)
             Instance *parent;
             // offset: 0x0004
             long segment;
         } flame;
         // offset: 0x0000 (12 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             short xVel;
             // offset: 0x0002
@@ -4581,10 +4822,11 @@ typedef struct _FX_PRIM {
             short zAccl;
         } phys;
     } duo;
-}FX_PRIM;
+} FX_PRIM;
 
 // size: 0x10
-typedef struct BASIC_LINE_G2 {
+typedef struct BASIC_LINE_G2
+{
     // offset: 0x0000
     unsigned char r0;
     // offset: 0x0001
@@ -4609,10 +4851,11 @@ typedef struct BASIC_LINE_G2 {
     short x1;
     // offset: 0x000E
     short y1;
-}BASIC_LINE_G2;
+} BASIC_LINE_G2;
 
 // size: 0x20
-typedef struct _BASIC_G4 {
+typedef struct _BASIC_G4
+{
     // offset: 0x0000
     unsigned char r0;
     // offset: 0x0001
@@ -4661,10 +4904,11 @@ typedef struct _BASIC_G4 {
     short x3;
     // offset: 0x001E
     short y3;
-}BASIC_G4;
+} BASIC_G4;
 
 // size: 0x14
-typedef struct _BASIC_F4 {
+typedef struct _BASIC_F4
+{
     // offset: 0x0000
     unsigned char r0;
     // offset: 0x0001
@@ -4689,10 +4933,11 @@ typedef struct _BASIC_F4 {
     short x3;
     // offset: 0x0012
     short y3;
-}BASIC_F4;
+} BASIC_F4;
 
 // size: 0x14
-typedef struct __BubbleParams {
+typedef struct __BubbleParams
+{
     // offset: 0x0000
     short DisperseFrames;
     // offset: 0x0002
@@ -4713,10 +4958,11 @@ typedef struct __BubbleParams {
     short StartScaleRange;
     // offset: 0x0012
     short UniqueBubbles;
-}BubbleParams;
+} BubbleParams;
 
 // size: 0x30
-typedef struct _GenericParticleParams {
+typedef struct _GenericParticleParams
+{
     // offset: 0x0000
     short size;
     // offset: 0x0002
@@ -4779,10 +5025,11 @@ typedef struct _GenericParticleParams {
     Position offset;
     // offset: 0x002E
     short startScale;
-}GenericParticleParams;
+} GenericParticleParams;
 
 // size: 0x14
-typedef struct _GenericRibbonParams {
+typedef struct _GenericRibbonParams
+{
     // offset: 0x0000
     char id;
     // offset: 0x0001
@@ -4805,10 +5052,11 @@ typedef struct _GenericRibbonParams {
     long startColor;
     // offset: 0x0010
     long endColor;
-}GenericRibbonParams;
+} GenericRibbonParams;
 
 // size: 0x18
-typedef struct _GenericGlowParams {
+typedef struct _GenericGlowParams
+{
     // offset: 0x0000
     char StartOnInit;
     // offset: 0x0001
@@ -4837,10 +5085,11 @@ typedef struct _GenericGlowParams {
     short fadein_time;
     // offset: 0x0016
     short fadeout_time;
-}GenericGlowParams;
+} GenericGlowParams;
 
 // size: 0x28
-typedef struct _GenericLightningParams {
+typedef struct _GenericLightningParams
+{
     // offset: 0x0000
     char type;
     // offset: 0x0001
@@ -4875,10 +5124,11 @@ typedef struct _GenericLightningParams {
     long color;
     // offset: 0x0024
     long glow_color;
-}GenericLightningParams;
+} GenericLightningParams;
 
 // size: 0x30
-typedef struct _GenericBlastringParams {
+typedef struct _GenericBlastringParams
+{
     // offset: 0x0000
     char type;
     // offset: 0x0001
@@ -4921,10 +5171,11 @@ typedef struct _GenericBlastringParams {
     long startColor;
     // offset: 0x002C
     long endColor;
-}GenericBlastringParams;
+} GenericBlastringParams;
 
 // size: 0xC
-typedef struct _GenericFlashParams {
+typedef struct _GenericFlashParams
+{
     // offset: 0x0000
     short type;
     // offset: 0x0002
@@ -4935,16 +5186,18 @@ typedef struct _GenericFlashParams {
     short timeAtColor;
     // offset: 0x000A
     short timeFromColor;
-}GenericFlashParams;
+} GenericFlashParams;
 
 // size: 0x4
-typedef struct XAFileInfo {
+typedef struct XAFileInfo
+{
     // offset: 0x0000
     int startPos;
-}XAFileInfo;
+} XAFileInfo;
 
 // size: 0x8
-typedef struct CdCommand {
+typedef struct CdCommand
+{
     // offset: 0x0000
     unsigned short flags;
     // offset: 0x0002
@@ -4953,20 +5206,22 @@ typedef struct CdCommand {
     unsigned char cdCommand;
     // offset: 0x0004 (4 bytes)
     unsigned char cdCmdParam[4];
-}CdCommand;
+} CdCommand;
 
 // size: 0x4
-typedef struct VoiceCommand {
+typedef struct VoiceCommand
+{
     // offset: 0x0000
     unsigned char voiceCmd;
     // offset: 0x0001
     unsigned char nextVoiceStatus;
     // offset: 0x0002
     unsigned short voiceCmdParam;
-}VoiceCommand;
+} VoiceCommand;
 
 // size: 0x70
-typedef struct _LoadQueueEntry {
+typedef struct _LoadQueueEntry
+{
     // offset: 0x0000 (4 bytes)
     struct _LoadQueueEntry *next;
     // offset: 0x0004
@@ -4979,18 +5234,20 @@ typedef struct _LoadQueueEntry {
     NonBlockLoadEntry loadEntry;
     // offset: 0x006C
     long endLoadTime;
-}LoadQueueEntry;
+} LoadQueueEntry;
 
 // size: 0x2
-typedef struct SavedBasic {
+typedef struct SavedBasic
+{
     // offset: 0x0000
     unsigned char savedID;
     // offset: 0x0001
     unsigned char shiftedSaveSize;
-}SavedBasic;
+} SavedBasic;
 
 // size: 0x28
-typedef struct _SavedIntro {
+typedef struct _SavedIntro
+{
     // offset: 0x0000
     unsigned char savedID;
     // offset: 0x0001
@@ -5017,10 +5274,11 @@ typedef struct _SavedIntro {
     long flags;
     // offset: 0x0024
     long flags2;
-}SavedIntro;
+} SavedIntro;
 
 // size: 0x10
-typedef struct SavedEvent {
+typedef struct SavedEvent
+{
     // offset: 0x0000
     unsigned char savedID;
     // offset: 0x0001
@@ -5031,20 +5289,22 @@ typedef struct SavedEvent {
     short eventNumber;
     // offset: 0x0006 (10 bytes)
     short eventVariables[5];
-}SavedEvent;
+} SavedEvent;
 
 // size: 0x8
-typedef struct SavedBspTree {
+typedef struct SavedBspTree
+{
     // offset: 0x0000 (6 bytes)
     Position localOffset;
     // offset: 0x0006
     unsigned char importantFlagsSaved;
     // offset: 0x0007
     unsigned char bspIndex;
-}SavedBspTree;
+} SavedBspTree;
 
 // size: 0xC
-typedef struct EventWildCardObject {
+typedef struct EventWildCardObject
+{
     // offset: 0x0000
     short id;
     // offset: 0x0002
@@ -5053,10 +5313,11 @@ typedef struct EventWildCardObject {
     long unitID;
     // offset: 0x0008
     char *objectName;
-}EventWildCardObject;
+} EventWildCardObject;
 
 // size: 0x18
-typedef struct InstanceSpline {
+typedef struct InstanceSpline
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004 (4 bytes)
@@ -5069,10 +5330,11 @@ typedef struct InstanceSpline {
     long isClass;
     // offset: 0x0014
     long splineFlags;
-}InstanceSpline;
+} InstanceSpline;
 
 // size: 0x14
-typedef struct Vector3d {
+typedef struct Vector3d
+{
     // offset: 0x0000
     short vx;
     // offset: 0x0002
@@ -5091,10 +5353,11 @@ typedef struct Vector3d {
     short pad2;
     // offset: 0x0010
     long streamUnitID;
-}Vector3d;
+} Vector3d;
 
 // size: 0x14
-typedef struct Rotation3d {
+typedef struct Rotation3d
+{
     // offset: 0x0000
     short vx;
     // offset: 0x0002
@@ -5113,26 +5376,29 @@ typedef struct Rotation3d {
     short pad2;
     // offset: 0x0010
     long attribute;
-}Rotation3d;
+} Rotation3d;
 
 // size: 0x8
-typedef struct InstanceObject {
+typedef struct InstanceObject
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
     long attribute;
-}InstanceObject;
+} InstanceObject;
 
 // size: 0x8
-typedef struct EventObject {
+typedef struct EventObject
+{
     // offset: 0x0000 (4 bytes)
     Event *event;
     // offset: 0x0004
     long attribute;
-}EventObject;
+} EventObject;
 
 // size: 0x10
-typedef struct SavedEventObject {
+typedef struct SavedEventObject
+{
     // offset: 0x0000 (4 bytes)
     SavedBasic *savedEvent;
     // offset: 0x0004
@@ -5141,50 +5407,56 @@ typedef struct SavedEventObject {
     long areaID;
     // offset: 0x000C
     long eventNumber;
-}SavedEventObject;
+} SavedEventObject;
 
 // size: 0x4
-typedef struct GameObject {
+typedef struct GameObject
+{
     // offset: 0x0000
     long attribute;
-}GameObject;
+} GameObject;
 
 // size: 0x8
-typedef struct SignalObject {
+typedef struct SignalObject
+{
     // offset: 0x0000 (4 bytes)
     MultiSignal *msignal;
     // offset: 0x0004
     long attribute;
-}SignalObject;
+} SignalObject;
 
 // size: 0x8
-typedef struct IntroObject {
+typedef struct IntroObject
+{
     // offset: 0x0000 (4 bytes)
     Intro *intro;
     // offset: 0x0004
     long attribute;
-}IntroObject;
+} IntroObject;
 
 // size: 0x8
-typedef struct InstanceAnimate {
+typedef struct InstanceAnimate
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
     long attribute;
-}InstanceAnimate;
+} InstanceAnimate;
 
 // size: 0xC
-typedef struct InstanceAnimateTexture {
+typedef struct InstanceAnimateTexture
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004 (4 bytes)
     AniTex *aniTextures;
     // offset: 0x0008
     long attribute;
-}InstanceAnimateTexture;
+} InstanceAnimateTexture;
 
 // size: 0x20
-typedef struct ListObject {
+typedef struct ListObject
+{
     // offset: 0x0000 (4 bytes)
     EventWildCardObject *eventInstance;
     // offset: 0x0004 (20 bytes)
@@ -5193,10 +5465,11 @@ typedef struct ListObject {
     long numberOfAttributes;
     // offset: 0x001C
     long lineID;
-}ListObject;
+} ListObject;
 
 // size: 0x20
-typedef struct SubListObject {
+typedef struct SubListObject
+{
     // offset: 0x0000 (4 bytes)
     Instance **instanceList;
     // offset: 0x0004
@@ -5205,10 +5478,11 @@ typedef struct SubListObject {
     long numberOfAttributes;
     // offset: 0x000C (20 bytes)
     long attribute[5];
-}SubListObject;
+} SubListObject;
 
 // size: 0x10
-typedef struct TGroupObject {
+typedef struct TGroupObject
+{
     // offset: 0x0000 (4 bytes)
     BSPTree *bspTree;
     // offset: 0x0004 (4 bytes)
@@ -5217,48 +5491,53 @@ typedef struct TGroupObject {
     long attribute;
     // offset: 0x000C (4 bytes)
     short arg[2];
-}TGroupObject;
+} TGroupObject;
 
 // size: 0x8
-typedef struct ConstrictInfo {
+typedef struct ConstrictInfo
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
     long attribute;
-}ConstrictInfo;
+} ConstrictInfo;
 
 // size: 0xC
-typedef struct CameraObject {
+typedef struct CameraObject
+{
     // offset: 0x0000 (4 bytes)
     Camera *camera;
     // offset: 0x0004
     long frames;
     // offset: 0x0008
     long attribute;
-}CameraObject;
+} CameraObject;
 
 // size: 0xC
-typedef struct EventVmObject {
+typedef struct EventVmObject
+{
     // offset: 0x0000 (4 bytes)
     VMObject *vmObjectPtr;
     // offset: 0x0004 (4 bytes)
     Level *level;
     // offset: 0x0008
     long attribute;
-}EventVmObject;
+} EventVmObject;
 
 // size: 0xC
-typedef struct AreaObject {
+typedef struct AreaObject
+{
     // offset: 0x0000 (4 bytes)
     StreamUnit *streamUnit;
     // offset: 0x0004
     long attribute;
     // offset: 0x0008
     long unitID;
-}AreaObject;
+} AreaObject;
 
 // size: 0x14
-typedef struct SoundObject {
+typedef struct SoundObject
+{
     // offset: 0x0000
     short flags;
     // offset: 0x0002
@@ -5270,29 +5549,34 @@ typedef struct SoundObject {
     // offset: 0x000C
     long duration;
     // offset: 0x0010 (4 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (4 bytes)
         Instance *instance;
         // offset: 0x0000 (4 bytes)
         SFXMkr *sfxMarker;
     } data;
-}SoundObject;
+} SoundObject;
 
 // size: 0x24
-typedef struct StackType {
+typedef struct StackType
+{
     // offset: 0x0000
     long id;
     // offset: 0x0004 (32 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long instanceNumber;
             // offset: 0x0004
             long attribute;
         } Object;
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000 (4 bytes)
             SavedIntro *intro;
             // offset: 0x0004
@@ -5301,7 +5585,8 @@ typedef struct StackType {
         // offset: 0x0000 (24 bytes)
         InstanceSpline instanceSpline;
         // offset: 0x0000 (12 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             long currentNumber;
             // offset: 0x0004
@@ -5310,24 +5595,28 @@ typedef struct StackType {
             short flags;
         } Number;
         // offset: 0x0000 (4 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             short vx;
             // offset: 0x0002
             short vy;
         } Vector2d;
         // offset: 0x0000 (4 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             char *pointer;
         } CharPointer;
         // offset: 0x0000 (4 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             char *pointer;
         } ShortPointer;
         // offset: 0x0000 (4 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             char *pointer;
         } LongPointer;
@@ -5368,44 +5657,49 @@ typedef struct StackType {
         // offset: 0x0000 (20 bytes)
         SoundObject soundObject;
     } data;
-}StackType;
+} StackType;
 
 // size: 0x4
-typedef struct __ReaverSaveDat {
+typedef struct __ReaverSaveDat
+{
     // offset: 0x0000
     unsigned long pad;
-}ReaverSaveData;
+} ReaverSaveData;
 
 // size: 0x10
-typedef struct GameCheat {
+typedef struct GameCheat
+{
     // offset: 0x0000 (12 bytes)
     unsigned char cheatKeys[12];
     // offset: 0x000C
     short cheatLen;
     // offset: 0x000E
     short cheatStage;
-}GameCheat;
+} GameCheat;
 
 // size: 0x8
-typedef struct debug_dispatch_t {
+typedef struct debug_dispatch_t
+{
     // offset: 0x0000 (4 bytes)
     DEBUG_LINE_TYPE type;
     // offset: 0x0004
     void (*fn)();
-}debug_dispatch_t;
+} debug_dispatch_t;
 
 // size: 0xC
-typedef struct debug_format_t {
+typedef struct debug_format_t
+{
     // offset: 0x0000
     int xpos;
     // offset: 0x0004
     int ypos;
     // offset: 0x0008
     int is_centered;
-}debug_format_t;
+} debug_format_t;
 
 // size: 0x28
-typedef struct POLY_GT3 {
+typedef struct POLY_GT3
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -5462,10 +5756,11 @@ typedef struct POLY_GT3 {
     unsigned char v2;
     // offset: 0x0026
     unsigned short pad2;
-}POLY_GT3;
+} POLY_GT3;
 
 // size: 0x34
-typedef struct POLY_GT4 {
+typedef struct POLY_GT4
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -5540,20 +5835,22 @@ typedef struct POLY_GT4 {
     unsigned char v3;
     // offset: 0x0032
     unsigned short pad3;
-}POLY_GT4;
+} POLY_GT4;
 
 // size: 0xC
-typedef struct _Vector {
+typedef struct _Vector
+{
     // offset: 0x0000
     long x;
     // offset: 0x0004
     long y;
     // offset: 0x0008
     long z;
-}Vector;
+} Vector;
 
 // size: 0x28
-typedef struct _PFace {
+typedef struct _PFace
+{
     // offset: 0x0000
     unsigned long *tag;
     // offset: 0x0004
@@ -5598,28 +5895,31 @@ typedef struct _PFace {
     long pad2;
     // offset: 0x0024
     long pad3;
-}PFace;
+} PFace;
 
 // size: 0x1004
-typedef struct _PolytopeList {
+typedef struct _PolytopeList
+{
     // offset: 0x0000
     long numPolytopes;
     // offset: 0x0004 (4096 bytes)
     void *polytope[1024];
-}PolytopeList;
+} PolytopeList;
 
 // size: 0x4
-typedef struct UVTYPE {
+typedef struct UVTYPE
+{
     // offset: 0x0000
     unsigned char u;
     // offset: 0x0001
     unsigned char v;
     // offset: 0x0002
     short pad;
-}UVTYPE;
+} UVTYPE;
 
 // size: 0x20
-typedef struct POLY_G3_SEMITRANS {
+typedef struct POLY_G3_SEMITRANS
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -5660,20 +5960,22 @@ typedef struct POLY_G3_SEMITRANS {
     short x2;
     // offset: 0x001E
     short y2;
-}POLY_G3_SEMITRANS;
+} POLY_G3_SEMITRANS;
 
 // size: 0x28
-typedef struct _POLY_NG4 {
+typedef struct _POLY_NG4
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
     unsigned long drawTPage1;
     // offset: 0x0008 (32 bytes)
     BASIC_G4 p1;
-}POLY_NG4;
+} POLY_NG4;
 
 // size: 0x1C
-typedef struct _GT3ZVertexD3D_Type {
+typedef struct _GT3ZVertexD3D_Type
+{
     // offset: 0x0000
     float x;
     // offset: 0x0004
@@ -5688,10 +5990,11 @@ typedef struct _GT3ZVertexD3D_Type {
     float u;
     // offset: 0x0018
     float v;
-}GT3ZVertexD3D;
+} GT3ZVertexD3D;
 
 // size: 0xD4
-typedef struct SP_SUBDIV_STRUCT {
+typedef struct SP_SUBDIV_STRUCT
+{
     // offset: 0x0000 (8 bytes)
     SVector vertex0;
     // offset: 0x0008 (8 bytes)
@@ -5742,10 +6045,11 @@ typedef struct SP_SUBDIV_STRUCT {
     long texinfo[3];
     // offset: 0x00C4 (16 bytes)
     DVECTOR sxy[4];
-}SP_SUBDIV_STRUCT;
+} SP_SUBDIV_STRUCT;
 
 // size: 0x28
-typedef struct POLY_FT4 {
+typedef struct POLY_FT4
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -5796,10 +6100,11 @@ typedef struct POLY_FT4 {
     unsigned char v3;
     // offset: 0x0026
     unsigned short pad2;
-}POLY_FT4;
+} POLY_FT4;
 
 // size: 0x620
-typedef struct FontTracker {
+typedef struct FontTracker
+{
     // offset: 0x0000 (1536 bytes)
     FontChar font_buffer[256];
     // offset: 0x0600
@@ -5828,20 +6133,22 @@ typedef struct FontTracker {
     char color_global;
     // offset: 0x061D
     char color_local;
-}FontTracker;
+} FontTracker;
 
 // size: 0xC
-typedef struct font_color_t {
+typedef struct font_color_t
+{
     // offset: 0x0000
     int r;
     // offset: 0x0004
     int g;
     // offset: 0x0008
     int b;
-}font_color_t;
+} font_color_t;
 
 // size: 0x4
-typedef struct FontPos {
+typedef struct FontPos
+{
     // offset: 0x0000
     char x;
     // offset: 0x0001
@@ -5850,18 +6157,20 @@ typedef struct FontPos {
     char w;
     // offset: 0x0003
     char h;
-}FontPos;
+} FontPos;
 
 // size: 0x4
-typedef struct JoypadMappingStruct {
+typedef struct JoypadMappingStruct
+{
     // offset: 0x0000
     unsigned short psxData;
     // offset: 0x0002
     unsigned short translation;
-}JoypadMapping;
+} JoypadMapping;
 
 // size: 0x6
-typedef struct AnalogueData {
+typedef struct AnalogueData
+{
     // offset: 0x0000
     unsigned short pad;
     // offset: 0x0002
@@ -5872,16 +6181,18 @@ typedef struct AnalogueData {
     unsigned char xL;
     // offset: 0x0005
     unsigned char yL;
-}AnalogueData;
+} AnalogueData;
 
 // size: 0x22
-typedef struct ControllerPacket {
+typedef struct ControllerPacket
+{
     // offset: 0x0000
     unsigned char transStatus;
     // offset: 0x0001
     unsigned char dataFormat;
     // offset: 0x0002 (32 bytes)
-    union {
+    union
+    {
         // offset: 0x0000
         unsigned short pad;
         // offset: 0x0000 (32 bytes)
@@ -5893,10 +6204,11 @@ typedef struct ControllerPacket {
         // offset: 0x0000 (6 bytes)
         AnalogueData analogue;
     } data;
-}ControllerPacket;
+} ControllerPacket;
 
 // size: 0x8
-typedef struct _G2EulerAngles_Type {
+typedef struct _G2EulerAngles_Type
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -5905,10 +6217,11 @@ typedef struct _G2EulerAngles_Type {
     short z;
     // offset: 0x0006
     short order;
-}G2EulerAngles;
+} G2EulerAngles;
 
 // size: 0x8
-typedef struct _AnimSoundData_Type {
+typedef struct _AnimSoundData_Type
+{
     // offset: 0x0000
     short sfxToneID;
     // offset: 0x0002
@@ -5917,18 +6230,20 @@ typedef struct _AnimSoundData_Type {
     short pitch;
     // offset: 0x0006
     short minVolDistance;
-}AnimSoundData;
+} AnimSoundData;
 
 // size: 0x8
-typedef struct _InstanceHandle {
+typedef struct _InstanceHandle
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
     long instanceID;
-}InstanceHandle;
+} InstanceHandle;
 
 // size: 0x18
-typedef struct evCollideInstanceStatsData {
+typedef struct evCollideInstanceStatsData
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
@@ -5939,20 +6254,22 @@ typedef struct evCollideInstanceStatsData {
     long xyDistance;
     // offset: 0x0014
     long zDelta;
-}evCollideInstanceStatsData;
+} evCollideInstanceStatsData;
 
 // size: 0x4
-typedef struct INICommand {
+typedef struct INICommand
+{
     // offset: 0x0000
     short command;
     // offset: 0x0002
     short numParameters;
     // offset: 0x0004
     long parameter[0];
-}INICommand;
+} INICommand;
 
 // size: 0x8
-typedef struct PhysObProperties {
+typedef struct PhysObProperties
+{
     // offset: 0x0000
     unsigned short version;
     // offset: 0x0002
@@ -5961,18 +6278,20 @@ typedef struct PhysObProperties {
     unsigned short ID;
     // offset: 0x0006
     unsigned short Type;
-}PhysObProperties;
+} PhysObProperties;
 
 // size: 0x8
-typedef struct PhysObSplinter {
+typedef struct PhysObSplinter
+{
     // offset: 0x0000
     long numSplintData;
     // offset: 0x0004
     void *splinterData;
-}PhysObSplinter;
+} PhysObSplinter;
 
 // size: 0x8
-typedef struct LightTableEntry {
+typedef struct LightTableEntry
+{
     // offset: 0x0000
     short r;
     // offset: 0x0002
@@ -5981,10 +6300,11 @@ typedef struct LightTableEntry {
     short b;
     // offset: 0x0006
     short radius;
-}LightTableEntry;
+} LightTableEntry;
 
 // size: 0x8
-typedef struct _PhysObLight {
+typedef struct _PhysObLight
+{
     // offset: 0x0000
     unsigned char length;
     // offset: 0x0001
@@ -5993,10 +6313,11 @@ typedef struct _PhysObLight {
     short speed;
     // offset: 0x0004 (4 bytes)
     LightTableEntry *lightTable;
-}PhysObLight;
+} PhysObLight;
 
 // size: 0x1C
-typedef struct PhysObWeaponAttributes {
+typedef struct PhysObWeaponAttributes
+{
     // offset: 0x0000
     long Damage;
     // offset: 0x0004
@@ -6019,10 +6340,11 @@ typedef struct PhysObWeaponAttributes {
     PhysObLight *Light;
     // offset: 0x0014 (8 bytes)
     PhysObSplinter splinter;
-}PhysObWeaponAttributes;
+} PhysObWeaponAttributes;
 
 // size: 0xC
-typedef struct __PhysObProjectileData {
+typedef struct __PhysObProjectileData
+{
     // offset: 0x0000
     char model;
     // offset: 0x0001
@@ -6035,28 +6357,31 @@ typedef struct __PhysObProjectileData {
     long flags;
     // offset: 0x0008 (4 bytes)
     PhysObWeaponAttributes *weapon;
-}PhysObProjData;
+} PhysObProjData;
 
 // size: 0x4
-typedef struct SwitchData {
+typedef struct SwitchData
+{
     // offset: 0x0000
     short state;
     // offset: 0x0002
     short accumulator;
-}SwitchData;
+} SwitchData;
 
 // size: 0x4
-typedef struct SavedIntroSmall {
+typedef struct SavedIntroSmall
+{
     // offset: 0x0000
     unsigned char savedID;
     // offset: 0x0001
     unsigned char shiftedSaveSize;
     // offset: 0x0002
     short introUniqueID;
-}SavedIntroSmall;
+} SavedIntroSmall;
 
 // size: 0xC
-typedef struct SavedIntroSpline {
+typedef struct SavedIntroSpline
+{
     // offset: 0x0000
     unsigned char savedID;
     // offset: 0x0001
@@ -6071,10 +6396,11 @@ typedef struct SavedIntroSpline {
     short splineClipBeg;
     // offset: 0x000A
     short splineClipEnd;
-}SavedIntroSpline;
+} SavedIntroSpline;
 
 // size: 0x20
-typedef struct _SavedIntroWithIntro {
+typedef struct _SavedIntroWithIntro
+{
     // offset: 0x0000
     unsigned char savedID;
     // offset: 0x0001
@@ -6099,10 +6425,11 @@ typedef struct _SavedIntroWithIntro {
     SmallRotation smallRotation;
     // offset: 0x001A (6 bytes)
     Position position;
-}SavedIntroWithIntro;
+} SavedIntroWithIntro;
 
 // size: 0x10
-typedef struct _MonsterAnim {
+typedef struct _MonsterAnim
+{
     // offset: 0x0000
     unsigned short velocity;
     // offset: 0x0002
@@ -6125,10 +6452,11 @@ typedef struct _MonsterAnim {
     char index[3];
     // offset: 0x000F
     char pad;
-}MonsterAnim;
+} MonsterAnim;
 
 // size: 0x4
-typedef struct _MonsterIdle {
+typedef struct _MonsterIdle
+{
     // offset: 0x0000
     char anim;
     // offset: 0x0001
@@ -6137,10 +6465,11 @@ typedef struct _MonsterIdle {
     char probability;
     // offset: 0x0003
     char pad;
-}MonsterIdle;
+} MonsterIdle;
 
 // size: 0x8
-typedef struct _MonsterBehavior {
+typedef struct _MonsterBehavior
+{
     // offset: 0x0000
     char alertness;
     // offset: 0x0001
@@ -6149,10 +6478,11 @@ typedef struct _MonsterBehavior {
     char numIdles;
     // offset: 0x0003 (5 bytes)
     char idleList[5];
-}MonsterBehavior;
+} MonsterBehavior;
 
 // size: 0x12
-typedef struct _MonsterSenses {
+typedef struct _MonsterSenses
+{
     // offset: 0x0000
     short sightArc;
     // offset: 0x0002
@@ -6171,10 +6501,11 @@ typedef struct _MonsterSenses {
     short alarmRadius;
     // offset: 0x0010
     unsigned short allyRadius;
-}MonsterSenses;
+} MonsterSenses;
 
 // size: 0x10
-typedef struct _MonsterAllegiances {
+typedef struct _MonsterAllegiances
+{
     // offset: 0x0000
     unsigned long enemies;
     // offset: 0x0004
@@ -6183,10 +6514,11 @@ typedef struct _MonsterAllegiances {
     unsigned long food;
     // offset: 0x000C
     unsigned long gods;
-}MonsterAllegiances;
+} MonsterAllegiances;
 
 // size: 0x20
-typedef struct _MonsterAttackAttributes {
+typedef struct _MonsterAttackAttributes
+{
     // offset: 0x0000
     short attackRange;
     // offset: 0x0002
@@ -6215,10 +6547,11 @@ typedef struct _MonsterAttackAttributes {
     char attackProbability[12];
     // offset: 0x001B (5 bytes)
     char animList[5];
-}MonsterAttackAttributes;
+} MonsterAttackAttributes;
 
 // size: 0x10
-typedef struct _MonsterMissile {
+typedef struct _MonsterMissile
+{
     // offset: 0x0000
     unsigned short speed;
     // offset: 0x0002
@@ -6245,10 +6578,11 @@ typedef struct _MonsterMissile {
     unsigned char numAnims;
     // offset: 0x000E (2 bytes)
     char animList[2];
-}MonsterMissile;
+} MonsterMissile;
 
 // size: 0x2E
-typedef struct _MonsterCombatAttributes {
+typedef struct _MonsterCombatAttributes
+{
     // offset: 0x0000
     short stunTime;
     // offset: 0x0002
@@ -6289,10 +6623,11 @@ typedef struct _MonsterCombatAttributes {
     char evadeProbability[12];
     // offset: 0x002C (1 bytes)
     char attackList[1];
-}MonsterCombatAttributes;
+} MonsterCombatAttributes;
 
 // size: 0x54
-typedef struct _MonsterSubAttributes {
+typedef struct _MonsterSubAttributes
+{
     // offset: 0x0000
     char *animList;
     // offset: 0x0004 (4 bytes)
@@ -6383,10 +6718,11 @@ typedef struct _MonsterSubAttributes {
     short upOnGroundOffset;
     // offset: 0x0050
     short downOnGroundOffset;
-}MonsterSubAttributes;
+} MonsterSubAttributes;
 
 // size: 0x2C
-typedef struct _PCollideInfo {
+typedef struct _PCollideInfo
+{
     // offset: 0x0000
     short type;
     // offset: 0x0002
@@ -6407,10 +6743,11 @@ typedef struct _PCollideInfo {
     long collideType;
     // offset: 0x0028 (4 bytes)
     Instance *instance;
-}PCollideInfo;
+} PCollideInfo;
 
 // size: 0x5C
-typedef struct CameraCollisionInfo {
+typedef struct CameraCollisionInfo
+{
     // offset: 0x0000 (20 bytes)
     TFace *tfaceList[5];
     // offset: 0x0014 (20 bytes)
@@ -6433,36 +6770,40 @@ typedef struct CameraCollisionInfo {
     Sphere *end;
     // offset: 0x0058
     long cldLines;
-}CameraCollisionInfo;
+} CameraCollisionInfo;
 
 // size: 0xC
-typedef struct _LCollideInfo {
+typedef struct _LCollideInfo
+{
     // offset: 0x0000 (4 bytes)
     TFace *tface;
     // offset: 0x0004 (4 bytes)
     Terrain *terrain;
     // offset: 0x0008
     int curTree;
-}LCollideInfo;
+} LCollideInfo;
 
 // size: 0x14
-typedef struct {
+typedef struct
+{
     // offset: 0x0000 (20 bytes)
     long m[5];
-}cmm;
+} cmm;
 
 // size: 0x18
-typedef struct CdlFILE {
+typedef struct CdlFILE
+{
     // offset: 0x0000 (4 bytes)
     CdlLOC pos;
     // offset: 0x0004
     unsigned long size;
     // offset: 0x0008 (16 bytes)
     char name[16];
-}CdlFILE;
+} CdlFILE;
 
 // size: 0xA0
-typedef struct _LoadStatus {
+typedef struct _LoadStatus
+{
     // offset: 0x0000 (44 bytes)
     ReadQueueEntry currentQueueFile;
     // offset: 0x002C
@@ -6507,18 +6848,20 @@ typedef struct _LoadStatus {
     long sectorTime;
     // offset: 0x009C
     long seekTime;
-}LoadStatus;
+} LoadStatus;
 
 // size: 0x8
-typedef struct RedirectList {
+typedef struct RedirectList
+{
     // offset: 0x0000
     long numPointers;
     // offset: 0x0004
     long *data;
-}RedirectList;
+} RedirectList;
 
 // size: 0x5C
-typedef struct DRAWENV {
+typedef struct DRAWENV
+{
     // offset: 0x0000 (8 bytes)
     RECT clip;
     // offset: 0x0008 (4 bytes)
@@ -6541,10 +6884,11 @@ typedef struct DRAWENV {
     unsigned char b0;
     // offset: 0x001C (64 bytes)
     DR_ENV dr_env;
-}DRAWENV;
+} DRAWENV;
 
 // size: 0x14
-typedef struct DISPENV {
+typedef struct DISPENV
+{
     // offset: 0x0000 (8 bytes)
     RECT disp;
     // offset: 0x0008 (8 bytes)
@@ -6557,10 +6901,11 @@ typedef struct DISPENV {
     unsigned char pad0;
     // offset: 0x0013
     unsigned char pad1;
-}DISPENV;
+} DISPENV;
 
 // size: 0x10
-typedef struct BLK_FILL {
+typedef struct BLK_FILL
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -6579,10 +6924,11 @@ typedef struct BLK_FILL {
     unsigned short w;
     // offset: 0x000E
     unsigned short h;
-}BLK_FILL;
+} BLK_FILL;
 
 // size: 0x10
-typedef struct MainTracker {
+typedef struct MainTracker
+{
     // offset: 0x0000
     long mainState;
     // offset: 0x0004
@@ -6591,10 +6937,11 @@ typedef struct MainTracker {
     long movieNum;
     // offset: 0x000C
     long done;
-}MainTracker;
+} MainTracker;
 
 // size: 0x1C
-typedef struct POLY_F4_SEMITRANS {
+typedef struct POLY_F4_SEMITRANS
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -6623,10 +6970,11 @@ typedef struct POLY_F4_SEMITRANS {
     short x3;
     // offset: 0x001A
     short y3;
-}POLY_F4_SEMITRANS;
+} POLY_F4_SEMITRANS;
 
 // size: 0x38
-typedef struct InterfaceItem {
+typedef struct InterfaceItem
+{
     // offset: 0x0000 (48 bytes)
     char name[48];
     // offset: 0x0030
@@ -6637,10 +6985,11 @@ typedef struct InterfaceItem {
     short itemType;
     // offset: 0x0036
     short nextItem;
-}InterfaceItem;
+} InterfaceItem;
 
 // size: 0x6DA8
-typedef struct _FXTracker {
+typedef struct _FXTracker
+{
     // offset: 0x0000 (1408 bytes)
     FX_MATRIX matrixPool[32];
     // offset: 0x0580 (8 bytes)
@@ -6655,10 +7004,11 @@ typedef struct _FXTracker {
     NodeType usedPrimListSprite;
     // offset: 0x6DA0 (8 bytes)
     NodeType freePrimList;
-}FXTracker;
+} FXTracker;
 
 // size: 0x5C
-typedef struct StreamUnitPortal {
+typedef struct StreamUnitPortal
+{
     // offset: 0x0000 (16 bytes)
     char tolevelname[16];
     // offset: 0x0010
@@ -6687,10 +7037,11 @@ typedef struct StreamUnitPortal {
     SVector t1[3];
     // offset: 0x0044 (24 bytes)
     SVector t2[3];
-}StreamUnitPortal;
+} StreamUnitPortal;
 
 // size: 0xC
-typedef struct SignalInfo {
+typedef struct SignalInfo
+{
     // offset: 0x0000
     long (*signalHandleFunc)();
     // offset: 0x0004
@@ -6699,10 +7050,11 @@ typedef struct SignalInfo {
     short onlyPlayer;
     // offset: 0x0008
     void (*signalRelocateFunc)();
-}SignalInfo;
+} SignalInfo;
 
 // size: 0xC
-typedef struct _Triangle2D {
+typedef struct _Triangle2D
+{
     // offset: 0x0000
     short x0;
     // offset: 0x0002
@@ -6715,10 +7067,11 @@ typedef struct _Triangle2D {
     short x2;
     // offset: 0x000A
     short y2;
-}Triangle2D;
+} Triangle2D;
 
 // size: 0x8
-typedef struct _HNormal {
+typedef struct _HNormal
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -6727,10 +7080,11 @@ typedef struct _HNormal {
     short z;
     // offset: 0x0006
     short pad;
-}HNormal;
+} HNormal;
 
 // size: 0x20
-typedef struct _HFaceInfo {
+typedef struct _HFaceInfo
+{
     // offset: 0x0000
     long flags;
     // offset: 0x0004
@@ -6745,10 +7099,11 @@ typedef struct _HFaceInfo {
     HVertex *vertex1;
     // offset: 0x001C (4 bytes)
     HVertex *vertex2;
-}HFaceInfo;
+} HFaceInfo;
 
 // size: 0x30
-typedef struct _CollideInfo {
+typedef struct _CollideInfo
+{
     // offset: 0x0000
     void *level;
     // offset: 0x0004
@@ -6775,10 +7130,11 @@ typedef struct _CollideInfo {
     Position offset;
     // offset: 0x002E
     short bspID;
-}CollideInfo;
+} CollideInfo;
 
 // size: 0x1C
-typedef struct SCollideInfo {
+typedef struct SCollideInfo
+{
     // offset: 0x0000 (4 bytes)
     Sphere *sphere;
     // offset: 0x0004 (4 bytes)
@@ -6793,10 +7149,11 @@ typedef struct SCollideInfo {
     Instance *instance;
     // offset: 0x0018
     void *prim;
-}SCollideInfo;
+} SCollideInfo;
 
 // size: 0x7C
-struct PandTScratch {
+struct PandTScratch
+{
     // offset: 0x0000 (32 bytes)
     MATRIX posMatrix;
     // offset: 0x0020 (8 bytes)
@@ -6834,13 +7191,15 @@ struct PandTScratch {
 };
 
 // size: 0xC
-typedef struct {
+typedef struct
+{
     // offset: 0x0000 (12 bytes)
     long m[3];
-}tmm;
+} tmm;
 
 // size: 0x44
-struct SandHFScratch {
+typedef struct SandHFScratch
+{
     // offset: 0x0000 (8 bytes)
     SVector normal;
     // offset: 0x0008 (32 bytes)
@@ -6851,10 +7210,11 @@ struct SandHFScratch {
     SVector triPoint;
     // offset: 0x003C (8 bytes)
     SVector planePoint;
-};
+} SandHFScratch;
 
 // size: 0xD4
-struct SandTScratch {
+struct SandTScratch
+{
     // offset: 0x0000 (32 bytes)
     MATRIX posMatrix;
     // offset: 0x0020 (12 bytes)
@@ -6900,7 +7260,8 @@ struct SandTScratch {
 };
 
 // size: 0x64
-struct IandTScratch {
+struct IandTScratch
+{
     // offset: 0x0000 (32 bytes)
     MATRIX posMatrix;
     // offset: 0x0020 (8 bytes)
@@ -6926,7 +7287,8 @@ struct IandTScratch {
 };
 
 // size: 0x4C
-struct PandTFScratch {
+struct PandTFScratch
+{
     // offset: 0x0000 (32 bytes)
     MATRIX posMatrix;
     // offset: 0x0020 (8 bytes)
@@ -6942,7 +7304,8 @@ struct PandTFScratch {
 };
 
 // size: 0x18
-typedef struct _SBSPLeaf {
+typedef struct _SBSPLeaf
+{
     // offset: 0x0000 (8 bytes)
     Sphere_noSq sphere;
     // offset: 0x0008 (4 bytes)
@@ -6957,10 +7320,11 @@ typedef struct _SBSPLeaf {
     short numLights;
     // offset: 0x0016
     short pad;
-}SBSPLeaf;
+} SBSPLeaf;
 
 // size: 0xCC
-struct BSPScratch {
+struct BSPScratch
+{
     // offset: 0x0000 (64 bytes)
     MATRIX vv[2];
     // offset: 0x0040 (32 bytes)
@@ -6976,25 +7340,28 @@ struct BSPScratch {
 };
 
 // size: 0x8
-typedef struct _ObjectOwnerInfo {
+typedef struct _ObjectOwnerInfo
+{
     // offset: 0x0000
     long magicnum;
     // offset: 0x0004
     short animID;
     // offset: 0x0006
     char objectName[0];
-}ObjectOwnerInfo;
+} ObjectOwnerInfo;
 
 // size: 0x8
-typedef struct ObjectAccess {
+typedef struct ObjectAccess
+{
     // offset: 0x0000
     char *objectName;
     // offset: 0x0004
     void *object;
-}ObjectAccess;
+} ObjectAccess;
 
 // size: 0x20
-typedef struct POLY_FT3 {
+typedef struct POLY_FT3
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -7035,10 +7402,11 @@ typedef struct POLY_FT3 {
     unsigned char v2;
     // offset: 0x001E
     unsigned short pad1;
-}POLY_FT3;
+} POLY_FT3;
 
 // size: 0x8
-typedef struct _Mirror {
+typedef struct _Mirror
+{
     // offset: 0x0000
     short a;
     // offset: 0x0002
@@ -7047,10 +7415,11 @@ typedef struct _Mirror {
     short c;
     // offset: 0x0006
     short d;
-}Mirror;
+} Mirror;
 
 // size: 0x2C
-typedef struct _FXHalvePlane {
+typedef struct _FXHalvePlane
+{
     // offset: 0x0000
     void *next;
     // offset: 0x0004
@@ -7075,10 +7444,11 @@ typedef struct _FXHalvePlane {
     short numColors;
     // offset: 0x002A
     short colorBlendLife;
-}FXHalvePlane;
+} FXHalvePlane;
 
 // size: 0x2C
-typedef struct _FXGlowEffect {
+typedef struct _FXGlowEffect
+{
     // offset: 0x0000
     void *next;
     // offset: 0x0004
@@ -7115,10 +7485,11 @@ typedef struct _FXGlowEffect {
     short fadein_time;
     // offset: 0x002A
     short fadeout_time;
-}FXGlowEffect;
+} FXGlowEffect;
 
 // size: 0x6C
-typedef struct TransformAnimatedInstanceVerticesWork_t {
+typedef struct TransformAnimatedInstanceVerticesWork_t
+{
     // offset: 0x0000 (32 bytes)
     Transform scTransform;
     // offset: 0x0020 (32 bytes)
@@ -7127,18 +7498,20 @@ typedef struct TransformAnimatedInstanceVerticesWork_t {
     MATRIX llm;
     // offset: 0x0060 (12 bytes)
     Vector vector;
-}TransformAnimatedInstanceVerticesWork_t;
+} TransformAnimatedInstanceVerticesWork_t;
 
 // size: 0x8
-typedef struct GenericTune {
+typedef struct GenericTune
+{
     // offset: 0x0000
     long flags;
     // offset: 0x0004
     void *shatterData;
-}GenericTune;
+} GenericTune;
 
 // size: 0x14
-typedef struct FXSplinter {
+typedef struct FXSplinter
+{
     // offset: 0x0000
     short flags;
     // offset: 0x0002
@@ -7159,18 +7532,20 @@ typedef struct FXSplinter {
     short rotRateRng;
     // offset: 0x0012
     short gravityZ;
-}FXSplinter;
+} FXSplinter;
 
 // size: 0x8
-typedef struct DR_TPAGE {
+typedef struct DR_TPAGE
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004 (4 bytes)
     unsigned long code[1];
-}DR_TPAGE;
+} DR_TPAGE;
 
 // size: 0x40
-typedef struct _POLY_SG4 {
+typedef struct _POLY_SG4
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -7181,10 +7556,11 @@ typedef struct _POLY_SG4 {
     unsigned long drawTPage2;
     // offset: 0x002C (20 bytes)
     BASIC_F4 p2;
-}POLY_SG4;
+} POLY_SG4;
 
 // size: 0x10
-typedef struct _FXGeneralEffect {
+typedef struct _FXGeneralEffect
+{
     // offset: 0x0000
     void *next;
     // offset: 0x0004
@@ -7197,10 +7573,11 @@ typedef struct _FXGeneralEffect {
     unsigned char type;
     // offset: 0x000E
     short lifeTime;
-}FXGeneralEffect;
+} FXGeneralEffect;
 
 // size: 0x2C
-typedef struct _FXRibbon {
+typedef struct _FXRibbon
+{
     // offset: 0x0000
     void *next;
     // offset: 0x0004
@@ -7235,10 +7612,11 @@ typedef struct _FXRibbon {
     short startFadeValue;
     // offset: 0x002A
     short fadeStep;
-}FXRibbon;
+} FXRibbon;
 
 // size: 0x4C
-typedef struct _FXParticle {
+typedef struct _FXParticle
+{
     // offset: 0x0000
     void *next;
     // offset: 0x0004
@@ -7293,10 +7671,11 @@ typedef struct _FXParticle {
     short startFadeValue;
     // offset: 0x004A
     short fadeStep;
-}FXParticle;
+} FXParticle;
 
 // size: 0x18
-typedef struct _FXLightBeam {
+typedef struct _FXLightBeam
+{
     // offset: 0x0000
     void *next;
     // offset: 0x0004
@@ -7315,10 +7694,11 @@ typedef struct _FXLightBeam {
     short endSeg;
     // offset: 0x0014
     long color;
-}FXLightBeam;
+} FXLightBeam;
 
 // size: 0x78
-typedef struct _FXBlastringEffect {
+typedef struct _FXBlastringEffect
+{
     // offset: 0x0000
     void *next;
     // offset: 0x0004
@@ -7375,10 +7755,11 @@ typedef struct _FXBlastringEffect {
     long startColor;
     // offset: 0x0074
     long endColor;
-}FXBlastringEffect;
+} FXBlastringEffect;
 
 // size: 0x2C
-typedef struct _FXForceFieldEffect {
+typedef struct _FXForceFieldEffect
+{
     // offset: 0x0000
     void *next;
     // offset: 0x0004
@@ -7409,10 +7790,11 @@ typedef struct _FXForceFieldEffect {
     short end_fade;
     // offset: 0x0028
     long color;
-}FXForceFieldEffect;
+} FXForceFieldEffect;
 
 // size: 0x3C
-typedef struct _FXLightning {
+typedef struct _FXLightning
+{
     // offset: 0x0000
     void *next;
     // offset: 0x0004
@@ -7455,10 +7837,11 @@ typedef struct _FXLightning {
     long color;
     // offset: 0x0038
     long glow_color;
-}FXLightning;
+} FXLightning;
 
 // size: 0x24
-typedef struct _FXFlash {
+typedef struct _FXFlash
+{
     // offset: 0x0000
     void *next;
     // offset: 0x0004
@@ -7481,10 +7864,11 @@ typedef struct _FXFlash {
     long currentTime;
     // offset: 0x0020
     long color;
-}FXFlash;
+} FXFlash;
 
 // size: 0x1C
-typedef struct GenericFXObject {
+typedef struct GenericFXObject
+{
     // offset: 0x0000 (4 bytes)
     GenericParticleParams *ParticleList;
     // offset: 0x0004 (4 bytes)
@@ -7499,10 +7883,11 @@ typedef struct GenericFXObject {
     GenericFlashParams *FlashList;
     // offset: 0x0018
     long *ColorList;
-}GenericFXObject;
+} GenericFXObject;
 
 // size: 0xA
-typedef struct evObjectDraftData {
+typedef struct evObjectDraftData
+{
     // offset: 0x0000
     short force;
     // offset: 0x0002
@@ -7513,10 +7898,11 @@ typedef struct evObjectDraftData {
     unsigned short height;
     // offset: 0x0008
     unsigned short maxVelocity;
-}evObjectDraftData;
+} evObjectDraftData;
 
 // size: 0x8C
-typedef struct _GlyphTuneData {
+typedef struct _GlyphTuneData
+{
     // offset: 0x0000
     short glyph_size;
     // offset: 0x0002
@@ -7527,10 +7913,11 @@ typedef struct _GlyphTuneData {
     short glyph_range[8];
     // offset: 0x001C (112 bytes)
     long color_array[28];
-}GlyphTuneData;
+} GlyphTuneData;
 
 // size: 0x24
-typedef struct __ReaverData {
+typedef struct __ReaverData
+{
     // offset: 0x0000
     char ReaverPickedUp;
     // offset: 0x0001
@@ -7557,10 +7944,11 @@ typedef struct __ReaverData {
     short ReaverTargetScale;
     // offset: 0x0020 (4 bytes)
     ReaverSaveData saveData;
-}ReaverData;
+} ReaverData;
 
 // size: 0xC0
-typedef struct __ReaverTuneData {
+typedef struct __ReaverTuneData
+{
     // offset: 0x0000
     unsigned long spectralGlowColor;
     // offset: 0x0004
@@ -7611,30 +7999,33 @@ typedef struct __ReaverTuneData {
     unsigned long soundInnerGlowColor;
     // offset: 0x0060 (96 bytes)
     unsigned long icon_colors[24];
-}ReaverTuneData;
+} ReaverTuneData;
 
 // size: 0x1C
-typedef struct _POLY_TF4 {
+typedef struct _POLY_TF4
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
     unsigned long drawTPage;
     // offset: 0x0008 (20 bytes)
     BASIC_F4 p1;
-}POLY_TF4;
+} POLY_TF4;
 
 // size: 0x44
-typedef struct _POLY_2G4 {
+typedef struct _POLY_2G4
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004 (32 bytes)
     BASIC_G4 p1;
     // offset: 0x0024 (32 bytes)
     BASIC_G4 p2;
-}POLY_2G4;
+} POLY_2G4;
 
 // size: 0x48
-typedef struct _POLY_2G4T {
+typedef struct _POLY_2G4T
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -7643,10 +8034,11 @@ typedef struct _POLY_2G4T {
     BASIC_G4 p1;
     // offset: 0x0028 (32 bytes)
     BASIC_G4 p2;
-}POLY_2G4T;
+} POLY_2G4T;
 
 // size: 0x24
-typedef struct ObjectFunc {
+typedef struct ObjectFunc
+{
     // offset: 0x0000
     char *scriptName;
     // offset: 0x0004
@@ -7665,10 +8057,11 @@ typedef struct ObjectFunc {
     void (*relocateTuneFunc)();
     // offset: 0x0020
     void (*relocateInstObFunc)();
-}ObjectFunc;
+} ObjectFunc;
 
 // size: 0x14
-typedef struct evAnimationInstanceSwitchData {
+typedef struct evAnimationInstanceSwitchData
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
@@ -7679,18 +8072,20 @@ typedef struct evAnimationInstanceSwitchData {
     int frames;
     // offset: 0x0010
     int mode;
-}evAnimationInstanceSwitchData;
+} evAnimationInstanceSwitchData;
 
 // size: 0x8
-typedef struct evControlSaveDataData {
+typedef struct evControlSaveDataData
+{
     // offset: 0x0000
     long length;
     // offset: 0x0004
     void *data;
-}evControlSaveDataData;
+} evControlSaveDataData;
 
 // size: 0x18
-typedef struct AadInitAttr {
+typedef struct AadInitAttr
+{
     // offset: 0x0000
     int updateMode;
     // offset: 0x0004
@@ -7703,10 +8098,11 @@ typedef struct AadInitAttr {
     void *(*memoryMallocProc)();
     // offset: 0x0014
     void (*memoryFreeProc)();
-}AadInitAttr;
+} AadInitAttr;
 
 // size: 0x4C
-typedef struct MusicLoadInfo {
+typedef struct MusicLoadInfo
+{
     // offset: 0x0000
     int state;
     // offset: 0x0004
@@ -7729,10 +8125,11 @@ typedef struct MusicLoadInfo {
     int commandOut;
     // offset: 0x0048
     int numCmdsInQueue;
-}MusicLoadInfo;
+} MusicLoadInfo;
 
 // size: 0x12
-typedef struct ObjectPeriodicSound {
+typedef struct ObjectPeriodicSound
+{
     // offset: 0x0000
     unsigned char type;
     // offset: 0x0001
@@ -7763,10 +8160,11 @@ typedef struct ObjectPeriodicSound {
     unsigned char offTime;
     // offset: 0x0011
     unsigned char offTimeVariation;
-}ObjectPeriodicSound;
+} ObjectPeriodicSound;
 
 // size: 0xE
-typedef struct ObjectEventSound {
+typedef struct ObjectEventSound
+{
     // offset: 0x0000
     unsigned char type;
     // offset: 0x0001
@@ -7789,10 +8187,11 @@ typedef struct ObjectEventSound {
     unsigned char initialDelay;
     // offset: 0x000D
     unsigned char initialDelayVariation;
-}ObjectEventSound;
+} ObjectEventSound;
 
 // size: 0xE
-typedef struct ObjectOneShotSound {
+typedef struct ObjectOneShotSound
+{
     // offset: 0x0000
     unsigned char type;
     // offset: 0x0001
@@ -7815,10 +8214,11 @@ typedef struct ObjectOneShotSound {
     unsigned char initialDelay;
     // offset: 0x000D
     unsigned char initialDelayVariation;
-}ObjectOneShotSound;
+} ObjectOneShotSound;
 
 // size: 0x24
-typedef struct SoundEffectChannel {
+typedef struct SoundEffectChannel
+{
     // offset: 0x0000
     unsigned char inUse;
     // offset: 0x0001
@@ -7855,10 +8255,11 @@ typedef struct SoundEffectChannel {
     short pitchChangeErrPerUpdate;
     // offset: 0x0022
     short pitchChangeError;
-}SoundEffectChannel;
+} SoundEffectChannel;
 
 // size: 0x10
-typedef struct AadSequenceHdr {
+typedef struct AadSequenceHdr
+{
     // offset: 0x0000
     unsigned long sequenceID;
     // offset: 0x0004
@@ -7871,26 +8272,29 @@ typedef struct AadSequenceHdr {
     unsigned short numTracks;
     // offset: 0x000E
     unsigned short unused;
-}AadSequenceHdr;
+} AadSequenceHdr;
 
 // size: 0x8
-typedef struct AadTempo {
+typedef struct AadTempo
+{
     // offset: 0x0000
     unsigned long quarterNoteTime;
     // offset: 0x0004
     int ppqn;
-}AadTempo;
+} AadTempo;
 
 // size: 0x4
-typedef struct AadVolume {
+typedef struct AadVolume
+{
     // offset: 0x0000
     short left;
     // offset: 0x0002
     short right;
-}AadVolume;
+} AadVolume;
 
 // size: 0x14
-typedef struct NewMemTracker {
+typedef struct NewMemTracker
+{
     // offset: 0x0000 (4 bytes)
     MemHeader *rootNode;
     // offset: 0x0004
@@ -7901,10 +8305,11 @@ typedef struct NewMemTracker {
     char *lastMemoryAddress;
     // offset: 0x0010
     long doingGarbageCollection;
-}NewMemTracker;
+} NewMemTracker;
 
 // size: 0x1C88
-typedef struct AadMemoryStruct {
+typedef struct AadMemoryStruct
+{
     // offset: 0x0000
     unsigned long updateCounter;
     // offset: 0x0004
@@ -8011,10 +8416,11 @@ typedef struct AadMemoryStruct {
     long endSequenceCallbackData;
     // offset: 0x1C08 (128 bytes)
     unsigned char userVariables[128];
-}AadMemoryStruct;
+} AadMemoryStruct;
 
 // size: 0x58
-typedef struct AadSlotAttributes {
+typedef struct AadSlotAttributes
+{
     // offset: 0x0000
     int sequenceNumberAssigned;
     // offset: 0x0004
@@ -8029,10 +8435,11 @@ typedef struct AadSlotAttributes {
     int slotPan;
     // offset: 0x0018 (64 bytes)
     int eventsInQueue[16];
-}AadSlotAttributes;
+} AadSlotAttributes;
 
 // size: 0x24
-typedef struct POLY_G4 {
+typedef struct POLY_G4
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004
@@ -8083,18 +8490,20 @@ typedef struct POLY_G4 {
     short x3;
     // offset: 0x0022
     short y3;
-}POLY_G4;
+} POLY_G4;
 
 // size: 0xC
-typedef struct DR_AREA {
+typedef struct DR_AREA
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004 (8 bytes)
     unsigned long code[2];
-}DR_AREA;
+} DR_AREA;
 
 // size: 0x8
-typedef struct evPositionData {
+typedef struct evPositionData
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -8103,16 +8512,18 @@ typedef struct evPositionData {
     short z;
     // offset: 0x0006
     short pad;
-}evPositionData;
+} evPositionData;
 
 // size: 0x400
-typedef struct STracker {
+typedef struct STracker
+{
     // offset: 0x0000 (1024 bytes)
     StreamUnit StreamList[16];
-}STracker;
+} STracker;
 
 // size: 0x18
-typedef struct FaceExtents {
+typedef struct FaceExtents
+{
     // offset: 0x0000
     long smallx;
     // offset: 0x0004
@@ -8125,18 +8536,20 @@ typedef struct FaceExtents {
     long smallz;
     // offset: 0x0014
     long bigz;
-}FaceExtents;
+} FaceExtents;
 
 // size: 0x14
-typedef struct WarpRoom {
+typedef struct WarpRoom
+{
     // offset: 0x0000 (16 bytes)
     char name[16];
     // offset: 0x0010 (4 bytes)
     StreamUnit *streamUnit;
-}WarpRoom;
+} WarpRoom;
 
 // size: 0x1C
-typedef struct PlanningNode {
+typedef struct PlanningNode
+{
     // offset: 0x0000 (6 bytes)
     Position pos;
     // offset: 0x0006
@@ -8155,10 +8568,11 @@ typedef struct PlanningNode {
     unsigned short id;
     // offset: 0x0018
     long streamUnitID;
-}PlanningNode;
+} PlanningNode;
 
 // size: 0x14
-typedef struct VramBuffer {
+typedef struct VramBuffer
+{
     // offset: 0x0000
     long flags;
     // offset: 0x0004
@@ -8175,10 +8589,11 @@ typedef struct VramBuffer {
     short lengthOfLeftOverData;
     // offset: 0x0010
     short *lineOverFlow;
-}VramBuffer;
+} VramBuffer;
 
 // size: 0x14
-typedef struct WarpGateLoadInformation {
+typedef struct WarpGateLoadInformation
+{
     // offset: 0x0000
     int warpgate_in_use;
     // offset: 0x0004
@@ -8193,10 +8608,11 @@ typedef struct WarpGateLoadInformation {
     long maxTime;
     // offset: 0x0010 (4 bytes)
     Instance *warpFaceInstance;
-}WarpGateLoadInformation;
+} WarpGateLoadInformation;
 
 // size: 0x10
-typedef struct evObjectData {
+typedef struct evObjectData
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -8209,10 +8625,11 @@ typedef struct evObjectData {
     Instance *Force;
     // offset: 0x000C
     int rc;
-}evObjectData;
+} evObjectData;
 
 // size: 0xC
-typedef struct evPhysicsGravityData {
+typedef struct evPhysicsGravityData
+{
     // offset: 0x0000
     short UpperOffset;
     // offset: 0x0002
@@ -8225,10 +8642,11 @@ typedef struct evPhysicsGravityData {
     short z;
     // offset: 0x000A
     short slipSlope;
-}evPhysicsGravityData;
+} evPhysicsGravityData;
 
 // size: 0x28
-typedef struct evPhysicsSlideData {
+typedef struct evPhysicsSlideData
+{
     // offset: 0x0000 (8 bytes)
     SVector ForwardVector;
     // offset: 0x0008 (8 bytes)
@@ -8247,16 +8665,18 @@ typedef struct evPhysicsSlideData {
     Instance *UpperInstance;
     // offset: 0x0024
     int Dot;
-}evPhysicsSlideData;
+} evPhysicsSlideData;
 
 // size: 0x1C
-typedef struct evObjectThrowData {
+typedef struct evObjectThrowData
+{
     // offset: 0x0000
     short type;
     // offset: 0x0002
     short spinType;
     // offset: 0x0004 (8 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (4 bytes)
         Instance *target;
         // offset: 0x0000 (6 bytes)
@@ -8276,10 +8696,11 @@ typedef struct evObjectThrowData {
     short initialXRot;
     // offset: 0x001A
     short zVel;
-}evObjectThrowData;
+} evObjectThrowData;
 
 // size: 0x10
-typedef struct evObjectBirthProjectileData {
+typedef struct evObjectBirthProjectileData
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
@@ -8288,18 +8709,20 @@ typedef struct evObjectBirthProjectileData {
     int type;
     // offset: 0x000C (4 bytes)
     Instance *birthInstance;
-}evObjectBirthProjectileData;
+} evObjectBirthProjectileData;
 
 // size: 0x24
-typedef struct PhysObWeaponProperties {
+typedef struct PhysObWeaponProperties
+{
     // offset: 0x0000 (8 bytes)
     PhysObProperties Properties;
     // offset: 0x0008 (28 bytes)
     PhysObWeaponAttributes WeaponAttributes;
-}PhysObWeaponProperties;
+} PhysObWeaponProperties;
 
 // size: 0x2C
-typedef struct PhysObInteractProperties {
+typedef struct PhysObInteractProperties
+{
     // offset: 0x0000 (8 bytes)
     PhysObProperties Properties;
     // offset: 0x0008
@@ -8344,20 +8767,22 @@ typedef struct PhysObInteractProperties {
     unsigned short pad;
     // offset: 0x0028 (4 bytes)
     PhysObWeaponAttributes *weapon;
-}PhysObInteractProperties;
+} PhysObInteractProperties;
 
 // size: 0x10
-typedef struct __PhysObProjectileProperties {
+typedef struct __PhysObProjectileProperties
+{
     // offset: 0x0000 (8 bytes)
     PhysObProperties Properties;
     // offset: 0x0008
     long totalProjectiles;
     // offset: 0x000C (4 bytes)
     PhysObProjData *data;
-}PhysObProjectileProperties;
+} PhysObProjectileProperties;
 
 // size: 0x14
-typedef struct PhysObDraftProperties {
+typedef struct PhysObDraftProperties
+{
     // offset: 0x0000 (8 bytes)
     PhysObProperties Properties;
     // offset: 0x0008
@@ -8370,10 +8795,11 @@ typedef struct PhysObDraftProperties {
     short maxVelocity;
     // offset: 0x0010
     unsigned long height;
-}PhysObDraftProperties;
+} PhysObDraftProperties;
 
 // size: 0x20
-typedef struct PhysObSwitchProperties {
+typedef struct PhysObSwitchProperties
+{
     // offset: 0x0000 (8 bytes)
     PhysObProperties Properties;
     // offset: 0x0008
@@ -8418,10 +8844,11 @@ typedef struct PhysObSwitchProperties {
     unsigned char engageYCone;
     // offset: 0x001F
     unsigned char engageZCone;
-}PhysObSwitchProperties;
+} PhysObSwitchProperties;
 
 // size: 0x14
-typedef struct PhysObCollectibleProperties {
+typedef struct PhysObCollectibleProperties
+{
     // offset: 0x0000 (8 bytes)
     PhysObProperties Properties;
     // offset: 0x0008
@@ -8436,20 +8863,22 @@ typedef struct PhysObCollectibleProperties {
     unsigned char collectAnim;
     // offset: 0x0012
     unsigned short spatialNode;
-}PhysObCollectibleProperties;
+} PhysObCollectibleProperties;
 
 // size: 0xC
-typedef struct PhysObAnimatedProperties {
+typedef struct PhysObAnimatedProperties
+{
     // offset: 0x0000 (8 bytes)
     PhysObProperties Properties;
     // offset: 0x0008
     unsigned short flags;
     // offset: 0x000A
     unsigned short pad;
-}PhysObAnimatedProperties;
+} PhysObAnimatedProperties;
 
 // size: 0x48
-typedef struct PhysObData {
+typedef struct PhysObData
+{
     // offset: 0x0000
     long Mode;
     // offset: 0x0004
@@ -8510,42 +8939,47 @@ typedef struct PhysObData {
     Instance *throwingInstance;
     // offset: 0x0044
     int physObTimer;
-}PhysObData;
+} PhysObData;
 
 // size: 0x4
-typedef struct BreakOffData {
+typedef struct BreakOffData
+{
     // offset: 0x0000
     short NewType;
     // offset: 0x0002
     short NewClass;
-}BreakOffData;
+} BreakOffData;
 
 // size: 0x4
-typedef struct ProjectileData {
+typedef struct ProjectileData
+{
     // offset: 0x0000
     int Type;
-}ProjectileData;
+} ProjectileData;
 
 // size: 0x8
-typedef struct _PhysObSaveData {
+typedef struct _PhysObSaveData
+{
     // offset: 0x0000 (4 bytes)
     SwitchData switchData;
     // offset: 0x0004
     long Mode;
-}PhysObSaveData;
+} PhysObSaveData;
 
 // size: 0x35C
-typedef struct __CharacterState {
+typedef struct __CharacterState
+{
     // offset: 0x0000 (4 bytes)
     Instance *CharacterInstance;
     // offset: 0x0004
     int TotalSections;
     // offset: 0x0008 (852 bytes)
     State SectionList[3];
-}CharacterState;
+} CharacterState;
 
 // size: 0x10
-typedef struct evMonsterHitData {
+typedef struct evMonsterHitData
+{
     // offset: 0x0000 (4 bytes)
     Instance *sender;
     // offset: 0x0004 (4 bytes)
@@ -8556,38 +8990,42 @@ typedef struct evMonsterHitData {
     short knockBackDuration;
     // offset: 0x000C
     long power;
-}evMonsterHitData;
+} evMonsterHitData;
 
 // size: 0x10
-typedef struct evMonsterThrownData {
+typedef struct evMonsterThrownData
+{
     // offset: 0x0000 (4 bytes)
     Instance *sender;
     // offset: 0x0004 (8 bytes)
     Rotation direction;
     // offset: 0x000C
     short power;
-}evMonsterThrownData;
+} evMonsterThrownData;
 
 // size: 0xC
-typedef struct evMonsterAlarmData {
+typedef struct evMonsterAlarmData
+{
     // offset: 0x0000 (4 bytes)
     Instance *sender;
     // offset: 0x0004 (6 bytes)
     Position position;
     // offset: 0x000A
     short type;
-}evMonsterAlarmData;
+} evMonsterAlarmData;
 
 // size: 0xC
-typedef struct evMonsterSoulSuckData {
+typedef struct evMonsterSoulSuckData
+{
     // offset: 0x0000 (4 bytes)
     Instance *sender;
     // offset: 0x0004 (6 bytes)
     Position Destination;
-}evMonsterSoulSuckData;
+} evMonsterSoulSuckData;
 
 // size: 0xC
-typedef struct evPhysicsDropOffData {
+typedef struct evPhysicsDropOffData
+{
     // offset: 0x0000
     short xOffset;
     // offset: 0x0002
@@ -8598,10 +9036,11 @@ typedef struct evPhysicsDropOffData {
     short slipSlope;
     // offset: 0x0008
     int UpperOffset;
-}evPhysicsDropOffData;
+} evPhysicsDropOffData;
 
 // size: 0x24
-typedef struct evPhysicsEdgeData {
+typedef struct evPhysicsEdgeData
+{
     // offset: 0x0000
     short UpperOffset;
     // offset: 0x0002
@@ -8626,10 +9065,11 @@ typedef struct evPhysicsEdgeData {
     int zRot;
     // offset: 0x0020
     int rc;
-}evPhysicsEdgeData;
+} evPhysicsEdgeData;
 
 // size: 0x2C
-typedef struct evPhysicsWallCrawlData {
+typedef struct evPhysicsWallCrawlData
+{
     // offset: 0x0000
     short Segment;
     // offset: 0x0002
@@ -8650,10 +9090,11 @@ typedef struct evPhysicsWallCrawlData {
     short ForwardXRotation;
     // offset: 0x0028
     int rc;
-}evPhysicsWallCrawlData;
+} evPhysicsWallCrawlData;
 
 // size: 0x18
-typedef struct evPhysicsSwimData {
+typedef struct evPhysicsSwimData
+{
     // offset: 0x0000
     short CheckDepth;
     // offset: 0x0002
@@ -8674,10 +9115,11 @@ typedef struct evPhysicsSwimData {
     short pad;
     // offset: 0x0014
     int WaterLevel;
-}evPhysicsSwimData;
+} evPhysicsSwimData;
 
 // size: 0x14
-typedef struct evPhysicsDropHeightData {
+typedef struct evPhysicsDropHeightData
+{
     // offset: 0x0000 (6 bytes)
     Position origin;
     // offset: 0x0006
@@ -8690,10 +9132,11 @@ typedef struct evPhysicsDropHeightData {
     BSPTree *bsp;
     // offset: 0x0010 (4 bytes)
     TFace *tface;
-}evPhysicsDropHeightData;
+} evPhysicsDropHeightData;
 
 // size: 0x18
-typedef struct evPhysicsLinkedMoveData {
+typedef struct evPhysicsLinkedMoveData
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
@@ -8702,10 +9145,11 @@ typedef struct evPhysicsLinkedMoveData {
     SVector posDelta;
     // offset: 0x0010 (8 bytes)
     SVector rotDelta;
-}evPhysicsLinkedMoveData;
+} evPhysicsLinkedMoveData;
 
 // size: 0x14
-typedef struct evFXHitData {
+typedef struct evFXHitData
+{
     // offset: 0x0000 (8 bytes)
     SVector location;
     // offset: 0x0008 (8 bytes)
@@ -8714,10 +9158,11 @@ typedef struct evFXHitData {
     short amount;
     // offset: 0x0012
     short type;
-}evFXHitData;
+} evFXHitData;
 
 // size: 0x10
-typedef struct evAnimationControllerDoneData {
+typedef struct evAnimationControllerDoneData
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
@@ -8726,10 +9171,11 @@ typedef struct evAnimationControllerDoneData {
     long type;
     // offset: 0x000C
     int data;
-}evAnimationControllerDoneData;
+} evAnimationControllerDoneData;
 
 // size: 0x14
-typedef struct evMonsterImpaleData {
+typedef struct evMonsterImpaleData
+{
     // offset: 0x0000 (4 bytes)
     Instance *weapon;
     // offset: 0x0004 (8 bytes)
@@ -8738,10 +9184,11 @@ typedef struct evMonsterImpaleData {
     Position position;
     // offset: 0x0012
     short distance;
-}evMonsterImpaleData;
+} evMonsterImpaleData;
 
 // size: 0x10
-typedef struct evObjectBreakOffData {
+typedef struct evObjectBreakOffData
+{
     // offset: 0x0000 (4 bytes)
     Instance *force;
     // offset: 0x0004
@@ -8756,48 +9203,53 @@ typedef struct evObjectBreakOffData {
     unsigned short type;
     // offset: 0x000E
     unsigned short action;
-}evObjectBreakOffData;
+} evObjectBreakOffData;
 
 // size: 0x8
-typedef struct evObjectAbsorbData {
+typedef struct evObjectAbsorbData
+{
     // offset: 0x0000 (4 bytes)
     Instance *force;
     // offset: 0x0004
     unsigned short node;
     // offset: 0x0006
     unsigned short steps;
-}evObjectAbsorbData;
+} evObjectAbsorbData;
 
 // size: 0x8
-typedef struct evObjectIdleData {
+typedef struct evObjectIdleData
+{
     // offset: 0x0000
     long mode;
     // offset: 0x0004 (4 bytes)
     Instance *instance;
-}evObjectIdleData;
+} evObjectIdleData;
 
 // size: 0xC
-typedef struct evControlInitHangData {
+typedef struct evControlInitHangData
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
     int frame;
     // offset: 0x0008
     int frames;
-}evControlInitHangData;
+} evControlInitHangData;
 
 // size: 0xC
-typedef struct evControlInitIdleData {
+typedef struct evControlInitIdleData
+{
     // offset: 0x0000
     int mode;
     // offset: 0x0004
     int frame;
     // offset: 0x0008
     int frames;
-}evControlInitIdleData;
+} evControlInitIdleData;
 
 // size: 0x10
-typedef struct evActionLookAroundData {
+typedef struct evActionLookAroundData
+{
     // offset: 0x0000
     short *rotx;
     // offset: 0x0004
@@ -8810,10 +9262,11 @@ typedef struct evActionLookAroundData {
     short minz;
     // offset: 0x000E
     short maxz;
-}evActionLookAroundData;
+} evActionLookAroundData;
 
 // size: 0x18
-typedef struct evActionPlayHostAnimationData {
+typedef struct evActionPlayHostAnimationData
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004 (4 bytes)
@@ -8826,26 +9279,29 @@ typedef struct evActionPlayHostAnimationData {
     int frames;
     // offset: 0x0014
     int mode;
-}evActionPlayHostAnimationData;
+} evActionPlayHostAnimationData;
 
 // size: 0xC
-typedef struct evShadowSegmentData {
+typedef struct evShadowSegmentData
+{
     // offset: 0x0000
     unsigned long totalShadowSegments;
     // offset: 0x0004 (8 bytes)
     unsigned short shadowSegments[4];
-}evShadowSegmentData;
+} evShadowSegmentData;
 
 // size: 0x4
-typedef struct LitShaftProperties {
+typedef struct LitShaftProperties
+{
     // offset: 0x0000
     short fadeValue;
     // offset: 0x0002
     short pad;
-}LitShaftProperties;
+} LitShaftProperties;
 
 // size: 0xA
-typedef struct SavedEventSmallVars {
+typedef struct SavedEventSmallVars
+{
     // offset: 0x0000
     unsigned char savedID;
     // offset: 0x0001
@@ -8856,10 +9312,11 @@ typedef struct SavedEventSmallVars {
     char eventNumber;
     // offset: 0x0005 (5 bytes)
     char eventVariables[5];
-}SavedEventSmallVars;
+} SavedEventSmallVars;
 
 // size: 0x1C
-typedef struct WaterLevelProcess {
+typedef struct WaterLevelProcess
+{
     // offset: 0x0000
     long flags;
     // offset: 0x0004 (4 bytes)
@@ -8878,10 +9335,11 @@ typedef struct WaterLevelProcess {
     long maxSteps;
     // offset: 0x0018
     long curStep;
-}WaterLevelProcess;
+} WaterLevelProcess;
 
 // size: 0x14
-typedef struct EventInstanceObject {
+typedef struct EventInstanceObject
+{
     // offset: 0x0000
     short id;
     // offset: 0x0002
@@ -8893,16 +9351,18 @@ typedef struct EventInstanceObject {
     // offset: 0x000C (4 bytes)
     Instance *instance;
     // offset: 0x0010 (4 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (4 bytes)
         Intro *intro;
         // offset: 0x0000 (4 bytes)
         SFXMkr *sfxMarker;
     } data;
-}EventInstanceObject;
+} EventInstanceObject;
 
 // size: 0xC
-typedef struct EventEventObject {
+typedef struct EventEventObject
+{
     // offset: 0x0000
     short id;
     // offset: 0x0002
@@ -8911,10 +9371,11 @@ typedef struct EventEventObject {
     long unitID;
     // offset: 0x0008 (4 bytes)
     Event *event;
-}EventEventObject;
+} EventEventObject;
 
 // size: 0x10
-typedef struct EventTGroupObject {
+typedef struct EventTGroupObject
+{
     // offset: 0x0000
     short id;
     // offset: 0x0002
@@ -8925,21 +9386,23 @@ typedef struct EventTGroupObject {
     BSPTree *bspTree;
     // offset: 0x000C (4 bytes)
     StreamUnit *stream;
-}EventTGroupObject;
+} EventTGroupObject;
 
 // size: 0x484
-typedef struct _PCodeStack {
+typedef struct _PCodeStack
+{
     // offset: 0x0000
     long topOfStack;
     // offset: 0x0004 (1152 bytes)
     StackType stack[32];
-}PCodeStack;
+} PCodeStack;
 
 // size: 0x18
-typedef struct EventTimer {
+typedef struct EventTimer
+{
     // offset: 0x0000
-    long flags:1;
-    long time:31;
+    long flags : 1;
+    long time : 31;
     // offset: 0x0004 (4 bytes)
     Event *event;
     // offset: 0x0008 (4 bytes)
@@ -8950,18 +9413,20 @@ typedef struct EventTimer {
     Level *level;
     // offset: 0x0014
     long nextEventIndex;
-}EventTimer;
+} EventTimer;
 
 // size: 0x8
-typedef struct SignalResetStruct {
+typedef struct SignalResetStruct
+{
     // offset: 0x0000 (4 bytes)
     MultiSignal *mSignal;
     // offset: 0x0004
     long timeLeft;
-}SignalResetStruct;
+} SignalResetStruct;
 
 // size: 0x10
-typedef struct HintSystemStruct {
+typedef struct HintSystemStruct
+{
     // offset: 0x0000
     short flags;
     // offset: 0x0002
@@ -8974,10 +9439,11 @@ typedef struct HintSystemStruct {
     long fadeTimer;
     // offset: 0x000C
     long spawningUnitID;
-}HintSystemStruct;
+} HintSystemStruct;
 
 // size: 0x9C
-typedef struct __GlyphData {
+typedef struct __GlyphData
+{
     // offset: 0x0000
     void (*process)();
     // offset: 0x0004 (136 bytes)
@@ -8998,10 +9464,11 @@ typedef struct __GlyphData {
     short target_glyph_rotation;
     // offset: 0x009A
     short glyph_movement;
-}GlyphData;
+} GlyphData;
 
 // size: 0x50
-typedef struct _MonsterAttributes {
+typedef struct _MonsterAttributes
+{
     // offset: 0x0000
     unsigned long magicnum;
     // offset: 0x0004
@@ -9084,10 +9551,11 @@ typedef struct _MonsterAttributes {
     MonsterBehavior *behaviorList;
     // offset: 0x004C
     void *shatterList;
-}MonsterAttributes;
+} MonsterAttributes;
 
 // size: 0x24
-typedef struct _MonsterIR {
+typedef struct _MonsterIR
+{
     // offset: 0x0000 (4 bytes)
     struct _MonsterIR *next;
     // offset: 0x0004 (4 bytes)
@@ -9106,10 +9574,11 @@ typedef struct _MonsterIR {
     unsigned long forgetTimer;
     // offset: 0x0020
     unsigned long idleTime;
-}MonsterIR;
+} MonsterIR;
 
 // size: 0x1AC
-typedef struct _MonsterVars {
+typedef struct _MonsterVars
+{
     // offset: 0x0000
     unsigned long mvFlags;
     // offset: 0x0004
@@ -9250,34 +9719,38 @@ typedef struct _MonsterVars {
     short targetFade;
     // offset: 0x01AA
     short fadeRate;
-}MonsterVars;
+} MonsterVars;
 
 // size: 0x8
-typedef struct burntTuneType {
+typedef struct burntTuneType
+{
     // offset: 0x0000
     int burntDist;
     // offset: 0x0004
     int fadeDelta;
-}burntTuneType;
+} burntTuneType;
 
 // size: 0x8
-typedef struct _MonsterState {
+typedef struct _MonsterState
+{
     // offset: 0x0000
     void (*entryFunction)();
     // offset: 0x0004
     void (*stateFunction)();
-}MonsterState;
+} MonsterState;
 
 // size: 0xC
-typedef struct _MonsterStateChoice {
+typedef struct _MonsterStateChoice
+{
     // offset: 0x0000
     int state;
     // offset: 0x0004 (8 bytes)
     MonsterState functions;
-}MonsterStateChoice;
+} MonsterStateChoice;
 
 // size: 0x20
-typedef struct _MonsterFunctionTable {
+typedef struct _MonsterFunctionTable
+{
     // offset: 0x0000
     void (*initFunc)();
     // offset: 0x0004
@@ -9294,18 +9767,20 @@ typedef struct _MonsterFunctionTable {
     char *versionID;
     // offset: 0x001C
     char *localVersionID;
-}MonsterFunctionTable;
+} MonsterFunctionTable;
 
 // size: 0x2
-typedef struct MissileGraphics {
+typedef struct MissileGraphics
+{
     // offset: 0x0000
     unsigned char object;
     // offset: 0x0001
     unsigned char model;
-}MissileGraphics;
+} MissileGraphics;
 
 // size: 0x10
-typedef struct evMonsterHitTerrainData {
+typedef struct evMonsterHitTerrainData
+{
     // offset: 0x0000 (4 bytes)
     TFace *tface;
     // offset: 0x0004 (8 bytes)
@@ -9314,18 +9789,20 @@ typedef struct evMonsterHitTerrainData {
     short faceFlags;
     // offset: 0x000E
     short bspFlags;
-}evMonsterHitTerrainData;
+} evMonsterHitTerrainData;
 
 // size: 0x8
-typedef struct evMonsterHitObjectData {
+typedef struct evMonsterHitObjectData
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
     int hitType;
-}evMonsterHitObjectData;
+} evMonsterHitObjectData;
 
 // size: 0x10
-typedef struct _MonsterSaveInfo {
+typedef struct _MonsterSaveInfo
+{
     // offset: 0x0000
     long mvFlags;
     // offset: 0x0004
@@ -9335,16 +9812,17 @@ typedef struct _MonsterSaveInfo {
     // offset: 0x000A
     short soulJuice;
     // offset: 0x000C
-    unsigned int age:3;
-    unsigned int state:6;
-    unsigned int behaviorState:5;
-    unsigned int anim:6;
-    unsigned int animLooping:1;
-    unsigned int causeOfDeath:3;
-}MonsterSaveInfo;
+    unsigned int age : 3;
+    unsigned int state : 6;
+    unsigned int behaviorState : 5;
+    unsigned int anim : 6;
+    unsigned int animLooping : 1;
+    unsigned int causeOfDeath : 3;
+} MonsterSaveInfo;
 
 // size: 0x12
-typedef struct evPhysicsLOSData {
+typedef struct evPhysicsLOSData
+{
     // offset: 0x0000 (6 bytes)
     Position destination;
     // offset: 0x0006
@@ -9355,28 +9833,31 @@ typedef struct evPhysicsLOSData {
     short flags;
     // offset: 0x0010
     short result;
-}evPhysicsLOSData;
+} evPhysicsLOSData;
 
 // size: 0x8
-typedef struct MonsterChoice {
+typedef struct MonsterChoice
+{
     // offset: 0x0000
     long whatAmI;
     // offset: 0x0004 (4 bytes)
     MonsterFunctionTable *table;
-}MonsterChoice;
+} MonsterChoice;
 
 // size: 0x6
-typedef struct RadarInfo {
+typedef struct RadarInfo
+{
     // offset: 0x0000
     short angle;
     // offset: 0x0002
     short x;
     // offset: 0x0004
     short y;
-}RadarInfo;
+} RadarInfo;
 
 // size: 0x10
-typedef struct burntMessType {
+typedef struct burntMessType
+{
     // offset: 0x0000
     int closestvert;
     // offset: 0x0004
@@ -9385,10 +9866,11 @@ typedef struct burntMessType {
     int closestseg;
     // offset: 0x000C (4 bytes)
     burntTuneType *burntTune;
-}burntMessType;
+} burntMessType;
 
 // size: 0x14
-typedef struct bloodyMessType {
+typedef struct bloodyMessType
+{
     // offset: 0x0000
     int closestvert;
     // offset: 0x0004
@@ -9399,13 +9881,14 @@ typedef struct bloodyMessType {
     int bloodiedAVert;
     // offset: 0x0010
     int bloodIntensity;
-}bloodyMessType;
+} bloodyMessType;
 
 /*struct _G2PoolMem_Type {
 };*/
 
 // size: 0x10
-typedef struct _G2PoolMemPool_Type {
+typedef struct _G2PoolMemPool_Type
+{
     // offset: 0x0000
     unsigned short blockSize;
     // offset: 0x0002
@@ -9416,10 +9899,11 @@ typedef struct _G2PoolMemPool_Type {
     unsigned short *stack;
     // offset: 0x000C (4 bytes)
     struct _G2PoolMem_Type *blockPool;
-}G2PoolMemPool;
+} G2PoolMemPool;
 
 // size: 0x1C
-typedef struct _walbossAttributes {
+typedef struct _walbossAttributes
+{
     // offset: 0x0000
     unsigned char segmentToAttach;
     // offset: 0x0001
@@ -9453,7 +9937,8 @@ typedef struct _walbossAttributes {
     // offset: 0x001A
     short junk;
     // offset: 0x001C
-    struct {
+    struct
+    {
         // offset: 0x0000
         short plusDelta;
         // offset: 0x0002
@@ -9461,10 +9946,11 @@ typedef struct _walbossAttributes {
         // offset: 0x0004
         short validAtHitPoint;
     } attackDeltas[0];
-}WalbossAttributes;
+} WalbossAttributes;
 
 // size: 0x24
-typedef struct _G2AnimController_Type {
+typedef struct _G2AnimController_Type
+{
     // offset: 0x0000
     unsigned short next;
     // offset: 0x0002
@@ -9482,43 +9968,49 @@ typedef struct _G2AnimController_Type {
     // offset: 0x0010 (4 bytes)
     G2AnimAlphaTable *alphaTable;
     // offset: 0x0014 (16 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (8 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000
             unsigned long (*function)();
             // offset: 0x0004
             void *fnData;
         } callback;
         // offset: 0x0000 (12 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000 (6 bytes)
             G2SVector3 base;
             // offset: 0x0006 (6 bytes)
             G2SVector3 offset;
         } vector;
         // offset: 0x0000 (16 bytes)
-        struct {
+        struct
+        {
             // offset: 0x0000 (8 bytes)
             G2Quat src;
             // offset: 0x0008 (8 bytes)
             G2Quat dest;
         } quat;
     } data;
-}G2AnimController;
+} G2AnimController;
 
 // size: 0xC
-typedef struct _G2AnimSegKeyflagInfo_Type {
+typedef struct _G2AnimSegKeyflagInfo_Type
+{
     // offset: 0x0000
     unsigned long *stream;
     // offset: 0x0004
     unsigned long flags;
     // offset: 0x0008
     int bitCount;
-}G2AnimSegKeyflagInfo;
+} G2AnimSegKeyflagInfo;
 
 // size: 0x10
-typedef struct _G2AnimDecompressChannelInfo_Type {
+typedef struct _G2AnimDecompressChannelInfo_Type
+{
     // offset: 0x0000 (4 bytes)
     G2AnimKeylist *keylist;
     // offset: 0x0004
@@ -9527,12 +10019,14 @@ typedef struct _G2AnimDecompressChannelInfo_Type {
     int storedKey;
     // offset: 0x000C
     int targetKey;
-}G2AnimDecompressChannelInfo;
+} G2AnimDecompressChannelInfo;
 
 // size: 0x18
-typedef struct _G2AnimSegValue_Type {
+typedef struct _G2AnimSegValue_Type
+{
     // offset: 0x0000 (8 bytes)
-    union {
+    union
+    {
         // offset: 0x0000 (6 bytes)
         G2SVector3 rot;
         // offset: 0x0000 (8 bytes)
@@ -9546,10 +10040,11 @@ typedef struct _G2AnimSegValue_Type {
     G2SVector3 trans;
     // offset: 0x0016
     unsigned short bIsQuat;
-}G2AnimSegValue;
+} G2AnimSegValue;
 
 // size: 0x10
-typedef struct _G2AnimChanStatusBlockPool_Type {
+typedef struct _G2AnimChanStatusBlockPool_Type
+{
     // offset: 0x0000
     unsigned short blockSize;
     // offset: 0x0002
@@ -9560,10 +10055,11 @@ typedef struct _G2AnimChanStatusBlockPool_Type {
     unsigned short *stack;
     // offset: 0x000C (4 bytes)
     G2AnimChanStatusBlock *blockPool;
-}G2AnimChanStatusBlockPool;
+} G2AnimChanStatusBlockPool;
 
 // size: 0x10
-typedef struct _G2AnimControllerPool_Type {
+typedef struct _G2AnimControllerPool_Type
+{
     // offset: 0x0000
     unsigned short blockSize;
     // offset: 0x0002
@@ -9574,10 +10070,11 @@ typedef struct _G2AnimControllerPool_Type {
     unsigned short *stack;
     // offset: 0x000C (4 bytes)
     G2AnimController *blockPool;
-}G2AnimControllerPool;
+} G2AnimControllerPool;
 
 // size: 0x10
-typedef struct _G2AnimInterpStateBlockPool_Type {
+typedef struct _G2AnimInterpStateBlockPool_Type
+{
     // offset: 0x0000
     unsigned short blockSize;
     // offset: 0x0002
@@ -9588,10 +10085,11 @@ typedef struct _G2AnimInterpStateBlockPool_Type {
     unsigned short *stack;
     // offset: 0x000C (4 bytes)
     G2AnimInterpStateBlock *blockPool;
-}G2AnimInterpStateBlockPool;
+} G2AnimInterpStateBlockPool;
 
 // size: 0x20
-typedef struct PoolManagementData {
+typedef struct PoolManagementData
+{
     // offset: 0x0000
     char state;
     // offset: 0x0001
@@ -9612,10 +10110,11 @@ typedef struct PoolManagementData {
     unsigned char currentNode;
     // offset: 0x001D
     unsigned char currentBit;
-}PoolManagementData;
+} PoolManagementData;
 
 // size: 0x44
-typedef struct EnemyPlanData {
+typedef struct EnemyPlanData
+{
     // offset: 0x0000 (8 bytes)
     unsigned char nodeSkipArray[8];
     // offset: 0x0008 (8 bytes)
@@ -9626,20 +10125,22 @@ typedef struct EnemyPlanData {
     short goalUnitID;
     // offset: 0x0042
     unsigned char numWayPoints;
-}EnemyPlanData;
+} EnemyPlanData;
 
 // size: 0x10
-typedef struct _PlanCollideInfo {
+typedef struct _PlanCollideInfo
+{
     // offset: 0x0000
     long StreamUnitID;
     // offset: 0x0004 (4 bytes)
     TFace *tFace;
     // offset: 0x0008 (6 bytes)
     Position collidePos;
-}PlanCollideInfo;
+} PlanCollideInfo;
 
 // size: 0x4
-typedef struct _fth {
+typedef struct _fth
+{
     // offset: 0x0000
     char x;
     // offset: 0x0001
@@ -9648,18 +10149,20 @@ typedef struct _fth {
     char z;
     // offset: 0x0003
     char nodeType;
-}FindTerrainHit;
+} FindTerrainHit;
 
 // size: 0x8
-typedef struct _G2AppDataVM_Type {
+typedef struct _G2AppDataVM_Type
+{
     // offset: 0x0000
     int argc;
     // offset: 0x0004
     int *argv;
-}G2AppDataVM;
+} G2AppDataVM;
 
 // size: 0x5E
-typedef struct EnemyPlanSlotData {
+typedef struct EnemyPlanSlotData
+{
     // offset: 0x0000
     char slotInUse;
     // offset: 0x0001
@@ -9678,20 +10181,22 @@ typedef struct EnemyPlanSlotData {
     char targetType;
     // offset: 0x005C
     short timer;
-}EnemyPlanSlotData;
+} EnemyPlanSlotData;
 
 // size: 0x14
-typedef struct __Force {
+typedef struct __Force
+{
     // offset: 0x0000
     int Type;
     // offset: 0x0004 (12 bytes)
     Vector LinearForce;
     // offset: 0x0010
     short Friction;
-}Force;
+} Force;
 
 // size: 0x4
-typedef struct __Idle {
+typedef struct __Idle
+{
     // offset: 0x0000
     unsigned char anim;
     // offset: 0x0001
@@ -9700,10 +10205,11 @@ typedef struct __Idle {
     unsigned char frames;
     // offset: 0x0003
     unsigned char type;
-}Idle;
+} Idle;
 
 // size: 0x8
-typedef struct __VAnim {
+typedef struct __VAnim
+{
     // offset: 0x0000
     unsigned char anim0;
     // offset: 0x0001
@@ -9718,10 +10224,11 @@ typedef struct __VAnim {
     unsigned char alpha;
     // offset: 0x0006
     unsigned short frame;
-}VAnim;
+} VAnim;
 
 // size: 0x10
-typedef struct __SAnim {
+typedef struct __SAnim
+{
     // offset: 0x0000 (4 bytes)
     VAnim *anim;
     // offset: 0x0004 (4 bytes)
@@ -9734,10 +10241,11 @@ typedef struct __SAnim {
     short speedAdjust;
     // offset: 0x000E
     short pad;
-}SAnim;
+} SAnim;
 
 // size: 0x24
-typedef struct __AttackItem {
+typedef struct __AttackItem
+{
     // offset: 0x0000
     unsigned char anim;
     // offset: 0x0001
@@ -9786,10 +10294,11 @@ typedef struct __AttackItem {
     unsigned short knockBackDistance;
     // offset: 0x0022
     unsigned short hitPowerScale;
-}AttackItem;
+} AttackItem;
 
 // size: 0x20
-typedef struct __ThrowItem {
+typedef struct __ThrowItem
+{
     // offset: 0x0000
     unsigned char prepAnim;
     // offset: 0x0001
@@ -9832,26 +10341,29 @@ typedef struct __ThrowItem {
     short coilRot;
     // offset: 0x001E
     short selfAdjustingFlag;
-}ThrowItem;
+} ThrowItem;
 
 // size: 0x8
-typedef struct __EngagedInstance {
+typedef struct __EngagedInstance
+{
     // offset: 0x0000 (4 bytes)
     Instance *instance;
     // offset: 0x0004
     unsigned long distance;
-}EngagedInstance;
+} EngagedInstance;
 
 // size: 0x4
-typedef struct __FitPoint {
+typedef struct __FitPoint
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
     short y;
-}FitPoint;
+} FitPoint;
 
 // size: 0x54
-typedef struct __SensoryData {
+typedef struct __SensoryData
+{
     // offset: 0x0000
     int Flags;
     // offset: 0x0004 (8 bytes)
@@ -9880,10 +10392,11 @@ typedef struct __SensoryData {
     Vector lookAtPoint;
     // offset: 0x0050
     unsigned long heldClass;
-}SensoryData;
+} SensoryData;
 
 // size: 0x5B8
-typedef struct __Player {
+typedef struct __Player
+{
     // offset: 0x0000
     int footPrint;
     // offset: 0x0004 (860 bytes)
@@ -10106,10 +10619,11 @@ typedef struct __Player {
     unsigned long playerEventHistory;
     // offset: 0x05B4
     int currentHint;
-}Player;
+} Player;
 
 // size: 0x14
-typedef struct __CannedSound {
+typedef struct __CannedSound
+{
     // offset: 0x0000
     short bank;
     // offset: 0x0002
@@ -10126,18 +10640,20 @@ typedef struct __CannedSound {
     long time;
     // offset: 0x0010
     long distance;
-}CannedSound;
+} CannedSound;
 
 // size: 0x4
-typedef struct __AlarmData {
+typedef struct __AlarmData
+{
     // offset: 0x0000
     short command;
     // offset: 0x0002
     short data;
-}AlarmData;
+} AlarmData;
 
 // size: 0x18
-typedef struct _SoundRamp {
+typedef struct _SoundRamp
+{
     // offset: 0x0000
     unsigned long soundHandle;
     // offset: 0x0004
@@ -10154,10 +10670,11 @@ typedef struct _SoundRamp {
     short soundStartVolume;
     // offset: 0x0016
     short soundEndVolume;
-}SoundRamp;
+} SoundRamp;
 
 // size: 0x18
-typedef struct PlayerSaveData {
+typedef struct PlayerSaveData
+{
     // offset: 0x0000
     unsigned long abilities;
     // offset: 0x0004
@@ -10172,10 +10689,11 @@ typedef struct PlayerSaveData {
     unsigned short manaMax;
     // offset: 0x0014
     unsigned long playerEventHistory;
-}PlayerSaveData;
+} PlayerSaveData;
 
 // size: 0xA0
-typedef struct RazielData {
+typedef struct RazielData
+{
     // offset: 0x0000
     unsigned long version;
     // offset: 0x0004
@@ -10266,26 +10784,29 @@ typedef struct RazielData {
     int SwimPhysicsSurfMaxRotation;
     // offset: 0x009C
     int SwimPhysicsSurfKickDecel;
-}RazielData;
+} RazielData;
 
 // size: 0x4
-typedef struct __razController {
+typedef struct __razController
+{
     // offset: 0x0000
     unsigned short segment;
     // offset: 0x0002
     unsigned short type;
-}razController;
+} razController;
 
 // size: 0xC
-typedef struct DR_STP {
+typedef struct DR_STP
+{
     // offset: 0x0000
     unsigned long tag;
     // offset: 0x0004 (8 bytes)
     unsigned long code[2];
-}DR_STP;
+} DR_STP;
 
 // size: 0x8
-typedef struct UW_ScreenXY {
+typedef struct UW_ScreenXY
+{
     // offset: 0x0000
     short sx;
     // offset: 0x0002
@@ -10294,10 +10815,11 @@ typedef struct UW_ScreenXY {
     short dx;
     // offset: 0x0006
     short dy;
-}UW_ScreenXY;
+} UW_ScreenXY;
 
 // size: 0x10
-typedef struct SavedInfoTracker {
+typedef struct SavedInfoTracker
+{
     // offset: 0x0000
     char *MemoryCardBuffer;
     // offset: 0x0004
@@ -10306,10 +10828,11 @@ typedef struct SavedInfoTracker {
     char *InfoEnd;
     // offset: 0x000C
     char *EndOfMemory;
-}SavedInfoTracker;
+} SavedInfoTracker;
 
 // size: 0x8
-typedef struct SavedLevel {
+typedef struct SavedLevel
+{
     // offset: 0x0000
     unsigned char savedID;
     // offset: 0x0001
@@ -10320,10 +10843,11 @@ typedef struct SavedLevel {
     short waterZ;
     // offset: 0x0006
     short numberBSPTreesSaved;
-}SavedLevel;
+} SavedLevel;
 
 // size: 0x10
-typedef struct ActualSavedLevel {
+typedef struct ActualSavedLevel
+{
     // offset: 0x0000
     unsigned char savedID;
     // offset: 0x0001
@@ -10336,20 +10860,22 @@ typedef struct ActualSavedLevel {
     short numberBSPTreesSaved;
     // offset: 0x0008 (8 bytes)
     SavedBspTree bspTreeArray[1];
-}ActualSavedLevel;
+} ActualSavedLevel;
 
 // size: 0x342
-typedef struct SavedDeadDeadBits {
+typedef struct SavedDeadDeadBits
+{
     // offset: 0x0000
     unsigned char savedID;
     // offset: 0x0001
     unsigned char shiftedSaveSize;
     // offset: 0x0002 (832 bytes)
     char deadDeadBits[832];
-}SavedDeadDeadBits;
+} SavedDeadDeadBits;
 
 // size: 0x78
-typedef struct _GlobalSaveTracker {
+typedef struct _GlobalSaveTracker
+{
     // offset: 0x0000
     short savedID;
     // offset: 0x0002
@@ -10372,20 +10898,22 @@ typedef struct _GlobalSaveTracker {
     short sizeUsedInBlock;
     // offset: 0x0076
     short CurrentBirthID;
-}GlobalSaveTracker;
+} GlobalSaveTracker;
 
 // size: 0x4
-typedef struct CdlFILTER {
+typedef struct CdlFILTER
+{
     // offset: 0x0000
     unsigned char file;
     // offset: 0x0001
     unsigned char chan;
     // offset: 0x0002
     unsigned short pad;
-}CdlFILTER;
+} CdlFILTER;
 
 // size: 0x28
-typedef struct SpuCommonAttr {
+typedef struct SpuCommonAttr
+{
     // offset: 0x0000
     unsigned long mask;
     // offset: 0x0004 (4 bytes)
@@ -10398,16 +10926,18 @@ typedef struct SpuCommonAttr {
     SpuExtAttr cd;
     // offset: 0x001C (12 bytes)
     SpuExtAttr ext;
-}SpuCommonAttr;
+} SpuCommonAttr;
 
 // size: 0x2
-typedef struct XAVoiceListEntry {
+typedef struct XAVoiceListEntry
+{
     // offset: 0x0000
     unsigned short length;
-}XAVoiceListEntry;
+} XAVoiceListEntry;
 
 // size: 0x128
-typedef struct XAVoiceTracker {
+typedef struct XAVoiceTracker
+{
     // offset: 0x0000 (4 bytes)
     CdlLOC currentPos;
     // offset: 0x0004
@@ -10454,18 +10984,20 @@ typedef struct XAVoiceTracker {
     short unused2;
     // offset: 0x00B0 (120 bytes)
     XAFileInfo xaFileInfo[30];
-}XAVoiceTracker;
+} XAVoiceTracker;
 
 // size: 0x8
-typedef struct cinema_fn_table_t {
+typedef struct cinema_fn_table_t
+{
     // offset: 0x0000
     int (*play)();
     // offset: 0x0004
     char *versionID;
-}cinema_fn_table_t;
+} cinema_fn_table_t;
 
 // size: 0x10
-typedef struct LocalizationHeader {
+typedef struct LocalizationHeader
+{
     // offset: 0x0000 (4 bytes)
     language_t language;
     // offset: 0x0004
@@ -10474,10 +11006,11 @@ typedef struct LocalizationHeader {
     int XATableOffset;
     // offset: 0x000C
     int numStrings;
-}LocalizationHeader;
+} LocalizationHeader;
 
 // size: 0x10
-typedef struct Extents2d {
+typedef struct Extents2d
+{
     // offset: 0x0000
     int xmin;
     // offset: 0x0004
@@ -10486,18 +11019,20 @@ typedef struct Extents2d {
     int ymin;
     // offset: 0x000C
     int ymax;
-}Extents2d;
+} Extents2d;
 
 // size: 0x8
-typedef struct menu_sound_entry_t {
+typedef struct menu_sound_entry_t
+{
     // offset: 0x0000 (4 bytes)
     menu_sound_t sound;
     // offset: 0x0004
     int sfx;
-}menu_sound_entry_t;
+} menu_sound_entry_t;
 
 // size: 0x10
-typedef struct menuface_t {
+typedef struct menuface_t
+{
     // offset: 0x0000
     short x;
     // offset: 0x0002
@@ -10516,10 +11051,11 @@ typedef struct menuface_t {
     unsigned short delay;
     // offset: 0x000E
     unsigned short loaded;
-}menuface_t;
+} menuface_t;
 
 // size: 0x200
-struct _216fake {
+struct _216fake
+{
     // offset: 0x0000 (404 bytes)
     mcmenu_t dummy1;
     // offset: 0x0194 (52 bytes)
@@ -10529,7 +11065,8 @@ struct _216fake {
 };
 
 // size: 0x4
-union _77fake {
+union _77fake
+{
     // offset: 0x0000
     long color;
     // offset: 0x0000 (4 bytes)

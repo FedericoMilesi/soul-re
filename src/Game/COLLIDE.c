@@ -1361,7 +1361,219 @@ void COLLIDE_InstanceList(InstanceList *instanceList)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndHFace);
+long COLLIDE_SphereAndHFace(Sphere *sphere, Position *oldPos, HFaceInfo *hfaceInfo, SVector *intersect, long *edge)
+{
+    SandHFScratch *CSpad;
+    SVector *vertex0;
+    long result;
+    // long behind; unused
+    unsigned long d0sq;
+    unsigned char temp; // not from decls.h
+
+    CSpad = (SandHFScratch *)getScratchAddr(21);
+
+    vertex0 = (SVector *)hfaceInfo->vertex0;
+
+    result = 0;
+
+    if ((hfaceInfo->hface->attr & 0x40))
+    {
+        return result;
+    }
+
+    *edge = 1;
+
+    // garbage code for reordering
+    if (intersect != NULL)
+    {
+        temp = -temp;
+    }
+
+    CSpad->posMatrix.m[0][0] = sphere->position.x - vertex0->x;
+    CSpad->posMatrix.m[0][1] = sphere->position.y - vertex0->y;
+    CSpad->posMatrix.m[0][2] = sphere->position.z - vertex0->z;
+
+    CSpad->posMatrix.m[1][0] = oldPos->x - vertex0->x;
+    CSpad->posMatrix.m[1][1] = oldPos->y - vertex0->y;
+    CSpad->posMatrix.m[1][2] = oldPos->z - vertex0->z;
+
+    CSpad->posMatrix.m[2][0] = vertex0->x;
+    CSpad->posMatrix.m[2][1] = vertex0->y;
+    CSpad->posMatrix.m[2][2] = vertex0->z;
+
+    CSpad->normal = *(SVector *)&hfaceInfo->normal;
+
+    gte_SetRotMatrix(&CSpad->posMatrix);
+    gte_ldv0(&CSpad->normal);
+    gte_nrtv0();
+    gte_stlvnl(&CSpad->dpv);
+
+    if ((CSpad->dpv.x <= CSpad->dpv.y) && ((CSpad->dpv.x < sphere->radius) && (CSpad->dpv.y >= -sphere->radius)))
+    {
+        if (CSpad->dpv.x < 0)
+        {
+            if (COLLIDE_IntersectLineAndPlane_S(&CSpad->planePoint, oldPos, &sphere->position, &CSpad->normal, CSpad->dpv.z) == 0)
+            {
+                return result;
+            }
+        }
+        else
+        {
+            COLLIDE_NearestPointOnPlane_S(&CSpad->planePoint, &CSpad->normal, CSpad->dpv.z, &sphere->position);
+        }
+
+        if (COLLIDE_PointInTriangle((SVector *)hfaceInfo->vertex0, (SVector *)hfaceInfo->vertex1, (SVector *)hfaceInfo->vertex2, &CSpad->planePoint, &CSpad->normal) != 0)
+        {
+            Vector dv;
+
+            COPY_SVEC(SVector, &CSpad->triPoint, SVector, &CSpad->planePoint);
+
+            intersect->x = CSpad->triPoint.x;
+            intersect->y = CSpad->triPoint.y;
+            intersect->z = CSpad->triPoint.z;
+
+            dv.x = (CSpad->normal.x * sphere->radius) >> 12;
+            dv.y = (CSpad->normal.y * sphere->radius) >> 12;
+            dv.z = (CSpad->normal.z * sphere->radius) >> 12;
+
+            sphere->position.x = dv.x + CSpad->triPoint.x;
+            sphere->position.y = dv.y + CSpad->triPoint.y;
+            sphere->position.z = dv.z + CSpad->triPoint.z;
+
+            *edge = 0;
+
+            return -1;
+        }
+
+        COLLIDE_NearestPointOnLine_S(&CSpad->triPoint, (SVECTOR *)hfaceInfo->vertex0, (SVECTOR *)hfaceInfo->vertex1, &sphere->position);
+
+        {
+            long x;
+            long y;
+            long z;
+
+            x = sphere->position.x - CSpad->triPoint.x;
+            y = sphere->position.y - CSpad->triPoint.y;
+            z = sphere->position.z - CSpad->triPoint.z;
+
+            hasm_sqrlen1(x, y, z);
+            gte_sqr0();
+            hasm_sqrlen2(x, y, z);
+
+            d0sq = x;
+        }
+
+        if (d0sq >= sphere->radiusSquared)
+        {
+            unsigned long d1sq;
+
+            COLLIDE_NearestPointOnLine_S(&CSpad->planePoint, (SVECTOR *)hfaceInfo->vertex1, (SVECTOR *)hfaceInfo->vertex2, &sphere->position);
+
+            {
+                long x;
+                long y;
+                long z;
+
+                x = sphere->position.x - CSpad->planePoint.x;
+                y = sphere->position.y - CSpad->planePoint.y;
+                z = sphere->position.z - CSpad->planePoint.z;
+
+                hasm_sqrlen1(x, y, z);
+                gte_sqr0();
+                hasm_sqrlen2(x, y, z);
+
+                d1sq = x;
+            }
+
+            if (d1sq < d0sq)
+            {
+                CSpad->triPoint = CSpad->planePoint;
+
+                d0sq = d1sq;
+            }
+
+            if (d0sq >= sphere->radiusSquared)
+            {
+                COLLIDE_NearestPointOnLine_S(&CSpad->planePoint, (SVECTOR *)hfaceInfo->vertex2, (SVECTOR *)hfaceInfo->vertex0, &sphere->position);
+
+                {
+                    long x;
+                    long y;
+                    long z;
+
+                    x = sphere->position.x - CSpad->planePoint.x;
+                    y = sphere->position.y - CSpad->planePoint.y;
+                    z = sphere->position.z - CSpad->planePoint.z;
+
+                    hasm_sqrlen1(x, y, z);
+                    gte_sqr0();
+                    hasm_sqrlen2(x, y, z);
+
+                    d1sq = x;
+                }
+
+                if (d1sq < d0sq)
+                {
+                    CSpad->triPoint = CSpad->planePoint;
+
+                    d0sq = d1sq;
+                }
+
+                if (d0sq >= sphere->radiusSquared)
+                {
+                    return result;
+                }
+            }
+        }
+
+        {
+            long len;
+            Vector dv;
+            long a;
+            long b;
+            long c;
+
+            SUB_LVEC(Vector, &dv, Position, &sphere->position, SVector, &CSpad->triPoint);
+
+            a = abs(dv.x);
+            b = abs(dv.y);
+            c = abs(dv.z);
+
+            MATH3D_Sort3VectorCoords(&a, &b, &c);
+
+            intersect->x = CSpad->triPoint.x;
+            intersect->y = CSpad->triPoint.y;
+            intersect->z = CSpad->triPoint.z;
+
+            len = ((c * 15) * 2) + (b * 12) + (a * 9);
+
+            if (len != 0)
+            {
+                dv.x *= sphere->radius;
+                dv.y *= sphere->radius;
+                dv.z *= sphere->radius;
+
+                dv.x = (dv.x << 5) / len;
+                dv.y = (dv.y << 5) / len;
+                dv.z = (dv.z << 5) / len;
+            }
+            else
+            {
+                dv.x = (CSpad->normal.x * sphere->radius) >> 12;
+                dv.y = (CSpad->normal.y * sphere->radius) >> 12;
+                dv.z = (CSpad->normal.z * sphere->radius) >> 12;
+            }
+
+            sphere->position.x = dv.x + CSpad->triPoint.x;
+            sphere->position.y = dv.y + CSpad->triPoint.y;
+            sphere->position.z = dv.z + CSpad->triPoint.z;
+
+            result = 1;
+        }
+    }
+
+    return result;
+}
 
 long COLLIDE_SAndT(SCollideInfo *scollideInfo, Level *level)
 {
