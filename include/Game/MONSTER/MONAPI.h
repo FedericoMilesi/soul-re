@@ -3,12 +3,14 @@
 
 #include "common.h"
 
-typedef struct Dummy3 {
+typedef struct Dummy3
+{
     char pad[24];
     int unknown;
 } Dummy3; // not from types.h
 
-typedef struct Dummy4 {
+typedef struct Dummy4
+{
     char pad[12];
     int unknown;
     int unknown2;
@@ -22,5 +24,6 @@ long MONAPI_OkToLookAround(Instance *instance);
 void MONAPI_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *gameTracker);
 void MonsterMessage(Instance *instance, unsigned long message, unsigned long data);
 void MONAPI_CheckGenerator(Instance *instance);
+void MonsterTranslateAnim(Object *object);
 
 #endif
