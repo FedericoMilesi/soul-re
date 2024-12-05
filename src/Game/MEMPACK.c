@@ -40,7 +40,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_FreeByType);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Size);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_ReportFreeMemory);
+unsigned long MEMPACK_ReportFreeMemory()
+{
+    return newMemTracker.totalMemory - newMemTracker.currentMemoryUsed;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_ReportMemory2);
 
