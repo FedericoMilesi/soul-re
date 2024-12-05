@@ -11,6 +11,7 @@
 #include "Game/MEMPACK.h"
 #include "Game/HASM.h"
 #include "Game/INSTANCE.h"
+#include "Game/RAZIEL/RAZLIB.h"
 
 long camera_modeToIndex[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0};
 
@@ -2612,7 +2613,193 @@ short CAMERA_update_z_damped(Camera *camera, short current, short target)
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CombatCamDist);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GenericCameraProcess);
+void CAMERA_GenericCameraProcess(Camera *camera)
+{
+    Instance *focusInstance;
+    Position targetCamPos;
+
+    focusInstance = camera->focusInstance;
+
+    if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x4000000)))
+    {
+        camera->rotationVel.z = 64;
+    }
+
+    if (!(camera->instance_mode & 0x2000000))
+    {
+        combat_cam_weight = 2048;
+    }
+
+    CAMERA_SetMaxVel(camera);
+    CAMERA_SetFocus(camera, &camera->targetFocusPoint);
+
+    if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x4000000)))
+    {
+        CAMERA_FollowPlayerTilt(camera, focusInstance);
+    }
+    else
+    {
+        short angle;
+        Rotation test_rot;
+
+        CAMERA_UpdateFocusRotationX(camera, focusInstance);
+
+        if ((camera->mode == 13) && (camera->instance_xyvel > 0) && (!(camera->instance_mode & 0x82000400)) && (camera->always_rotate_flag == 0) && (camera->rotState != 3) && (!(camera->instance_mode & 0x2000)) && (gameTrackerX.cheatMode != 1))
+        {
+            CAMERA_CalcRotation(&test_rot, &camera->targetFocusPoint, &camera->core.position);
+
+            angle = CAMERA_SignedAngleDifference(test_rot.z, camera->focusRotation.z);
+
+            if ((camera->instance_mode & 0x2))
+            {
+                angle >>= 1;
+            }
+            else
+            {
+                angle = (angle * 3) >> 2;
+            }
+
+            camera->targetFocusRotation.z = camera->focusRotation.z + angle;
+        }
+    }
+
+    if ((int)camera->instance_mode < 0)
+    {
+        Instance *warpInstance;
+        int tmp;
+
+        warpInstance = RAZIEL_QueryEngagedInstance(14);
+
+        if (warpInstance != NULL)
+        {
+            tmp = warpInstance->rotation.z;
+
+            camera->tfaceTilt = 3988;
+
+            camera->rotationVel.z = 64;
+
+            camera->smooth = 8;
+
+            camera->always_rotate_flag = 1;
+
+            camera->forced_movement = 0;
+
+            camera->collisionTargetFocusRotation.z = ((tmp & 0xFFF) <= 1024) || ((tmp & 0xFFF) >= 3072);
+
+            camera->collisionTargetFocusRotation.z <<= 11;
+
+            camera->targetFocusRotation.z = camera->collisionTargetFocusRotation.z;
+        }
+    }
+    else
+    {
+        int mod;
+
+        if (((camera->flags & 0x2000)) || ((camera->instance_mode & 0x20000000)))
+        {
+            if (!(camera->instance_mode & 0x2000000))
+            {
+                camera->rotationVel.z = 64;
+
+                CAMERA_FollowGoBehindPlayer(camera);
+            }
+        }
+        else if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x4000000)))
+        {
+            CAMERA_FollowGoBehindPlayer(camera);
+        }
+        else
+        {
+            if (((camera->instance_mode & 0x400)) && (!(camera->prev_instance_mode & 0x400)))
+            {
+                mod = camera->core.rotation.z % 1024;
+
+                if (mod > 512)
+                {
+                    mod = 1024 - mod;
+                }
+                else
+                {
+                    mod = -mod;
+                }
+
+                if (ABS(mod) > 128)
+                {
+                    mod += camera->core.rotation.z;
+                    mod &= 0xFFF;
+
+                    camera->targetFocusRotation.z = mod;
+                }
+            }
+
+            CAMERA_FollowGoBehindPlayerWithTimer(camera);
+        }
+    }
+
+    if (!(camera->flags & 0x1800))
+    {
+        int dist;
+
+        if ((camera->instance_mode & 0x2000000))
+        {
+            CAMERA_CombatCamDist(camera);
+
+            dist = combat_cam_distance;
+        }
+        else
+        {
+            combat_cam_distance = dist = camera->targetFocusDistance;
+        }
+
+        CAMERA_CalcPosition(&targetCamPos, &camera->focusPoint, &camera->focusRotation, dist);
+
+        camera->data.Follow.hit = CAMERA_DoCameraCollision2(camera, &targetCamPos, 0);
+    }
+
+    if ((int)camera->instance_mode < 0)
+    {
+        camera->collisionTargetFocusDistance = 2000;
+    }
+
+    CAMERA_UpdateFocusDistance(camera);
+    CAMERA_UpdateFocusTilt(camera);
+    CAMERA_UpdateFocusRotate(camera);
+
+    if ((camera->flags & 0x1800))
+    {
+        COPY_SVEC(Position, &camera->focusPoint, Position, &camera->targetFocusPoint);
+
+        camera->focusDistance = camera->targetFocusDistance;
+
+        if ((camera->flags & 0x1000))
+        {
+            CAMERA_SetZRotation(camera, camera->teleportZRot);
+        }
+    }
+    else
+    {
+        Position target;
+
+        target = camera->targetFocusPoint;
+
+        if (!(camera->flags & 0x10000))
+        {
+            target.z = camera->focusPoint.z;
+        }
+
+        CriticalDampPosition(1, &camera->focusPoint, &target, &camera->focusPointVel, &camera->focusPointAccl, camera->maxVel);
+
+        if (!(camera->flags & 0x10000))
+        {
+            camera->focusPoint.z = CAMERA_update_z_damped(camera, camera->focusPoint.z, camera->targetFocusPoint.z);
+        }
+    }
+
+    CAMERA_CalcFollowPosition(camera, &camera->focusRotation);
+    CAMERA_CalculateLead(camera);
+
+    CAMERA_UpdateFocusRoll(camera);
+}
 
 void CAMERA_CinematicProcess(Camera *camera)
 {

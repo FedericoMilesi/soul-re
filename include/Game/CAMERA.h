@@ -63,6 +63,15 @@ void CAMERA_StartSwimThrowMode(Camera *camera);
 void CAMERA_Initialize(Camera *camera);
 void CAMERA_SetInstanceFocus(Camera *camera, Instance *instance);
 void CAMERA_CalcFocusOffset(SVector *offset, Camera *camera);
+void CAMERA_FollowPlayerTilt(Camera *camera, Instance *focusInstance);
+void CAMERA_UpdateFocusRotationX(Camera *camera, Instance *focusInstance);
+void CAMERA_FollowGoBehindPlayer(Camera *camera);
+void CAMERA_FollowGoBehindPlayerWithTimer(Camera *camera);
+void CAMERA_CombatCamDist(Camera *camera);
+void CAMERA_UpdateFocusDistance(Camera *camera);
+short CAMERA_update_z_damped(Camera *camera, short current, short target);
+void CAMERA_UpdateFocusTilt(Camera *camera);
+void CAMERA_UpdateFocusRotate(Camera *camera);
 
 extern int CameraCenterDelay;
 Camera theCamera;

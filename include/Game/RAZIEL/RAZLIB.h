@@ -27,5 +27,6 @@ void razSetWallCrawlNodes(Instance *instance, evPhysicsWallCrawlData *data);
 int razZeroAxis(long *x, long *y, int radius);
 void razReaverPickup(Instance *instance, Instance *soulReaver);
 int razConstrictAngle(Instance *instance);
+Instance *RAZIEL_QueryEngagedInstance(int index);
 
 #endif
