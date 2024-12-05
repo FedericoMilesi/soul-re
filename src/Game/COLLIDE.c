@@ -234,7 +234,96 @@ long COLLIDE_GetNormal(short nNum, short *nrmlArray, SVector *nrml)
     return bitMask;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_MakeNormal);
+void COLLIDE_MakeNormal(Terrain *terrain, TFace *tface, SVector *normal)
+{
+    SVector *vertex0;
+    SVector *vertex1;
+    SVector *vertex2;
+    int len;
+    Vector *a;
+    Vector *b;
+    Vector *n;
+    int temp, temp2; // not from decls.h
+
+    vertex0 = (SVector *)&terrain->vertexList[tface->face.v0];
+    vertex1 = (SVector *)&terrain->vertexList[tface->face.v1];
+    vertex2 = (SVector *)&terrain->vertexList[tface->face.v2];
+
+    a = (Vector *)getScratchAddr(0);
+
+    {
+        long _x0;
+        long _y0;
+        long _z0;
+        long _x1;
+        long _y1;
+        long _z1;
+
+        _x0 = vertex1->x;
+        _y0 = vertex1->y;
+        _z0 = vertex1->z;
+
+        _x1 = vertex0->x;
+        _y1 = vertex0->y;
+        _z1 = vertex0->z;
+
+        _x0 -= _x1;
+        _y0 -= _y1;
+        _z0 -= _z1;
+
+        a->x = _x0;
+        a->y = _y0;
+        a->z = _z0;
+    }
+
+    b = (Vector *)getScratchAddr(4);
+
+    {
+        long _x0;
+        long _y0;
+        long _z0;
+        long _x1;
+        long _y1;
+        long _z1;
+
+        _x0 = vertex2->x;
+        _y0 = vertex2->y;
+        _z0 = vertex2->z;
+
+        _x1 = vertex0->x;
+        _y1 = vertex0->y;
+        _z1 = vertex0->z;
+
+        _x0 -= _x1;
+        _y0 -= _y1;
+        _z0 -= _z1;
+
+        b->x = _x0;
+        b->y = _y0;
+        b->z = _z0;
+    }
+
+    n = (Vector *)getScratchAddr(8);
+
+    n->x = (short)(((a->y * b->z) - (a->z * b->y)) >> 12);
+    n->y = (short)(-(((a->x * b->z) - (a->z * b->x)) >> 12));
+    n->z = (short)((((a->x * b->y) - (a->y * b->x))) >> 12);
+
+    temp2 = abs(n->y);
+
+    temp = MAX(abs(n->x), temp2);
+
+    len = MAX(abs(n->z), temp);
+
+    temp2 = len;
+
+    if (temp2 != 0)
+    {
+        normal->x = (n->x << 12) / len;
+        normal->y = (n->y << 12) / len;
+        normal->z = (n->z << 12) / len;
+    }
+}
 
 void COLLIDE_UpdateAllTransforms(Instance *instance, SVECTOR *offset)
 {
