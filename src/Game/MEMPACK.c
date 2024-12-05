@@ -45,7 +45,17 @@ unsigned long MEMPACK_ReportFreeMemory()
     return newMemTracker.totalMemory - newMemTracker.currentMemoryUsed;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_ReportMemory2);
+void MEMPACK_ReportMemory2()
+{
+    MemHeader *address;
+
+    address = newMemTracker.rootNode;
+
+    while ((char *)address != newMemTracker.lastMemoryAddress)
+    {
+        address = (MemHeader *)((char *)address + address->memSize);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_ReportMemory);
 
