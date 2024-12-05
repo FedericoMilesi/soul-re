@@ -36,6 +36,8 @@ SVector *collide_normal0;
 
 SVector *collide_normal1;
 
+SVector collide_localPoint;
+
 int COLLIDE_PointInTriangle(SVector *v0, SVector *v1, SVector *v2, SVector *point, SVector *normal)
 {
     Triangle2D *triangle;
@@ -1111,7 +1113,127 @@ long COLLIDE_SphereAndPoint(Sphere *sphere, SVector *point, SVector *normal)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_SphereAndHBox);
+long COLLIDE_SphereAndHBox(HBox *hbox, Sphere *sphere, Position *oldPos, SVector *normal)
+{
+    SVector point;
+    SVector point0;
+    SVector point1;
+    SVector normal0;
+    SVector normal1;
+    SVector sphereNormal;
+    SVector dv;
+    SVector absdv;
+
+    if (COLLIDE_ClosestPointInBoxToPoint((Position *)&point, hbox, (SVector *)sphere) != 0)
+    {
+        long numIntersects;
+
+        numIntersects = COLLIDE_IntersectLineAndBox(&point0, &normal0, &point1, &normal1, (SVector *)sphere, (SVector *)oldPos, hbox);
+
+        if (numIntersects != 0)
+        {
+            COPY_SVEC(SVector, normal, SVector, &normal0);
+            COPY_SVEC(SVector, &collide_localPoint, SVector, &point0);
+
+            sphere->position.x = point0.x + ((normal->x * sphere->radius) >> 12);
+            sphere->position.y = point0.y + ((normal->y * sphere->radius) >> 12);
+            sphere->position.z = point0.z + ((normal->z * sphere->radius) >> 12);
+        }
+        else
+        {
+            point.x = (hbox->minX + hbox->maxX) >> 1;
+            point.y = (hbox->minY + hbox->maxY) >> 1;
+            point.z = (hbox->minZ + hbox->maxZ) >> 1;
+
+            SUB_SVEC(SVector, &dv, SVector, &point, Position, &sphere->position);
+
+            absdv.x = -abs(dv.x);
+            absdv.y = -abs(dv.y);
+            absdv.z = -abs(dv.z);
+
+            if (((absdv.x * 65536) >= (absdv.y * 65536)) && (absdv.x >= absdv.z))
+            {
+                if (dv.x < 0)
+                {
+                    sphere->position.x = hbox->maxX + sphere->radius;
+
+                    normal->x = 4096;
+                    normal->y = 0;
+                    normal->z = 0;
+                }
+                else
+                {
+                    sphere->position.x = hbox->minX - sphere->radius;
+
+                    normal->x = -4096;
+                    normal->y = 0;
+                    normal->z = 0;
+                }
+            }
+            else if ((absdv.y >= absdv.x) && (absdv.y >= absdv.z))
+            {
+                if (dv.y < 0)
+                {
+                    sphere->position.y = hbox->maxY + sphere->radius;
+
+                    normal->x = 0;
+                    normal->y = 4096;
+                    normal->z = 0;
+                }
+                else
+                {
+                    sphere->position.y = hbox->minY - sphere->radius;
+
+                    normal->x = 0;
+                    normal->y = -4096;
+                    normal->z = 0;
+                }
+            }
+            else if (dv.z < 0)
+            {
+                sphere->position.z = hbox->maxZ + sphere->radius;
+
+                normal->x = 0;
+                normal->y = 0;
+                normal->z = 4096;
+            }
+            else
+            {
+                sphere->position.z = hbox->minZ - sphere->radius;
+
+                normal->x = 0;
+                normal->y = 0;
+                normal->z = -4096;
+            }
+
+            numIntersects = 1;
+        }
+
+        return numIntersects;
+    }
+
+    if (COLLIDE_IntersectLineAndBox(&point0, &normal0, &point1, &normal1, (SVector *)sphere, (SVector *)oldPos, hbox) == 0)
+    {
+        if (COLLIDE_SphereAndPoint(sphere, &point, &sphereNormal) != 0)
+        {
+            COPY_SVEC(SVector, &collide_localPoint, SVector, &point);
+            COPY_SVEC(SVector, normal, SVector, &sphereNormal);
+
+            return 1;
+        }
+
+        return 0;
+    }
+
+    COPY_SVEC(SVector, normal, SVector, &normal0);
+    COPY_SVEC(SVector, &collide_localPoint, SVector, &point0);
+
+    sphere->position.x = point0.x + ((normal->x * sphere->radius) >> 12);
+    sphere->position.y = point0.y + ((normal->y * sphere->radius) >> 12);
+    sphere->position.z = point0.z + ((normal->z * sphere->radius) >> 12);
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/COLLIDE", COLLIDE_Instance1SpheresToInstance2);
 
