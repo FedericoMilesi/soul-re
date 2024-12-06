@@ -6,6 +6,7 @@
 #include "Game/MEMPACK.h"
 #include "Game/RELMOD.h"
 #include "Game/STRMLOAD.h"
+#include "Game/GAMELOOP.h"
 
 int MEMCARD_IsWrongVersion(memcard_t *memcard)
 {

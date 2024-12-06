@@ -23,13 +23,13 @@
 #include "Game/MATH3D.h"
 #include "Game/PLAN/PLAN.h"
 #include "Game/PSX/SUPPORT.h"
-#include "Libs/STRING.h"
 #include "Game/COLLIDE.h"
 #include "Game/SOUND.h"
 #include "Game/VM.h"
 #include "Game/GAMEPAD.h"
 #include "Game/FONT.h"
 #include "Game/DRAW.h"
+#include "Game/LIST.h"
 
 short M_TrackClutUpdate;
 
@@ -38,20 +38,20 @@ WarpGateLoadInformation WarpGateLoadInfo;
 long CurrentWarpNumber = 0;
 
 WarpRoom WarpRoomArray[14] = {
-    { "under3", NULL },
-    { "clfpil3", NULL },
-    { "huba8", NULL },
-    { "out10", NULL },
-    { "city6", NULL },
-    { "cathy58", NULL },
-    { "cathy62", NULL },
-    { "stone15", NULL },
-    { "add6", NULL },
-    { "aluka43", NULL },
-    { "fill3", NULL },
-    { "hubb4", NULL },
-    { "oracle1", NULL },
-    { "chrono17", NULL },
+    {"under3", NULL},
+    {"clfpil3", NULL},
+    {"huba8", NULL},
+    {"out10", NULL},
+    {"city6", NULL},
+    {"cathy58", NULL},
+    {"cathy62", NULL},
+    {"stone15", NULL},
+    {"add6", NULL},
+    {"aluka43", NULL},
+    {"fill3", NULL},
+    {"hubb4", NULL},
+    {"oracle1", NULL},
+    {"chrono17", NULL},
 };
 
 TFace *MORPH_SavedFace;
@@ -66,7 +66,6 @@ short RENDER_currentStreamUnitID;
 
 static int s_zval;
 
-/* TODO: Move these function declarations over to STREAM.h */
 void RelocateLevel(Level *level, SVector *offset);
 void RelocateLevelWithInstances(Level *level, SVector *offset);
 void RelocateTerrain(Terrain *terrain, SVector *offset);
@@ -79,9 +78,6 @@ void RelocateSFXMarkers(SFXMkr *sfxMkrList, int numSFXMkrs, SVector *offset);
 void RelocateInstances(SVector *offset);
 void RelocatePlanPool(PlanningNode *planPool, SVector *offset);
 void RelocateStreamPortals(StreamUnitPortal *StreamUnitList, int NumStreamUnits, SVector *offset);
-void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit);
-void MORPH_UpdateTrackingPoint(TFace *face, Level *level);
-BSPTree *STREAM_GetBspTree(StreamUnit *streamUnit, long bspNumber);
 
 void STREAM_FillOutFileNames(char *baseAreaName, char *dramName, char *vramName, char *sfxName)
 {
@@ -302,7 +298,6 @@ int STREAM_InList(char *name, char **nameList)
 
 int STREAM_IsSpecialMonster(char *name)
 {
-    //static char *mon[6] = {"wallcr", "aluka", "ronin", "sluagh", "vwraith", NULL};
     static char *mon[] = {"wallcr", "aluka", "ronin", "sluagh", "vwraith", NULL};
 
     return STREAM_InList(name, mon);
@@ -636,8 +631,7 @@ void STREAM_RemoveAllObjectsNotInUse()
         {
             object = tracker->object;
 
-            if ((!(object->oflags & 0x2000000)) && (STREAM_IsObjectInAnyUnit(tracker) == 0)
-            && (STREAM_IsAnInstanceUsingObject(object) == 0))
+            if ((!(object->oflags & 0x2000000)) && (STREAM_IsObjectInAnyUnit(tracker) == 0) && (STREAM_IsAnInstanceUsingObject(object) == 0))
             {
                 tracker->objectStatus = 3;
             }
@@ -788,8 +782,7 @@ void STREAM_CalculateWaterLevel(Level *level)
 
             for (i = terrain->numFaces; i > 0; i--, tface++)
             {
-                if (((tface->attr & 0x8)) && (terrain->vertexList[tface->face.v0].vertex.z == terrain->vertexList[tface->face.v1].vertex.z)
-                && (terrain->vertexList[tface->face.v0].vertex.z == terrain->vertexList[tface->face.v2].vertex.z))
+                if (((tface->attr & 0x8)) && (terrain->vertexList[tface->face.v0].vertex.z == terrain->vertexList[tface->face.v1].vertex.z) && (terrain->vertexList[tface->face.v0].vertex.z == terrain->vertexList[tface->face.v2].vertex.z))
                 {
                     if (waterZLevel == -32767)
                     {
@@ -1829,8 +1822,7 @@ void WARPGATE_RelocateLoadedWarpRooms(StreamUnit *mainUnit, StreamUnitPortal *st
 
     for (i = 0; i < 16; i++)
     {
-        if ((StreamTracker.StreamList[i].used == 2) && (&StreamTracker.StreamList[i] != mainUnit)
-        && ((StreamTracker.StreamList[i].flags & 0x1)))
+        if ((StreamTracker.StreamList[i].used == 2) && (&StreamTracker.StreamList[i] != mainUnit) && ((StreamTracker.StreamList[i].flags & 0x1)))
         {
             STREAM_LoadLevel(StreamTracker.StreamList[i].baseAreaName, streamPortal, 0);
         }
@@ -2828,7 +2820,7 @@ void MORPH_UpdateNormals(Level *BaseLevel)
 
             for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = instance->next)
             {
-                Intro *temp; // not from decls.h 
+                Intro *temp; // not from decls.h
 
                 temp = instance->intro;
 
@@ -2857,14 +2849,133 @@ void MORPH_UpdateNormals(Level *BaseLevel)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/STREAM", MORPH_BringBackNormals);
+void MORPH_BringBackNormals(Level *BaseLevel)
+{
+    TFace *face;
+    long faceCount;
+    TVertex *v;
+    MorphVertex *mv;
+    MorphColor *mc;
+    short h1;
+    short *morphNormals;
+
+    morphNormals = BaseLevel->terrain->morphNormalIdx;
+
+    face = BaseLevel->terrain->faceList;
+
+    for (faceCount = BaseLevel->terrain->numFaces; faceCount > 0; morphNormals++, face++, faceCount--)
+    {
+        h1 = face->normal;
+
+        face->normal = *morphNormals;
+
+        *morphNormals = h1;
+    }
+
+    mv = BaseLevel->terrain->MorphDiffList;
+
+    if (mv != NULL)
+    {
+        for (; mv->vindex > -1; mv++)
+        {
+            v = &BaseLevel->terrain->vertexList[mv->vindex];
+
+            v->vertex.x = mv->hx;
+            v->vertex.y = mv->hy;
+            v->vertex.z = mv->hz;
+        }
+    }
+
+    mc = BaseLevel->terrain->MorphColorList;
+
+    if (mc != NULL)
+    {
+        TVertex *endv;
+
+        endv = &BaseLevel->terrain->vertexList[BaseLevel->terrain->numVertices];
+
+        for (v = BaseLevel->terrain->vertexList; v < endv; v++)
+        {
+            v->r0 = (v->rgb15 & 0x1F) << 3;
+            v->g0 = (v->rgb15 >> 2) & 0xF8;
+            v->b0 = (v->rgb15 >> 7) & 0xF8;
+        }
+    }
+
+    {
+        BSPNode *node;
+        BSPLeaf *leaf;
+        Sphere_noSq hsphere;
+        BoundingBox hbox;
+        Terrain *terrain;
+        long curTree;
+
+        terrain = BaseLevel->terrain;
+
+        for (curTree = 0; curTree < terrain->numBSPTrees; curTree++)
+        {
+            for (node = terrain->BSPTreeArray[curTree].bspRoot; (BSPLeaf *)node < terrain->BSPTreeArray[curTree].startLeaves; node++)
+            {
+                hsphere = node->sphere;
+
+                node->sphere = node->spectralSphere;
+                node->spectralSphere = hsphere;
+            }
+
+            for (leaf = terrain->BSPTreeArray[curTree].startLeaves; leaf < terrain->BSPTreeArray[curTree].endLeaves; leaf++)
+            {
+                hsphere = leaf->sphere;
+                leaf->sphere = leaf->spectralSphere;
+                leaf->spectralSphere = hsphere;
+
+                hbox = leaf->box;
+                leaf->box = leaf->spectralBox;
+                leaf->spectralBox = hbox;
+            }
+        }
+    }
+
+    {
+        Instance *instance;
+
+        for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = instance->next)
+        {
+            if (instance->intro != NULL)
+            {
+                SVECTOR realDiff;
+                Position oldPos;
+                Intro *temp; // not from decls.h
+
+                temp = instance->intro;
+
+                if (((temp->spectralPosition.x != 0) || (temp->spectralPosition.y != 0) || (temp->spectralPosition.z != 0)) && (!(instance->flags2 & 0x8)))
+                {
+                    oldPos = instance->position;
+
+                    instance->position.x = temp->position.x;
+                    instance->position.y = temp->position.y;
+                    instance->position.z = temp->position.z;
+
+                    realDiff.vx = instance->position.x - oldPos.x;
+                    realDiff.vy = instance->position.y - oldPos.y;
+                    realDiff.vz = instance->position.z - oldPos.z;
+
+                    if (realDiff.vx + realDiff.vy + realDiff.vz != 0)
+                    {
+                        COLLIDE_UpdateAllTransforms(instance, &realDiff);
+                    }
+                }
+            }
+        }
+    }
+}
 
 void MORPH_AddOffsets(Level *BaseLevel, int time)
 {
     TVertex *v;
     MorphVertex *mv;
     MorphColor *mc;
-    //long m; unused
+    // long m; unused
     long fixed_time;
     Instance *instance;
     int temp; // not from decls.h
@@ -2973,7 +3084,7 @@ void MORPH_SubtractOffsets(Level *BaseLevel, int time)
     TVertex *v;
     MorphVertex *mv;
     MorphColor *mc;
-    //long m; unused 
+    // long m; unused
     long fixed_time;
     Instance *instance;
     int temp; // not from decls.h
@@ -3123,8 +3234,7 @@ void MORPH_GetComponentsForTrackingPoint(TFace *face, Level *level)
                     next = 0;
                 }
 
-                if (((track != 1) || (n != MORPH_Track[0])) && (((player.y >= v[n]->y) && (player.y <= v[next]->y))
-                    || ((player.y >= v[next]->y) && (player.y <= v[n]->y))))
+                if (((track != 1) || (n != MORPH_Track[0])) && (((player.y >= v[n]->y) && (player.y <= v[next]->y)) || ((player.y >= v[next]->y) && (player.y <= v[n]->y))))
                 {
                     div = v[next]->y - v[n]->y;
 
@@ -3257,7 +3367,9 @@ void MORPH_ToggleMorph()
 
     MORPH_UpdateTrackingPoint(gameTrackerX.playerInstance->tface, (Level *)gameTrackerX.playerInstance->tfaceLevel);
 
-    do {} while (0); // garbage code for reordering
+    do
+    {
+    } while (0); // garbage code for reordering
 
     gameTrackerX.gameData.asmData.MorphTime = 0;
 
@@ -3497,7 +3609,9 @@ int AddVertex(VECTOR *v0, RECT *rect)
         return -1;
     }
 
-    do {} while (0); // garbage code for reodering
+    do
+    {
+    } while (0); // garbage code for reodering
 
     x = v.vx;
     y = v.vy;
@@ -3519,8 +3633,8 @@ int GetPlaneDist(int k, int j, int i, VECTOR *v)
     (void)i;
 
     return (((v->vx >> 12) - (theCamera.core.position.x << 4)) * theCamera.core.vvNormalWorVecMat[k].m[j][0]) +
-        (((v->vy >> 12) - (theCamera.core.position.y << 4)) * theCamera.core.vvNormalWorVecMat[k].m[j][1]) +
-        (((v->vz >> 12) - (theCamera.core.position.z << 4)) * theCamera.core.vvNormalWorVecMat[k].m[j][2]);
+           (((v->vy >> 12) - (theCamera.core.position.y << 4)) * theCamera.core.vvNormalWorVecMat[k].m[j][1]) +
+           (((v->vz >> 12) - (theCamera.core.position.z << 4)) * theCamera.core.vvNormalWorVecMat[k].m[j][2]);
 }
 
 void CalcVert(VECTOR *v, VECTOR *v1, VECTOR *v2, int dist1, int dist2, int k, int j)
@@ -3764,9 +3878,9 @@ void DrawFogRectangle(RECT *cliprect, PrimPool *primPool, int otzpos, unsigned l
 
         setPolyG4(polyg4);
 
-        //addPrim(drawot[otzpos], polyg4);
+        // addPrim(drawot[otzpos], polyg4);
         *(int *)polyg4 = getaddr(&drawot[otzpos]) | 0x8000000;
-        *(int *)&drawot[otzpos] = (int)polyg4 & 0xFFFFFF;
+        drawot[otzpos] = (unsigned long *)((intptr_t)polyg4 & 0xFFFFFF);
     }
 }
 
@@ -4092,9 +4206,9 @@ void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStream
 
             SetDrawArea(PortalClip, &PortalRect);
 
-            //addPrim(curOT[3070], PortalClip);
+            // addPrim(curOT[3070], PortalClip);
             *(int *)PortalClip = getaddr(&curOT[3070]) | 0x2000000;
-            *(int *)&curOT[3070] = (int)PortalClip & 0xFFFFFF;
+            curOT[3070] = (unsigned long *)((intptr_t)PortalClip & 0xFFFFFF);
 
             if (!(toStreamUnit->flags & 0x8))
             {
@@ -4113,9 +4227,9 @@ void WARPGATE_RenderWarpUnit(unsigned long **mainOT, StreamUnitPortal *curStream
 
             SetDrawArea(PortalClip, &PortalRect);
 
-            //addPrim(curOT[1], PortalClip);
+            // addPrim(curOT[1], PortalClip);
             *(int *)PortalClip = getaddr(&curOT[1]) | 0x2000000;
-            curOT[1] = (int)PortalClip & 0xFFFFFF;
+            curOT[1] = (unsigned long *)((intptr_t)PortalClip & 0xFFFFFF);
 
             hld = mainOT[s_zval];
 

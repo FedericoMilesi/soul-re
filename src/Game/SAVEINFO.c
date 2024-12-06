@@ -6,20 +6,38 @@
 #include "Game/DEBUG.h"
 #include "Game/GAMEPAD.h"
 #include "Game/SCRIPT.h"
+#include "Game/GAMELOOP.h"
+#include "Game/STREAM.h"
+#include "Game/SOUND.h"
+#include "Game/INSTANCE.h"
+#include "Game/EVENT.h"
+#include "Game/MATH3D.h"
+
+GlobalSaveTracker *GlobalSave = NULL;
+
+static long numbufferedIntros = 0;
+
+static int the_header_size = 0;
+
+long SaveArraySize[10] = {
+    0,
+    sizeof(SavedIntro),
+    sizeof(SavedInfoTracker),
+    sizeof(SavedLevel),
+    sizeof(SavedDeadDeadBits),
+    sizeof(SavedIntroSmall),
+    sizeof(GlobalSaveTracker),
+    sizeof(SavedIntroWithIntro),
+    sizeof(SavedIntroSpline),
+    sizeof(SavedEventSmallVars)
+};
 
 static SavedInfoTracker savedInfoTracker;
-
-//static int the_header_size;
-EXTERN STATIC int the_header_size;
-
-//static long numbufferedIntros;
-EXTERN STATIC long numbufferedIntros;
 
 static SavedBasic *bufferSavedIntroArray[64];
 
 long DoMainMenu;
 
-long SaveArraySize[10];
 
 void SAVE_GetInstanceRotation(Instance *instance, SmallRotation *vector)
 {
@@ -91,9 +109,6 @@ void SAVE_Init(GameTracker *gt)
     SAVE_ClearMemory(gt);
 }
 
-extern char D_800D1E0C[];
-extern char D_800D1E24[];
-extern char D_800D1E44[];
 void *SAVE_GetSavedBlock(long saveType, long extraSize)
 {
     SavedBasic *savedInfo;
@@ -104,8 +119,7 @@ void *SAVE_GetSavedBlock(long saveType, long extraSize)
 
     if (saveType >= 10)
     {
-        //DEBUG_FatalError("illegal save type %d\n", saveType);
-        DEBUG_FatalError(D_800D1E0C, saveType);
+        DEBUG_FatalError("illegal save type %d\n", saveType);
     }
 
     sizeOfSave = SaveArraySize[saveType] + extraSize;
@@ -116,8 +130,7 @@ void *SAVE_GetSavedBlock(long saveType, long extraSize)
 
     if (sizeOfSave >= 1021)
     {
-        //DEBUG_FatalError("save %d is too big! (type %d)\n", sizeOfSave, saveType);
-        DEBUG_FatalError(D_800D1E24, sizeOfSave, saveType);
+        DEBUG_FatalError("save %d is too big! (type %d)\n", sizeOfSave, saveType);
     }
 
     do
@@ -136,8 +149,7 @@ void *SAVE_GetSavedBlock(long saveType, long extraSize)
         }
         else if (SAVE_PurgeAMemoryBlock() == 0)
         {
-            //DEBUG_FatalError("ran out of saved memory. needed %d, used %d. increase from % d\n", sizeOfSave, savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd, 24576);
-            DEBUG_FatalError(D_800D1E44, sizeOfSave, savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd, 24576);
+            DEBUG_FatalError("ran out of saved memory. needed %d, used %d.\nincrease from %d\n", sizeOfSave, savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd, 24576);
 
             done = 1;
         }
@@ -213,9 +225,68 @@ long SAVE_SaveableInstance(Instance *instance)
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateSavedIntro);
+SavedIntro *SAVE_UpdateSavedIntro(Instance *instance, Level *level, SavedIntro *savedIntro, evControlSaveDataData *extraData)
+{
+    Position *levelOffset;
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_UpdateSavedIntroWithIntro);
+    levelOffset = &level->terrain->BSPTreeArray->globalOffset;
+    if (savedIntro)
+    {
+        memcpy(savedIntro->name, instance->introName, 8);
+        savedIntro->savedID = 1;
+        savedIntro->introUniqueID = (short)instance->introUniqueID;
+        savedIntro->streamUnitID = (short)instance->currentStreamUnitID;
+        savedIntro->birthUnitID = (short)instance->birthStreamUnitID;
+        SUB_SVEC(Position, &savedIntro->position, Position, &instance->position, Position, levelOffset);
+        SAVE_GetInstanceRotation(instance, &savedIntro->smallRotation);
+        savedIntro->flags = instance->flags;
+        savedIntro->flags2 = instance->flags2;
+        savedIntro->specturalLightGroup = instance->spectralLightGroup;
+        savedIntro->lightGroup = instance->lightGroup;
+        savedIntro->attachedUniqueID = (short)instance->attachedID;
+        if (extraData)
+        {
+            memcpy(savedIntro + 1, extraData->data, extraData->length);
+        }
+    }
+    return savedIntro;
+}
+
+SavedIntroWithIntro *SAVE_UpdateSavedIntroWithIntro(Instance *instance, Level *level, SavedIntroWithIntro *savedIntro, evControlSaveDataData *extraData)
+{ 
+	Position* levelOffset;
+
+	levelOffset = &level->terrain->BSPTreeArray->globalOffset;
+    
+	if ((savedIntro != NULL) && (instance->intro != NULL))
+	{
+		savedIntro->savedID = 7;
+        
+		savedIntro->introOffset = instance->intro - level->introList;
+        
+		savedIntro->introUniqueID = (short)instance->introUniqueID;
+		savedIntro->birthUnitID = (short)instance->birthStreamUnitID;
+        
+        SUB_SVEC(Position, &savedIntro->position, Position, &instance->position, Position, levelOffset);
+        
+		SAVE_GetInstanceRotation(instance, &savedIntro->smallRotation);
+        
+		savedIntro->flags = instance->flags;
+		savedIntro->flags2 = instance->flags2;
+        
+		savedIntro->specturalLightGroup = instance->spectralLightGroup;
+		savedIntro->lightGroup = instance->lightGroup;
+        
+		savedIntro->attachedUniqueID = (unsigned short)instance->attachedID;
+        
+		if (extraData != NULL)
+		{
+			memcpy(&savedIntro[1], extraData->data, extraData->length); // TODO: first parameter unlikely, perhaps savedIntro was casted?
+		}
+	}
+    
+	return savedIntro;
+}
 
 SavedBasic *SAVE_GetSavedEvent(long areaID, long eventNumber)
 {
@@ -507,7 +578,116 @@ void SAVE_DeleteBlock(SavedBasic *savedBlock)
     savedInfoTracker.InfoEnd -= size;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SAVEINFO", SAVE_Instance);
+void SAVE_Instance(Instance *instance, Level *level)
+{
+	SavedIntro* savedIntro;
+	evControlSaveDataData* extraData;
+	long extraSize;
+	long saveType;
+	SavedIntroSmall* savedSmallIntro;
+	SavedIntroWithIntro* savedIntroWithIntro;
+	SavedIntroSpline* savedIntroSpline;
+	MultiSpline* multi; 
+    
+	extraSize = 0;
+    
+	saveType = SAVE_SaveableInstance(instance);
+    
+	if (saveType != 0)
+	{
+		if ((instance->flags2 & 0x4))
+		{
+			SAVE_DeleteInstance(instance);
+            
+			extraData = (evControlSaveDataData*)INSTANCE_Query(instance, 24);
+            
+			if (extraData != NULL)
+			{
+				savedSmallIntro = (SavedIntroSmall*)SAVE_GetSavedBlock(5, extraData->length);
+                
+				if (savedSmallIntro != NULL)
+				{
+					savedSmallIntro->introUniqueID = (short)instance->introUniqueID;
+                    
+					memcpy(&((evControlSaveDataData*)savedSmallIntro)->data, extraData->data, extraData->length); 
+				}
+			}
+		}
+		else if (saveType == 1)
+		{
+			SAVE_DeleteInstance(instance);
+            
+			extraData = (evControlSaveDataData*)INSTANCE_Query(instance, 24);
+            
+			if (extraData != NULL)
+			{
+				extraSize = extraData->length;
+			}
+            
+			savedIntro = (SavedIntro*)SAVE_GetSavedBlock(1, extraSize);
+            
+			if (savedIntro != NULL)
+			{
+				SAVE_UpdateSavedIntro(instance, level, savedIntro, extraData);
+			}
+		}
+		else if (saveType == 2)
+		{
+			SAVE_DeleteInstance(instance);
+            
+			extraData = (evControlSaveDataData*)INSTANCE_Query(instance, 24);
+            
+			if (extraData != NULL)
+			{
+				extraSize = extraData->length;
+			}
+            
+			savedIntroWithIntro = (SavedIntroWithIntro*)SAVE_GetSavedBlock(7, extraSize);
+            
+			if (savedIntroWithIntro != NULL)
+			{
+				SAVE_UpdateSavedIntroWithIntro(instance, level, savedIntroWithIntro, extraData);
+			}
+		}
+		else if (saveType == 3)
+		{
+			SAVE_DeleteInstance(instance);
+            
+			savedIntroSpline = (SavedIntroSpline*)SAVE_GetSavedBlock(8, 0);
+            
+			if (savedIntroSpline != NULL)
+			{
+				multi = SCRIPT_GetMultiSpline(instance, NULL, NULL);
+                
+				if (multi != NULL)
+				{
+					instance->splineFlags &= ~0x180;
+                    
+					if ((instance->flags & 0x1000000))
+					{
+						instance->splineFlags |= 0x80;
+					}
+                    
+					if ((instance->flags & 0x2000000))
+					{
+						instance->splineFlags |= 0x100;
+					}
+                    
+					savedIntroSpline->savedID = 8;
+                    
+					savedIntroSpline->introUniqueID = (short)instance->introUniqueID;
+                    
+					savedIntroSpline->splineFlags = instance->splineFlags;
+                    
+					savedIntroSpline->splineKeyFrame = (short)INSTANCE_GetSplineFrameNumber(instance, multi);
+                    
+					savedIntroSpline->splineClipBeg = instance->clipBeg;
+					savedIntroSpline->splineClipEnd = instance->clipEnd;
+				}
+			}
+		}
+	}
+}
 
 void SAVE_DeleteInstance(Instance *instance)
 {
@@ -692,13 +872,11 @@ void SAVE_UpdateGlobalSaveTracker()
     }
 }
 
-extern char D_800D1E84[];
 void SAVE_RestoreGlobalSaveTracker()
 {
     if (GlobalSave->saveVersion != 21793)
     {
-        //DEBUG_FatalError("error: old save game\n");
-        DEBUG_FatalError(D_800D1E84);
+        DEBUG_FatalError("error: old save game\n");
     }
     else
     {
@@ -764,7 +942,6 @@ void SAVE_SaveGame()
     GlobalSave->sizeUsedInBlock = *(unsigned short *)&savedInfoTracker.InfoEnd - *(unsigned short *)&savedInfoTracker.InfoStart;
 }
 
-extern char D_800D1E9C[];
 void SAVE_RestoreGame()
 {
     gameTrackerX.streamFlags |= 0x200000;
@@ -774,8 +951,7 @@ void SAVE_RestoreGame()
 
     savedInfoTracker.InfoEnd = &savedInfoTracker.InfoStart[GlobalSave->sizeUsedInBlock];
 
-    //GAMELOOP_RequestLevelChange("under", 1, &gameTrackerX);
-    GAMELOOP_RequestLevelChange(D_800D1E9C, 1, &gameTrackerX);
+    GAMELOOP_RequestLevelChange("under", 1, &gameTrackerX);
 }
 
 void SAVE_DebugSaveGame()
@@ -786,8 +962,7 @@ void SAVE_LoadSaveGame()
 {
     gameTrackerX.streamFlags |= 0x200000;
 
-    //GAMELOOP_RequestLevelChange("under", 1, &gameTrackerX);
-    GAMELOOP_RequestLevelChange(D_800D1E9C, 1, &gameTrackerX);
+    GAMELOOP_RequestLevelChange("under", 1, &gameTrackerX);
 
     gameTrackerX.gameMode = 0;
 }
@@ -797,3 +972,4 @@ long SAVE_SizeOfFreeSpace()
     return savedInfoTracker.EndOfMemory - savedInfoTracker.InfoEnd;
 }
 
+char monVersion[] = "Jun 30 1999";

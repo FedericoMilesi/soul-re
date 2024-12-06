@@ -4,12 +4,11 @@
 #include "Game/HASM.h"
 #include "Game/PSX/PSX_G2/QUATVM.h"
 #include "Game/G2/ANMG2ILF.h"
+#include "Game/G2/ANIMG2.h"
 
-//static G2AnimInterpStateBlockPool _interpStateBlockPool;
-G2AnimInterpStateBlockPool _interpStateBlockPool;
+STATIC G2AnimInterpStateBlockPool _interpStateBlockPool;
 
-//static G2AnimSegValue _segValues[80];
-G2AnimSegValue _segValues[80];
+STATIC G2AnimSegValue _segValues[80];
 
 static inline void gte_process(G2Quat *dest, G2SVector3 *base, G2SVector3 *offset, long alpha)
 {

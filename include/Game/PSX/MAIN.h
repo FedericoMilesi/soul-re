@@ -5,4 +5,7 @@ void MAIN_StartGame();
 void VblTick();
 int MainG2(void *appData);
 
+DISPENV disp[2];
+BLK_FILL clearRect[2];
+
 #endif

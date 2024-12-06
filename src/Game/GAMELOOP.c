@@ -1,10 +1,44 @@
 #include "common.h"
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"
+#include "Game/EVENT.h"
+#include "Game/LOAD3D.h"
+#include "Game/STREAM.h"
+#include "Game/STRMLOAD.h"
+#include "Game/CAMERA.h"
+#include "Game/OBTABLE.h"
+#include "Game/INSTANCE.h"
+#include "Game/FX.h"
+#include "Game/DRAW.h"
+#include "Game/MATH3D.h"
+#include "Game/SIGNAL.h"
+#include "Game/PSX/MAIN.h"
+#include "Game/PSX/SUPPORT.h"
+#include "Game/G2/ANIMG2.h"
+#include "Game/PLAN/PLANAPI.h"
+#include "Game/PLAN/ENMYPLAN.h"
+
+#define FRAMERATE_MULT 1
+
+long cameraMode = 0xD;
+
+long playerCameraMode = 0xD;
+
+Object *fontsObject = NULL;
 
 EXTERN STATIC short pause_redraw_flag;
 
 EXTERN STATIC PrimPool *primPool[2];
+
+STATIC InstanceList *instanceList;
+
+STATIC InstancePool *instancePool;
+
+STATIC void *planningPool;
+
+STATIC void *enemyPlanPool;
+
+FXTracker *fxTracker;
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AllocStaticMemory);
 
@@ -17,6 +51,7 @@ void GAMELOOP_ResetGameStates()
     EVENT_Init();
 }
 
+void GAMELOOP_ClearGameTracker();
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ClearGameTracker);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_CalcGameTime);
@@ -29,11 +64,128 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetTimeOfDayIdx);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_WaitForLoad);
 
+/*TODO: migrate to LoadLevels*/
+static char D_800D0718[16] = {0}; // oldArea
+StreamUnit *LoadLevels(char *baseAreaName, GameTracker *gameTracker);
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", LoadLevels);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_InitStandardObjects);
+void GAMELOOP_InitStandardObjects()
+{
+    static char *sobjects[] = {
+        "raziel",
+        "paths",
+        "glphicon",
+        "sreavr",
+        "soul",
+        "force",
+        "particle",
+        "healths",
+        "eaggot",
+        "eaggots"};
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_LevelLoadAndInit);
+    int i;
+
+    LOAD_DumpCurrentDir();
+
+    for (i = 0; (unsigned int)i < ARRAY_COUNT(sobjects); i++)
+    {
+        InsertGlobalObject(sobjects[i], &gameTrackerX);
+    }
+}
+
+void GAMELOOP_LevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker)
+{
+    long i;
+    StreamUnit *streamUnit;
+    BLK_FILL *temp; // not from SYMDUMP
+
+    G2Anim_ResetInternalState();
+    gameTracker->playerInstance = NULL;
+
+    INSTANCE_InitInstanceList(instanceList, instancePool);
+    GAMELOOP_ClearGameTracker();
+    CAMERA_Initialize(&theCamera);
+    PLANAPI_InitPlanning(planningPool);
+    ENMYPLAN_InitEnemyPlanPool(enemyPlanPool);
+    FX_Init(fxTracker);
+    WARPGATE_Init();
+    DRAW_InitShadow();
+    GAMELOOP_InitStandardObjects();
+
+    streamUnit = LoadLevels(baseAreaName, gameTracker);
+
+    while (STREAM_PollLoadQueue() != 0)
+    {
+    }
+
+    fontsObject = (Object *)objectAccess[2].object;
+
+    gameTracker->introFX = (Object *)objectAccess[6].object;
+
+    RENDER_currentStreamUnitID = (unsigned short)gameTracker->StreamUnitID;
+
+    for (i = 0; i < streamUnit->level->numIntros; i++)
+    {
+#if defined(UWP)
+        if (_strcmpi(streamUnit->level->introList[i].name, "raziel") == 0)
+#else
+        if (strcmpi(streamUnit->level->introList[i].name, "raziel") == 0)
+#endif
+        {
+            INSTANCE_IntroduceInstance(&streamUnit->level->introList[i], (short)streamUnit->StreamUnitID);
+            break;
+        }
+    }
+
+    gameTracker->playerInstance->data = gameTracker->playerInstance->object->data;
+
+    CAMERA_SetInstanceFocus(&theCamera, gameTracker->playerInstance);
+
+    COPY_SVEC(Position, &theCamera.core.position, Position, &gameTracker->playerInstance->position);
+
+#if defined(EDITOR)
+    extern Position overrideEditorPosition;
+    extern Rotation overrideEditorRotation;
+
+    overrideEditorPosition = theCamera.core.position;
+#endif
+
+    SetFogNearFar(streamUnit->level->fogNear, streamUnit->level->fogFar, 320);
+    SetFarColor(0, 0, 0);
+
+    temp = clearRect;
+
+    temp->r0 = streamUnit->level->backColorR;
+    temp->g0 = streamUnit->level->backColorG;
+    temp->b0 = streamUnit->level->backColorB;
+
+    temp++;
+
+    temp->r0 = streamUnit->level->backColorR;
+    temp->g0 = streamUnit->level->backColorG;
+    temp->b0 = streamUnit->level->backColorB;
+
+    gameTracker->wipeType = 10;
+    gameTracker->hideBG = 0;
+    gameTracker->wipeTime = 30;
+    gameTracker->maxWipeTime = 30 * FRAMERATE_MULT;
+
+    if (streamUnit->level->startSignal != NULL)
+    {
+        streamUnit->level->startSignal->flags |= 0x1;
+        SIGNAL_HandleSignal(gameTracker->playerInstance, streamUnit->level->startSignal->signalList, 0);
+        EVENT_AddSignalToReset(streamUnit->level->startSignal);
+    }
+
+    gameTracker->vblFrames = 0;
+
+    if (streamUnit->level->startUnitMainSignal != NULL && gameTracker->playerInstance != NULL)
+    {
+        streamUnit->level->startUnitMainSignal->flags |= 0x1;
+        SIGNAL_HandleSignal(gameTracker->playerInstance, streamUnit->level->startUnitMainSignal->signalList, 0);
+        EVENT_AddSignalToReset(streamUnit->level->startUnitMainSignal);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_StreamLevelLoadAndInit);
 
@@ -63,6 +215,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetupRenderFunction);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetMainRenderUnit);
 
+/*TODO: migrate to GAMELOOP_DisplayFrame*/
+static char D_800D0780[] = "Cameraunit: %s\n";
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DisplayFrame);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DrawSavedOT);
@@ -170,6 +324,9 @@ void GAMELOOP_Reset24FPS()
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DoTimeProcess);
 
+/*TODO: migrate to GAMELOOP_Process*/
+static char D_800D0790[] = "Processing unit %s\n";
+static char D_800D07A4[] = "Military Time %04d\n";
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_Process);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ModeStartRunning);
@@ -178,6 +335,8 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ModeStartPause);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ChangeMode);
 
+/*TODO: migrate to GAMELOOP_RequestLevelChange*/
+static char D_800D07B8[] = "%s%d";
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_RequestLevelChange);
 
 void PSX_GameLoop(GameTracker *gameTracker)

@@ -7,14 +7,11 @@
 #include "Game/G2/ANMINTRP.h"
 #include "Game/HASM.h"
 
-//static G2AnimChanStatusBlockPool _chanStatusBlockPool;
-G2AnimChanStatusBlockPool _chanStatusBlockPool;
+STATIC G2AnimChanStatusBlockPool _chanStatusBlockPool;
 
-//static G2AnimInterpStateBlockPool _interpStateBlockPool;
-G2AnimInterpStateBlockPool _interpStateBlockPool;
+STATIC G2AnimInterpStateBlockPool _interpStateBlockPool;
 
-//static G2AnimControllerPool _controllerPool;
-G2AnimControllerPool _controllerPool;
+STATIC G2AnimControllerPool _controllerPool;
 
 G2Bool G2Anim_Install()
 {
@@ -608,9 +605,9 @@ unsigned long kangaroo(G2AnimSegKeyflagInfo *kfInfo)
 void _G2Anim_InitializeSegValue(G2Anim *anim, G2AnimSegValue *segValue, int segIndex)
 {
     Segment *segment;
-    //G2Quat *quat; // unused
-    //unsigned long zpad; // unused
-    //unsigned long xy; // unused
+    // G2Quat *quat; // unused
+    // unsigned long zpad; // unused
+    // unsigned long xy; // unused
 
     SET_QUAT_FAST(&segValue->rotQuat.quat, 0, 0, 0, 4096);
     SET_SVEC3_FAST(&segValue->scale, 4096, 4096, 4096);
@@ -658,7 +655,43 @@ G2Anim *_G2AnimSection_GetAnim(G2AnimSection *section)
     return (G2Anim *)((char *)section - ((section->sectionID * sizeof(G2AnimSection)) + 36));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_TriggerEffects);
+void _G2AnimSection_TriggerEffects(G2AnimSection *section, short startTime, short endTime)
+{
+    G2AnimKeylist *keylist;
+    G2AnimFxHeader *fxHeader;
+    int fxSectionID;
+    unsigned long fxSize;
+    G2Anim *Anim;
+
+    keylist = section->keylist;
+
+    if (keylist->fxList != NULL)
+    {
+        fxHeader = keylist->fxList;
+
+        while (fxHeader->type != -1)
+        {
+            fxSectionID = fxHeader->sizeAndSection & 0xF;
+            fxSize = (fxHeader->sizeAndSection & 0xF0) >> 2;
+
+            if (fxSectionID == section->sectionID)
+            {
+                short time;
+
+                time = fxHeader->keyframeID * keylist->s0TailTime;
+
+                if (((startTime < time) || ((time == 0) && (time >= startTime))) && (endTime >= time) && (section->callback != NULL))
+                {
+                    Anim = _G2AnimSection_GetAnim(section);
+
+                    section->callback(Anim, section->sectionID, G2ANIM_MSG_PLAYEFFECT, fxHeader->type, &fxHeader[1], (Instance *)section->callbackData);
+                }
+            }
+
+            fxHeader = (G2AnimFxHeader *)((unsigned char *)fxHeader + fxSize);
+        }
+    }
+}
 
 void _G2Anim_FreeChanStatusBlockList(G2AnimChanStatusBlock *block)
 {

@@ -4,10 +4,10 @@
 #include "Game/MONSTER/MISSILE.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/STATE.h"
+#include "Game/OBTABLE.h"
+#include "Game/INSTANCE.h"
 
-//static struct MissileGraphics MISSILE_objectTable[4];
-
-EXTERN STATIC MissileGraphics MISSILE_objectTable[];
+static MissileGraphics MISSILE_objectTable[] = {{0xD, 0x1}, {0x13, 0}, {0xB, 0}, {0x13, 0}};
 
 void MISSILE_Process(Instance *instance, GameTracker *gameTracker)
 {

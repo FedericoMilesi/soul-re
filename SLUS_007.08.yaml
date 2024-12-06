@@ -16,7 +16,7 @@ options:
   gp_value: 0x800D7598
   use_legacy_include_asm: False
   section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
-  auto_all_sections: []
+  auto_link_sections: []
   symbol_addrs_path:
     - symbol_addrs.txt
   reloc_addrs_path:
@@ -180,15 +180,16 @@ segments:
 
       - [0x0B8890, .data, Game/DEBUG]
       - [0x0BA7C0, data, Game/FONT]
-      - [0x0BA9F4, data, Game/GAMELOOP]
-      - [0x0BAA1C, data]
+      - [0x0BA9F4, .data, Game/GAMELOOP]
+      - [0x0BAA1C, .data, Game/GAMEPAD]
+      - [0x0BAA28, data]
       - [0x0BCBF8, .data, Game/STREAM]
       - [0x0BCC5C, .data, Game/MONSTER/HUMAN]
-      - [0x0BCCA4, data, Game/MONSTER/MISSILE]
+      - [0x0BCCA4, .data, Game/MONSTER/MISSILE]
       - [0x0BCCAC, data, Game/MONSTER/MONMSG]
       - [0x0BCCD0, data, Game/MONSTER/MONSTER]
       - [0x0BCCD4, .data, Game/MONSTER/MONTABLE]
-      - [0x0BCDFC, data, Game/MONSTER/SLUAGH]
+      - [0x0BCDFC, .data, Game/MONSTER/SLUAGH]
       - [0x0BCE80, data, Game/MONSTER/VWRAITH]
       - [0x0BCED4, data, Game/MONSTER/WORSHIP]
       - [0x0BCF10, data, Game/G2/ANMDECMP]
@@ -204,8 +205,8 @@ segments:
       - [0x0C0D6C, .sdata, Game/COLLIDE]
       - [0x0C0DDC, sdata] # HASM_1/DRAW
       - [0x0C0E38, sdata, Game/FONT]
-      - [0x0C0F0C, sdata, Game/GAMELOOP]
-      - [0x0C0FC0, sdata, Game/GAMEPAD]
+      - [0x0C0F0C, .sdata, Game/GAMELOOP]
+      - [0x0C0FC0, .sdata, Game/GAMEPAD]
       - [0x0C1010, .sdata, Game/INSTANCE]
       - [0x0C10C8, sdata, Game/LIGHT3D]
       - [0x0C1124, sdata, Game/LOAD3D]
@@ -218,7 +219,7 @@ segments:
       - [0x0C16A8, .sdata, Game/OBTABLE]
       - [0x0C16C0, sdata] # Unused
       - [0x0C1714, .sdata, Game/GENERIC]
-      - [0x0C1720, sdata, Game/SOUND]
+      - [0x0C1720, .sdata, Game/SOUND]
       - [0x0C17D4, .sdata, Game/SPLINE]
       - [0x0C17FC, sdata, Game/FX]
       - [0x0C186C, .sdata, Game/VM]
@@ -247,10 +248,10 @@ segments:
       - [0x0C23D0, sdata, Game/MONSTER/WORSHIP]
       - [0x0C23F0, .sdata, Game/MONSTER/MBMISS]
       - [0x0C2408, .sdata, Game/G2/QUATG2]
-      - [0x0C2418, sdata, Game/PLAN/PLANCOLL]
+      - [0x0C2418, .sdata, Game/PLAN/PLANCOLL]
       - [0x0C2430, sdata] # Game/RAZIEL/* include C files?
       - [0x0C25C4, .sdata, Game/UNDRWRLD]
-      - [0x0C25D8, sdata, Game/SAVEINFO]
+      - [0x0C25D8, .sdata, Game/SAVEINFO]
       - [0x0C26B0, .sdata, Game/VOICEXA]
       - [0x0C26DC, sdata, Game/LOCAL/LOCALSTR]
       - [0x0C26FC, sdata, Game/MENU/MENU]
@@ -274,7 +275,7 @@ segments:
       - {start: 0x0C28AC, type: comm, vram: 0x800D31D4, name: Game/PSX/MAIN}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D3664, name: Game/GENERIC}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D3670, name: Game/SOUND}
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D3910, name: Game/SPLINE}
+      - {start: 0x0C28AC, type: .sbss, vram: 0x800D3910, name: Game/SPLINE}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D3948, name: Game/FX}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D3C88, name: Game/MEMPACK}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D3C9C, name: Game/PSX/AADLIB}

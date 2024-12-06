@@ -13,6 +13,14 @@
 #include "Game/G2/QUATG2.h"
 #include "Game/MONSTER/HUMAN.h"
 #include "Game/CAMERA.h"
+#include "Game/INSTANCE.h"
+#include "Game/LIST.h"
+#include "Game/EVENT.h"
+#include "Game/FX.h"
+#include "Game/OBTABLE.h"
+#include "Game/SOUND.h"
+#include "Game/STREAM.h"
+#include "Game/STATE.h"
 
 void INSTANCE_Deactivate(Instance *instance)
 {
@@ -921,7 +929,7 @@ Instance *INSTANCE_BirthObject(Instance *parent, Object *object, int modelNum)
 
         for (i = 0; i < (int)strlen(instance->introName); i++)
         {
-            if ((unsigned char)instance->introName[i] == '_')
+            if (instance->introName[i] == '_')
             {
                 instance->introName[i] = 0;
                 break;

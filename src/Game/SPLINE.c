@@ -2,8 +2,13 @@
 #include "Game/SPLINE.h"
 #include "Game/MATH3D.h"
 #include "Game/PSX/PSX_G2/QUATVM.h"
+#include "Game/G2/QUATG2.h"
 
 long FRAC_BITS = 15;
+
+unsigned long SplineGetData(Spline *spline, SplineDef *def, void *p);
+unsigned long SplineGetNext(Spline *spline, SplineDef *def);
+unsigned long SplineGetPrev(Spline *spline, SplineDef *def);
 
 void _SplineS2Pos(vecS *p, long s, SplineKey *key, SplineKey *key2)
 {
@@ -276,11 +281,195 @@ SVector *SplineGetFirstPoint(Spline *spline, SplineDef *def)
     return (SVector *)&spline->key->point;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNextPoint);
+SVector *SplineGetNextPoint(Spline *spline, SplineDef *def)
+{
+    static SVector nextrot; /*Unused*/
+    static SVector point;
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetPreviousPoint);
+    (void)nextrot;
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetNearestPoint);
+    if ((SplineGetNext(spline, def) != 0) && (SplineGetData(spline, def, &point) != 0))
+    {
+        return &point;
+    }
+
+    return NULL;
+}
+
+SVector *SplineGetPreviousPoint(Spline *spline, SplineDef *def)
+{
+    static SVector point;
+
+    if ((SplineGetPrev(spline, def) != 0) && (SplineGetData(spline, def, &point) != 0))
+    {
+        return &point;
+    }
+
+    return NULL;
+}
+
+SVector *SplineGetNearestPoint(Spline *spline, SVector *point, SplineDef *def)
+{
+    static SVector dpoint;
+    static SVector p; /*Unused*/
+    long dist;
+    long closest_dist;
+    int closest_keyframe;
+    int adjacent_keyframe;
+    int closest_ib;
+    int saved_closest_key_dist;
+    int i;
+    int frame_count;
+    int swapped_keys;
+    SplineKey *key;
+    Vector d;
+    SplineDef tempdef;
+
+    (void)p;
+
+    closest_dist = 0x7FFFFFFF;
+
+    closest_keyframe = 0;
+
+    key = spline->key;
+
+    for (i = 0; i < spline->numkeys; key++, i++)
+    {
+        d.x = point->x - key->point.x;
+        d.y = point->y - key->point.y;
+        d.z = point->z - key->point.z;
+
+        gte_ldlvl(&d);
+        gte_nsqr0();
+        gte_stlvnl(&d);
+
+        dist = d.x + d.y + d.z;
+
+        if (dist < closest_dist)
+        {
+            closest_dist = dist;
+
+            closest_keyframe = i;
+        }
+    }
+
+    saved_closest_key_dist = closest_dist;
+
+    if (closest_keyframe == 0)
+    {
+        adjacent_keyframe = 1;
+    }
+    else if (closest_keyframe == (spline->numkeys - 1))
+    {
+        adjacent_keyframe = spline->numkeys - 2;
+    }
+    else
+    {
+        key = &spline->key[closest_keyframe] - 1;
+
+        d.x = point->x - key->point.x;
+        d.y = point->y - key->point.y;
+        d.z = point->z - key->point.z;
+
+        gte_ldlvl(&d);
+        gte_nsqr0();
+        gte_stlvnl(&d);
+
+        key = &spline->key[closest_keyframe] + 1;
+
+        dist = d.x + d.y + d.z;
+
+        d.x = point->x - key->point.x;
+        d.y = point->y - key->point.y;
+        d.z = point->z - key->point.z;
+
+        gte_ldlvl(&d);
+        gte_nsqr0();
+        gte_stlvnl(&d);
+
+        if (d.x + d.y + d.z >= dist)
+        {
+            adjacent_keyframe = closest_keyframe - 1;
+        }
+        else
+        {
+            adjacent_keyframe = closest_keyframe + 1;
+        }
+    }
+
+    if (adjacent_keyframe < closest_keyframe)
+    {
+        tempdef.currkey = adjacent_keyframe;
+
+        swapped_keys = 1;
+    }
+    else
+    {
+        tempdef.currkey = closest_keyframe;
+
+        swapped_keys = 0;
+    }
+
+    tempdef.fracCurr = 0;
+
+    frame_count = spline->key[tempdef.currkey].count;
+
+    closest_ib = 0;
+
+    tempdef.denomFlag = 0;
+
+    for (i = 0; i < frame_count; i++)
+    {
+        SplineGetData(spline, (SplineDef *)&tempdef.currkey, &dpoint);
+
+        tempdef.fracCurr += 4096;
+
+        d.x = point->x - dpoint.x;
+        d.y = point->y - dpoint.y;
+        d.z = point->z - dpoint.z;
+
+        gte_ldlvl(&d);
+        gte_nsqr0();
+        gte_stlvnl(&d);
+
+        dist = d.x + d.y + d.z;
+
+        if (dist < closest_dist)
+        {
+            closest_dist = dist;
+
+            closest_ib = i;
+        }
+    }
+
+    if (swapped_keys != 0)
+    {
+        if (closest_dist >= saved_closest_key_dist)
+        {
+            def->currkey = closest_keyframe;
+
+            def->fracCurr = 0;
+        }
+        else
+        {
+            def->currkey = adjacent_keyframe;
+
+            def->fracCurr = closest_ib << 12;
+        }
+    }
+    else
+    {
+        def->currkey = closest_keyframe;
+
+        def->fracCurr = closest_ib << 12;
+    }
+
+    def->denomFlag = 0;
+
+    SplineGetData(spline, def, &dpoint);
+
+    return &dpoint;
+}
 
 unsigned long SplineGetData(Spline *spline, SplineDef *def, void *p)
 {
@@ -610,6 +799,26 @@ unsigned long SplineGetOffsetPrev(Spline *spline, SplineDef *def, long fracOffse
     return movedSplineOk;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetNextPoint);
+SVector *SplineGetOffsetNextPoint(Spline *spline, SplineDef *def, long offset)
+{
+    static SVector point;
 
-INCLUDE_ASM("asm/nonmatchings/Game/SPLINE", SplineGetOffsetPreviousPoint);
+    if ((SplineGetOffsetNext(spline, def, offset) != 0) && (SplineGetData(spline, def, &point) != 0))
+    {
+        return &point;
+    }
+
+    return NULL;
+}
+
+SVector *SplineGetOffsetPreviousPoint(Spline *spline, SplineDef *def, long offset)
+{
+    static SVector point;
+
+    if ((SplineGetOffsetPrev(spline, def, offset) != 0) && (SplineGetData(spline, def, &point) != 0))
+    {
+        return &point;
+    }
+
+    return NULL;
+}

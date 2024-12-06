@@ -1,24 +1,104 @@
 #include "common.h"
+#include "Game/PSX/AADSEQEV.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadGetMemorySize);
+AadMemoryStruct *aadMem;
+
+EXTERN STATIC unsigned long __hblankEvent;
+
+unsigned long aadGetMemorySize(AadInitAttr *attributes)
+{
+    return (1488 * attributes->numSlots) + 7304;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInstallUpdateFunc);
+void aadInstallUpdateFunc(long (*updateFuncPtr)(), int hblanksPerUpdate)
+{
+    EnterCriticalSection();
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInitVolume);
+    __hblankEvent = OpenEvent(0xF2000001, 2, 4096, updateFuncPtr);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetMasterVolume);
+    EnableEvent(__hblankEvent);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadStartMasterVolumeFade);
+    SetRCnt(0xF2000001, hblanksPerUpdate, 4096);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetSfxMasterVolume);
+    StartRCnt(0xF2000001);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetMusicMasterVolume);
+    ExitCriticalSection();
+}
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadStartMusicMasterVolFade);
+void aadInitVolume()
+{
+    aadMem->masterVolume = 0;
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadShutdown);
+    SpuSetCommonCDMix(0);
+    SpuSetCommonMasterVolume(0, 0);
+}
+
+void aadSetMasterVolume(int volume)
+{
+    aadMem->masterVolume = (short)volume;
+
+    SpuSetCommonMasterVolume(volume, volume);
+}
+
+void aadStartMasterVolumeFade(int targetVolume, int volumeStep, void (*fadeCompleteCallback)())
+{
+    aadMem->masterVolFader.volumeStep = volumeStep;
+
+    aadMem->masterVolFader.targetVolume = targetVolume;
+
+    aadMem->masterVolFader.fadeCompleteCallback = fadeCompleteCallback;
+}
+
+void aadSetSfxMasterVolume(int volume)
+{
+    aadMem->sfxMasterVol = volume & 0xFF;
+}
+
+void aadSetMusicMasterVolume(int volume)
+{
+    int slotNumber;
+
+    aadMem->musicMasterVol = volume;
+
+    for (slotNumber = 0; slotNumber < aadMem->numSlots; slotNumber++)
+    {
+        aadUpdateSlotVolPan(aadMem->sequenceSlots[slotNumber]);
+    }
+}
+
+void aadStartMusicMasterVolFade(int targetVolume, int volumeStep, void (*fadeCompleteCallback)())
+{
+    aadMem->musicMasterVolFader.volumeStep = volumeStep;
+
+    aadMem->musicMasterVolFader.targetVolume = targetVolume;
+
+    aadMem->musicMasterVolFader.fadeCompleteCallback = fadeCompleteCallback;
+}
+
+void aadShutdown()
+{
+    EnterCriticalSection();
+
+    StopRCnt(0xF2000001);
+
+    DisableEvent(__hblankEvent);
+
+    CloseEvent(__hblankEvent);
+
+    aadMem->flags |= 0x2;
+
+    ExitCriticalSection();
+
+    SpuSetKey(0, 0xFFFFFF);
+
+    SpuClearReverbWorkArea(aadGetReverbMode());
+
+    SpuQuit();
+
+    aadMem = NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSlotUpdateWrapper);
 
@@ -88,7 +168,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInitReverb);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadShutdownReverb);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadGetReverbMode);
+int aadGetReverbMode()
+{
+    return 3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadGetReverbSize);
 
@@ -116,22 +199,98 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadPauseSlot);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadResumeSlot);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadGetSlotStatus);
+int aadGetSlotStatus(int slotNumber)
+{
+    return aadMem->sequenceSlots[slotNumber]->status;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadAllNotesOff);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadMuteChannels);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadUnMuteChannels);
+void aadUnMuteChannels(AadSequenceSlot *slot, unsigned long channelList)
+{
+    unsigned long delayedUnMute;
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadInstallEndSequenceCallback);
+    delayedUnMute = slot->delayedMuteMode & channelList;
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetUserVariable);
+    if (delayedUnMute != 0)
+    {
+        slot->delayedUnMuteCmds |= delayedUnMute;
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadSetNoUpdateMode);
+        channelList &= ~delayedUnMute;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadPauseSound);
+    slot->channelMute &= ~channelList;
+}
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadCancelPauseSound);
+void (*aadInstallEndSequenceCallback(void (*callbackProc)(), long data))()
+{
+    void (*previousCallbackProc)();
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADLIB", aadResumeSound);
+    previousCallbackProc = (void *)aadMem->endSequenceCallback;
+
+    aadMem->endSequenceCallback = callbackProc;
+    aadMem->endSequenceCallbackData = data;
+
+    return previousCallbackProc;
+}
+
+void aadSetUserVariable(int variableNumber, int value)
+{
+    aadMem->userVariables[variableNumber] = value;
+}
+
+void aadSetNoUpdateMode(int noUpdate)
+{
+    if (noUpdate != 0)
+    {
+        aadMem->flags |= 0x2;
+    }
+    else
+    {
+        aadMem->flags &= ~0x2;
+    }
+}
+
+void aadPauseSound()
+{
+    int i;
+
+    if (!(aadMem->flags & 0x8))
+    {
+        aadMem->flags |= 0xC;
+
+        for (i = 0; i < 24; i++)
+        {
+            aadMem->synthVoice[i].flags &= ~0x2;
+
+            SpuGetVoicePitch(i, &aadMem->voicePitchSave[i]);
+
+            SpuSetVoicePitch(i, 0);
+        }
+    }
+}
+
+void aadCancelPauseSound()
+{
+    aadMem->flags &= ~0xC;
+}
+
+void aadResumeSound()
+{
+    int i;
+
+    if ((aadMem->flags & 0x8))
+    {
+        aadMem->flags &= ~0xC;
+
+        for (i = 0; i < 24; i++)
+        {
+            if (!(aadMem->synthVoice[i].flags & 0x2))
+            {
+                SpuSetVoicePitch(i, aadMem->voicePitchSave[i]);
+            }
+        }
+    }
+}

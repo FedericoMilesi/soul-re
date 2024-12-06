@@ -1,5 +1,4 @@
 #include "common.h"
-#include "Libs/STRING.h"
 #include "Game/SAVEINFO.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MONSTER/MONSTER.h"
@@ -16,12 +15,15 @@
 #include "Game/MATH3D.h"
 #include "Game/MONSTER/MONTABLE.h"
 #include "Game/MONSTER/MISSILE.h"
+#include "Game/STREAM.h"
+#include "Game/INSTANCE.h"
+#include "Game/G2/ANIMG2.h"
 
 typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int);
 
 void MonsterProcess(Instance *instance, GameTracker *gameTracker)
 {
-    MonsterStateFunction *state;
+    MonsterState *state;
     MonsterVars *mv;
     MonsterAttributes *attributes;
 
@@ -72,7 +74,7 @@ void MonsterProcess(Instance *instance, GameTracker *gameTracker)
 
 void MonsterInit(Instance *instance, GameTracker *gameTracker)
 {
-    MonsterStateFunction *state;
+    MonsterState *state;
     MonsterAttributes *attributes;
     MonsterVars *mv;
     typedef void (*MONTABLE_CleanUpFunc)(Instance *); // not from decls.h
@@ -673,7 +675,7 @@ void MonsterMessage(Instance *instance, unsigned long message, unsigned long dat
     }
 }
 
-void AnimDistanceAndVel(Object *object, MonsterAnimation *mAnim)
+void AnimDistanceAndVel(Object *object, MonsterAnim *mAnim)
 {
     G2Anim anim;
     G2AnimSection *animSection;
@@ -713,13 +715,13 @@ void AnimDistanceAndVel(Object *object, MonsterAnimation *mAnim)
     G2Anim_Free(&anim);
 }
 
-void TranslateAnimList(Object *object, MonsterAnimation *animList, int numAnims)
+void TranslateAnimList(Object *object, MonsterAnim *animList, int numAnims)
 {
     int i;
 
     if (animList != NULL)
     {
-        MonsterAnimation *animPtr;
+        MonsterAnim *animPtr;
 
         animPtr = animList;
 
@@ -834,7 +836,7 @@ void MonsterRelocateTune(Object *object, long offset)
         attributes->combatAttributesList = (MonsterCombatAttributes **)OFFSET_DATA(attributes->combatAttributesList, offset);
         attributes->attackAttributesList = (MonsterAttackAttributes *)OFFSET_DATA(attributes->attackAttributesList, offset);
         attributes->missileList = (MonsterMissile *)OFFSET_DATA(attributes->missileList, offset);
-        attributes->animList = (MonsterAnimation *)OFFSET_DATA(attributes->animList, offset);
+        attributes->animList = (MonsterAnim *)OFFSET_DATA(attributes->animList, offset);
         attributes->idleList = (MonsterIdle *)OFFSET_DATA(attributes->idleList, offset);
         attributes->behaviorList = (MonsterBehavior *)OFFSET_DATA(attributes->behaviorList, offset);
         attributes->shatterList = (void *)OFFSET_DATA(attributes->shatterList, offset);
@@ -889,7 +891,7 @@ void MonsterRelocateInstanceObject(Instance *instance, long offset)
     {
         mv->subAttr = (MonsterSubAttributes *)OFFSET_DATA(mv->subAttr, offset);
         mv->attackType = (MonsterAttackAttributes *)OFFSET_DATA(mv->attackType, offset);
-        mv->anim = (MonsterAnimation *)OFFSET_DATA(mv->anim, offset);
+        mv->anim = (MonsterAnim *)OFFSET_DATA(mv->anim, offset);
 
         if ((instance->object->oflags & 0x8000000))
         {

@@ -7,6 +7,8 @@
 #include "Game/PSX/SUPPORT.h"
 #include "Game/OBTABLE.h"
 #include "Game/MATH3D.h"
+#include "Game/INSTANCE.h"
+#include "Game/COLLIDE.h"
 
 void WCBEGG_Message(Instance *instance, unsigned long message, unsigned long data)
 {
@@ -30,7 +32,7 @@ void WCBEGG_Message(Instance *instance, unsigned long message, unsigned long dat
     PhysicalObjectPost(instance, message, data);
 }
 
-int WCBEGG_ShouldIgniteEgg(Instance *egg, walbossAttributes *wa)
+int WCBEGG_ShouldIgniteEgg(Instance *egg, WalbossAttributes *wa)
 {
     InstanceList *instanceList;
     Instance *instance;
@@ -72,7 +74,7 @@ void WCBEGG_Process(Instance *instance, GameTracker *gameTracker)
     int timeBetween;
     //int birthTime; unused
     Object *walboss;
-    walbossAttributes *wa;
+    WalbossAttributes *wa;
 
     data = instance->extraData;
 
@@ -89,7 +91,7 @@ void WCBEGG_Process(Instance *instance, GameTracker *gameTracker)
 
     if (walboss != NULL)
     {
-        wa = (walbossAttributes *)(intptr_t)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
+        wa = (WalbossAttributes *)(intptr_t)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
 
         timeBetween = ((Dummy *)data)->unknown + (wa->timeToEggThrob * 33); // data needs parsing to the correct struct
 
@@ -138,7 +140,7 @@ void WCBEGG_ExplodeProcess(Instance *instance, GameTracker *gameTracker)
     int currentTime;
     int time;
     Object *walboss;
-    walbossAttributes *wa;
+    WalbossAttributes *wa;
 
     (void)time;
 
@@ -155,7 +157,7 @@ void WCBEGG_ExplodeProcess(Instance *instance, GameTracker *gameTracker)
 
     if (walboss != NULL)
     {
-        wa = (walbossAttributes *)(intptr_t)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
+        wa = (WalbossAttributes *)(intptr_t)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
 
         if (currentTime >= (((Dummy *)data)->unknown + 330)) // data needs parsing to the correct struct
         {
@@ -192,7 +194,7 @@ void WCBEGG_SplitProcess(Instance *instance, GameTracker *gameTracker)
     int currentTime;
     int time;
     Object *walboss;
-    walbossAttributes *wa;
+    WalbossAttributes *wa;
 
     data = (PhysObData *)instance->extraData;
 
@@ -202,7 +204,7 @@ void WCBEGG_SplitProcess(Instance *instance, GameTracker *gameTracker)
 
     if (walboss != NULL)
     {
-        wa = (walbossAttributes *)(intptr_t)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
+        wa = (WalbossAttributes *)(intptr_t)((Dummy2 *)walboss->data)->unknown; // walboss->data needs parsing to the correct struct
 
         if (currentTime >= (((Dummy *)data)->unknown + 198)) // data needs parsing to the correct struct
         {

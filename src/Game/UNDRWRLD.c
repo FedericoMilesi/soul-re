@@ -9,6 +9,9 @@
 #include "Game/COLLIDE.h"
 #include "Game/STRMLOAD.h"
 #include "Game/PSX/SUPPORT.h"
+#include "Game/INSTANCE.h"
+#include "Game/SIGNAL.h"
+#include "Game/STREAM.h"
 
 static UW_ScreenXY *ScreenMorphArray = 0;
 

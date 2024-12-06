@@ -12,6 +12,10 @@
 #include "Game/FX.h"
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/CAMERA.h"
+#include "Game/GAMELOOP.h"
+#include "Game/SOUND.h"
+#include "Game/STREAM.h"
+#include "Game/G2/ANIMG2.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -188,7 +192,7 @@ void MON_TurnOnAllSpheres(Instance *instance)
     MON_TurnOnBodySpheres(instance);
 }
 
-void MON_SwitchState(Instance *instance, MonsterState state)
+void MON_SwitchState(Instance *instance, enum MonsterState state)
 {
     MonsterVars *mv;
     int temp; // not from decls.h
@@ -232,7 +236,7 @@ void MON_SwitchState(Instance *instance, MonsterState state)
     }
 }
 
-void MON_SwitchStateDoEntry(Instance *instance, MonsterState state)
+void MON_SwitchStateDoEntry(Instance *instance, enum MonsterState state)
 {
     MonsterVars *mv;
 
@@ -242,7 +246,7 @@ void MON_SwitchStateDoEntry(Instance *instance, MonsterState state)
 
     if (mv != NULL)
     {
-        (((MonsterStateFunction *)MONTABLE_GetStateFuncs(instance, instance->currentMainState))->entryFunction)(instance);
+        (((MonsterState *)MONTABLE_GetStateFuncs(instance, instance->currentMainState))->entryFunction)(instance);
 
         mv->mvFlags &= ~0x1;
     }
@@ -253,7 +257,7 @@ int MON_TransNodeAnimation(Instance *instance)
     return G2Anim_SegmentHasActiveChannels(&instance->anim, 0, 0x700);
 }
 
-MonsterAnimation *MON_GetAnim(Instance *instance, char *animList, int index)
+MonsterAnim *MON_GetAnim(Instance *instance, char *animList, int index)
 {
     int whichAnim;
     MonsterAttributes *temp; // not from decls.h
@@ -273,7 +277,7 @@ MonsterAnimation *MON_GetAnim(Instance *instance, char *animList, int index)
 void MON_PlayAnimID(Instance *instance, int index, int mode)
 {
     MonsterVars *mv;
-    MonsterAnimation *manim;
+    MonsterAnim *manim;
     MonsterAttributes *ma;
     int anim;
     int anim0;
@@ -373,17 +377,17 @@ void MON_PlayAnimFromListIfNotPlaying(Instance *instance, char *animList, int an
     }
 }
 
-void MON_PlayAnim(Instance *instance, MonsterAnim animtype, int mode)
+void MON_PlayAnim(Instance *instance, enum MonsterAnim animtype, int mode)
 {
     MON_PlayAnimFromList(instance, ((MonsterVars *)instance->extraData)->subAttr->animList, animtype, mode);
 }
 
-int MON_AnimPlaying(Instance *instance, MonsterAnim animtype)
+int MON_AnimPlaying(Instance *instance, enum MonsterAnim animtype)
 {
     return MON_AnimPlayingFromList(instance, ((MonsterVars *)instance->extraData)->subAttr->animList, animtype);
 }
 
-void MON_PlayAnimIfNotPlaying(Instance *instance, MonsterAnim animtype, int mode)
+void MON_PlayAnimIfNotPlaying(Instance *instance, enum MonsterAnim animtype, int mode)
 {
     MON_PlayAnimFromListIfNotPlaying(instance, ((MonsterVars *)instance->extraData)->subAttr->animList, animtype, mode);
 }
@@ -574,7 +578,7 @@ void MON_PlayCombatIdle(Instance *instance, int mode)
         anim = MONSTER_ANIM_STANCE_HEALTHY;
     }
 
-    MON_PlayAnimIfNotPlaying(instance, (MonsterAnim)anim, mode);
+    MON_PlayAnimIfNotPlaying(instance, (enum MonsterAnim)anim, mode);
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetRandomPoint);

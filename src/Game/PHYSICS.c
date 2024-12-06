@@ -8,6 +8,10 @@
 #include "Game/STATE.h"
 #include "Game/SIGNAL.h"
 #include "Game/PHYSOBS.h"
+#include "Game/STREAM.h"
+#include "Game/INSTANCE.h"
+#include "Game/FX.h"
+#include "Game/G2/QUATG2.h"
 
 void SetNoPtCollideInFamily(Instance *instance)
 {
@@ -866,6 +870,7 @@ int PHYSICS_CheckFaceStick(PCollideInfo *CInfo)
     HFace *hface;
     char temp[8]; // not from decls.h
 
+    (void)hface;
     (void)temp;
 
     rc = 0;
@@ -876,9 +881,7 @@ int PHYSICS_CheckFaceStick(PCollideInfo *CInfo)
 
         if (tface->textoff != 0xFFFF)
         {
-            hface = (HFace *)(((TextureFT3 *)((char *)((Level *)&CInfo->inst->node)->terrain->StartTextureList + tface->textoff))->attr & 0x200);
-
-            rc = (unsigned int)rc < (uintptr_t)hface;
+            rc = (unsigned int)rc < (unsigned int)(((TextureFT3*)((char*)((Level*)&CInfo->inst->node)->terrain->StartTextureList + tface->textoff))->attr & 0x200);
         }
     }
 

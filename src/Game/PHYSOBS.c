@@ -11,6 +11,14 @@
 #include "Game/G2/ANMCTRLR.h"
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/G2/INSTNCG2.h"
+#include "Game/GAMELOOP.h"
+#include "Game/OBTABLE.h"
+#include "Game/INSTANCE.h"
+#include "Game/SOUND.h"
+#include "Game/FX.h"
+#include "Game/COLLIDE.h"
+#include "Game/G2/QUATG2.h"
+#include "Game/HASM.h"
 
 void PHYSOB_PlayDropSound(Instance *instance)
 {
@@ -117,7 +125,7 @@ int CheckPhysOb(Instance *instance)
 int CheckPhysObAbility(Instance *instance, unsigned short ability)
 {
     PhysObProperties *prop;
-    PhysObInteractProperties *temp; // not from decls.h 
+    PhysObInteractProperties *temp; // not from decls.h
 
     prop = (PhysObProperties *)instance->data;
 
@@ -1543,7 +1551,7 @@ void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker)
 
     if (CheckPhysObAbility(instance, 64) != 0)
     {
-        PhysObSwitchProperties *temp; // not from decls.h 
+        PhysObSwitchProperties *temp; // not from decls.h
 
         temp = (PhysObSwitchProperties *)instance->extraData;
 
@@ -1651,7 +1659,7 @@ void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker)
                 if ((level != NULL) && (instance->position.z < level->waterZLevel))
                 {
                     PhysObProjectileProperties *ProjProp;
-                    PhysObProjectileData *ProjData;
+                    PhysObProjData *ProjData;
 
                     ProjProp = (PhysObProjectileProperties *)instance->data;
 
@@ -1822,7 +1830,7 @@ void ProcessPhysicalObject(Instance *instance, GameTracker *gameTracker)
                 SVECTOR Old;
                 SVECTOR New;
                 short len;
-                //short mult; unused
+                // short mult; unused
                 int temp; // not from decls.h
 
                 CInfo.oldPoint = &Old;
@@ -1927,7 +1935,7 @@ unsigned long PhysicalObjectQuery(Instance *instance, unsigned long Query)
         return Data->Mode;
     case 5:
     {
-        PhysObSwitchProperties *temp; // not from decls.h 
+        PhysObSwitchProperties *temp; // not from decls.h
 
         temp = (PhysObSwitchProperties *)instance->extraData;
 
@@ -1942,7 +1950,7 @@ unsigned long PhysicalObjectQuery(Instance *instance, unsigned long Query)
         return SetPositionData(instance->position.x, instance->position.y, instance->position.z);
     case 7:
     {
-        PhysObData *temp; // not from decls.h 
+        PhysObData *temp; // not from decls.h
 
         if (CheckPhysObAbility(instance, 64) != 0)
         {
@@ -1974,7 +1982,7 @@ unsigned long PhysicalObjectQuery(Instance *instance, unsigned long Query)
     case 4:
     {
         PhysObProperties *Prop;
-        PhysObInteractProperties *temp; // not from decls.h 
+        PhysObInteractProperties *temp; // not from decls.h
 
         Prop = (PhysObProperties *)instance->data;
 
@@ -2621,7 +2629,7 @@ PhysObWeaponAttributes *PhysObGetWeapon(Instance *instance)
     if (CheckPhysObFamily(instance, 7) != 0)
     {
         PhysObProjectileProperties *Prop;
-        PhysObProjectileData *temp; // not from decls.h
+        PhysObProjData *temp;               // not from decls.h
         evObjectBirthProjectileData *temp2; // not from decls.h
 
         Prop = (PhysObProjectileProperties *)instance->data;
@@ -2728,7 +2736,7 @@ void TurnOffCollisionPhysOb(Instance *instance, int coll)
 int GetPhysObCollisionType(Instance *instance)
 {
     CollideInfo *collideInfo;
-    //HSphere *S; unused
+    // HSphere *S; unused
     Instance *target;
     PhysObWeaponAttributes *weapon;
     PhysObData *Data;
@@ -2767,8 +2775,7 @@ int GetPhysObCollisionType(Instance *instance)
             }
         }
 
-        if (((collideInfo->type0 == 1) && (collideInfo->type1 == 1)) && ((unsigned char)weapon->AltDamage == 9)
-        && (weapon = (PhysObWeaponAttributes *)collideInfo->prim1, ((HSphere *)weapon)->id == 8)) // TODO: weapon should be S here
+        if (((collideInfo->type0 == 1) && (collideInfo->type1 == 1)) && ((unsigned char)weapon->AltDamage == 9) && (weapon = (PhysObWeaponAttributes *)collideInfo->prim1, ((HSphere *)weapon)->id == 8)) // TODO: weapon should be S here
         {
             target = (Instance *)collideInfo->inst1;
 
@@ -3047,7 +3054,9 @@ int PHYSOBS_FigureDragForSlope(Instance *instance, int pathNumber, int *result)
 
     didSomething = 0;
 
-    do {} while (0); // garbage code for reodering
+    do
+    {
+    } while (0); // garbage code for reodering
 
     if ((PHYSOBS_IsAPushBlockAttached(instance) != NULL) || (pathNumber == 5) || (pathNumber == 1) || (pathNumber == 7) || (pathNumber == 4) || (pathNumber == 2) || (didSomething = 0, pathNumber == 3))
     {
@@ -3155,9 +3164,7 @@ long PHYSOB_CheckForEnemyInBlkSpot(Instance *instance, int dx, int dy)
 
     while (inst != NULL)
     {
-        if (((!(inst->object->oflags2 & 0x80000)) || ((inst->flags2 & 0x8000000))) || ((INSTANCE_Query(inst, 0) & 0x40000000))
-        || ((inst->position.x < x0) || (inst->position.x > x1)) || ((inst->position.y < y0) || (inst->position.y > y1))
-        || ((inst->position.z < z0) || (inst->position.z > z1)))
+        if (((!(inst->object->oflags2 & 0x80000)) || ((inst->flags2 & 0x8000000))) || ((INSTANCE_Query(inst, 0) & 0x40000000)) || ((inst->position.x < x0) || (inst->position.x > x1)) || ((inst->position.y < y0) || (inst->position.y > y1)) || ((inst->position.z < z0) || (inst->position.z > z1)))
         {
             inst = inst->next;
         }
@@ -3304,7 +3311,71 @@ void PHYSOB_Normalize(SVector *v)
     v->z = ((v->z << 12) / len);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_MoveTowardsAlign);
+int PHYSOB_MoveTowardsAlign(Instance *instance, SVector *orgVec, SVector *endVec)
+{
+    MATRIX xform;
+    MATRIX dest;
+    MATRIX *src;
+    G2Quat rot;
+    long len;
+    int theta;
+    int sintheta;
+    G2EulerAngles ea;
+    short temp; // not from decls.h
+
+    temp = ((long)gameTrackerX.timeMult * 50) >> 12;
+
+    PHYSOB_Normalize(orgVec);
+    PHYSOB_Normalize(endVec);
+
+    src = instance->matrix;
+
+    rot.x = ((orgVec->y * endVec->z) - (orgVec->z * endVec->y)) / 4096;
+    rot.y = ((orgVec->z * endVec->x) - (orgVec->x * endVec->z)) / 4096;
+    rot.z = ((orgVec->x * endVec->y) - (orgVec->y * endVec->x)) / 4096;
+
+    theta = MATH3D_racos_S(((orgVec->x * endVec->x) + (orgVec->y * endVec->y) + (orgVec->z * endVec->z)) / 4096) / 2;
+
+    if (theta < -temp)
+    {
+        theta = -temp;
+    }
+
+    if (theta > temp)
+    {
+        theta = temp;
+    }
+
+    len = MATH3D_SquareLength(rot.x, rot.y, rot.z);
+
+    if (len <= 0)
+    {
+        len = 4096;
+    }
+    else
+    {
+        len = MATH3D_FastSqrt0(len);
+    }
+
+    sintheta = rsin(theta);
+
+    rot.x = (rot.x * sintheta) / len;
+    rot.y = (rot.y * sintheta) / len;
+    rot.z = (rot.z * sintheta) / len;
+    rot.w = rcos(theta);
+
+    G2Quat_ToMatrix_S(&rot, (G2Matrix *)&xform);
+
+    MulMatrix0(&xform, src, &dest);
+
+    G2EulerAngles_FromMatrix(&ea, (G2Matrix *)&dest, 21);
+
+    instance->rotation.x = ea.x;
+    instance->rotation.y = ea.y;
+    instance->rotation.z = ea.z;
+
+    return theta < 20;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOB_ReAlignFalling);
 
@@ -3416,11 +3487,11 @@ void PhysicalRelocateTune(Object *object, long offset)
         if (properties->Properties.family == 7)
         {
             PhysObProjectileProperties *prop;
-            PhysObProjectileData *temp; // not from decls.h
+            PhysObProjData *temp; // not from decls.h
 
             prop = (PhysObProjectileProperties *)object->data;
 
-            prop->data = (PhysObProjectileData *)OFFSET_DATA(prop->data, offset);
+            prop->data = (PhysObProjData *)OFFSET_DATA(prop->data, offset);
 
             if (prop->data != NULL)
             {

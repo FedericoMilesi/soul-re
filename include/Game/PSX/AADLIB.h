@@ -1,7 +1,9 @@
 #ifndef _AADLIB_H_
 #define _AADLIB_H_
 
-#include "Game/SOUND.h"
+#include "common.h"
+
+AadMemoryStruct *aadMem;
 
 int aadIsSfxLoaded(unsigned int toneID);
 int aadFreeDynamicSfx(int handle);
@@ -28,5 +30,7 @@ void aadSetUserVariable(int variableNumber, int value);
 void aadShutdown();
 unsigned long aadGetMemorySize(AadInitAttr *attributes);
 int aadInit(AadInitAttr *attributes, unsigned char *memoryPtr);
+int aadLoadDynamicSoundBank(char *sndFileName, char *smpFileName, int dynamicBankIndex, int loadOption, void (*retProc)());
+unsigned long aadGetSramBlockAddr(int handle);
 
 #endif

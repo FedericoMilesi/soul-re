@@ -8,29 +8,34 @@
 #include "Game/CAMERA.h"
 #include "Game/MATH3D.h"
 #include "Game/MEMPACK.h"
-#include "Game/STRMLOAD.h"
+#include "Game/STREAM.h"
+#include "Game/LOAD3D.h"
+#include "Game/PSX/SUPPORT.h"
 
-char soundBuffer[13256];
+/*.sdata*/
+int gSramFullAlarm = 0;
 
-MusicLoadInfo musicInfo;
+static int gSramFullMsgCnt = 0;
 
-int gSramFullAlarm;
+long objectOneShotTriggerTbl[3] = {0x1000, 0x2000, 0x4000};
 
-EXTERN STATIC int gSramFullMsgCnt;
-
-int gSramTotalUsed;
-
-int gSramUsedBlocks;
-
-int gSramTotalFree;
-
+/*.sbss*/
 int gSramLargestFree;
+
+SoundEffectChannel soundEffectChannelTbl[16];
 
 int gSramFreeBlocks;
 
-AadMemoryStruct *aadMem;
+int gSramUsedBlocks;
 
-SoundEffectChannel soundEffectChannelTbl[16];
+int gSramTotalUsed;
+
+int gSramTotalFree;
+
+MusicLoadInfo musicInfo;
+
+/*.bss*/
+char soundBuffer[13256];
 
 SoundEffectChannel *SndOpenSfxChannel(unsigned char *channelNum)
 {
@@ -72,9 +77,124 @@ SoundEffectChannel *SndGetSfxChannel(int channelNum)
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessInstanceSounds);
+void SOUND_ProcessInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl, Position *position, int livesInOnePlace, int inSpectral, int hidden, int burning, long *triggerFlags)
+{
+    int numSounds;
+    // int numSfxIDs; unused
+    int i;
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_EndInstanceSounds);
+    if ((gameTrackerX.gameMode == 6) || (sfxFileData == NULL) || (soundInstTbl == NULL) || (*sfxFileData++ != 190) || (*sfxFileData++ != 239))
+    {
+        return;
+    }
+
+    numSounds = *sfxFileData;
+
+    sfxFileData += 2;
+
+    for (i = 0; i < numSounds; i++)
+    {
+        switch (*sfxFileData)
+        {
+        case 0:
+            processPeriodicSound(position, livesInOnePlace, inSpectral, hidden, burning, &soundInstTbl[i], (ObjectPeriodicSound *)sfxFileData);
+
+            sfxFileData += (sfxFileData[1] * 2) + 18;
+            break;
+        case 1:
+            processEventSound(position, &soundInstTbl[i], (ObjectEventSound *)sfxFileData);
+
+            sfxFileData += (sfxFileData[1] * 2) + 14;
+            break;
+        case 2:
+        case 3:
+        case 4:
+            processOneShotSound(position, hidden, burning, triggerFlags, &soundInstTbl[i], (ObjectOneShotSound *)sfxFileData);
+
+            sfxFileData += (sfxFileData[1] * 2) + 14;
+            break;
+        }
+    }
+}
+
+void SOUND_EndInstanceSounds(unsigned char *sfxFileData, SoundInstance *soundInstTbl)
+{
+    int numSounds;
+    int i;
+    SoundEffectChannel *channel;
+
+    if ((sfxFileData == NULL) || (soundInstTbl == NULL) || (*sfxFileData++ != 190) || (*sfxFileData++ != 239))
+    {
+        return;
+    }
+
+    do
+    {
+        numSounds = *sfxFileData;
+
+        sfxFileData += 2;
+    } while (0); // this loop isn't really necessary (it's garbage), however the two lines inside of it are
+
+    for (i = 0; i < numSounds; i++)
+    {
+        switch (*sfxFileData)
+        {
+        default:
+            break;
+        case 0:
+            sfxFileData += (sfxFileData[1] * 2) + 18;
+
+            channel = SndGetSfxChannel(soundInstTbl[i].channel);
+
+            if (channel != NULL)
+            {
+                SndEndLoop(channel->handle);
+
+                SndCloseSfxChannel(soundInstTbl[i].channel);
+
+                soundInstTbl[i].channel = 0xFF;
+
+                soundInstTbl[i].state = 0;
+            }
+
+            break;
+        case 1:
+            sfxFileData += (sfxFileData[1] * 2) + 14;
+
+            channel = SndGetSfxChannel(soundInstTbl[i].channel);
+
+            if (channel != NULL)
+            {
+                SndEndLoop(channel->handle);
+
+                SndCloseSfxChannel(soundInstTbl[i].channel);
+
+                soundInstTbl[i].channel = 0xFF;
+
+                soundInstTbl[i].state = 0;
+            }
+
+            break;
+        case 2:
+        case 3:
+        case 4:
+            sfxFileData += (sfxFileData[1] * 2) + 14;
+
+            channel = SndGetSfxChannel(soundInstTbl[i].channel);
+
+            if (channel != NULL)
+            {
+                SndCloseSfxChannel(soundInstTbl[i].channel);
+
+                soundInstTbl[i].channel = 0xFF;
+
+                soundInstTbl[i].state = 0;
+            }
+
+            break;
+        }
+    }
+}
 
 int isOkayToPlaySound(int flags, int spectralPlane, int hidden, int burning)
 {
@@ -439,7 +559,7 @@ void processEventSound(Position *position, SoundInstance *soundInst, ObjectEvent
                 sfxIDNum = (sound->numSfxIDs < 2) ? 0 : rand() % sound->numSfxIDs;
 
                 // TODO: second parameter is likely wrong
-                channel->handle = SOUND_Play3dSound(position, ((unsigned short *)(sound + 1))[sfxIDNum], channel->pitch, channel->volume, sound->minVolDistance);
+                channel->handle = SOUND_Play3dSound(position, ((unsigned short *)&sound[1])[sfxIDNum], channel->pitch, channel->volume, sound->minVolDistance);
 
                 if (channel->handle == 0)
                 {
@@ -499,18 +619,18 @@ int SOUND_IsInstanceSoundLoaded(unsigned char *sfxFileData, long soundNumber)
             case 0:
                 sfxIDList = (unsigned short *)&sfxFileData[18];
                 numSfxIDs = sfxFileData[1];
-                sfxFileData += numSfxIDs*2+18;
+                sfxFileData += numSfxIDs * 2 + 18;
                 break;
             case 1:
                 sfxIDList = (unsigned short *)&sfxFileData[14];
                 numSfxIDs = sfxFileData[1];
-                sfxFileData += numSfxIDs*2+14;
+                sfxFileData += numSfxIDs * 2 + 14;
                 break;
             case 2:
             default:
                 sfxIDList = (unsigned short *)&sfxFileData[14];
                 numSfxIDs = sfxFileData[1];
-                sfxFileData += numSfxIDs*2+14;
+                sfxFileData += numSfxIDs * 2 + 14;
                 break;
             }
 
@@ -634,9 +754,243 @@ void SOUND_SetInstanceSoundVolume(SoundInstance *soundInst, long volumeChangeAmt
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", processOneShotSound);
+void processOneShotSound(Position *position, int hidden, int burning, long *triggerFlags, SoundInstance *soundInst, ObjectOneShotSound *sound)
+{
+    SoundEffectChannel *channel;
+    // int sfxIDNum; unused
+    int sfxToneID;
+    long triggerMask;
+    int spectralPlane;
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_Play3dSound);
+    triggerMask = objectOneShotTriggerTbl[sound->type - 2];
+
+    spectralPlane = gameTrackerX.gameData.asmData.MorphType;
+
+    switch (soundInst->state & 0xF)
+    {
+    case 0:
+    default:
+        soundInst->channel = 0xFF;
+
+        soundInst->state = 1;
+
+        soundInst->delay = 0;
+        break;
+    case 1:
+        if ((*triggerFlags & triggerMask))
+        {
+            if (isOkayToPlaySound(sound->flags, spectralPlane, hidden, burning) != 0)
+            {
+                soundInst->delay = sound->initialDelay;
+
+                if (sound->initialDelayVariation != 0)
+                {
+                    soundInst->delay += sound->initialDelayVariation - (rand() % (sound->initialDelayVariation * 2));
+                }
+
+                if (soundInst->delay != 0)
+                {
+                    soundInst->state = 2;
+                }
+                else
+                {
+                    soundInst->state = 3;
+                }
+            }
+            else
+            {
+                *triggerFlags &= ~triggerMask;
+            }
+        }
+
+        break;
+    case 2:
+        if (soundInst->delay != 0)
+        {
+            soundInst->delay--;
+        }
+        else
+        {
+            soundInst->state = 3;
+        }
+
+        break;
+    case 3:
+        channel = SndGetSfxChannel(soundInst->channel);
+
+        if (channel != NULL)
+        {
+            if (SndIsPlayingOrRequested(channel->handle) == 0)
+            {
+                SndCloseSfxChannel(soundInst->channel);
+
+                soundInst->channel = 0xFF;
+
+                soundInst->state = 1;
+
+                *triggerFlags &= ~triggerMask;
+            }
+            else if (SndIsPlaying(channel->handle) != 0)
+            {
+                if ((soundInst->state & 0x10))
+                {
+                    soundInst->state &= ~0x10;
+
+                    if (SOUND_Update3dSound(position, channel->handle, channel->pitch, channel->volume, sound->minVolDistance) == 0)
+                    {
+                        SndEndLoop(channel->handle);
+
+                        SndCloseSfxChannel(soundInst->channel);
+
+                        soundInst->channel = 0xFF;
+
+                        soundInst->state = 1;
+
+                        *triggerFlags &= ~triggerMask;
+                    }
+                }
+                else
+                {
+                    soundInst->state |= 0x10;
+                }
+            }
+        }
+        else
+        {
+            channel = SndOpenSfxChannel((unsigned char *)soundInst);
+
+            if (channel != NULL)
+            {
+                channel->volume = sound->maxVolume;
+
+                if (sound->maxVolVariation != 0)
+                {
+                    channel->volume += sound->maxVolVariation - (rand() % (sound->maxVolVariation * 2));
+                }
+
+                channel->pitch = sound->pitch;
+
+                if (sound->pitchVariation != 0)
+                {
+                    channel->pitch += sound->pitchVariation - (rand() % (sound->pitchVariation * 2));
+                }
+
+                if ((sound->numSfxIDs != 0) && (sound->numSfxIDs != 1))
+                {
+                    sfxToneID = (rand() % sound->numSfxIDs);
+                }
+                else
+                {
+                    sfxToneID = 0;
+                }
+
+                // TODO: second parameter is likely wrong
+                channel->handle = SOUND_Play3dSound(position, ((unsigned short *)&sound[1])[sfxToneID], channel->pitch, channel->volume, sound->minVolDistance);
+
+                if (channel->handle == 0)
+                {
+                    SndCloseSfxChannel(soundInst->channel);
+
+                    soundInst->channel = 0xFF;
+                }
+            }
+        }
+
+        break;
+    }
+}
+
+unsigned long SOUND_Play3dSound(Position *position, int sfxToneID, int pitch, int maxVolume, int minVolDist)
+{
+    long dx;
+    long dy;
+    long dz;
+    long objDist;
+    long workMinVolDist;
+    int angle;
+    int quadrant;
+    int qpos;
+    int pan;
+    int volume;
+    int temp, temp2; // not from decls.h
+
+    if (maxVolume != 0)
+    {
+        if (minVolDist == 0)
+        {
+            return SndPlayVolPan(sfxToneID, maxVolume, 64, pitch);
+        }
+        else
+        {
+            if ((theCamera.mode == 5) && ((gameTrackerX.gameFlags & 0x10)))
+            {
+                workMinVolDist = minVolDist;
+
+                dx = position->x - theCamera.core.position.x;
+                dy = position->y - theCamera.core.position.y;
+                dz = position->z - theCamera.core.position.z;
+            }
+            else
+            {
+                workMinVolDist = minVolDist;
+
+                dx = position->x - theCamera.focusInstance->position.x;
+                dy = position->y - theCamera.focusInstance->position.y;
+                dz = position->z - theCamera.focusInstance->position.z;
+            }
+
+            objDist = MATH3D_FastSqrt0((dx * dx) + (dy * dy) + (dz * dz));
+
+            if (objDist <= workMinVolDist)
+            {
+                temp = ratan2(dy, dx) + 1024;
+
+                angle = theCamera.core.rotation.z - temp;
+
+                volume = (workMinVolDist - objDist) / (workMinVolDist / maxVolume);
+
+                quadrant = (angle & 0xFFF) >> 10;
+
+                qpos = angle & 0x3FF;
+
+                if (volume >= 128)
+                {
+                    volume = 127;
+                }
+
+                switch (quadrant)
+                {
+                case 0:
+                    pan = 63 - (qpos >> 4);
+                    break;
+                case 1:
+                    pan = qpos >> 4;
+                    break;
+                case 2:
+                    pan = (qpos >> 4) + 64;
+                    break;
+                default:
+                    pan = 127 - (qpos >> 4);
+                }
+
+                temp2 = (objDist << 8) / workMinVolDist;
+
+                if (pan < 64)
+                {
+                    pan = 63 - (((63 - pan) * temp2) >> 8);
+                }
+                else
+                {
+                    pan = (((pan - 64) * temp2) >> 8) + 64;
+                }
+
+                return SndPlayVolPan(sfxToneID, volume, pan, pitch);
+            }
+        }
+    }
+
+    return 0;
+}
 
 unsigned long SOUND_Update3dSound(Position *position, unsigned long handle, int pitch, int maxVolume, int minVolDist)
 {
@@ -817,7 +1171,7 @@ void SOUND_SetVoiceVolume(int newVolume)
 
 void SOUND_PauseAllSound()
 {
-    if ((unsigned char)gameTrackerX.sound.soundsLoaded != 0)
+    if (gameTrackerX.sound.soundsLoaded != 0)
     {
         aadShutdownReverb();
 
@@ -827,7 +1181,7 @@ void SOUND_PauseAllSound()
 
 void SOUND_ResumeAllSound()
 {
-    if ((unsigned char)gameTrackerX.sound.soundsLoaded != 0)
+    if (gameTrackerX.sound.soundsLoaded != 0)
     {
         aadInitReverb();
 
@@ -837,7 +1191,7 @@ void SOUND_ResumeAllSound()
 
 void SOUND_StopAllSound()
 {
-    if ((unsigned char)gameTrackerX.sound.soundsLoaded != 0)
+    if (gameTrackerX.sound.soundsLoaded != 0)
     {
         aadStopAllSfx();
         aadStopAllSlots();
@@ -850,7 +1204,7 @@ void SOUND_StopAllSound()
 
 void SOUND_ResetAllSound()
 {
-    if ((unsigned char)gameTrackerX.sound.soundsLoaded != 0)
+    if (gameTrackerX.sound.soundsLoaded != 0)
     {
         SOUND_StopAllSound();
 
@@ -911,7 +1265,7 @@ int SndTypeIsPlayingOrRequested(unsigned int sfxToneID)
 
 unsigned long SndPlay(unsigned int sample)
 {
-    if ((unsigned char)gameTrackerX.sound.gSfxOn != 0)
+    if (gameTrackerX.sound.gSfxOn != 0)
     {
         return aadPlaySfx(sample, 90, 64, 0);
     }
@@ -926,7 +1280,7 @@ void SndEndLoop(unsigned long handle)
 
 unsigned long SndPlayVolPan(unsigned int sample, unsigned short vol, unsigned short pan, short pitch)
 {
-    if ((unsigned char)gameTrackerX.sound.gSfxOn != 0)
+    if (gameTrackerX.sound.gSfxOn != 0)
     {
         return aadPlaySfx(sample, vol & 0xFFFF, pan & 0xFFFF, pitch);
     }
@@ -936,7 +1290,7 @@ unsigned long SndPlayVolPan(unsigned int sample, unsigned short vol, unsigned sh
 
 unsigned long SndUpdateVolPanPitch(unsigned long handle, unsigned short vol, unsigned short pan, short pitch)
 {
-    if ((handle != 0) && ((unsigned char)gameTrackerX.sound.gSfxOn != 0))
+    if ((handle != 0) && (gameTrackerX.sound.gSfxOn != 0))
     {
         return aadSetSfxVolPanPitch(handle, vol, pan, pitch);
     }
@@ -1031,9 +1385,208 @@ int SOUND_IsMusicLoading()
     return temp;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/SOUND", SOUND_ProcessMusicLoad);
+void SOUND_ProcessMusicLoad()
+{
+    char musicName[8];
+    char sndFileName[32];
+    char smpFileName[32];
+    MusicLoadCmd *cmd;
+    Level *level;
 
-extern char D_800D0F9C[];
+    switch (musicInfo.state)
+    {
+    case 0:
+        if (musicInfo.numCmdsInQueue != 0)
+        {
+            cmd = &musicInfo.commandQueue[musicInfo.commandOut];
+
+            if (cmd->type == 0)
+            {
+                musicInfo.state = 11;
+                musicInfo.nextState = 13;
+
+                musicInfo.currentMusicPlane = cmd->data;
+
+                aadStartMusicMasterVolFade(0, -3, musicFadeoutReturnFunc);
+            }
+
+            musicInfo.commandOut = (musicInfo.commandOut + 1) & 0x3;
+
+            musicInfo.numCmdsInQueue--;
+        }
+        else if (musicInfo.checkMusicDelay == 0)
+        {
+            if (aadMem->sramDefragInfo.status == 0)
+            {
+                musicInfo.checkMusicDelay = 30;
+
+                level = STREAM_GetLevelWithID(gameTrackerX.playerInstance->currentStreamUnitID);
+
+                if (level != NULL)
+                {
+                    if (level->dynamicMusicName != NULL)
+                    {
+                        musicName[0] = level->dynamicMusicName[0];
+                        musicName[1] = level->dynamicMusicName[1];
+
+                        if (musicInfo.currentMusicPlane == -1)
+                        {
+                            musicInfo.currentMusicPlane = gameTrackerX.gameData.asmData.MorphType;
+                        }
+
+                        if (musicInfo.currentMusicPlane != 0)
+                        {
+                            musicName[2] = 's';
+                            musicName[3] = 'p';
+                        }
+                        else
+                        {
+                            musicName[2] = 'm';
+                            musicName[3] = 'a';
+                        }
+
+                        musicName[4] = 0;
+
+                        if (strcmpi(musicName, musicInfo.currentMusicName) != 0)
+                        {
+                            if (musicInfo.currentMusicName[0] != 0)
+                            {
+                                sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicName, musicName);
+
+                                if (LOAD_DoesFileExist(sndFileName) != 0)
+                                {
+                                    strcpy(musicInfo.currentMusicName, musicName);
+                                    strcpy(sndFileName, "\\kain2\\music\\uwtr\\uwtr.snd");
+                                    strcpy(smpFileName, "\\kain2\\music\\uwtr\\uwtr.smp");
+
+                                    musicInfo.state = 3;
+                                    musicInfo.nextState = 4;
+
+                                    aadLoadDynamicSoundBank(sndFileName, smpFileName, 1, 0, musicLoadReturnFunc);
+                                }
+                            }
+                            else
+                            {
+                                sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicName, musicName);
+                                sprintf(smpFileName, "\\kain2\\music\\%s\\%s.smp", musicName, musicName);
+
+                                if (LOAD_DoesFileExist(sndFileName) != 0)
+                                {
+                                    strcpy(musicInfo.currentMusicName, musicName);
+
+                                    musicInfo.state = 1;
+                                    musicInfo.nextState = 2;
+
+                                    aadLoadDynamicSoundBank(sndFileName, smpFileName, 0, 1, musicLoadReturnFunc);
+                                }
+                            }
+                        }
+                    }
+                    else if (musicInfo.currentMusicName[0] != 0)
+                    {
+                        musicInfo.currentMusicName[0] = 0;
+
+                        musicInfo.state = 11;
+                        musicInfo.nextState = 12;
+
+                        aadStartMusicMasterVolFade(0, -1, musicFadeoutReturnFunc);
+                    }
+                }
+            }
+        }
+        else
+        {
+            musicInfo.checkMusicDelay--;
+        }
+
+        break;
+    case 2:
+        if (aadAssignDynamicSequence(0, 0, 0) == 0)
+        {
+            aadStartSlot(0);
+        }
+
+        musicInfo.state = 0;
+        break;
+    case 4:
+        if (musicInfo.errorStatus == 0)
+        {
+            musicInfo.state = 5;
+            musicInfo.nextState = 6;
+
+            musicInfo.bankLoaded = 1;
+
+            aadInstallEndSequenceCallback(musicEndCallbackFunc, 0);
+
+            aadSetUserVariable(127, 1);
+        }
+        else
+        {
+            musicInfo.state = 0;
+        }
+
+        break;
+    case 6:
+        if (aadMem->sramDefragInfo.status == 0)
+        {
+            sprintf(sndFileName, "\\kain2\\music\\%s\\%s.snd", musicInfo.currentMusicName, musicInfo.currentMusicName);
+            sprintf(smpFileName, "\\kain2\\music\\%s\\%s.smp", musicInfo.currentMusicName, musicInfo.currentMusicName);
+
+            aadLoadDynamicSoundBank(sndFileName, smpFileName, 0, 1, musicLoadReturnFunc);
+
+            musicInfo.state = 7;
+            musicInfo.nextState = 8;
+        }
+
+        break;
+    case 8:
+        if (musicInfo.errorStatus == 0)
+        {
+            musicInfo.state = 9;
+            musicInfo.nextState = 10;
+
+            musicInfo.bankLoaded = 0;
+
+            aadInstallEndSequenceCallback(musicEndCallbackFunc, 0);
+
+            aadSetUserVariable(127, 1);
+        }
+        else
+        {
+            musicInfo.state = 0;
+        }
+
+        break;
+    case 10:
+        aadFreeDynamicSoundBank(1);
+
+        musicInfo.state = 0;
+        break;
+    case 12:
+        aadStopAllSlots();
+
+        aadFreeDynamicSoundBank(0);
+
+        aadStartMusicMasterVolFade(gameTrackerX.sound.gMusicVol, 1, NULL);
+
+        musicInfo.state = 0;
+        break;
+    case 13:
+        aadStopAllSlots();
+
+        aadFreeDynamicSoundBank(0);
+
+        aadStartMusicMasterVolFade(gameTrackerX.sound.gMusicVol, 1, NULL);
+
+        musicInfo.currentMusicName[0] = 0;
+
+        musicInfo.checkMusicDelay = 0;
+
+        musicInfo.state = 0;
+        break;
+    }
+}
+
 void SOUND_UpdateSound()
 {
     aadProcessLoadQueue();
@@ -1049,11 +1602,10 @@ void SOUND_UpdateSound()
             gSramFullMsgCnt--;
         }
 
-        //FONT_Print("$\n\n\n\n\n\n\n\n\n\nsound memory full!\nu = % d % d f = % d % d lf = % d", gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
-        FONT_Print(D_800D0F9C, gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
+        FONT_Print("$\n\n\n\n\n\n\n\n\n\nsound memory full!\nu=%d %d f=%d %d lf=%d\n", gSramTotalUsed, gSramUsedBlocks, gSramTotalFree, gSramFreeBlocks, gSramLargestFree);
     }
 
-    if ((unsigned char)gameTrackerX.sound.gMusicOn != 0)
+    if (gameTrackerX.sound.gMusicOn != 0)
     {
         SOUND_ProcessMusicLoad();
     }
@@ -1061,7 +1613,7 @@ void SOUND_UpdateSound()
 
 void SOUND_PlaneShift(int newPlane)
 {
-    if ((unsigned char)gameTrackerX.sound.gMusicOn != 0)
+    if (gameTrackerX.sound.gMusicOn != 0)
     {
         SOUND_PutMusicCommand(0, newPlane);
     }

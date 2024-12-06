@@ -4,6 +4,7 @@
 #include "Game/MATH3D.h"
 #include "Game/INSTANCE.h"
 #include "Game/STATE.h"
+#include "Game/G2/QUATG2.h"
 
 EXTERN STATIC int AlgoControlFlag;
 
@@ -161,12 +162,12 @@ void AlgorithmicNeck(Instance *Player, Instance *Target)
         Rot1.z = Player->rotation.z - 512;
     }
 
-    if ((unsigned short)(Rot1.x - 513) < 1535U)
+    if ((Rot1.x > 512) && (Rot1.x < 2048))
     {
         Rot1.x = 512;
     }
 
-    if ((unsigned short)(Rot1.x - 2049) < 1389U)
+    if ((Rot1.x > 2048) && (Rot1.x < 3438))
     {
         Rot1.x = 3438;
     }

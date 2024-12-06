@@ -29,7 +29,7 @@ static MonsterChoice functionChoiceTable[] = {
     { 0, NULL },
 };
 
-static MonsterStateFunction DefaultStateTable[] = {
+static MonsterState DefaultStateTable[] = {
     { MON_BirthEntry, MON_Birth },
     { MON_PursueEntry, MON_Pursue },
     { MON_IdleEntry, MON_Idle },
@@ -79,7 +79,7 @@ void MONTABLE_SetupTablePointer(Object *object)
     }
 }
 
-MonsterStateFunction *MONTABLE_GetStateFuncs(Instance *instance, int state)
+MonsterState *MONTABLE_GetStateFuncs(Instance *instance, int state)
 {
     MonsterFunctionTable *ft;
 
@@ -95,14 +95,14 @@ MonsterStateFunction *MONTABLE_GetStateFuncs(Instance *instance, int state)
         {
             if (state == choice->state)
             {
-                return (MonsterStateFunction *)&choice->functions.entryFunction;
+                return (MonsterState *)&choice->functions.entryFunction;
             }
 
             choice++;
         }
     }
 
-    return (MonsterStateFunction *)&DefaultStateTable[state].entryFunction;
+    return (MonsterState *)&DefaultStateTable[state].entryFunction;
 }
 
 void *MONTABLE_GetDamageEffectFunc(Instance *instance)

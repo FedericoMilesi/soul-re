@@ -2,6 +2,8 @@
 #include "Game/MONSTER/HUMAN.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONSTER.h"
+#include "Game/INSTANCE.h"
+#include "Game/COLLIDE.h"
 
 void WORSHIP_Init(Instance *instance)
 {

@@ -4,8 +4,10 @@
 #include "Game/SCRIPT.h"
 #include "Game/GENERIC.h"
 #include "Game/MEMPACK.h"
+#include "Game/STREAM.h"
+#include "Game/MONSTER/MONAPI.h"
 
-ObjectFunc objectFunc[8924+8];
+ObjectFunc objectFunc[8924 + 8];
 
 void OBTABLE_InstanceInit(Instance *instance)
 {
@@ -126,15 +128,18 @@ void OBTABLE_InitObjectWithID(Object *object)
 
         if ((object->oflags2 & 0x40000))
         {
-            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, "physical")); id++);
+            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, "physical")); id++)
+                ;
         }
         else if ((object->oflags2 & 0x80000))
         {
-            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, "monster_")); id++);
+            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, "monster_")); id++)
+                ;
         }
         else
         {
-            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, object->script)); id++);
+            for (id = 0; (objectFunc[id].scriptName != NULL) && (strcmp(objectFunc[id].scriptName, object->script)); id++)
+                ;
         }
 
         if (objectFunc[id].scriptName != NULL)
@@ -148,8 +153,7 @@ void OBTABLE_InitObjectWithID(Object *object)
 
         for (oa = objectAccess; oa->objectName != NULL; oa++)
         {
-            if ((((unsigned int *)oa->objectName)[0] == ((unsigned int *)object->name)[0])
-            && (((unsigned int *)oa->objectName)[1] == ((unsigned int *)object->name)[1]))
+            if ((((unsigned int *)oa->objectName)[0] == ((unsigned int *)object->name)[0]) && (((unsigned int *)oa->objectName)[1] == ((unsigned int *)object->name)[1]))
             {
                 oa->object = object;
                 break;
@@ -196,8 +200,7 @@ Object *OBTABLE_FindObject(char *objectName)
         {
             object = otr->object;
 
-            if ((MEMPACK_MemoryValidFunc((char *)object) != 0) && ((((unsigned int *)objectName)[0] == ((unsigned int *)object->name)[0])
-                && (((unsigned int *)objectName)[1] == ((unsigned int *)object->name)[1])))
+            if ((MEMPACK_MemoryValidFunc((char *)object) != 0) && ((((unsigned int *)objectName)[0] == ((unsigned int *)object->name)[0]) && (((unsigned int *)objectName)[1] == ((unsigned int *)object->name)[1])))
             {
                 return object;
             }
@@ -252,4 +255,80 @@ void OBTABLE_RelocateInstanceObject(Instance *instance, long offset)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/OBTABLE", OBTABLE_InitAnimPointers);
+void OBTABLE_InitAnimPointers(ObjectTracker *objectTracker)
+{
+    Object *object;
+
+    object = objectTracker->object;
+
+    if ((object->oflags2 & 0x10000000))
+    {
+        int i;
+        char *earlyOut;
+        G2AnimKeylist **keyPtr;
+
+        earlyOut = NULL;
+
+        keyPtr = object->animList;
+
+        for (i = object->numAnims; i != 0; i--, keyPtr++)
+        {
+            ObjectOwnerInfo *oi;
+
+            oi = (ObjectOwnerInfo *)*keyPtr;
+
+            if (oi->magicnum == 0xFACE0FF)
+            {
+                ObjectTracker *otr;
+                Object *ownerOb;
+                int j;
+                int objectIndex;
+
+                otr = STREAM_GetObjectTracker(oi->objectName);
+
+                if (otr != NULL)
+                {
+                    objectIndex = objectTracker - gameTrackerX.GlobalObjects;
+
+                    ownerOb = otr->object;
+
+                    for (j = 0; j < otr->numObjectsUsing; j++)
+                    {
+                        if (otr->objectsUsing[j] == objectIndex)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (j == otr->numObjectsUsing)
+                    {
+                        otr->numObjectsUsing++;
+
+                        otr->objectsUsing[j] = objectIndex;
+                    }
+
+                    if (otr->objectStatus == 2)
+                    {
+                        *keyPtr = ownerOb->animList[oi->animID];
+                    }
+                    else
+                    {
+                        earlyOut = oi->objectName;
+                    }
+                }
+            }
+        }
+
+        if (earlyOut != NULL)
+        {
+            return;
+        }
+
+        object->oflags2 &= ~0x10000000;
+    }
+
+    if ((object->oflags2 & 0x80000))
+    {
+        MonsterTranslateAnim(object);
+    }
+}

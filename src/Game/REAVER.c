@@ -6,6 +6,10 @@
 #include "Game/STATE.h"
 #include "Game/GAMEPAD.h"
 #include "Game/MEMPACK.h"
+#include "Game/COLLIDE.h"
+#include "Game/FX.h"
+#include "Game/INSTANCE.h"
+#include "Game/STREAM.h"
 
 static short FireReaverFlag;
 

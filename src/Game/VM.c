@@ -79,9 +79,9 @@ void VM_UpdateMorph(Level *level, int initFlg)
 
                 if ((vmobject->flags & 0x8))
                 {
-                    VMOffset *material;
-                    VMOffset *spectral;
-                    VMOffset *offset;
+                    VMMoveOffset *material;
+                    VMMoveOffset *spectral;
+                    VMMoveOffset *offset;
 
                     material = &vmobject->vmoffsetTableList[vmobject->materialIdx]->offsets.moveOffsets;
                     spectral = &vmobject->vmoffsetTableList[vmobject->spectralIdx]->offsets.moveOffsets;

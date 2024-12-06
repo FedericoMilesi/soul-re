@@ -10,6 +10,8 @@
 #include "Game/GAMEPAD.h"
 #include "Game/MEMPACK.h"
 #include "Game/HASM.h"
+#include "Game/INSTANCE.h"
+#include "Game/RAZIEL/RAZLIB.h"
 
 long camera_modeToIndex[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0};
 
@@ -1179,7 +1181,71 @@ void CAMERA_CalcPosition(Position *position, Position *base, Rotation *rotation,
     COPY_SVEC(Position, position, Vector, &vectorPos);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SetFocus);
+void CAMERA_SetFocus(Camera *camera, Position *targetfocusPoint)
+{
+    Instance *focusInstance;
+    Model *model;
+    SVector temp1;
+    SVector offset;
+    SVector *segPosVector;
+    Vector temp2;
+
+    focusInstance = camera->focusInstance;
+
+    if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x4000000)))
+    {
+        model = focusInstance->object->modelList[focusInstance->currentModel];
+
+        segPosVector = (SVector *)&model->segmentList[1].px;
+
+        COPY_SVEC(SVector, &temp1, SVector, segPosVector);
+
+        ApplyMatrix(&focusInstance->matrix[1], (SVECTOR *)&temp1, (VECTOR *)&temp2);
+
+        COPY_SVEC(Position, targetfocusPoint, Position, &focusInstance->position);
+
+        if ((camera->flags & 0x10000))
+        {
+            ADD_SVEC(Position, targetfocusPoint, Position, targetfocusPoint, SVector, &temp1);
+
+            if ((INSTANCE_Query(focusInstance, 9) & 0x40))
+            {
+                targetfocusPoint->z += 192;
+            }
+        }
+
+        camera->real_focuspoint = *targetfocusPoint;
+
+        camera->focuspoint_fallz = targetfocusPoint->z;
+    }
+    else
+    {
+        Instance *instance;
+        SVector output;
+
+        if (((camera->instance_mode & 0x2000000)) && ((camera->mode >= 12) && (camera->mode < 14)) && ((instance = (Instance *)INSTANCE_Query(focusInstance, 34)) != NULL))
+        {
+            LoadAverageShort12((SVECTOR *)&instance->position, (SVECTOR *)&focusInstance->position, 4096 - combat_cam_weight, combat_cam_weight, (SVECTOR *)&output);
+
+            COPY_SVEC(Position, targetfocusPoint, SVector, &output);
+        }
+        else
+        {
+            COPY_SVEC(Position, targetfocusPoint, Position, &focusInstance->position);
+        }
+
+        CAMERA_CalcFocusOffset(&offset, camera);
+
+        ADD_SVEC(Position, targetfocusPoint, Position, targetfocusPoint, SVector, &offset);
+
+        camera->real_focuspoint = *targetfocusPoint;
+
+        if ((!(camera->instance_mode & 0x2038)) || (((camera->instance_mode & 0x2000)) && (camera->focusInstanceVelVec.z > 70)))
+        {
+            camera->focuspoint_fallz = targetfocusPoint->z;
+        }
+    }
+}
 
 void CAMERA_Lock(Camera *camera, long lock)
 {
@@ -2222,7 +2288,7 @@ long CAMERA_ACNoForcedMovement(Camera *camera, CameraCollisionInfo *colInfo)
     short playerSamePos;
     short angle;
     int temp, temp2; // not from decls.h
-    short temp3; // not from decls.h
+    short temp3;     // not from decls.h
 
     hit = 0;
 
@@ -2418,7 +2484,9 @@ long CAMERA_ACNoForcedMovement(Camera *camera, CameraCollisionInfo *colInfo)
     {
         CAMERA_update_dist_debounced(camera, colInfo->lenCenterToExtend);
 
-        do {} while (0); // garbage code for reordering
+        do
+        {
+        } while (0); // garbage code for reordering
 
         hit = 1;
     }
@@ -2476,15 +2544,262 @@ long CAMERA_AbsoluteCollision(Camera *camera, CameraCollisionInfo *colInfo)
     return hit;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 /*TODO: migrate to CAMERA_update_z_damped*/
 static short D_800D03F6 = 0; // upvel
 static short D_800D03F8 = 0; // upaccl
 static short D_800D03FA = 0; // upmaxVel
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_update_z_damped);
+#else
+short CAMERA_update_z_damped(Camera *camera, short current, short target)
+{
+    static short upvel = 0;
+    static short upaccl = 0;
+    static short upmaxVel = 0;
+    short current_tmp;
+
+    current_tmp = current;
+
+    if (current > target)
+    {
+        if (((camera->instance_mode & 0x1038)) && (camera->real_focuspoint.z >= camera->focuspoint_fallz))
+        {
+            upmaxVel = ABS(current - target) / 6;
+        }
+        else
+        {
+            upmaxVel = ABS(current - target) * 2;
+        }
+
+        CriticalDampValue(1, &current_tmp, target, &upvel, &upaccl, upmaxVel);
+    }
+    else if (ABS(current - target) >= 5)
+    {
+        if ((camera->instance_mode & 0x100))
+        {
+            upmaxVel = ABS(current - target) / 6;
+
+            if (upmaxVel < 50)
+            {
+                upmaxVel = 50;
+            }
+        }
+        else
+        {
+            upmaxVel = ABS(current - target) / 6;
+        }
+
+        if (ABS(current - target) < upmaxVel)
+        {
+            upmaxVel = ABS(current - target);
+        }
+
+        CriticalDampValue(1, &current_tmp, target, &upvel, &upaccl, upmaxVel);
+    }
+    else
+    {
+        upaccl = 0;
+
+        upvel = 0;
+        upmaxVel = 0;
+
+        return current;
+    }
+
+    return current_tmp;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CombatCamDist);
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_GenericCameraProcess);
+void CAMERA_GenericCameraProcess(Camera *camera)
+{
+    Instance *focusInstance;
+    Position targetCamPos;
+
+    focusInstance = camera->focusInstance;
+
+    if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x4000000)))
+    {
+        camera->rotationVel.z = 64;
+    }
+
+    if (!(camera->instance_mode & 0x2000000))
+    {
+        combat_cam_weight = 2048;
+    }
+
+    CAMERA_SetMaxVel(camera);
+    CAMERA_SetFocus(camera, &camera->targetFocusPoint);
+
+    if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x4000000)))
+    {
+        CAMERA_FollowPlayerTilt(camera, focusInstance);
+    }
+    else
+    {
+        short angle;
+        Rotation test_rot;
+
+        CAMERA_UpdateFocusRotationX(camera, focusInstance);
+
+        if ((camera->mode == 13) && (camera->instance_xyvel > 0) && (!(camera->instance_mode & 0x82000400)) && (camera->always_rotate_flag == 0) && (camera->rotState != 3) && (!(camera->instance_mode & 0x2000)) && (gameTrackerX.cheatMode != 1))
+        {
+            CAMERA_CalcRotation(&test_rot, &camera->targetFocusPoint, &camera->core.position);
+
+            angle = CAMERA_SignedAngleDifference(test_rot.z, camera->focusRotation.z);
+
+            if ((camera->instance_mode & 0x2))
+            {
+                angle >>= 1;
+            }
+            else
+            {
+                angle = (angle * 3) >> 2;
+            }
+
+            camera->targetFocusRotation.z = camera->focusRotation.z + angle;
+        }
+    }
+
+    if ((int)camera->instance_mode < 0)
+    {
+        Instance *warpInstance;
+        int tmp;
+
+        warpInstance = RAZIEL_QueryEngagedInstance(14);
+
+        if (warpInstance != NULL)
+        {
+            tmp = warpInstance->rotation.z;
+
+            camera->tfaceTilt = 3988;
+
+            camera->rotationVel.z = 64;
+
+            camera->smooth = 8;
+
+            camera->always_rotate_flag = 1;
+
+            camera->forced_movement = 0;
+
+            camera->collisionTargetFocusRotation.z = ((tmp & 0xFFF) <= 1024) || ((tmp & 0xFFF) >= 3072);
+
+            camera->collisionTargetFocusRotation.z <<= 11;
+
+            camera->targetFocusRotation.z = camera->collisionTargetFocusRotation.z;
+        }
+    }
+    else
+    {
+        int mod;
+
+        if (((camera->flags & 0x2000)) || ((camera->instance_mode & 0x20000000)))
+        {
+            if (!(camera->instance_mode & 0x2000000))
+            {
+                camera->rotationVel.z = 64;
+
+                CAMERA_FollowGoBehindPlayer(camera);
+            }
+        }
+        else if (((camera->flags & 0x10000)) || ((camera->instance_mode & 0x4000000)))
+        {
+            CAMERA_FollowGoBehindPlayer(camera);
+        }
+        else
+        {
+            if (((camera->instance_mode & 0x400)) && (!(camera->prev_instance_mode & 0x400)))
+            {
+                mod = camera->core.rotation.z % 1024;
+
+                if (mod > 512)
+                {
+                    mod = 1024 - mod;
+                }
+                else
+                {
+                    mod = -mod;
+                }
+
+                if (ABS(mod) > 128)
+                {
+                    mod += camera->core.rotation.z;
+                    mod &= 0xFFF;
+
+                    camera->targetFocusRotation.z = mod;
+                }
+            }
+
+            CAMERA_FollowGoBehindPlayerWithTimer(camera);
+        }
+    }
+
+    if (!(camera->flags & 0x1800))
+    {
+        int dist;
+
+        if ((camera->instance_mode & 0x2000000))
+        {
+            CAMERA_CombatCamDist(camera);
+
+            dist = combat_cam_distance;
+        }
+        else
+        {
+            combat_cam_distance = dist = camera->targetFocusDistance;
+        }
+
+        CAMERA_CalcPosition(&targetCamPos, &camera->focusPoint, &camera->focusRotation, dist);
+
+        camera->data.Follow.hit = CAMERA_DoCameraCollision2(camera, &targetCamPos, 0);
+    }
+
+    if ((int)camera->instance_mode < 0)
+    {
+        camera->collisionTargetFocusDistance = 2000;
+    }
+
+    CAMERA_UpdateFocusDistance(camera);
+    CAMERA_UpdateFocusTilt(camera);
+    CAMERA_UpdateFocusRotate(camera);
+
+    if ((camera->flags & 0x1800))
+    {
+        COPY_SVEC(Position, &camera->focusPoint, Position, &camera->targetFocusPoint);
+
+        camera->focusDistance = camera->targetFocusDistance;
+
+        if ((camera->flags & 0x1000))
+        {
+            CAMERA_SetZRotation(camera, camera->teleportZRot);
+        }
+    }
+    else
+    {
+        Position target;
+
+        target = camera->targetFocusPoint;
+
+        if (!(camera->flags & 0x10000))
+        {
+            target.z = camera->focusPoint.z;
+        }
+
+        CriticalDampPosition(1, &camera->focusPoint, &target, &camera->focusPointVel, &camera->focusPointAccl, camera->maxVel);
+
+        if (!(camera->flags & 0x10000))
+        {
+            camera->focusPoint.z = CAMERA_update_z_damped(camera, camera->focusPoint.z, camera->targetFocusPoint.z);
+        }
+    }
+
+    CAMERA_CalcFollowPosition(camera, &camera->focusRotation);
+    CAMERA_CalculateLead(camera);
+
+    CAMERA_UpdateFocusRoll(camera);
+}
 
 void CAMERA_CinematicProcess(Camera *camera)
 {
@@ -2733,7 +3048,55 @@ int CAMERA_FindLinePoint(Position *point, SVector *linept1, SVector *linept2, in
     return hits;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineGetNearestPoint2);
+void CAMERA_SplineGetNearestPoint2(Camera *camera, Spline *spline, SVector *point, int *currkey, SVector *ret_dpoint)
+{
+    SplineKey *key;
+    int n;
+    int target_dist_sq;
+    long dist;
+
+    key = spline->key;
+
+    COPY_SVEC(SVector, ret_dpoint, Position, &camera->core.position);
+
+    dist = 0x7FFFFFFF;
+
+    target_dist_sq = camera->targetFocusDistance;
+    target_dist_sq *= target_dist_sq;
+
+    for (n = 0; n < (spline->numkeys - 1); n++)
+    {
+        if ((n >= 0) && (n <= (spline->numkeys - 2)))
+        {
+            SVector point1;
+            SVector point2;
+            SVector results[2];
+            int i;
+            int hits;
+
+            COPY_SVEC(SVector, &point1, vecS, &key[n].point);
+            COPY_SVEC(SVector, &point2, vecS, &key[n + 1].point);
+
+            hits = CAMERA_FindLinePoint(&camera->targetFocusPoint, &point1, &point2, target_dist_sq, results);
+
+            for (i = 0; i < hits; i++)
+            {
+                int tmpdist;
+
+                tmpdist = CAMERA_GetDistSq(point, &results[i]);
+
+                if (tmpdist < dist)
+                {
+                    COPY_SVEC(SVector, ret_dpoint, SVector, &results[i]);
+
+                    dist = tmpdist;
+
+                    *currkey = n;
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_SplineGetNearestPoint);
 
@@ -3444,7 +3807,40 @@ void CAMERA_UpdateFocusTilt(Camera *camera)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_UpdateFocusRoll);
+void CAMERA_UpdateFocusRoll(Camera *camera)
+{
+    long tmp_inc;
+    int temp; // not from decls.h
+
+    if (roll_inc != 0)
+    {
+        if (gameTrackerX.timeMult != 4096)
+        {
+            temp = (roll_inc / 32) * gameTrackerX.timeMult;
+
+            tmp_inc = temp / 128;
+        }
+        else
+        {
+            tmp_inc = roll_inc;
+        }
+
+        if (CAMERA_AngleDifference(current_roll_amount / 4096, roll_target / 4096) <= abs(tmp_inc / 4096))
+        {
+            current_roll_amount = roll_target;
+
+            roll_inc = 0;
+        }
+        else
+        {
+            current_roll_amount += tmp_inc;
+        }
+
+        current_roll_amount &= 0xFFFFFF;
+    }
+
+    camera->core.rotation.y = current_roll_amount / 4096;
+}
 
 void CAMERA_UpdateFocusRotate(Camera *camera)
 {
@@ -3502,8 +3898,11 @@ void CAMERA_UpdateFocusRotationX(Camera *camera, Instance *focusInstance)
 
     tfaceFlag = 0;
 
-    if ((focusInstance->tface != NULL) && (((Level *)focusInstance->tfaceLevel)->terrain != NULL) && (focusInstance->tface->textoff != 0xFFFF) && ((((TextureFT3 *)((char *)((Level *)focusInstance->tfaceLevel)->terrain->StartTextureList + focusInstance->tface->textoff))->attr & 0x8000)) /*TODO: FAKEMATCH?*/
-        && (dist < 2912))
+    if ((focusInstance->tface != NULL) &&
+        (((Level *)focusInstance->tfaceLevel)->terrain != NULL) &&
+        (focusInstance->tface->textoff != 0xFFFF) &&
+        ((((TextureFT3 *)((char *)((Level *)focusInstance->tfaceLevel)->terrain->StartTextureList + focusInstance->tface->textoff))->attr & 0x8000)) && /*TODO: FAKEMATCH?*/
+        (dist < 2912))
     {
         COLLIDE_GetNormal(focusInstance->tface->normal, (short *)((Level *)focusInstance->tfaceLevel)->terrain->normalList, (SVector *)&normal);
 
