@@ -2544,14 +2544,6 @@ long CAMERA_AbsoluteCollision(Camera *camera, CameraCollisionInfo *colInfo)
     return hit;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-/*TODO: migrate to CAMERA_update_z_damped*/
-static short D_800D03F6 = 0; // upvel
-static short D_800D03F8 = 0; // upaccl
-static short D_800D03FA = 0; // upmaxVel
-INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_update_z_damped);
-#else
 short CAMERA_update_z_damped(Camera *camera, short current, short target)
 {
     static short upvel = 0;
@@ -2599,9 +2591,10 @@ short CAMERA_update_z_damped(Camera *camera, short current, short target)
     }
     else
     {
+        upvel = 0;
+
         upaccl = 0;
 
-        upvel = 0;
         upmaxVel = 0;
 
         return current;
@@ -2609,7 +2602,6 @@ short CAMERA_update_z_damped(Camera *camera, short current, short target)
 
     return current_tmp;
 }
-#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/CAMERA", CAMERA_CombatCamDist);
 
