@@ -380,7 +380,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", StreamIntroInstancesForUnit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", StreamRenderLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_FlipScreenAndDraw);
+void GAMELOOP_FlipScreenAndDraw(GameTracker *gameTracker, unsigned long **drawot)
+{
+    DrawOTag((unsigned long *)(drawot + 3071));
+
+    while (CheckVolatile(gameTracker->drawTimerReturn) != 0)
+        ;
+
+    ResetPrimPool();
+
+    PutDrawEnv(&draw[gameTracker->drawPage]);
+
+    while (CheckVolatile(gameTracker->reqDisp) != 0)
+        ;
+
+    gameTracker->usecsStartDraw = (GetRCnt(0xF2000000) & 0xFFFF) | (gameTimer << 16);
+
+    gameTracker->drawTimerReturn = (long *)&gameTracker->drawTime;
+
+    gameTracker->gameData.asmData.dispPage = 1 - gameTracker->gameData.asmData.dispPage;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AddClearPrim);
 
