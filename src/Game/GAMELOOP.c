@@ -86,7 +86,14 @@ void GAMELOOP_ClearGameTracker()
     gameTrackerX.debugFlags |= 0x40000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_CalcGameTime);
+void GAMELOOP_CalcGameTime()
+{
+    long time;
+
+    time = (gameTrackerX.currentTimeOfDayTime * gameTrackerX.multGameTime) / 60000;
+
+    gameTrackerX.timeOfDay = ((((time + 720) / 60) % 24) * 100) + ((time + 720) % 60);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetGameTime);
 
