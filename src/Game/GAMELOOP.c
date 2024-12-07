@@ -304,11 +304,7 @@ void GAMELOOP_LevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker)
 
     for (i = 0; i < streamUnit->level->numIntros; i++)
     {
-#if defined(UWP)
-        if (_strcmpi(streamUnit->level->introList[i].name, "raziel") == 0)
-#else
         if (strcmpi(streamUnit->level->introList[i].name, "raziel") == 0)
-#endif
         {
             INSTANCE_IntroduceInstance(&streamUnit->level->introList[i], (short)streamUnit->StreamUnitID);
             break;
@@ -320,13 +316,6 @@ void GAMELOOP_LevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker)
     CAMERA_SetInstanceFocus(&theCamera, gameTracker->playerInstance);
 
     COPY_SVEC(Position, &theCamera.core.position, Position, &gameTracker->playerInstance->position);
-
-#if defined(EDITOR)
-    extern Position overrideEditorPosition;
-    extern Rotation overrideEditorRotation;
-
-    overrideEditorPosition = theCamera.core.position;
-#endif
 
     SetFogNearFar(streamUnit->level->fogNear, streamUnit->level->fogFar, 320);
     SetFarColor(0, 0, 0);
