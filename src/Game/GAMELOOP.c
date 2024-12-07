@@ -21,8 +21,6 @@
 #include "Game/MEMPACK.h"
 #include "Game/TIMER.h"
 
-#define FRAMERATE_MULT 1
-
 long cameraMode = 0xD;
 
 long playerCameraMode = 0xD;
@@ -335,7 +333,7 @@ void GAMELOOP_LevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker)
     gameTracker->wipeType = 10;
     gameTracker->hideBG = 0;
     gameTracker->wipeTime = 30;
-    gameTracker->maxWipeTime = 30 * FRAMERATE_MULT;
+    gameTracker->maxWipeTime = 30;
 
     if (streamUnit->level->startSignal != NULL)
     {
