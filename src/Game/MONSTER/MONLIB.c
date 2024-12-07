@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/MONSTER/MONSTER.h"
 #include "Game/PHYSOBS.h"
 #include "Game/INSTANCE.h"
 #include "Game/MONSTER/MONTABLE.h"
@@ -1593,7 +1594,41 @@ void MON_ProcessLookAt(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TakeDamage);
+int MON_TakeDamage(Instance *instance, int damage, int type)
+{
+    
+    MonsterVars *mv;
+    MonsterCombatAttributes *mca;
+
+    mv = instance->extraData;
+    mca = mv->subAttr->combatAttributes;
+    
+    if (mca != NULL)
+    {
+
+        if ((signed char) mca->hitPoints != 0)
+        {
+            
+            uintptr_t enemyInstance;
+            enemyInstance = INSTANCE_Query(instance, 1);
+
+            if (type != 0x40000 || enemyInstance & 8)
+            {
+                
+                mv->hitPoints -= damage;
+                mv->damageType = type;
+                
+                if (mv->hitPoints <= 0)
+                {
+                    mv->hitPoints = 0;
+                    return 1;
+                }
+            }
+        }
+    }
+    
+    return 0;
+}
 
 void MON_SetUpSaveInfo(Instance *instance, MonsterSaveInfo *saveData)
 {
