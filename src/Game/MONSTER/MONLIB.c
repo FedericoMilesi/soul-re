@@ -16,6 +16,7 @@
 #include "Game/SOUND.h"
 #include "Game/STREAM.h"
 #include "Game/G2/ANIMG2.h"
+#include "Game/OBTABLE.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -716,7 +717,7 @@ void MON_CheckEnvironment(Instance *instance)
                 do
                 {
 
-                } while (0); // garbage code for reordering 
+                } while (0); // garbage code for reordering
 
                 SOUND_Play3dSound(&instance->position, 1, -200, 120, 10000);
 
@@ -746,7 +747,7 @@ void MON_CheckEnvironment(Instance *instance)
                 do
                 {
 
-                } while (0); // garbage code for reordering 
+                } while (0); // garbage code for reordering
 
                 if ((instance->object->oflags & 0x200))
                 {
@@ -940,7 +941,84 @@ unsigned long MON_GetTime(Instance *instance)
     return gameTrackerX.currentMaterialTime;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_BirthSoul);
+void MON_BirthSoul(Instance *instance, int link)
+{
+
+    MonsterVars *mv;
+    mv = instance->extraData;
+
+    if (mv->soulJuice != 0)
+    {
+
+        long soulID;
+        soulID = mv->soulID;
+
+        if (soulID == 0 || soulID >= 0x2000)
+        {
+
+            Object *soulObj;
+            soulObj = (Object *)objectAccess[9].object;
+
+            if (soulObj != NULL)
+            {
+
+                Instance *newInstance;
+                newInstance = INSTANCE_BirthObject(instance, soulObj, 0);
+
+                if (newInstance != NULL)
+                {
+
+                    if (mv->soulID >= 0x2000)
+                    {
+
+                        newInstance->flags2 |= 0x08000000;
+                        MORPH_SetupInstanceFlags(newInstance);
+                    }
+
+                    if (link != 0)
+                    {
+                        mv->soulID = newInstance->introUniqueID;
+                    }
+                    else
+                    {
+                        newInstance->parent = NULL;
+                    }
+
+                    if (instance->matrix != NULL)
+                    {
+
+                        MATRIX *mat;
+                        mat = instance->matrix + 1;
+
+                        newInstance->position.x = mat->t[0];
+                        newInstance->position.y = mat->t[1];
+                        newInstance->position.z = mat->t[2];
+                    }
+
+                    ((MonsterVars *)newInstance->extraData)->soulJuice = mv->soulJuice;
+                }
+            }
+        }
+        else
+        {
+
+            Instance *monster;
+            monster = INSTANCE_Find(soulID);
+
+            if (monster != NULL)
+            {
+
+                instance->flags2 &= ~0x80;
+                mv->soulID = monster->introUniqueID;
+                ((MonsterVars *)monster->extraData)->soulID = instance->introUniqueID;
+            }
+            else
+            {
+                instance->flags2 |= 0x80;
+            }
+        }
+    }
+}
 
 void MON_ProcessIntro(Instance *instance)
 {
@@ -1336,7 +1414,7 @@ void MON_DropAllObjects(Instance *instance)
         do
         {
 
-        } while (0); // garbage code for reordering 
+        } while (0); // garbage code for reordering
 
         if (child->ParentLinkNode == 3)
         {
@@ -1572,7 +1650,7 @@ void MON_GetSaveInfo(Instance *instance, MonsterSaveInfo *saveData)
     do
     {
 
-    } while (0); // garbage code for reordering 
+    } while (0); // garbage code for reordering
 
     mv->age = saveData->age;
 
@@ -1796,8 +1874,7 @@ void MON_ProcessSpecialFade(Instance *instance)
     {
         if ((instance->currentMainState != MONSTER_STATE_DEAD) && (instance->currentMainState != MONSTER_STATE_GENERALDEATH))
         {
-            if ((*(int *)&gameTrackerX.gameData.asmData.MorphTime == 1000) || ((gameTrackerX.gameData.asmData.MorphType == 1)
-                && (gameTrackerX.gameData.asmData.MorphTime != 1000))) // double-check
+            if ((*(int *)&gameTrackerX.gameData.asmData.MorphTime == 1000) || ((gameTrackerX.gameData.asmData.MorphType == 1) && (gameTrackerX.gameData.asmData.MorphTime != 1000))) // double-check
             {
                 targetFadeValue = mv->targetFade;
 
