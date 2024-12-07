@@ -40,6 +40,8 @@ STATIC void *enemyPlanPool;
 
 FXTracker *fxTracker;
 
+STATIC void *pause_redraw_prim;
+
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AllocStaticMemory);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_InitGameTracker);
@@ -51,8 +53,29 @@ void GAMELOOP_ResetGameStates()
     EVENT_Init();
 }
 
-void GAMELOOP_ClearGameTracker();
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ClearGameTracker);
+void GAMELOOP_ClearGameTracker()
+{
+    gameTrackerX.gameData.asmData.MorphTime = 1000;
+
+    gameTrackerX.currentTime = 0;
+    gameTrackerX.currentTicks = 0;
+
+    gameTrackerX.gameFlags = 0;
+
+    gameTrackerX.frameCount = 0;
+    gameTrackerX.fps30Count = 0;
+
+    gameTrackerX.currentHotSpot = 0;
+
+    gameTrackerX.SwitchToNewStreamUnit = 0;
+
+    gameTrackerX.gameData.asmData.drawBackFaces = 0;
+
+    pause_redraw_flag = 0;
+    pause_redraw_prim = NULL;
+
+    gameTrackerX.debugFlags |= 0x40000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_CalcGameTime);
 
