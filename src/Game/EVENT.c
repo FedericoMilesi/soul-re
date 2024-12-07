@@ -27,7 +27,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ProcessHints);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_GetNextTimer);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_RemoveTimer);
+void EVENT_RemoveTimer(EventTimer *timer)
+{
+    if (timer != NULL)
+    {
+        numActiveEventTimers--;
+
+        timer->flags &= ~0x1;
+    }
+}
 
 void EVENT_InitTimers()
 {
