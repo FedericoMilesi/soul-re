@@ -76,7 +76,63 @@ void GAMEPAD_EnableDualShock()
     align_flag = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMEPAD", GAMEPAD_HandleDualShock);
+void GAMEPAD_HandleDualShock()
+{
+    int decrement_amount;
+
+    decrement_amount = gameTrackerX.timeMult;
+
+    if (PadInfoMode(0, 2, 0) != 0)
+    {
+        if (align_flag == 0)
+        {
+            int timeout;
+
+            timeout = 0;
+
+            PadSetAct(timeout, dualshock_motors, 2);
+
+            for (;; timeout++)
+            {
+                if (PadSetActAlign(0, dualshock_align) != 0)
+                {
+                    break;
+                }
+
+                if (timeout > 99999)
+                {
+                    break;
+                }
+            }
+
+            align_flag = 1;
+        }
+    }
+    else
+    {
+        align_flag = 0;
+    }
+
+    if (dualshock0_time > 0)
+    {
+        dualshock0_time -= decrement_amount;
+
+        if (dualshock0_time <= 0)
+        {
+            dualshock_motors[0] = dualshock0_time = 0;
+        }
+    }
+
+    if (dualshock1_time > 0)
+    {
+        dualshock1_time -= decrement_amount;
+
+        if (dualshock1_time <= 0)
+        {
+            dualshock_motors[1] = dualshock1_time = 0;
+        }
+    }
+}
 
 void GAMEPAD_Shock(int motor0_speed, int motor0_time, int motor1_speed, int motor1_time)
 {
