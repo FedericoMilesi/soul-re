@@ -85,7 +85,20 @@ void EVENT_InitTerrainMovement()
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_Init);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_GetNextTerrainMove);
+WaterLevelProcess *EVENT_GetNextTerrainMove()
+{
+    int i;
+
+    for (i = 0; i < 5; i++)
+    {
+        if (!(WaterLevelArray[i].flags & 0x1))
+        {
+            return &WaterLevelArray[i];
+        }
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ProcessMovingWater);
 
