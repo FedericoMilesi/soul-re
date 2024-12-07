@@ -195,7 +195,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_HandleScreenWipes);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", UpdateFogSettings);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", CheckForNoBlend);
+int CheckForNoBlend(ColorType *Color)
+{
+    if ((Color->r < 5) && (Color->g < 5) && (Color->b < 5))
+    {
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", BlendToColor);
 
