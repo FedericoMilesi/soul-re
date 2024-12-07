@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/EVENT.h"
+#include "Game/INSTANCE.h"
 
 STATIC long numActiveEventTimers;
 
@@ -168,7 +169,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_WriteEventObject);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ResolveObjectSignal);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ResolveObjectIntro);
+Intro *EVENT_ResolveObjectIntro(EventInstanceObject *instanceObject)
+{
+    return INSTANCE_FindIntro(instanceObject->unitID, instanceObject->introUniqueID);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ResolveSFXMarker);
 

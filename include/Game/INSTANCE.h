@@ -26,6 +26,7 @@ int INSTANCE_InPlane(Instance *instance, int plane);
 void INSTANCE_UnlinkChildren(Instance *instance);
 void INSTANCE_DefaultInit(Instance *instance, Object *object, int modelNum);
 int INSTANCE_GetFadeValue(Instance *instance);
+Intro *INSTANCE_FindIntro(long areaID, long introUniqueID);
 INICommand *INSTANCE_FindIntroCommand(Instance *instance, int cmd);
 Instance *INSTANCE_IntroduceSavedInstance(SavedIntro *savedIntro, StreamUnit *streamUnit, int *deleted);
 Instance *INSTANCE_IntroduceSavedInstanceWithIntro(SavedIntroWithIntro *savedIntro, StreamUnit *streamUnit, int *deleted);
