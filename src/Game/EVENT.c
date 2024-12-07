@@ -9,6 +9,16 @@ STATIC WaterLevelProcess WaterLevelArray[5];
 
 long WaterInUse;
 
+long WaitingForVoiceNumber;
+
+long WaitingToLoadSound;
+
+long WaitingToLoadSFX;
+
+short MoviePlayed;
+
+short MovieToPlay;
+
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_UpdateResetSignalArrayAndWaterMovement);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ResetAllOneTimeVariables);
@@ -83,7 +93,22 @@ void EVENT_InitTerrainMovement()
     WaterInUse = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_Init);
+void EVENT_Init()
+{
+    EVENT_InitTerrainMovement();
+    EVENT_InitTimers();
+
+    HINT_ResetHint();
+
+    WaitingForVoiceNumber = -1;
+
+    WaitingToLoadSound = 614400;
+    WaitingToLoadSFX = 614400;
+
+    MoviePlayed = 0;
+
+    MovieToPlay = -1;
+}
 
 WaterLevelProcess *EVENT_GetNextTerrainMove()
 {
