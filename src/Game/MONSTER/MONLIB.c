@@ -2017,7 +2017,24 @@ void MON_UnlinkFromRaziel(Instance *instance)
     INSTANCE_Post(enemy, 0x1000006, (intptr_t)instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_BurnInAir);
+void MON_BurnInAir(Instance *instance, int currentState)
+{
+    
+    MonsterVars *mv;
+    mv = (MonsterVars *) instance->extraData;
+    
+    if (!(mv->mvFlags & 0x400000))
+    {
+        mv->mvFlags |= 0x400000;
+        mv->effectTimer = MON_GetTime(instance) + 0x2710;
+        MON_MonsterGlow(instance, 0x4960, -1, 0, 0);
+        INSTANCE_Post(instance, 0x400000, SetFXHitData(NULL, 0, 0, 0x20));
+    }
+    
+    instance->currentMainState = currentState;
+    mv->mvFlags &= ~1;
+    instance->checkMask &= ~0x20;
+}
 
 void MON_BirthMana(Instance *instance)
 {
