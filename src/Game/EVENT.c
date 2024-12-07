@@ -19,6 +19,8 @@ short MoviePlayed;
 
 short MovieToPlay;
 
+HintSystemStruct gHintSystem;
+
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_UpdateResetSignalArrayAndWaterMovement);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ResetAllOneTimeVariables);
@@ -33,7 +35,15 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_StopHint);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_KillSpecificHint);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_GetCurrentHint);
+long HINT_GetCurrentHint()
+{
+    if ((gHintSystem.flags & 0x1))
+    {
+        return gHintSystem.hintNumber;
+    }
+
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ProcessTimers);
 
