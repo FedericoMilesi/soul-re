@@ -27,7 +27,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ResetAllOneTimeVariables);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_AddSignalToReset);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_ResetHint);
+void HINT_ResetHint()
+{
+    memset(&gHintSystem, 0, sizeof(HintSystemStruct));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_StartHint);
 
