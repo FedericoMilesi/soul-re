@@ -1,6 +1,10 @@
 #include "common.h"
 #include "Game/EVENT.h"
 
+STATIC long numActiveEventTimers;
+
+STATIC EventTimer eventTimerArray[24];
+
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_UpdateResetSignalArrayAndWaterMovement);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ResetAllOneTimeVariables);
@@ -25,7 +29,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_GetNextTimer);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_RemoveTimer);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_InitTimers);
+void EVENT_InitTimers()
+{
+    numActiveEventTimers = 0;
+
+    memset(eventTimerArray, 0, sizeof(EventTimer) * 24);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_InitTerrainMovement);
 
