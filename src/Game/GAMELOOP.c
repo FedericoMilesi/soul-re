@@ -42,9 +42,64 @@ FXTracker *fxTracker;
 
 STATIC void *pause_redraw_prim;
 
+STATIC VertexPool *gVertexPool;
+
+STATIC ObjectTracker *GlobalObjects;
+
+STATIC LightInfo *gLightInfo;
+
+STATIC unsigned long **gOt[2];
+
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AllocStaticMemory);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_InitGameTracker);
+void GAMELOOP_InitGameTracker()
+{
+    int i;
+
+    primPool[0]->lastPrim = &primPool[0]->prim[23988];
+    primPool[1]->lastPrim = &primPool[1]->prim[23988];
+
+    primPool[0]->nextPrim = &primPool[0]->prim[0];
+    primPool[1]->nextPrim = &primPool[1]->prim[0];
+
+    gameTrackerX.instancePool = instancePool;
+    gameTrackerX.vertexPool = gVertexPool;
+    gameTrackerX.planningPool = planningPool;
+    gameTrackerX.enemyPlanPool = enemyPlanPool;
+
+    gameTrackerX.GlobalObjects = GlobalObjects;
+
+    gameTrackerX.instanceList = instanceList;
+
+    gameTrackerX.lightInfo = gLightInfo;
+
+    gameTrackerX.multGameTime = 10;
+
+    gameTrackerX.material_fadeValue = 4096;
+    gameTrackerX.spectral_fadeValue = 0;
+
+    gameTrackerX.decoupleGame = 1;
+
+    gameTrackerX.frameRateLock = 1;
+
+    gameTrackerX.primPool = primPool[0];
+
+    gameTrackerX.drawOT = gOt[0];
+    gameTrackerX.dispOT = gOt[1];
+
+    gameTrackerX.frameRate24fps = 1;
+
+    for (i = 0; i < 48; i++)
+    {
+        gameTrackerX.GlobalObjects[i].objectStatus = 0;
+    }
+
+    gameTrackerX.gameData.asmData.MorphTime = 1000;
+
+    OBTABLE_ClearObjectReferences();
+
+    EVENT_Init();
+}
 
 void GAMELOOP_SystemInit(GameTracker *gameTracker)
 {
