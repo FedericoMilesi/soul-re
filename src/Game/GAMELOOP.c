@@ -520,9 +520,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ModeStartPause);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ChangeMode);
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 /*TODO: migrate to GAMELOOP_RequestLevelChange*/
 static char D_800D07B8[] = "%s%d";
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_RequestLevelChange);
+#else
+void GAMELOOP_RequestLevelChange(char *name, short number, GameTracker *gameTracker)
+{
+    if (gameTracker->levelChange == 0)
+    {
+        gameTracker->gameFlags |= 0x1;
+
+        SOUND_ResetAllSound();
+
+        sprintf(gameTracker->baseAreaName, "%s%d", name, number);
+
+        gameTracker->levelChange = 1;
+
+        gameTracker->levelDone = 1;
+    }
+}
+#endif
 
 void PSX_GameLoop(GameTracker *gameTracker)
 {
