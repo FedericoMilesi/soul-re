@@ -33,7 +33,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_StartHint);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_StopHint);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", HINT_KillSpecificHint);
+void HINT_KillSpecificHint(short hintNumber)
+{
+    if (gHintSystem.hintNumber == hintNumber)
+    {
+        HINT_StopHint();
+    }
+}
 
 long HINT_GetCurrentHint()
 {

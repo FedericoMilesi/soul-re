@@ -16,5 +16,6 @@ void EVENT_PrintVars();
 void EVENT_ProcessMovingWater();
 void EVENT_ProcessTimers();
 void HINT_ResetHint();
+void HINT_StopHint();
 
 #endif
