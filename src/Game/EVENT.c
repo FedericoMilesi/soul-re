@@ -248,7 +248,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ModifyObjectToStackWithAttribut
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_DoInstanceAnimateTextureAction);
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ResetAllSplineFlags);
+void EVENT_ResetAllSplineFlags(MultiSpline *spline)
+{
+    if (spline->positional != NULL)
+    {
+        spline->positional->flags &= ~0x7;
+    }
+
+    if (spline->rotational != NULL)
+    {
+        spline->rotational->flags &= ~0x7;
+    }
+
+    if (spline->scaling != NULL)
+    {
+        spline->scaling->flags &= ~0x7;
+    }
+
+    if (spline->color != NULL)
+    {
+        spline->color->flags &= ~0x7;
+    }
+}
 
 void EVENT_SetSplineLoop(MultiSpline *spline)
 {
