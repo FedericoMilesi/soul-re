@@ -12,6 +12,7 @@
 #include "Game/DRAW.h"
 #include "Game/MATH3D.h"
 #include "Game/SIGNAL.h"
+#include "Game/VOICEXA.h"
 #include "Game/PSX/MAIN.h"
 #include "Game/PSX/SUPPORT.h"
 #include "Game/G2/ANIMG2.h"
@@ -230,7 +231,15 @@ int GAMELOOP_GetTimeOfDayIdx(int timeOfDay)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_WaitForLoad);
+int GAMELOOP_WaitForLoad()
+{
+    if ((gameTrackerX.debugFlags & 0x80000))
+    {
+        VOICEXA_Tick();
+    }
+
+    return STREAM_PollLoadQueue();
+}
 
 /*TODO: migrate to LoadLevels*/
 static char D_800D0718[16] = {0}; // oldArea

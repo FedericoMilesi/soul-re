@@ -11,5 +11,6 @@ void voiceCmdResume(XAVoiceTracker *vt, short cmdParam);
 void voiceCmdNull(XAVoiceTracker *vt, short cmdParam);
 void VOICEXA_Play(int voiceIndex, int queueRequests);
 int VOICEXA_IsPlaying();
+void VOICEXA_Tick();
 
 #endif
