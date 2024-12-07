@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/COLLIDE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"
 #include "Game/EVENT.h"
@@ -386,7 +387,44 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SwitchTheDrawBuffer);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetupRenderFunction);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetMainRenderUnit);
+StreamUnit *GAMELOOP_GetMainRenderUnit()
+{
+    StreamUnit *streamUnit;
+    Instance *focusInstance;
+    StreamUnit *cameraUnit;
+
+    if (theCamera.mode == 5)
+    {
+        streamUnit = STREAM_WhichUnitPointerIsIn(theCamera.data.Cinematic.posSpline);
+    }
+    else
+    {
+        focusInstance = theCamera.focusInstance;
+
+        if ((focusInstance == gameTrackerX.playerInstance) && (gameTrackerX.SwitchToNewStreamUnit != 0))
+        {
+            streamUnit = STREAM_GetStreamUnitWithID(gameTrackerX.moveRazielToStreamID);
+
+            if (streamUnit == NULL)
+            {
+                return STREAM_GetStreamUnitWithID(focusInstance->currentStreamUnitID);
+            }
+        }
+        else
+        {
+            streamUnit = STREAM_GetStreamUnitWithID(focusInstance->currentStreamUnitID);
+        }
+
+        cameraUnit = COLLIDE_CameraWithStreamSignals(&theCamera);
+
+        if (cameraUnit != NULL)
+        {
+            streamUnit = cameraUnit;
+        }
+    }
+
+    return streamUnit;
+}
 
 /*TODO: migrate to GAMELOOP_DisplayFrame*/
 static char D_800D0780[] = "Cameraunit: %s\n";

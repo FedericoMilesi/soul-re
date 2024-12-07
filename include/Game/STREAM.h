@@ -53,5 +53,6 @@ long STREAM_GetWaterZLevel(Level *level, Instance *instance);
 void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUnit *streamUnit);
 int InsertGlobalObject(char *name, GameTracker *gameTracker);
 void WARPGATE_Init();
+StreamUnit *STREAM_WhichUnitPointerIsIn(void *pointer);
 
 #endif
