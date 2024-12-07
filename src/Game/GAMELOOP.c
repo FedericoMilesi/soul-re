@@ -275,7 +275,7 @@ void GAMELOOP_LevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker)
 {
     long i;
     StreamUnit *streamUnit;
-    BLK_FILL *temp; // not from SYMDUMP
+    BLK_FILL *temp; // not from decls.h
 
     G2Anim_ResetInternalState();
     gameTracker->playerInstance = NULL;

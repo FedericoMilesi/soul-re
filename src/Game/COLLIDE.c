@@ -720,7 +720,7 @@ void COLLIDE_PointAndInstance(PCollideInfo *pcollideInfo, Instance *instance)
 
                 if ((hbox->flags & 0x2000))
                 {
-                    unsigned short temp; // not from SYMDUMP
+                    unsigned short temp; // not from decls.h
 
                     temp = instance->scale.x;
 
