@@ -69,6 +69,7 @@ void MON_TerrainImpaleDeathEntry(Instance *instance);
 void MON_TerrainImpaleDeath(Instance *instance);
 void MON_PetrifiedEntry(Instance *instance);
 void MON_Petrified(Instance *instance);
+void MON_MonsterGlow(Instance *instance, long color, int glowtime, int glowin, int glowfade);
 void ProcessBurntMess(Instance *instance, int vertidx, int segidx, int dist, void *cb_data);
 void MONSTER_InitVertexColors(Instance *instance, Model *model);
 void MONSTER_ProcessClosestVerts(Instance *instance, SVector *location, void (*processVert_cb)(), void *cb_data);

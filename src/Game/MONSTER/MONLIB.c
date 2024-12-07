@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/MONSTER/MONSTER.h"
 #include "Game/PHYSOBS.h"
 #include "Game/INSTANCE.h"
 #include "Game/MONSTER/MONTABLE.h"
@@ -1593,7 +1594,41 @@ void MON_ProcessLookAt(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TakeDamage);
+int MON_TakeDamage(Instance *instance, int damage, int type)
+{
+    
+    MonsterVars *mv;
+    MonsterCombatAttributes *mca;
+
+    mv = instance->extraData;
+    mca = mv->subAttr->combatAttributes;
+    
+    if (mca != NULL)
+    {
+
+        if ((signed char) mca->hitPoints != 0)
+        {
+            
+            uintptr_t enemyInstance;
+            enemyInstance = INSTANCE_Query(instance, 1);
+
+            if (type != 0x40000 || enemyInstance & 8)
+            {
+                
+                mv->hitPoints -= damage;
+                mv->damageType = type;
+                
+                if (mv->hitPoints <= 0)
+                {
+                    mv->hitPoints = 0;
+                    return 1;
+                }
+            }
+        }
+    }
+    
+    return 0;
+}
 
 void MON_SetUpSaveInfo(Instance *instance, MonsterSaveInfo *saveData)
 {
@@ -2017,7 +2052,24 @@ void MON_UnlinkFromRaziel(Instance *instance)
     INSTANCE_Post(enemy, 0x1000006, (intptr_t)instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_BurnInAir);
+void MON_BurnInAir(Instance *instance, int currentState)
+{
+    
+    MonsterVars *mv;
+    mv = (MonsterVars *) instance->extraData;
+    
+    if (!(mv->mvFlags & 0x400000))
+    {
+        mv->mvFlags |= 0x400000;
+        mv->effectTimer = MON_GetTime(instance) + 0x2710;
+        MON_MonsterGlow(instance, 0x4960, -1, 0, 0);
+        INSTANCE_Post(instance, 0x400000, SetFXHitData(NULL, 0, 0, 0x20));
+    }
+    
+    instance->currentMainState = currentState;
+    mv->mvFlags &= ~1;
+    instance->checkMask &= ~0x20;
+}
 
 void MON_BirthMana(Instance *instance)
 {
