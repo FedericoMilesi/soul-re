@@ -21,6 +21,7 @@
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MEMPACK.h"
 #include "Game/TIMER.h"
+#include "Game/HASM.h"
 
 long cameraMode = 0xD;
 
@@ -385,7 +386,11 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AddClearPrim);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SwitchTheDrawBuffer);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetupRenderFunction);
+void GAMELOOP_SetupRenderFunction(GameTracker *gameTracker)
+{
+    gameTracker->drawAnimatedModelFunc = &DRAW_AnimatedModel_S;
+    gameTracker->drawDisplayPolytopeListFunc = &DRAW_DisplayPolytopeList_S;
+}
 
 StreamUnit *GAMELOOP_GetMainRenderUnit()
 {
