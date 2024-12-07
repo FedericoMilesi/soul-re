@@ -97,7 +97,27 @@ void GAMELOOP_CalcGameTime()
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetGameTime);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetTimeOfDay);
+int GAMELOOP_GetTimeOfDay()
+{
+    int timeOfDay;
+
+    timeOfDay = gameTrackerX.timeOfDay;
+
+    if (((timeOfDay - 601) >= 0) && ((timeOfDay - 601) < 99))
+    {
+        return 600;
+    }
+    else if (((timeOfDay - 700) >= 0) && ((timeOfDay - 700) < 1100))
+    {
+        return 700;
+    }
+    else if (((timeOfDay - 1800) >= 0) && ((timeOfDay - 1800) < 100))
+    {
+        return 1800;
+    }
+
+    return 1900;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetTimeOfDayIdx);
 
