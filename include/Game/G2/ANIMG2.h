@@ -3,25 +3,28 @@
 
 #include "common.h"
 
-#define SET_QUAT_FAST(q, _x, _y, _z, _w) {\
-G2Quat* quat = q;\
-*(int*)&quat->x = ((_x) | (_y << 16));\
-*(int*)&quat->z = ((_z) | (_w << 16));\
-}
+#define SET_QUAT_FAST(q, _x, _y, _z, _w)        \
+    {                                           \
+        G2Quat *quat = q;                       \
+        *(int *)&quat->x = ((_x) | (_y << 16)); \
+        *(int *)&quat->z = ((_z) | (_w << 16)); \
+    }
 
-#define SET_SVEC3_FAST(v, _x, _y, _z) {\
-*(int*)&(v)->x = ((_x) | (_y << 16));\
-(v)->z = (_z);\
-}
+#define SET_SVEC3_FAST(v, _x, _y, _z)          \
+    {                                          \
+        *(int *)&(v)->x = ((_x) | (_y << 16)); \
+        (v)->z = (_z);                         \
+    }
 
-#define COPY_SVEC3_FAST(_tgt, _src) {\
-G2SVector3* src = _src;\
-G2SVector3* tgt = _tgt;\
-unsigned long xy = *(int*)&src->x;\
-unsigned long zpad = *(int*)&src->z;\
-*(int*)&tgt->x = xy;\
-*(int*)&tgt->z = zpad & 0xFFFF;\
-}
+#define COPY_SVEC3_FAST(_tgt, _src)           \
+    {                                         \
+        G2SVector3 *src = _src;               \
+        G2SVector3 *tgt = _tgt;               \
+        unsigned long xy = *(int *)&src->x;   \
+        unsigned long zpad = *(int *)&src->z; \
+        *(int *)&tgt->x = xy;                 \
+        *(int *)&tgt->z = zpad & 0xFFFF;      \
+    }
 
 void G2Anim_Restore(G2Anim *anim);
 void G2Anim_Free(G2Anim *anim);
@@ -49,5 +52,6 @@ void _G2AnimSection_InitStatus(G2AnimSection *section, G2Anim *anim);
 short G2AnimSection_RewindOverInterval(G2AnimSection *section, short interval);
 short G2AnimSection_AdvanceOverInterval(G2AnimSection *section, short interval);
 void G2Anim_ResetInternalState();
+G2Bool G2Anim_Install();
 
 #endif
