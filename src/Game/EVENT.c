@@ -5,6 +5,10 @@ STATIC long numActiveEventTimers;
 
 STATIC EventTimer eventTimerArray[24];
 
+STATIC WaterLevelProcess WaterLevelArray[5];
+
+long WaterInUse;
+
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_UpdateResetSignalArrayAndWaterMovement);
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_ResetAllOneTimeVariables);
@@ -67,7 +71,17 @@ void EVENT_InitTimers()
     memset(eventTimerArray, 0, sizeof(EventTimer) * 24);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_InitTerrainMovement);
+void EVENT_InitTerrainMovement()
+{
+    long i;
+
+    for (i = 0; i < 5; i++)
+    {
+        memset(&WaterLevelArray[i], sizeof(WaterLevelProcess), 0); // last two function parameters are swapped, likely a mistake by the devs
+    }
+
+    WaterInUse = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/EVENT", EVENT_Init);
 
