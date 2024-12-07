@@ -210,7 +210,25 @@ int GAMELOOP_GetTimeOfDay()
     return 1900;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetTimeOfDayIdx);
+int GAMELOOP_GetTimeOfDayIdx(int timeOfDay)
+{
+    if (((timeOfDay - 601) >= 0) && ((timeOfDay - 601) < 99))
+    {
+        return 1;
+    }
+
+    if (((timeOfDay - 700) >= 0) && ((timeOfDay - 700) < 1100))
+    {
+        return 2;
+    }
+
+    if (((timeOfDay - 1800) >= 0) && ((timeOfDay - 1800) < 100))
+    {
+        return 3;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_WaitForLoad);
 
