@@ -401,7 +401,35 @@ void GAMELOOP_FlipScreenAndDraw(GameTracker *gameTracker, unsigned long **drawot
     gameTracker->gameData.asmData.dispPage = 1 - gameTracker->gameData.asmData.dispPage;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AddClearPrim);
+void GAMELOOP_AddClearPrim(unsigned long **drawot, int override)
+{
+    if ((!(gameTrackerX.gameFlags & 0x8000000)) || (override != 0))
+    {
+        BLK_FILL *blkfill;
+        int *temp; // not from decls.h
+
+        blkfill = (BLK_FILL *)gameTrackerX.primPool->nextPrim;
+
+        *blkfill = clearRect[gameTrackerX.drawPage];
+
+        gameTrackerX.primPool->nextPrim = (unsigned long *)(blkfill + 1);
+
+        // addPrim(drawot[3071], blkfill);
+
+        temp = (int *)&drawot[3071];
+
+        *(int *)blkfill = getaddr(temp) | 0x3000000;
+        *(int *)temp = getaddr(&blkfill);
+    }
+    else
+    {
+        BLK_FILL *blkfill;
+
+        blkfill = (BLK_FILL *)gameTrackerX.savedOTStart;
+
+        blkfill->y0 = clearRect[gameTrackerX.drawPage].y0;
+    }
+}
 
 void GAMELOOP_SwitchTheDrawBuffer(unsigned long **drawot)
 {
