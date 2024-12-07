@@ -19,6 +19,7 @@
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MEMPACK.h"
+#include "Game/TIMER.h"
 
 #define FRAMERATE_MULT 1
 
@@ -507,7 +508,104 @@ void GAMELOOP_Reset24FPS()
     gameTrackerX.frameRate24fps = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DoTimeProcess);
+void GAMELOOP_DoTimeProcess()
+{
+    int holdTime;
+
+    holdTime = TIMER_GetTimeMS();
+
+    if (!(gameTrackerX.gameFlags & 0x10000000))
+    {
+        gameTrackerX.totalTime = TIMER_TimeDiff(gameTrackerX.currentTicks);
+
+        gameTrackerX.currentTicks = (GetRCnt(0xF2000000) & 0xFFFF) | (gameTimer << 16);
+
+        if (gameTrackerX.frameRateLock <= 0)
+        {
+            gameTrackerX.frameRateLock = 1;
+        }
+
+        if (gameTrackerX.frameRateLock >= 3)
+        {
+            gameTrackerX.frameRateLock = 2;
+        }
+
+        if ((gameTrackerX.decoupleGame == 0) || ((gameTrackerX.gameFlags & 0x10000000)))
+        {
+            if (gameTrackerX.frameRateLock == 1)
+            {
+                gameTrackerX.lastLoopTime = 33;
+            }
+            else if (gameTrackerX.frameRateLock == 2)
+            {
+                gameTrackerX.lastLoopTime = 50;
+            }
+
+            gameTrackerX.timeMult = (gameTrackerX.lastLoopTime << 12) / 33;
+        }
+        else
+        {
+            int lockRate;
+            unsigned long last;
+
+            lockRate = 33;
+
+            if (gameTrackerX.frameRateLock != 1)
+            {
+                if (gameTrackerX.frameRateLock == 2)
+                {
+                    lockRate = 50;
+                }
+            }
+
+            last = lockRate;
+
+            if (gameTrackerX.lastLoopTime != -1U)
+            {
+                last = holdTime - gameTrackerX.currentTime;
+            }
+
+            if ((gameTrackerX.frameRateLock == 1) && (gameTrackerX.frameRate24fps != 0))
+            {
+                last -= 9;
+            }
+
+            if ((last < (unsigned int)lockRate) || (gameTrackerX.gameData.asmData.MorphTime != 1000))
+            {
+                last = lockRate;
+            }
+            else if (last > 66)
+            {
+                last = 66;
+            }
+
+            gameTrackerX.timeMult = (last << 12) / 33;
+
+            gameTrackerX.lastLoopTime = last;
+        }
+
+        gameTrackerX.gameFramePassed = 0;
+
+        gameTrackerX.globalTimeMult = gameTrackerX.timeMult;
+
+        gameTrackerX.timeSinceLastGameFrame += gameTrackerX.timeMult;
+
+        while (gameTrackerX.timeSinceLastGameFrame >= 4097)
+        {
+            gameTrackerX.gameFramePassed = 1;
+
+            gameTrackerX.timeSinceLastGameFrame -= 4096;
+
+            gameTrackerX.fps30Count++;
+        }
+    }
+    else
+    {
+        gameTrackerX.lastLoopTime = -1;
+    }
+
+    gameTrackerX.currentTime = holdTime;
+}
 
 /*TODO: migrate to GAMELOOP_Process*/
 static char D_800D0790[] = "Processing unit %s\n";
