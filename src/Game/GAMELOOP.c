@@ -46,7 +46,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AllocStaticMemory);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_InitGameTracker);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SystemInit);
+void GAMELOOP_SystemInit(GameTracker *gameTracker)
+{
+    (void)gameTracker;
+
+    GAMELOOP_AllocStaticMemory();
+
+    INSTANCE_InitInstanceList(instanceList, instancePool);
+
+    GAMELOOP_InitGameTracker();
+}
 
 void GAMELOOP_ResetGameStates()
 {

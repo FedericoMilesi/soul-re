@@ -12,6 +12,8 @@ void GAMELOOP_RequestLevelChange(char *name, short number, GameTracker *gameTrac
 void ResetPrimPool();
 void GAMELOOP_Process(GameTracker *gameTracker);
 void ResetDrawPage();
+void GAMELOOP_AllocStaticMemory();
+void GAMELOOP_InitGameTracker();
 
 GameTracker gameTrackerX;
 GameTracker *gameTracker;
