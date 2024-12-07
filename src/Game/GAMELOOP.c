@@ -384,7 +384,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_FlipScreenAndDraw);
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AddClearPrim);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SwitchTheDrawBuffer);
+void GAMELOOP_SwitchTheDrawBuffer(unsigned long **drawot)
+{
+    GAMELOOP_AddClearPrim(drawot, 0);
+
+    DrawSync(0);
+
+    if (gameTrackerX.drawTimerReturn != NULL)
+    {
+        gameTrackerX.drawTimerReturn = NULL;
+
+        gameTrackerX.reqDisp = (DISPENV *)gameTrackerX.disp + gameTrackerX.gameData.asmData.dispPage;
+    }
+
+    PutDrawEnv(&draw[gameTrackerX.drawPage]);
+}
 
 void GAMELOOP_SetupRenderFunction(GameTracker *gameTracker)
 {
