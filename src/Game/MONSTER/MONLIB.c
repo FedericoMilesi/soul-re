@@ -762,7 +762,36 @@ void MON_ApplyPhysics(Instance *instance)
     PhysicsMove(instance, &instance->position, gameTrackerX.timeMult);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChangeBehavior);
+void MON_ChangeBehavior(Instance *instance, int behavior)
+{
+    
+    enum MonsterState state;
+    MonsterVars *mv;
+
+    if (behavior != -1)
+    {
+        mv = (MonsterVars *)instance->extraData;
+        switch (behavior) {
+        case 9:
+            state = MONSTER_STATE_FLEE;
+            break;
+        case 2:
+            state = MONSTER_STATE_WANDER;
+            break;
+        case 4:
+        case 8:
+            state = MONSTER_STATE_HIDE;
+            break;
+        case 11:
+        default:
+            state = MONSTER_STATE_PURSUE;
+            break;
+        }
+        MON_SwitchState(instance, state);
+        mv->behaviorState = behavior;
+    }
+}
+
 
 void MON_CheckEnvironment(Instance *instance)
 {
