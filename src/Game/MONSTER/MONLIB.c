@@ -2045,7 +2045,30 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetVelocityTowardsImpali
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffSphereCollisions);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnSphereCollisions);
+void MON_TurnOnSphereCollisions(Instance *instance)
+{
+    
+    int i;
+    HModel *hModel;
+    
+    hModel = &instance->hModelList[instance->currentModel];
+    i = hModel->numHPrims;
+    
+    if (i != 0)
+    {
+        
+        HPrim *hprim;
+        hprim = hModel->hPrimList;
+        
+        if (!(hprim->withFlags & 0x20))
+        {
+            for (; i != 0; i--, hprim++)
+            {
+                hprim->withFlags |= 0x20;
+            } 
+        }
+    }
+}
 
 void MON_ProcessSpecialFade(Instance *instance)
 {
