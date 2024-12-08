@@ -1050,7 +1050,36 @@ unsigned long MON_CheckTerrain(Instance *instance, BSPTree *bsp, TFace *tface)
     return rv;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_CheckPointSuitability);
+int MON_CheckPointSuitability(Instance *instance, Position *origin, Position *destination)
+{
+    int result;
+    int rc;
+    MonsterVars *mv;
+    evPhysicsDropHeightData *data;
+
+    rc = 0;
+    mv = (MonsterVars *)instance->extraData;
+    data = (evPhysicsDropHeightData *)SetPhysicsDropHeightData(destination, mv->subAttr->fallDistance, 0x40);
+    result = PhysicsCheckDropHeight(instance, (intptr_t) data, 1);
+    
+    if (result == 1)
+    {
+        result = MON_CheckTerrain(instance, data->bsp, data->tface) | 1;
+        destination->z = data->origin.z;
+    }
+
+    
+    if (!(result & mv->avoidMask))
+    {
+        if (mv->mvFlags & 0x800 || result != 0)
+        {
+            rc = 1;
+        }
+    }
+    
+    return rc;
+}
+
 
 unsigned long MON_GetTime(Instance *instance)
 {
