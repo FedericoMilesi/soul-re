@@ -3,6 +3,7 @@
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONSTER.h"
 #include "Game/MONSTER/MONSENSE.h"
+#include "Game/MONSTER/MONAPI.h"
 #include "Game/PHYSOBS.h"
 #include "Game/INSTANCE.h"
 #include "Game/MONSTER/MONTABLE.h"
@@ -19,6 +20,7 @@
 #include "Game/STREAM.h"
 #include "Game/G2/ANIMG2.h"
 #include "Game/OBTABLE.h"
+#include "Game/SAVEINFO.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {
@@ -1927,7 +1929,55 @@ void MON_GetSaveInfo(Instance *instance, MonsterSaveInfo *saveData)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_KillMonster);
+void MON_KillMonster(Instance *instance)
+{
+    
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+    MON_DropAllObjects(instance);
+    
+    if (mv->causeOfDeath == 6)
+    {
+        
+        MonsterAttributes *attr;
+        FXSplinter *splintDef;
+        
+        attr = (MonsterAttributes *)instance->data;
+        splintDef = attr->shatterList;
+        
+        _FX_BuildSplinters(instance, 0, 0, 0, splintDef, gFXT, NULL, NULL, 8);
+        
+        if (!(instance->flags2 & 0x1000))
+        {
+            SOUND_Play3dSound(&instance->position, 0x30, 0, 0x5F, 0x3E80);
+        }
+        
+    }
+    
+    if (mv->mvFlags & 0x01000000 && (instance->intro == NULL || !(instance->intro->flags & 0x400)))
+    {
+        if (mv->regenTime != 0)
+        {
+            MONAPI_AddToGenerator(instance);
+        }
+        SAVE_DeleteInstance(instance);
+    }
+    else
+    {
+        SAVE_MarkDeadDead(instance);
+    }
+    
+    if (instance->object->oflags2 & 4)
+    {
+        if (instance->flags2 & 0x1000)
+        {
+            SOUND_ProcessInstanceSounds(instance->object->soundData, instance->soundInstanceTbl, &instance->position, instance->object->oflags2 & 0x02000000, instance->flags2 & 0x08000000, 0, 0, &instance->flags2);
+            SOUND_ProcessInstanceSounds(instance->object->soundData, instance->soundInstanceTbl, &instance->position, instance->object->oflags2 & 0x02000000, instance->flags2 & 0x08000000, 0, 0, &instance->flags2);
+        }
+    }
+    instance->flags |= 0x20;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIAmbushEnemy);
 

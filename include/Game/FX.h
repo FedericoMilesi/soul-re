@@ -36,5 +36,6 @@ void FX_Health_Spiral(int number, int current_health, int max_health);
 void FX_StartConstrict(Instance *instance, SVector *constrict_point, short startSegment, short endSegment);
 void FX_EndConstrict(int ConstrictEnemyFlag, Instance *instance);
 void FX_Init(FXTracker *fxTracker);
+void _FX_BuildSplinters(struct _Instance *instance, struct SVECTOR *center, struct SVECTOR *vel, struct SVECTOR *accl, struct FXSplinter *splintDef, struct _FXTracker *fxTracker, void (*fxSetup)(), void (*fxProcess)(), int shardFlags);
 
 #endif

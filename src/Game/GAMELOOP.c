@@ -57,8 +57,6 @@ char *primBase;
 
 STATIC PolytopeList *gPolytopeList;
 
-FXTracker *gFXT;
-
 void GAMELOOP_AllocStaticMemory()
 {
     instanceList = (InstanceList *)MEMPACK_Malloc(sizeof(InstanceList), 6);
