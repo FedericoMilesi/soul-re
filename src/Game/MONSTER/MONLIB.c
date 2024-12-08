@@ -542,7 +542,34 @@ int MON_ChooseLeftOrRight(struct _Instance *instance, struct _MonsterIR *enemy)
     return -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseEvadeMove);
+int MON_ChooseEvadeMove(Instance *instance)
+{
+    
+    int anim; // v0
+    int leftOrRight; // v1
+    
+    leftOrRight = MON_ChooseLeftOrRight(instance, ((MonsterVars *)instance->extraData)->enemy);
+
+    if (leftOrRight == 0)
+    {
+        if (rand() & 1)
+        {
+            leftOrRight = 1;
+        }
+        else
+        {
+            leftOrRight = -1;
+        }
+    }
+    
+    anim = MONSTER_ANIM_EVADERIGHT;
+    if (leftOrRight < 0)
+    {
+        anim = MONSTER_ANIM_EVADELEFT;
+    }
+    
+    return anim;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseCombatMove);
 
