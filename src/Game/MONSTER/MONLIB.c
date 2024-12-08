@@ -2,6 +2,7 @@
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONSTER.h"
+#include "Game/MONSTER/MONSENSE.h"
 #include "Game/PHYSOBS.h"
 #include "Game/INSTANCE.h"
 #include "Game/MONSTER/MONTABLE.h"
@@ -482,11 +483,93 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIAttack);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseAttack);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIEvade);
+int MON_ShouldIEvade(Instance *instance)
+{
+    
+    int rv;
+    MonsterVars *mv;
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseLeftOrRight);
+    mv = (MonsterVars *) instance->extraData;
+    rv = 0;
+    
+    if (!(mv->mvFlags & 0x40000000))
+    {
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseEvadeMove);
+        MonsterIR *enemy;
+        enemy = mv->enemy;
+        
+        if ((unsigned short) (MON_FacingOffset(instance, enemy->instance) + 0x2A9U) < 0x553U)
+        {
+            if (MON_CheckConditions(instance, enemy, mv->subAttr->combatAttributes->evadeProbability) != 0) {
+                mv->enemy->mirConditions = 0;
+                rv = 1;
+            }
+        }
+    }
+    
+    return rv;
+}
+
+int MON_ChooseLeftOrRight(struct _Instance *instance, struct _MonsterIR *enemy)
+{
+    
+    short offset;
+    int leftDist;
+    int rightDist;
+    
+    offset = MON_FacingOffset(instance, enemy->instance);
+    
+    if (offset >= -0x40)
+    {
+        if (offset >= 0x41)
+        {
+            return 1;
+        }
+        
+        leftDist = MONSENSE_GetDistanceInDirection(instance, instance->rotation.z + 0x400);
+        rightDist = MONSENSE_GetDistanceInDirection(instance, instance->rotation.z - 0x400);
+        
+        if (leftDist != rightDist)
+        {
+            if (leftDist < rightDist)
+            {
+                return 1;
+            }
+            return -1;
+        }
+        return 0;
+    }
+    return -1;
+}
+
+int MON_ChooseEvadeMove(Instance *instance)
+{
+    
+    int anim; // v0
+    int leftOrRight; // v1
+    
+    leftOrRight = MON_ChooseLeftOrRight(instance, ((MonsterVars *)instance->extraData)->enemy);
+
+    if (leftOrRight == 0)
+    {
+        if (rand() & 1)
+        {
+            leftOrRight = 1;
+        }
+        else
+        {
+            leftOrRight = -1;
+        }
+    }
+    
+    anim = MONSTER_ANIM_EVADERIGHT;
+    if (leftOrRight < 0)
+    {
+        anim = MONSTER_ANIM_EVADELEFT;
+    }
+    
+    return anim;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseCombatMove);
 
@@ -583,7 +666,19 @@ void MON_PlayCombatIdle(Instance *instance, int mode)
     MON_PlayAnimIfNotPlaying(instance, (enum MonsterAnim)anim, mode);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetRandomPoint);
+void MON_GetRandomPoint(Position *out, Position *in, short r)
+{
+    
+    int mult;
+    int ang;
+    
+    mult = rand() % r;
+    ang = rand();
+
+    out->x = in->x + (mult * rcos(ang) >> 0xC);
+    out->y = in->y + (mult * rsin(ang) >> 0xC);
+    out->z = in->z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetRandomDestinationInWorld);
 

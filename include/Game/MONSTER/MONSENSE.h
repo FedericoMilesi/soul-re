@@ -5,6 +5,7 @@
 
 MonsterIR *MONSENSE_SetEnemy(Instance *instance, Instance *newenemy);
 void MONSENSE_DoSenses(Instance *instance);
+int MONSENSE_GetDistanceInDirection(Instance *instance, short angle);
 void MONSENSE_RemoveSenses(Instance *instance);
 void MONSENSE_SetupSenses(Instance *instance);
 void MONSENSE_StartMonsterIRList(Instance *instance);
