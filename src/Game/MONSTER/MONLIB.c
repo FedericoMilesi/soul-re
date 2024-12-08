@@ -482,7 +482,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIAttack);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseAttack);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIEvade);
+int MON_ShouldIEvade(Instance *instance)
+{
+    
+    int rv;
+    MonsterVars *mv;
+
+    mv = (MonsterVars *) instance->extraData;
+    rv = 0;
+    
+    if (!(mv->mvFlags & 0x40000000))
+    {
+
+        MonsterIR *enemy;
+        enemy = mv->enemy;
+        
+        if ((unsigned short) (MON_FacingOffset(instance, enemy->instance) + 0x2A9U) < 0x553U)
+        {
+            if (MON_CheckConditions(instance, enemy, mv->subAttr->combatAttributes->evadeProbability) != 0) {
+                mv->enemy->mirConditions = 0;
+                rv = 1;
+            }
+        }
+    }
+    
+    return rv;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseLeftOrRight);
 
