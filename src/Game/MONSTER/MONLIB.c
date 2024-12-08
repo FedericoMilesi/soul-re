@@ -2,6 +2,7 @@
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONSTER.h"
+#include "Game/MONSTER/MONSENSE.h"
 #include "Game/PHYSOBS.h"
 #include "Game/INSTANCE.h"
 #include "Game/MONSTER/MONTABLE.h"
@@ -509,7 +510,37 @@ int MON_ShouldIEvade(Instance *instance)
     return rv;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseLeftOrRight);
+int MON_ChooseLeftOrRight(struct _Instance *instance, struct _MonsterIR *enemy)
+{
+    
+    short offset;
+    int leftDist;
+    int rightDist;
+    
+    offset = MON_FacingOffset(instance, enemy->instance);
+    
+    if (offset >= -0x40)
+    {
+        if (offset >= 0x41)
+        {
+            return 1;
+        }
+        
+        leftDist = MONSENSE_GetDistanceInDirection(instance, instance->rotation.z + 0x400);
+        rightDist = MONSENSE_GetDistanceInDirection(instance, instance->rotation.z - 0x400);
+        
+        if (leftDist != rightDist)
+        {
+            if (leftDist < rightDist)
+            {
+                return 1;
+            }
+            return -1;
+        }
+        return 0;
+    }
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseEvadeMove);
 
