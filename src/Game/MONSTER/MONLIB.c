@@ -762,7 +762,36 @@ void MON_ApplyPhysics(Instance *instance)
     PhysicsMove(instance, &instance->position, gameTrackerX.timeMult);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChangeBehavior);
+void MON_ChangeBehavior(Instance *instance, int behavior)
+{
+    
+    enum MonsterState state;
+    MonsterVars *mv;
+
+    if (behavior != -1)
+    {
+        mv = (MonsterVars *)instance->extraData;
+        switch (behavior) {
+        case 9:
+            state = MONSTER_STATE_FLEE;
+            break;
+        case 2:
+            state = MONSTER_STATE_WANDER;
+            break;
+        case 4:
+        case 8:
+            state = MONSTER_STATE_HIDE;
+            break;
+        case 11:
+        default:
+            state = MONSTER_STATE_PURSUE;
+            break;
+        }
+        MON_SwitchState(instance, state);
+        mv->behaviorState = behavior;
+    }
+}
+
 
 void MON_CheckEnvironment(Instance *instance)
 {
@@ -1021,7 +1050,36 @@ unsigned long MON_CheckTerrain(Instance *instance, BSPTree *bsp, TFace *tface)
     return rv;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_CheckPointSuitability);
+int MON_CheckPointSuitability(Instance *instance, Position *origin, Position *destination)
+{
+    int result;
+    int rc;
+    MonsterVars *mv;
+    evPhysicsDropHeightData *data;
+
+    rc = 0;
+    mv = (MonsterVars *)instance->extraData;
+    data = (evPhysicsDropHeightData *)SetPhysicsDropHeightData(destination, mv->subAttr->fallDistance, 0x40);
+    result = PhysicsCheckDropHeight(instance, (intptr_t) data, 1);
+    
+    if (result == 1)
+    {
+        result = MON_CheckTerrain(instance, data->bsp, data->tface) | 1;
+        destination->z = data->origin.z;
+    }
+
+    
+    if (!(result & mv->avoidMask))
+    {
+        if (mv->mvFlags & 0x800 || result != 0)
+        {
+            rc = 1;
+        }
+    }
+    
+    return rc;
+}
+
 
 unsigned long MON_GetTime(Instance *instance)
 {
@@ -1985,9 +2043,55 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ReachableIntro);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetVelocityTowardsImpalingObject);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffSphereCollisions);
+void MON_TurnOffSphereCollisions(Instance *instance)
+{
+    
+    int i;
+    HModel *hmodel;
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOnSphereCollisions);
+    hmodel = &instance->hModelList[instance->currentModel];
+    i = hmodel->numHPrims;
+    
+    if (i != 0)
+    {
+        
+        HPrim *hprim;
+        hprim = hmodel->hPrimList;
+        
+        if (hprim->withFlags & 0x20)
+        {
+            for (; i != 0; i--, hprim++)
+            {
+                hprim->withFlags &= 0xDF;
+            }
+        }
+    }
+}
+
+void MON_TurnOnSphereCollisions(Instance *instance)
+{
+    
+    int i;
+    HModel *hModel;
+    
+    hModel = &instance->hModelList[instance->currentModel];
+    i = hModel->numHPrims;
+    
+    if (i != 0)
+    {
+        
+        HPrim *hprim;
+        hprim = hModel->hPrimList;
+        
+        if (!(hprim->withFlags & 0x20))
+        {
+            for (; i != 0; i--, hprim++)
+            {
+                hprim->withFlags |= 0x20;
+            } 
+        }
+    }
+}
 
 void MON_ProcessSpecialFade(Instance *instance)
 {
