@@ -666,7 +666,19 @@ void MON_PlayCombatIdle(Instance *instance, int mode)
     MON_PlayAnimIfNotPlaying(instance, (enum MonsterAnim)anim, mode);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetRandomPoint);
+void MON_GetRandomPoint(Position *out, Position *in, short r)
+{
+    
+    int mult;
+    int ang;
+    
+    mult = rand() % r;
+    ang = rand();
+
+    out->x = in->x + (mult * rcos(ang) >> 0xC);
+    out->y = in->y + (mult * rsin(ang) >> 0xC);
+    out->z = in->z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_GetRandomDestinationInWorld);
 
