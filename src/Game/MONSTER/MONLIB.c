@@ -2043,7 +2043,30 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ReachableIntro);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetVelocityTowardsImpalingObject);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_TurnOffSphereCollisions);
+void MON_TurnOffSphereCollisions(Instance *instance)
+{
+    
+    int i;
+    HModel *hmodel;
+
+    hmodel = &instance->hModelList[instance->currentModel];
+    i = hmodel->numHPrims;
+    
+    if (i != 0)
+    {
+        
+        HPrim *hprim;
+        hprim = hmodel->hPrimList;
+        
+        if (hprim->withFlags & 0x20)
+        {
+            for (; i != 0; i--, hprim++)
+            {
+                hprim->withFlags &= 0xDF;
+            }
+        }
+    }
+}
 
 void MON_TurnOnSphereCollisions(Instance *instance)
 {
