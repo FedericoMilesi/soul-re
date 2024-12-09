@@ -583,7 +583,62 @@ int CheckForNoBlend(ColorType *Color)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", BlendToColor);
+void BlendToColor(ColorType *target, ColorType *current, ColorType *dest)
+{
+    LoadAverageCol((unsigned char *)target, (unsigned char *)current, 512, 3584, (unsigned char *)dest);
+
+    if ((target->r - dest->r) >= 0)
+    {
+        if ((target->r - dest->r) >= 5)
+        {
+            dest->code = 0;
+
+            return;
+        }
+    }
+    else if ((dest->r - target->r) >= 5)
+    {
+        dest->code = 0;
+
+        return;
+    }
+
+    if ((target->g - dest->g) >= 0)
+    {
+        if ((target->g - dest->g) >= 5)
+        {
+            dest->code = 0;
+
+            return;
+        }
+    }
+    else if ((dest->g - target->g) >= 5)
+    {
+        dest->code = 0;
+
+        return;
+    }
+
+    if ((target->b - dest->b) >= 0)
+    {
+        if ((target->b - dest->b) >= 5)
+        {
+            dest->code = 0;
+
+            return;
+        }
+    }
+    else if ((dest->b - target->b) >= 5)
+    {
+        dest->code = 0;
+
+        return;
+    }
+
+    *(int *)dest = *(int *)target;
+
+    dest->code = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", MainRenderLevel);
 
