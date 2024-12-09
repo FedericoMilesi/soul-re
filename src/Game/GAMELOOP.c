@@ -384,7 +384,13 @@ void GAMELOOP_LevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_StreamLevelLoadAndInit);
+void GAMELOOP_StreamLevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker, int toSignalNum, int fromSignalNum)
+{
+    (void)toSignalNum;
+    (void)fromSignalNum;
+
+    LoadLevels(baseAreaName, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetScreenWipe);
 
