@@ -22,5 +22,6 @@ void LOAD_CD_ReadPartOfFile(NonBlockLoadEntry *loadEntry);
 int LOAD_ChangeDirectoryByID(int id);
 void *LOAD_InitBuffers();
 void LOAD_DumpCurrentDir();
+void LOAD_UpdateBigFilePointers(BigFileDir *oldDir, BigFileDir *newDir);
 
 #endif
