@@ -276,10 +276,80 @@ int GAMELOOP_WaitForLoad()
     return STREAM_PollLoadQueue();
 }
 
-/*TODO: migrate to LoadLevels*/
-static char D_800D0718[16] = {0}; // oldArea
-StreamUnit *LoadLevels(char *baseAreaName, GameTracker *gameTracker);
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", LoadLevels);
+StreamUnit *LoadLevels(char *baseAreaName, GameTracker *gameTracker)
+{
+    SVector offset;
+    StreamUnit *streamUnit;
+    static char oldArea[16] = {0};
+
+    if (strlen(oldArea) != 0)
+    {
+        STREAM_AbortAreaLoad(oldArea);
+    }
+
+    strcpy(oldArea, baseAreaName);
+
+    LOAD_ChangeDirectory(baseAreaName);
+
+    streamUnit = STREAM_LoadLevel(baseAreaName, NULL, 0);
+
+    if (streamUnit->used == 1)
+    {
+        int num;
+        int waitFor;
+
+        DRAW_LoadingMessage();
+
+        while (streamUnit->used == 1)
+        {
+            GAMELOOP_WaitForLoad();
+        }
+
+        STREAM_NextLoadFromHead();
+
+        STREAM_LoadMainVram(gameTracker, baseAreaName, streamUnit);
+
+        STREAM_NextLoadAsNormal();
+
+        waitFor = GAMELOOP_WaitForLoad() - 1;
+
+        do
+        {
+            num = GAMELOOP_WaitForLoad();
+
+            if (num == 0)
+            {
+                break;
+            }
+        } while (num >= waitFor);
+    }
+
+    else
+    {
+        STREAM_DumpLoadingObjects();
+
+        STREAM_LoadMainVram(gameTracker, baseAreaName, streamUnit);
+    }
+
+    if ((streamUnit->level->startUnitMainSignal != NULL) && (gameTracker->playerInstance != NULL))
+    {
+        streamUnit->level->startUnitMainSignal->flags |= 0x1;
+
+        SIGNAL_HandleSignal(gameTracker->playerInstance, streamUnit->level->startUnitMainSignal->signalList, 0);
+
+        EVENT_AddSignalToReset(streamUnit->level->startUnitMainSignal);
+    }
+
+    ADD_SVEC(SVector, &offset, Position, &streamUnit->level->terrain->BSPTreeArray->bspRoot->sphere.position, Position, &streamUnit->level->terrain->BSPTreeArray->globalOffset);
+
+    offset.x = -offset.x;
+    offset.y = -offset.y;
+    offset.z = -offset.z;
+
+    PreloadAllConnectedUnits(streamUnit, &offset);
+
+    return streamUnit;
+}
 
 void GAMELOOP_InitStandardObjects()
 {

@@ -54,5 +54,8 @@ void STREAM_LoadMainVram(GameTracker *gameTracker, char *baseAreaName, StreamUni
 int InsertGlobalObject(char *name, GameTracker *gameTracker);
 void WARPGATE_Init();
 StreamUnit *STREAM_WhichUnitPointerIsIn(void *pointer);
+void STREAM_AbortAreaLoad(char *baseAreaName);
+void STREAM_NextLoadFromHead();
+void STREAM_DumpLoadingObjects();
 
 #endif
