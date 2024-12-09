@@ -526,8 +526,7 @@ int PhysicsDefaultCheckSwimResponse(Instance *instance, evPhysicsSwimData *Data)
         rc |= 0x100;
     }
 
-    if (((instance->matrix != NULL) && (instance->oldMatrix != NULL)) && (instance->matrix[1].t[2] > waterZLevel)
-    && (instance->oldMatrix[1].t[2] < waterZLevel))
+    if (((instance->matrix != NULL) && (instance->oldMatrix != NULL)) && (instance->matrix[1].t[2] > waterZLevel) && (instance->oldMatrix[1].t[2] < waterZLevel))
     {
         SIGNAL_OutOfWater(instance);
 
@@ -539,8 +538,7 @@ int PhysicsDefaultCheckSwimResponse(Instance *instance, evPhysicsSwimData *Data)
         rc |= 0x400;
     }
 
-    if (((instance->matrix != NULL) && (instance->oldMatrix != NULL)) && (instance->matrix[1].t[2] < (waterZLevel - Data->SwimDepth))
-    && (instance->oldMatrix[1].t[2] > (waterZLevel - Data->SwimDepth)) && (Data->iVelocity->z < 0))
+    if (((instance->matrix != NULL) && (instance->oldMatrix != NULL)) && (instance->matrix[1].t[2] < (waterZLevel - Data->SwimDepth)) && (instance->oldMatrix[1].t[2] > (waterZLevel - Data->SwimDepth)) && (Data->iVelocity->z < 0))
     {
         rc |= 0x800;
     }
@@ -596,7 +594,178 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropHeight);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropOff);
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsFollowWall);
+#else
+int PhysicsFollowWall(Instance *instance, GameTracker *gameTracker, intptr_t Data, short Mode)
+{
+    VECTOR OutTrans;
+    evPhysicsWallCrawlData *Ptr;
+    PCollideInfo CInfo;
+    SVECTOR New;
+    SVECTOR Old;
+    STATIC MATRIX *pTempMat;
+
+    (void)gameTracker;
+
+    Ptr = (evPhysicsWallCrawlData *)Data;
+
+    Ptr->rc = 0;
+
+    CInfo.oldPoint = &Old;
+    CInfo.newPoint = &New;
+
+    pTempMat = &instance->matrix[Ptr->Segment];
+
+    PHYSICS_GenericLineCheckSetup(0, 64, 0, &Old);
+    PHYSICS_GenericLineCheckSetup(0, Ptr->Length, 0, &New);
+
+    PHYSICS_GenericLineCheck(instance, pTempMat, pTempMat, &CInfo);
+
+    if ((CInfo.type == 3) || (CInfo.type == 5))
+    {
+        instance->shadowPosition.x = New.vx;
+        instance->shadowPosition.y = New.vy;
+        instance->shadowPosition.z = New.vz;
+
+        if ((instance->flags2 & 0x40))
+        {
+            instance->flags |= 0x8000000;
+        }
+
+        Ptr->rc |= 0x8;
+
+        if ((Mode & 0x7))
+        {
+            Ptr->DropNormal.x = CInfo.wNormal.vx;
+            Ptr->DropNormal.y = CInfo.wNormal.vy;
+            Ptr->DropNormal.z = CInfo.wNormal.vz;
+        }
+
+        if ((Mode & 0x4))
+        {
+            Position A;
+            Position B;
+            MATRIX mat;
+
+            B.x = B.y = B.z = 0;
+
+            A.x = Ptr->DropNormal.x;
+            A.y = Ptr->DropNormal.y;
+            A.z = Ptr->DropNormal.z;
+
+            MATH3D_RotationFromPosToPos(&A, &B, &Ptr->DropRotation);
+
+            RotMatrix((SVECTOR *)&Ptr->DropRotation, &mat);
+
+            Ptr->NewPosition.x = New.vx;
+            Ptr->NewPosition.y = New.vy;
+            Ptr->NewPosition.z = New.vz;
+
+            New.vx = 0;
+            New.vy = -Ptr->NormalDistance;
+            New.vz = 0;
+
+            ApplyMatrix(&mat, &New, &OutTrans);
+
+            Ptr->NewPosition.x += (short)OutTrans.vx;
+            Ptr->NewPosition.y += (short)OutTrans.vy;
+            Ptr->NewPosition.z += (short)OutTrans.vz;
+
+            Ptr->NewPosition.x = instance->position.x - Ptr->NewPosition.x;
+            Ptr->NewPosition.y = instance->position.y - Ptr->NewPosition.y;
+            Ptr->NewPosition.z = instance->position.z - Ptr->NewPosition.z;
+        }
+
+        instance->wNormal.x = CInfo.wNormal.vx;
+        instance->wNormal.y = CInfo.wNormal.vy;
+        instance->wNormal.z = CInfo.wNormal.vz;
+
+        instance->oldTFace = instance->tface;
+
+        instance->tface = (TFace *)CInfo.prim;
+        instance->tfaceLevel = CInfo.inst;
+
+        instance->bspTree = CInfo.segment;
+    }
+
+    PHYSICS_GenericLineCheckSetup(0, 64, Ptr->ForwardOffset, &Old);
+    PHYSICS_GenericLineCheckSetup(0, (short)(Ptr->NormalDistance / 2) + Ptr->Length, Ptr->ForwardOffset, &New);
+
+    PHYSICS_GenericLineCheck(instance, pTempMat, pTempMat, &CInfo);
+
+    if ((CInfo.type == 3) || (CInfo.type == 5))
+    {
+        Ptr->rc |= 0x2;
+
+        if ((Mode & 0x7))
+        {
+            Ptr->ForwardNormal.x = CInfo.wNormal.vx;
+            Ptr->ForwardNormal.y = CInfo.wNormal.vy;
+            Ptr->ForwardNormal.z = CInfo.wNormal.vz;
+        }
+
+        if ((Mode & 0x4))
+        {
+            Ptr->ForwardXRotation = MATH3D_AngleBetweenVectors(&Ptr->DropNormal, &Ptr->ForwardNormal);
+        }
+
+        Old.vx = 0;
+        Old.vy = -32;
+        Old.vz = 0;
+
+        ApplyMatrix(pTempMat, &Old, &OutTrans);
+
+        Old.vx = 0;
+        Old.vy = 0;
+        Old.vz = 64;
+
+        New.vx += (short)OutTrans.vx;
+        New.vy += (short)OutTrans.vy;
+        New.vz += (short)OutTrans.vz;
+
+        ApplyMatrix(pTempMat, &Old, &OutTrans);
+
+        Old.vx = New.vx + (short)OutTrans.vx;
+        Old.vy = New.vy + (short)OutTrans.vy;
+        Old.vz = New.vz + (short)OutTrans.vz;
+
+        PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+        if ((CInfo.type == 3) || (CInfo.type == 5))
+        {
+            Old.vx = 0;
+            Old.vy = 0;
+            Old.vz = 64;
+
+            ApplyMatrix(pTempMat, &Old, &OutTrans);
+
+            New.vx += (short)OutTrans.vx;
+            New.vy += (short)OutTrans.vy;
+            New.vz += (short)OutTrans.vz;
+
+            Old.vx = (short)pTempMat->t[0] + (short)OutTrans.vx;
+            Old.vy = (short)pTempMat->t[1] + (short)OutTrans.vy;
+            Old.vz = (short)pTempMat->t[2] + (short)OutTrans.vz;
+
+            PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+            if (CInfo.type == 0)
+            {
+                Ptr->rc |= 0x4;
+            }
+        }
+    }
+
+    if ((Mode & 0x2))
+    {
+        INSTANCE_Post(instance, 0x4010011, Data);
+    }
+
+    return Ptr->rc;
+}
+#endif
 
 void PhysicsMoveLocalZClamp(Instance *instance, long segment, long time, long clamp)
 {
@@ -881,7 +1050,7 @@ int PHYSICS_CheckFaceStick(PCollideInfo *CInfo)
 
         if (tface->textoff != 0xFFFF)
         {
-            rc = (unsigned int)rc < (unsigned int)(((TextureFT3*)((char*)((Level*)&CInfo->inst->node)->terrain->StartTextureList + tface->textoff))->attr & 0x200);
+            rc = (unsigned int)rc < (unsigned int)(((TextureFT3 *)((char *)((Level *)&CInfo->inst->node)->terrain->StartTextureList + tface->textoff))->attr & 0x200);
         }
     }
 
