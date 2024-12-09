@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/BSP.h"
 #include "Game/COLLIDE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"
@@ -642,7 +643,13 @@ void BlendToColor(ColorType *target, ColorType *current, ColorType *dest)
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", MainRenderLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", StreamIntroInstancesForUnit);
+void StreamIntroInstancesForUnit(StreamUnit *currentUnit)
+{
+    if (currentUnit->used == 2)
+    {
+        SBSP_IntroduceInstances(currentUnit->level->terrain, currentUnit->StreamUnitID);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", StreamRenderLevel);
 
