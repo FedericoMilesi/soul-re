@@ -188,7 +188,25 @@ void GAMELOOP_CalcGameTime()
     gameTrackerX.timeOfDay = ((((time + 720) / 60) % 24) * 100) + ((time + 720) % 60);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetGameTime);
+void GAMELOOP_SetGameTime(long timeOfDay)
+{
+    long tim;
+
+    tim = ((timeOfDay / 100) * 60) + (timeOfDay % 100);
+
+    tim -= 720;
+
+    if (tim < 0)
+    {
+        tim += 1440;
+    }
+
+    tim = (tim * 60000) / gameTrackerX.multGameTime;
+
+    gameTrackerX.timeOfDay = timeOfDay;
+
+    gameTrackerX.currentMaterialTime = gameTrackerX.currentTimeOfDayTime = tim;
+}
 
 int GAMELOOP_GetTimeOfDay()
 {
