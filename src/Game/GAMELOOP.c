@@ -26,6 +26,7 @@
 #include "Game/SOUND.h"
 #include "Game/MENU/MENU.h"
 #include "Game/MENU/MENUDEFS.h"
+#include "Game/LIGHT3D.h"
 
 long cameraMode = 0xD;
 
@@ -484,7 +485,93 @@ void GAMELOOP_HandleScreenWipes(unsigned long **drawot)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", UpdateFogSettings);
+void UpdateFogSettings(StreamUnit *currentUnit, Level *level)
+{
+    int changed;
+    int FogFar;
+    int FogNear;
+    int setflag;
+
+    changed = 0;
+
+    FogNear = currentUnit->TargetFogNear;
+    FogFar = currentUnit->TargetFogFar;
+
+    setflag = 0;
+
+    if (level->fogNear > FogNear)
+    {
+        level->fogNear -= 500;
+
+        changed = 1;
+
+        if (level->fogNear <= FogNear)
+        {
+            setflag = 1;
+
+            level->fogNear = FogNear;
+        }
+    }
+    else if (level->fogNear < FogNear)
+    {
+        level->fogNear += 500;
+
+        changed = 1;
+
+        if (level->fogNear >= FogNear)
+        {
+            setflag = 1;
+
+            level->fogNear = FogNear;
+        }
+    }
+    else
+    {
+        setflag = 1;
+    }
+
+    if (level->fogFar > FogFar)
+    {
+        level->fogFar -= 500;
+
+        changed = 1;
+
+        if (level->fogFar <= FogFar)
+        {
+            level->fogFar = FogFar;
+        }
+        else
+        {
+            setflag = 0;
+        }
+    }
+    else if (level->fogFar < FogFar)
+    {
+        level->fogFar += 500;
+
+        changed = 1;
+
+        if (level->fogFar >= FogFar)
+        {
+            level->fogFar = FogFar;
+        }
+        else
+        {
+            setflag = 0;
+        }
+    }
+
+    if (changed != 0)
+    {
+        LIGHT_CalcDQPTable(level);
+
+        if (setflag != 0)
+        {
+            currentUnit->TargetFogNear = level->fogNear;
+            currentUnit->TargetFogFar = level->fogFar;
+        }
+    }
+}
 
 int CheckForNoBlend(ColorType *Color)
 {
