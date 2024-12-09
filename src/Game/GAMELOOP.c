@@ -22,6 +22,8 @@
 #include "Game/MEMPACK.h"
 #include "Game/TIMER.h"
 #include "Game/HASM.h"
+#include "Game/DEBUG.h"
+#include "Game/SOUND.h"
 
 long cameraMode = 0xD;
 
@@ -58,6 +60,10 @@ char *primBase;
 STATIC PolytopeList *gPolytopeList;
 
 FXTracker *gFXT;
+
+DebugMenuLine *currentMenu;
+
+DebugMenuLine standardMenu[8924 + 12];
 
 void GAMELOOP_AllocStaticMemory()
 {
@@ -721,7 +727,42 @@ static char D_800D0790[] = "Processing unit %s\n";
 static char D_800D07A4[] = "Military Time %04d\n";
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_Process);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ModeStartRunning);
+void GAMELOOP_ModeStartRunning()
+{
+    if ((gameTrackerX.gameMode == 4) || (gameTrackerX.gameMode == 6))
+    {
+        DEBUG_ExitMenus();
+
+        if (gameTrackerX.gameMode == 6)
+        {
+            currentMenu = standardMenu;
+
+            SOUND_ResumeAllSound();
+
+            VOICEXA_Resume();
+        }
+    }
+
+    if ((gameTrackerX.gameFlags & 0x8000000))
+    {
+        gameTrackerX.gameFlags &= ~0x8000000;
+
+        gameTrackerX.savedOTStart = NULL;
+
+        DrawSync(0);
+    }
+
+    gameTrackerX.gameMode = 0;
+    gameTrackerX.gameFlags &= ~0x10000000;
+
+    gameTrackerX.playerInstance->flags &= ~0x100;
+
+    gameTrackerX.gameMode = 0;
+
+    GAMEPAD_RestoreControllers();
+
+    INSTANCE_Post(gameTrackerX.playerInstance, 0x10000A, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ModeStartPause);
 

@@ -36,5 +36,6 @@ void processPeriodicSound(Position *position, int livesInOnePlane, int inSpectra
 void processEventSound(Position *position, SoundInstance *soundInst, ObjectEventSound *sound);
 void processOneShotSound(Position *position, int hidden, int burning, long *triggerFlags, SoundInstance *soundInst, ObjectOneShotSound *sound);
 unsigned long SndPlay(unsigned int sample);
+void SOUND_ResumeAllSound();
 
 #endif
