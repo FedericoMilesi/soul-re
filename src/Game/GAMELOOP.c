@@ -24,6 +24,8 @@
 #include "Game/HASM.h"
 #include "Game/DEBUG.h"
 #include "Game/SOUND.h"
+#include "Game/MENU/MENU.h"
+#include "Game/MENU/MENUDEFS.h"
 
 long cameraMode = 0xD;
 
@@ -64,6 +66,8 @@ FXTracker *gFXT;
 DebugMenuLine *currentMenu;
 
 DebugMenuLine standardMenu[8924 + 12];
+
+DebugMenuLine pauseMenu[8924 + 7];
 
 void GAMELOOP_AllocStaticMemory()
 {
@@ -764,7 +768,45 @@ void GAMELOOP_ModeStartRunning()
     INSTANCE_Post(gameTrackerX.playerInstance, 0x10000A, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ModeStartPause);
+void GAMELOOP_ModeStartPause()
+{
+    gameTrackerX.gameMode = 6;
+
+    INSTANCE_Post(gameTrackerX.playerInstance, 0x10000A, 1);
+
+    currentMenu = pauseMenu;
+
+    menu_set(gameTrackerX.menu, menudefs_pause_menu);
+
+    SOUND_PauseAllSound();
+
+    VOICEXA_Pause();
+
+    SndPlay(5);
+
+    gameTrackerX.gameFlags |= 0x10000000;
+
+    GAMEPAD_SaveControllers();
+
+    gameTrackerX.gameFlags |= 0x8000000;
+
+    if (gameTrackerX.primPool == primPool[0])
+    {
+        gameTrackerX.primPool = primPool[1];
+    }
+    else
+    {
+        gameTrackerX.primPool = primPool[0];
+    }
+
+    gameTrackerX.primPool->nextPrim = &gameTrackerX.primPool->prim[0];
+
+    gameTrackerX.primPool->numPrims = 0;
+
+    SaveOT();
+
+    pause_redraw_flag = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ChangeMode);
 

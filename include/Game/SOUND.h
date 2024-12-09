@@ -37,5 +37,6 @@ void processEventSound(Position *position, SoundInstance *soundInst, ObjectEvent
 void processOneShotSound(Position *position, int hidden, int burning, long *triggerFlags, SoundInstance *soundInst, ObjectOneShotSound *sound);
 unsigned long SndPlay(unsigned int sample);
 void SOUND_ResumeAllSound();
+void SOUND_PauseAllSound();
 
 #endif

@@ -20,5 +20,6 @@ void GAMEPAD_Detect();
 void PSXPAD_TranslateData(long *data, unsigned short padData, unsigned short lastData);
 void GAMEPAD_HandleDualShock();
 void GAMEPAD_RestoreControllers();
+void GAMEPAD_SaveControllers();
 
 #endif

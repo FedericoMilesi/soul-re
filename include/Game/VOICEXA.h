@@ -13,5 +13,6 @@ void VOICEXA_Play(int voiceIndex, int queueRequests);
 int VOICEXA_IsPlaying();
 void VOICEXA_Tick();
 void VOICEXA_Resume();
+void VOICEXA_Pause();
 
 #endif
