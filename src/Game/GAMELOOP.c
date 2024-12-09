@@ -69,6 +69,8 @@ DebugMenuLine standardMenu[8924 + 12];
 
 DebugMenuLine pauseMenu[8924 + 7];
 
+int gamePadControllerOut;
+
 void GAMELOOP_AllocStaticMemory()
 {
     instanceList = (InstanceList *)MEMPACK_Malloc(sizeof(InstanceList), 6);
@@ -808,7 +810,131 @@ void GAMELOOP_ModeStartPause()
     pause_redraw_flag = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ChangeMode);
+void GAMELOOP_ChangeMode()
+{
+    long *controlCommand;
+    int temp; // not from decls.h
+
+    controlCommand = gameTrackerX.controlCommand[0];
+
+    if (!(gameTrackerX.debugFlags & 0x40000))
+    {
+        if (!(gameTrackerX.debugFlags & 0x200000))
+        {
+            if ((gameTrackerX.controlCommand[0][0] & 0xA01) == 0xA01)
+            {
+                theCamera.forced_movement = 1;
+
+                gameTrackerX.playerInstance->position.z += 100;
+
+                gameTrackerX.playerInstance->zVel = 0;
+
+                gameTrackerX.cheatMode = 1;
+
+                INSTANCE_Post(gameTrackerX.playerInstance, 0x100010, 1);
+
+                gameTrackerX.playerInstance->flags &= ~0x800;
+            }
+            else if ((gameTrackerX.controlCommand[0][0] & 0xA02) == 0xA02)
+            {
+                theCamera.forced_movement = 1;
+
+                gameTrackerX.playerInstance->position.z -= 100;
+
+                gameTrackerX.playerInstance->zVel = 0;
+
+                gameTrackerX.cheatMode = 0;
+
+                INSTANCE_Post(gameTrackerX.playerInstance, 0x100010, 0);
+
+                gameTrackerX.gameMode = 0;
+            }
+        }
+    }
+
+    if ((!(gameTrackerX.debugFlags & 0x40000)) || ((gameTrackerX.playerCheatFlags & 0x2)))
+    {
+        if (((controlCommand[1] & 0x60) == 0x60) && (!(controlCommand[0] & 0xF)))
+        {
+            if (gameTrackerX.gameMode == 0)
+            {
+                gameTrackerX.gameMode = 4;
+
+                currentMenu = (DebugMenuLine *)&standardMenu;
+
+                if ((unsigned char)gameTrackerX.sound.gVoiceOn != 0)
+                {
+                    gameTrackerX.debugFlags |= 0x80000;
+                }
+                else
+                {
+                    gameTrackerX.debugFlags &= ~0x80000;
+                }
+
+                if ((unsigned char)gameTrackerX.sound.gMusicOn != 0)
+                {
+                    gameTrackerX.debugFlags2 |= 0x1000;
+                }
+                else
+                {
+                    gameTrackerX.debugFlags2 &= ~0x1000;
+                }
+
+                if ((unsigned char)gameTrackerX.sound.gSfxOn != 0)
+                {
+                    gameTrackerX.debugFlags2 |= 0x2000;
+                }
+                else
+                {
+                    gameTrackerX.debugFlags2 &= ~0x2000;
+                }
+            }
+            else if (gameTrackerX.gameMode == 7)
+            {
+                DEBUG_EndViewVram(&gameTrackerX);
+
+                gameTrackerX.gameMode = 0;
+            }
+            else
+            {
+                GAMELOOP_ModeStartRunning();
+            }
+        }
+    }
+
+    if ((((controlCommand[1] & 0x4000)) || (gamePadControllerOut >= 6)) && (gameTrackerX.gameMode == 0) && (!(gameTrackerX.gameFlags & 0x80)) && ((gameTrackerX.wipeTime == 0) || ((gameTrackerX.wipeType != 11) && (gameTrackerX.wipeTime == -1))))
+    {
+        GAMELOOP_ModeStartPause();
+    }
+    else
+    {
+        temp = controlCommand[1] & 0x4000;
+
+        if (((temp != 0) || ((gameTrackerX.gameFlags & 0x40000000))) && (gameTrackerX.gameMode != 0) && (!(gameTrackerX.gameFlags & 0x20000000)) && ((gameTrackerX.wipeTime == 0) || ((gameTrackerX.wipeType != 11) && (gameTrackerX.wipeTime == -1))))
+        {
+            if (temp != 0)
+            {
+                if (!(gameTrackerX.gameFlags & 0x40000000))
+                {
+                    SndPlay(5);
+                }
+            }
+
+            gameTrackerX.gameFlags &= ~0x40000000;
+
+            GAMELOOP_ModeStartRunning();
+        }
+    }
+
+    if ((gameTrackerX.controlCommand[0][0] & 0x40000000))
+    {
+        gameTrackerX.playerInstance->flags |= 0x100;
+    }
+    else if ((gameTrackerX.controlCommand[0][2] & 0x40000000))
+    {
+        gameTrackerX.playerInstance->flags &= ~0x100;
+    }
+}
 
 // Matches 100% on decomp.me but differs on this project
 #ifndef NON_MATCHING
