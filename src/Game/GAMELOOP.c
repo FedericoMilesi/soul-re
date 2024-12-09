@@ -392,7 +392,13 @@ void GAMELOOP_StreamLevelLoadAndInit(char *baseAreaName, GameTracker *gameTracke
     LoadLevels(baseAreaName, gameTracker);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetScreenWipe);
+void GAMELOOP_SetScreenWipe(int time, int maxTime, int type)
+{
+    gameTrackerX.maxWipeTime = maxTime;
+    gameTrackerX.wipeTime = time;
+
+    gameTrackerX.wipeType = type;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_HandleScreenWipes);
 
