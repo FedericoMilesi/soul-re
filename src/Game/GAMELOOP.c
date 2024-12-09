@@ -71,6 +71,8 @@ DebugMenuLine pauseMenu[8924 + 7];
 
 int gamePadControllerOut;
 
+GlobalSaveTracker *GlobalSave;
+
 void GAMELOOP_AllocStaticMemory()
 {
     instanceList = (InstanceList *)MEMPACK_Malloc(sizeof(InstanceList), 6);
@@ -400,7 +402,87 @@ void GAMELOOP_SetScreenWipe(int time, int maxTime, int type)
     gameTrackerX.wipeType = type;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_HandleScreenWipes);
+void GAMELOOP_HandleScreenWipes(unsigned long **drawot)
+{
+    long temp;
+    PrimPool *primPool;
+
+    primPool = gameTrackerX.primPool;
+
+    if ((GlobalSave->flags & 0x1))
+    {
+        DRAW_FlatQuad(&gameTrackerX.wipeColor, 0, 0, 512, 0, 0, 30, 512, 30, primPool, drawot);
+        DRAW_FlatQuad(&gameTrackerX.wipeColor, 0, 210, 512, 210, 0, 240, 512, 240, primPool, drawot);
+    }
+
+    if (gameTrackerX.wipeTime > 0)
+    {
+        switch (gameTrackerX.wipeType)
+        {
+        case 10:
+            temp = (gameTrackerX.wipeTime * 255) / gameTrackerX.maxWipeTime;
+
+            DRAW_TranslucentQuad(0, 0, 512, 0, 0, 240, 512, 240, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+            break;
+        case 11:
+            temp = (gameTrackerX.wipeTime * 255) / gameTrackerX.maxWipeTime;
+
+            DRAW_TranslucentQuad(0, 0, 512, 0, 0, 30, 512, 30, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+            DRAW_TranslucentQuad(0, 210, 512, 210, 0, 240, 512, 240, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+
+            GlobalSave->flags &= ~0x1;
+            break;
+        }
+
+        if (gameTrackerX.gameFramePassed != 0)
+        {
+            gameTrackerX.wipeTime--;
+        }
+    }
+    else if (gameTrackerX.wipeTime < -1)
+    {
+        switch (gameTrackerX.wipeType)
+        {
+        case 10:
+            temp = ((gameTrackerX.maxWipeTime + gameTrackerX.wipeTime + 2) * 255) / gameTrackerX.maxWipeTime;
+
+            DRAW_TranslucentQuad(0, 0, 512, 0, 0, 240, 512, 240, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+            break;
+        case 11:
+            temp = ((gameTrackerX.maxWipeTime + gameTrackerX.wipeTime) * 255) / gameTrackerX.maxWipeTime;
+
+            DRAW_TranslucentQuad(0, 0, 512, 0, 0, 30, 512, 30, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+            DRAW_TranslucentQuad(0, 210, 512, 210, 0, 240, 512, 240, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+
+            if (gameTrackerX.wipeTime == -2)
+            {
+                GlobalSave->flags |= 0x1;
+            }
+
+            break;
+        }
+
+        if (gameTrackerX.gameFramePassed != 0)
+        {
+            gameTrackerX.wipeTime++;
+        }
+    }
+    else if (gameTrackerX.wipeTime == -1)
+    {
+        if (gameTrackerX.wipeType == 11)
+        {
+            GlobalSave->flags |= 0x1;
+        }
+        else
+        {
+            DRAW_FlatQuad(&gameTrackerX.wipeColor, 0, 0, 512, 0, 0, 240, 512, 240, primPool, drawot);
+        }
+    }
+    else
+    {
+        theCamera.core.screenScale.x = theCamera.core.screenScale.y = theCamera.core.screenScale.z = 4096;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", UpdateFogSettings);
 
