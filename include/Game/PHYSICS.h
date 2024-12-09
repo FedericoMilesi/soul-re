@@ -25,5 +25,6 @@ int PhysicsCheckSliding(Instance *instance, int Data, short Mode);
 int PhysicsDefaultCheckSwimResponse(Instance *instance, evPhysicsSwimData *Data);
 void PHYSICS_GenericLineCheckSetup(short x, short y, short z, SVECTOR *inVec);
 int PHYSICS_CheckForTerrainCollide(Instance *instance, SVECTOR *startVec, SVECTOR *endVec, int segment);
+int PhysicsUpdateTface(Instance *instance, intptr_t Data);
 
 #endif
