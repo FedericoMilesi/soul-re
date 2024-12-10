@@ -483,7 +483,88 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIAttackInstance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIAttack);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ChooseAttack);
+MonsterAttackAttributes *MON_ChooseAttack(Instance *instance, MonsterIR *enemy)
+{
+    
+    long distance;
+    long zdiff;
+    long smallest;
+    int i;
+    char *attackIndex;
+    MonsterCombatAttributes *combat;
+    MonsterVars *mv;
+    MonsterAttackAttributes *bestAttack;
+    MonsterAttributes *ma;
+
+    bestAttack = NULL;
+    zdiff = 0x100;
+    smallest = 0x1869F;
+    
+    mv = (MonsterVars *)instance->extraData;
+    ma = (MonsterAttributes *)instance->data;
+    combat = mv->subAttr->combatAttributes;
+    
+    if (mv->mvFlags & 4 || enemy->mirFlags & 8)
+    {
+        distance = 0;
+    }
+    else
+    {
+        distance = enemy->distance;
+        if (enemy->instance->matrix != NULL)
+        {
+            if (enemy->instance == gameTrackerX.playerInstance)
+            {
+                zdiff = enemy->instance->matrix[14].t[2] - instance->position.z;
+            }
+            else
+            {
+                zdiff = enemy->instance->matrix[1].t[2] - instance->position.z;
+            }
+        }
+    }
+    
+    i = (signed char) combat->numAttacks;
+    attackIndex = combat->attackList;
+    
+    if (i != 0)
+    {
+        for(; i != 0; i--, attackIndex++)
+        {
+
+            
+            long delta;
+            MonsterAttackAttributes *attack;
+            
+            attack = &ma->attackAttributesList[(signed char) *attackIndex];
+            delta = zdiff - attack->attackHeight;
+
+            
+            if (abs(delta) < 100 || enemy->mirFlags & 8)
+            {
+                
+                int effectiveRange; // not from decls.h
+
+                effectiveRange = attack->attackRange * mv->subAttr->scale;
+                if (effectiveRange < 0) {
+                    effectiveRange += 0xFFF;
+                }
+
+                delta = (effectiveRange >> 0xC) - distance;
+
+                if (abs(delta) < abs(smallest))
+                {
+                    bestAttack = attack;
+                    smallest = delta;
+                }
+            }
+        }
+    }
+    
+    mv->attackType = bestAttack;
+    mv->attackState = 0;
+    return bestAttack;
+}
 
 int MON_ShouldIEvade(Instance *instance)
 {
