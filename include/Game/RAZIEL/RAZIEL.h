@@ -17,6 +17,12 @@ STATIC long *PadData;
 
 STATIC int AutoFaceAngle;
 
+STATIC Force ExternalForces[4];
+
+STATIC G2SVector3 ExtraRotData;
+
+STATIC G2SVector3 *ExtraRot;
+
 void RAZIEL_DebugHurtRaziel();
 void RAZIEL_DebugHealthSetScale(long healthScale);
 void RAZIEL_DebugManaSetMax(long manaScale);
@@ -36,5 +42,7 @@ void StateHandlerStopMove(CharacterState *In, int CurrentSection, intptr_t Data)
 void StateHandlerAutoFace(CharacterState *In, int CurrentSection, intptr_t Data);
 void StateHandlerCompression(CharacterState *In, int CurrentSection, intptr_t Data);
 void DisableWristCollision(Instance *instance, int Side);
+void StateHandlerGlyphs(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerSoulSuck(CharacterState *In, int CurrentSection, intptr_t Data);
 
 #endif

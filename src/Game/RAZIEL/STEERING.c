@@ -11,10 +11,6 @@
 
 EXTERN STATIC int ZoneDelta;
 
-EXTERN STATIC G2SVector3 ExtraRotData;
-
-EXTERN STATIC G2SVector3 *ExtraRot;
-
 EXTERN STATIC int LastRC;
 
 int UpdateZoneDelta(int rc, int LastRC)
