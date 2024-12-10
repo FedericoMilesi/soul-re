@@ -1,18 +1,5 @@
-#include "common.h"
-#include "Game/RAZIEL/HEALTH.h"
-#include "Game/GAMELOOP.h"
-#include "Game/PLAYER.h"
-#include "Game/RAZIEL/RAZIEL.h"
-#include "Game/RAZIEL/RAZLIB.h"
-#include "Game/GAMEPAD.h"
-#include "Game/CAMERA.h"
-#include "Game/FX.h"
-#include "Game/INSTANCE.h"
-#include "Game/STATE.h"
-#include "Game/STREAM.h"
-#include "Game/SOUND.h"
+void razPlayUnderworldSounds(Instance *instance);
 
-extern char D_800D1D1C[];
 void InitHealthSystem()
 {
     Raziel.DamageFrequency = 0;
@@ -39,8 +26,7 @@ void InitHealthSystem()
         razSpectralShift();
     }
 
-    // if (razInBaseArea("under", sizeof("under") - 1) != 0)
-    if (razInBaseArea(D_800D1D1C, 5) != 0)
+    if (razInBaseArea("under", 5) != 0)
     {
         Raziel.HitPoints = 100;
     }

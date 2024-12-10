@@ -1,12 +1,4 @@
-#include "common.h"
-#include "Game/G2/ANMCTRLR.h"
-#include "Game/RAZIEL/RAZIEL.h"
-#include "Game/MATH3D.h"
-#include "Game/INSTANCE.h"
-#include "Game/STATE.h"
-#include "Game/G2/QUATG2.h"
-
-EXTERN STATIC int AlgoControlFlag;
+static int AlgoControlFlag = 0;
 
 void InitAlgorithmicWings(Instance *instance)
 {
@@ -82,7 +74,7 @@ void DeInitAlgorithmicWings(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ALGOCTRL", AlgorithmicWings);
+INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", AlgorithmicWings);
 
 void AlgorithmicNeck(Instance *Player, Instance *Target)
 {

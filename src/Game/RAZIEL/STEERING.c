@@ -1,17 +1,13 @@
-#include "common.h"
-#include "Game/RAZIEL/STEERING.h"
-#include "Game/CAMERA.h"
-#include "Game/MATH3D.h"
-#include "Game/RAZIEL/RAZIEL.h"
-#include "Game/RAZIEL/RAZLIB.h"
-#include "Game/G2/ANMCTRLR.h"
-#include "Game/MONSTER/MONLIB.h"
-#include "Game/GAMELOOP.h"
-#include "Game/STATE.h"
+static int ZoneDelta = 16;
 
-EXTERN STATIC int ZoneDelta;
-
-EXTERN STATIC int LastRC;
+void razDeinitWallCrawlSteering(Instance *instance);
+void razInitWallCrawlSteering(Instance *instance);
+void SteerTurn(Instance *instance, int rc);
+void SteerMove(Instance *instance, int rc);
+void SteerDisableAutoFace(Instance *instance);
+int SteerAutoFace(Instance *instance, long *controlCommand);
+void SteerSwim(Instance *instance);
+void SteerWallcrawling(Instance *instance);
 
 int UpdateZoneDelta(int rc, int LastRC)
 {
@@ -824,5 +820,3 @@ void razDeinitWallCrawlSteering(Instance *instance)
     G2Anim_InterpDisableController(&instance->anim, 50, 76, 300);
     G2Anim_InterpDisableController(&instance->anim, 58, 76, 300);
 }
-
-FORCE_RODATA_ALIGNMENT;

@@ -19,5 +19,5 @@
     },
     "terminal.integrated.tabs.enableAnimation": false,
     "files.autoGuessEncoding": true,
-    }
+    "C_Cpp.autoAddFileAssociations": false
 }

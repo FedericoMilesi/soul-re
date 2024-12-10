@@ -78,7 +78,7 @@ ENDLINE := \n'
 
 ASFLAGS        := -Iinclude -march=r3000 -mtune=r3000 -no-pad-sections
 CFLAGS         := -O2 -G4096 -gcoff -quiet -fsigned-char
-CPPFLAGS       := -Iinclude -DTARGET_PSX
+CPPFLAGS       := -Iinclude -Isrc -DTARGET_PSX
 LDFLAGS        := -T undefined_syms.txt -T undefined_funcs.txt -T $(BUILD_DIR)/$(LD_SCRIPT) -Map $(LD_MAP) \
                   --no-check-sections -nostdlib
 CFLAGS_CHECK   := -fsyntax-only -fno-builtin -std=gnu90

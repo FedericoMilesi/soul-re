@@ -10398,7 +10398,7 @@ typedef struct __SensoryData
 typedef struct __Player
 {
     // offset: 0x0000
-    int footPrint;
+    intptr_t footPrint;
     // offset: 0x0004 (860 bytes)
     CharacterState State;
     // offset: 0x0360
