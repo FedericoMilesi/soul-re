@@ -592,7 +592,99 @@ int PhysicsCheckLOS(Instance *instance, intptr_t Data, int Mode)
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropHeight);
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropOff);
+#else
+int PhysicsCheckDropOff(Instance *instance, intptr_t Data, short Mode)
+{
+    evPhysicsDropOffData *Ptr;
+    int rc;
+    VECTOR OutTrans;
+    SVECTOR *ExtraRot;
+    PCollideInfo CInfo;
+    SVECTOR New;
+    SVECTOR Old;
+    STATIC MATRIX TempMat;
+    STATIC MATRIX *pTempMat;
+
+    Ptr = (evPhysicsDropOffData *)Data;
+
+    CInfo.oldPoint = &Old;
+    CInfo.newPoint = &New;
+
+    ExtraRot = (SVECTOR *)INSTANCE_Query(instance, 8);
+
+    rc = 0;
+
+    if (instance->matrix != NULL)
+    {
+        if (ExtraRot != NULL)
+        {
+            pTempMat = &TempMat;
+
+            RotMatrix(ExtraRot, pTempMat);
+
+            MulMatrix2(instance->matrix, pTempMat);
+        }
+        else
+        {
+            pTempMat = instance->matrix;
+        }
+
+        New.vx = Ptr->xOffset;
+        New.vy = Ptr->yOffset;
+        New.vz = 0;
+
+        ApplyMatrix(pTempMat, &New, &OutTrans);
+
+        Old.vx = instance->position.x + (short)OutTrans.vx;
+        Old.vy = instance->position.y + (short)OutTrans.vy;
+        Old.vz = instance->position.z + (short)OutTrans.vz;
+
+        New.vx = Old.vx;
+        New.vy = Old.vy;
+        New.vz = Old.vz - Ptr->DropOffset;
+
+        Old.vz += Ptr->UpperOffset;
+
+        PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+        if ((CInfo.type == 2) || (CInfo.type == 3) || (CInfo.type == 5))
+        {
+            if ((Mode & 0x2))
+            {
+                if (CInfo.wNormal.vz > Ptr->slipSlope)
+                {
+                    INSTANCE_Post(instance, 0x4010080, 1);
+                }
+                else
+                {
+                    INSTANCE_Post(instance, 0x4010080, 0);
+
+                    rc = 8;
+                }
+            }
+
+            if ((CInfo.wNormal.vz < Ptr->slipSlope) && (CInfo.wNormal.vz > 0) && (CInfo.newPoint->vz > instance->position.z))
+            {
+                INSTANCE_Post(instance, 0x4010401, 0);
+            }
+        }
+        else if (CInfo.type == 0)
+        {
+            if ((Mode & 0x2))
+            {
+                INSTANCE_Post(instance, 0x4010080, 0);
+            }
+
+            rc = 8;
+        }
+    }
+
+    return rc;
+}
+#endif
 
 // Matches 100% on decomp.me but differs on this project
 // Needs sbss migration. Only possible when all functions of the TU are matching.
