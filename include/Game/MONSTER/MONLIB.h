@@ -60,5 +60,6 @@ int MON_SetUpKnockBack(Instance *instance, Instance *enemy, evMonsterHitData *da
 int MON_OnGround(Instance *instance);
 void MON_DoDrainEffects(Instance *instance, Instance *ei);
 int MON_ShouldIAttackInstance(Instance *instance, Instance *ei);
+int MON_CheckConditions(Instance *instance, MonsterIR *mir, char *probArray);
 
 #endif

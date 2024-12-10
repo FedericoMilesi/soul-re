@@ -33,5 +33,7 @@ void handle_line_type_long(GameTracker *gt, DebugMenuLine *line);
 void handle_line_type_action(GameTracker *gt, DebugMenuLine *line);
 void handle_line_type_action_with_line(GameTracker *gt, DebugMenuLine *line);
 void handle_line_type_menu(GameTracker *gt, DebugMenuLine *line);
+void DEBUG_ExitMenus();
+void DEBUG_EndViewVram(GameTracker *gameTracker);
 
 #endif

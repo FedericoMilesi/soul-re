@@ -568,50 +568,51 @@ MonsterAttackAttributes *MON_ChooseAttack(Instance *instance, MonsterIR *enemy)
 
 int MON_ShouldIEvade(Instance *instance)
 {
-    
+
     int rv;
     MonsterVars *mv;
 
-    mv = (MonsterVars *) instance->extraData;
+    mv = (MonsterVars *)instance->extraData;
     rv = 0;
-    
+
     if (!(mv->mvFlags & 0x40000000))
     {
 
         MonsterIR *enemy;
         enemy = mv->enemy;
-        
-        if ((unsigned short) (MON_FacingOffset(instance, enemy->instance) + 0x2A9U) < 0x553U)
+
+        if ((unsigned short)(MON_FacingOffset(instance, enemy->instance) + 0x2A9U) < 0x553U)
         {
-            if (MON_CheckConditions(instance, enemy, mv->subAttr->combatAttributes->evadeProbability) != 0) {
+            if (MON_CheckConditions(instance, enemy, mv->subAttr->combatAttributes->evadeProbability) != 0)
+            {
                 mv->enemy->mirConditions = 0;
                 rv = 1;
             }
         }
     }
-    
+
     return rv;
 }
 
 int MON_ChooseLeftOrRight(struct _Instance *instance, struct _MonsterIR *enemy)
 {
-    
+
     short offset;
     int leftDist;
     int rightDist;
-    
+
     offset = MON_FacingOffset(instance, enemy->instance);
-    
+
     if (offset >= -0x40)
     {
         if (offset >= 0x41)
         {
             return 1;
         }
-        
+
         leftDist = MONSENSE_GetDistanceInDirection(instance, instance->rotation.z + 0x400);
         rightDist = MONSENSE_GetDistanceInDirection(instance, instance->rotation.z - 0x400);
-        
+
         if (leftDist != rightDist)
         {
             if (leftDist < rightDist)
@@ -627,10 +628,10 @@ int MON_ChooseLeftOrRight(struct _Instance *instance, struct _MonsterIR *enemy)
 
 int MON_ChooseEvadeMove(Instance *instance)
 {
-    
-    int anim; // v0
+
+    int anim;        // v0
     int leftOrRight; // v1
-    
+
     leftOrRight = MON_ChooseLeftOrRight(instance, ((MonsterVars *)instance->extraData)->enemy);
 
     if (leftOrRight == 0)
@@ -644,13 +645,13 @@ int MON_ChooseEvadeMove(Instance *instance)
             leftOrRight = -1;
         }
     }
-    
+
     anim = MONSTER_ANIM_EVADERIGHT;
     if (leftOrRight < 0)
     {
         anim = MONSTER_ANIM_EVADELEFT;
     }
-    
+
     return anim;
 }
 
@@ -751,10 +752,10 @@ void MON_PlayCombatIdle(Instance *instance, int mode)
 
 void MON_GetRandomPoint(Position *out, Position *in, short r)
 {
-    
+
     int mult;
     int ang;
-    
+
     mult = rand() % r;
     ang = rand();
 
@@ -847,14 +848,15 @@ void MON_ApplyPhysics(Instance *instance)
 
 void MON_ChangeBehavior(Instance *instance, int behavior)
 {
-    
+
     enum MonsterState state;
     MonsterVars *mv;
 
     if (behavior != -1)
     {
         mv = (MonsterVars *)instance->extraData;
-        switch (behavior) {
+        switch (behavior)
+        {
         case 9:
             state = MONSTER_STATE_FLEE;
             break;
@@ -874,7 +876,6 @@ void MON_ChangeBehavior(Instance *instance, int behavior)
         mv->behaviorState = behavior;
     }
 }
-
 
 void MON_CheckEnvironment(Instance *instance)
 {
@@ -1140,18 +1141,19 @@ int MON_CheckPointSuitability(Instance *instance, Position *origin, Position *de
     MonsterVars *mv;
     evPhysicsDropHeightData *data;
 
+    (void)origin;
+
     rc = 0;
     mv = (MonsterVars *)instance->extraData;
     data = (evPhysicsDropHeightData *)SetPhysicsDropHeightData(destination, mv->subAttr->fallDistance, 0x40);
-    result = PhysicsCheckDropHeight(instance, (intptr_t) data, 1);
-    
+    result = PhysicsCheckDropHeight(instance, (intptr_t)data, 1);
+
     if (result == 1)
     {
         result = MON_CheckTerrain(instance, data->bsp, data->tface) | 1;
         destination->z = data->origin.z;
     }
 
-    
     if (!(result & mv->avoidMask))
     {
         if (mv->mvFlags & 0x800 || result != 0)
@@ -1159,10 +1161,9 @@ int MON_CheckPointSuitability(Instance *instance, Position *origin, Position *de
             rc = 1;
         }
     }
-    
+
     return rc;
 }
-
 
 unsigned long MON_GetTime(Instance *instance)
 {
@@ -1832,28 +1833,28 @@ void MON_ProcessLookAt(Instance *instance)
 
 int MON_TakeDamage(Instance *instance, int damage, int type)
 {
-    
+
     MonsterVars *mv;
     MonsterCombatAttributes *mca;
 
     mv = instance->extraData;
     mca = mv->subAttr->combatAttributes;
-    
+
     if (mca != NULL)
     {
 
-        if ((signed char) mca->hitPoints != 0)
+        if ((signed char)mca->hitPoints != 0)
         {
-            
+
             uintptr_t enemyInstance;
             enemyInstance = INSTANCE_Query(instance, 1);
 
             if (type != 0x40000 || enemyInstance & 8)
             {
-                
+
                 mv->hitPoints -= damage;
                 mv->damageType = type;
-                
+
                 if (mv->hitPoints <= 0)
                 {
                     mv->hitPoints = 0;
@@ -1862,7 +1863,7 @@ int MON_TakeDamage(Instance *instance, int damage, int type)
             }
         }
     }
-    
+
     return 0;
 }
 
@@ -2176,19 +2177,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_SetVelocityTowardsImpali
 
 void MON_TurnOffSphereCollisions(Instance *instance)
 {
-    
+
     int i;
     HModel *hmodel;
 
     hmodel = &instance->hModelList[instance->currentModel];
     i = hmodel->numHPrims;
-    
+
     if (i != 0)
     {
-        
+
         HPrim *hprim;
         hprim = hmodel->hPrimList;
-        
+
         if (hprim->withFlags & 0x20)
         {
             for (; i != 0; i--, hprim++)
@@ -2201,25 +2202,25 @@ void MON_TurnOffSphereCollisions(Instance *instance)
 
 void MON_TurnOnSphereCollisions(Instance *instance)
 {
-    
+
     int i;
     HModel *hModel;
-    
+
     hModel = &instance->hModelList[instance->currentModel];
     i = hModel->numHPrims;
-    
+
     if (i != 0)
     {
-        
+
         HPrim *hprim;
         hprim = hModel->hPrimList;
-        
+
         if (!(hprim->withFlags & 0x20))
         {
             for (; i != 0; i--, hprim++)
             {
                 hprim->withFlags |= 0x20;
-            } 
+            }
         }
     }
 }
@@ -2384,10 +2385,10 @@ void MON_UnlinkFromRaziel(Instance *instance)
 
 void MON_BurnInAir(Instance *instance, int currentState)
 {
-    
+
     MonsterVars *mv;
-    mv = (MonsterVars *) instance->extraData;
-    
+    mv = (MonsterVars *)instance->extraData;
+
     if (!(mv->mvFlags & 0x400000))
     {
         mv->mvFlags |= 0x400000;
@@ -2395,7 +2396,7 @@ void MON_BurnInAir(Instance *instance, int currentState)
         MON_MonsterGlow(instance, 0x4960, -1, 0, 0);
         INSTANCE_Post(instance, 0x400000, SetFXHitData(NULL, 0, 0, 0x20));
     }
-    
+
     instance->currentMainState = currentState;
     mv->mvFlags &= ~1;
     instance->checkMask &= ~0x20;

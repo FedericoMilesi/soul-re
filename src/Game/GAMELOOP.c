@@ -1,4 +1,6 @@
 #include "common.h"
+#include "Game/BSP.h"
+#include "Game/COLLIDE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"
 #include "Game/EVENT.h"
@@ -20,8 +22,12 @@
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MEMPACK.h"
 #include "Game/TIMER.h"
-
-#define FRAMERATE_MULT 1
+#include "Game/HASM.h"
+#include "Game/DEBUG.h"
+#include "Game/SOUND.h"
+#include "Game/MENU/MENU.h"
+#include "Game/MENU/MENUDEFS.h"
+#include "Game/LIGHT3D.h"
 
 long cameraMode = 0xD;
 
@@ -41,8 +47,6 @@ STATIC void *planningPool;
 
 STATIC void *enemyPlanPool;
 
-FXTracker *fxTracker;
-
 STATIC void *pause_redraw_prim;
 
 STATIC VertexPool *gVertexPool;
@@ -56,6 +60,18 @@ STATIC unsigned long **gOt[2];
 char *primBase;
 
 STATIC PolytopeList *gPolytopeList;
+
+FXTracker *gFXT;
+
+DebugMenuLine *currentMenu;
+
+DebugMenuLine standardMenu[8924 + 12];
+
+DebugMenuLine pauseMenu[8924 + 7];
+
+int gamePadControllerOut;
+
+GlobalSaveTracker *GlobalSave;
 
 void GAMELOOP_AllocStaticMemory()
 {
@@ -186,7 +202,25 @@ void GAMELOOP_CalcGameTime()
     gameTrackerX.timeOfDay = ((((time + 720) / 60) % 24) * 100) + ((time + 720) % 60);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetGameTime);
+void GAMELOOP_SetGameTime(long timeOfDay)
+{
+    long tim;
+
+    tim = ((timeOfDay / 100) * 60) + (timeOfDay % 100);
+
+    tim -= 720;
+
+    if (tim < 0)
+    {
+        tim += 1440;
+    }
+
+    tim = (tim * 60000) / gameTrackerX.multGameTime;
+
+    gameTrackerX.timeOfDay = timeOfDay;
+
+    gameTrackerX.currentMaterialTime = gameTrackerX.currentTimeOfDayTime = tim;
+}
 
 int GAMELOOP_GetTimeOfDay()
 {
@@ -240,10 +274,80 @@ int GAMELOOP_WaitForLoad()
     return STREAM_PollLoadQueue();
 }
 
-/*TODO: migrate to LoadLevels*/
-static char D_800D0718[16] = {0}; // oldArea
-StreamUnit *LoadLevels(char *baseAreaName, GameTracker *gameTracker);
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", LoadLevels);
+StreamUnit *LoadLevels(char *baseAreaName, GameTracker *gameTracker)
+{
+    SVector offset;
+    StreamUnit *streamUnit;
+    static char oldArea[16] = {0};
+
+    if (strlen(oldArea) != 0)
+    {
+        STREAM_AbortAreaLoad(oldArea);
+    }
+
+    strcpy(oldArea, baseAreaName);
+
+    LOAD_ChangeDirectory(baseAreaName);
+
+    streamUnit = STREAM_LoadLevel(baseAreaName, NULL, 0);
+
+    if (streamUnit->used == 1)
+    {
+        int num;
+        int waitFor;
+
+        DRAW_LoadingMessage();
+
+        while (streamUnit->used == 1)
+        {
+            GAMELOOP_WaitForLoad();
+        }
+
+        STREAM_NextLoadFromHead();
+
+        STREAM_LoadMainVram(gameTracker, baseAreaName, streamUnit);
+
+        STREAM_NextLoadAsNormal();
+
+        waitFor = GAMELOOP_WaitForLoad() - 1;
+
+        do
+        {
+            num = GAMELOOP_WaitForLoad();
+
+            if (num == 0)
+            {
+                break;
+            }
+        } while (num >= waitFor);
+    }
+
+    else
+    {
+        STREAM_DumpLoadingObjects();
+
+        STREAM_LoadMainVram(gameTracker, baseAreaName, streamUnit);
+    }
+
+    if ((streamUnit->level->startUnitMainSignal != NULL) && (gameTracker->playerInstance != NULL))
+    {
+        streamUnit->level->startUnitMainSignal->flags |= 0x1;
+
+        SIGNAL_HandleSignal(gameTracker->playerInstance, streamUnit->level->startUnitMainSignal->signalList, 0);
+
+        EVENT_AddSignalToReset(streamUnit->level->startUnitMainSignal);
+    }
+
+    ADD_SVEC(SVector, &offset, Position, &streamUnit->level->terrain->BSPTreeArray->bspRoot->sphere.position, Position, &streamUnit->level->terrain->BSPTreeArray->globalOffset);
+
+    offset.x = -offset.x;
+    offset.y = -offset.y;
+    offset.z = -offset.z;
+
+    PreloadAllConnectedUnits(streamUnit, &offset);
+
+    return streamUnit;
+}
 
 void GAMELOOP_InitStandardObjects()
 {
@@ -333,7 +437,7 @@ void GAMELOOP_LevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker)
     gameTracker->wipeType = 10;
     gameTracker->hideBG = 0;
     gameTracker->wipeTime = 30;
-    gameTracker->maxWipeTime = 30 * FRAMERATE_MULT;
+    gameTracker->maxWipeTime = 30;
 
     if (streamUnit->level->startSignal != NULL)
     {
@@ -352,13 +456,191 @@ void GAMELOOP_LevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_StreamLevelLoadAndInit);
+void GAMELOOP_StreamLevelLoadAndInit(char *baseAreaName, GameTracker *gameTracker, int toSignalNum, int fromSignalNum)
+{
+    (void)toSignalNum;
+    (void)fromSignalNum;
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetScreenWipe);
+    LoadLevels(baseAreaName, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_HandleScreenWipes);
+void GAMELOOP_SetScreenWipe(int time, int maxTime, int type)
+{
+    gameTrackerX.maxWipeTime = maxTime;
+    gameTrackerX.wipeTime = time;
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", UpdateFogSettings);
+    gameTrackerX.wipeType = type;
+}
+
+void GAMELOOP_HandleScreenWipes(unsigned long **drawot)
+{
+    long temp;
+    PrimPool *primPool;
+
+    primPool = gameTrackerX.primPool;
+
+    if ((GlobalSave->flags & 0x1))
+    {
+        DRAW_FlatQuad(&gameTrackerX.wipeColor, 0, 0, 512, 0, 0, 30, 512, 30, primPool, drawot);
+        DRAW_FlatQuad(&gameTrackerX.wipeColor, 0, 210, 512, 210, 0, 240, 512, 240, primPool, drawot);
+    }
+
+    if (gameTrackerX.wipeTime > 0)
+    {
+        switch (gameTrackerX.wipeType)
+        {
+        case 10:
+            temp = (gameTrackerX.wipeTime * 255) / gameTrackerX.maxWipeTime;
+
+            DRAW_TranslucentQuad(0, 0, 512, 0, 0, 240, 512, 240, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+            break;
+        case 11:
+            temp = (gameTrackerX.wipeTime * 255) / gameTrackerX.maxWipeTime;
+
+            DRAW_TranslucentQuad(0, 0, 512, 0, 0, 30, 512, 30, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+            DRAW_TranslucentQuad(0, 210, 512, 210, 0, 240, 512, 240, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+
+            GlobalSave->flags &= ~0x1;
+            break;
+        }
+
+        if (gameTrackerX.gameFramePassed != 0)
+        {
+            gameTrackerX.wipeTime--;
+        }
+    }
+    else if (gameTrackerX.wipeTime < -1)
+    {
+        switch (gameTrackerX.wipeType)
+        {
+        case 10:
+            temp = ((gameTrackerX.maxWipeTime + gameTrackerX.wipeTime + 2) * 255) / gameTrackerX.maxWipeTime;
+
+            DRAW_TranslucentQuad(0, 0, 512, 0, 0, 240, 512, 240, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+            break;
+        case 11:
+            temp = ((gameTrackerX.maxWipeTime + gameTrackerX.wipeTime) * 255) / gameTrackerX.maxWipeTime;
+
+            DRAW_TranslucentQuad(0, 0, 512, 0, 0, 30, 512, 30, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+            DRAW_TranslucentQuad(0, 210, 512, 210, 0, 240, 512, 240, (short)temp, (short)temp, (short)temp, 2, primPool, drawot);
+
+            if (gameTrackerX.wipeTime == -2)
+            {
+                GlobalSave->flags |= 0x1;
+            }
+
+            break;
+        }
+
+        if (gameTrackerX.gameFramePassed != 0)
+        {
+            gameTrackerX.wipeTime++;
+        }
+    }
+    else if (gameTrackerX.wipeTime == -1)
+    {
+        if (gameTrackerX.wipeType == 11)
+        {
+            GlobalSave->flags |= 0x1;
+        }
+        else
+        {
+            DRAW_FlatQuad(&gameTrackerX.wipeColor, 0, 0, 512, 0, 0, 240, 512, 240, primPool, drawot);
+        }
+    }
+    else
+    {
+        theCamera.core.screenScale.x = theCamera.core.screenScale.y = theCamera.core.screenScale.z = 4096;
+    }
+}
+
+void UpdateFogSettings(StreamUnit *currentUnit, Level *level)
+{
+    int changed;
+    int FogFar;
+    int FogNear;
+    int setflag;
+
+    changed = 0;
+
+    FogNear = currentUnit->TargetFogNear;
+    FogFar = currentUnit->TargetFogFar;
+
+    setflag = 0;
+
+    if (level->fogNear > FogNear)
+    {
+        level->fogNear -= 500;
+
+        changed = 1;
+
+        if (level->fogNear <= FogNear)
+        {
+            setflag = 1;
+
+            level->fogNear = FogNear;
+        }
+    }
+    else if (level->fogNear < FogNear)
+    {
+        level->fogNear += 500;
+
+        changed = 1;
+
+        if (level->fogNear >= FogNear)
+        {
+            setflag = 1;
+
+            level->fogNear = FogNear;
+        }
+    }
+    else
+    {
+        setflag = 1;
+    }
+
+    if (level->fogFar > FogFar)
+    {
+        level->fogFar -= 500;
+
+        changed = 1;
+
+        if (level->fogFar <= FogFar)
+        {
+            level->fogFar = FogFar;
+        }
+        else
+        {
+            setflag = 0;
+        }
+    }
+    else if (level->fogFar < FogFar)
+    {
+        level->fogFar += 500;
+
+        changed = 1;
+
+        if (level->fogFar >= FogFar)
+        {
+            level->fogFar = FogFar;
+        }
+        else
+        {
+            setflag = 0;
+        }
+    }
+
+    if (changed != 0)
+    {
+        LIGHT_CalcDQPTable(level);
+
+        if (setflag != 0)
+        {
+            currentUnit->TargetFogNear = level->fogNear;
+            currentUnit->TargetFogFar = level->fogFar;
+        }
+    }
+}
 
 int CheckForNoBlend(ColorType *Color)
 {
@@ -370,23 +652,186 @@ int CheckForNoBlend(ColorType *Color)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", BlendToColor);
+void BlendToColor(ColorType *target, ColorType *current, ColorType *dest)
+{
+    LoadAverageCol((unsigned char *)target, (unsigned char *)current, 512, 3584, (unsigned char *)dest);
+
+    if ((target->r - dest->r) >= 0)
+    {
+        if ((target->r - dest->r) >= 5)
+        {
+            dest->code = 0;
+
+            return;
+        }
+    }
+    else if ((dest->r - target->r) >= 5)
+    {
+        dest->code = 0;
+
+        return;
+    }
+
+    if ((target->g - dest->g) >= 0)
+    {
+        if ((target->g - dest->g) >= 5)
+        {
+            dest->code = 0;
+
+            return;
+        }
+    }
+    else if ((dest->g - target->g) >= 5)
+    {
+        dest->code = 0;
+
+        return;
+    }
+
+    if ((target->b - dest->b) >= 0)
+    {
+        if ((target->b - dest->b) >= 5)
+        {
+            dest->code = 0;
+
+            return;
+        }
+    }
+    else if ((dest->b - target->b) >= 5)
+    {
+        dest->code = 0;
+
+        return;
+    }
+
+    *(int *)dest = *(int *)target;
+
+    dest->code = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", MainRenderLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", StreamIntroInstancesForUnit);
+void StreamIntroInstancesForUnit(StreamUnit *currentUnit)
+{
+    if (currentUnit->used == 2)
+    {
+        SBSP_IntroduceInstances(currentUnit->level->terrain, currentUnit->StreamUnitID);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", StreamRenderLevel);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_FlipScreenAndDraw);
+void GAMELOOP_FlipScreenAndDraw(GameTracker *gameTracker, unsigned long **drawot)
+{
+    DrawOTag((unsigned long *)(drawot + 3071));
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_AddClearPrim);
+    while (CheckVolatile(gameTracker->drawTimerReturn) != 0)
+        ;
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SwitchTheDrawBuffer);
+    ResetPrimPool();
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_SetupRenderFunction);
+    PutDrawEnv(&draw[gameTracker->drawPage]);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_GetMainRenderUnit);
+    while (CheckVolatile(gameTracker->reqDisp) != 0)
+        ;
+
+    gameTracker->usecsStartDraw = (GetRCnt(0xF2000000) & 0xFFFF) | (gameTimer << 16);
+
+    gameTracker->drawTimerReturn = (long *)&gameTracker->drawTime;
+
+    gameTracker->gameData.asmData.dispPage = 1 - gameTracker->gameData.asmData.dispPage;
+}
+
+void GAMELOOP_AddClearPrim(unsigned long **drawot, int override)
+{
+    if ((!(gameTrackerX.gameFlags & 0x8000000)) || (override != 0))
+    {
+        BLK_FILL *blkfill;
+        int *temp; // not from decls.h
+
+        blkfill = (BLK_FILL *)gameTrackerX.primPool->nextPrim;
+
+        *blkfill = clearRect[gameTrackerX.drawPage];
+
+        gameTrackerX.primPool->nextPrim = (unsigned long *)(blkfill + 1);
+
+        // addPrim(drawot[3071], blkfill);
+
+        temp = (int *)&drawot[3071];
+
+        *(int *)blkfill = getaddr(temp) | 0x3000000;
+        *(int *)temp = getaddr(&blkfill);
+    }
+    else
+    {
+        BLK_FILL *blkfill;
+
+        blkfill = (BLK_FILL *)gameTrackerX.savedOTStart;
+
+        blkfill->y0 = clearRect[gameTrackerX.drawPage].y0;
+    }
+}
+
+void GAMELOOP_SwitchTheDrawBuffer(unsigned long **drawot)
+{
+    GAMELOOP_AddClearPrim(drawot, 0);
+
+    DrawSync(0);
+
+    if (gameTrackerX.drawTimerReturn != NULL)
+    {
+        gameTrackerX.drawTimerReturn = NULL;
+
+        gameTrackerX.reqDisp = (DISPENV *)gameTrackerX.disp + gameTrackerX.gameData.asmData.dispPage;
+    }
+
+    PutDrawEnv(&draw[gameTrackerX.drawPage]);
+}
+
+void GAMELOOP_SetupRenderFunction(GameTracker *gameTracker)
+{
+    gameTracker->drawAnimatedModelFunc = &DRAW_AnimatedModel_S;
+    gameTracker->drawDisplayPolytopeListFunc = &DRAW_DisplayPolytopeList_S;
+}
+
+StreamUnit *GAMELOOP_GetMainRenderUnit()
+{
+    StreamUnit *streamUnit;
+    Instance *focusInstance;
+    StreamUnit *cameraUnit;
+
+    if (theCamera.mode == 5)
+    {
+        streamUnit = STREAM_WhichUnitPointerIsIn(theCamera.data.Cinematic.posSpline);
+    }
+    else
+    {
+        focusInstance = theCamera.focusInstance;
+
+        if ((focusInstance == gameTrackerX.playerInstance) && (gameTrackerX.SwitchToNewStreamUnit != 0))
+        {
+            streamUnit = STREAM_GetStreamUnitWithID(gameTrackerX.moveRazielToStreamID);
+
+            if (streamUnit == NULL)
+            {
+                return STREAM_GetStreamUnitWithID(focusInstance->currentStreamUnitID);
+            }
+        }
+        else
+        {
+            streamUnit = STREAM_GetStreamUnitWithID(focusInstance->currentStreamUnitID);
+        }
+
+        cameraUnit = COLLIDE_CameraWithStreamSignals(&theCamera);
+
+        if (cameraUnit != NULL)
+        {
+            streamUnit = cameraUnit;
+        }
+    }
+
+    return streamUnit;
+}
 
 /*TODO: migrate to GAMELOOP_DisplayFrame*/
 static char D_800D0780[] = "Cameraunit: %s\n";
@@ -599,11 +1044,208 @@ static char D_800D0790[] = "Processing unit %s\n";
 static char D_800D07A4[] = "Military Time %04d\n";
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_Process);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ModeStartRunning);
+void GAMELOOP_ModeStartRunning()
+{
+    if ((gameTrackerX.gameMode == 4) || (gameTrackerX.gameMode == 6))
+    {
+        DEBUG_ExitMenus();
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ModeStartPause);
+        if (gameTrackerX.gameMode == 6)
+        {
+            currentMenu = standardMenu;
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_ChangeMode);
+            SOUND_ResumeAllSound();
+
+            VOICEXA_Resume();
+        }
+    }
+
+    if ((gameTrackerX.gameFlags & 0x8000000))
+    {
+        gameTrackerX.gameFlags &= ~0x8000000;
+
+        gameTrackerX.savedOTStart = NULL;
+
+        DrawSync(0);
+    }
+
+    gameTrackerX.gameMode = 0;
+    gameTrackerX.gameFlags &= ~0x10000000;
+
+    gameTrackerX.playerInstance->flags &= ~0x100;
+
+    gameTrackerX.gameMode = 0;
+
+    GAMEPAD_RestoreControllers();
+
+    INSTANCE_Post(gameTrackerX.playerInstance, 0x10000A, 0);
+}
+
+void GAMELOOP_ModeStartPause()
+{
+    gameTrackerX.gameMode = 6;
+
+    INSTANCE_Post(gameTrackerX.playerInstance, 0x10000A, 1);
+
+    currentMenu = pauseMenu;
+
+    menu_set(gameTrackerX.menu, menudefs_pause_menu);
+
+    SOUND_PauseAllSound();
+
+    VOICEXA_Pause();
+
+    SndPlay(5);
+
+    gameTrackerX.gameFlags |= 0x10000000;
+
+    GAMEPAD_SaveControllers();
+
+    gameTrackerX.gameFlags |= 0x8000000;
+
+    if (gameTrackerX.primPool == primPool[0])
+    {
+        gameTrackerX.primPool = primPool[1];
+    }
+    else
+    {
+        gameTrackerX.primPool = primPool[0];
+    }
+
+    gameTrackerX.primPool->nextPrim = &gameTrackerX.primPool->prim[0];
+
+    gameTrackerX.primPool->numPrims = 0;
+
+    SaveOT();
+
+    pause_redraw_flag = 1;
+}
+
+void GAMELOOP_ChangeMode()
+{
+    long *controlCommand;
+    int temp; // not from decls.h
+
+    controlCommand = gameTrackerX.controlCommand[0];
+
+    if (!(gameTrackerX.debugFlags & 0x40000))
+    {
+        if (!(gameTrackerX.debugFlags & 0x200000))
+        {
+            if ((gameTrackerX.controlCommand[0][0] & 0xA01) == 0xA01)
+            {
+                theCamera.forced_movement = 1;
+
+                gameTrackerX.playerInstance->position.z += 100;
+
+                gameTrackerX.playerInstance->zVel = 0;
+
+                gameTrackerX.cheatMode = 1;
+
+                INSTANCE_Post(gameTrackerX.playerInstance, 0x100010, 1);
+
+                gameTrackerX.playerInstance->flags &= ~0x800;
+            }
+            else if ((gameTrackerX.controlCommand[0][0] & 0xA02) == 0xA02)
+            {
+                theCamera.forced_movement = 1;
+
+                gameTrackerX.playerInstance->position.z -= 100;
+
+                gameTrackerX.playerInstance->zVel = 0;
+
+                gameTrackerX.cheatMode = 0;
+
+                INSTANCE_Post(gameTrackerX.playerInstance, 0x100010, 0);
+
+                gameTrackerX.gameMode = 0;
+            }
+        }
+    }
+
+    if ((!(gameTrackerX.debugFlags & 0x40000)) || ((gameTrackerX.playerCheatFlags & 0x2)))
+    {
+        if (((controlCommand[1] & 0x60) == 0x60) && (!(controlCommand[0] & 0xF)))
+        {
+            if (gameTrackerX.gameMode == 0)
+            {
+                gameTrackerX.gameMode = 4;
+
+                currentMenu = (DebugMenuLine *)&standardMenu;
+
+                if ((unsigned char)gameTrackerX.sound.gVoiceOn != 0)
+                {
+                    gameTrackerX.debugFlags |= 0x80000;
+                }
+                else
+                {
+                    gameTrackerX.debugFlags &= ~0x80000;
+                }
+
+                if ((unsigned char)gameTrackerX.sound.gMusicOn != 0)
+                {
+                    gameTrackerX.debugFlags2 |= 0x1000;
+                }
+                else
+                {
+                    gameTrackerX.debugFlags2 &= ~0x1000;
+                }
+
+                if ((unsigned char)gameTrackerX.sound.gSfxOn != 0)
+                {
+                    gameTrackerX.debugFlags2 |= 0x2000;
+                }
+                else
+                {
+                    gameTrackerX.debugFlags2 &= ~0x2000;
+                }
+            }
+            else if (gameTrackerX.gameMode == 7)
+            {
+                DEBUG_EndViewVram(&gameTrackerX);
+
+                gameTrackerX.gameMode = 0;
+            }
+            else
+            {
+                GAMELOOP_ModeStartRunning();
+            }
+        }
+    }
+
+    if ((((controlCommand[1] & 0x4000)) || (gamePadControllerOut >= 6)) && (gameTrackerX.gameMode == 0) && (!(gameTrackerX.gameFlags & 0x80)) && ((gameTrackerX.wipeTime == 0) || ((gameTrackerX.wipeType != 11) && (gameTrackerX.wipeTime == -1))))
+    {
+        GAMELOOP_ModeStartPause();
+    }
+    else
+    {
+        temp = controlCommand[1] & 0x4000;
+
+        if (((temp != 0) || ((gameTrackerX.gameFlags & 0x40000000))) && (gameTrackerX.gameMode != 0) && (!(gameTrackerX.gameFlags & 0x20000000)) && ((gameTrackerX.wipeTime == 0) || ((gameTrackerX.wipeType != 11) && (gameTrackerX.wipeTime == -1))))
+        {
+            if (temp != 0)
+            {
+                if (!(gameTrackerX.gameFlags & 0x40000000))
+                {
+                    SndPlay(5);
+                }
+            }
+
+            gameTrackerX.gameFlags &= ~0x40000000;
+
+            GAMELOOP_ModeStartRunning();
+        }
+    }
+
+    if ((gameTrackerX.controlCommand[0][0] & 0x40000000))
+    {
+        gameTrackerX.playerInstance->flags |= 0x100;
+    }
+    else if ((gameTrackerX.controlCommand[0][2] & 0x40000000))
+    {
+        gameTrackerX.playerInstance->flags &= ~0x100;
+    }
+}
 
 // Matches 100% on decomp.me but differs on this project
 #ifndef NON_MATCHING

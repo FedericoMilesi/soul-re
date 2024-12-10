@@ -14,6 +14,8 @@ void GAMELOOP_Process(GameTracker *gameTracker);
 void ResetDrawPage();
 void GAMELOOP_AllocStaticMemory();
 void GAMELOOP_InitGameTracker();
+void GAMELOOP_AddClearPrim(unsigned long **drawot, int override);
+void SaveOT();
 
 GameTracker gameTrackerX;
 GameTracker *gameTracker;
