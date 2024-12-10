@@ -19,6 +19,7 @@ void SaveOT();
 
 GameTracker gameTrackerX;
 GameTracker *gameTracker;
+FXTracker *gFXT;
 extern long playerCameraMode;
 extern long cameraMode;
 DRAWENV draw[2];
