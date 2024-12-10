@@ -1,4 +1,5 @@
 #include "common.h"
+#include "Game/MATH3D.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZLIB", razAlignYMoveRot);
 
@@ -24,7 +25,22 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZLIB", RAZIEL_OkToShift);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZLIB", razPickupAndGrab);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZLIB", razZeroAxis);
+int razZeroAxis(long *x, long *y, int radius)
+{
+    unsigned long distance;
+
+    distance = MATH3D_SquareLength(*x, *y, 0);
+
+    if (distance < (unsigned int)radius)
+    {
+        distance = 0;
+
+        *x = 0;
+        *y = 0;
+    }
+
+    return distance;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZLIB", razAdjustSpeed);
 

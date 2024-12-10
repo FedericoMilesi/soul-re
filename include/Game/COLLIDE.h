@@ -23,5 +23,6 @@ void COLLIDE_MakeNormal(Terrain *terrain, TFace *tface, SVector *normal);
 long COLLIDE_SphereAndHFace(Sphere *sphere, Position *oldPos, HFaceInfo *hfaceInfo, SVector *intersect, long *edge);
 void COLLIDE_PointAndInstanceTrivialReject(PCollideInfo *pcollideInfo, Instance *instance);
 void COLLIDE_LineWithBoxFace(short startDist, long lineDist, short planeDist, SVector *start, Vector *line, HBox *hbox, long (*collideBoundFunc)(), SVector *normal);
+StreamUnit *COLLIDE_CameraWithStreamSignals(Camera *camera);
 
 #endif

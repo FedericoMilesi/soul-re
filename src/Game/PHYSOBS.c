@@ -3177,7 +3177,148 @@ long PHYSOB_CheckForEnemyInBlkSpot(Instance *instance, int dx, int dy)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSOBS", PHYSOBS_CheckForValidMove);
+long PHYSOBS_CheckForValidMove(Instance *instance)
+{
+    int rc;
+    PhysObData *Data;
+    evPhysicsSlideData *Ptr;
+    int result;
+    // int Height; unused (line 86)
+    short temp; // not from decls.h
+
+    gameTrackerX.block_collide_override = 1;
+
+    Data = (PhysObData *)instance->extraData;
+
+    result = 7;
+
+    if (((Data->Mode & 0x1)) && (PhysicsUpdateTface(instance, SetPhysicsGravityData(160, 640, 0, 0, 0, 2896)), (PHYSOBS_CheckForStackedForwardHits(instance, Data->xForce * 704, Data->yForce * 704) == 0)))
+    {
+        rc = PHYSOB_CheckSlide(instance, Data->xForce, Data->yForce, &Ptr);
+
+        if ((rc & 0x2))
+        {
+            if (((CheckSlope(Ptr->ForwardNormal.z, 3663, 4) == 0) && (CheckSlope(Ptr->ForwardNormal.z, 4096, 4) == 0)) && ((Data->Mode & 0x8)) && ((rc & 0x4)) && (PHYSOB_CheckDirectedLineCollision(instance, Data->xForce * 704, Data->yForce * 704, 640) == 0) && (((169 - Ptr->Height) >= 0) && ((169 - Ptr->Height) < 19)))
+            {
+                PHYSOBS_SetNewAnim(instance, Data, 2, 7, 1);
+
+                result = (result & ~4) | 8;
+            }
+            else
+            {
+                result = 0;
+            }
+        }
+        else if ((rc & 0x4000))
+        {
+            if ((Data->Mode & 0x8))
+            {
+                if ((Data->Mode & 0x200))
+                {
+                    result = 0;
+                }
+
+                if (((rc & 0x8000)) || (PHYSOB_CheckDirectedLineCollision(instance, Data->xForce * 704, Data->yForce * 704, 640) != 0))
+                {
+                    result = 0;
+                }
+            }
+
+            if (result != 0)
+            {
+                if ((CheckSlope(Ptr->Dot, -314, 4) == 0) && (CheckSlope(Ptr->Dot, 314, 4) == 0) && (!(Data->Mode & 0x200)))
+                {
+                    if (CheckSlope(Ptr->DropNormal.z, 3663, 4) != 0)
+                    {
+                        if (((Ptr->DropNormal.x > 10) && (Data->xForce > 0)) || ((Ptr->DropNormal.x < -10) && (Data->xForce < 0)) || ((Ptr->DropNormal.y > 10) && (Data->yForce > 0)) || ((Ptr->DropNormal.y < -10) && (Data->yForce < 0)))
+                        {
+                            if (CheckBlockSlope(instance, Data->xForce, Data->yForce, 732, -173, 625, -312) == 0)
+                            {
+                                if (PHYSOBS_FigureDragForSlope(instance, Data->PathNumber, &result) == 0)
+                                {
+                                    result = 0;
+                                }
+                            }
+                            else
+                            {
+                                result = 0;
+                            }
+                        }
+                        else
+                        {
+                            result = 0;
+                        }
+                    }
+                    else if (((PHYSOB_CheckForEnemyInBlkSpot(instance, Data->xForce * 640, Data->yForce * 640) == 0) || (PHYSOB_CheckDirectedLineCollision(instance, Data->xForce * 1344, Data->yForce * 1344, 0) == 0)) && (CheckSlope(Ptr->DropNormal.z, 4096, 4) != 0))
+                    {
+                        PHYSOBS_SetNewAnim(instance, Data, 2, Data->PathNumber, 0);
+                    }
+                    else
+                    {
+                        result = 0;
+                    }
+                }
+                else
+                {
+                    result = 0;
+                }
+            }
+        }
+        else
+        {
+            evPhysicsSlideData *Ptr;
+
+            if ((!(PHYSOB_CheckDropOnSlope(instance, Data->xForce, Data->yForce, &Ptr) & 0x4000)) || (Ptr->DropNormal.z > 3900))
+            {
+                if (((Data->Mode & 0x8)) && ((rc & 0x8000)))
+                {
+                    result = 0;
+                }
+
+                temp = Data->PathNumber;
+
+                if (((temp != 2) && (temp != 3)) && (result != 0))
+                {
+                    if (temp == 5)
+                    {
+                        result &= ~5;
+                    }
+                    else if ((Data->Mode & 0x8))
+                    {
+                        Data->PathNumber = 14;
+
+                        PHYSOBS_SetNewAnim(instance, Data, 2, Data->PathNumber, 1);
+                    }
+                    else
+                    {
+                        PHYSOBS_SetNewAnim(instance, Data, 2, temp, 1);
+                    }
+                }
+                else
+                {
+                    result = 0;
+                }
+            }
+            else
+            {
+                result = 0;
+            }
+        }
+    }
+    else
+    {
+        result = 0;
+    }
+
+    gameTrackerX.block_collide_override = 0;
+
+    if (result == 0)
+    {
+        Data->Mode &= ~0x14A;
+    }
+
+    return result;
+}
 
 void ExecuteGravitate(Instance *instance)
 {

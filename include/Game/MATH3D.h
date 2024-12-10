@@ -136,5 +136,6 @@ short MATH3D_ElevationFromPosToPos(Position *from, Position *to);
 void MATH3D_RotateAxisToVector(MATRIX *dest, MATRIX *src, SVector *vec, enum MATH3D_AXIS axis);
 long MATH3D_DistanceBetweenPositions(Position *pos1, Position *pos2);
 int MATH3D_veclen2(int ix, int iy);
+short MATH3D_AngleBetweenVectors(SVector *vector1, SVector *vector2);
 
 #endif

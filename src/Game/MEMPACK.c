@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/MEMPACK.h"
+#include "Game/LOAD3D.h"
 
 static NewMemTracker newMemTracker;
 
@@ -79,4 +80,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_RelocateG2AnimKeylistType);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_RelocateObjectType);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_RelocateCDMemory);
+void MEMPACK_RelocateCDMemory(MemHeader *newAddress, long offset, BigFileDir *oldDir)
+{
+    BigFileDir *newDir;
+
+    (void)offset;
+
+    newDir = (BigFileDir *)(newAddress + 1);
+
+    LOAD_UpdateBigFilePointers(oldDir, newDir);
+}

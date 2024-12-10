@@ -12,5 +12,6 @@ void menu_draw(menu_t *menu);
 void menu_run(menu_t *menu);
 void menu_process(menu_t *menu);
 void DisplayHintBox(int len, int y);
+void menu_set(menu_t *menu, int (*fn)());
 
 #endif
