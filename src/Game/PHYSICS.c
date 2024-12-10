@@ -595,6 +595,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropHeight);
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropOff);
 
 // Matches 100% on decomp.me but differs on this project
+// Needs sbss migration. Only possible when all functions of the TU are matching.
 #ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsFollowWall);
 #else
@@ -605,7 +606,7 @@ int PhysicsFollowWall(Instance *instance, GameTracker *gameTracker, intptr_t Dat
     PCollideInfo CInfo;
     SVECTOR New;
     SVECTOR Old;
-    STATIC MATRIX *pTempMat;
+    static MATRIX *pTempMat;
 
     (void)gameTracker;
 

@@ -5,7 +5,8 @@
 #include "Game/GAMELOOP.h"
 #include "Game/INSTANCE.h"
 
-EXTERN STATIC Force *ExternalForces;
+static Force *ExternalForces;
+static char _unused[8];
 
 void SetPhysics(Instance *instance, short gravity, long x, long y, long z)
 {
@@ -93,7 +94,7 @@ void InitExternalForces(Force *Forces, int MaxForces)
     ExternalForces = Forces;
 }
 
-//void SetExternalForce(Force *In, short x, short y, short z, int Space, int Friction)
+// void SetExternalForce(Force *In, short x, short y, short z, int Space, int Friction)
 void SetExternalForce(Force *In, short x, short y, short z, short Space, int Friction)
 {
     In->LinearForce.x = x;

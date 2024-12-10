@@ -28,5 +28,8 @@ int razZeroAxis(long *x, long *y, int radius);
 void razReaverPickup(Instance *instance, Instance *soulReaver);
 int razConstrictAngle(Instance *instance);
 Instance *RAZIEL_QueryEngagedInstance(int index);
+void razLaunchBubbles(int segments, int count, int type);
+void razSetSwimVelocity(Instance *instance, int vel, int accl);
+int razPickupAndGrab(CharacterState *In, int CurrentSection);
 
 #endif
