@@ -9,7 +9,7 @@
 #include "Game/RAZIEL/STEERING.h"
 #include "Game/RAZIEL/ATTACK.h"
 #include "Game/RAZIEL/RAZIEL.h"
-#include "Game/RAZIEL/RAZLIB.H"
+#include "Game/RAZIEL/RAZLIB.h"
 #include "Game/RAZIEL/CONTROL.h"
 
 void StateHandlerSwimTread(CharacterState *In, int CurrentSection, intptr_t Data);
