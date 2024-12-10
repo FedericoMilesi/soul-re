@@ -18,6 +18,7 @@ typedef struct Dummy4
 
 void MonsterProcess(Instance *instance, GameTracker *gameTracker);
 uintptr_t MonsterQuery(Instance *instance, unsigned long query);
+void MONAPI_AddToGenerator(Instance *instance);
 void MONAPI_ResetLookAround(Instance *instance);
 void MONAPI_SetLookAround(Instance *instance);
 long MONAPI_OkToLookAround(Instance *instance);
