@@ -485,7 +485,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONLIB", MON_ShouldIAttack);
 
 MonsterAttackAttributes *MON_ChooseAttack(Instance *instance, MonsterIR *enemy)
 {
-    
+
     long distance;
     long zdiff;
     long smallest;
@@ -499,11 +499,11 @@ MonsterAttackAttributes *MON_ChooseAttack(Instance *instance, MonsterIR *enemy)
     bestAttack = NULL;
     zdiff = 0x100;
     smallest = 0x1869F;
-    
+
     mv = (MonsterVars *)instance->extraData;
     ma = (MonsterAttributes *)instance->data;
     combat = mv->subAttr->combatAttributes;
-    
+
     if (mv->mvFlags & 4 || enemy->mirFlags & 8)
     {
         distance = 0;
@@ -523,34 +523,27 @@ MonsterAttackAttributes *MON_ChooseAttack(Instance *instance, MonsterIR *enemy)
             }
         }
     }
-    
-    i = (signed char) combat->numAttacks;
+
+    i = (signed char)combat->numAttacks;
     attackIndex = combat->attackList;
-    
+
     if (i != 0)
     {
-        for(; i != 0; i--, attackIndex++)
+        for (; i != 0; i--, attackIndex++)
         {
 
-            
             long delta;
             MonsterAttackAttributes *attack;
-            
-            attack = &ma->attackAttributesList[(signed char) *attackIndex];
+
+            attack = &ma->attackAttributesList[(signed char)*attackIndex];
             delta = zdiff - attack->attackHeight;
 
-            
             if (abs(delta) < 100 || enemy->mirFlags & 8)
             {
-                
+
                 int effectiveRange; // not from decls.h
-
                 effectiveRange = attack->attackRange * mv->subAttr->scale;
-                if (effectiveRange < 0) {
-                    effectiveRange += 0xFFF;
-                }
-
-                delta = (effectiveRange >> 0xC) - distance;
+                delta = (effectiveRange / 4096) - distance;
 
                 if (abs(delta) < abs(smallest))
                 {
@@ -560,7 +553,7 @@ MonsterAttackAttributes *MON_ChooseAttack(Instance *instance, MonsterIR *enemy)
             }
         }
     }
-    
+
     mv->attackType = bestAttack;
     mv->attackState = 0;
     return bestAttack;
@@ -2013,30 +2006,29 @@ void MON_GetSaveInfo(Instance *instance, MonsterSaveInfo *saveData)
 
 void MON_KillMonster(Instance *instance)
 {
-    
+
     MonsterVars *mv;
 
     mv = (MonsterVars *)instance->extraData;
     MON_DropAllObjects(instance);
-    
+
     if (mv->causeOfDeath == 6)
     {
-        
+
         MonsterAttributes *attr;
         FXSplinter *splintDef;
-        
+
         attr = (MonsterAttributes *)instance->data;
         splintDef = attr->shatterList;
-        
+
         _FX_BuildSplinters(instance, 0, 0, 0, splintDef, gFXT, NULL, NULL, 8);
-        
+
         if (!(instance->flags2 & 0x1000))
         {
             SOUND_Play3dSound(&instance->position, 0x30, 0, 0x5F, 0x3E80);
         }
-        
     }
-    
+
     if (mv->mvFlags & 0x01000000 && (instance->intro == NULL || !(instance->intro->flags & 0x400)))
     {
         if (mv->regenTime != 0)
@@ -2049,7 +2041,7 @@ void MON_KillMonster(Instance *instance)
     {
         SAVE_MarkDeadDead(instance);
     }
-    
+
     if (instance->object->oflags2 & 4)
     {
         if (instance->flags2 & 0x1000)
