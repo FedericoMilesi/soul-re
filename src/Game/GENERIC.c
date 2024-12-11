@@ -4,7 +4,7 @@
 #include "Game/STATE.h"
 #include "Game/SCRIPT.h"
 #include "Game/SAVEINFO.h"
-#include "Game/G2/ANMG2ILF.h"
+#include "Game/G2/ANIMG2.h"
 #include "Game/INSTANCE.h"
 #include "Game/STREAM.h"
 

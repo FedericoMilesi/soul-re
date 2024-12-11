@@ -6,13 +6,12 @@
 #include "Game/MONSTER/MONSENSE.h"
 #include "Game/PHYSICS.h"
 #include "Game/MONSTER/MISSILE.h"
-#include "Game/G2/ANMG2ILF.h"
+#include "Game/G2/ANIMG2.h"
 #include "Game/MATH3D.h"
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/FX.h"
 #include "Game/STATE.h"
 #include "Game/SOUND.h"
-#include "Game/G2/ANMCTRLR.h"
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/CAMERA.h"
 #include "Game/MEMPACK.h"
@@ -118,7 +117,9 @@ void MON_ParryEntry(Instance *instance)
 
     MON_PlayAnim(instance, MONSTER_ANIM_JUMPRIGHT, 1);
 
-    do {} while (0); // garbage code for reordering
+    do
+    {
+    } while (0); // garbage code for reordering
 
     MON_TurnToPosition(instance, &mv->enemy->instance->position, 4096);
 }
@@ -318,7 +319,9 @@ void MON_ProjectileEntry(Instance *instance)
 
     missileDef = &ma->missileList[(int)mv->subAttr->combatAttributes->missileAttack];
 
-    do {} while (0); // garbage code for reordering
+    do
+    {
+    } while (0); // garbage code for reordering
 
     MON_PlayAnimFromList(instance, missileDef->animList, 0, 1);
 
@@ -733,7 +736,9 @@ void MON_SurpriseAttackEntry(Instance *instance)
 
     ma = (MonsterAttributes *)instance->data;
 
-    do {} while (0); // garbage code for reordering
+    do
+    {
+    } while (0); // garbage code for reordering
 
     mv->attackType = &ma->attackAttributesList[(int)combatAttr->ambushAttack];
 
@@ -1094,8 +1099,7 @@ void MON_Embrace(Instance *instance)
 
     if (enemy != NULL)
     {
-        if ((enemy->distance > mv->subAttr->combatAttributes->suckRange) || (!(enemy->mirFlags & 0x20)) || (!(enemy->mirFlags & 0x1000))
-        || ((mv->mvFlags & 0x4)) || (mv->generalTimer < MON_GetTime(instance)))
+        if ((enemy->distance > mv->subAttr->combatAttributes->suckRange) || (!(enemy->mirFlags & 0x20)) || (!(enemy->mirFlags & 0x1000)) || ((mv->mvFlags & 0x4)) || (mv->generalTimer < MON_GetTime(instance)))
         {
             MON_SwitchState(instance, MONSTER_STATE_COMBAT);
         }

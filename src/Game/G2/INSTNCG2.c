@@ -5,7 +5,6 @@
 #include "Game/SPLINE.h"
 #include "Game/CAMERA.h"
 #include "Game/G2/ANIMG2.h"
-#include "Game/G2/ANMCTRLR.h"
 
 void G2Instance_BuildTransformsForList(Instance *listHead)
 {
@@ -173,7 +172,7 @@ void _G2Instance_RebuildAnimatedTransforms(Instance *instance)
 
         if (instance->LinkParent != NULL)
         {
-            MATRIX *tv; // not from decls.h
+            MATRIX *tv;     // not from decls.h
             G2LVector3 *ts; // not from decls.h
 
             tv = instance->matrix;

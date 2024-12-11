@@ -6,7 +6,7 @@
 #include "Game/SAVEINFO.h"
 #include "Game/PHYSICS.h"
 #include "Game/MATH3D.h"
-#include "Game/G2/ANMG2ILF.h"
+#include "Game/G2/ANIMG2.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONMSG.h"
@@ -335,7 +335,6 @@ void SOUL_SoulSuck(Instance *instance)
                     instance->maxXVel = 600;
                     instance->maxYVel = 600;
                     instance->maxZVel = 17;
-
                 }
                 else
                 {
@@ -375,7 +374,6 @@ void SOUL_SoulSuck(Instance *instance)
                             instance->xVel = (short)((dir.x * 4096) / animLength);
                             instance->yVel = (short)((dir.y * 4096) / animLength);
                             instance->zVel = (short)((dir.z * 4096) / animLength);
-
                         }
 
                         if (!(mv->mvFlags & 0x04000000))
@@ -776,7 +774,8 @@ void SOUL_Reanimate(Instance *instance)
     }
     else
     {
-        while (DeMessageQueue(&mv->messageQueue) != NULL);
+        while (DeMessageQueue(&mv->messageQueue) != NULL)
+            ;
     }
 }
 
