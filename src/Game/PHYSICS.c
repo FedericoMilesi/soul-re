@@ -590,7 +590,133 @@ int PhysicsCheckLOS(Instance *instance, intptr_t Data, int Mode)
     return CInfo.type == 0;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropHeight);
+#else
+int PhysicsCheckDropHeight(Instance *instance, intptr_t Data, int Mode)
+{
+    evPhysicsDropHeightData *data;
+    Level *level;
+    SVECTOR newPos;
+    SVECTOR oldPos;
+    int rc;
+    int lowZ;
+    PCollideInfo CInfo;
+    STATIC MATRIX TempMat;
+    STATIC MATRIX *pTempMat;
+
+    data = (evPhysicsDropHeightData *)Data;
+
+    if ((data->mode & 0x20))
+    {
+        VECTOR outTrans;
+        SVECTOR *ExtraRot;
+
+        ExtraRot = (SVECTOR *)INSTANCE_Query(instance, 8);
+
+        if (ExtraRot != NULL)
+        {
+            pTempMat = &TempMat;
+
+            RotMatrix(ExtraRot, &TempMat);
+
+            MulMatrix2(instance->matrix, pTempMat);
+        }
+        else
+        {
+            pTempMat = instance->matrix;
+        }
+
+        ApplyMatrix(pTempMat, (SVECTOR *)data, &outTrans);
+
+        oldPos.vx = (short)(instance->position.x + outTrans.vx);
+        oldPos.vy = (short)(instance->position.y + outTrans.vy);
+        oldPos.vz = (short)(instance->position.z + outTrans.vz);
+    }
+    else if ((data->mode & 0x10))
+    {
+        oldPos.vx = instance->position.x + data->origin.x;
+        oldPos.vy = instance->position.y + data->origin.y;
+        oldPos.vz = instance->position.z + data->origin.z;
+    }
+    else
+    {
+        oldPos.vx = data->origin.x;
+        oldPos.vy = data->origin.y;
+        oldPos.vz = data->origin.z;
+    }
+    {
+        long waterZLevel;
+
+        level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+        if (((data->mode & 0x40)) && (waterZLevel = STREAM_GetWaterZLevel(level, instance), (waterZLevel != -32767)))
+        {
+            lowZ = oldPos.vz - data->DropOffset;
+
+            if (lowZ < waterZLevel)
+            {
+                lowZ = waterZLevel - 1;
+
+                rc = 16;
+            }
+            else
+            {
+                rc = 0;
+            }
+        }
+        else
+        {
+            rc = 0;
+
+            lowZ = oldPos.vz - data->DropOffset;
+        }
+    }
+
+    if (lowZ < oldPos.vz)
+    {
+        newPos.vz = lowZ;
+
+        CInfo.oldPoint = &oldPos;
+        CInfo.newPoint = &newPos;
+
+        newPos.vx = oldPos.vx;
+        newPos.vy = oldPos.vy;
+
+        PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+        if ((CInfo.type != 0) && (CInfo.wNormal.vz > 3200))
+        {
+            if (Mode == 1)
+            {
+                if (CInfo.type == 3)
+                {
+                    level = (Level *)CInfo.inst;
+
+                    data->bsp = &level->terrain->BSPTreeArray[CInfo.segment];
+
+                    data->tface = (TFace *)CInfo.prim;
+                }
+                else
+                {
+                    data->bsp = NULL;
+
+                    data->tface = NULL;
+                }
+
+                data->result = oldPos.vz - newPos.vz;
+
+                data->origin.z = newPos.vz;
+            }
+
+            rc = 1;
+        }
+    }
+
+    return rc;
+}
+#endif
 
 // Matches 100% on decomp.me but differs on this project
 #ifndef NON_MATCHING

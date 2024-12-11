@@ -8,7 +8,7 @@ void PhysicsMove(Instance *instance, Position *position, long time);
 void PhysicsSetVelFromRot(Instance *instance, Rotation *rot, long magnitude);
 int PhysicsCheckGravity(Instance *instance, intptr_t Data, short Mode);
 int PhysicsCheckSwim(Instance *instance, intptr_t Data, short Mode);
-int PhysicsCheckDropHeight(Instance *instance, int Data, int Mode);
+int PhysicsCheckDropHeight(Instance *instance, intptr_t Data, int Mode);
 void PhysicsSetVelFromZRot(Instance *instance, short angle, long magnitude);
 void PhysicsDefaultLinkedMoveResponse(Instance *instance, evPhysicsLinkedMoveData *Data, int updateTransforms);
 void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Data);
