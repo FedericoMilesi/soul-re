@@ -353,7 +353,173 @@ void PhysicsDefaultEdgeGrabResponse(Instance *instance, evPhysicsEdgeData *Data,
     instance->position.y -= (short)OutTrans.vy - Data->Delta->y;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckSliding);
+#else
+int PhysicsCheckSliding(Instance *instance, intptr_t Data, short Mode)
+{
+    evPhysicsSlideData *Ptr;
+    int rc;
+    VECTOR OutTrans;
+    SVector normal;
+    PCollideInfo CInfo;
+    SVECTOR Old;
+    SVECTOR New;
+    STATIC MATRIX *pTempMat;
+
+    Ptr = (evPhysicsSlideData *)Data;
+
+    CInfo.oldPoint = &Old;
+    CInfo.newPoint = &New;
+
+    pTempMat = &instance->matrix[Ptr->Segment];
+
+    Old.vx = pTempMat->t[0];
+    Old.vy = pTempMat->t[1];
+    Old.vz = pTempMat->t[2] + Ptr->Height;
+
+    rc = 0;
+
+    if (instance->tface != NULL)
+    {
+        COLLIDE_GetNormal(instance->tface->normal, (short *)STREAM_GetLevelWithID(instance->currentStreamUnitID)->terrain->normalList, &normal);
+    }
+    else
+    {
+        normal.x = 0;
+        normal.y = 0;
+        normal.z = 4096;
+    }
+
+    Ptr->Dot = (Ptr->ForwardVector.x * normal.x) + (Ptr->ForwardVector.y * normal.y) + (Ptr->ForwardVector.z * normal.z);
+
+    Ptr->Dot /= 4096;
+
+    {
+        int Temp;
+
+        Temp = (Ptr->Dot * normal.x) / 4096;
+
+        OutTrans.vx = Ptr->ForwardVector.x - Temp;
+
+        Temp = (Ptr->Dot * normal.y) / 4096;
+
+        OutTrans.vy = Ptr->ForwardVector.y - Temp;
+
+        Temp = (Ptr->Dot * normal.z) / 4096;
+
+        OutTrans.vz = Ptr->ForwardVector.z - Temp;
+    }
+
+    New.vx = Old.vx + OutTrans.vx;
+    New.vy = Old.vy + OutTrans.vy;
+    New.vz = Old.vz + OutTrans.vz;
+
+    PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+    switch (CInfo.type)
+    {
+    case 3:
+    case 5:
+        if ((Mode & 0x1))
+        {
+            Ptr->ForwardNormal.x = CInfo.wNormal.vx;
+            Ptr->ForwardNormal.y = CInfo.wNormal.vy;
+            Ptr->ForwardNormal.z = CInfo.wNormal.vz;
+
+            Ptr->ForwardVector.x = Old.vx - New.vx;
+            Ptr->ForwardVector.y = Old.vy - New.vy;
+            Ptr->ForwardVector.z = Old.vz - New.vz;
+        }
+
+        New.vx = pTempMat->t[0] + OutTrans.vx;
+        New.vy = pTempMat->t[1] + OutTrans.vy;
+        New.vz = (pTempMat->t[2] + Ptr->Height) + OutTrans.vz;
+
+        Old.vx = New.vx;
+        Old.vy = New.vy;
+        Old.vz = New.vz + Ptr->UpperOffset;
+
+        PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+        rc |= 0x2;
+
+        if ((CInfo.type == 3) || (CInfo.type == 5))
+        {
+            if ((Mode & 0x1))
+            {
+                Ptr->DropNormal.x = CInfo.wNormal.vx;
+                Ptr->DropNormal.y = CInfo.wNormal.vy;
+                Ptr->DropNormal.z = CInfo.wNormal.vz;
+
+                Ptr->Height = Old.vz - New.vz;
+            }
+
+            rc |= 0x4;
+        }
+
+        CInfo.type = 0;
+        break;
+    default:
+        if (CInfo.type == 0)
+        {
+            Old.vx = pTempMat->t[0] + OutTrans.vx;
+            Old.vy = pTempMat->t[1] + OutTrans.vy;
+            Old.vz = (pTempMat->t[2] + Ptr->Height) + OutTrans.vz;
+
+            New.vx = Old.vx;
+            New.vy = Old.vy;
+            New.vz = Old.vz - Ptr->DropOffset;
+
+            PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+            if ((CInfo.type == 3) || (CInfo.type == 5))
+            {
+                if ((Mode & 0x1))
+                {
+                    Ptr->DropNormal.x = CInfo.wNormal.vx;
+                    Ptr->DropNormal.y = CInfo.wNormal.vy;
+                    Ptr->DropNormal.z = CInfo.wNormal.vz;
+
+                    Ptr->Height = Old.vz - New.vz;
+                }
+
+                rc |= 0x4000;
+            }
+        }
+    }
+
+    Old.vx = pTempMat->t[0];
+    Old.vy = pTempMat->t[1];
+    Old.vz = pTempMat->t[2];
+
+    New.vx = Old.vx;
+    New.vy = Old.vy;
+    New.vz = Old.vz + Ptr->UpperOffset;
+
+    PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+    if (CInfo.type != 0)
+    {
+        rc |= 0x8000;
+    }
+
+    if (CInfo.type == 5)
+    {
+        if ((Mode & 0x1))
+        {
+            Ptr->UpperInstance = CInfo.inst;
+        }
+    }
+    else
+    {
+        Ptr->UpperInstance = NULL;
+    }
+
+    return rc;
+}
+#endif
 
 int PhysicsUpdateTface(Instance *instance, intptr_t Data)
 {

@@ -21,7 +21,7 @@ void PHYSICS_CheckLineInWorld(Instance *instance, PCollideInfo *pcollideInfo);
 int PHYSICS_CheckFaceStick(PCollideInfo *CInfo);
 void PHYSICS_GenericLineCheck(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
 void PHYSICS_GenericLineCheckMask(Instance *instance, MATRIX *transMat, MATRIX *rotMat, PCollideInfo *cInfo);
-int PhysicsCheckSliding(Instance *instance, int Data, short Mode);
+int PhysicsCheckSliding(Instance *instance, intptr_t Data, short Mode);
 int PhysicsDefaultCheckSwimResponse(Instance *instance, evPhysicsSwimData *Data);
 void PHYSICS_GenericLineCheckSetup(short x, short y, short z, SVECTOR *inVec);
 int PHYSICS_CheckForTerrainCollide(Instance *instance, SVECTOR *startVec, SVECTOR *endVec, int segment);
