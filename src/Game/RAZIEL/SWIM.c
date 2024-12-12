@@ -1,17 +1,3 @@
-#include "common.h"
-#include "Game/CAMERA.h"
-#include "Game/STATE.h"
-#include "Game/GAMELOOP.h"
-#include "Game/PHYSICS.h"
-#include "Game/INSTANCE.h"
-#include "Game/G2/ANMG2ILF.h"
-#include "Game/RAZIEL/HEALTH.h"
-#include "Game/RAZIEL/STEERING.h"
-#include "Game/RAZIEL/ATTACK.h"
-#include "Game/RAZIEL/RAZIEL.h"
-#include "Game/RAZIEL/RAZLIB.h"
-#include "Game/RAZIEL/CONTROL.h"
-
 void StateHandlerSwimTread(CharacterState *In, int CurrentSection, intptr_t Data);
 
 void StateHandlerInitSwim(CharacterState *In, int CurrentSection, intptr_t Data)
@@ -50,11 +36,11 @@ void StateHandlerInitSwim(CharacterState *In, int CurrentSection, intptr_t Data)
 }
 
 void StateHandlerSwimCoil(CharacterState *In, int CurrentSection, intptr_t Data);
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/SWIM", StateHandlerSwimCoil);
+INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerSwimCoil);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/SWIM", StateHandlerSwimTread);
+INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerSwimTread);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/SWIM", StateHandlerSwimDiveIn);
+INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerSwimDiveIn);
 
 void StateHandlerSwim(CharacterState *In, int CurrentSection, intptr_t Data)
 {

@@ -1,14 +1,7 @@
-#include "common.h"
-#include "Game/G2/ANMINTRP.h"
-#include "Game/G2/POOLMMG2.h"
-#include "Game/HASM.h"
-#include "Game/PSX/PSX_G2/QUATVM.h"
-#include "Game/G2/ANMG2ILF.h"
-#include "Game/G2/ANIMG2.h"
-
-STATIC G2AnimInterpStateBlockPool _interpStateBlockPool;
-
-STATIC G2AnimSegValue _segValues[80];
+void _G2Anim_FreeInterpStateBlockList(G2AnimInterpStateBlock *block);
+void _G2AnimSection_SegValueToQuat(G2AnimSection *section, int zeroOne);
+G2AnimInterpStateBlock *_G2Anim_AllocateInterpStateBlockList(G2AnimSection *section);
+void _G2AnimSection_InterpStateToQuat(G2AnimSection *section);
 
 static inline void gte_process(G2Quat *dest, G2SVector3 *base, G2SVector3 *offset, long alpha)
 {
@@ -23,7 +16,7 @@ static inline void gte_process(G2Quat *dest, G2SVector3 *base, G2SVector3 *offse
     gte_stlvnlsv(dest);
 }
 
-//void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime, int duration)
+// void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime, int duration)
 void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime, short duration)
 {
     G2Anim *anim;

@@ -1,10 +1,4 @@
-#include "common.h"
-#include "Game/RAZIEL/SPIDER.h"
-#include "Game/RAZIEL/RAZIEL.h"
-#include "Game/RAZIEL/RAZLIB.h"
-#include "Game/RAZIEL/STEERING.h"
-#include "Game/RAZIEL/CONTROL.h"
-#include "Game/STATE.h"
+void StateHandlerWallIdle(CharacterState *In, int CurrentSection, intptr_t Data);
 
 void StateHandlerWallGrab(CharacterState *In, int CurrentSection, intptr_t Data)
 {
@@ -79,6 +73,6 @@ void StateHandlerWallGrab(CharacterState *In, int CurrentSection, intptr_t Data)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/SPIDER", StateHandlerWallIdle);
+INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerWallIdle);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/SPIDER", StateHandlerWallDismount);
+INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerWallDismount);

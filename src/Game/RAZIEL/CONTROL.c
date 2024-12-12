@@ -7,6 +7,7 @@
 
 static Force *ExternalForces;
 static char _unused[8];
+static MATRIX TempMat; /*unused*/
 
 void SetPhysics(Instance *instance, short gravity, long x, long y, long z)
 {

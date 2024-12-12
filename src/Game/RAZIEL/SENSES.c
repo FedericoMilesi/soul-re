@@ -1,16 +1,3 @@
-#include "common.h"
-#include "Game/PLAYER.h"
-#include "Game/MATH3D.h"
-#include "Game/INSTANCE.h"
-#include "Game/GAMELOOP.h"
-#include "Game/DEBUG.h"
-#include "Game/PHYSICS.h"
-#include "Game/FX.h"
-#include "Game/STATE.h"
-#include "Game/RAZIEL/RAZIEL.h"
-#include "Game/RAZIEL/RAZLIB.h"
-#include "Game/RAZIEL/HEALTH.h"
-
 long UpdateAutoFaceAngle(Instance *player, Instance *instance);
 
 int SetEngagedInstance(Player *player, evCollideInstanceStatsData *Ptr, unsigned long Attribute)
@@ -515,5 +502,3 @@ long UpdateAutoFaceAngle(Instance *player, Instance *instance)
 
     return (rc + 3072) & 0xFFF;
 }
-
-FORCE_RODATA_ALIGNMENT;

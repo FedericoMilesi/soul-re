@@ -16,6 +16,8 @@ void GAMELOOP_AllocStaticMemory();
 void GAMELOOP_InitGameTracker();
 void GAMELOOP_AddClearPrim(unsigned long **drawot, int override);
 void SaveOT();
+void GAMELOOP_Reset24FPS();
+void GAMELOOP_Set24FPS();
 
 GameTracker gameTrackerX;
 GameTracker *gameTracker;

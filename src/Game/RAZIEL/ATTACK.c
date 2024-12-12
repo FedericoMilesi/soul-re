@@ -1,24 +1,6 @@
-#include "common.h"
-#include "Game/RAZIEL/ATTACK.h"
-#include "Game/RAZIEL/RAZIEL.h"
-#include "Game/MATH3D.h"
-#include "Game/G2/ANMCTRLR.h"
-#include "Game/CAMERA.h"
-#include "Game/RAZIEL/RAZLIB.h"
-#include "Game/STATE.h"
-#include "Game/RAZIEL/STEERING.h"
-#include "Game/RAZIEL/HEALTH.h"
-#include "Game/RAZIEL/CONTROL.h"
-#include "Game/G2/ANMG2ILF.h"
-#include "Game/RAZIEL/SWIM.h"
-#include "Game/REAVER.h"
-#include "Game/FX.h"
-#include "Game/GAMELOOP.h"
-#include "Game/INSTANCE.h"
-#include "Game/STREAM.h"
-#include "Game/SOUND.h"
+void PointAt(Instance *instance, Position *Target, Rotation *Rot1);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerDecodeHold);
+INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerDecodeHold);
 
 void StateHandlerAttack2(CharacterState *In, int CurrentSection, intptr_t Data)
 {
@@ -786,7 +768,8 @@ void StateHandlerStumble(CharacterState *In, int CurrentSection, intptr_t Data)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerHitReaction);
+void StateHandlerHitReaction(CharacterState *In, int CurrentSection, intptr_t Data);
+INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerHitReaction);
 
 void StateHandlerThrow2(CharacterState *In, int CurrentSection, intptr_t Data)
 {
@@ -1264,4 +1247,4 @@ void LimitRotation(Rotation *rot)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/ATTACK", StateHandlerGrab);
+INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerGrab);

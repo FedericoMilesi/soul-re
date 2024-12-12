@@ -8,7 +8,6 @@
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONTABLE.h"
 #include "Game/MONSTER/MONSENSE.h"
-#include "Game/G2/ANMG2ILF.h"
 #include "Game/G2/INSTNCG2.h"
 #include "Game/COLLIDE.h"
 #include "Game/GENERIC.h"

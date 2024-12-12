@@ -8,7 +8,6 @@
 #include "Game/LIGHT3D.h"
 #include "Game/PSX/SUPPORT.h"
 #include "Game/G2/ANIMG2.h"
-#include "Game/G2/ANMG2ILF.h"
 #include "Game/G2/INSTNCG2.h"
 #include "Game/G2/QUATG2.h"
 #include "Game/MONSTER/HUMAN.h"
@@ -1199,7 +1198,7 @@ void INSTANCE_KillInstance(Instance *instance)
 
 uintptr_t INSTANCE_Query(Instance *Inst, int Query)
 {
-    uintptr_t(*Func)(Instance *, unsigned long);
+    uintptr_t (*Func)(Instance *, unsigned long);
 
     Func = Inst->queryFunc;
 

@@ -7,12 +7,13 @@ import subprocess
 import tempfile
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
-root_dir = os.path.abspath(os.path.join(script_dir, ".."))
+root_dir = os.path.abspath(os.path.join(script_dir, "../.."))
 src_dir = root_dir + "src/"
 
 # Project-specific
 CPP_FLAGS = [
     "-Iinclude",
+    "-Isrc",
     "-D__asm__(A)=",
     "-DTARGET_PSX",
     "-D__CTX__",

@@ -38,5 +38,6 @@ void processOneShotSound(Position *position, int hidden, int burning, long *trig
 unsigned long SndPlay(unsigned int sample);
 void SOUND_ResumeAllSound();
 void SOUND_PauseAllSound();
+int SndTypeIsPlayingOrRequested(unsigned int sfxToneID);
 
 #endif

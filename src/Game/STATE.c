@@ -1,7 +1,6 @@
 #include "common.h"
 #include "Game/STATE.h"
 #include "Game/G2/ANIMG2.h"
-#include "Game/G2/ANMG2ILF.h"
 #include "Game/MEMPACK.h"
 #include "Game/G2/INSTNCG2.h"
 #include "Game/INSTANCE.h"
@@ -1183,7 +1182,7 @@ void G2EmulationSetInterpController_Vector(Instance *instance, long segment, lon
 
 void StateSwitchStateDataDefault(CharacterState *In, int CurrentSection, void (*NewProcess)(), intptr_t Data)
 {
-    void(*process)();
+    void (*process)();
 
     process = In->SectionList[CurrentSection].Process;
 

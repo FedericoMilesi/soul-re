@@ -8,5 +8,6 @@ void ApplyExternalLocalForces(Player *player, Instance *instance, Force *Forces,
 void SetPhysics(Instance *instance, short gravity, long x, long y, long z);
 void SetDropPhysics(Instance *instance, Player *player);
 void ResetPhysics(Instance *instance, short gravity);
+void InitExternalForces(Force *Forces, int MaxForces);
 
 #endif

@@ -1,15 +1,17 @@
-#include "common.h"
-#include "Game/G2/ANMCTRLR.h"
-#include "Game/PSX/PSX_G2/QUATVM.h"
-#include "Game/G2/POOLMMG2.h"
-#include "Game/G2/TIMERG2.h"
-#include "Game/G2/ANMINTRP.h"
-#include "Game/MATH3D.h"
-#include "Game/HASM.h"
-#include "Game/G2/ANIMG2.h"
-#include "Game/G2/QUATG2.h"
-
-STATIC G2AnimControllerPool _controllerPool;
+void G2Anim_SetInterpController_Quat(G2Anim *anim, int segNumber, int type, G2Quat *quat, int duration);
+G2AnimController *_G2AnimController_Create(int segNumber, int type);
+G2AnimController *_G2AnimControllerST_FindPtrInList(int segNumber, int type, unsigned short **listPtrPtr);
+G2AnimController *_G2AnimController_Destroy(G2AnimController *controller);
+G2AnimController *_G2AnimControllerST_RemoveFromList(int segNumber, int type, unsigned short *listPtr);
+G2AnimController *_G2AnimControllerST_FindInList(int segNumber, int type, unsigned short *listPtr);
+void _G2AnimController_InsertIntoList(G2AnimController *controller, unsigned short *listPtr);
+void _G2AnimController_GetSimpleWorldRotQuat(G2AnimController *controller, G2Anim *anim, G2Quat *quat);
+G2AnimController *_G2Anim_FindController(G2Anim *anim, int segNumber, int type);
+void _G2AnimController_GetCurrentInterpQuat(G2AnimController *controller, G2Anim *anim, G2Quat *quat);
+void _G2AnimSection_ApplyControllersToStoredFrame(G2AnimSection *section);
+void _G2AnimController_GetMatrix(G2AnimController *controller, G2Matrix *matrix);
+void _G2AnimController_GetVector(G2AnimController *controller, G2SVector3 *vector);
+unsigned long _G2AnimController_ApplyToSegValue(G2AnimController *controller, G2AnimSegValue *segValue, G2Matrix *segMatrix, G2Matrix *parentMatrix);
 
 void G2Anim_AttachControllerToSeg(G2Anim *anim, int segNumber, int type)
 {
@@ -152,7 +154,7 @@ G2Bool G2Anim_IsControllerInterpolating(G2Anim *anim, int segNumber, int type)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_GetControllerCurrentInterpVector);
+INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_GetControllerCurrentInterpVector);
 
 void G2Anim_SetControllerCallbackData(G2Anim *anim, int segNumber, int type, void *callbackData)
 {
@@ -179,7 +181,7 @@ void G2Anim_SetController_Vector(G2Anim *anim, int segNumber, int type, G2SVecto
     controller->flags = (unsigned char)controller->flags;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", G2Anim_SetInterpController_Vector);
+INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_SetInterpController_Vector);
 
 void G2Anim_SetInterpController_Quat(G2Anim *anim, int segNumber, int type, G2Quat *quat, int duration)
 {
@@ -217,11 +219,12 @@ void _G2Anim_ApplyControllersToStoredFrame(G2Anim *anim)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2Anim_BuildTransformsWithControllers);
+void _G2Anim_BuildTransformsWithControllers(G2Anim *anim);
+INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_BuildTransformsWithControllers);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2Anim_BuildSegTransformWithControllers);
+INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_BuildSegTransformWithControllers);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_ApplyToSegValue);
+INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimController_ApplyToSegValue);
 
 void _G2Anim_UpdateControllers(G2Anim *anim)
 {
@@ -300,7 +303,6 @@ void _G2Anim_CopyVectorWithOrder(G2SVector3 *sourceVector, G2EulerAngles *destVe
     }
 }
 
-G2AnimSegValue _segValues[80]; // TODO: delete, this is duplicated from ANMINTRP.c
 void _G2AnimSection_ApplyControllersToStoredFrame(G2AnimSection *section)
 {
     G2Anim *anim;
@@ -378,7 +380,7 @@ void _G2AnimSection_ApplyControllersToStoredFrame(G2AnimSection *section)
                                 G2SVector3 *dest;
                                 unsigned long mask;
                                 unsigned short z;
-                                //unsigned long xy; unused         
+                                // unsigned long xy; unused
 
                                 dest = &segValue->rotQuat.rot;
 
@@ -486,7 +488,7 @@ void _G2AnimController_GetMatrix(G2AnimController *controller, G2Matrix *matrix)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANMCTRLR", _G2AnimController_GetVector);
+INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimController_GetVector);
 
 G2AnimController *_G2Anim_FindController(G2Anim *anim, int segNumber, int type)
 {
@@ -546,7 +548,7 @@ void _G2AnimController_InsertIntoList(G2AnimController *controller, unsigned sho
 {
     G2AnimController *testController;
 
-    for (testController = &_controllerPool.blockPool[*listPtr]; _controllerPool.blockPool < testController; )
+    for (testController = &_controllerPool.blockPool[*listPtr]; _controllerPool.blockPool < testController;)
     {
         if ((testController->segNumber <= controller->segNumber) && ((testController->segNumber != controller->segNumber) || (testController->type <= controller->type)))
         {

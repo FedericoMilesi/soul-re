@@ -1,8 +1,6 @@
-#include "common.h"
-#include "Game/G2/ANMG2ILF.h"
-#include "Game/G2/ANMINTRP.h"
-#include "Game/G2/TIMERG2.h"
-#include "Game/G2/ANIMG2.h"
+void G2AnimSection_SetLoopRangeAll(G2AnimSection *section);
+void G2AnimSection_SwitchToKeylist(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID);
+void G2AnimSection_SetNotRewinding(G2AnimSection *section);
 
 short G2Anim_GetElapsedTime(G2Anim *anim)
 {
@@ -31,7 +29,7 @@ void G2Anim_GetRootMotionOverInterval(G2Anim *anim, short intervalStart, short i
     G2Anim_GetRootMotionFromTimeForDuration(anim, intervalStart, temp, motionVector);
 }
 
-//void G2Anim_InterpToKeylistFrame(G2Anim *anim, G2AnimKeylist *keylist, int keylistID, int targetFrame, int duration)
+// void G2Anim_InterpToKeylistFrame(G2Anim *anim, G2AnimKeylist *keylist, int keylistID, int targetFrame, int duration)
 void G2Anim_InterpToKeylistFrame(G2Anim *anim, G2AnimKeylist *keylist, int keylistID, int targetFrame, short duration)
 {
     int i;

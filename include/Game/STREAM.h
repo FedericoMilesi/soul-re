@@ -57,5 +57,6 @@ StreamUnit *STREAM_WhichUnitPointerIsIn(void *pointer);
 void STREAM_AbortAreaLoad(char *baseAreaName);
 void STREAM_NextLoadFromHead();
 void STREAM_DumpLoadingObjects();
+void STREAM_MORPH_Relocate();
 
 #endif
