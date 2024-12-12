@@ -398,7 +398,130 @@ int PhysicsUpdateTface(Instance *instance, intptr_t Data)
     return 0;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckBlockers);
+#else
+int PhysicsCheckBlockers(Instance *instance, GameTracker *gameTracker, intptr_t Data, short Mode)
+{
+    evPhysicsEdgeData *Ptr;
+    VECTOR OutTrans;
+    PCollideInfo CInfo;
+    SVECTOR Old;
+    SVECTOR New;
+    STATIC MATRIX *pTempMat;
+    TFace *tface;
+    int Dot;
+    SVECTOR Force;
+    // HFace *hface; unused
+    char temp[8]; // not from decls.h
+
+    (void)gameTracker;
+    (void)temp;
+
+    Ptr = (evPhysicsEdgeData *)Data;
+
+    Ptr->rc = 0;
+
+    Ptr->instance = NULL;
+
+    CInfo.oldPoint = &Old;
+    CInfo.newPoint = &New;
+
+    PHYSICS_GenericLineCheckSetup(0, 0, 0, &Old);
+    PHYSICS_GenericLineCheckSetup(0, Ptr->ForwardOffset, 0, &New);
+
+    PHYSICS_GenericLineCheck(instance, &instance->matrix[1], instance->matrix, &CInfo);
+
+    pTempMat = instance->matrix;
+
+    if ((CInfo.type == 3) || (CInfo.type == 5) || (CInfo.type == 2))
+    {
+        tface = (TFace *)CInfo.prim;
+
+        Force.vy = 0;
+        Force.vx = 0;
+        Force.vy = -4096;
+
+        ApplyMatrix(pTempMat, &Force, &OutTrans);
+
+        Dot = CInfo.wNormal.vx * OutTrans.vx;
+
+        Dot += CInfo.wNormal.vy * OutTrans.vy;
+        Dot += CInfo.wNormal.vz * OutTrans.vz;
+
+        Dot /= 4096;
+
+        if ((CInfo.type == 3) && (tface->textoff != 0xFFFF) && ((((TextureFT3 *)((char *)((Level *)&CInfo.inst->node)->terrain->StartTextureList + tface->textoff))->attr & 0x1000)))
+        {
+            if (Dot > -3784)
+            {
+                return Ptr->rc;
+            }
+        }
+        else if (Dot >= -4032)
+        {
+            return Ptr->rc;
+        }
+
+        if ((Mode & 0x1))
+        {
+            Ptr->Normal1->x = CInfo.wNormal.vx;
+            Ptr->Normal1->y = CInfo.wNormal.vy;
+            Ptr->Normal1->z = CInfo.wNormal.vz;
+
+            Ptr->Delta->y = CInfo.newPoint->vy;
+            Ptr->Delta->x = CInfo.newPoint->vx;
+            Ptr->Delta->z = CInfo.newPoint->vz;
+        }
+
+        if ((CInfo.type == 3) && (tface->textoff != 0xFFFF) && ((((TextureFT3 *)((char *)((Level *)&CInfo.inst->node)->terrain->StartTextureList + tface->textoff))->attr & 0x1000)))
+        {
+            Ptr->rc |= 0x20000;
+        }
+
+        Ptr->rc |= 0x2;
+
+        Old.vx = 0;
+        Old.vy = -16;
+        Old.vz = 0;
+
+        ApplyMatrix(pTempMat, &Old, &OutTrans);
+
+        New.vx = CInfo.newPoint->vx + (short)OutTrans.vx;
+        New.vy = CInfo.newPoint->vy + (short)OutTrans.vy;
+        New.vz = CInfo.newPoint->vz + (short)OutTrans.vz;
+
+        Old.vx = New.vx;
+        Old.vy = New.vy;
+        Old.vz = New.vz + Ptr->AboveOffset;
+
+        PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+        if ((CInfo.type == 3) || (CInfo.type == 5))
+        {
+            if ((Mode & 0x1))
+            {
+                Ptr->Normal2->x = CInfo.wNormal.vx;
+                Ptr->Normal2->y = CInfo.wNormal.vy;
+                Ptr->Normal2->z = CInfo.wNormal.vz;
+            }
+
+            if (CInfo.wNormal.vz > 2896)
+            {
+                Ptr->rc |= 0x4;
+            }
+        }
+
+        if ((Mode & 0x2))
+        {
+            INSTANCE_Post(instance, 0x4010400, Data);
+        }
+    }
+
+    return Ptr->rc;
+}
+#endif
 
 int PhysicsCheckSwim(Instance *instance, intptr_t Data, short Mode)
 {
