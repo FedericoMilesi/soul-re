@@ -27,5 +27,7 @@ void PHYSICS_GenericLineCheckSetup(short x, short y, short z, SVECTOR *inVec);
 int PHYSICS_CheckForTerrainCollide(Instance *instance, SVECTOR *startVec, SVECTOR *endVec, int segment);
 int PhysicsUpdateTface(Instance *instance, intptr_t Data);
 void PhysicsForceSetWater(Instance *instance, int *Time, int Depth, int rate, int maxAmplitude);
+int PHYSICS_CheckDontGrabEdge(PCollideInfo *CInfo);
+void PhysicsDefaultEdgeGrabResponse(Instance *instance, evPhysicsEdgeData *Data, int blockFlag);
 
 #endif

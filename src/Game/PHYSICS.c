@@ -550,7 +550,226 @@ void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Dat
     }
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckEdgeGrabbing);
+#else
+int PhysicsCheckEdgeGrabbing(Instance *instance, GameTracker *gameTracker, intptr_t Data, short Mode)
+{
+    evPhysicsEdgeData *Ptr;
+    int rc;
+    VECTOR OutTrans;
+    SVECTOR *ExtraRot;
+    PCollideInfo CInfo;
+    SVECTOR Old;
+    SVECTOR New;
+    STATIC MATRIX TempMat;
+    STATIC MATRIX *pTempMat;
+    int wallCrawl;
+    int freeSpot;
+    char temp; // not from decls.h
+
+    (void)gameTracker;
+
+    rc = 0;
+
+    wallCrawl = 0;
+
+    freeSpot = 1;
+
+    Ptr = (evPhysicsEdgeData *)Data;
+
+    if ((Mode & 0x1))
+    {
+        Ptr->instance = NULL;
+    }
+
+    CInfo.oldPoint = &Old;
+    CInfo.newPoint = &New;
+
+    ExtraRot = (SVECTOR *)INSTANCE_Query(instance, 7);
+
+    if (ExtraRot != NULL)
+    {
+        pTempMat = &TempMat;
+
+        RotMatrix(ExtraRot, &TempMat);
+    }
+    else
+    {
+        pTempMat = instance->matrix;
+    }
+
+    PHYSICS_GenericLineCheckSetup(0, 0, Ptr->UpperOffset + Ptr->AboveOffset, &Old);
+    PHYSICS_GenericLineCheckSetup(0, Ptr->ForwardOffset, Ptr->UpperOffset + Ptr->AboveOffset, &New);
+
+    PHYSICS_GenericLineCheck(instance, instance->matrix, pTempMat, &CInfo);
+
+    // garbage code for reordering
+    if (freeSpot != 0)
+    {
+        temp = -temp;
+    }
+
+    if (PHYSICS_CheckFaceStick(&CInfo) != 0)
+    {
+        wallCrawl++;
+    }
+
+    if (CInfo.type == 0)
+    {
+        PHYSICS_GenericLineCheckSetup(0, 0, Ptr->AboveOffset, &Old);
+        PHYSICS_GenericLineCheckSetup(0, 0, (Ptr->UpperOffset + Ptr->AboveOffset) + 128, &New);
+
+        PHYSICS_GenericLineCheck(instance, instance->matrix, pTempMat, &CInfo);
+    }
+
+    if (CInfo.type != 0)
+    {
+        freeSpot = 0;
+    }
+
+    if ((freeSpot != 0) || (wallCrawl != 0))
+    {
+        New.vx = 0;
+        New.vy = 0;
+        New.vz = Ptr->UpperOffset;
+
+        gte_SetRotMatrix(&pTempMat->m[0][0]);
+        gte_ldv0(&New.vx);
+        gte_nrtv0();
+        gte_stlvnl(&OutTrans);
+
+        Old.vx = instance->position.x + (short)OutTrans.vx;
+        Old.vy = instance->position.y + (short)OutTrans.vy;
+        Old.vz = instance->position.z + (short)OutTrans.vz;
+
+        New.vx = 0;
+        New.vy = Ptr->ForwardOffset;
+        New.vz = Ptr->UpperOffset;
+
+        gte_SetRotMatrix(&pTempMat->m[0][0]);
+        gte_ldv0(&New.vx);
+        gte_nrtv0();
+        gte_stlvnl(&OutTrans);
+
+        New.vx = instance->position.x + (short)OutTrans.vx;
+        New.vy = instance->position.y + (short)OutTrans.vy;
+        New.vz = instance->position.z + (short)OutTrans.vz;
+
+        PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+        if (PHYSICS_CheckDontGrabEdge(&CInfo) == 0)
+        {
+            if (((CInfo.type == 3) || (CInfo.type == 5) || (CInfo.type == 2)) && (CInfo.wNormal.vz < 2048))
+            {
+                if (PHYSICS_CheckFaceStick(&CInfo) != 0)
+                {
+                    wallCrawl++;
+                }
+
+                if ((Mode & 0x1))
+                {
+                    Ptr->Normal1->x = CInfo.wNormal.vx;
+                    Ptr->Normal1->y = CInfo.wNormal.vy;
+                    Ptr->Normal1->z = CInfo.wNormal.vz;
+
+                    Ptr->Delta->y = CInfo.newPoint->vy - CInfo.oldPoint->vy;
+                    Ptr->Delta->x = CInfo.newPoint->vx - CInfo.oldPoint->vx;
+
+                    if ((CInfo.type == 5) || (CInfo.type == 2))
+                    {
+                        Ptr->instance = CInfo.inst;
+                    }
+                }
+
+                rc |= 0x2;
+
+                Old.vx = 0;
+                Old.vy = -16;
+                Old.vz = 0;
+
+                gte_SetRotMatrix(&pTempMat->m[0][0]);
+                gte_ldv0(&Old.vx);
+                gte_nrtv0();
+                gte_stlvnl(&OutTrans);
+
+                New.vx = CInfo.newPoint->vx + (short)OutTrans.vx;
+                New.vy = CInfo.newPoint->vy + (short)OutTrans.vy;
+                New.vz = CInfo.newPoint->vz + (short)OutTrans.vz;
+
+                Old.vx = New.vx;
+                Old.vy = New.vy;
+                Old.vz = New.vz + Ptr->AboveOffset;
+
+                PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+                if (PHYSICS_CheckDontGrabEdge(&CInfo) == 0)
+                {
+                    if (((CInfo.type == 3) || (CInfo.type == 5) || (CInfo.type == 2)) && (CInfo.wNormal.vz >= 3548))
+                    {
+                        if ((Mode & 0x1))
+                        {
+                            Ptr->Normal2->x = CInfo.wNormal.vx;
+                            Ptr->Normal2->y = CInfo.wNormal.vy;
+                            Ptr->Normal2->z = CInfo.wNormal.vz;
+
+                            Ptr->Delta->z = CInfo.newPoint->vz - CInfo.oldPoint->vz;
+
+                            if ((CInfo.type == 5) || (CInfo.type == 2))
+                            {
+                                Ptr->instance = CInfo.inst;
+                            }
+                        }
+
+                        if (CInfo.wNormal.vz > 2896)
+                        {
+                            rc |= 0x4;
+
+                            if ((Mode & 0x2))
+                            {
+                                INSTANCE_Post(instance, 0x4010010, Data);
+                            }
+
+                            if ((Mode & 0x4))
+                            {
+                                PhysicsDefaultEdgeGrabResponse(instance, Ptr, 0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    else if ((CInfo.type == 3) || (CInfo.type == 5) || (CInfo.type == 2))
+    {
+        if ((Mode & 0x1))
+        {
+            Ptr->Normal1->x = CInfo.wNormal.vx;
+            Ptr->Normal1->y = CInfo.wNormal.vy;
+            Ptr->Normal1->z = CInfo.wNormal.vz;
+
+            Ptr->Delta->y = CInfo.newPoint->vy - CInfo.oldPoint->vy;
+            Ptr->Delta->x = CInfo.newPoint->vx - CInfo.oldPoint->vx;
+            Ptr->Delta->z = 0;
+
+            if ((CInfo.type == 5) || (CInfo.type == 2))
+            {
+                Ptr->instance = CInfo.inst;
+            }
+        }
+
+        rc |= 0x2;
+    }
+
+    if (((Mode & 0x2)) && (wallCrawl == 2))
+    {
+        INSTANCE_Post(instance, 0x4000011, Data);
+    }
+
+    return rc;
+}
+#endif
 
 void PhysicsDefaultEdgeGrabResponse(Instance *instance, evPhysicsEdgeData *Data, int blockFlag)
 {
