@@ -839,7 +839,70 @@ StreamUnit *GAMELOOP_GetMainRenderUnit()
 static char D_800D0780[] = "Cameraunit: %s\n";
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DisplayFrame);
 
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DrawSavedOT);
+void GAMELOOP_DrawSavedOT(unsigned long **newOT)
+{
+    void *tag;
+    int y;
+
+    y = draw[gameTrackerX.drawPage].ofs[1];
+    for (tag = gameTrackerX.savedOTStart; tag != (P_TAG *)gameTrackerX.savedOTEnd; tag = (P_TAG *)nextPrim(tag))
+    {
+        int mask = ~0x10;
+
+        if ((getcode(tag) & ~3) == 0x34)
+        {
+            int tpage;
+            tpage = ((POLY_GT3 *)tag)->tpage;
+
+            if ((tpage & 0xF) < 8)
+            {
+                if (y != 0)
+                {
+                    ((POLY_GT3 *)tag)->tpage |= 0x10;
+                }
+                else
+                {
+                    ((POLY_GT3 *)tag)->tpage &= mask;
+                }
+            }
+        }
+        else if ((getcode(tag) & ~3) == 0x24)
+        {
+            int tpage;
+            tpage = ((POLY_FT3 *)tag)->tpage;
+
+            if ((tpage & 0xF) < 8)
+            {
+                if (y != 0)
+                {
+                    ((POLY_FT3 *)tag)->tpage |= 0x10;
+                }
+                else
+                {
+                    ((POLY_FT3 *)tag)->tpage &= mask;
+                }
+            }
+        }
+        else if (getcode(tag) == 0xE3)
+        {
+            if (y != 0)
+            {
+                ((DR_TPAGE *)tag)->code[0] |= 0x40000;
+                ((DR_TPAGE *)tag)->code[1] |= 0x40000;
+            }
+            else
+            {
+                ((DR_TPAGE *)tag)->code[0] &= ~0x40000;
+                ((DR_TPAGE *)tag)->code[1] &= ~0x40000;
+            }
+        }
+    }
+
+    tag = gameTrackerX.savedOTEnd;
+    setaddr(tag, &newOT[3071]);
+
+    DrawOTag((unsigned long *)gameTrackerX.savedOTStart);
+}
 
 void ResetPrimPool()
 {

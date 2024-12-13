@@ -8,6 +8,7 @@
 #include "Game/TIMER.h"
 #include "Game/MATH3D.h"
 #include "Game/PLAN/PLANCOLL.h"
+#include "Game/HASM.h"
 
 STATIC PoolManagementData poolManagementDataStorage;
 

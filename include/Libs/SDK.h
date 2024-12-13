@@ -222,6 +222,12 @@
 
 #define setcode(p, _code) (((P_TAG *)(p))->code = (u_char)(_code))
 
+#define getcode(p) (u_char)(((P_TAG *)(p))->code)
+
+#define setaddr(p, _addr) (((P_TAG *)(p))->addr = (uintptr_t)(_addr))
+
+#define nextPrim(p) (void *)((((P_TAG *)(p))->addr) | (intptr_t)0x80000000)
+
 #define setlen(p, _len) (((P_TAG *)(p))->len = (u_char)(_len))
 
 #define _get_mode(dfe, dtd, tpage)         \

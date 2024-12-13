@@ -1,8 +1,5 @@
 #include "common.h"
-
-long depthQFogStart; // not from decls.h
-
-long depthQBlendStart; // not from decls.h
+#include "Game/HASM.h"
 
 static inline int LIGHT3D_FixedDivision(long a, long b)
 {

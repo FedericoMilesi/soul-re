@@ -4,6 +4,4 @@
 unsigned long TIMER_TimeDiff(unsigned long x);
 unsigned long TIMER_GetTimeMS();
 
-extern volatile int gameTimer;
-
 #endif
