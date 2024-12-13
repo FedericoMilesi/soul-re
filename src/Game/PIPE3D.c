@@ -12,16 +12,6 @@
 #include "Game/DRAW.h"
 #include "Game/G2/QUATG2.h"
 
-long depthQBackColor; // not from decls.h
-
-long depthQFogStart; // not from decls.h
-
-long depthQBlendStart; // not from decls.h
-
-long modelFadeValue; // not from decls.h
-
-long draw_belowSplit;
-
 void PIPE3D_AspectAdjustMatrix(MATRIX *matrix)
 {
     int temp, temp2, temp3; // not from decls.h

@@ -30,6 +30,7 @@
 #include "Game/FONT.h"
 #include "Game/DRAW.h"
 #include "Game/LIST.h"
+#include "Game/HASM.h"
 
 short M_TrackClutUpdate;
 

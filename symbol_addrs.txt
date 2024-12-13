@@ -1,3 +1,17 @@
+D_1F800000                     = 0x1F800000; // ignore:true
+D_1F800004                     = 0x1F800004; // ignore:true
+D_1F800008                     = 0x1F800008; // ignore:true
+D_1F800020                     = 0x1F800020; // ignore:true
+D_1F800034                     = 0x1F800034; // ignore:true
+D_1F800040                     = 0x1F800040; // ignore:true
+D_1F800048                     = 0x1F800048; // ignore:true
+D_1F800060                     = 0x1F800060; // ignore:true
+D_80000000                     = 0x80000000; // ignore:true
+D_80000003                     = 0x80000003; // ignore:true
+D_80000004                     = 0x80000004; // ignore:true
+D_80000007                     = 0x80000007; // ignore:true
+D_8000001A                     = 0x8000001A; // ignore:true
+
 // DATA SYMBOLS
 standardMenu                   = 0x800C8090; // type:s32 size:288
 saveMenu                       = 0x800C81B0; // type:s32 size:96

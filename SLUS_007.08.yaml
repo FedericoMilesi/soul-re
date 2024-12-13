@@ -33,6 +33,7 @@ options:
   ld_bss_is_noload: True
   subalign: 4
   migrate_rodata_to_functions: True
+  hasm_in_src_path: True
 
 segments:
   - name: header
@@ -77,7 +78,7 @@ segments:
       - [0x0052A4, _c, Game/CAMERA]
       - [0x00E3F8, _c, Game/SIGNAL]
       - [0x00F018, _c, Game/COLLIDE]
-      - [0x0159AC, asm, Game/HASM_1]
+      - [0x0159AC, hasm, Game/HASM_1]
       - [0x01B110, _c, Game/DRAW]
       - [0x01D6D4, _c, Game/FONT]
       - [0x01E328, _c, Game/GAMELOOP]
@@ -115,7 +116,7 @@ segments:
       - [0x063644, _c, Game/VRAM]
       - [0x064C18, _c, Game/PSX/SUPPORT]
       - [0x0650D0, _c, Game/PHYSICS]
-      - [0x0689E4, asm, Game/HASM_2]
+      - [0x0689E4, hasm, Game/HASM_2]
       - [0x06A7F0, _c, Game/REAVER]
       - [0x06B364, _c, Game/GLYPH]
       - [0x06D3A4, _c, Game/RELMOD]
@@ -150,7 +151,7 @@ segments:
       - [0x08B10C, _c, Game/RAZIEL/RAZIEL]
       - [0x0A5038, _c, Game/UNDRWRLD]
       - [0x0A59F8, _c, Game/SAVEINFO]
-      - [0x0A71F8, asm, Game/ENTRYPOINT.s]
+      - [0x0A71F8, hasm, Game/ENTRYPOINT]
       - [0x0A72E0, _c, Game/VOICEXA]
       - [0x0A7C34, _c, Game/CINEMA/CINEPSX]
       - [0x0A7E30, _c, Game/LOCAL/LOCALSTR]
@@ -177,7 +178,7 @@ segments:
       - [0x0BCE80, data, Game/MONSTER/VWRAITH]
       - [0x0BCED4, data, Game/MONSTER/WORSHIP]
       - [0x0BCF10, data, Game/G2/ANIMG2]
-      - [0x0BD050, data, Game/ENTRYPOINT]
+      - [0x0BD050, .data, Game/ENTRYPOINT]
       - [0x0BD074, data, Game/CINEMA/CINEPSX]
       - [0x0BD07C, data, Game/MENU/MENUUTIL]
       - [0x0BD0AC, data, Game/MENU/MENUDEFS]
@@ -187,7 +188,7 @@ segments:
       - [0x0C0BA0, .sdata, Game/CAMERA]
       - [0x0C0C08, .sdata, Game/SIGNAL]
       - [0x0C0D6C, .sdata, Game/COLLIDE]
-      - [0x0C0DDC, sdata] # HASM_1/DRAW
+      - [0x0C0DDC, .sdata, Game/HASM_1]
       - [0x0C0E38, sdata, Game/FONT]
       - [0x0C0F0C, .sdata, Game/GAMELOOP]
       - [0x0C0FC0, .sdata, Game/GAMEPAD]
@@ -280,7 +281,7 @@ segments:
       - {start: 0x0C28AC, type: sbss, vram: 0x800D6BB8, name: Game/RAZIEL/RAZIEL}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D7364, name: Game/UNDRWRLD}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D7374, name: Game/SAVEINFO}
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D7484, name: Game/ENTRYPOINT}
+      - {start: 0x0C28AC, type: .sbss, vram: 0x800D7484, name: Game/ENTRYPOINT}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D7488, name: Game/VOICEXA}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D75B0, name: Game/LOCAL/LOCALSTR}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D75B4, name: Game/MENU/MENUDEFS}

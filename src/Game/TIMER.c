@@ -1,5 +1,6 @@
 #include "common.h"
 #include "Game/TIMER.h"
+#include "Game/HASM.h"
 
 long gTimerEnabled = 0;
 
@@ -25,7 +26,7 @@ unsigned long TIMER_TimeDiff(unsigned long x)
     unsigned long ticks;
     unsigned long prevIntrs;
     unsigned long prevTicks;
-    //unsigned long diffIntrs; // unused
+    // unsigned long diffIntrs; // unused
     unsigned long diffTicks;
     unsigned long timeDiff;
 
