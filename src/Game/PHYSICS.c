@@ -13,6 +13,15 @@
 #include "Game/FX.h"
 #include "Game/G2/QUATG2.h"
 
+static inline int PHYSICS_FixedMultiplication(short a, short b, long c)
+{
+    long r;
+
+    r = a * b * c;
+
+    return r / 4096;
+}
+
 void SetNoPtCollideInFamily(Instance *instance)
 {
     Instance *child;
@@ -252,6 +261,279 @@ void PhysicsDefaultLinkedMoveResponse(Instance *instance, evPhysicsLinkedMoveDat
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckGravity);
+/* TODO: Have to find a way to get this to compile - it likely doesn't because of the compound literal
+int PhysicsCheckGravity(Instance *instance, intptr_t Data, short Mode)
+{
+    evPhysicsGravityData *Ptr;
+    SVECTOR D;
+    SVECTOR N;
+    short Dot;
+    int rc;
+    PCollideInfo CInfo;
+    SVECTOR Old;
+    SVECTOR New;
+    int slide;
+    int stillOnOldTFace;
+    Level *level;
+    TFace *tface;
+    Instance *oldOn;
+    // int dx; unused
+    // int dy; unused
+    // int dz; unused
+
+    D = (SVECTOR){.vx = 0, .vy = 0, .vz = (short)61440};
+
+    Ptr = (evPhysicsGravityData *)Data;
+
+    rc = 0;
+
+    slide = 0;
+
+    CInfo.oldPoint = &Old;
+    CInfo.newPoint = &New;
+
+    Old.vx = New.vx = instance->position.x;
+    Old.vy = New.vy = instance->position.y;
+    Old.vz = New.vz = instance->position.z;
+
+    Old.vz += Ptr->UpperOffset;
+    New.vz -= Ptr->LowerOffset;
+
+    if (Old.vz < New.vz)
+    {
+        CInfo.type = 0;
+    }
+    else
+    {
+        if ((instance->cachedTFace != -1) && (instance->cachedTFaceLevel != NULL))
+        {
+            tface = NULL;
+
+            level = STREAM_GetLevelWithID(((Level *)instance->cachedTFaceLevel)->streamUnitID);
+
+            gameTrackerX.gameFlags |= 0x8000;
+
+            if (level != NULL)
+            {
+                tface = &level->terrain->faceList[instance->cachedTFace];
+
+                stillOnOldTFace = COLLIDE_PointAndTfaceFunc(level->terrain, &level->terrain->BSPTreeArray[instance->cachedBSPTree], (SVector *)&New, (SVector *)&Old, tface, 0, 0);
+            }
+            else
+            {
+                stillOnOldTFace = 0;
+            }
+
+            if (stillOnOldTFace == 0)
+            {
+                instance->waterFace = NULL;
+
+                PHYSICS_CheckLineInWorld(instance, &CInfo);
+            }
+            else
+            {
+                CInfo.type = 3;
+
+                CInfo.prim = tface;
+
+                CInfo.inst = (Instance *)level;
+
+                CInfo.segment = instance->cachedBSPTree;
+
+                COLLIDE_GetNormal((short)tface->normal, (short *)level->terrain->normalList, (SVector *)&CInfo.wNormal);
+            }
+        }
+        else
+        {
+            instance->waterFace = NULL;
+
+            gameTrackerX.gameFlags |= 0x8000;
+
+            PHYSICS_CheckLineInWorld(instance, &CInfo);
+        }
+
+        gameTrackerX.gameFlags &= ~0x8000;
+    }
+
+    if (((CInfo.type == 2) || (CInfo.type == 3) || (CInfo.type == 5)) && ((CInfo.wNormal.vz < Ptr->slipSlope) && (CInfo.wNormal.vz > 0)))
+    {
+        N.vx = PHYSICS_FixedMultiplication(CInfo.wNormal.vx, -CInfo.wNormal.vz, -1);
+        N.vy = PHYSICS_FixedMultiplication(CInfo.wNormal.vy, -CInfo.wNormal.vz, -1);
+        N.vz = PHYSICS_FixedMultiplication(CInfo.wNormal.vz, -CInfo.wNormal.vz, 1);
+
+        N.vz = D.vz - N.vz;
+
+        Dot = (short)((instance->zVel < -48) ? -instance->zVel : 48);
+
+        Old.vx = New.vx = CInfo.newPoint->vx + ((N.vx * Dot) / 4096);
+        Old.vy = New.vy = CInfo.newPoint->vy + ((N.vy * Dot) / 4096);
+        Old.vz = New.vz = CInfo.newPoint->vz + ((N.vz * Dot) / 4096);
+
+        Old.vz += Ptr->UpperOffset;
+        New.vz -= Ptr->LowerOffset;
+
+        PHYSICS_CheckLineInWorld(instance, &CInfo);
+
+        if ((CInfo.type == 2) || (CInfo.type == 3) || (CInfo.type == 5))
+        {
+            if ((CInfo.wNormal.vz < Ptr->slipSlope) && (CInfo.wNormal.vz > 0))
+            {
+                slide = 1;
+            }
+            else
+            {
+                instance->position.x = CInfo.newPoint->vx;
+                instance->position.y = CInfo.newPoint->vy;
+            }
+        }
+    }
+
+    if (CInfo.type == 3)
+    {
+        instance->cachedBSPTree = CInfo.segment;
+
+        instance->cachedTFace = (TFace *)CInfo.prim - ((Level *)CInfo.inst)->terrain->faceList;
+
+        instance->cachedTFaceLevel = CInfo.inst;
+    }
+    else
+    {
+        instance->cachedTFace = -1;
+
+        instance->cachedTFaceLevel = NULL;
+    }
+
+    if ((CInfo.type == 2) || (CInfo.type == 3) || (CInfo.type == 5))
+    {
+        if ((Mode & 0x7))
+        {
+            if (slide != 0)
+            {
+                Ptr->x = CInfo.newPoint->vx - instance->position.x;
+                Ptr->y = CInfo.newPoint->vy - instance->position.y;
+            }
+            else
+            {
+                Ptr->x = 0;
+                Ptr->y = 0;
+            }
+
+            Ptr->z = CInfo.newPoint->vz - instance->position.z;
+        }
+
+        if (((Mode & 0x2)) && (slide == 0))
+        {
+            INSTANCE_Post(instance, 0x4010008, Data);
+        }
+
+        if (slide == 1)
+        {
+            if ((Mode & 0x2))
+            {
+                INSTANCE_Post(instance, 0x4010200, Data);
+            }
+
+            rc |= 0x100000;
+        }
+
+        if (((Mode & 0x4)) && ((CheckPhysOb(instance) == 0) || (CheckPhysObFamily(instance, 1) == 0) || (instance->attachedID == 0)))
+        {
+            PhysicsDefaultGravityResponse(instance, Ptr);
+        }
+
+        if (CInfo.type != 1)
+        {
+            instance->wNormal.x = CInfo.wNormal.vx;
+            instance->wNormal.y = CInfo.wNormal.vy;
+            instance->wNormal.z = CInfo.wNormal.vz;
+        }
+        else
+        {
+            instance->wNormal.x = 0;
+            instance->wNormal.y = 0;
+            instance->wNormal.z = 4096;
+        }
+
+        if ((CInfo.type != 3) && (CInfo.inst != NULL) && ((CInfo.inst->object->oflags & 0x400)))
+        {
+            rc |= PhysicsCheckLinkedMove(instance, SetPhysicsLinkedMoveData(CInfo.inst, CInfo.segment, NULL, NULL), Mode);
+        }
+        else
+        {
+            if (instance->attachedID != 0)
+            {
+                oldOn = INSTANCE_Find(instance->attachedID);
+
+                if (oldOn != NULL)
+                {
+                    oldOn->flags2 &= ~0x80;
+                }
+            }
+
+            instance->attachedID = 0;
+        }
+
+        if ((instance->flags2 & 0x40))
+        {
+            instance->shadowPosition = instance->position;
+
+            instance->flags |= 0x8000000;
+        }
+
+        if (CInfo.type == 3)
+        {
+            if (instance->tface != CInfo.prim)
+            {
+                instance->oldTFace = instance->tface;
+
+                instance->tface = (TFace *)CInfo.prim;
+
+                instance->tfaceLevel = CInfo.inst;
+
+                instance->bspTree = CInfo.segment;
+
+                if (CInfo.segment == 0)
+                {
+                    rc |= 0x80000;
+                }
+            }
+        }
+        else if (instance->tface != NULL)
+        {
+            instance->oldTFace = instance->tface;
+
+            instance->tface = NULL;
+
+            instance->tfaceLevel = NULL;
+
+            instance->bspTree = 0;
+        }
+
+        rc |= 0x1;
+    }
+    else
+    {
+        if (instance->tface != NULL)
+        {
+            instance->oldTFace = instance->tface;
+
+            instance->tface = NULL;
+
+            instance->tfaceLevel = NULL;
+
+            instance->bspTree = 0;
+        }
+
+        instance->attachedID = 0;
+
+        if ((Mode & 0x2))
+        {
+            INSTANCE_Post(instance, 0x4000001, Data);
+        }
+    }
+
+    return rc;
+}*/
 
 void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Data)
 {
