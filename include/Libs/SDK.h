@@ -220,6 +220,48 @@
 // custom macro
 #define gte_nrtvx() gte_nmvmva(1, 0, 0, 0, 0)
 
+// custom macro
+#define gte_ldv0sv(r0) __asm__ volatile( \
+    "lhu	$12, 0( %0 );"                  \
+    "lhu	$13, 2( %0 );"                  \
+    "lhu	$14, 4( %0 );"                  \
+    "or     $12, $13;"                   \
+    "ctc2	$12, $0;"                      \
+    "ctc2	$14, $1;"                      \
+    "nop;"                               \
+    "nop;"                               \
+    :                                    \
+    : "r"(r0)                            \
+    : "$12", "$13", "$14")
+
+#define gte_rtir12() gte_mvmva(1, 0, 3, 3, 0)
+
+#define gte_stlvnl0(r0) __asm__( \
+    "swc2    $25, 0(%0)"         \
+    : : "r"(r0)                  \
+    : "memory")
+
+#define gte_gpf(sf) __asm__( \
+    ".word %0"               \
+    : : "g"(0x4B90003D | ((sf) & 0x1) << 19))
+
+#define gte_gpf12() gte_gpf(1)
+
+#define gte_stlvl(r0) __asm__( \
+    "swc2    $9, 0(%0);"       \
+    "swc2    $10, 4(%0);"      \
+    "swc2    $11, 8(%0)"       \
+    : : "r"(r0)                \
+    : "memory")
+
+#define gte_ngpf(sf) __asm__( \
+    "nop;"                    \
+    "nop;"                    \
+    ".word %0"                \
+    : : "g"(0x4B90003D | ((sf) & 0x1) << 19))
+
+#define gte_ngpf12() gte_ngpf(1)
+
 #define setcode(p, _code) (((P_TAG *)(p))->code = (u_char)(_code))
 
 #define getcode(p) (u_char)(((P_TAG *)(p))->code)
