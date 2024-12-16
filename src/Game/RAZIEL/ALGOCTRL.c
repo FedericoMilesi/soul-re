@@ -74,7 +74,22 @@ void DeInitAlgorithmicWings(Instance *instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", AlgorithmicWings);
+void AlgorithmicWings(Instance *instance, evAnimationControllerDoneData *ControllerData)
+{
+    G2EulerAngles Rot;
+    int temp; // not from decls.h
+
+    temp = ControllerData->segment;
+
+    do
+    {
+        instance++;
+        instance--;
+        // this do while is fake, only the following two function calls are valid code
+        G2EulerAngles_FromMatrix(&Rot, &instance->anim.segMatrices[temp - 1], 21);
+        G2EmulationSetInterpController_Vector(instance, ControllerData->segment, ControllerData->type, (G2SVector3 *)&Rot, 5, 2);
+    } while (0);
+}
 
 void AlgorithmicNeck(Instance *Player, Instance *Target)
 {
@@ -92,8 +107,7 @@ void AlgorithmicNeck(Instance *Player, Instance *Target)
 
         TransposeMatrix(Player->oldMatrix, &matrix);
 
-        if ((INSTANCE_SetStatsData(Player, NULL, &Raziel.Senses.lookAtPoint, &data, &matrix) != 0)
-        && (data.distance < 3200) && (MATH3D_ConeDetect(&data.relativePosition, 967, 967) != 0))
+        if ((INSTANCE_SetStatsData(Player, NULL, &Raziel.Senses.lookAtPoint, &data, &matrix) != 0) && (data.distance < 3200) && (MATH3D_ConeDetect(&data.relativePosition, 967, 967) != 0))
         {
             Raziel.Senses.Flags |= 0x8;
         }
