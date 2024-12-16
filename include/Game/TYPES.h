@@ -3944,7 +3944,8 @@ typedef struct GameTracker
     // offset: 0x014C
     void *drawAnimatedModelFunc;
     // offset: 0x0150
-    void *drawDisplayPolytopeListFunc;
+    // void *drawDisplayPolytopeListFunc;
+    unsigned long (*drawDisplayPolytopeListFunc)();
     // offset: 0x0154
     void *drawBgFunc;
     // offset: 0x0158 (4 bytes)

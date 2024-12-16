@@ -13,8 +13,9 @@ void COLLIDE_NearestPointOnLine_S(SVector *linePoint, SVECTOR *oldPoint, SVECTOR
 void G2Quat_FromMatrix_S(G2Quat *quat, G2Matrix *matrix);
 unsigned long *DRAW_SplitModel_S(Model *model, Instance *instance, VertexPool *textexPool, MATRIX *transform, PrimPool *primPool, unsigned long **ot);
 long PIPE3D_TransformAnimatedInstanceVertices_S(VertexPool *vertexPool, PVertex *poolVertex, Model *model, MATRIX *wcTransform, MATRIX *matrixPool, MATRIX *lm, CVECTOR *vertexColor, CVECTOR *perVertexColor);
-int *DRAW_AnimatedModel_S(Model *model, PVertex *poolVertex, PrimPool *primPool, unsigned int **ot, CVECTOR *vertexColor);
-unsigned int *DRAW_DisplayPolytopeList_S(PolytopeList *polytopeList, Terrain *terrain, Camera *camera, PrimPool *primPool, unsigned int **drawot, Position *globalOffset);
+int *DRAW_AnimatedModel_S(Model *model, PVertex *poolVertex, PrimPool *primPool, unsigned long **ot, CVECTOR *vertexColor);
+unsigned long *DRAW_DisplayPolytopeList_S(PolytopeList *polytopeList, Terrain *terrain, Camera *camera, PrimPool *primPool, unsigned long **drawot, Position *globalOffset);
+void BSP_MarkVisibleLeaves_S(BSPTree *bsp, Camera *camera, PolytopeList *polytopeList);
 
 extern long depthQFogStart;
 extern long depthQBlendStart;

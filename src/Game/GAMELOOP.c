@@ -28,6 +28,7 @@
 #include "Game/MENU/MENU.h"
 #include "Game/MENU/MENUDEFS.h"
 #include "Game/LIGHT3D.h"
+#include "Game/PIPE3D.h"
 
 long cameraMode = 0xD;
 
@@ -74,6 +75,34 @@ DebugMenuLine pauseMenu[8924 + 7];
 int gamePadControllerOut;
 
 GlobalSaveTracker *GlobalSave;
+
+long depthQFogFar;
+
+int InStreamUnit;
+
+unsigned long **hackOT;
+
+unsigned long StackSave;
+
+#define STACK_SET(x)                       \
+    {                                      \
+        asm(                               \
+            "sw      $sp, 0(%0);"          \
+            "li      $t4, 0x1F8003F0;"     \
+            "move    $sp, $t4;"            \
+            :                              \
+            : "r"(&StackSave) : "memory"); \
+    }
+
+#define STACK_SAVE() STACK_SET(0x1F8003F0)
+
+#define STACK_RESTORE(x)                          \
+    {                                             \
+        asm(                                      \
+            "lw      $sp, 0(%0);"                 \
+            :                                     \
+            : "r"(&StackSave) : "$sp", "memory"); \
+    }
 
 void GAMELOOP_AllocStaticMemory()
 {
@@ -721,7 +750,111 @@ void StreamIntroInstancesForUnit(StreamUnit *currentUnit)
     }
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", StreamRenderLevel);
+#else
+long StreamRenderLevel(StreamUnit *currentUnit, Level *mainLevel, unsigned long **drawot, long portalFogColor)
+{
+    GameTracker *gameTracker;
+    Level *level;
+    Terrain *terrain;
+    int curTree;
+    int farplanesave;
+    Position cam_pos_save;
+    MATRIX cam_mat_save;
+    SVector tmp;
+    BSPTree *bsp;
+
+    (void)mainLevel;
+
+    level = currentUnit->level;
+
+    farplanesave = theCamera.core.farPlane;
+
+    terrain = level->terrain;
+
+    SetFarColor(0, 0, 0);
+
+    UpdateFogSettings(currentUnit, level);
+
+    gameTracker = &gameTrackerX;
+
+    depthQBackColor = portalFogColor;
+
+    depthQFogFar = level->fogFar;
+    depthQFogStart = level->fogNear;
+
+    currentUnit->FogColor = portalFogColor;
+
+    theCamera.core.farPlane = depthQFogFar;
+
+    if (CheckForNoBlend((ColorType *)&depthQBackColor) != 0)
+    {
+        depthQBlendStart = 65535;
+    }
+    else
+    {
+        depthQBlendStart = depthQFogStart;
+    }
+
+    SetFogNearFar(depthQFogStart, depthQFogFar, 320);
+
+    PIPE3D_AnimateTerrainTextures(terrain->aniList, gameTracker->frameCount, gameTracker->primPool, drawot);
+    PIPE3D_AnimateTerrainTextures(level->bgAniList, gameTracker->frameCount, gameTracker->primPool, drawot);
+
+    PIPE3D_InstanceListTransformAndDraw(currentUnit, gameTracker, drawot, &theCamera.core);
+
+    cam_pos_save = theCamera.core.position;
+    cam_mat_save = *theCamera.core.wcTransform;
+
+    for (curTree = 0; curTree < terrain->numBSPTrees; curTree++)
+    {
+        bsp = &terrain->BSPTreeArray[curTree];
+
+        if ((bsp->ID >= 0) && (!(bsp->flags & 0x1)))
+        {
+            theCamera.core.position.x = cam_pos_save.x - bsp->globalOffset.x;
+            theCamera.core.position.y = cam_pos_save.y - bsp->globalOffset.y;
+            theCamera.core.position.z = cam_pos_save.z - bsp->globalOffset.z;
+
+            tmp.x = -theCamera.core.position.x;
+            tmp.y = -theCamera.core.position.y;
+            tmp.z = -theCamera.core.position.z;
+
+            ApplyMatrix(&cam_mat_save, (SVECTOR *)&tmp, (VECTOR *)&theCamera.core.wcTransform->t[0]);
+
+            BSP_MarkVisibleLeaves_S(bsp, &theCamera, gPolytopeList);
+
+            gameTracker->primPool->nextPrim = (uintptr_t *)gameTracker->drawDisplayPolytopeListFunc(gPolytopeList, terrain, &theCamera, gameTracker->primPool, drawot, &bsp->globalOffset);
+        }
+    }
+
+    theCamera.core.position = cam_pos_save;
+    *theCamera.core.wcTransform = cam_mat_save;
+
+    InStreamUnit = 1;
+
+    SBSP_IntroduceInstancesAndLights(terrain, &theCamera.core, gLightInfo, RENDER_currentStreamUnitID);
+
+    theCamera.core.farPlane = farplanesave;
+
+    InStreamUnit = 0;
+
+    if (gameTrackerX.playerInstance->currentStreamUnitID == currentUnit->StreamUnitID)
+    {
+        hackOT = drawot;
+
+        STACK_SET();
+
+        FX_DrawReaver(gameTrackerX.primPool, hackOT, theCamera.core.wcTransform);
+
+        STACK_RESTORE();
+    }
+
+    return 0;
+}
+#endif
 
 void GAMELOOP_FlipScreenAndDraw(GameTracker *gameTracker, unsigned long **drawot)
 {
