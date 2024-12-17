@@ -24,5 +24,8 @@ long COLLIDE_SphereAndHFace(Sphere *sphere, Position *oldPos, HFaceInfo *hfaceIn
 void COLLIDE_PointAndInstanceTrivialReject(PCollideInfo *pcollideInfo, Instance *instance);
 void COLLIDE_LineWithBoxFace(short startDist, long lineDist, short planeDist, SVector *start, Vector *line, HBox *hbox, long (*collideBoundFunc)(), SVector *normal);
 StreamUnit *COLLIDE_CameraWithStreamSignals(Camera *camera);
+void COLLIDE_InstanceList(InstanceList *instanceList);
+void COLLIDE_InstanceListTerrain(InstanceList *instanceList);
+void COLLIDE_InstanceListWithSignals(InstanceList *instanceList);
 
 #endif

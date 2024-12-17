@@ -58,5 +58,8 @@ void STREAM_AbortAreaLoad(char *baseAreaName);
 void STREAM_NextLoadFromHead();
 void STREAM_DumpLoadingObjects();
 void STREAM_MORPH_Relocate();
+void MORPH_UpdateTimeMult();
+void MORPH_Continue();
+void STREAM_MoveIntoNewStreamUnit();
 
 #endif

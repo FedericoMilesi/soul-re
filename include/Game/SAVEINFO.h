@@ -35,6 +35,7 @@ SavedIntroWithIntro *SAVE_UpdateSavedIntroWithIntro(Instance *instance, Level *l
 SavedLevel *SAVE_HasSavedLevel(long areaID);
 SavedBasic *SAVE_GetSavedEvent(long areaID, long eventNumber);
 long SAVE_PurgeAMemoryBlock();
+void SAVE_IntroduceBufferIntros();
 
 extern GlobalSaveTracker *GlobalSave;
 extern char monVersion[];

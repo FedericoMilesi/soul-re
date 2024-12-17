@@ -9,5 +9,6 @@ void LIGHT_Restore(LightInfo *lightInfo);
 void LIGHT_DrawShadow(MATRIX *wcTransform, Instance *instance, PrimPool *primPool, unsigned long **ot);
 void LIGHT_SetMatrixForLightGroupInstance(Instance *instance, Level *level);
 void LIGHT_PresetInstanceLight(Instance *instance, short attenuate, MATRIX *lm);
+void LIGHT_CalcShadowPositions(GameTracker *gameTracker);
 
 #endif

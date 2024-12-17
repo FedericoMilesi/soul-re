@@ -17,5 +17,10 @@ void EVENT_ProcessMovingWater();
 void EVENT_ProcessTimers();
 void HINT_ResetHint();
 void HINT_StopHint();
+void EVENT_DoProcess();
+void EVENT_ProcessEvents(EventPointers *eventPointers, Level *level);
+void EVENT_BSPProcess(StreamUnit *streamUnit);
+void EVENT_ResetAllOneTimeVariables();
+void EVENT_ProcessHints();
 
 #endif

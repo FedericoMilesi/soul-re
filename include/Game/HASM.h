@@ -16,6 +16,7 @@ long PIPE3D_TransformAnimatedInstanceVertices_S(VertexPool *vertexPool, PVertex 
 int *DRAW_AnimatedModel_S(Model *model, PVertex *poolVertex, PrimPool *primPool, unsigned long **ot, CVECTOR *vertexColor);
 unsigned long *DRAW_DisplayPolytopeList_S(PolytopeList *polytopeList, Terrain *terrain, Camera *camera, PrimPool *primPool, unsigned long **drawot, Position *globalOffset);
 void BSP_MarkVisibleLeaves_S(BSPTree *bsp, Camera *camera, PolytopeList *polytopeList);
+void VM_ProcessVMObjectList_S(Level *level, Camera *camera);
 
 extern long depthQFogStart;
 extern long depthQBlendStart;

@@ -31,5 +31,10 @@ INICommand *INSTANCE_FindIntroCommand(Instance *instance, int cmd);
 Instance *INSTANCE_IntroduceSavedInstance(SavedIntro *savedIntro, StreamUnit *streamUnit, int *deleted);
 Instance *INSTANCE_IntroduceSavedInstanceWithIntro(SavedIntroWithIntro *savedIntro, StreamUnit *streamUnit, int *deleted);
 void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool);
+void INSTANCE_SpatialRelationships(InstanceList *instanceList);
+void INSTANCE_ProcessFunctions(InstanceList *instanceList);
+void INSTANCE_CleanUpInstanceList(InstanceList *list, long reset);
+void INSTANCE_DeactivateFarInstances(GameTracker *gameTracker);
+void INSTANCE_AdditionalCollideFunctions(InstanceList *instanceList);
 
 #endif

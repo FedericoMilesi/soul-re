@@ -4,5 +4,6 @@
 #include "common.h"
 
 void VM_UpdateMorph(Level *level, int initFlg);
+void VM_Tick(long time);
 
 #endif

@@ -12,5 +12,6 @@ void _G2Instance_BuildFacadeTransforms(Instance *instance, Segment *segment, MAT
 void _G2Instance_BuildDeactivatedTransforms(Instance *instance);
 void G2Instance_BuildTransforms(Instance *instance);
 void G2Instance_RebuildTransforms(Instance *instance);
+void G2Instance_BuildTransformsForList(Instance *listHead);
 
 #endif

@@ -29,6 +29,14 @@
 #include "Game/MENU/MENUDEFS.h"
 #include "Game/LIGHT3D.h"
 #include "Game/PIPE3D.h"
+#include "Game/SAVEINFO.h"
+#include "Game/FONT.h"
+#include "Game/VM.h"
+#include "Game/VRAM.h"
+#include "Game/UNDRWRLD.h"
+#include "Game/PLAN/PLANAPI.h"
+#include "Game/MONSTER/MONAPI.h"
+#include "Game/G2/INSTNCG2.h"
 
 long cameraMode = 0xD;
 
@@ -83,6 +91,10 @@ int InStreamUnit;
 unsigned long **hackOT;
 
 unsigned long StackSave;
+
+short gEndGameNow;
+
+long VRAM_NeedToUpdateMorph;
 
 #define STACK_SET(x)                       \
     {                                      \
@@ -1404,10 +1416,251 @@ void GAMELOOP_DoTimeProcess()
     gameTrackerX.currentTime = holdTime;
 }
 
-/*TODO: migrate to GAMELOOP_Process*/
-static char D_800D0790[] = "Processing unit %s\n";
-static char D_800D07A4[] = "Military Time %04d\n";
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_Process);
+void GAMELOOP_Process(GameTracker *gameTracker)
+{
+    int d;
+    int useTime;
+    Level *level;
+    int i;
+    SFXMkr *sfxMkr;
+
+    if (gEndGameNow != 0)
+    {
+        DEBUG_ExitGame();
+
+        gameTracker->levelDone = 3;
+    }
+    else
+    {
+        GAMELOOP_DoTimeProcess();
+
+        if ((gameTrackerX.gameMode != 6) && (!(gameTrackerX.streamFlags & 0x100000)))
+        {
+            MORPH_UpdateTimeMult();
+
+            GAMELOOP_CalcGameTime();
+
+            if (gameTracker->gameData.asmData.MorphType != 0)
+            {
+                gameTracker->currentSpectralTime += gameTracker->lastLoopTime;
+            }
+            else
+            {
+                useTime = 1;
+
+                if (gameTrackerX.playerInstance != NULL)
+                {
+                    level = STREAM_GetLevelWithID(gameTrackerX.playerInstance->currentStreamUnitID);
+
+                    if (level != NULL)
+                    {
+                        useTime = (((unsigned long)level->unitFlags & 0x2000)) < (unsigned int)useTime;
+                    }
+                }
+
+                if (useTime != 0)
+                {
+                    gameTracker->currentTimeOfDayTime += gameTracker->lastLoopTime;
+                }
+
+                gameTracker->currentMaterialTime += gameTracker->lastLoopTime;
+            }
+        }
+
+        gameTracker->numGSignals = 0;
+
+        GAMELOOP_ChangeMode();
+
+        ResetPrimPool();
+
+        memset(gameTracker->overrideData, 0, sizeof(gameTracker->overrideData));
+
+        if (gameTrackerX.gameMode != 6)
+        {
+            if (!(gameTrackerX.streamFlags & 0x100000))
+            {
+                if (gameTrackerX.SwitchToNewStreamUnit == 1)
+                {
+                    INSTANCE_Post(gameTrackerX.playerInstance, 0x4000006, 0);
+
+                    STREAM_MoveIntoNewStreamUnit();
+                }
+
+                if ((VRAM_NeedToUpdateMorph != 0) && (STREAM_IsCdBusy(NULL) == 0))
+                {
+                    VRAM_UpdateMorphPalettes();
+
+                    VRAM_NeedToUpdateMorph = 0;
+                }
+
+                if (gameTracker->gameData.asmData.MorphTime < 1000)
+                {
+                    MORPH_Continue();
+                }
+
+                if ((gameTracker->streamFlags & 0x80000))
+                {
+                    gameTracker->streamFlags &= ~0x80000;
+
+                    UNDERWORLD_StartProcess();
+                }
+
+                EVENT_DoProcess();
+
+                for (i = 0; i < 16; i++)
+                {
+                    if (StreamTracker.StreamList[i].used == 2)
+                    {
+                        if (StreamTracker.StreamList[i].level->PuzzleInstances != NULL)
+                        {
+                            if ((gameTrackerX.debugFlags2 & 0x100))
+                            {
+                                FONT_Print("Processing unit %s\n", StreamTracker.StreamList[i].baseAreaName);
+                            }
+
+                            EVENT_ProcessEvents(StreamTracker.StreamList[i].level->PuzzleInstances, StreamTracker.StreamList[i].level);
+                        }
+
+                        EVENT_BSPProcess(&StreamTracker.StreamList[i]);
+                    }
+                }
+
+                EVENT_ResetAllOneTimeVariables();
+            }
+
+            EVENT_ProcessHints();
+
+            for (d = 0; d < 16; d++)
+            {
+                if (StreamTracker.StreamList[d].used == 2)
+                {
+                    for (i = 0; i < StreamTracker.StreamList[d].level->NumberOfSFXMarkers; i++)
+                    {
+                        sfxMkr = &StreamTracker.StreamList[d].level->SFXMarkerList[i];
+
+                        if ((sfxMkr != NULL) && (sfxMkr->soundData != NULL))
+                        {
+                            SOUND_ProcessInstanceSounds(sfxMkr->soundData, sfxMkr->sfxTbl, &sfxMkr->pos, sfxMkr->livesInOnePlace, sfxMkr->inSpectral, 0, 0, NULL);
+                        }
+                    }
+                }
+            }
+
+            if (!(gameTrackerX.streamFlags & 0x100000))
+            {
+                INSTANCE_SpatialRelationships(instanceList);
+            }
+
+            INSTANCE_ProcessFunctions(gameTracker->instanceList);
+
+            INSTANCE_CleanUpInstanceList(gameTracker->instanceList, 0);
+
+            INSTANCE_DeactivateFarInstances(gameTracker);
+
+            MONAPI_ProcessGenerator();
+
+            getScratchAddr(0)[0] = ((unsigned long *)&theCamera.core.position.x)[0];
+            getScratchAddr(1)[0] = ((unsigned long *)&theCamera.core.position.z)[0];
+
+            STACK_SAVE();
+
+            G2Instance_BuildTransformsForList(gameTracker->instanceList->first);
+
+            STACK_RESTORE();
+
+            if (!(gameTrackerX.streamFlags & 0x100000))
+            {
+                STACK_SAVE();
+
+                FX_ProcessList(fxTracker);
+
+                STACK_RESTORE();
+
+                if (!(gameTrackerX.streamFlags & 0x100000))
+                {
+                    VM_Tick(256);
+
+                    if ((gameTracker->debugFlags2 & 0x10000))
+                    {
+                        FONT_Print("Military Time %04d\n", gameTrackerX.timeOfDay);
+                    }
+
+                    for (d = 0; d < 16; d++)
+                    {
+                        if (StreamTracker.StreamList[d].used == 2)
+                        {
+                            VM_ProcessVMObjectList_S(StreamTracker.StreamList[d].level, &theCamera);
+                        }
+                    }
+
+                    if (!(gameTrackerX.streamFlags & 0x100000))
+                    {
+                        PLANAPI_UpdatePlanningDatabase(gameTracker, gameTrackerX.playerInstance);
+                    }
+                }
+            }
+
+            DEBUG_Process(gameTracker);
+
+            COLLIDE_InstanceList(gameTracker->instanceList);
+            COLLIDE_InstanceListTerrain(gameTracker->instanceList);
+
+            INSTANCE_AdditionalCollideFunctions(instanceList);
+
+            COLLIDE_InstanceListWithSignals(instanceList);
+
+            if (!(gameTrackerX.streamFlags & 0x100000))
+            {
+                LIGHT_CalcShadowPositions(gameTracker);
+
+                INSTANCE_CleanUpInstanceList(gameTracker->instanceList, 16);
+            }
+
+            CAMERA_Process(&theCamera);
+
+            PIPE3D_CalculateWCTransform(&theCamera.core);
+
+            theCamera.core.wcTransform2->m[2][3] = 0;
+
+            PIPE3D_InvertTransform(theCamera.core.cwTransform2, theCamera.core.wcTransform2);
+
+            CAMERA_CalcVVClipInfo(&theCamera);
+
+            if (gameTracker->levelChange != 0)
+            {
+                gameTracker->levelChange = 0;
+            }
+
+            SAVE_IntroduceBufferIntros();
+        }
+        else
+        {
+            getScratchAddr(0)[0] = ((unsigned long *)&theCamera.core.position.x)[0];
+            getScratchAddr(1)[0] = ((unsigned long *)&theCamera.core.position.z)[0];
+
+            STACK_SAVE();
+
+            G2Instance_BuildTransformsForList(gameTracker->instanceList->first);
+
+            STACK_RESTORE();
+
+            DEBUG_Process(gameTracker);
+        }
+
+        if (gameTracker->levelDone == 0)
+        {
+            GAMELOOP_DisplayFrame(gameTracker);
+        }
+        else
+        {
+            ResetDrawPage();
+        }
+
+        gameTracker->frameCount++;
+
+        gameTracker->debugFlags &= ~0x8000000;
+    }
+}
 
 void GAMELOOP_ModeStartRunning()
 {

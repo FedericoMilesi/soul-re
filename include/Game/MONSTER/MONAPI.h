@@ -26,5 +26,6 @@ void MONAPI_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *
 void MonsterMessage(Instance *instance, unsigned long message, unsigned long data);
 void MONAPI_CheckGenerator(Instance *instance);
 void MonsterTranslateAnim(Object *object);
+void MONAPI_ProcessGenerator();
 
 #endif

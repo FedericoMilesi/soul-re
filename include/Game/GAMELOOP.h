@@ -18,6 +18,8 @@ void GAMELOOP_AddClearPrim(unsigned long **drawot, int override);
 void SaveOT();
 void GAMELOOP_Reset24FPS();
 void GAMELOOP_Set24FPS();
+void GAMELOOP_DisplayFrame(GameTracker *gameTracker);
+void GAMELOOP_ChangeMode();
 
 GameTracker gameTrackerX;
 GameTracker *gameTracker;

@@ -12,6 +12,7 @@ int PLANAPI_FindPathBetweenNodes(PlanningNode *startNode, PlanningNode *goalNode
 int PLANAPI_AddNodeOfTypeToPool(Position *pos, int type);
 int PLANAPI_FindPathInGraphToTarget(Position *startPos, EnemyPlanData *planData, int validNodeTypes);
 void PLANAPI_InitPlanning(void *planningPool);
+void PLANAPI_UpdatePlanningDatabase(GameTracker *gameTracker, Instance *player);
 
 PoolManagementData *poolManagementData;
 

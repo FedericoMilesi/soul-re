@@ -12,5 +12,6 @@ void PIPE3D_TransformFromZAxis(MATRIX *transform, SVector *normal);
 long PIPE3D_TransformAnimatedSplitInstanceVertices(MVertex *vertexList, PVertex *poolVertex, Model *model, MATRIX *wcTransform, MATRIX *matrixPool, Mirror *mirror, MATRIX *lm, CVECTOR *vertexColor, CVECTOR *vertexSrcCol);
 void PIPE3D_AnimateTerrainTextures(DrMoveAniTex *aniTextures, long req_frame, PrimPool *primPool, unsigned long **drawot);
 void PIPE3D_InstanceListTransformAndDraw(StreamUnit *unit, GameTracker *gameTracker, unsigned long **ot, CameraCore *cameraCore);
+void PIPE3D_CalculateWCTransform(CameraCore *cameraCore);
 
 #endif
