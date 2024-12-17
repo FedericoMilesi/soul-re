@@ -37,5 +37,7 @@ void DEBUG_ExitMenus();
 void DEBUG_EndViewVram(GameTracker *gameTracker);
 void DEBUG_ExitGame();
 void DEBUG_Process(GameTracker *gameTracker);
+void DEBUG_DrawShrinkCels(unsigned long **polyAddr);
+void DEBUG_Draw(GameTracker *gameTracker, unsigned long **ot);
 
 #endif

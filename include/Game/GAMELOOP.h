@@ -20,6 +20,9 @@ void GAMELOOP_Reset24FPS();
 void GAMELOOP_Set24FPS();
 void GAMELOOP_DisplayFrame(GameTracker *gameTracker);
 void GAMELOOP_ChangeMode();
+void Switch_For_Redraw();
+void MainRenderLevel(StreamUnit *currentUnit, unsigned long **drawot);
+void GAMELOOP_DrawSavedOT(unsigned long **newOT);
 
 GameTracker gameTrackerX;
 GameTracker *gameTracker;

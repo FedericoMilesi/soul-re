@@ -61,5 +61,9 @@ void STREAM_MORPH_Relocate();
 void MORPH_UpdateTimeMult();
 void MORPH_Continue();
 void STREAM_MoveIntoNewStreamUnit();
+int STREAM_GetClipRect(StreamUnitPortal *portal, RECT *rect);
+void STREAM_RenderWarpGate(unsigned long **mainOT, StreamUnitPortal *curStreamPortal, StreamUnit *mainStreamUnit, RECT *cliprect);
+void WARPGATE_IsItActive(StreamUnit *streamUnit);
+void STREAM_RenderAdjacantUnit(unsigned long **curOT, StreamUnitPortal *curStreamPortal, StreamUnit *toStreamUnit, StreamUnit *mainStreamUnit, RECT *cliprect);
 
 #endif

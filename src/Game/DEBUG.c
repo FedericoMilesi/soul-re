@@ -1474,8 +1474,9 @@ void DEBUG_DisplayStatus(GameTracker *gameTracker)
     }
 }
 
-void DEBUG_DrawShrinkCels()
+void DEBUG_DrawShrinkCels(unsigned long **polyAddr)
 {
+    (void)polyAddr;
 }
 
 void DEBUG_ContinueGame()

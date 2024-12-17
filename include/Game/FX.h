@@ -40,5 +40,6 @@ void _FX_BuildSplinters(Instance *instance, SVECTOR *center, SVECTOR *vel, SVECT
 void FX_DrawReaver(PrimPool *primPool, unsigned long **ot, MATRIX *wcTransform);
 void FX_DrawList(FXTracker *fxTracker, GameTracker *gameTracker, unsigned long **ot, MATRIX *wcTransform);
 void FX_ProcessList(FXTracker *fxTracker);
+void FX_Spiral(PrimPool *primPool, unsigned long **ot);
 
 #endif

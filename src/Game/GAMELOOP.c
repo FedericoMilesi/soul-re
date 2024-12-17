@@ -37,6 +37,7 @@
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/G2/INSTNCG2.h"
+#include "Game/GLYPH.h"
 
 long cameraMode = 0xD;
 
@@ -1147,9 +1148,298 @@ StreamUnit *GAMELOOP_GetMainRenderUnit()
     return streamUnit;
 }
 
-/*TODO: migrate to GAMELOOP_DisplayFrame*/
-static char D_800D0780[] = "Cameraunit: %s\n";
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", GAMELOOP_DisplayFrame);
+void GAMELOOP_DisplayFrame(GameTracker *gameTracker)
+{
+    unsigned long **drawot;
+    Level *mainLevel;
+    StreamUnitPortal *streamPortal;
+    int numportals;
+    int d;
+    StreamUnit *mainStreamUnit;
+    void *savedNextPrim;
+
+    drawot = gameTracker->drawOT;
+
+    if ((!(gameTrackerX.gameFlags & 0x8000000)) || (pause_redraw_flag != 0))
+    {
+        if (pause_redraw_flag != 0)
+        {
+            savedNextPrim = gameTrackerX.primPool->nextPrim;
+
+            DrawSync(0);
+
+            Switch_For_Redraw();
+
+            drawot = gameTracker->drawOT;
+
+            ClearOTagR((unsigned long *)gameTrackerX.drawOT, 3072);
+
+            if (pause_redraw_prim != NULL)
+            {
+                gameTrackerX.primPool->nextPrim = pause_redraw_prim;
+            }
+            else
+            {
+                gameTrackerX.primPool->nextPrim = gameTrackerX.primPool->prim;
+            }
+        }
+        else
+        {
+            pause_redraw_prim = gameTrackerX.primPool->nextPrim;
+        }
+
+        gameTrackerX.visibleInstances = 0;
+
+        gameTrackerX.displayFrameCount++;
+
+        GAMELOOP_SetupRenderFunction(&gameTrackerX);
+
+        if ((!(GlobalSave->flags & 0x1)) && ((gameTracker->wipeType != 11) || (gameTracker->wipeTime == 0)) && ((gameTracker->debugFlags2 & 0x800)))
+        {
+            FX_Spiral(gameTrackerX.primPool, drawot);
+        }
+
+        if (pause_redraw_flag == 0)
+        {
+            HUD_Draw();
+        }
+
+        mainStreamUnit = GAMELOOP_GetMainRenderUnit();
+
+        mainLevel = mainStreamUnit->level;
+
+        if ((gameTracker->debugFlags & 0x4))
+        {
+            FONT_Print("Cameraunit: %s\n", mainStreamUnit->level->worldName);
+        }
+
+        RENDER_currentStreamUnitID = mainStreamUnit->StreamUnitID;
+
+        theCamera.core.leftX = 0;
+        theCamera.core.rightX = 320;
+
+        theCamera.core.topY = 0;
+        theCamera.core.bottomY = 240;
+
+        CAMERA_SetViewVolume(&theCamera);
+
+        if (MEMPACK_MemoryValidFunc((char *)mainLevel) != 0)
+        {
+            if (mainLevel->fogFar != theCamera.core.farPlane)
+            {
+                theCamera.core.farPlane = mainLevel->fogFar;
+            }
+
+            if (!(gameTracker->debugFlags & 0x8000))
+            {
+                MainRenderLevel(mainStreamUnit, drawot);
+            }
+        }
+
+        numportals = *(long *)mainLevel->terrain->StreamUnits;
+
+        streamPortal = (StreamUnitPortal *)((long *)mainLevel->terrain->StreamUnits + 1);
+
+        for (d = 0; d < numportals; d++, streamPortal++)
+        {
+            StreamUnit *toStreamUnit;
+            long toStreamUnitID;
+            StreamUnitPortal *streamPortal2;
+            int i;
+            int draw;
+            RECT cliprect;
+
+            toStreamUnit = streamPortal->toStreamUnit;
+
+            toStreamUnitID = streamPortal->streamID;
+
+            if ((toStreamUnit != NULL) && ((unsigned long)toStreamUnit->FrameCount == gameTrackerX.displayFrameCount))
+            {
+                continue;
+            }
+
+            cliprect.x = 512;
+            cliprect.y = 240;
+            cliprect.w = -512;
+            cliprect.h = -240;
+
+            theCamera.core.leftX = 0;
+            theCamera.core.rightX = 320;
+
+            theCamera.core.topY = 0;
+            theCamera.core.bottomY = 240;
+
+            CAMERA_SetViewVolume(&theCamera);
+
+            draw = 0;
+
+            streamPortal2 = (StreamUnitPortal *)((long *)mainLevel->terrain->StreamUnits + 1);
+
+            for (i = 0; i < numportals; i++, streamPortal2++)
+            {
+                if (streamPortal2->streamID != toStreamUnitID)
+                {
+                    continue;
+                }
+
+                if (STREAM_GetClipRect(streamPortal2, &cliprect) != 0)
+                {
+                    draw = 1;
+                }
+                else if ((theCamera.instance_mode & 0x2000000))
+                {
+                    int streamID;
+                    Instance *instance;
+
+                    streamID = streamPortal2->toStreamUnit->StreamUnitID;
+
+                    instance = (Instance *)INSTANCE_Query(gameTrackerX.playerInstance, 34);
+
+                    if ((streamID == gameTrackerX.playerInstance->currentStreamUnitID) || ((instance != NULL) && (streamID == instance->currentStreamUnitID)))
+                    {
+                        draw = 1;
+
+                        cliprect.w = 512;
+                        cliprect.x = 0;
+                        cliprect.y = 0;
+                        cliprect.h = 240;
+                    }
+                }
+            }
+
+            if (draw != 0)
+            {
+                theCamera.core.leftX = (cliprect.x * 320) / 512;
+                theCamera.core.topY = cliprect.y;
+
+                theCamera.core.rightX = ((cliprect.x + cliprect.w) * 320) / 512;
+                theCamera.core.bottomY = cliprect.y + cliprect.h;
+
+                CAMERA_SetViewVolume(&theCamera);
+
+                SetRotMatrix(theCamera.core.wcTransform);
+                SetTransMatrix(theCamera.core.wcTransform);
+
+                if ((streamPortal->flags & 0x1))
+                {
+                    if ((mainStreamUnit->flags & 0x8))
+                    {
+                        if (toStreamUnit != NULL)
+                        {
+                            if ((unsigned long)toStreamUnit->FrameCount == gameTrackerX.displayFrameCount)
+                            {
+                                continue;
+                            }
+
+                            toStreamUnit->FrameCount = gameTrackerX.displayFrameCount;
+                        }
+
+                        STREAM_RenderWarpGate(drawot, streamPortal, mainStreamUnit, &cliprect);
+                    }
+                    else
+                    {
+                        WARPGATE_IsItActive(mainStreamUnit);
+                    }
+                }
+                else if ((toStreamUnit != NULL) && ((unsigned long)toStreamUnit->FrameCount != gameTrackerX.displayFrameCount))
+                {
+                    toStreamUnit->FrameCount = gameTrackerX.displayFrameCount;
+
+                    STREAM_RenderAdjacantUnit(drawot, streamPortal, toStreamUnit, mainStreamUnit, &cliprect);
+                }
+            }
+            else if ((toStreamUnit != NULL) && ((unsigned long)toStreamUnit->FrameCount != gameTrackerX.displayFrameCount))
+            {
+                toStreamUnit->FrameCount = gameTrackerX.displayFrameCount;
+
+                StreamIntroInstancesForUnit(toStreamUnit);
+            }
+        }
+
+        for (d = 0; d < 16; d++)
+        {
+            if ((StreamTracker.StreamList[d].used == 2) && ((unsigned long)StreamTracker.StreamList[d].FrameCount != gameTrackerX.displayFrameCount))
+            {
+                StreamTracker.StreamList[d].FrameCount = gameTrackerX.displayFrameCount;
+
+                StreamIntroInstancesForUnit(&StreamTracker.StreamList[d]);
+            }
+        }
+
+        theCamera.core.rightX = 320;
+        theCamera.core.leftX = 0;
+
+        theCamera.core.topY = 0;
+        theCamera.core.bottomY = 240;
+
+        CAMERA_SetViewVolume(&theCamera);
+
+        if (pause_redraw_flag != 0)
+        {
+            GAMELOOP_AddClearPrim(drawot, 1);
+
+            SaveOT();
+
+            ClearOTagR((unsigned long *)gameTrackerX.drawOT, 3072);
+
+            Switch_For_Redraw();
+
+            drawot = gameTracker->drawOT;
+
+            pause_redraw_flag = 0;
+
+            gameTrackerX.primPool->nextPrim = savedNextPrim;
+        }
+    }
+
+    if ((gameTrackerX.gameFlags & 0x8000000))
+    {
+        HUD_Draw();
+    }
+
+    DEBUG_Draw(gameTracker, drawot);
+
+    FONT_Flush();
+
+    GAMELOOP_SwitchTheDrawBuffer(drawot);
+
+    gameTracker->idleTime = (GetRCnt(0xF2000000) & 0xFFFF) | (gameTimer << 16);
+
+    if (gameTracker->vblFrames <= (unsigned long)gameTracker->frameRateLock)
+    {
+        while (CheckVolatile(gameTracker->reqDisp) != 0)
+            ;
+    }
+    else if (gameTracker->reqDisp != NULL)
+    {
+        PutDispEnv(gameTracker->reqDisp);
+
+        gameTracker->reqDisp = NULL;
+
+        gameTracker->vblFrames = 0;
+    }
+
+    gameTracker->idleTime = TIMER_TimeDiff(gameTracker->idleTime);
+
+    gameTracker->gameData.asmData.dispPage = 1 - gameTracker->gameData.asmData.dispPage;
+
+    DEBUG_DrawShrinkCels(drawot + 3071);
+
+    GAMELOOP_HandleScreenWipes(drawot);
+
+    gameTracker->usecsStartDraw = (GetRCnt(0xF2000000) & 0xFFFF) | (gameTimer << 16);
+
+    gameTracker->drawTimerReturn = (long *)&gameTracker->drawTime;
+
+    if ((gameTrackerX.gameFlags & 0x8000000))
+    {
+        GAMELOOP_DrawSavedOT(drawot);
+    }
+    else
+    {
+        DrawOTag((unsigned long *)drawot + 3071);
+    }
+}
 
 void GAMELOOP_DrawSavedOT(unsigned long **newOT)
 {

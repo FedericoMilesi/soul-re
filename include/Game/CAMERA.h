@@ -73,6 +73,7 @@ short CAMERA_update_z_damped(Camera *camera, short current, short target);
 void CAMERA_UpdateFocusTilt(Camera *camera);
 void CAMERA_UpdateFocusRotate(Camera *camera);
 void CAMERA_Process(Camera *camera);
+void CAMERA_SetViewVolume(Camera *camera);
 
 extern int CameraCenterDelay;
 Camera theCamera;
