@@ -82,7 +82,10 @@ void MEMPACK_ReportMemory2()
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_ReportMemory);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_SetMemoryBeingStreamed);
+void MEMPACK_SetMemoryBeingStreamed(char *address)
+{
+    address[-6] = 2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_SetMemoryDoneStreamed);
 
