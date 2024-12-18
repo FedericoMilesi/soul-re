@@ -4,7 +4,26 @@
 
 static NewMemTracker newMemTracker;
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Init);
+int overlayAddress;
+
+void MEMPACK_Init()
+{
+    newMemTracker.rootNode = (MemHeader *)overlayAddress;
+
+    newMemTracker.totalMemory = (0x80000000 + (2097152 - (1048576 / 256))) - overlayAddress;
+
+    newMemTracker.rootNode->magicNumber = 0xBADE;
+
+    newMemTracker.rootNode->memStatus = 0;
+    newMemTracker.rootNode->memType = 0;
+    newMemTracker.rootNode->memSize = newMemTracker.totalMemory;
+
+    newMemTracker.lastMemoryAddress = (char *)newMemTracker.rootNode + newMemTracker.totalMemory;
+
+    newMemTracker.currentMemoryUsed = 0;
+
+    newMemTracker.doingGarbageCollection = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GetSmallestBlockTopBottom);
 
