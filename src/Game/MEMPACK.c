@@ -58,7 +58,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Free);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_FreeByType);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Size);
+unsigned long MEMPACK_Size(char *address)
+{
+    return ((int *)address)[-1] - sizeof(MemHeader);
+}
 
 unsigned long MEMPACK_ReportFreeMemory()
 {
