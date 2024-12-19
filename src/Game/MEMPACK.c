@@ -285,7 +285,37 @@ void MEMPACK_GarbageSplitMemoryNow(unsigned long allocSize, MemHeader *bestAddre
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GarbageCollectFree);
+void MEMPACK_GarbageCollectFree(MemHeader *memAddress)
+{
+    MemHeader *secondAddress;
+
+    memAddress->memStatus = 0;
+    memAddress->memType = 0;
+
+    newMemTracker.currentMemoryUsed -= memAddress->memSize;
+
+    secondAddress = (MemHeader *)((char *)memAddress + memAddress->memSize);
+
+    if ((char *)secondAddress != newMemTracker.lastMemoryAddress)
+    {
+        MEMORY_MergeAddresses(memAddress, secondAddress);
+    }
+
+    secondAddress = memAddress;
+
+    memAddress = newMemTracker.rootNode;
+
+    while ((char *)memAddress != newMemTracker.lastMemoryAddress)
+    {
+        if (((char *)memAddress + memAddress->memSize) == (char *)secondAddress)
+        {
+            MEMORY_MergeAddresses(memAddress, (MemHeader *)((char *)memAddress + memAddress->memSize));
+            break;
+        }
+
+        memAddress = (MemHeader *)((char *)memAddress + memAddress->memSize);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_DoGarbageCollection);
 
