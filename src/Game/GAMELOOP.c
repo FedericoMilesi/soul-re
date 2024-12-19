@@ -75,27 +75,11 @@ STATIC PolytopeList *gPolytopeList;
 
 FXTracker *gFXT;
 
-DebugMenuLine *currentMenu;
-
-DebugMenuLine standardMenu[8924 + 12];
-
-DebugMenuLine pauseMenu[8924 + 7];
-
-int gamePadControllerOut;
-
-GlobalSaveTracker *GlobalSave;
-
-long depthQFogFar;
-
 int InStreamUnit;
 
 unsigned long **hackOT;
 
 unsigned long StackSave;
-
-short gEndGameNow;
-
-long VRAM_NeedToUpdateMorph;
 
 #define STACK_SET(x)                       \
     {                                      \
@@ -753,10 +737,6 @@ void BlendToColor(ColorType *target, ColorType *current, ColorType *dest)
     dest->code = 0;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", MainRenderLevel);
-#else
 void MainRenderLevel(StreamUnit *currentUnit, unsigned long **drawot)
 {
     Level *level;
@@ -895,7 +875,7 @@ void MainRenderLevel(StreamUnit *currentUnit, unsigned long **drawot)
 
             BSP_MarkVisibleLeaves_S(bsp, &theCamera, gPolytopeList);
 
-            gameTracker->primPool->nextPrim = (unsigned long *)gameTracker->drawDisplayPolytopeListFunc(gPolytopeList, terrain, &theCamera, gameTracker->primPool, drawot, &bsp->globalOffset);
+            gameTracker->primPool->nextPrim = ((DrawDisplayPolytopeListFunc *)gameTracker->drawDisplayPolytopeListFunc)(gPolytopeList, terrain, &theCamera, gameTracker->primPool, drawot, &bsp->globalOffset);
 
             if ((bsp->flags & 0x40))
             {
@@ -920,7 +900,6 @@ void MainRenderLevel(StreamUnit *currentUnit, unsigned long **drawot)
 
     STACK_RESTORE();
 }
-#endif
 
 void StreamIntroInstancesForUnit(StreamUnit *currentUnit)
 {
@@ -930,10 +909,6 @@ void StreamIntroInstancesForUnit(StreamUnit *currentUnit)
     }
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/GAMELOOP", StreamRenderLevel);
-#else
 long StreamRenderLevel(StreamUnit *currentUnit, Level *mainLevel, unsigned long **drawot, long portalFogColor)
 {
     GameTracker *gameTracker;
@@ -1006,7 +981,7 @@ long StreamRenderLevel(StreamUnit *currentUnit, Level *mainLevel, unsigned long 
 
             BSP_MarkVisibleLeaves_S(bsp, &theCamera, gPolytopeList);
 
-            gameTracker->primPool->nextPrim = (uintptr_t *)gameTracker->drawDisplayPolytopeListFunc(gPolytopeList, terrain, &theCamera, gameTracker->primPool, drawot, &bsp->globalOffset);
+            gameTracker->primPool->nextPrim = ((DrawDisplayPolytopeListFunc *)gameTracker->drawDisplayPolytopeListFunc)(gPolytopeList, terrain, &theCamera, gameTracker->primPool, drawot, &bsp->globalOffset);
         }
     }
 
@@ -1034,7 +1009,6 @@ long StreamRenderLevel(StreamUnit *currentUnit, Level *mainLevel, unsigned long 
 
     return 0;
 }
-#endif
 
 void GAMELOOP_FlipScreenAndDraw(GameTracker *gameTracker, unsigned long **drawot)
 {

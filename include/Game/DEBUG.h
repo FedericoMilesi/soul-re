@@ -3,10 +3,6 @@
 
 #include "common.h"
 
-extern unsigned long debugRazielFlags1;
-extern unsigned long debugRazielFlags2;
-extern unsigned long debugRazielFlags3;
-
 void DEBUG_FatalError(const char *fmt, ...);
 void DEBUG_DisplayStatus(GameTracker *gameTracker);
 void DEBUG_ProcessSecondController(GameTracker *gameTracker);
@@ -39,5 +35,12 @@ void DEBUG_ExitGame();
 void DEBUG_Process(GameTracker *gameTracker);
 void DEBUG_DrawShrinkCels(unsigned long **polyAddr);
 void DEBUG_Draw(GameTracker *gameTracker, unsigned long **ot);
+
+extern unsigned long debugRazielFlags1;
+extern unsigned long debugRazielFlags2;
+extern unsigned long debugRazielFlags3;
+extern DebugMenuLine *currentMenu;
+extern DebugMenuLine standardMenu[];
+extern DebugMenuLine pauseMenu[];
 
 #endif

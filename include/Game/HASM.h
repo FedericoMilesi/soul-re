@@ -18,11 +18,12 @@ unsigned long *DRAW_DisplayPolytopeList_S(PolytopeList *polytopeList, Terrain *t
 void BSP_MarkVisibleLeaves_S(BSPTree *bsp, Camera *camera, PolytopeList *polytopeList);
 void VM_ProcessVMObjectList_S(Level *level, Camera *camera);
 
-extern long depthQFogStart;
-extern long depthQBlendStart;
-extern long depthQBackColor;
-extern long depthQFogStart;
-extern long depthQBlendStart;
+long depthQFogStart;
+long depthQBlendStart;
+long depthQBackColor;
+long depthQFogFar;
+
+extern void *overlayAddress;
 extern long modelFadeValue;
 extern long draw_belowSplit;
 extern volatile int gameTimer;

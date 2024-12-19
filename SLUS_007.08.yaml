@@ -221,7 +221,7 @@ segments:
       - [0x0C2250, .sdata, Game/STATE]
       - [0x0C2270, .sdata, Game/VRAM]
       - [0x0C2274, sdata, Game/PSX/SUPPORT]
-      - [0x0C2278, sdata, Game/PHYSICS]
+      - [0x0C2278, .sdata, Game/PHYSICS]
       - [0x0C2288, sdata, Game/GLYPH]
       - [0x0C229C, .sdata, Game/MONSTER/HUMAN]
       - [0x0C22E8, sdata, Game/MONSTER/MONSENSE]
@@ -270,7 +270,7 @@ segments:
       - {start: 0x0C28AC, type: sbss, vram: 0x800D40E8, name: Game/EVENT}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D47E0, name: Game/STATE}
       - {start: 0x0C28AC, type: comm, vram: 0x800D57E0, name: Game/VRAM}
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D61E4, name: Game/PHYSICS}
+      - {start: 0x0C28AC, type: .sbss, vram: 0x800D61E4, name: Game/PHYSICS}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D626C, name: Game/REAVER}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D6270, name: Game/GLYPH}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D62B4, name: Game/MONSTER/MONSENSE}
