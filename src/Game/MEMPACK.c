@@ -209,7 +209,36 @@ void MEMPACK_ReportMemory2()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_ReportMemory);
+void MEMPACK_ReportMemory()
+{
+    MemHeader *address;
+    long i;
+    long firstTime;
+
+    address = newMemTracker.rootNode;
+
+    while ((char *)address != newMemTracker.lastMemoryAddress)
+    {
+        address = (MemHeader *)((char *)address + address->memSize);
+    }
+
+    for (i = 0; i < 49; i++)
+    {
+        firstTime = 1;
+
+        address = newMemTracker.rootNode;
+
+        while ((char *)address != newMemTracker.lastMemoryAddress)
+        {
+            if ((address->memStatus != 0) && (address->memType == i) && (firstTime != 0))
+            {
+                firstTime = 0;
+            }
+
+            address = (MemHeader *)((char *)address + address->memSize);
+        }
+    }
+}
 
 void MEMPACK_SetMemoryBeingStreamed(char *address)
 {
