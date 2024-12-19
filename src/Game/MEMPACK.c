@@ -267,7 +267,23 @@ long MEMPACK_MemoryValidFunc(char *address)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GarbageCollectMalloc);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GarbageSplitMemoryNow);
+void MEMPACK_GarbageSplitMemoryNow(unsigned long allocSize, MemHeader *bestAddress, long memType, unsigned long freeSize)
+{
+    (void)memType;
+
+    if (freeSize != 0)
+    {
+        MemHeader *address;
+
+        address = (MemHeader *)((char *)bestAddress + allocSize);
+
+        address->magicNumber = 0xBADE;
+
+        address->memStatus = 0;
+        address->memType = 0;
+        address->memSize = freeSize;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GarbageCollectFree);
 
