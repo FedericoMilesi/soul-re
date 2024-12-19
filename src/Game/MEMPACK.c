@@ -159,7 +159,33 @@ void MEMPACK_Free(char *address)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_FreeByType);
+void MEMPACK_FreeByType(unsigned char memType)
+{
+    MemHeader *address;
+    int freed;
+
+    do
+    {
+        freed = 0;
+
+        address = newMemTracker.rootNode;
+
+        while ((char *)address != newMemTracker.lastMemoryAddress)
+        {
+            if ((address->memStatus == 1) && (address->memType == memType))
+            {
+                address++;
+
+                freed = 1;
+
+                MEMPACK_Free((char *)address);
+                break;
+            }
+
+            address = (MemHeader *)((char *)address + address->memSize);
+        }
+    } while (freed == 1);
+}
 
 unsigned long MEMPACK_Size(char *address)
 {
