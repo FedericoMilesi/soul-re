@@ -124,7 +124,40 @@ void MEMPACK_Return(char *address, long takeBackSize)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Free);
+void MEMPACK_Free(char *address)
+{
+    MemHeader *memAddress;
+    MemHeader *secondAddress;
+
+    memAddress = (MemHeader *)(address - 8);
+
+    memAddress->memStatus = 0;
+    memAddress->memType = 0;
+
+    newMemTracker.currentMemoryUsed -= memAddress->memSize;
+
+    secondAddress = (MemHeader *)((char *)memAddress + memAddress->memSize);
+
+    if ((char *)secondAddress != newMemTracker.lastMemoryAddress)
+    {
+        MEMORY_MergeAddresses(memAddress, secondAddress);
+    }
+
+    secondAddress = memAddress;
+
+    memAddress = newMemTracker.rootNode;
+
+    while ((char *)memAddress != newMemTracker.lastMemoryAddress)
+    {
+        if (((char *)memAddress + memAddress->memSize) == (char *)secondAddress)
+        {
+            MEMORY_MergeAddresses(memAddress, (MemHeader *)((char *)memAddress + memAddress->memSize));
+            break;
+        }
+
+        memAddress = (MemHeader *)((char *)memAddress + memAddress->memSize);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_FreeByType);
 
