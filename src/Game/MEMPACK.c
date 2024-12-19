@@ -250,7 +250,20 @@ void MEMPACK_SetMemoryDoneStreamed(char *address)
     address[-6] = 1;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_MemoryValidFunc);
+#else
+long MEMPACK_MemoryValidFunc(char *address)
+{
+    if ((address != (char *)0xFAFBFCFD) && (address != NULL))
+    {
+        return address[-6] == 1;
+    }
+
+    return 0;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GarbageCollectMalloc);
 
