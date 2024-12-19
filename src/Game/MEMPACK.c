@@ -47,7 +47,27 @@ MemHeader *MEMPACK_GetSmallestBlockTopBottom(long allocSize)
     return bestAddress;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GetSmallestBlockBottomTop);
+MemHeader *MEMPACK_GetSmallestBlockBottomTop(long allocSize)
+{
+    MemHeader *address;
+    MemHeader *bestAddress;
+
+    address = newMemTracker.rootNode;
+
+    bestAddress = NULL;
+
+    while ((char *)address != newMemTracker.lastMemoryAddress)
+    {
+        if ((address->memStatus == 0) && (address->memSize >= (unsigned long)allocSize) && ((bestAddress == NULL) || ((char *)address > (char *)bestAddress)))
+        {
+            bestAddress = address;
+        }
+
+        address = (MemHeader *)((char *)address + address->memSize);
+    }
+
+    return bestAddress;
+}
 
 long MEMPACK_RelocatableType(long memType)
 {
