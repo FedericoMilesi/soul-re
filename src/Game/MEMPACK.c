@@ -24,7 +24,28 @@ void MEMPACK_Init()
     newMemTracker.doingGarbageCollection = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GetSmallestBlockTopBottom);
+MemHeader *MEMPACK_GetSmallestBlockTopBottom(long allocSize)
+{
+    MemHeader *address;
+    MemHeader *bestAddress;
+
+    address = newMemTracker.rootNode;
+
+    bestAddress = NULL;
+
+    while ((char *)address != newMemTracker.lastMemoryAddress)
+    {
+        if ((address->memStatus == 0) && (address->memSize >= (unsigned long)allocSize) && (bestAddress == NULL))
+        {
+            bestAddress = address;
+            break;
+        }
+
+        address = (MemHeader *)((char *)address + address->memSize);
+    }
+
+    return bestAddress;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GetSmallestBlockBottomTop);
 
