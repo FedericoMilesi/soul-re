@@ -4,7 +4,7 @@
 #include "common.h"
 
 extern ControllerPacket readGPBuffer1;
-
+extern int gamePadControllerOut;
 extern ControllerPacket readGPBuffer2;
 
 void GAMEPAD_Shock0(int motor0_speed, int motor0_time);

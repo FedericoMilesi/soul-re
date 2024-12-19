@@ -260,8 +260,6 @@ void PhysicsDefaultLinkedMoveResponse(Instance *instance, evPhysicsLinkedMoveDat
     instance->rotation.z += Data->rotDelta.z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckGravity);
-/* TODO: Have to find a way to get this to compile - it likely doesn't because of the compound literal
 int PhysicsCheckGravity(Instance *instance, intptr_t Data, short Mode)
 {
     evPhysicsGravityData *Ptr;
@@ -533,7 +531,9 @@ int PhysicsCheckGravity(Instance *instance, intptr_t Data, short Mode)
     }
 
     return rc;
-}*/
+}
+
+static SVECTOR unused = {.vx = 0, .vy = 160, .vz = 0};
 
 void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Data)
 {
@@ -550,10 +550,6 @@ void PhysicsDefaultGravityResponse(Instance *instance, evPhysicsGravityData *Dat
     }
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckEdgeGrabbing);
-#else
 int PhysicsCheckEdgeGrabbing(Instance *instance, GameTracker *gameTracker, intptr_t Data, short Mode)
 {
     evPhysicsEdgeData *Ptr;
@@ -563,8 +559,8 @@ int PhysicsCheckEdgeGrabbing(Instance *instance, GameTracker *gameTracker, intpt
     PCollideInfo CInfo;
     SVECTOR Old;
     SVECTOR New;
-    STATIC MATRIX TempMat;
-    STATIC MATRIX *pTempMat;
+    static MATRIX TempMat;
+    static MATRIX *pTempMat;
     int wallCrawl;
     int freeSpot;
     char temp; // not from decls.h
@@ -769,7 +765,6 @@ int PhysicsCheckEdgeGrabbing(Instance *instance, GameTracker *gameTracker, intpt
 
     return rc;
 }
-#endif
 
 void PhysicsDefaultEdgeGrabResponse(Instance *instance, evPhysicsEdgeData *Data, int blockFlag)
 {
@@ -854,10 +849,6 @@ void PhysicsDefaultEdgeGrabResponse(Instance *instance, evPhysicsEdgeData *Data,
     instance->position.y -= (short)OutTrans.vy - Data->Delta->y;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckSliding);
-#else
 int PhysicsCheckSliding(Instance *instance, intptr_t Data, short Mode)
 {
     evPhysicsSlideData *Ptr;
@@ -867,7 +858,7 @@ int PhysicsCheckSliding(Instance *instance, intptr_t Data, short Mode)
     PCollideInfo CInfo;
     SVECTOR Old;
     SVECTOR New;
-    STATIC MATRIX *pTempMat;
+    static MATRIX *pTempMat;
 
     Ptr = (evPhysicsSlideData *)Data;
 
@@ -1020,7 +1011,6 @@ int PhysicsCheckSliding(Instance *instance, intptr_t Data, short Mode)
 
     return rc;
 }
-#endif
 
 int PhysicsUpdateTface(Instance *instance, intptr_t Data)
 {
@@ -1065,10 +1055,6 @@ int PhysicsUpdateTface(Instance *instance, intptr_t Data)
     return 0;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckBlockers);
-#else
 int PhysicsCheckBlockers(Instance *instance, GameTracker *gameTracker, intptr_t Data, short Mode)
 {
     evPhysicsEdgeData *Ptr;
@@ -1076,7 +1062,8 @@ int PhysicsCheckBlockers(Instance *instance, GameTracker *gameTracker, intptr_t 
     PCollideInfo CInfo;
     SVECTOR Old;
     SVECTOR New;
-    STATIC MATRIX *pTempMat;
+    static MATRIX *pTempMat;
+    static long unused;
     TFace *tface;
     int Dot;
     SVECTOR Force;
@@ -1085,6 +1072,7 @@ int PhysicsCheckBlockers(Instance *instance, GameTracker *gameTracker, intptr_t 
 
     (void)gameTracker;
     (void)temp;
+    (void)unused;
 
     Ptr = (evPhysicsEdgeData *)Data;
 
@@ -1188,7 +1176,6 @@ int PhysicsCheckBlockers(Instance *instance, GameTracker *gameTracker, intptr_t 
 
     return Ptr->rc;
 }
-#endif
 
 int PhysicsCheckSwim(Instance *instance, intptr_t Data, short Mode)
 {
@@ -1380,10 +1367,6 @@ int PhysicsCheckLOS(Instance *instance, intptr_t Data, int Mode)
     return CInfo.type == 0;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropHeight);
-#else
 int PhysicsCheckDropHeight(Instance *instance, intptr_t Data, int Mode)
 {
     evPhysicsDropHeightData *data;
@@ -1393,8 +1376,13 @@ int PhysicsCheckDropHeight(Instance *instance, intptr_t Data, int Mode)
     int rc;
     int lowZ;
     PCollideInfo CInfo;
-    STATIC MATRIX TempMat;
-    STATIC MATRIX *pTempMat;
+    static MATRIX TempMat;
+    static MATRIX *pTempMat;
+    static long unused1;
+    static long unused2;
+
+    (void)unused1;
+    (void)unused2;
 
     data = (evPhysicsDropHeightData *)Data;
 
@@ -1506,12 +1494,7 @@ int PhysicsCheckDropHeight(Instance *instance, intptr_t Data, int Mode)
 
     return rc;
 }
-#endif
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsCheckDropOff);
-#else
 int PhysicsCheckDropOff(Instance *instance, intptr_t Data, short Mode)
 {
     evPhysicsDropOffData *Ptr;
@@ -1521,8 +1504,8 @@ int PhysicsCheckDropOff(Instance *instance, intptr_t Data, short Mode)
     PCollideInfo CInfo;
     SVECTOR New;
     SVECTOR Old;
-    STATIC MATRIX TempMat;
-    STATIC MATRIX *pTempMat;
+    static MATRIX TempMat;
+    static MATRIX *pTempMat;
 
     Ptr = (evPhysicsDropOffData *)Data;
 
@@ -1600,13 +1583,7 @@ int PhysicsCheckDropOff(Instance *instance, intptr_t Data, short Mode)
 
     return rc;
 }
-#endif
 
-// Matches 100% on decomp.me but differs on this project
-// Needs sbss migration. Only possible when all functions of the TU are matching.
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/PHYSICS", PhysicsFollowWall);
-#else
 int PhysicsFollowWall(Instance *instance, GameTracker *gameTracker, intptr_t Data, short Mode)
 {
     VECTOR OutTrans;
@@ -1774,7 +1751,6 @@ int PhysicsFollowWall(Instance *instance, GameTracker *gameTracker, intptr_t Dat
 
     return Ptr->rc;
 }
-#endif
 
 void PhysicsMoveLocalZClamp(Instance *instance, long segment, long time, long clamp)
 {

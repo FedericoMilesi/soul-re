@@ -1,16 +1,15 @@
 #include "common.h"
 #include "Game/MEMPACK.h"
 #include "Game/LOAD3D.h"
+#include "Game/HASM.h"
 
 static NewMemTracker newMemTracker;
-
-int overlayAddress;
 
 void MEMPACK_Init()
 {
     newMemTracker.rootNode = (MemHeader *)overlayAddress;
 
-    newMemTracker.totalMemory = (0x80000000 + (2097152 - (1048576 / 256))) - overlayAddress;
+    newMemTracker.totalMemory = (0x80000000 + (0x200000 - (0x100000 / 256))) - (intptr_t)overlayAddress;
 
     newMemTracker.rootNode->magicNumber = 0xBADE;
 
