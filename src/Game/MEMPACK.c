@@ -427,7 +427,26 @@ void MEMPACK_DoGarbageCollection()
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_RelocateAreaType);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_RelocateG2AnimKeylistType);
+void MEMPACK_RelocateG2AnimKeylistType(G2AnimKeylist **pKeylist, int offset, char *start, char *end)
+{
+    int j;
+    G2AnimKeylist *keylist;
+
+    if (((char *)*pKeylist >= start) && ((char *)*pKeylist < end))
+    {
+        keylist = *pKeylist = (G2AnimKeylist *)OFFSET_DATA(*pKeylist, offset);
+
+        if ((keylist->sectionCount != 255) || (keylist->s0TailTime != 224) || (keylist->s1TailTime != 172) || (keylist->s2TailTime != 15))
+        {
+            keylist->fxList = (G2AnimFxHeader *)OFFSET_DATA(keylist->fxList, offset);
+
+            for (j = 0; j < keylist->sectionCount; j++)
+            {
+                keylist->sectionData[j] = (unsigned short *)OFFSET_DATA(keylist->sectionData[j], offset);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_RelocateObjectType);
 
