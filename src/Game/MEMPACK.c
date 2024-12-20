@@ -1,7 +1,9 @@
 #include "common.h"
+#include "Game/PSX/AADLIB.h"
 #include "Game/MEMPACK.h"
 #include "Game/LOAD3D.h"
 #include "Game/HASM.h"
+#include "Game/STREAM.h"
 
 static NewMemTracker newMemTracker;
 
@@ -317,7 +319,111 @@ void MEMPACK_GarbageCollectFree(MemHeader *memAddress)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_DoGarbageCollection);
+void MEMPACK_DoGarbageCollection()
+{
+    MemHeader *relocateAddress;
+    long foundOpening;
+    long done;
+    long addressSize;
+    long addressMemType;
+    long holdSize;
+    long freeSize;
+    char *oldAddress;
+    char *newAddress;
+
+    done = 0;
+
+    freeSize = 0;
+
+    newMemTracker.doingGarbageCollection = 1;
+
+    while (done == 0)
+    {
+        relocateAddress = newMemTracker.rootNode;
+
+        foundOpening = 0;
+
+        while ((char *)relocateAddress != newMemTracker.lastMemoryAddress)
+        {
+            if (relocateAddress->memStatus != 0)
+            {
+                if ((MEMPACK_RelocatableType(relocateAddress->memType) != 0) && (foundOpening == 1) && (relocateAddress->memStatus != 2))
+                {
+                    foundOpening = 2;
+                    break;
+                }
+            }
+            else
+            {
+                foundOpening = 1;
+            }
+
+            relocateAddress = (MemHeader *)((char *)relocateAddress + relocateAddress->memSize);
+        }
+
+        if (foundOpening == 2)
+        {
+            addressMemType = relocateAddress->memType;
+
+            addressSize = relocateAddress->memSize - sizeof(MemHeader);
+
+            MEMPACK_GarbageCollectFree(relocateAddress);
+
+            holdSize = addressSize;
+
+            newAddress = MEMPACK_GarbageCollectMalloc((unsigned long *)&holdSize, addressMemType, (unsigned long *)&freeSize);
+
+            oldAddress = (char *)(relocateAddress + 1);
+
+            if (newAddress != NULL)
+            {
+                if (addressMemType == 2)
+                {
+                    RemoveIntroducedLights((Level *)oldAddress);
+                }
+                else if (addressMemType == 4)
+                {
+                    aadRelocateMusicMemoryBegin();
+                }
+
+                memcpy(newAddress, oldAddress, addressSize);
+
+                if (addressMemType == 2)
+                {
+                    MEMPACK_RelocateAreaType((MemHeader *)(newAddress - 8), newAddress - oldAddress, (Level *)oldAddress);
+                }
+                else if (addressMemType == 1)
+                {
+                    MEMPACK_RelocateObjectType((MemHeader *)(newAddress - 8), newAddress - oldAddress, (Object *)oldAddress);
+                }
+                else if (addressMemType == 14)
+                {
+                    STREAM_UpdateInstanceCollisionInfo((HModel *)oldAddress, (HModel *)newAddress);
+                }
+                else if (addressMemType == 44)
+                {
+                    MEMPACK_RelocateCDMemory((MemHeader *)(newAddress - 8), newAddress - oldAddress, (BigFileDir *)oldAddress);
+                }
+                else if (addressMemType == 4)
+                {
+                    aadRelocateMusicMemoryEnd(oldAddress, newAddress - oldAddress);
+                }
+                else if (addressMemType == 47)
+                {
+                    aadRelocateSfxMemory(oldAddress, newAddress - oldAddress);
+                }
+
+                MEMPACK_GarbageSplitMemoryNow(holdSize, (MemHeader *)(newAddress - 8), addressMemType, freeSize);
+            }
+        }
+        else
+        {
+            done = 1;
+        }
+    }
+
+    newMemTracker.doingGarbageCollection = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_RelocateAreaType);
 

@@ -10,5 +10,9 @@ unsigned long MEMPACK_ReportFreeMemory();
 void MEMPACK_Return(char *address, long takeBackSize);
 void MEMPACK_SetMemoryDoneStreamed(char *address);
 void MEMPACK_SetMemoryBeingStreamed(char *address);
+void MEMPACK_RelocateCDMemory(MemHeader *newAddress, long offset, BigFileDir *oldDir);
+void MEMPACK_RelocateObjectType(MemHeader *newAddress, long offset, Object *oldObject);
+void MEMPACK_RelocateAreaType(MemHeader *newAddress, long offset, Level *oldLevel);
+char *MEMPACK_GarbageCollectMalloc(unsigned long *allocSize, unsigned char memType, unsigned long *freeSize);
 
 #endif

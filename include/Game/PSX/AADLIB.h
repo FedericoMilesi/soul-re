@@ -32,5 +32,8 @@ unsigned long aadGetMemorySize(AadInitAttr *attributes);
 int aadInit(AadInitAttr *attributes, unsigned char *memoryPtr);
 int aadLoadDynamicSoundBank(char *sndFileName, char *smpFileName, int dynamicBankIndex, int loadOption, void (*retProc)());
 unsigned long aadGetSramBlockAddr(int handle);
+void aadRelocateSfxMemory(void *oldAddress, int offset);
+void aadRelocateMusicMemoryEnd(void *oldAddress, int offset);
+void aadRelocateMusicMemoryBegin();
 
 #endif
