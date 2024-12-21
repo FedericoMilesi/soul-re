@@ -66,7 +66,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_SetSearchDirectory);
 
 INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_GetSearchDirectory);
 
-INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_ChangeDirectoryFlag);
+int LOAD_ChangeDirectoryFlag()
+{
+    return loadStatus.changeDir;
+}
 
 void LOAD_UpdateBigFilePointers(BigFileDir *oldDir, BigFileDir *newDir)
 {
