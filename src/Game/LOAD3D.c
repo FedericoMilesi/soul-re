@@ -64,7 +64,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_ChangeDirectoryByID);
 
 INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_SetSearchDirectory);
 
-INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_GetSearchDirectory);
+long LOAD_GetSearchDirectory()
+{
+    return loadStatus.bigFile.searchDirID;
+}
 
 int LOAD_ChangeDirectoryFlag()
 {
