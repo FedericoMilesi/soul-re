@@ -67,5 +67,6 @@ void WARPGATE_IsItActive(StreamUnit *streamUnit);
 void STREAM_RenderAdjacantUnit(unsigned long **curOT, StreamUnitPortal *curStreamPortal, StreamUnit *toStreamUnit, StreamUnit *mainStreamUnit, RECT *cliprect);
 void STREAM_UpdateInstanceCollisionInfo(HModel *oldHModel, HModel *newHModel);
 void RemoveIntroducedLights(Level *level);
+void STREAM_UpdateObjectPointer(Object *oldObject, Object *newObject, long sizeOfObject);
 
 #endif

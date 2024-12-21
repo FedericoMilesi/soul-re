@@ -4,6 +4,7 @@
 #include "Game/LOAD3D.h"
 #include "Game/HASM.h"
 #include "Game/STREAM.h"
+#include "Game/GAMELOOP.h"
 
 static NewMemTracker newMemTracker;
 
@@ -448,7 +449,161 @@ void MEMPACK_RelocateG2AnimKeylistType(G2AnimKeylist **pKeylist, int offset, cha
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_RelocateObjectType);
+void MEMPACK_RelocateObjectType(MemHeader *newAddress, long offset, Object *oldObject)
+{
+    Instance *instance;
+    Object *object;
+    int i;
+    int j;
+    int d;
+    int sizeOfObject;
+    Model *model;
+
+    object = (Object *)(newAddress + 1);
+
+    sizeOfObject = newAddress->memSize - sizeof(MemHeader);
+
+    object->modelList = (Model **)OFFSET_DATA(object->modelList, offset);
+    object->animList = (G2AnimKeylist **)OFFSET_DATA(object->animList, offset);
+
+    object->soundData = (unsigned char *)OFFSET_DATA(object->soundData, offset);
+    object->data = (void *)OFFSET_DATA(object->data, offset);
+
+    object->script = (char *)OFFSET_DATA(object->script, offset);
+    object->name = (char *)OFFSET_DATA(object->name, offset);
+
+    object->effectList = (ObjectEffect *)OFFSET_DATA(object->effectList, offset);
+
+    if ((((Object *)(newAddress + 1))->oflags & 0x8000000))
+    {
+        object->relocList = (unsigned long *)OFFSET_DATA(object->relocList, offset);
+        object->relocModule = (void *)OFFSET_DATA(object->relocModule, offset);
+    }
+
+    for (i = 0; i < object->numModels; i++)
+    {
+        object->modelList[i] = (Model *)OFFSET_DATA(object->modelList[i], offset);
+
+        model = object->modelList[i];
+
+        model->vertexList = (MVertex *)OFFSET_DATA(model->vertexList, offset);
+        model->normalList = (SVectorNoPad *)OFFSET_DATA(model->normalList, offset);
+        model->faceList = (MFace *)OFFSET_DATA(model->faceList, offset);
+        model->segmentList = (Segment *)OFFSET_DATA(model->segmentList, offset);
+
+        model->aniTextures = (AniTex *)OFFSET_DATA(model->aniTextures, offset);
+
+        model->multiSpline = (MultiSpline *)OFFSET_DATA(model->multiSpline, offset);
+
+        model->startTextures = (TextureMT3 *)OFFSET_DATA(model->startTextures, offset);
+        model->endTextures = (TextureMT3 *)OFFSET_DATA(model->endTextures, offset);
+
+        for (d = 0; d < model->numFaces; d++)
+        {
+            MFace *mface;
+
+            mface = &model->faceList[d];
+
+            if ((mface->flags & 0x2))
+            {
+                mface->color = (long)OFFSET_DATA(mface->color, offset);
+            }
+        }
+
+        for (d = 0; d < model->numSegments; d++)
+        {
+            Segment *segment;
+            HInfo *hInfo;
+
+            segment = &model->segmentList[d];
+
+            segment->hInfo = (HInfo *)OFFSET_DATA(segment->hInfo, offset);
+
+            if (segment->hInfo != NULL)
+            {
+                hInfo = segment->hInfo;
+
+                hInfo->hfaceList = (HFace *)OFFSET_DATA(hInfo->hfaceList, offset);
+                hInfo->hsphereList = (HSphere *)OFFSET_DATA(hInfo->hsphereList, offset);
+                hInfo->hboxList = (HBox *)OFFSET_DATA(hInfo->hboxList, offset);
+            }
+        }
+
+        if (model->aniTextures != NULL)
+        {
+            AniTexInfo *aniTexInfo;
+
+            aniTexInfo = &model->aniTextures->aniTexInfo;
+
+            for (d = 0; d < model->aniTextures->numAniTextues; d++, aniTexInfo++)
+            {
+                aniTexInfo->texture = (TextureMT3 *)OFFSET_DATA(aniTexInfo->texture, offset);
+            }
+        }
+
+        {
+            MultiSpline *multiSpline;
+
+            if (model->multiSpline != NULL)
+            {
+                multiSpline = model->multiSpline;
+
+                multiSpline->positional = (Spline *)OFFSET_DATA(multiSpline->positional, offset);
+                multiSpline->rotational = (RSpline *)OFFSET_DATA(multiSpline->rotational, offset);
+
+                multiSpline->scaling = (Spline *)OFFSET_DATA(multiSpline->scaling, offset);
+
+                multiSpline->color = (Spline *)OFFSET_DATA(multiSpline->color, offset);
+
+                if (multiSpline->positional != NULL)
+                {
+                    multiSpline->positional->key = (SplineKey *)OFFSET_DATA(multiSpline->positional->key, offset);
+                }
+
+                if (multiSpline->rotational != NULL)
+                {
+                    multiSpline->rotational->key = (SplineRotKey *)OFFSET_DATA(multiSpline->rotational->key, offset);
+                }
+
+                if (multiSpline->scaling != NULL)
+                {
+                    multiSpline->scaling->key = (SplineKey *)OFFSET_DATA(multiSpline->scaling->key, offset);
+                }
+
+                if (multiSpline->color != NULL)
+                {
+                    multiSpline->color->key = (SplineKey *)OFFSET_DATA(multiSpline->color->key, offset);
+                }
+            }
+        }
+    }
+
+    for (i = 0; i < object->numAnims; i++)
+    {
+        MEMPACK_RelocateG2AnimKeylistType(&object->animList[i], offset, (char *)oldObject, (char *)oldObject + sizeOfObject);
+    }
+
+    if (object->animList != NULL)
+    {
+        for (instance = gameTrackerX.instanceList->first; instance != NULL; instance = instance->next)
+        {
+            if (instance->object == oldObject)
+            {
+                instance->anim.modelData = (Model *)OFFSET_DATA(instance->anim.modelData, offset);
+            }
+
+            for (j = 0; j < instance->anim.sectionCount; j++)
+            {
+                if (((uintptr_t)instance->anim.section[j].keylist >= (uintptr_t)oldObject) && ((uintptr_t)((char *)oldObject + sizeOfObject) >= (uintptr_t)instance->anim.section[j].keylist))
+                {
+                    instance->anim.section[j].keylist = (G2AnimKeylist *)OFFSET_DATA(instance->anim.section[j].keylist, offset);
+                }
+            }
+        }
+    }
+
+    STREAM_UpdateObjectPointer(oldObject, object, sizeOfObject);
+}
 
 void MEMPACK_RelocateCDMemory(MemHeader *newAddress, long offset, BigFileDir *oldDir)
 {
