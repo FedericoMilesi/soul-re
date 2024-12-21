@@ -70,7 +70,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_ChangeDirectoryFlag);
 
 INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_UpdateBigFilePointers);
 
-INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_IsFileLoading);
+int LOAD_IsFileLoading()
+{
+    return loadStatus.currentQueueFile.readStatus != 0;
+}
 
 void LOAD_StopLoad()
 {
