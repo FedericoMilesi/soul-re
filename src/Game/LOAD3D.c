@@ -68,7 +68,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_GetSearchDirectory);
 
 INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_ChangeDirectoryFlag);
 
-INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_UpdateBigFilePointers);
+void LOAD_UpdateBigFilePointers(BigFileDir *oldDir, BigFileDir *newDir)
+{
+    if (loadStatus.bigFile.currentDir == oldDir)
+    {
+        loadStatus.bigFile.currentDir = newDir;
+    }
+
+    if (loadStatus.bigFile.cachedDir == oldDir)
+    {
+        loadStatus.bigFile.cachedDir = newDir;
+    }
+}
 
 int LOAD_IsFileLoading()
 {
