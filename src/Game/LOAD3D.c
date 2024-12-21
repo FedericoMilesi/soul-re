@@ -1,5 +1,7 @@
 #include "common.h"
 
+STATIC LoadStatus loadStatus;
+
 INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_InitCd);
 
 INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_CdSeekCallback);
@@ -70,4 +72,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_UpdateBigFilePointers);
 
 INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_IsFileLoading);
 
-INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_StopLoad);
+void LOAD_StopLoad()
+{
+    loadStatus.state = 5;
+
+    loadStatus.currentQueueFile.readStatus = 0;
+
+    if (loadStatus.currentDirLoading != 0)
+    {
+        loadStatus.currentDirLoading = 0;
+    }
+}
