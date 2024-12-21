@@ -2,7 +2,14 @@
 
 STATIC LoadStatus loadStatus;
 
-INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_InitCd);
+void LOAD_InitCd()
+{
+    CdInit();
+
+    ResetCallback();
+
+    CdSetDebug(0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/LOAD3D", LOAD_CdSeekCallback);
 

@@ -406,5 +406,8 @@ void PadSetAct(int, unsigned char *, int);
 void SetFarColor(long rfc, long gfc, long bfc);
 int PadInfoMode(int, int, int);
 int PadSetActAlign(int, unsigned char *);
+int ResetCallback(void);
+int CdSetDebug(int level);
+int CdInit(void);
 
 #endif
