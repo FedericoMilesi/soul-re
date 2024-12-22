@@ -83,6 +83,121 @@ long MEMPACK_RelocatableType(long memType)
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Malloc);
+/* needs strings migration
+char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType)
+{
+    MemHeader *bestAddress;
+    long relocatableMemory;
+    int curMem;
+    MemHeader *address;
+    long topOffset;
+
+    relocatableMemory = MEMPACK_RelocatableType(memType);
+
+    allocSize = ((allocSize + 11) / 4) << 2;
+
+    do
+    {
+        if ((newMemTracker.doingGarbageCollection == 0) && (relocatableMemory != 0))
+        {
+            MEMPACK_DoGarbageCollection();
+        }
+
+        if (relocatableMemory != 0)
+        {
+            bestAddress = MEMPACK_GetSmallestBlockTopBottom(allocSize);
+        }
+        else if (relocatableMemory == 0)
+        {
+            bestAddress = MEMPACK_GetSmallestBlockBottomTop(allocSize);
+        }
+
+        if (bestAddress == NULL)
+        {
+            curMem = newMemTracker.currentMemoryUsed;
+
+            STREAM_TryAndDumpANonResidentObject();
+
+            if (curMem == newMemTracker.currentMemoryUsed)
+            {
+                if (memType == 16)
+                {
+                    return NULL;
+                }
+
+                MEMPACK_ReportMemory2();
+
+                DEBUG_FatalError("Trying to fit memory size %d Type = %d\nAvailable memory : used = % d, free = % d", allocSize, memType, newMemTracker.currentMemoryUsed, newMemTracker.totalMemory - newMemTracker.currentMemoryUsed);
+                break;
+            }
+        }
+        else
+        {
+            break;
+        }
+    } while (curMem != newMemTracker.currentMemoryUsed);
+
+    topOffset = bestAddress->memSize;
+
+    if (((topOffset - allocSize) >= 0) && ((topOffset - allocSize) <= 7))
+    {
+        allocSize = bestAddress->memSize;
+    }
+
+    if (allocSize != bestAddress->memSize)
+    {
+        if (relocatableMemory != 0)
+        {
+            address = (MemHeader *)((char *)bestAddress + allocSize);
+
+            address->magicNumber = 0xBADE;
+
+            address->memStatus = 0;
+            address->memType = 0;
+            address->memSize = bestAddress->memSize - allocSize;
+
+            bestAddress->magicNumber = 0xBADE;
+
+            bestAddress->memStatus = 1;
+            bestAddress->memType = memType;
+            bestAddress->memSize = allocSize;
+
+            newMemTracker.currentMemoryUsed += allocSize;
+        }
+        else
+        {
+            address = (MemHeader *)((char *)bestAddress + (topOffset - allocSize));
+
+            address->magicNumber = 0xBADE;
+
+            address->memStatus = 1;
+            address->memType = memType;
+            address->memSize = allocSize;
+
+            newMemTracker.currentMemoryUsed += allocSize;
+
+            bestAddress->magicNumber = 0xBADE;
+
+            bestAddress->memStatus = 0;
+            bestAddress->memType = 0;
+            bestAddress->memSize = topOffset - allocSize;
+
+            bestAddress = address;
+        }
+    }
+    else
+    {
+        bestAddress->magicNumber = 0xBADE;
+
+        bestAddress->memStatus = 1;
+        bestAddress->memType = memType;
+        bestAddress->memSize = allocSize;
+
+        newMemTracker.currentMemoryUsed += allocSize;
+    }
+
+    return (char *)(bestAddress + 1);
+}*/
 
 void MEMORY_MergeAddresses(MemHeader *firstAddress, MemHeader *secondAddress)
 {
