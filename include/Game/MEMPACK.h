@@ -14,5 +14,6 @@ void MEMPACK_RelocateCDMemory(MemHeader *newAddress, long offset, BigFileDir *ol
 void MEMPACK_RelocateObjectType(MemHeader *newAddress, long offset, Object *oldObject);
 void MEMPACK_RelocateAreaType(MemHeader *newAddress, long offset, Level *oldLevel);
 char *MEMPACK_GarbageCollectMalloc(unsigned long *allocSize, unsigned char memType, unsigned long *freeSize);
+void MEMPACK_ReportMemory2();
 
 #endif

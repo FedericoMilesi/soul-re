@@ -68,5 +68,7 @@ void STREAM_RenderAdjacantUnit(unsigned long **curOT, StreamUnitPortal *curStrea
 void STREAM_UpdateInstanceCollisionInfo(HModel *oldHModel, HModel *newHModel);
 void RemoveIntroducedLights(Level *level);
 void STREAM_UpdateObjectPointer(Object *oldObject, Object *newObject, long sizeOfObject);
+int STREAM_TryAndDumpANonResidentObject();
+void STREAM_DumpNonResidentObjects();
 
 #endif

@@ -5,8 +5,15 @@
 #include "Game/HASM.h"
 #include "Game/STREAM.h"
 #include "Game/GAMELOOP.h"
+#include "Game/DEBUG.h"
 
 static NewMemTracker newMemTracker;
+
+// char D_800D1114[] = "Verify failed: %s :%s, line %d\n";
+
+// char D_800D1134[] = "Assert failed: %s :%s, line %d\n";
+
+// char D_800D1154[] = "%s\n";
 
 void MEMPACK_Init()
 {
@@ -82,8 +89,11 @@ long MEMPACK_RelocatableType(long memType)
     return 0;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
+// char D_800D1074[] = "Trying to fit memory size %d Type = %d\nAvailable memory : used = %d, free = %d\n";
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Malloc);
-/* needs strings migration
+#else
 char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType)
 {
     MemHeader *bestAddress;
@@ -118,7 +128,7 @@ char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType)
 
             STREAM_TryAndDumpANonResidentObject();
 
-            if (curMem == newMemTracker.currentMemoryUsed)
+            if ((unsigned int)curMem == newMemTracker.currentMemoryUsed)
             {
                 if (memType == 16)
                 {
@@ -127,7 +137,7 @@ char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType)
 
                 MEMPACK_ReportMemory2();
 
-                DEBUG_FatalError("Trying to fit memory size %d Type = %d\nAvailable memory : used = % d, free = % d", allocSize, memType, newMemTracker.currentMemoryUsed, newMemTracker.totalMemory - newMemTracker.currentMemoryUsed);
+                DEBUG_FatalError("Trying to fit memory size %d Type = %d\nAvailable memory : used = %d, free = %d\n", allocSize, memType, newMemTracker.currentMemoryUsed, newMemTracker.totalMemory - newMemTracker.currentMemoryUsed);
                 break;
             }
         }
@@ -135,7 +145,7 @@ char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType)
         {
             break;
         }
-    } while (curMem != newMemTracker.currentMemoryUsed);
+    } while ((unsigned int)curMem != newMemTracker.currentMemoryUsed);
 
     topOffset = bestAddress->memSize;
 
@@ -197,7 +207,8 @@ char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType)
     }
 
     return (char *)(bestAddress + 1);
-}*/
+}
+#endif
 
 void MEMORY_MergeAddresses(MemHeader *firstAddress, MemHeader *secondAddress)
 {
@@ -383,7 +394,73 @@ long MEMPACK_MemoryValidFunc(char *address)
 }
 #endif
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
+// char D_800D10C4[] = "Trying to fit memory size %d Type = %d\nAvalible memory : used = %d, free = %d\n";
 INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GarbageCollectMalloc);
+#else
+char *MEMPACK_GarbageCollectMalloc(unsigned long *allocSize, unsigned char memType, unsigned long *freeSize)
+{
+    MemHeader *bestAddress;
+
+    *allocSize = ((*allocSize + 11) / 4) << 2;
+
+    bestAddress = MEMPACK_GetSmallestBlockTopBottom(*allocSize);
+
+    if (bestAddress == NULL)
+    {
+        STREAM_DumpNonResidentObjects();
+
+        bestAddress = MEMPACK_GetSmallestBlockTopBottom(*allocSize);
+
+        if (bestAddress == NULL)
+        {
+            if (memType != 16)
+            {
+                MEMPACK_ReportMemory();
+
+                DEBUG_FatalError("Trying to fit memory size %d Type = %d\nAvalible memory : used = %d, free = %d\n", *allocSize, memType, newMemTracker.currentMemoryUsed, newMemTracker.totalMemory - newMemTracker.currentMemoryUsed);
+            }
+            else
+            {
+                return NULL;
+            }
+        }
+    }
+
+    if ((bestAddress->memSize - *allocSize) < 8)
+    {
+        *allocSize = bestAddress->memSize;
+    }
+
+    if (*allocSize != bestAddress->memSize)
+    {
+        *freeSize = bestAddress->memSize - *allocSize;
+
+        bestAddress->magicNumber = 0xBADE;
+
+        bestAddress->memStatus = 1;
+        bestAddress->memType = memType;
+        bestAddress->memSize = *allocSize;
+
+        newMemTracker.currentMemoryUsed += *allocSize;
+    }
+    else
+    {
+        bestAddress->magicNumber = 0xBADE;
+
+        bestAddress->memStatus = 1;
+        bestAddress->memType = memType;
+        bestAddress->memSize = *allocSize;
+
+        newMemTracker.currentMemoryUsed += *allocSize;
+
+        *freeSize = 0;
+    }
+
+    return (char *)(bestAddress + 1);
+}
+#endif
 
 void MEMPACK_GarbageSplitMemoryNow(unsigned long allocSize, MemHeader *bestAddress, long memType, unsigned long freeSize)
 {
