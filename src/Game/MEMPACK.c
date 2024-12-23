@@ -9,12 +9,6 @@
 
 static NewMemTracker newMemTracker;
 
-// char D_800D1114[] = "Verify failed: %s :%s, line %d\n";
-
-// char D_800D1134[] = "Assert failed: %s :%s, line %d\n";
-
-// char D_800D1154[] = "%s\n";
-
 void MEMPACK_Init()
 {
     newMemTracker.rootNode = (MemHeader *)overlayAddress;
@@ -89,11 +83,6 @@ long MEMPACK_RelocatableType(long memType)
     return 0;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-// char D_800D1074[] = "Trying to fit memory size %d Type = %d\nAvailable memory : used = %d, free = %d\n";
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_Malloc);
-#else
 char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType)
 {
     MemHeader *bestAddress;
@@ -149,7 +138,7 @@ char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType)
 
     topOffset = bestAddress->memSize;
 
-    if (((topOffset - allocSize) >= 0) && ((topOffset - allocSize) <= 7))
+    if ((topOffset - allocSize) <= 7)
     {
         allocSize = bestAddress->memSize;
     }
@@ -208,7 +197,6 @@ char *MEMPACK_Malloc(unsigned long allocSize, unsigned char memType)
 
     return (char *)(bestAddress + 1);
 }
-#endif
 
 void MEMORY_MergeAddresses(MemHeader *firstAddress, MemHeader *secondAddress)
 {
@@ -379,10 +367,6 @@ void MEMPACK_SetMemoryDoneStreamed(char *address)
     address[-6] = 1;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_MemoryValidFunc);
-#else
 long MEMPACK_MemoryValidFunc(char *address)
 {
     if ((address != (char *)0xFAFBFCFD) && (address != NULL))
@@ -392,13 +376,7 @@ long MEMPACK_MemoryValidFunc(char *address)
 
     return 0;
 }
-#endif
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-// char D_800D10C4[] = "Trying to fit memory size %d Type = %d\nAvalible memory : used = %d, free = %d\n";
-INCLUDE_ASM("asm/nonmatchings/Game/MEMPACK", MEMPACK_GarbageCollectMalloc);
-#else
 char *MEMPACK_GarbageCollectMalloc(unsigned long *allocSize, unsigned char memType, unsigned long *freeSize)
 {
     MemHeader *bestAddress;
@@ -460,7 +438,6 @@ char *MEMPACK_GarbageCollectMalloc(unsigned long *allocSize, unsigned char memTy
 
     return (char *)(bestAddress + 1);
 }
-#endif
 
 void MEMPACK_GarbageSplitMemoryNow(unsigned long allocSize, MemHeader *bestAddress, long memType, unsigned long freeSize)
 {
@@ -807,3 +784,7 @@ void MEMPACK_RelocateCDMemory(MemHeader *newAddress, long offset, BigFileDir *ol
 
     LOAD_UpdateBigFilePointers(oldDir, newDir);
 }
+
+static char unused1[] = "Verify failed: %s :%s, line %d\n";
+static char unused2[] = "Assert failed: %s :%s, line %d\n";
+static char unused3[] = "%s\n";
