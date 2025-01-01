@@ -718,7 +718,18 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", SetupReaction);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", CheckHolding);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", DisableWristCollision);
+void DisableWristCollision(Instance *instance, int Side)
+{
+	if ((Side & 0x1))
+	{
+		COLLIDE_SegmentCollisionOff(instance, 31);
+	}
+
+	if ((Side & 0x2))
+	{
+		COLLIDE_SegmentCollisionOff(instance, 41);
+	}
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", EnableWristCollision);
 
