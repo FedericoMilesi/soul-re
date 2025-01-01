@@ -265,7 +265,26 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razLaunchForce);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razGetHeldItem);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razGetHeldWeapon);
+Instance *razGetHeldWeapon()
+{
+	Instance* instance;
+
+	instance = razGetHeldItem();
+
+	if (instance == NULL)
+	{
+		if (Raziel.Senses.heldClass != 0)
+		{
+			return Raziel.soulReaver;
+		}
+	}
+    else if ((INSTANCE_Query(instance, 1) & 0x20))
+	{
+        return instance;
+	}
+
+	return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverBladeOff);
 
