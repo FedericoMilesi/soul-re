@@ -4,7 +4,13 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYRotMove);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYRotMoveInterp);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYRotInterp);
+void razAlignYRotInterp(Instance *source, Position *dest, unsigned char segNumber, int Frames)
+{
+    (void)segNumber;
+    (void)Frames;
+    
+	source->rotation.z = MATH3D_AngleFromPosToPos(&source->position, dest);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razConstrictAngle);
 
