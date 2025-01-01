@@ -19,6 +19,7 @@
 #include "Game/G2/QUATG2.h"
 #include "Game/RAZIEL/CONTROL.h"
 #include "Game/RAZIEL/RAZIEL.h"
+#include "Game/OBTABLE.h"
 
 /*.sbss*/
 STATIC Player Raziel;
@@ -748,7 +749,23 @@ void EnableWristCollision(Instance *instance, int Side)
 static char D_800D1DB8[0xA] = "MultiHit\n";
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", GetCollisionType);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", InitGlyphSystem);
+void InitGlyphSystem(Instance *instance)
+{
+	Object* GlyphOb;
+	Instance* iGlyph;
+	
+	GlyphOb = (Object*)objectAccess[20].object;
+	
+	if (GlyphOb != NULL)
+	{
+		iGlyph = INSTANCE_BirthObject(instance, GlyphOb, 0);
+
+		if (iGlyph != NULL)
+		{
+			Raziel.GlyphSystem = iGlyph;
+		}
+	}
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", mdRazielProcess);
 
