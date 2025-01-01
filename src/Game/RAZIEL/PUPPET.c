@@ -194,7 +194,86 @@ void StateHandlerMoveToPosition(CharacterState *In, int CurrentSection, intptr_t
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", DefaultPuppetStateHandler);
+void DefaultPuppetStateHandler(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+
+    Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event);
+    
+    if (Ptr != NULL) 
+    {
+        switch (Ptr->ID) 
+        {
+        case 0x100004: 
+            razResetMotion(gameTrackerX.playerInstance);
+            break;
+        case 0x4000A:
+            STREAM_SetInstancePosition(gameTrackerX.playerInstance, (evPositionData*)Ptr->Data);
+            break;
+        case 0x4000B:
+        {
+            evPositionData *data; 
+            
+            if (CurrentSection == 0) 
+            {
+                data = (evPositionData*)Ptr->Data;
+                
+                gameTrackerX.playerInstance->rotation.z = data->z;
+            }
+            
+            break;
+        }
+        case 0x4000F:
+        {
+            evPositionData *data; 
+            
+            data = (evPositionData*)Ptr->Data; 
+            
+            COPY_LVEC(Vector, &Raziel.Senses.lookAtPoint, evPositionData, data);
+            
+            Raziel.Senses.Flags |= 0x10;
+            
+            ControlFlag |= 0x20000;
+            break;
+        }
+        case 0x40020:
+            if (CurrentSection == 0) 
+            {
+                G2Anim_SetSpeedAdjustment(&gameTrackerX.playerInstance->anim, Ptr->Data);
+            }
+            
+            break;
+        case 0x800027:
+            if (Data != 0) 
+            {
+                ControlFlag |= 0x8;
+            }
+            else 
+            {
+                ControlFlag &= ~0x8; 
+            }
+            
+            break;
+        case 0x10002002:
+            razMaterialShift();
+            break;
+        case 0x10002001:
+            razSpectralShift();
+            break;
+        case 0x100009:
+        case 0x1000001:
+        case 0x4010200:
+        case 0x8000000:
+        case 0x80000000:
+        case 0x80000008:
+        case 0x80000010:
+        case 0x80000020:
+            break; 
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerWarpGate);
 
