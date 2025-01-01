@@ -2,7 +2,30 @@
 #include "Game/FX.h"
 #include "Game/STREAM.h"
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYMoveRot);
+void razAlignYMoveRot(Instance *dest, short distance, Position *position, Rotation *rotation, int extraZ) 
+{
+    SVECTOR d; 
+    SVECTOR dd; 
+    MATRIX mat;
+    int temp; // not from decls.h
+
+    temp = 2048;
+
+    d.vx = 0;
+    d.vy = -distance;
+    d.vz = 0;
+    
+    rotation->z = ((evPositionData*)INSTANCE_Query(dest, 7))->z + (extraZ + temp);
+    
+    MATH3D_SetUnityMatrix(&mat);
+    
+    RotMatrixZ(rotation->z, &mat);
+    
+    ApplyMatrixSV(&mat, &d, &dd);
+    
+    position->x = dest->position.x + dd.vx;
+    position->y = dest->position.y + dd.vy;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYRotMove);
 
