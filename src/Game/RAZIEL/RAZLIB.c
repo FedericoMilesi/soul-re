@@ -1,4 +1,6 @@
 #include "Game/FONT.h"
+#include "Game/FX.h"
+#include "Game/STREAM.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYMoveRot);
 
@@ -54,7 +56,39 @@ int razPlaneShift(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSpectralShift);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razMaterialShift);
+void razMaterialShift()
+{
+	if (Raziel.CurrentPlane == 2)
+	{
+		if (Raziel.HitPoints == 100000)
+		{
+			Raziel.CurrentPlane = 1;
+
+			gameTrackerX.playerInstance->flags2 &= ~0x8000000;
+
+			Raziel.HitPoints = GetMaxHealth();
+
+			Raziel.DamageFrequency = 0;
+
+			razReaverOn();
+
+			if (gameTrackerX.gameData.asmData.MorphType != 0)
+			{
+				MORPH_ToggleMorph();
+
+				if ((Raziel.State.SectionList[0].Process != StateHandlerGlyphs) && (Raziel.State.SectionList[0].Process != StateHandlerPuppetShow))
+				{
+					INSTANCE_Post(gameTrackerX.playerInstance, 0x40005, 0);
+				}
+
+				if (Raziel.Senses.Portal != NULL)
+				{
+					FX_EndInstanceParticleEffects(Raziel.Senses.Portal);
+				}
+			}
+		}
+	}
+}
 
 int RAZIEL_OkToShift()
 {

@@ -77,5 +77,6 @@ long WARPGATE_DecrementIndex();
 int WARPGATE_IsWarpgateUsable();
 int WARPGATE_IsWarpgateSpectral();
 int WARPGATE_IsWarpgateReady();
+void MORPH_ToggleMorph();
 
 #endif
