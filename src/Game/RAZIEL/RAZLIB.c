@@ -29,7 +29,33 @@ void razAlignYMoveRot(Instance *dest, short distance, Position *position, Rotati
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYRotMove);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYRotMoveInterp);
+//void razAlignYRotMoveInterp(struct _Instance *source, struct _Instance *dest, short distance, unsigned char segNumber, int Frames, int extraZ)
+void razAlignYRotMoveInterp(Instance *source, Instance *dest, short distance, unsigned char segNumber, int Frames, short extraZ)
+{
+    Position position; 
+    Rotation rotation; 
+    G2SVector3 v; 
+
+    position = source->position;
+    
+    razAlignYRotMove(dest, distance, &position, &rotation, extraZ);
+    
+    v.x = position.x;
+    v.y = position.y;
+    v.z = position.z;
+    
+    source->position = position;
+    
+    v.x = 0;
+    v.y = 0;
+    v.z = rotation.z;
+    
+    G2Anim_EnableController(&source->anim, segNumber, 8);
+    
+    G2EmulationSetInterpController_Vector(source, segNumber, 8, &v, Frames, 0);
+    
+    source->rotation.z = rotation.z;
+}
 
 void razAlignYRotInterp(Instance *source, Position *dest, unsigned char segNumber, int Frames)
 {
