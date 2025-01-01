@@ -12,7 +12,28 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razRotateUpperBody);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetFadeEffect);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razPlaneShift);
+int razPlaneShift(Instance *instance)
+{
+    (void)instance;
+    
+	if (!(gameTrackerX.streamFlags & 0x40000))
+	{
+		if (Raziel.CurrentPlane == 1)
+		{
+			razSpectralShift();
+
+			return 1;
+		}
+		else
+		{
+			razMaterialShift();
+
+			return 1;
+		}
+	}
+
+	return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSpectralShift);
 
