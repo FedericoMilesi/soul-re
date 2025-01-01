@@ -855,6 +855,21 @@ void RAZIEL_ResetLookAround(Instance *instance)
 	INSTANCE_Post(instance, 0x100009, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_OkToLookAround);
+long RAZIEL_OkToLookAround(Instance *playerInstance)
+{
+    (void)playerInstance;
+    
+	if (((Raziel.Senses.Flags & 0x4)) && ((Raziel.State.SectionList[0].Process == StateHandlerIdle) || (Raziel.State.SectionList[0].Process == StateHandlerThrow2)))
+    {
+        return 1;
+    }
+
+    if ((Raziel.State.SectionList[1].Process == StateHandlerSwim) || (Raziel.State.SectionList[1].Process == StateHandlerSwimTread))
+    {
+        return 1;
+    }
+    
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", TrailWaterFX);
