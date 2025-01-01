@@ -263,7 +263,19 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAdjustSpeed);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razLaunchForce);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razGetHeldItem);
+Instance *razGetHeldItem()
+{
+	Instance* instance;
+
+	instance = Raziel.State.CharacterInstance->LinkChild;
+
+	if ((Raziel.soulReaver != NULL) && (instance == Raziel.soulReaver) && (instance != NULL))
+	{
+		return instance->LinkSibling;
+	}
+
+	return instance;
+}
 
 Instance *razGetHeldWeapon()
 {
