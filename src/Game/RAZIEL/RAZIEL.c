@@ -713,7 +713,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", GetControllerMessages);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielAdditionalCollide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", GetEngageEvent);
+int GetEngageEvent(Instance *instance)
+{
+	int Ability;
+
+	if (instance != NULL)
+	{
+		Ability = INSTANCE_Query(instance, 2);
+
+		if ((Ability & 0x8))
+		{
+			return 0x2000000;
+		}
+
+		if ((Ability & 0x1))
+		{
+			return 0x2000001;
+		}
+
+		if ((Ability & 0x2))
+		{
+			return 0x2000004;
+		}
+	}
+
+	return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", SetupReaction);
 
