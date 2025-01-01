@@ -1,3 +1,5 @@
+#include "Game/RAZIEL/RAZLIB.h"
+
 void StateHandlerMoveToPosition(CharacterState *In, int CurrentSection, intptr_t Data);
 void DefaultPuppetStateHandler(CharacterState *In, int CurrentSection, intptr_t Data);
 
@@ -111,7 +113,86 @@ void StateHandlerPuppetShow(CharacterState *In, int CurrentSection, intptr_t Dat
     razApplyMotion(In, CurrentSection);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerMoveToPosition);
+void StateHandlerMoveToPosition(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr; 
+    long distance; 
+    int motion; 
+    int applyMotion;
+    
+    applyMotion = 1;
+    
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID) 
+        {         
+        case 0x1000000:
+        case 0x4010400:
+            break;
+        case 0x100001:
+            if (CurrentSection == 0) 
+            {
+                evPositionData *moveToPoint; 
+                
+                moveToPoint = (evPositionData*)Ptr->Data;
+                
+                COPY_SVEC(Position, &Raziel.puppetMoveToPoint, evPositionData, moveToPoint);
+                
+                razAlignYRotInterp(In->CharacterInstance, &Raziel.puppetMoveToPoint, 0, 4);
+                
+                PhysicsMode = 0;
+                
+                SteerSwitchMode(In->CharacterInstance, 0);
+            }
+                
+            break;
+        case 0x100000:
+            StateSwitchStateData(In, CurrentSection, StateHandlerPuppetShow, SetControlInitIdleData(0, 0, 3));
+                
+            applyMotion = 0;
+            break;
+        case 0x40016:
+            G2EmulationSwitchAnimation(In, CurrentSection, 123, 0, 4, 2);
+        case 0x4000C:
+        {
+            evPositionData *moveToPoint; 
+                
+            moveToPoint = (evPositionData*)Ptr->Data;
+                
+            COPY_SVEC(Position, &Raziel.puppetMoveToPoint, evPositionData, moveToPoint);
+            break;
+        }
+        case 0x4000001:
+            PhysicsMode = 0;
+                
+            SetDropPhysics(In->CharacterInstance, &Raziel);
+            break;
+        case 0x4020000:
+            break;
+        default:
+            DefaultPuppetStateHandler(In, CurrentSection, Data);
+        }
+        
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+    
+    if (applyMotion != 0) 
+    {
+        if (CurrentSection == 0) 
+        {
+            razAlignYRotInterp(In->CharacterInstance, &Raziel.puppetMoveToPoint, 0, 4);
+        }
+        
+        distance = MATH3D_LengthXYZ(In->CharacterInstance->position.x - Raziel.puppetMoveToPoint.x, In->CharacterInstance->position.y - Raziel.puppetMoveToPoint.y, In->CharacterInstance->position.z - Raziel.puppetMoveToPoint.z);
+        
+        motion = razApplyMotion(In, CurrentSection) * 2;
+        
+        if ((CurrentSection == 0) && (distance < motion)) 
+        {
+            INSTANCE_Post(In->CharacterInstance, 0x100000, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", DefaultPuppetStateHandler);
 
