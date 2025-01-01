@@ -738,7 +738,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielCollide);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_TurnHead);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_SetLookAround);
+void RAZIEL_SetLookAround(Instance* instance)
+{
+	G2Anim_EnableController(&instance->anim, 17, 14);
+	G2Anim_EnableController(&instance->anim, 16, 14);
+	G2Anim_EnableController(&instance->anim, 14, 14);
+
+	INSTANCE_Post(instance, 0x100009, 1);
+
+	Raziel.throwXRot = 0;
+	Raziel.throwZRot = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_ResetLookAround);
 
