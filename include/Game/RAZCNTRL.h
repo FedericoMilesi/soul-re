@@ -5,4 +5,6 @@
 
 /*extern*/ long RazielCommands[10];
 
+void ProcessRazControl(long *command);
+
 #endif

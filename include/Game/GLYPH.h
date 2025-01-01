@@ -16,6 +16,7 @@ void MANNA_Pickup();
 void HEALTHU_Pickup(Instance *instance);
 void HUD_Setup_Chit_Count(int chits);
 void HUD_Draw();
+void GlyphProcess(Instance *instance, GameTracker *gameTracker);
 
 int hud_warp_arrow_flash;
 

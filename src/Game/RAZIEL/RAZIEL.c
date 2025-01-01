@@ -792,7 +792,39 @@ void InitGlyphSystem(Instance *instance)
 	}
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", mdRazielProcess);
+void mdRazielProcess(Instance *playerInstance, GameTracker *gameTracker, long *controlCommand)
+{
+	ProcessTimers(playerInstance);
+
+	razClearPlayerEvent();
+
+	ProcessRazControl(controlCommand);
+
+	SetStates(playerInstance, gameTracker, controlCommand, -1);
+
+	ProcessHints();
+
+	CAMERA_Control(&theCamera, playerInstance);
+
+	playerInstance->offset.x = 0;
+	playerInstance->offset.y = 0;
+	playerInstance->offset.z = 0;
+	
+	Raziel.collisionEdgeOffset.x = 0;
+	Raziel.collisionEdgeOffset.y = 0;
+	Raziel.collisionEdgeOffset.z = 0;
+
+	Raziel.Senses.HitMonster = NULL;
+
+	if (Raziel.GlyphSystem != NULL)
+	{
+		GlyphProcess(Raziel.GlyphSystem, gameTracker);
+	}
+
+	Raziel.Abilities = debugRazielFlags1;
+	
+	debugRazielFlags1 |= debugRazielFlags2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielProcess);
 

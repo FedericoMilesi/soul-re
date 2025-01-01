@@ -15,5 +15,8 @@ long RAZIEL_OkToLookAround(Instance *playerInstance);
 Instance *RAZIEL_QueryEngagedInstance(int index);
 void StateInitIdle(CharacterState *In, int CurrentSection, intptr_t Ptr);
 void StateHandlerDeCompression(CharacterState *In, int CurrentSection, intptr_t Data);
+void ProcessHints();
+void ProcessTimers(Instance *instance);
+int SetStates(Instance *instance, GameTracker *GT, long *controlCommand, int AnalogLength);
 
 #endif
