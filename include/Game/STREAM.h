@@ -70,5 +70,12 @@ void RemoveIntroducedLights(Level *level);
 void STREAM_UpdateObjectPointer(Object *oldObject, Object *newObject, long sizeOfObject);
 int STREAM_TryAndDumpANonResidentObject();
 void STREAM_DumpNonResidentObjects();
+void WARPGATE_StartUsingWarpgate();
+void WARPGATE_EndUsingWarpgate();
+long WARPGATE_IncrementIndex();
+long WARPGATE_DecrementIndex();
+int WARPGATE_IsWarpgateUsable();
+int WARPGATE_IsWarpgateSpectral();
+int WARPGATE_IsWarpgateReady();
 
 #endif

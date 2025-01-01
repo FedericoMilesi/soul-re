@@ -23,5 +23,6 @@ int LOAD_ChangeDirectoryByID(int id);
 void *LOAD_InitBuffers();
 void LOAD_DumpCurrentDir();
 void LOAD_UpdateBigFilePointers(BigFileDir *oldDir, BigFileDir *newDir);
+void LOAD_PlayXA(int number);
 
 #endif

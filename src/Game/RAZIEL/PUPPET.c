@@ -1,4 +1,7 @@
+#include "Game/RAZIEL/RAZIEL.h"
 #include "Game/RAZIEL/RAZLIB.h"
+#include "Game/STREAM.h"
+#include "Game/LOAD3D.h"
 
 void StateHandlerMoveToPosition(CharacterState *In, int CurrentSection, intptr_t Data);
 void DefaultPuppetStateHandler(CharacterState *In, int CurrentSection, intptr_t Data);
@@ -275,6 +278,143 @@ void DefaultPuppetStateHandler(CharacterState *In, int CurrentSection, intptr_t 
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerWarpGate);
+void StateHandlerWarpGate(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr; 
+    int anim; 
+
+    anim = G2EmulationQueryAnimation(In, CurrentSection);
+    
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID) 
+        {
+        case 0x100001:
+            StateInitIdle(In, CurrentSection, SetControlInitIdleData(0, 0, 3));
+            
+            ControlFlag = 0x20008;
+            
+            Raziel.Mode = 0x80000000;
+            
+            PhysicsMode = 3;
+            
+            Raziel.idleCount = 0;
+            
+            if (CurrentSection == 0) 
+            {
+                Raziel.puppetRotToPoint.z = Raziel.Senses.EngagedList[14].instance->rotation.z;
+                
+                SteerSwitchMode(In->CharacterInstance, 13);
+                
+                In->CharacterInstance->position = Raziel.Senses.EngagedList[14].instance->position;
+                
+                razSetPlayerEventHistory(0x800);
+                
+                WARPGATE_StartUsingWarpgate();
+            }
+            
+            break;
+        case 0x2000000:
+        case 0x80000000:
+            if (anim != 123) 
+            {
+                EnMessageQueueData(&In->SectionList[CurrentSection].Defer, 0x100000, 0);
+                
+                WARPGATE_EndUsingWarpgate();
+            }
+            
+            break;
+        case 0x10000000:
+            if ((CurrentSection == 0) && (anim != 123)) 
+            {
+                if ((*PadData & 0x4)) 
+                {
+                    WARPGATE_IncrementIndex();
+                }
+                
+                if ((*PadData & 0x8)) 
+                {
+                    WARPGATE_DecrementIndex();
+                }
+                
+                if ((*PadData & 0x1)) 
+                {
+                    if (WARPGATE_IsWarpgateUsable() != 0) 
+                    {
+                        Instance *heldInst; 
+                        
+                        SetTimer(75);
+                        
+                        heldInst = razGetHeldItem();
+                        
+                        if (heldInst != NULL) 
+                        {
+                            INSTANCE_Post(heldInst, 0x800008, 0);
+                        }
+                        
+                        G2EmulationSwitchAnimationCharacter(In, 123, 0, 6, 2);
+                        
+                        if (WARPGATE_IsWarpgateSpectral() != 0) 
+                        {
+                            razSpectralShift();
+                        }
+                        
+                        break;
+                    }
+                    
+                    if ((!(Raziel.playerEventHistory & 0x20000)) && (WARPGATE_IsWarpgateReady() != 0)) 
+                    {
+                        LOAD_PlayXA(239);
+                        
+                        razSetPlayerEventHistory(0x20000);
+                    }
+                }
+            }
+            
+            break;
+        case 0x100000:
+            if (WARPGATE_IsWarpgateActive() != 0) 
+            {
+                EnMessageQueueData(&In->SectionList[CurrentSection].Defer, 0x100000, 0);
+            }
+            else 
+            {
+                StateSwitchStateCharacterData(In, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+            }
+            
+            break;
+        case 0x100015:
+            if (CurrentSection == 0) 
+            {
+                EnMessageQueueData(&In->SectionList[CurrentSection].Defer, 0x100000, 0);
+                
+                WARPGATE_EndUsingWarpgate();
+            }
+            
+            StateInitIdle(In, CurrentSection, SetControlInitIdleData(0, 0, 3));
+            break;
+        case 0x40005:
+        case 0x100004:
+        case 0x100014:
+        case 0x1000001:
+        case 0x8000000:
+        case 0x10002001:
+        case 0x10002002:
+        case 0x80000008:
+        case 0x80000010:
+        case 0x80000020:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+        
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+    
+    if (CurrentSection == 0) 
+    {
+        razApplyMotion(In, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerForcedGlide);
