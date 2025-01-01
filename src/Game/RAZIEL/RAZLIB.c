@@ -10,12 +10,21 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razConstrictAngle);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razRotateUpperBody);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetFadeEffect);
+void razSetFadeEffect(short source, short dest, int steps)
+{
+	Raziel.effectsFadeSource = source;
+	Raziel.effectsFadeDest = dest;
+
+	Raziel.effectsFadeSteps = 0;
+	Raziel.effectsFadeStep = steps;
+
+	Raziel.effectsFlags |= 0x3;
+}
 
 int razPlaneShift(Instance *instance)
 {
     (void)instance;
-    
+
 	if (!(gameTrackerX.streamFlags & 0x40000))
 	{
 		if (Raziel.CurrentPlane == 1)
