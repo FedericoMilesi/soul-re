@@ -67,7 +67,57 @@ void razAlignYRotInterp(Instance *source, Position *dest, unsigned char segNumbe
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razConstrictAngle);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razRotateUpperBody);
+void razRotateUpperBody(Instance *instance, evActionLookAroundData *data)
+{
+    int tx; 
+    int tz; 
+    G2SVector3 Rot; 
+    
+    if (*data->rotx < data->minx) 
+    {
+        *data->rotx = data->minx;
+    }
+    else if (*data->rotx > data->maxx) 
+    {
+        *data->rotx = data->maxx;
+    }
+    
+    if (*data->rotz < data->minz) 
+    {
+        *data->rotz = data->minz;
+    }
+    else if (*data->rotz > data->maxz) 
+    {
+        *data->rotz = data->maxz;
+    }
+    
+    tx = *data->rotx;
+    tz = *data->rotz;
+    
+    Rot.x = -tx / 2;
+    Rot.y = 0;
+    Rot.z = tz / 2;
+    
+    MATH3D_ZYXtoXYZ((Rotation*)&Rot);
+    
+    G2Anim_SetController_Vector((G2Anim*)&instance->anim, 14, 14, &Rot);
+    
+    Rot.x = (-tx * 30) / 100;
+    Rot.y = 0;
+    Rot.z = (tz * 30) / 100;
+    
+    MATH3D_ZYXtoXYZ((Rotation*)&Rot);
+    
+    G2Anim_SetController_Vector((G2Anim*)&instance->anim, 16, 14, &Rot);
+    
+    Rot.x = -tx / 5;
+    Rot.y = 0;
+    Rot.z = tz / 5; 
+    
+    MATH3D_ZYXtoXYZ((Rotation*)&Rot);
+    
+    G2Anim_SetController_Vector((G2Anim*)&instance->anim, 17, 14, &Rot);
+}
 
 void razSetFadeEffect(short source, short dest, int steps)
 {
