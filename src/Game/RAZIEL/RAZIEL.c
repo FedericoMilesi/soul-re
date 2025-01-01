@@ -731,7 +731,18 @@ void DisableWristCollision(Instance *instance, int Side)
 	}
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", EnableWristCollision);
+void EnableWristCollision(Instance *instance, int Side)
+{
+	if ((Side & 0x1))
+	{
+		COLLIDE_SegmentCollisionOn(instance, 31);
+	}
+
+	if ((Side & 0x2))
+	{
+		COLLIDE_SegmentCollisionOn(instance, 41);
+	}
+}
 
 /*TODO: migrate to GetCollisionType*/
 static char D_800D1DB8[0xA] = "MultiHit\n";
