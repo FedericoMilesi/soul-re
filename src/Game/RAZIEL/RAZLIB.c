@@ -27,7 +27,28 @@ void razAlignYMoveRot(Instance *dest, short distance, Position *position, Rotati
     position->y = dest->position.y + dd.vy;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYRotMove);
+void razAlignYRotMove(Instance *dest, short distance, Position *position, Rotation *rotation, int extraZ) 
+{
+	SVECTOR d;
+	SVECTOR dd;
+	SVECTOR rot;
+	MATRIX mat;
+
+	memset(&rot, 0, sizeof(SVECTOR));
+    
+	rot.vz = rotation->z = MATH3D_AngleFromPosToPos(position, &dest->position) + extraZ;
+    
+	RotMatrix(&rot, &mat);
+	
+    d.vx = 0;
+	d.vz = 0;
+	d.vy = distance;
+	
+    ApplyMatrixSV(&mat, &d, &dd);
+    
+	position->x = dest->position.x + dd.vx;
+	position->y = dest->position.y + dd.vy;
+}
 
 //void razAlignYRotMoveInterp(struct _Instance *source, struct _Instance *dest, short distance, unsigned char segNumber, int Frames, int extraZ)
 void razAlignYRotMoveInterp(Instance *source, Instance *dest, short distance, unsigned char segNumber, int Frames, short extraZ)
