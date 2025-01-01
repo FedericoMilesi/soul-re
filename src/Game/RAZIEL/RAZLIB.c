@@ -1,3 +1,5 @@
+#include "Game/FONT.h"
+
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYMoveRot);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAlignYRotMove);
@@ -54,10 +56,35 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSpectralShift);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razMaterialShift);
 
-/*TODO: migrate to RAZIEL_OkToShift*/
-static char D_800D1D24[0x39] = "\nYOU CAN NOT HAVE SHIFT ANYTIME WITHOUT THE SWIM ABILITY";
-static char D_800D1D60[0x38] = "\nBEAT THE ALUKA BOSS THEN WIN THE SECOND KAIN ENCOUNTER";
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_OkToShift);
+int RAZIEL_OkToShift()
+{
+	if (Raziel.CurrentPlane == 2)
+	{
+		if (Raziel.HitPoints == GetMaxHealth())
+		{
+			if ((Raziel.Abilities & 0x40))
+			{
+				if (!(Raziel.Abilities & 0x10))
+				{
+					FONT_Print("\nYOU CAN NOT HAVE SHIFT ANYTIME WITHOUT THE SWIM ABILITY");
+					FONT_Print("\nBEAT THE ALUKA BOSS THEN WIN THE SECOND KAIN ENCOUNTER");
+
+					return 0;
+				}
+			}
+			else
+			{
+				return (Raziel.Senses.Flags & 0x40) > 0;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razPickupAndGrab);
 
