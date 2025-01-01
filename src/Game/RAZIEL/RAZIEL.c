@@ -750,7 +750,14 @@ void RAZIEL_SetLookAround(Instance* instance)
 	Raziel.throwZRot = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_ResetLookAround);
+void RAZIEL_ResetLookAround(Instance *instance)
+{
+	G2Anim_InterpDisableController(&instance->anim, 17, 14, 300);
+	G2Anim_InterpDisableController(&instance->anim, 16, 14, 300);
+	G2Anim_InterpDisableController(&instance->anim, 14, 14, 300);
+
+	INSTANCE_Post(instance, 0x100009, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_OkToLookAround);
 
