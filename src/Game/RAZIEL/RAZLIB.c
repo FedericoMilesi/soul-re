@@ -175,7 +175,52 @@ int razPlaneShift(Instance *instance)
 	return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSpectralShift);
+void razSpectralShift()
+{
+	Instance* inst;
+
+	if (!(gameTrackerX.streamFlags & 0x40000))
+	{
+		if (Raziel.CurrentPlane == 1)
+		{
+			inst = razGetHeldItem();
+
+			if (inst != NULL)
+			{
+				INSTANCE_Post(inst, 0x800008, 4);
+
+				razSetFadeEffect(4096, 0, 256);
+			}
+
+			gameTrackerX.playerInstance->flags2 |= 0x8000000;
+
+			INSTANCE_Post(gameTrackerX.playerInstance, 0x100014, 0);
+
+			if (Raziel.HitPoints == GetMaxHealth())
+			{
+				Raziel.HitPoints = 100000;
+			}
+			else
+			{
+				Raziel.HitPoints = 83334;
+			}
+
+			Raziel.CurrentPlane = 2;
+
+			razReaverOn();
+
+			if (gameTrackerX.gameData.asmData.MorphType == 0)
+			{
+				MORPH_ToggleMorph();
+
+				if ((Raziel.State.SectionList[0].Process != StateHandlerGlyphs) && (Raziel.State.SectionList[0].Process != StateHandlerPuppetShow))
+				{
+					INSTANCE_Post(gameTrackerX.playerInstance, 0x40005, 0);
+				}
+			}
+		}
+	}
+}
 
 void razMaterialShift()
 {
