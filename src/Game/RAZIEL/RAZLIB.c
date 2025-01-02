@@ -451,7 +451,13 @@ Instance *razGetHeldWeapon()
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverBladeOff);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverBladeOn);
+void razReaverBladeOn()
+{
+	if ((Raziel.soulReaver != NULL) && (razGetHeldItem() == NULL))
+	{
+		INSTANCE_Post(Raziel.soulReaver, 0x800108, 0);
+	}
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverOff);
 
