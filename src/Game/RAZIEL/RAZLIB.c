@@ -1,6 +1,7 @@
 #include "Game/FONT.h"
 #include "Game/FX.h"
 #include "Game/STREAM.h"
+#include "Game/PHYSOBS.h"
 
 void razAlignYMoveRot(Instance *dest, short distance, Position *position, Rotation *rotation, int extraZ) 
 {
@@ -261,7 +262,17 @@ int razZeroAxis(long *x, long *y, int radius)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAdjustSpeed);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razLaunchForce);
+void razLaunchForce(Instance *instance)
+{
+	PHYSOB_BirthProjectile(instance, 49, ((char*)&Raziel.Abilities)[1] & 0x1); // TODO: reverify that the third function parameter is not fake
+    
+	Raziel.effectsFlags |= 0x4;
+    
+	razSetupSoundRamp(instance, (SoundRamp*)&Raziel.soundHandle, 12, PlayerData->forceMinPitch, PlayerData->forceMaxPitch, PlayerData->forceMinVolume, PlayerData->forceMaxVolume, PlayerData->forceRampTime * 30, 10000);
+    
+	Raziel.soundTimerNext = 0;
+	Raziel.soundTimerData = 0;
+}
 
 Instance *razGetHeldItem()
 {
