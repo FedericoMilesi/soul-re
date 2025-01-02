@@ -2,6 +2,7 @@
 #include "Game/FX.h"
 #include "Game/STREAM.h"
 #include "Game/PHYSOBS.h"
+#include "Game/RAZIEL/RAZLIB.h"
 
 void razAlignYMoveRot(Instance *dest, short distance, Position *position, Rotation *rotation, int extraZ) 
 {
@@ -286,7 +287,78 @@ int RAZIEL_OkToShift()
 	return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razPickupAndGrab);
+int razPickupAndGrab(CharacterState *In, int CurrentSection)
+{
+    int index; 
+
+    if (!(Raziel.Senses.EngagedMask & 0x20)) 
+    {
+        return 1;
+    }
+    
+    if ((razGetHeldItem() == NULL) && (Raziel.CurrentPlane == 1) && (!(Raziel.Senses.Flags & 0x80))) 
+    {
+        evObjectData *objData; 
+        
+        if (CurrentSection != 1) 
+        {
+            return 0; 
+        }
+        
+        if (Raziel.Senses.EngagedList[5].instance->LinkParent != NULL) 
+        {
+            INSTANCE_Query(Raziel.Senses.EngagedList[5].instance->LinkParent, 0);
+        }
+        
+        objData = (evObjectData*)SetObjectData(0, 0, 8, In->CharacterInstance, CurrentSection);
+        
+        INSTANCE_Post(Raziel.Senses.EngagedList[5].instance, 0x80002E, (intptr_t)objData);
+        
+        if (objData->LinkNode == 0) 
+        {
+            if (Raziel.Senses.EngagedList[5].instance->LinkParent != NULL) 
+            {
+                INSTANCE_Post(Raziel.Senses.EngagedList[5].instance->LinkParent, 0x100001B, 0);
+                
+                INSTANCE_UnlinkFromParent(Raziel.Senses.EngagedList[5].instance);
+            }
+            
+            objData = (evObjectData*)SetObjectData(0, 0, 8, In->CharacterInstance, 49);
+            
+            INSTANCE_Post(Raziel.Senses.EngagedList[5].instance, 0x800002, (intptr_t)objData);
+            
+            if (objData->LinkNode == 0) 
+            {
+                CharacterState *temp; // not from decls.h
+                
+                Raziel.Senses.Flags |= 0x80;
+                
+                temp = (CharacterState*)&In->SectionList[0].Data1; 
+                
+                razReaverOff();
+                
+                temp->SectionList[0].Data1 = 0; // TODO: double-check, something looks a bit off here
+                
+                index = INSTANCE_Query(Raziel.Senses.EngagedList[5].instance, 4);
+                
+                if ((Raziel.Mode & 0x40000)) 
+                {
+                    return 0;
+                }
+                
+                G2EmulationSwitchAnimation(In, 1, PickupList[index], 0, 3, CurrentSection);
+                
+                Raziel.returnState = temp->SectionList[0].Process;
+                
+                StateSwitchStateData(In, 1, StateHandlerPickupObject, 0);
+            }
+        }
+        
+        return 0;
+    }
+    
+    return 1;
+}
 
 int razZeroAxis(long *x, long *y, int radius)
 {
