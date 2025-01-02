@@ -260,7 +260,30 @@ int razZeroAxis(long *x, long *y, int radius)
     return distance;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAdjustSpeed);
+int razAdjustSpeed(Instance *instance, int minSpeed)
+{
+	long adjustment;
+	//int data; unused
+
+    (void)minSpeed;
+
+	if (Raziel.Magnitude > Raziel.movementMaxAnalog)
+	{
+		adjustment = Raziel.movementMaxRate;
+	}
+	else if (Raziel.Magnitude < Raziel.movementMinAnalog)
+	{
+		adjustment = Raziel.movementMinRate;
+	}
+	else
+	{
+		adjustment = Raziel.movementMaxRate - (((Raziel.movementMaxRate - Raziel.movementMinRate) * (Raziel.movementMaxAnalog - Raziel.Magnitude)) / (Raziel.movementMaxAnalog - Raziel.movementMinAnalog));
+	}
+
+	G2Anim_SetSpeedAdjustment(&instance->anim, adjustment);
+
+	return adjustment;
+}
 
 void razLaunchForce(Instance *instance)
 {
