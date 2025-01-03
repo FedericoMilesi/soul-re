@@ -1,6 +1,4 @@
-void G2AnimSection_SetLoopRangeAll(G2AnimSection *section);
-void G2AnimSection_SwitchToKeylist(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID);
-void G2AnimSection_SetNotRewinding(G2AnimSection *section);
+#include "Game/G2/ANMG2ILF.h"
 
 short G2Anim_GetElapsedTime(G2Anim *anim)
 {

@@ -1,3 +1,5 @@
+
+
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_DecompressChannel_AdaptiveDelta);
 
 void _G2Anim_DecompressChannel_Linear(G2AnimDecompressChannelInfo *dcInfo, G2AnimChanStatus *status)
