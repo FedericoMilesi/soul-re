@@ -9,7 +9,6 @@ void G2PoolMem_InitPool(void *voidPool, int blockCount, int blockSize)
     ((G2PoolMemPool *)voidPool)->stack = (unsigned short *)MEMPACK_Malloc(blockCount * 2, 25);
 
     ((G2PoolMemPool *)voidPool)->blockSize = blockSize;
-
     ((G2PoolMemPool *)voidPool)->stackSize = blockCount;
 
     G2PoolMem_ResetPool(voidPool);
@@ -22,18 +21,11 @@ void G2PoolMem_ResetPool(void *voidPool)
 
     pool = (G2PoolMemPool *)voidPool;
 
-    blockIndex = 0;
-
     pool->stackTop = 0;
 
-    if (pool->stackSize != 0)
+    for (blockIndex = 0; blockIndex < pool->stackSize; blockIndex++)
     {
-        do
-        {
-            pool->stack[blockIndex] = blockIndex;
-
-            blockIndex++;
-        } while (blockIndex < pool->stackSize);
+        pool->stack[blockIndex] = blockIndex;
     }
 }
 
