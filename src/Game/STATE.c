@@ -774,7 +774,7 @@ void G2EmulationInstanceToInstanceSwitchAnimation(Instance *instance, Instance *
 
     G2AnimSection_SetAlphaTable(animSection, NULL);
 
-    G2AnimSection_InterpToKeylistFrame(animSection, keylist, NewAnim, NewFrame, (short)(Frames * 100));
+    G2AnimSection_InterpToKeylistFrame(animSection, keylist, NewAnim, NewFrame, Frames * 100);
 
     if (Mode == 0)
     {
@@ -806,7 +806,7 @@ void G2EmulationInstanceSwitchAnimation(Instance *instance, int CurrentSection, 
 
     G2AnimSection_SetAlphaTable(animSection, NULL);
 
-    G2AnimSection_InterpToKeylistFrame(animSection, keylist, NewAnim, NewFrame, (short)(Frames * 100));
+    G2AnimSection_InterpToKeylistFrame(animSection, keylist, NewAnim, NewFrame, Frames * 100);
 
     if (Mode == 0)
     {
@@ -885,7 +885,7 @@ void G2EmulationSwitchAnimationSync(CharacterState *In, int SlaveSectionID, int 
 
     G2AnimSection_SetAlphaTable(slaveAnimSection, NULL);
 
-    G2AnimSection_InterpToKeylistFrame(slaveAnimSection, keylist, keylistID, targetFrame, (short)(Frames * 100));
+    G2AnimSection_InterpToKeylistFrame(slaveAnimSection, keylist, keylistID, targetFrame, Frames * 100);
 
     if (!(masterAnimSection->flags & 0x2))
     {
@@ -919,7 +919,7 @@ void G2EmulationInstanceToInstanceSwitchAnimationCharacter(Instance *instance, I
 
     G2Anim_SetAlphaTable(&instance->anim, NULL);
 
-    G2Anim_InterpToKeylistFrame(&instance->anim, keylist1, NewAnim, NewFrame, (short)(Frames * 100));
+    G2Anim_InterpToKeylistFrame(&instance->anim, keylist1, NewAnim, NewFrame, Frames * 100);
 
     if (Mode == 0)
     {
@@ -956,7 +956,7 @@ void G2EmulationSwitchAnimationCharacter(CharacterState *In, int NewAnim, int Ne
 
     G2Anim_SetAlphaTable(&instance->anim, NULL);
 
-    G2Anim_InterpToKeylistFrame(&instance->anim, keylist, NewAnim, NewFrame, (short)(100 * Frames));
+    G2Anim_InterpToKeylistFrame(&instance->anim, keylist, NewAnim, NewFrame, Frames * 100);
 
     if (Mode == 0)
     {
@@ -988,7 +988,7 @@ void G2EmulationInstanceSetAnimation(Instance *instance, int CurrentSection, int
 
     G2AnimSection_SetAlphaTable(animSection, NULL);
 
-    G2AnimSection_InterpToKeylistFrame(animSection, keylist, NewAnim, NewFrame, (short)(Frames * 100));
+    G2AnimSection_InterpToKeylistFrame(animSection, keylist, NewAnim, NewFrame, Frames * 100);
 }
 
 void G2EmulationSetAnimation(CharacterState *In, int CurrentSection, int NewAnim, int NewFrame, int Frames)
@@ -1262,7 +1262,7 @@ void StateGovernState(CharacterState *In, int Frames)
                 keylist = animSectionA->keylist;
                 keylistID = animSectionA->keylistID;
 
-                G2AnimSection_InterpToKeylistFrame(animSectionB, keylist, keylistID, (G2AnimSection_GetKeyframeNumber(animSectionA) + Frames) % G2AnimKeylist_GetKeyframeCount(keylist), (short)(Frames * 100));
+                G2AnimSection_InterpToKeylistFrame(animSectionB, keylist, keylistID, (G2AnimSection_GetKeyframeNumber(animSectionA) + Frames) % G2AnimKeylist_GetKeyframeCount(keylist), Frames * 100);
             }
         }
     }

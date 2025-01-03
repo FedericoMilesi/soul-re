@@ -54,7 +54,7 @@ short G2AnimSection_NextKeyframe(G2AnimSection *section);
 void G2AnimSection_SetInterpInfo(G2AnimSection *section, G2AnimInterpInfo *newInfoPtr);
 void G2Anim_SetCallback(G2Anim *anim, long (*callback)(), void *data);
 void G2AnimSection_SetAlphaTable(G2AnimSection *section, G2AnimAlphaTable *table);
-void G2AnimSection_InterpToKeylistFrame(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, int targetFrame, int duration);
+void G2AnimSection_InterpToKeylistFrame(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, int targetFrame, short duration);
 void G2AnimSection_SetPaused(G2AnimSection *section);
 void G2AnimSection_SetUnpaused(G2AnimSection *section);
 void G2AnimSection_SetLooping(G2AnimSection *section);

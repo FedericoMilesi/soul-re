@@ -1,4 +1,4 @@
-
+#include "Game/G2/ANMDECMP.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_DecompressChannel_AdaptiveDelta);
 

@@ -27,7 +27,7 @@ void G2Anim_GetRootMotionOverInterval(G2Anim *anim, short intervalStart, short i
     G2Anim_GetRootMotionFromTimeForDuration(anim, intervalStart, temp, motionVector);
 }
 
-// void G2Anim_InterpToKeylistFrame(G2Anim *anim, G2AnimKeylist *keylist, int keylistID, int targetFrame, int duration)
+// Further debugging symbols were provided by the remasters' PDB file for this function
 void G2Anim_InterpToKeylistFrame(G2Anim *anim, G2AnimKeylist *keylist, int keylistID, int targetFrame, short duration)
 {
     int i;
@@ -154,9 +154,10 @@ int G2AnimSection_GetStoredKeyframeNumber(G2AnimSection *section)
     return section->storedTime / section->keylist->s0TailTime;
 }
 
-void G2AnimSection_InterpToKeylistFrame(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, int targetFrame, int duration)
+// Further debugging symbols were provided by the remasters' PDB file for this function
+void G2AnimSection_InterpToKeylistFrame(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, int targetFrame, short duration)
 {
-    G2AnimSection_InterpToKeylistAtTime(section, keylist, keylistID, (short)(targetFrame * keylist->s0TailTime), (short)duration);
+    G2AnimSection_InterpToKeylistAtTime(section, keylist, keylistID, targetFrame * keylist->s0TailTime, duration);
 }
 
 G2Bool G2AnimSection_IsInInterpolation(G2AnimSection *section)
