@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/MENU/MENUUTIL.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUUTIL", menu_get_ctrl);
 

@@ -1,4 +1,3 @@
-#include "common.h"
 #include "Game/MENU/MENU.h"
 
 int menu_data_size()

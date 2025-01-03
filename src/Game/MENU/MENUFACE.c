@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/MENU/MENUFACE.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUFACE", NextTimAddr);
 

@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/MENU/MENUDEFS.h"
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"
 
