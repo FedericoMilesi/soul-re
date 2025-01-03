@@ -1,4 +1,3 @@
-#include "common.h"
 #include "Game/G2/POOLMMG2.h"
 #include "Game/MEMPACK.h"
 

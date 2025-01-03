@@ -1,4 +1,3 @@
-#include "common.h"
 #include "Game/LOCAL/LOCALSTR.h"
 #include "Game/VOICEXA.h"
 #include "Game/LOAD3D.h"

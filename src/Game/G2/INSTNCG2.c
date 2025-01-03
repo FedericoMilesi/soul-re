@@ -1,4 +1,3 @@
-#include "common.h"
 #include "Game/G2/INSTNCG2.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MATH3D.h"

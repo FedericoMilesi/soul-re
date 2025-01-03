@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/G2/TIMERG2.h"
 #include "Game/GAMELOOP.h"
 
 short G2Timer_GetFrameTime()

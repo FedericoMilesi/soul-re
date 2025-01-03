@@ -1,7 +1,6 @@
-#include "common.h"
+#include "Game/CINEMA/CINEPSX.h"
 #include "Game/OBTABLE.h"
 #include "Game/PSX/MAIN.h"
-#include "Game/CINEMA/CINEPSX.h"
 #include "Game/GAMEPAD.h"
 #include "Game/SAVEINFO.h"
 #include "Game/LOAD3D.h"
