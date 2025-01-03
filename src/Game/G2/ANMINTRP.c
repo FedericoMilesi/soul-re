@@ -1,7 +1,4 @@
-void _G2Anim_FreeInterpStateBlockList(G2AnimInterpStateBlock *block);
-void _G2AnimSection_SegValueToQuat(G2AnimSection *section, int zeroOne);
-G2AnimInterpStateBlock *_G2Anim_AllocateInterpStateBlockList(G2AnimSection *section);
-void _G2AnimSection_InterpStateToQuat(G2AnimSection *section);
+#include "Game/G2/ANMINTRP.h"
 
 static inline void gte_process(G2Quat *dest, G2SVector3 *base, G2SVector3 *offset, long alpha)
 {

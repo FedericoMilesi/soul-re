@@ -16,12 +16,7 @@ void G2Instance_BuildTransformsForList(Instance *listHead)
     {
         if (instance->LinkParent == NULL)
         {
-            if (((instance->flags2 & 0x1)) || (((instance->flags & 0x100000)) && (instance->oldPos.x == instance->position.x)
-                && (instance->oldPos.y == instance->position.y) && (instance->oldPos.z == instance->position.z)
-                && (instance->oldRotation.x == instance->rotation.x) && (instance->oldRotation.y == instance->rotation.y)
-                && (instance->oldRotation.z == instance->rotation.z) && (instance->matrix != NULL)
-                && (((instance->object->animList == NULL)) || ((instance->object->oflags2 & 0x40000000))
-                    || (!(instance->anim.flags & 0x1)))))
+            if (((instance->flags2 & 0x1)) || (((instance->flags & 0x100000)) && (instance->oldPos.x == instance->position.x) && (instance->oldPos.y == instance->position.y) && (instance->oldPos.z == instance->position.z) && (instance->oldRotation.x == instance->rotation.x) && (instance->oldRotation.y == instance->rotation.y) && (instance->oldRotation.z == instance->rotation.z) && (instance->matrix != NULL) && (((instance->object->animList == NULL)) || ((instance->object->oflags2 & 0x40000000)) || (!(instance->anim.flags & 0x1)))))
             {
                 _G2Instance_BuildDeactivatedTransforms(instance);
             }
@@ -94,6 +89,7 @@ void _G2Instance_RebuildAnimatedTransforms(Instance *instance)
     int temp, temp2; // not from decls.h
 
     (void)segMatrix;
+
     rootMatrix = (G2Matrix *)instance->matrix;
 
     if (rootMatrix != NULL)
