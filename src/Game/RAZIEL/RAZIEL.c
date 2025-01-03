@@ -199,7 +199,7 @@ void InitStates(Instance *PlayerInstance)
 {
     unsigned char i;
     G2AnimSection *animSection;
-    typedef long fn(G2Anim *, int, G2AnimCallbackMsg, long, long, Instance *); // not from SYMDUMP
+    typedef long fn(G2Anim *, int, G2AnimCallbackMsg, long, long, Instance *); // not from decls.h
 
     if (Raziel.footPrint == 0)
     {

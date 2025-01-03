@@ -48,7 +48,7 @@ void StateHandlerSwim(CharacterState *In, int CurrentSection, intptr_t Data)
     evPhysicsSwimData *SwimData;
     int rc;
     int release;
-    Instance *temp; // not from SYMDUMP
+    Instance *temp; // not from decls.h
 
     (void)release;
 

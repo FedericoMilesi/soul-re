@@ -653,7 +653,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razLaunchBubbles);
 
 void razSetCowlNoDraw(int mode)
 {
-    unsigned short *temp; // not from SYMDUMP
+    unsigned short *temp; // not from decls.h
 
     temp = (unsigned short *)&cowlList;
 
