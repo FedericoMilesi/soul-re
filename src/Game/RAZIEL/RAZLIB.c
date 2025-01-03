@@ -636,7 +636,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchVAnimGroup);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchVAnimCharacterSingle);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchVAnimSingle);
+void razSwitchVAnimSingle(Instance *instance, int section, int anim, int frame, int frames)
+{
+	razSwitchVAnim(instance, section, &PlayerData->virtualAnimSingle[anim], frame, frames);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchVAnim);
 
