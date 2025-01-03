@@ -8,38 +8,7 @@
 #include "Game/G2/QUATG2.h"
 #include "Game/G2/ANMINTRP.h"
 
-#define SET_QUAT_FAST(q, _x, _y, _z, _w)        \
-    {                                           \
-        G2Quat *quat = q;                       \
-        *(int *)&quat->x = ((_x) | (_y << 16)); \
-        *(int *)&quat->z = ((_z) | (_w << 16)); \
-    }
-
-#define SET_SVEC3_FAST(v, _x, _y, _z)          \
-    {                                          \
-        *(int *)&(v)->x = ((_x) | (_y << 16)); \
-        (v)->z = (_z);                         \
-    }
-
-#define COPY_SVEC3_FAST(_tgt, _src)           \
-    {                                         \
-        G2SVector3 *src = _src;               \
-        G2SVector3 *tgt = _tgt;               \
-        unsigned long xy = *(int *)&src->x;   \
-        unsigned long zpad = *(int *)&src->z; \
-        *(int *)&tgt->x = xy;                 \
-        *(int *)&tgt->z = zpad & 0xFFFF;      \
-    }
-
-#define GET_XY(a) *(long *)(&a.x);
-#define SET_XY(a, c) *(long *)(&a.x) = c;
-#define GET_ZW(b) *(long *)(&b.z);
-#define SET_ZW(b, c) *(long *)(&b.z) = c;
-
-#define GETP_XY(a) *(long *)(&a->x);
-#define SETP_XY(a, c) *(long *)(&a->x) = c;
-#define GETP_ZW(b) *(long *)(&b->z);
-#define SETP_ZW(b, c) *(long *)(&b->z) = c;
+// TODO: this file needs migrating its .data to C
 
 static G2AnimChanStatusBlockPool _chanStatusBlockPool;
 
