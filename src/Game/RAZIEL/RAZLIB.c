@@ -578,7 +578,17 @@ int razGetReaverFromMask(int reaverMask)
 	return rc;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverScale);
+void razReaverScale(int scale)
+{
+	Instance* Inst;
+
+	Inst = razGetHeldWeapon();
+
+	if ((Raziel.soulReaver != NULL) && (Inst == Raziel.soulReaver) && ((INSTANCE_Query(Inst, 40) & 0x2)))
+	{
+		INSTANCE_Post(Inst, 0x800107, scale);
+	}
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razGetForwardNormal);
 
