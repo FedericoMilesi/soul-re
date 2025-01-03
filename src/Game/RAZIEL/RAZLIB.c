@@ -516,7 +516,44 @@ int razReaverOn()
 	return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverPickup);
+void razReaverPickup(Instance *instance, Instance *soulReaver)
+{
+    INSTANCE_Post(soulReaver, 0x800002, (intptr_t)instance);
+    
+    Raziel.soulReaver = soulReaver;
+    
+    if (razGetHeldItem() != NULL) 
+    {
+        razReaverOff();
+    }
+    
+    Raziel.Abilities |= 0x8;
+    
+    if (Raziel.CurrentPlane == 1) 
+    {
+        Raziel.currentSoulReaver = 2;
+        
+        Raziel.Abilities |= 0xC08;
+        
+        debugRazielFlags2 = 0x800;
+        
+        debugRazielFlags1 = Raziel.Abilities;
+        
+        INSTANCE_Post(soulReaver, 0x800103, Raziel.currentSoulReaver);
+    }
+    else 
+    {
+        Raziel.currentSoulReaver = 1;
+        
+        Raziel.Abilities |= 0xC08;
+        
+        debugRazielFlags2 = 0x400;
+        
+        debugRazielFlags1 = Raziel.Abilities;
+        
+        INSTANCE_Post(soulReaver, 0x800103, Raziel.currentSoulReaver);
+    }
+}
 
 void razReaverImbue(int reaverType)
 {
