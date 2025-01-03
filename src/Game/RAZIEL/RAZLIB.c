@@ -489,7 +489,32 @@ int razReaverOff()
 	return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverOn);
+int razReaverOn()
+{
+	if ((Raziel.soulReaver != NULL) && (razGetHeldItem() == NULL) && ((Raziel.HitPoints == GetMaxHealth()) || (Raziel.CurrentPlane == 2)))
+	{
+        if (!(INSTANCE_Query(Raziel.soulReaver, 40) & 0x1))
+        {
+            INSTANCE_Post(Raziel.soulReaver, 0x800100, 0);
+        }
+        
+        Raziel.Senses.heldClass = 0x1000;
+
+        if ((Raziel.CurrentPlane == 2) && (Raziel.currentSoulReaver != 1))
+        {
+            razReaverImbue(1);
+        }
+        
+        if ((Raziel.CurrentPlane == 1) && (Raziel.currentSoulReaver == 1))
+        {
+            razReaverImbue(2);
+        }
+        
+        return 1;
+	}
+	
+	return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverPickup);
 
