@@ -8,6 +8,8 @@
 #include "Game/STRMLOAD.h"
 #include "Game/GAMELOOP.h"
 
+STATIC mcmenu gMcmenu;
+
 int MEMCARD_IsWrongVersion(memcard_t *memcard)
 {
     int result;
@@ -74,7 +76,37 @@ int memcard_data_size()
     return sizeof(memcard_t);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MCARD/MEMCARD", memcard_initialize);
+int memcard_initialize(memcard_t *memcard, void *gt, int nblocks, void *buffer, int nbytes)
+{
+    int header_size;
+
+    (void)gt;
+
+    memset(memcard, 0, sizeof(memcard_t));
+
+    load(memcard);
+
+    header_size = 0;
+
+    memcard->wrongVerison = 0;
+
+    if (memcard->table != NULL)
+    {
+        memcard->mcmenu = &gMcmenu.dummy1;
+
+        memcard->table->initialize(memcard->mcmenu, memcard, nblocks);
+
+        header_size = memcard->table->set_buffer(memcard->mcmenu, buffer, nbytes);
+
+        unload(memcard);
+    }
+    else
+    {
+        memcard->wrongVerison = 1;
+    }
+
+    return header_size;
+}
 
 void memcard_end(memcard_t *memcard)
 {

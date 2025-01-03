@@ -11054,7 +11054,7 @@ typedef struct menuface_t
 } menuface_t;
 
 // size: 0x200
-struct _216fake
+typedef struct mcmenu
 {
     // offset: 0x0000 (404 bytes)
     mcmenu_t dummy1;
@@ -11062,7 +11062,7 @@ struct _216fake
     mcard_t dummy2;
     // offset: 0x01C8 (56 bytes)
     mcpsx_t dummy3;
-};
+} mcmenu;
 
 // size: 0x4
 union _77fake
