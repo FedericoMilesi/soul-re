@@ -493,7 +493,14 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverOn);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverPickup);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverImbue);
+void razReaverImbue(int reaverType)
+{
+	Raziel.currentSoulReaver = reaverType;
+
+	debugRazielFlags2 = 1 << (reaverType + 9);
+
+	INSTANCE_Post(Raziel.soulReaver, 0x800103, reaverType);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razGetReaverFromMask);
 
