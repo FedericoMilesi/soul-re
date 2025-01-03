@@ -22,7 +22,6 @@ int MEMCARD_IsWrongVersion(memcard_t *memcard)
     return result;
 }
 
-extern char D_8001248C[];
 void load(memcard_t *memcard)
 {
     Object *object;
@@ -37,7 +36,6 @@ void load(memcard_t *memcard)
     }
 
     LOAD_LoadToAddress("\\kain2\\object\\mcardx\\mcardx.drm", object, 1);
-    //LOAD_LoadToAddress(D_8001248C, object, 1);
 
     memcard->table = (mcmenu_table_t *)object->relocModule;
 
@@ -45,7 +43,6 @@ void load(memcard_t *memcard)
 
     memcard->object = object;
 
-    //if (memcard->table->versionID != "Jun 30 1999")
     if (memcard->table->versionID != monVersion)
     {
         if (!(gameTrackerX.gameFlags & 0x8000000))

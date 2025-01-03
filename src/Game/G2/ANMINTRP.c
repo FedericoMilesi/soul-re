@@ -1,6 +1,6 @@
 #include "Game/G2/ANMINTRP.h"
 
-// void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime, int duration)
+// Further debugging symbols were provided by the remasters' PDB file for this function
 void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime, short duration)
 {
     G2Anim *anim;

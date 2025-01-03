@@ -7,9 +7,9 @@
 
 static language_t the_language;
 
-EXTERN STATIC char **LocalStrings;
+STATIC char **LocalStrings;
 
-EXTERN STATIC LocalizationHeader *LocalizationTable;
+STATIC LocalizationHeader *LocalizationTable;
 
 XAVoiceListEntry *voiceList;
 
