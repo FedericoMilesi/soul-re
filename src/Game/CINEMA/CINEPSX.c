@@ -8,6 +8,8 @@
 #include "Game/STRMLOAD.h"
 #include "Game/STREAM.h"
 
+// TODO: this file needs migrating its .data to C
+
 extern int StCdIntrFlag;
 
 EXTERN STATIC ObjectTracker *the_cine_tracker;

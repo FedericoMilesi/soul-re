@@ -6,6 +6,7 @@
 #include "Game/G2/TIMERG2.h"
 #include "Game/MATH3D.h"
 #include "Game/G2/QUATG2.h"
+#include "Game/G2/ANMINTRP.h"
 
 #define SET_QUAT_FAST(q, _x, _y, _z, _w)        \
     {                                           \
@@ -47,21 +48,6 @@ static G2AnimSegValue _segValues[80];
 static G2AnimControllerPool _controllerPool;
 
 static G2AnimInterpStateBlockPool _interpStateBlockPool;
-
-void G2AnimSection_InterpToKeylistAtTime(G2AnimSection *section, G2AnimKeylist *keylist, int keylistID, short targetTime, short duration);
-void G2Anim_GetRootMotionFromTimeForDuration(G2Anim *anim, short durationStart, short duration, G2SVector3 *motionVector);
-short G2AnimSection_UpdateOverInterval(G2AnimSection *section, short interval);
-G2AnimSection *G2Anim_GetSectionWithSeg(G2Anim *anim, int segNumber);
-void G2AnimSection_JumpToTime(G2AnimSection *section, short targetTime);
-short G2AnimSection_RewindOverInterval(G2AnimSection *section, short interval);
-short G2AnimSection_AdvanceOverInterval(G2AnimSection *section, short interval);
-
-G2Anim *_G2AnimSection_GetAnim(G2AnimSection *section);
-void _G2AnimSection_UpdateStoredFrameFromData(G2AnimSection *section, G2Anim *anim);
-long _G2AnimAlphaTable_GetValue(G2AnimAlphaTable *table, long trueAlpha);
-void _G2Anim_BuildTransformsNoControllers(G2Anim *anim);
-void _G2Anim_BuildSegLocalRotMatrix(G2AnimSegValue *segValue, G2Matrix *segMatrix);
-void _G2Anim_FreeChanStatusBlockList(G2AnimChanStatusBlock *block);
 
 #include "Game/G2/ANMG2ILF.c"
 #include "Game/G2/ANMDECMP.c"
@@ -671,10 +657,8 @@ void _G2Anim_InitializeSegValue(G2Anim *anim, G2AnimSegValue *segValue, int segI
     COPY_SVEC3_FAST((G2SVector3 *)&segValue->trans, (G2SVector3 *)&segment->px);
 }
 
-void _G2AnimSection_InitStatus(G2AnimSection *section, G2Anim *anim);
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_InitStatus);
 
-void FooBar(G2AnimSection *section, G2Anim *anim, int decompressedKey, int targetKey, long timeOffset);
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", FooBar);
 
 void _G2AnimSection_UpdateStoredFrameFromData(G2AnimSection *section, G2Anim *anim)

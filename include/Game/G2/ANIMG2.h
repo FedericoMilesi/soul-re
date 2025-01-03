@@ -50,5 +50,19 @@ void G2Anim_InterpDisableController(G2Anim *anim, int segNumber, int type, short
 void G2Anim_AttachControllerToSeg(G2Anim *anim, int segNumber, int type);
 void G2Anim_DetachControllerFromSeg(G2Anim *anim, int segNumber, int type);
 G2Bool G2Anim_IsControllerInterpolating(G2Anim *anim, int segNumber, int type);
+void _G2Anim_FreeChanStatusBlockList(G2AnimChanStatusBlock *block);
+void _G2Anim_BuildSegLocalRotMatrix(G2AnimSegValue *segValue, G2Matrix *segMatrix);
+void _G2Anim_BuildTransformsNoControllers(G2Anim *anim);
+long _G2AnimAlphaTable_GetValue(G2AnimAlphaTable *table, long trueAlpha);
+void _G2AnimSection_UpdateStoredFrameFromData(G2AnimSection *section, G2Anim *anim);
+G2Anim *_G2AnimSection_GetAnim(G2AnimSection *section);
+short G2AnimSection_AdvanceOverInterval(G2AnimSection *section, short interval);
+short G2AnimSection_RewindOverInterval(G2AnimSection *section, short interval);
+void G2AnimSection_JumpToTime(G2AnimSection *section, short targetTime);
+G2AnimSection *G2Anim_GetSectionWithSeg(G2Anim *anim, int segNumber);
+short G2AnimSection_UpdateOverInterval(G2AnimSection *section, short interval);
+void G2Anim_GetRootMotionFromTimeForDuration(G2Anim *anim, short durationStart, short duration, G2SVector3 *motionVector);
+void FooBar(G2AnimSection *section, G2Anim *anim, int decompressedKey, int targetKey, long timeOffset);
+void _G2AnimSection_InitStatus(G2AnimSection *section, G2Anim *anim);
 
 #endif
