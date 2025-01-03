@@ -465,7 +465,29 @@ void razReaverBladeOn()
 	}
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverOff);
+int razReaverOff()
+{
+	Instance* HeldWeapon;
+
+	if ((Raziel.soulReaver != NULL) && (Raziel.Senses.heldClass == 0x1000))
+	{
+        HeldWeapon = razGetHeldWeapon();
+
+        if ((INSTANCE_Query(Raziel.soulReaver, 40) & 0x1))
+        {
+            INSTANCE_Post(Raziel.soulReaver, 0x800101, 0);
+        }
+        
+        if (HeldWeapon == Raziel.soulReaver)
+        {
+            Raziel.Senses.heldClass = 0;
+        }
+        
+        return 1;
+	}
+
+	return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverOn);
 
