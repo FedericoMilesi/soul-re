@@ -564,7 +564,19 @@ void razReaverImbue(int reaverType)
 	INSTANCE_Post(Raziel.soulReaver, 0x800103, reaverType);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razGetReaverFromMask);
+int razGetReaverFromMask(int reaverMask)
+{
+	int rc;
+	
+	reaverMask = ((unsigned int)reaverMask >> 10) & 0xFF;
+
+	for (rc = 0; reaverMask != 0; rc++)
+	{
+		reaverMask >>= 1;
+	}
+
+	return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razReaverScale);
 
