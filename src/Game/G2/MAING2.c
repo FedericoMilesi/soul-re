@@ -7,9 +7,11 @@ G2Bool MainG2_InitEngine(void *appData, unsigned int screenWidth, unsigned int s
     (void)screenWidth;
     (void)screenHeight;
     (void)filesystemName;
+
     return !G2FALSE;
 }
 
-void MainG2_ShutDownEngine()
+void MainG2_ShutDownEngine(void *appData)
 {
+    (void)appData;
 }
