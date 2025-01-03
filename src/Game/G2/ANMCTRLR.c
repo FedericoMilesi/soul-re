@@ -366,7 +366,7 @@ void _G2AnimSection_ApplyControllersToStoredFrame(G2AnimSection *section)
                                 G2SVector3 *dest;
                                 unsigned long mask;
                                 unsigned short z;
-                                // unsigned long xy; unused
+                                // unsigned long xy; // unused
 
                                 dest = &segValue->rotQuat.rot;
 

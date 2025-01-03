@@ -19,7 +19,7 @@ void _G2Anim_DecompressChannel_Linear(G2AnimDecompressChannelInfo *dcInfo, G2Ani
 
     rangeBase = chanData[1];
 
-    rangeInfo = chanData[2]; // double-check
+    rangeInfo = chanData[2];
 
     chanData++;
 
@@ -29,7 +29,7 @@ void _G2Anim_DecompressChannel_Linear(G2AnimDecompressChannelInfo *dcInfo, G2Ani
 
     while (rangeLength < targetKey)
     {
-        rangeInfo = chanData[2]; // double-check
+        rangeInfo = chanData[2];
 
         targetKey -= rangeLength;
 
@@ -56,7 +56,7 @@ void _G2Anim_InitializeChannel_AdaptiveDelta(G2AnimDecompressChannelInfo *dcInfo
 
     chanData = dcInfo->chanData;
 
-    status->index = ((unsigned char *)chanData)[0]; // double-check
+    status->index = ((unsigned char *)chanData)[0];
 
     status->keyData = chanData[1];
 

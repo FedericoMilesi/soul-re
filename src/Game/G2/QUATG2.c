@@ -15,7 +15,7 @@ void G2Quat_ToEuler(G2Quat *quat, G2EulerAngles *euler, int order)
 void G2EulerAngles_FromMatrix(G2EulerAngles *euler, G2Matrix *matrix, long order)
 {
     long i;
-    // long j; unused
+    // long j; // unused
     long k;
     long n;
     long s;
