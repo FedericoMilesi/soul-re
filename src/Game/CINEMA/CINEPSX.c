@@ -12,9 +12,9 @@
 
 extern int StCdIntrFlag;
 
-EXTERN STATIC ObjectTracker *the_cine_tracker;
+STATIC ObjectTracker *the_cine_tracker;
 
-EXTERN STATIC cinema_fn_table_t *the_cine_table;
+STATIC cinema_fn_table_t *the_cine_table;
 
 int CINE_CDIntrQuery()
 {
@@ -63,24 +63,28 @@ int CINE_Load()
     int attempts;
 
     attempts = 0;
+
     tracker = STREAM_GetObjectTracker("cinemax");
 
-    while (attempts < 400 && tracker->objectStatus != 2)
+    for (; (attempts < 400) && (tracker->objectStatus != 2); attempts++)
     {
         STREAM_PollLoadQueue();
+
         VSync(0);
-        attempts++;
     }
 
     if (attempts >= 400)
     {
         printf("cinema timeout\n");
+
         return 0;
     }
     else
     {
         the_cine_tracker = tracker;
+
         the_cine_table = (cinema_fn_table_t *)tracker->object->relocModule;
+
         return 1;
     }
 }
