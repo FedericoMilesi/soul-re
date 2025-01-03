@@ -10,9 +10,7 @@ void G2Instance_BuildTransformsForList(Instance *listHead)
 {
     Instance *instance;
 
-    instance = listHead;
-
-    while (instance != NULL)
+    for (instance = listHead; instance != NULL; instance = instance->next)
     {
         if (instance->LinkParent == NULL)
         {
@@ -25,13 +23,9 @@ void G2Instance_BuildTransformsForList(Instance *listHead)
                 G2Instance_BuildTransforms(instance);
             }
         }
-
-        instance = instance->next;
     }
 
-    instance = listHead;
-
-    while (instance != NULL)
+    for (instance = listHead; instance != NULL; instance = instance->next)
     {
         if ((instance->rebuildCallback != NULL) && (instance->rebuildCallback(instance) != G2FALSE))
         {
@@ -39,8 +33,6 @@ void G2Instance_BuildTransformsForList(Instance *listHead)
 
             G2Instance_RebuildTransforms(instance);
         }
-
-        instance = instance->next;
     }
 }
 
@@ -78,7 +70,7 @@ void _G2Instance_RebuildAnimatedTransforms(Instance *instance)
     Model *model;
     G2Matrix *rootMatrix;
     Rotation pre_facade_rot;
-    G2Matrix *segMatrix;
+    // G2Matrix *segMatrix; // unused
     G2Matrix seg1RotMatrix;
     G2Matrix seg2RotMatrix;
     G2SVector3 rotVector;
@@ -87,8 +79,6 @@ void _G2Instance_RebuildAnimatedTransforms(Instance *instance)
     long otz;
     long segIndex;
     int temp, temp2; // not from decls.h
-
-    (void)segMatrix;
 
     rootMatrix = (G2Matrix *)instance->matrix;
 
@@ -203,13 +193,9 @@ void _G2Instance_RebuildAnimatedTransforms(Instance *instance)
             instance->rotation = pre_facade_rot;
         }
 
-        instance = instance->LinkChild;
-
-        while (instance != NULL)
+        for (instance = instance->LinkChild; instance != NULL; instance = instance->LinkSibling)
         {
             G2Instance_BuildTransforms(instance);
-
-            instance = instance->LinkSibling;
         }
     }
 }
@@ -219,13 +205,9 @@ void G2Instance_ClearMatrices(Instance *instance)
     instance->oldMatrix = instance->matrix;
     instance->matrix = NULL;
 
-    instance = instance->LinkChild;
-
-    while (instance != NULL)
+    for (instance = instance->LinkChild; instance != NULL; instance = instance->LinkSibling)
     {
         G2Instance_ClearMatrices(instance);
-
-        instance = instance->LinkSibling;
     }
 }
 
@@ -335,13 +317,9 @@ void _G2Instance_RebuildNonAnimatedTransforms(Instance *instance)
             segMatrix->m[2][3] = scale_flag;
         }
 
-        instance = instance->LinkChild;
-
-        while (instance != NULL)
+        for (instance = instance->LinkChild; instance != NULL; instance = instance->LinkSibling)
         {
             G2Instance_BuildTransforms(instance);
-
-            instance = instance->LinkSibling;
         }
     }
 }
@@ -415,13 +393,9 @@ void _G2Instance_BuildDeactivatedTransforms(Instance *instance)
         memcpy(segMatrix, startOldMatrix, numMatrices * sizeof(MATRIX));
     }
 
-    instance = instance->LinkChild;
-
-    while (instance != NULL)
+    for (instance = instance->LinkChild; instance != NULL; instance = instance->LinkSibling)
     {
         G2Instance_BuildTransforms(instance);
-
-        instance = instance->LinkSibling;
     }
 }
 
