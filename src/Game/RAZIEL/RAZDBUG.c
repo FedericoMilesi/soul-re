@@ -1,3 +1,7 @@
-void DebugProcess()
+
+
+void DebugProcess(Instance *instance, Player *player)
 {
+    (void)instance;
+    (void)player;
 }
