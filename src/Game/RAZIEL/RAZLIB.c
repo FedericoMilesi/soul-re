@@ -592,7 +592,21 @@ void razReaverScale(int scale)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razGetForwardNormal);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razGetRotFromNormal);
+void razGetRotFromNormal(SVector *normal, Rotation *rot)
+{
+	Position a; 
+	Position b;
+
+	a.x = normal->x;
+	a.y = normal->y;
+	a.z = normal->z;
+	
+	b.z = 0;
+	b.y = 0;
+	b.x = 0;
+	
+	MATH3D_RotationFromPosToPos(&a, &b, rot);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razCenterWithBlock);
 
