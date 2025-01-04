@@ -653,7 +653,15 @@ void razSetPauseTranslation(Instance *instance)
     ControlFlag |= 0x20000000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razResetPauseTranslation);
+void razResetPauseTranslation(Instance *instance)
+{
+    if (G2Anim_IsControllerActive(&instance->anim, 0, 34) != G2FALSE)
+    {
+        G2Anim_DisableController(&instance->anim, 0, 34);
+    }
+
+    ControlFlag &= ~0x20000000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSelectMotionAnim);
 
