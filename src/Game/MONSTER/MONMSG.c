@@ -422,11 +422,10 @@ void MON_DefaultMessageHandler(Instance *instance, Message *message)
     }
     case 0x100000E:
     case 0x1000012:
-    {
-        MonsterIR *mir;
-
         if (!(mv->mvFlags & 0x4))
         {
+            MonsterIR *mir;
+
             mir = (MonsterIR *)message->Data;
 
             if ((INSTANCE_Query(mir->instance, 1) & 0x1))
@@ -436,7 +435,6 @@ void MON_DefaultMessageHandler(Instance *instance, Message *message)
         }
 
         break;
-    }
     case 0x1000016:
         if ((signed char)mv->subAttr->combatAttributes->hitPoints != 0)
         {
