@@ -635,7 +635,23 @@ void razGetRotFromNormal(SVector *normal, Rotation *rot)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razCenterWithBlock);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetPauseTranslation);
+void razSetPauseTranslation(Instance *instance)
+{
+    G2SVector3 Vec;
+
+    if (G2Anim_IsControllerActive(&instance->anim, 0, 34) == G2FALSE)
+    {
+        G2Anim_EnableController(&instance->anim, 0, 34);
+    }
+
+    Vec.x = 0;
+    Vec.y = 0;
+    Vec.z = 0;
+
+    G2Anim_SetController_Vector(&instance->anim, 0, 34, &Vec);
+
+    ControlFlag |= 0x20000000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razResetPauseTranslation);
 
