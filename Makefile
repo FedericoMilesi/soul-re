@@ -118,6 +118,8 @@ $(BUILD_DIR)/src/Game/DEBUG.c.o: CFLAGS += -funsigned-char
 $(BUILD_DIR)/src/Game/SOUND.c.o: CFLAGS += -funsigned-char
 $(BUILD_DIR)/src/Game/MEMPACK.c.o: CFLAGS += -funsigned-char
 
+$(BUILD_DIR)/src/Game/MONSTER/MONMSG.c.o: CFLAGS += -funsigned-char
+
 all: $(EXE)
 
 -include $(DEPENDS)

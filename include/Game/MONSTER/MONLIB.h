@@ -61,5 +61,9 @@ int MON_OnGround(Instance *instance);
 void MON_DoDrainEffects(Instance *instance, Instance *ei);
 int MON_ShouldIAttackInstance(Instance *instance, Instance *ei);
 int MON_CheckConditions(Instance *instance, MonsterIR *mir, char *probArray);
+int MON_TakeDamage(Instance *instance, int damage, int type);
+void MON_MoveInstanceToImpalePoint(Instance *instance);
+void MON_SetFXHitData(Instance *instance, evFXHitData *data, int type, int amount);
+void MON_LaunchMonster(Instance *instance, int zDirection, int power, int loft);
 
 #endif

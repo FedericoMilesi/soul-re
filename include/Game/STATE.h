@@ -57,5 +57,6 @@ void G2EmulationSetStartAndEndSegment(CharacterState *In, int CurrentSection, sh
 void G2EmulationSetAnimation(CharacterState *In, int CurrentSection, int NewAnim, int NewFrame, int Frames);
 void G2EmulationSetMode(CharacterState *In, int CurrentSection, int Mode);
 void G2EmulationInit();
+void G2EmulationInstanceToInstanceSwitchAnimation(Instance *instance, Instance *host, int CurrentSection, int NewAnim, int NewFrame, int Frames, int Mode);
 
 #endif
