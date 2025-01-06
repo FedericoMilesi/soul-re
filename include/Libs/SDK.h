@@ -262,6 +262,110 @@
 
 #define gte_ngpf12() gte_ngpf(1)
 
+#define gte_ldv3(r0, r1, r2) __asm__( \
+    "lwc2    $0, 0(%0);"              \
+    "lwc2    $1, 4(%0);"              \
+    "lwc2    $2, 0(%1);"              \
+    "lwc2    $3, 4(%1);"              \
+    "lwc2    $4, 0(%2);"              \
+    "lwc2    $5, 4(%2)"               \
+    : : "r"(r0), "r"(r1), "r"(r2))
+
+#define gte_nrtpt() __asm__( \
+    "nop;"                   \
+    "nop;"                   \
+    ".word 0x4A280030")
+
+#define gte_stsz3(r0, r1, r2) __asm__( \
+    "swc2    $17, 0(%0);"              \
+    "swc2    $18, 0(%1);"              \
+    "swc2    $19, 0(%2)"               \
+    : : "r"(r0), "r"(r1), "r"(r2)      \
+    : "memory")
+
+#define gte_stszotz(r0) __asm__( \
+    "mfc2    $12, $19;"          \
+    "nop;"                       \
+    "sra    $12, $12, 2;"        \
+    "sw    $12, 0(%0)"           \
+    : : "r"(r0)                  \
+    : "$12", "memory")
+
+#define gte_stsxy3(r0, r1, r2) __asm__( \
+    "swc2    $12, 0(%0);"               \
+    "swc2    $13, 0(%1);"               \
+    "swc2    $14, 0(%2)"                \
+    : : "r"(r0), "r"(r1), "r"(r2)       \
+    : "memory")
+
+#define gte_ldcv(r0) __asm__( \
+    "lbu    $12, 0(%0);"      \
+    "lbu    $13, 1(%0);"      \
+    "lbu    $14, 2(%0);"      \
+    "mtc2    $12, $9;"        \
+    "mtc2    $13, $10;"       \
+    "mtc2    $14, $11"        \
+    : : "r"(r0)               \
+    : "$12", "$13", "$14")
+
+#define gte_stcv(r0) __asm__( \
+    "mfc2    $12, $9;"        \
+    "mfc2    $13, $10;"       \
+    "mfc2    $14, $11;"       \
+    "sb    $12, 0(%0);"       \
+    "sb    $13, 1(%0);"       \
+    "sb    $14, 2(%0)"        \
+    : : "r"(r0)               \
+    : "$12", "$13", "$14", "memory")
+
+#define gte_stsxy0(r0) __asm__( \
+    "swc2    $12, 0(%0)"        \
+    : : "r"(r0)                 \
+    : "memory")
+
+#define gte_stsxy1(r0) __asm__( \
+    "swc2    $13, 0(%0)"        \
+    : : "r"(r0)                 \
+    : "memory")
+
+#define gte_stopz(r0) __asm__( \
+    "swc2    $24, 0(%0)"       \
+    : : "r"(r0)                \
+    : "memory")
+
+// custom macro
+#define gte_lddqb(r0) __asm__ volatile( \
+    "ctc2	%0, $28"                      \
+    :                                   \
+    : "r"(r0))
+
+// custom macro
+#define gte_lddqa(r0) __asm__ volatile( \
+    "ctc2	%0, $27"                      \
+    :                                   \
+    : "r"(r0))
+
+// custom struct
+typedef struct _LINE_SG2
+{
+    u_long tag;
+    u_long drawTPage1;
+    // BASIC_LINE_G2
+    u_char r0, g0, b0, code;
+    short x0, y0;
+    u_char r1, g1, b1, p1;
+    short x1, y1;
+} LINE_SG2;
+
+typedef struct
+{
+    u_long tag;
+    u_char r0, g0, b0, code;
+    short x0, y0;
+    short x1, y1;
+    short x2, y2;
+} POLY_F3; /* Flat Triangle */
+
 #define setcode(p, _code) (((P_TAG *)(p))->code = (u_char)(_code))
 
 #define getcode(p) (u_char)(((P_TAG *)(p))->code)

@@ -5,6 +5,7 @@
 #include "Game/DRAW.h"
 #include "Game/OBTABLE.h"
 #include "Game/LIST.h"
+#include "Game/GAMELOOP.h"
 
 EXTERN STATIC FXGeneralEffect *FX_GeneralEffectTracker;
 
@@ -243,7 +244,834 @@ void FX_DrawReaver(PrimPool *primPool, unsigned long **ot, MATRIX *wcTransform)
     FX_reaver_instance = NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_DrawList);
+void FX_DrawList(FXTracker *fxTracker, GameTracker *gameTracker, unsigned long **ot, MATRIX *wcTransform)
+{
+    TextureMT3 *texture;
+    PrimPool *primPool;
+    long *prim;
+    FX_PRIM *fxPrim;
+    FX_PRIM *nextFXPrim;
+    SVECTOR sv0;
+    SVECTOR sv1;
+    SVECTOR sv2;
+    long otz;
+    long sz0;
+    long sz1;
+    long sz2;
+    char whitec[4];
+    int sizex;
+    int sizey;
+    int matrix_wc;
+
+    matrix_wc = 0;
+
+    primPool = gameTracker->primPool;
+
+    prim = (long *)primPool->nextPrim;
+
+    whitec[0] = whitec[1] = whitec[2] = 31;
+
+    for (fxPrim = (FX_PRIM *)fxTracker->usedPrimList.next; fxPrim != NULL; fxPrim = nextFXPrim)
+    {
+        long flags;
+
+        if ((prim + 10) >= (long *)primPool->lastPrim)
+        {
+            break;
+        }
+
+        flags = fxPrim->flags;
+
+        nextFXPrim = (FX_PRIM *)fxPrim->node.next;
+
+        if (!(flags & 0x10))
+        {
+            if (!(flags & 0x10000))
+            {
+                fxPrim->matrix->lwTransform.t[0] = fxPrim->position.x;
+                fxPrim->matrix->lwTransform.t[1] = fxPrim->position.y;
+                fxPrim->matrix->lwTransform.t[2] = fxPrim->position.z;
+
+                CompMatrix(wcTransform, &fxPrim->matrix->lwTransform, (MATRIX *)getScratchAddr(0));
+
+                SetRotMatrix((MATRIX *)getScratchAddr(0));
+                SetTransMatrix((MATRIX *)getScratchAddr(0));
+
+                matrix_wc = 0;
+            }
+            else if (matrix_wc == 0)
+            {
+                gte_SetRotMatrix(wcTransform);
+                gte_SetTransMatrix(wcTransform);
+
+                matrix_wc = 1;
+            }
+
+            if (!(flags & 0x2000))
+            {
+                gte_ldv3(&fxPrim->v0, &fxPrim->v1, &fxPrim->v2);
+            }
+            else
+            {
+                sv0.vx = (fxPrim->v0.x * fxPrim->v0.y) >> 12;
+                sv1.vx = (fxPrim->v1.x * fxPrim->v0.y) >> 12;
+                sv2.vx = (fxPrim->v2.x * fxPrim->v0.y) >> 12;
+
+                sv0.vz = (fxPrim->v0.z * fxPrim->v2.y) >> 12;
+                sv1.vz = (fxPrim->v1.z * fxPrim->v2.y) >> 12;
+                sv2.vz = (fxPrim->v2.z * fxPrim->v2.y) >> 12;
+
+                sv0.vy = 0;
+                sv1.vy = 0;
+                sv2.vy = 0;
+
+                gte_ldv3(&sv0, &sv1, &sv2);
+            }
+
+            gte_nrtpt();
+
+            if ((flags & 0x1000000))
+            {
+                gte_stsz3(&sz0, &sz1, &sz2);
+
+                otz = sz0 >> 2;
+            }
+            else if ((flags & 0x4000))
+            {
+                int temp; // not from decls.h
+
+                gte_stsz3(&sz0, &sz1, &sz2);
+
+                if (sz0 > sz1)
+                {
+                    temp = (sz2 < sz0) ? sz0 : sz2;
+                }
+                else
+                {
+                    temp = (sz2 < sz1) ? sz1 : sz2;
+                }
+
+                otz = temp >> 2;
+            }
+            else
+            {
+                gte_stszotz(&otz);
+            }
+
+            if ((flags & 0x8000))
+            {
+                otz -= 20;
+            }
+
+            if ((otz >= 1) && (otz < 3072))
+            {
+                if (!(flags & 0x1))
+                {
+                    if ((flags & 0x8))
+                    {
+                        if ((flags & 0x80000))
+                        {
+                            POLY_NG4 *ng4;
+                            int n;
+                            long *ptr;
+                            int *temp; // not from decls.h
+
+                            gte_stsxy3(&((POLY_NG4 *)prim)->p1.x0, &((POLY_NG4 *)prim)->p1.x1, &((POLY_NG4 *)prim)->p1.x2);
+
+                            gte_ldv0(&fxPrim->v3);
+
+                            gte_nrtps();
+
+                            ng4 = (POLY_NG4 *)prim;
+
+                            prim += 10;
+
+                            // setDrawTPage(ng4, 1, 1, 32);
+
+                            ng4->drawTPage1 = _get_mode(1, 1, 32);
+
+                            gte_stsxy(&ng4->p1.x3);
+
+                            ptr = (long *)&ng4->p1;
+
+                            for (n = 0; n < 4; n++)
+                            {
+                                gte_lddp(4096 - fxPrim->fadeValue[n]);
+
+                                gte_ldcv(&fxPrim->color);
+
+                                gte_ngpf(1);
+
+                                gte_stcv(ptr);
+
+                                ptr += 2;
+                            }
+
+                            // addPrim(ot[otz], ng4);
+
+                            temp = (int *)((otz * 4) + (uintptr_t)ot);
+
+                            *(int *)ng4 = getaddr(temp) | 0x9000000;
+                            *(int *)temp = (intptr_t)ng4 & 0xFFFFFF;
+
+                            ng4->p1.code = 0x3A; // Poly G4 + semitrans flag
+                        }
+                        else
+                        {
+                            POLY_G4 *temp; // not from decls.h
+                            int *temp2;    // not from decls.h
+
+                            temp = (POLY_G4 *)prim;
+
+                            gte_stsxy3(&temp->x0, &temp->x1, &temp->x2);
+
+                            gte_ldv0(&fxPrim->v3);
+
+                            gte_nrtps();
+
+                            *(int *)&temp->r0 = fxPrim->color;
+                            *(int *)&temp->r1 = fxPrim->color;
+                            *(int *)&temp->r2 = fxPrim->color;
+                            *(int *)&temp->r3 = fxPrim->color;
+
+                            setPolyG4(temp);
+
+                            gte_stsxy(&temp->x3);
+
+                            // addPrim(ot[otz], temp);
+
+                            temp2 = (int *)((otz * 4) + (uintptr_t)ot);
+
+                            *(int *)temp = getaddr(temp2) | 0x8000000;
+                            *(int *)temp2 = (intptr_t)temp & 0xFFFFFF;
+
+                            prim += 9;
+                        }
+                    }
+                    else if ((flags & 0x1000000))
+                    {
+                        if ((flags & 0x80000))
+                        {
+                            LINE_SG2 *temp; // not from decls.h
+                            int *temp2;     // not from decls.h
+
+                            temp = (LINE_SG2 *)prim;
+
+                            *(int *)&temp->r0 = fxPrim->color;
+                            *(int *)&temp->r1 = fxPrim->endColor;
+
+                            // setDrawTPage(temp, 1, 1, 32);
+
+                            temp->drawTPage1 = _get_mode(1, 1, 32);
+
+                            gte_stsxy0(&temp->x1);
+                            gte_stsxy1(&temp->x0);
+
+                            temp->code = 0x52; // Line G2 + semitrans flag
+
+                            // addPrim(ot[otz], temp);
+
+                            temp2 = (int *)((otz * 4) + (uintptr_t)ot);
+
+                            *(int *)temp = getaddr(temp2) | 0x5000000;
+                            *(int *)temp2 = (intptr_t)temp & 0xFFFFFF;
+
+                            prim += 6;
+                        }
+                    }
+                    else
+                    {
+                        // usage of POLY F3 in this block is just an estimate, it could be another prim type
+                        POLY_F3 *temp; // not from decls.h
+                        int *temp2;    // not from decls.h
+
+                        temp = (POLY_F3 *)prim;
+
+                        *(int *)&temp->r0 = fxPrim->color;
+
+                        gte_stsxy3(&temp->x0, &temp->x1, &temp->x2);
+
+                        // addPrim(ot[otz], temp);
+
+                        temp2 = (int *)((otz * 4) + (uintptr_t)ot);
+
+                        *(int *)temp = getaddr(temp2) | 0x4000000;
+                        *(int *)temp2 = (intptr_t)temp & 0xFFFFFF;
+
+                        prim += 5;
+                    }
+                }
+                else
+                {
+                    texture = fxPrim->texture;
+
+                    if ((flags & 0x8))
+                    {
+                        POLY_FT4 *ft4;
+                        unsigned short uMin;
+                        unsigned short uMax;
+                        unsigned short vMin;
+                        unsigned short vMax;
+                        int *temp; // not from decls.h
+
+                        ft4 = (POLY_FT4 *)prim;
+
+                        gte_stsxy3(&ft4->x0, &ft4->x1, &ft4->x2);
+
+                        gte_ldv0(&fxPrim->v3);
+
+                        gte_nrtps();
+
+                        if (texture->u0 < texture->u1)
+                        {
+                            if (texture->u0 < texture->u2)
+                            {
+                                uMin = texture->u0;
+                            }
+                            else
+                            {
+                                uMin = texture->u2;
+                            }
+                        }
+                        else if (texture->u1 < texture->u2)
+                        {
+                            uMin = texture->u1;
+                        }
+                        else
+                        {
+                            uMin = texture->u2;
+                        }
+
+                        if (texture->u0 > texture->u1)
+                        {
+                            if (texture->u0 > texture->u2)
+                            {
+                                uMax = texture->u0;
+                            }
+                            else
+                            {
+                                uMax = texture->u2;
+                            }
+                        }
+                        else if (texture->u1 > texture->u2)
+                        {
+                            uMax = texture->u1;
+                        }
+                        else
+                        {
+                            uMax = texture->u2;
+                        }
+
+                        if (texture->v0 < texture->v1)
+                        {
+                            if (texture->v0 < texture->v2)
+                            {
+                                vMin = texture->v0 << 8;
+                            }
+                            else
+                            {
+                                vMin = texture->v2 << 8;
+                            }
+                        }
+                        else if (texture->v1 < texture->v2)
+                        {
+                            vMin = texture->v1 << 8;
+                        }
+                        else
+                        {
+                            vMin = texture->v2 << 8;
+                        }
+
+                        if (texture->v0 > texture->v1)
+                        {
+                            if (texture->v0 > texture->v2)
+                            {
+                                vMax = texture->v0 << 8;
+                            }
+                            else
+                            {
+                                vMax = texture->v2 << 8;
+                            }
+                        }
+                        else if (texture->v1 > texture->v2)
+                        {
+                            vMax = texture->v1 << 8;
+                        }
+                        else
+                        {
+                            vMax = texture->v2 << 8;
+                        }
+
+                        *(short *)&ft4->u0 = uMin | vMin;
+                        *(short *)&ft4->u1 = uMax | vMin;
+                        *(short *)&ft4->u2 = uMin | vMax;
+                        *(short *)&ft4->u3 = uMax | vMax;
+
+                        *(unsigned short *)&ft4->clut = texture->clut;
+
+                        *(unsigned short *)&ft4->tpage = texture->tpage;
+
+                        gte_stsxy(&((POLY_FT4 *)prim)->x3);
+
+                        if ((flags & 0x1000))
+                        {
+                            char temp; // not from decls.h
+
+                            ft4->u0 ^= ft4->u1;
+
+                            temp = ft4->u0 ^ ft4->u1;
+
+                            ft4->u1 ^= ft4->u0;
+                            ft4->u0 ^= ft4->u1;
+                            ft4->u2 ^= ft4->u3;
+
+                            temp = ft4->u2 ^ ft4->u3;
+
+                            (void)temp;
+
+                            ft4->u3 ^= ft4->u2;
+                            ft4->u2 ^= ft4->u3;
+                        }
+
+                        *(int *)&((POLY_FT4 *)prim)->r0 = fxPrim->color;
+
+                        // addPrim(ot[otz], prim);
+
+                        temp = (int *)((otz * 4) + (uintptr_t)ot);
+
+                        *(int *)prim = getaddr(temp) | 0x9000000;
+                        *(int *)temp = (intptr_t)prim & 0xFFFFFF;
+
+                        prim += 10;
+                    }
+                    else
+                    {
+                        POLY_FT3 *ft3;
+                        int *temp; // not from decls.h
+
+                        ft3 = (POLY_FT3 *)prim;
+
+                        gte_stsxy3(&ft3->x0, &ft3->x1, &ft3->x2);
+
+                        *(int *)&ft3->u0 = *(int *)&texture->u0;
+                        *(int *)&ft3->u1 = *(int *)&texture->u1;
+                        *(int *)&ft3->u2 = *(int *)&texture->u2;
+
+                        if ((flags & 0x1000))
+                        {
+                            short uMin;
+                            short uMax;
+
+                            if (texture->u0 < texture->u1)
+                            {
+                                if (texture->u0 < texture->u2)
+                                {
+                                    uMin = texture->u0;
+                                }
+                                else
+                                {
+                                    uMin = texture->u2;
+                                }
+                            }
+                            else if (texture->u1 < texture->u2)
+                            {
+                                uMin = texture->u1;
+                            }
+                            else
+                            {
+                                uMin = texture->u2;
+                            }
+
+                            if (texture->u0 > texture->u1)
+                            {
+                                if (texture->u0 > texture->u2)
+                                {
+                                    uMax = texture->u0;
+                                }
+                                else
+                                {
+                                    uMax = texture->u2;
+                                }
+                            }
+                            else if (texture->u1 > texture->u2)
+                            {
+                                uMax = texture->u1;
+                            }
+                            else
+                            {
+                                uMax = texture->u2;
+                            }
+
+                            ft3->u0 = (texture->u0 == uMin) ? uMax : uMin;
+                            ft3->u1 = (texture->u1 == uMin) ? uMax : uMin;
+                            ft3->u2 = (texture->u2 == uMin) ? uMax : uMin;
+                        }
+
+                        *(int *)&((POLY_FT3 *)prim)->r0 = fxPrim->color;
+
+                        // addPrim(ot[otz], prim);
+
+                        temp = (int *)((otz * 4) + (uintptr_t)ot);
+
+                        *(int *)prim = getaddr(temp) | 0x7000000;
+                        *(int *)temp = (intptr_t)prim & 0xFFFFFF;
+
+                        prim += 8;
+                    }
+                }
+            }
+        }
+    }
+
+    SetRotMatrix(wcTransform);
+    SetTransMatrix(wcTransform);
+
+    for (fxPrim = (FX_PRIM *)fxTracker->usedPrimListSprite.next; fxPrim != NULL; fxPrim = nextFXPrim)
+    {
+        DVECTOR xy_pos;
+        long flags;
+
+        sizex = fxPrim->v0.x << 1;
+
+        gte_ldv0(&fxPrim->position);
+
+        gte_lddqb(0);
+
+        gte_lddqa(sizex);
+
+        gte_nrtps();
+
+        nextFXPrim = (FX_PRIM *)fxPrim->node.next;
+
+        flags = fxPrim->flags;
+
+        if ((prim + 10) >= (long *)primPool->lastPrim)
+        {
+            break;
+        }
+
+        if (!(flags & 0x10))
+        {
+            gte_stsxy(&xy_pos);
+
+            gte_stopz(&sizex);
+
+            gte_stsz(&sz0);
+
+            otz = sz0 >> 2;
+
+            if ((flags & 0x2008000))
+            {
+                if (!(flags & 0x8000))
+                {
+                    if (((flags & 0x2000000)) && (otz > 50))
+                    {
+                        otz = 3071;
+                    }
+                }
+                else
+                {
+                    otz -= 20;
+                }
+            }
+
+            if (((flags & 0x800000)) && ((sz0 < 384) || (sz0 >= 4096)))
+            {
+                otz = 0;
+            }
+
+            if (((otz > 50) && (otz < 3072)) && (((flags & 0x4000000)) || ((xy_pos.vx >= 0) && (xy_pos.vy >= 0) && (xy_pos.vx < 512) && (xy_pos.vy < 240))))
+            {
+                int temp; // not from decls.h
+
+                if (((flags & 0x2000)) && (fxPrim->v0.y != 4096))
+                {
+                    sizex = (sizex >> 12) * fxPrim->v0.y;
+
+                    if (fxPrim->v0.x == fxPrim->v0.z)
+                    {
+                        sizey = sizex;
+                    }
+                    else
+                    {
+                        sizey = (((fxPrim->v0.z * 640) * fxPrim->v0.y) / sz0) << 4;
+                    }
+
+                    temp = 0xFFFF;
+                }
+                else if (fxPrim->v0.x == fxPrim->v0.z)
+                {
+                    sizey = sizex;
+                }
+                else
+                {
+                    sizey = ((fxPrim->v0.z << 16) * 640) / sz0;
+                }
+
+                temp = 0xFFFF;
+
+                sizex = (((sizex / 320) << 9) + temp) >> 16;
+                sizey = (sizey + temp) >> 16;
+
+                if (!(flags & 0x1))
+                {
+                    if ((flags & 0x8))
+                    {
+                        if ((flags & 0x80000))
+                        {
+                            POLY_SG4 *sg4;
+                            int n;
+                            long *src;
+                            long *dst;
+                            long *ptr;
+                            int *temp; // not from decls.h
+
+                            sg4 = (POLY_SG4 *)prim;
+
+                            prim += 16;
+
+                            // setDrawTPage(sg4, 1, 1, 32);
+
+                            sg4->drawTPage1 = _get_mode(1, 1, 32);
+
+                            // setDrawTPage(sg4, 1, 1, 64);
+
+                            sg4->drawTPage2 = _get_mode(1, 1, 64);
+
+                            ptr = (long *)&sg4->p1;
+
+                            src = (long *)&sg4->p1.x0;
+                            dst = (long *)&sg4->p2.x0;
+
+                            sg4->p1.x0 = sg4->p1.x2 = xy_pos.vx - (sizex / 2);
+                            sg4->p1.y0 = sg4->p1.y1 = xy_pos.vy - (sizey / 2);
+                            sg4->p1.x1 = sg4->p1.x3 = sg4->p1.x0 + sizex;
+                            sg4->p1.y2 = sg4->p1.y3 = sg4->p1.y1 + sizey;
+
+                            for (n = 0; n < 4; n++)
+                            {
+                                gte_lddp(4096 - fxPrim->fadeValue[0]);
+
+                                gte_ldcv(&fxPrim->color);
+
+                                gte_ngpf(1);
+
+                                *dst = *src;
+
+                                src += 2;
+
+                                dst += 1;
+
+                                gte_stcv(ptr);
+
+                                ptr += 2;
+                            }
+
+                            gte_lddp(4096 - fxPrim->fadeValue[0]);
+
+                            gte_ldcv(&whitec);
+
+                            gte_ngpf(1);
+
+                            // addPrim(ot[otz], sg4);
+
+                            temp = (int *)((otz * 4) + (uintptr_t)ot);
+
+                            *(int *)sg4 = getaddr(temp) | 0xF000000;
+                            *(int *)temp = (intptr_t)sg4 & 0xFFFFFF;
+
+                            gte_stcv(&sg4->p2.r0);
+
+                            sg4->p1.code = 0x3A; // Poly G4 + semitrans flag
+                            sg4->p2.code = 0x2A; // POLY_F4_SEMITRANS code
+                        }
+                        else
+                        {
+                            POLY_G4 *temp; // not from decls.h
+                            int *temp2;    // not from decls.h
+
+                            temp = (POLY_G4 *)prim;
+
+                            temp->x0 = temp->x2 = xy_pos.vx - (sizex / 2);
+                            temp->y0 = temp->y1 = xy_pos.vy - (sizey / 2);
+                            temp->x1 = temp->x3 = temp->x0 + sizex;
+                            temp->y2 = temp->y3 = temp->y1 + sizey;
+
+                            *(int *)&temp->r0 = fxPrim->color;
+                            *(int *)&temp->r1 = fxPrim->color;
+                            *(int *)&temp->r2 = fxPrim->color;
+                            *(int *)&temp->r3 = fxPrim->color;
+
+                            setPolyG4(prim);
+
+                            // addPrim(ot[otz], prim);
+
+                            temp2 = (int *)((otz * 4) + (uintptr_t)ot);
+
+                            *(int *)prim = getaddr(temp2) | 0x8000000;
+                            *(int *)temp2 = (intptr_t)prim & 0xFFFFFF;
+
+                            prim += 9;
+                        }
+                    }
+                }
+                else
+                {
+                    unsigned short uMin;
+                    unsigned short uMax;
+                    unsigned short vMin;
+                    unsigned short vMax;
+                    POLY_FT4 *ft4;
+                    int *temp; // not from decls.h
+
+                    texture = fxPrim->texture;
+
+                    if ((flags & 0x8))
+                    {
+                        ft4 = (POLY_FT4 *)prim;
+
+                        if (texture->u0 < texture->u1)
+                        {
+                            if (texture->u0 < texture->u2)
+                            {
+                                uMin = texture->u0;
+                            }
+                            else
+                            {
+                                uMin = texture->u2;
+                            }
+                        }
+                        else if (texture->u1 < texture->u2)
+                        {
+                            uMin = texture->u1;
+                        }
+                        else
+                        {
+                            uMin = texture->u2;
+                        }
+
+                        if (texture->u0 > texture->u1)
+                        {
+                            if (texture->u0 > texture->u2)
+                            {
+                                uMax = texture->u0;
+                            }
+                            else
+                            {
+                                uMax = texture->u2;
+                            }
+                        }
+                        else if (texture->u1 > texture->u2)
+                        {
+                            uMax = texture->u1;
+                        }
+                        else
+                        {
+                            uMax = texture->u2;
+                        }
+
+                        if (texture->v0 < texture->v1)
+                        {
+                            if (texture->v0 < texture->v2)
+                            {
+                                vMin = texture->v0 << 8;
+                            }
+                            else
+                            {
+                                vMin = texture->v2 << 8;
+                            }
+                        }
+                        else if (texture->v1 < texture->v2)
+                        {
+                            vMin = texture->v1 << 8;
+                        }
+                        else
+                        {
+                            vMin = texture->v2 << 8;
+                        }
+
+                        if (texture->v0 > texture->v1)
+                        {
+                            if (texture->v0 > texture->v2)
+                            {
+                                vMax = texture->v0 << 8;
+                            }
+                            else
+                            {
+                                vMax = texture->v2 << 8;
+                            }
+                        }
+                        else if (texture->v1 > texture->v2)
+                        {
+                            vMax = texture->v1 << 8;
+                        }
+                        else
+                        {
+                            vMax = texture->v2 << 8;
+                        }
+
+                        *(short *)&ft4->u0 = uMin | vMin;
+                        *(short *)&ft4->u1 = uMax | vMin;
+                        *(short *)&ft4->u2 = uMin | vMax;
+                        *(short *)&ft4->u3 = uMax | vMax;
+
+                        *(unsigned short *)&ft4->clut = texture->clut;
+
+                        *(unsigned short *)&ft4->tpage = texture->tpage;
+
+                        ft4->x0 = ft4->x2 = xy_pos.vx + (sizex / 2);
+                        ft4->y0 = ft4->y1 = xy_pos.vy + (sizey / 2);
+                        ft4->x1 = ft4->x3 = ft4->x0 - sizex;
+                        ft4->y2 = ft4->y3 = ft4->y1 - sizey;
+
+                        if ((flags & 0x1000))
+                        {
+                            char temp; // not from decls.h
+
+                            ft4->u0 ^= ft4->u1;
+
+                            temp = ft4->u0 ^ ft4->u1;
+
+                            ft4->u1 ^= ft4->u0;
+                            ft4->u0 ^= ft4->u1;
+                            ft4->u2 ^= ft4->u3;
+
+                            temp = ft4->u2 ^ ft4->u3;
+
+                            (void)temp;
+
+                            ft4->u3 ^= ft4->u2;
+                            ft4->u2 ^= ft4->u3;
+                        }
+
+                        *(int *)&ft4->r0 = fxPrim->color;
+
+                        // addPrim(ot[otz], prim);
+
+                        temp = (int *)((otz * 4) + (uintptr_t)ot);
+
+                        *(int *)prim = getaddr(temp) | 0x9000000;
+                        *(int *)temp = (intptr_t)prim & 0xFFFFFF;
+
+                        prim += 10;
+                    }
+                }
+            }
+            else if ((flags & 0x400000))
+            {
+                fxPrim->timeToLive = 1;
+            }
+            else if ((flags & 0x800000))
+            {
+                fxPrim->work0 = 9999;
+            }
+        }
+    }
+
+    primPool->nextPrim = (unsigned long *)prim;
+
+    FX_DrawAllGeneralEffects(wcTransform, gameTrackerX.vertexPool, primPool, ot);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_SimpleQuadSetup);
 

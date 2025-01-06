@@ -42,5 +42,6 @@ void FX_DrawList(FXTracker *fxTracker, GameTracker *gameTracker, unsigned long *
 void FX_ProcessList(FXTracker *fxTracker);
 void FX_Spiral(PrimPool *primPool, unsigned long **ot);
 void FX_EndInstanceParticleEffects(Instance *instance);
+void FX_DrawAllGeneralEffects(MATRIX *wcTransform, VertexPool *vertexPool, PrimPool *primPool, unsigned long **ot);
 
 #endif
