@@ -103,10 +103,6 @@ void MON_IdleMessageHandler(Instance *instance, Message *message)
     }
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONMSG", MON_DefaultMessageHandler);
-#else
 void MON_DefaultMessageHandler(Instance *instance, Message *message)
 {
     MonsterAttributes *ma;
@@ -611,7 +607,10 @@ void MON_DefaultMessageHandler(Instance *instance, Message *message)
         break;
     case 0x40017:
     {
-        STATIC int deaths[8924 + 9];
+        static int deaths[] = {
+            0x20, 0x40, 0x10,
+            0x200, 0x80, 0x400,
+            0x100, 0x400, 0x100};
 
         mv->damageType = deaths[message->Data];
 
@@ -656,7 +655,6 @@ void MON_DefaultMessageHandler(Instance *instance, Message *message)
         break;
     }
 }
-#endif
 
 void MON_PupateQueueHandler(Instance *instance)
 {
