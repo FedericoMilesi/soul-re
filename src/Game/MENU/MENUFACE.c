@@ -82,7 +82,29 @@ void menuface_initialize()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUFACE", menuface_terminate);
+void menuface_terminate()
+{
+    int i;
+    int j;
+
+    if (hack_initialized != 0)
+    {
+        for (i = 0; i < 8; i++)
+        {
+            for (j = 0; j < 7; j++)
+            {
+                if (((MenuFaces[i].loaded >> j) & 0x1))
+                {
+                    DRAW_FreeButton(&FaceButtons[(i * 7) + j]);
+                }
+            }
+        }
+
+        MEMPACK_Free((char *)FaceButtons);
+
+        hack_initialized = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUFACE", MENUFACE_ChangeStateRandomly);
 
