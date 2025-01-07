@@ -9,6 +9,7 @@ void FONT_Print(const char *fmt, ...);
 void FONT_Print2(char *fmt);
 void FONT_SetCursor(short x, short y);
 void FONT_FontPrintCentered(char *text, long y);
+void FONT_SetColorIndex(int color);
 
 FontTracker fontTracker;
 

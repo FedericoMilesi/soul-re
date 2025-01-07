@@ -6,7 +6,22 @@ STATIC menu_sound_entry_t the_menu_sounds[8924 + 6];
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUUTIL", menu_get_ctrl);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUUTIL", menu_print);
+void menu_print(int xpos, int ypos, char *text, int color)
+{
+    FONT_SetCursor(xpos, ypos);
+
+    if (color != 0)
+    {
+        FONT_SetColorIndex(color);
+    }
+
+    FONT_Print2(text);
+
+    if (color != 0)
+    {
+        FONT_SetColorIndex(0);
+    }
+}
 
 int menu_text_width(char *text)
 {
