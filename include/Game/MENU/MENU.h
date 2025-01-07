@@ -4,7 +4,7 @@
 #include "common.h"
 
 void menu_pop(menu_t *menu);
-void menu_item_flags(menu_t *menu, int (*fn)(), long parameter, long flags, char *format);
+void menu_item_flags(menu_t *menu, int (*fn)(), long parameter, long flags, char *format, ...);
 void menu_item(menu_t *menu, int (*fn)(), long parameter, char *format);
 void menu_push(menu_t *menu, int (*fn)());
 void menu_build(menu_t *menu);

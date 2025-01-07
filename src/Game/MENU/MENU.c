@@ -49,7 +49,28 @@ void menu_pop(menu_t *menu)
     menu->nmenus--;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_item_flags);
+// void menu_item_flags(struct menu_t *menu, int (*fn)(), long parameter, long flags, char *format)
+void menu_item_flags(menu_t *menu, int (*fn)(), long parameter, long flags, char *format, ...)
+{
+    menu_item_t *item;
+    va_list temp; // not from decls.h
+
+    item = &menu->items[menu->nitems++];
+
+    item->fn = fn;
+
+    item->parameter = parameter;
+
+    item->text = &menu->bytes[menu->nbytes];
+
+    item->flags = flags;
+
+    va_start(temp, format);
+
+    vsprintf(item->text, format, temp);
+
+    menu->nbytes += strlen(item->text) + 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_item);
 
