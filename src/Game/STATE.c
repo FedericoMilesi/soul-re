@@ -1,6 +1,7 @@
 #include "common.h"
 #include "Game/STATE.h"
 #include "Game/G2/ANIMG2.h"
+#include "Game/G2/ANMCTRLR.h"
 #include "Game/MEMPACK.h"
 #include "Game/G2/INSTNCG2.h"
 #include "Game/INSTANCE.h"
@@ -1176,7 +1177,7 @@ void G2EmulationSetInterpController_Vector(Instance *instance, long segment, lon
 
     temp2 = type & 0xFF;
 
-    G2Anim_SetInterpController_Vector(&instance->anim, temp, temp2, vec, (short)(Frames * 100));
+    G2Anim_SetInterpController_Vector(&instance->anim, temp, temp2, vec, Frames * 100);
     G2Anim_SetControllerCallbackData(&instance->anim, temp, temp2, (void *)Data);
 }
 

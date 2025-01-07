@@ -168,7 +168,44 @@ void G2Anim_SetController_Vector(G2Anim *anim, int segNumber, int type, G2SVecto
     controller->flags = (unsigned char)controller->flags;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2Anim_SetInterpController_Vector);
+// Further debugging symbols were provided by the remasters' PDB file for this function
+void G2Anim_SetInterpController_Vector(G2Anim *anim, int segNumber, int type, G2SVector3 *vector, short duration)
+{
+    G2AnimController *controller;
+    G2EulerAngles eulerVector;
+    G2SVector3 *base;
+    G2SVector3 *offset;
+    G2Quat quat;
+
+    controller = _G2Anim_FindController(anim, segNumber, type);
+
+    if ((controller->type & 0x38) == 8)
+    {
+        _G2Anim_CopyVectorWithOrder(vector, &eulerVector, (unsigned char)controller->flags);
+
+        G2Quat_FromEuler_S(&quat, &eulerVector);
+
+        G2Anim_SetInterpController_Quat(anim, segNumber, type, &quat, duration);
+    }
+    else
+    {
+        base = &controller->data.vector.base;
+
+        offset = &controller->data.vector.offset;
+
+        G2Anim_GetControllerCurrentInterpVector(anim, segNumber, type, base);
+
+        offset->x = ((vector->x - base->x) * 4096) / (duration + 1);
+        offset->y = ((vector->y - base->y) * 4096) / (duration + 1);
+        offset->z = ((vector->z - base->z) * 4096) / (duration + 1);
+
+        controller->duration = duration;
+
+        controller->elapsedTime = 0;
+
+        controller->flags = (unsigned char)controller->flags | 0x4000;
+    }
+}
 
 void G2Anim_SetInterpController_Quat(G2Anim *anim, int segNumber, int type, G2Quat *quat, int duration)
 {
