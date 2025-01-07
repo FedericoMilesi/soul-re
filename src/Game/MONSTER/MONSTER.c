@@ -526,7 +526,36 @@ void MON_PursueEntry(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_Pursue);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_WanderEntry);
+void MON_WanderEntry(Instance *instance)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    mv->mvFlags |= 0x11000;
+
+    if ((mv->mvFlags & 0x4))
+    {
+        MON_PlayAnim(instance, MONSTER_ANIM_WALK, 2);
+    }
+    else
+    {
+        MON_GetPlanSlot(mv);
+
+        if (MON_AnimPlaying(instance, MONSTER_ANIM_WALK) == 0)
+        {
+            MON_PlayRandomIdle(instance, 2);
+        }
+    }
+
+    mv->mvFlags &= ~0x20000;
+
+    do
+    {
+    } while (0); // garbage code for reordering
+
+    mv->generalTimer = MON_GetTime(instance) + 1000;
+}
 
 void MON_Wander(Instance *instance)
 {
