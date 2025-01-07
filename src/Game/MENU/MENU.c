@@ -14,7 +14,24 @@ void menu_initialize(menu_t *menu, void *opaque)
     menu->opaque = opaque;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_format);
+void menu_format(menu_t *menu, int center, int xpos, int ypos, int width, int lineskip, int itemskip, int border)
+{
+    menu_format_t *fmt;
+
+    fmt = &menu->stack[menu->nmenus - 1].format;
+
+    fmt->xpos = xpos;
+    fmt->ypos = ypos;
+
+    fmt->center = center;
+
+    fmt->lineskip = lineskip;
+    fmt->itemskip = itemskip;
+
+    fmt->width = width;
+
+    fmt->border = border;
+}
 
 void menu_set(menu_t *menu, int (*fn)())
 {
