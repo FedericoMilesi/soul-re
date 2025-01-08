@@ -17,7 +17,19 @@ void do_check_controller(void *gt)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_push_menu);
+int do_push_menu(void *gt, long menuparam, menu_ctrl_t ctrl)
+{
+    typedef int (*fn)(); // not from decls.h
+
+    if (ctrl == menu_ctrl_engage)
+    {
+        menu_push(((GameTracker *)gt)->menu, (fn)menuparam);
+
+        return 1;
+    }
+
+    return 0;
+}
 
 int do_pop_menu(void *gt, long param, menu_ctrl_t ctrl)
 {
