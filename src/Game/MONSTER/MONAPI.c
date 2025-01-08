@@ -975,7 +975,74 @@ void MONAPI_DeleteRegen(MONAPI_Regenerator *regen)
     memcpy(regen, &regen[1], ((signed char)GlobalSave->numRegens - (regen - GlobalSave->regenEntries)) * sizeof(MONAPI_Regenerator));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONAPI", MONAPI_ProcessGenerator);
+void MONAPI_ProcessGenerator()
+{
+    MONAPI_Regenerator *regen;
+    int i;
+
+    regen = &GlobalSave->regenEntries[0];
+
+    if ((GlobalSave->flags & 0x1))
+    {
+        return;
+    }
+
+    for (i = 0; i < (signed char)GlobalSave->numRegens;)
+    {
+        unsigned long time;
+
+        if (gameTrackerX.gameData.asmData.MorphType != 0)
+        {
+            time = gameTrackerX.currentSpectralTime;
+        }
+        else
+        {
+            time = gameTrackerX.currentMaterialTime;
+        }
+
+        if (regen->regenTime < time)
+        {
+            Level *level;
+
+            level = STREAM_GetLevelWithID(regen->streamUnitID);
+
+            if (level != NULL)
+            {
+                Intro *intro;
+                int j;
+                long id;
+
+                id = regen->introUniqueID;
+
+                for (j = level->numIntros, intro = level->introList; j != 0; j--, intro++)
+                {
+                    if (intro->UniqueID == id)
+                    {
+                        if ((intro->flags & 0x400))
+                        {
+                            MONAPI_DeleteRegen(regen);
+                        }
+                        else if (INSTANCE_IntroduceInstance(intro, regen->streamUnitID) == NULL)
+                        {
+                            MONAPI_DeleteRegen(regen);
+                        }
+
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                MONAPI_DeleteRegen(regen);
+            }
+        }
+        else
+        {
+            i++;
+            regen++;
+        }
+    }
+}
 
 void MONAPI_AddToGenerator(Instance *instance)
 {
