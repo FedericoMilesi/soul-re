@@ -94,7 +94,19 @@ int do_start_game(void *gt, long parameter, menu_ctrl_t ctrl)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_save_menu);
+int do_save_menu(void *gt, long parameter, menu_ctrl_t ctrl)
+{
+    (void)parameter;
+
+    if (ctrl == menu_ctrl_engage)
+    {
+        menu_push(((GameTracker *)gt)->menu, memcard_pause_menu);
+
+        return 1;
+    }
+
+    return 0;
+}
 
 void womp_background(char *tim_path)
 {
