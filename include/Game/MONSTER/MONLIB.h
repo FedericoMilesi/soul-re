@@ -65,5 +65,6 @@ int MON_TakeDamage(Instance *instance, int damage, int type);
 void MON_MoveInstanceToImpalePoint(Instance *instance);
 void MON_SetFXHitData(Instance *instance, evFXHitData *data, int type, int amount);
 void MON_LaunchMonster(Instance *instance, int zDirection, int power, int loft);
+void MON_MoveForward(Instance *instance);
 
 #endif

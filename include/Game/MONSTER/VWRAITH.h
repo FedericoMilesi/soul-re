@@ -5,6 +5,20 @@
 
 extern MonsterFunctionTable VWRAITH_FunctionTable;
 
+typedef struct Dummy5
+{
+    short unk0;
+    short unk2;
+    short unk4;
+    short unk6;
+    short unk8;
+    short unkA;
+    short unkC;
+    char unkE;
+    char unkF;
+    char unk10;
+} Dummy5;
+
 int VWRAITH_ShouldISwoop(Instance *instance);
 void VWRAITH_VerticalMove(Instance *instance);
 void VWRAITH_PursueEntry(Instance *instance);
