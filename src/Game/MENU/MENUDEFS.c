@@ -2,8 +2,12 @@
 #include "Game/MENU/MENU.h"
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"
+#include "Game/MEMPACK.h"
+#include "Game/PSX/MAIN.h"
 
 STATIC int StartGameFading;
+
+long *mainMenuScreen;
 
 void do_check_controller(void *gt)
 {
@@ -68,7 +72,12 @@ INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_start_game);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_save_menu);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", womp_background);
+void womp_background(char *tim_path)
+{
+    MEMPACK_Free((char *)mainMenuScreen);
+
+    mainMenuScreen = MAIN_LoadTim(tim_path);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", play_movie_dup1);
 
