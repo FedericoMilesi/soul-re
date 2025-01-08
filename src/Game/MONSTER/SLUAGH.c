@@ -57,6 +57,87 @@ uintptr_t SLUAGH_Query(Instance *instance, unsigned long query)
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_DamageEffect);
+/* TODO: this file needs migrating its .sdata to C for this function to match
+void SLUAGH_DamageEffect(Instance *instance, evFXHitData *data)
+{
+    MonsterVars *mv;
+
+    mv = (MonsterVars *)instance->extraData;
+
+    if (data != NULL)
+    {
+        if (!(mv->auxFlags & 0x1))
+        {
+            SVector accel = {0, 0, 1}; // placeholder values
+
+            FX_Blood(&data->location, &data->velocity, &accel, data->amount, 0x308000, sizeof(SVector));
+
+            FX_MakeHitFX(&data->location);
+        }
+    }
+    else
+    {
+        FXGlowEffect *fx;
+
+        fx = (FXGlowEffect *)mv->effect;
+
+        if (fx != NULL)
+        {
+            long color;
+
+            color = FX_GetHealthColor(mv->hitPoints / 4096);
+
+            if (fx->currentColor != color)
+            {
+                ColorType current;
+                ColorType target;
+
+                current = *(ColorType *)&fx->currentColor;
+                target = *(ColorType *)&color;
+
+                if (current.r > target.r)
+                {
+                    current.r -= 4;
+                }
+                else if (current.r < target.r)
+                {
+                    current.r += 4;
+                }
+
+                if (current.g > target.g)
+                {
+                    current.g -= 4;
+                }
+                else if (current.g < target.g)
+                {
+                    current.g += 4;
+                }
+
+                if (current.b > target.b)
+                {
+                    current.b -= 4;
+                }
+                else if (current.b < target.b)
+                {
+                    current.b += 4;
+                }
+
+                fx->currentColor = *(long *)&current;
+            }
+        }
+
+        if (((mv->auxFlags & 0x1)) && (mv->hitPoints != 0))
+        {
+            mv->mvFlags &= ~0x200000;
+            mv->auxFlags &= ~0x1;
+
+            mv->behaviorState = mv->triggeredBehavior;
+
+            MON_StartSpecialFade(instance, 0, 20);
+        }
+    }
+}
+*/
 
 void SLUAGH_Init(Instance *instance)
 {
@@ -192,7 +273,6 @@ void SLUAGH_Attack(Instance *instance)
                         ma = (MonsterAttributes *)instance->data;
                         color = FX_GetHealthColor(hitpoints / 4096);
                         mv->effect = FX_DoInstanceOneSegmentGlow(instance, ma->headSegment, &color, 1, 0x4B0, 0x68, 0x70);
-
                     }
                     MON_SwitchState(instance, MONSTER_STATE_IDLE);
                 }
