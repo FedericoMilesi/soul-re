@@ -154,7 +154,29 @@ void check_hack_attract()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", get_volume);
+int get_volume(void *gt, sfx_t sfx)
+{
+    int raw;
+
+    if (sfx == sfx_sound)
+    {
+        raw = ((GameTracker *)gt)->sound.gSfxVol;
+    }
+    else if (sfx == sfx_music)
+    {
+        raw = ((GameTracker *)gt)->sound.gMusicVol;
+    }
+    else if (sfx == sfx_voice)
+    {
+        raw = ((GameTracker *)gt)->sound.gVoiceVol;
+    }
+    else
+    {
+        raw = 3;
+    }
+
+    return (raw * 10) / 127;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", set_volume);
 
