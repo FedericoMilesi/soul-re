@@ -45,7 +45,24 @@ int do_pop_menu(void *gt, long param, menu_ctrl_t ctrl)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_function);
+int do_function(void *gt, long fnparam, menu_ctrl_t ctrl)
+{
+    typedef int (*fn)(); // not from decls.h
+    fn temp;             // not from decls.h
+
+    (void)gt;
+
+    if (ctrl == menu_ctrl_engage)
+    {
+        temp = (fn)fnparam;
+
+        temp();
+
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_start_game);
 
