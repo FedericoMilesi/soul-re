@@ -1,4 +1,5 @@
 #include "Game/MENU/MENUDEFS.h"
+#include "Game/MENU/MENU.h"
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"
 
@@ -18,7 +19,19 @@ void do_check_controller(void *gt)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_push_menu);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_pop_menu);
+int do_pop_menu(void *gt, long param, menu_ctrl_t ctrl)
+{
+    (void)param;
+
+    if (ctrl == menu_ctrl_engage)
+    {
+        menu_pop(((GameTracker *)gt)->menu);
+
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_function);
 
