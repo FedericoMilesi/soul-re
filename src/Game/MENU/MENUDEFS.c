@@ -4,6 +4,7 @@
 #include "Game/GAMEPAD.h"
 #include "Game/MEMPACK.h"
 #include "Game/PSX/MAIN.h"
+#include "Game/MCARD/MEMCARD.h"
 
 STATIC int StartGameFading;
 
@@ -70,7 +71,28 @@ int do_function(void *gt, long fnparam, menu_ctrl_t ctrl)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_start_game);
+int do_start_game(void *gt, long parameter, menu_ctrl_t ctrl)
+{
+    (void)parameter;
+
+    if (ctrl == menu_ctrl_engage)
+    {
+        if (MEMCARD_IsWrongVersion(((GameTracker *)gt)->memcard) == 0)
+        {
+            menu_push(((GameTracker *)gt)->menu, memcard_main_menu);
+
+            return 1;
+        }
+        else
+        {
+            MAIN_StartGame();
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_save_menu);
 

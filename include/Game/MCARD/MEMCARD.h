@@ -6,6 +6,8 @@
 void memcard_end(memcard_t *memcard);
 int maybe_start(memcard_t *memcard);
 int memcard_initialize(memcard_t *memcard, void *gt, int nblocks, void *buffer, int nbytes);
+int memcard_main_menu(void *gt, int index);
+int MEMCARD_IsWrongVersion(memcard_t *memcard);
 
 extern memcard_t gMemcard;
 
