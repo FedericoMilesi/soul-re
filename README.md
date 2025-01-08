@@ -6,7 +6,7 @@
 
 Soul Reaverse is a project that seeks to reconstruct the source code of the PSX action-adventure classic Legacy of Kain: Soul Reaver. This is achieved by disassembling the executable of a prototype of the game that was built two weeks before its final release, which includes a full set of debugging symbols that makes the process of reverse-engineering the binary's MIPS instructions back to C language easier.
 
-The current progress of the project is 70% completion, excluding overlays.
+The current progress of the project is 71% completion, excluding overlays.
 
 ## Building (Linux)
 
@@ -36,7 +36,7 @@ cd soul-re
 Run `python3 -m install -r requirements.txt`
 
 ### Placing the ROM
-Obviously, you will need to provide your own rom dump of the game. The required version is the 1999-07-14 Prototype Version of Legacy of Kain: Soul Reaver.
+You will need to provide your own rom dump of the game. The required version is the 1999-07-14 Prototype Version of Legacy of Kain: Soul Reaver.
 If done correctly, you will end up with a .IMG and a .CUE file that you can mount on your PC to get the required binary, SLUS_007.08, which needs to be placed inside the `soul-re` folder.
 
 ### Build the code
