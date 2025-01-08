@@ -3,4 +3,8 @@
 
 #include "common.h"
 
+int CINE_Load();
+void CINE_Play(char *strfile, unsigned short mask, int buffers);
+void CINE_Unload();
+
 #endif

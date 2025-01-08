@@ -5,6 +5,7 @@
 #include "Game/MEMPACK.h"
 #include "Game/PSX/MAIN.h"
 #include "Game/MCARD/MEMCARD.h"
+#include "Game/CINEMA/CINEPSX.h"
 
 STATIC int StartGameFading;
 
@@ -119,7 +120,17 @@ void womp_background(char *tim_path)
     mainMenuScreen = MAIN_LoadTim(tim_path);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", play_movie_dup1);
+void play_movie_dup1(char *name)
+{
+    if (CINE_Load() != 0)
+    {
+        CINE_Play(name, 0xFFFF, 2);
+
+        CINE_Unload();
+
+        MAIN_InitVolume();
+    }
+}
 
 void menudefs_reset_hack_attract_mode()
 {
