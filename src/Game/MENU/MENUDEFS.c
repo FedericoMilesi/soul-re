@@ -12,6 +12,10 @@ long *mainMenuScreen;
 
 STATIC int hack_attract;
 
+STATIC int hack_attract_movie;
+
+STATIC char *the_attract_movies[8924 + 4];
+
 void do_check_controller(void *gt)
 {
     if (((GameTracker *)gt)->gameMode == 6)
@@ -125,7 +129,19 @@ void menudefs_reset_hack_attract_mode()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", check_hack_attract);
+void check_hack_attract()
+{
+    if ((hack_attract > 0) && ((unsigned int)(hack_attract + 2000) < gameTrackerX.vblCount))
+    {
+        hack_attract = 1;
+
+        play_movie_dup1(the_attract_movies[hack_attract_movie]);
+
+        hack_attract_movie = (hack_attract_movie + 1) & 0x3;
+
+        hack_attract = gameTrackerX.vblCount;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", get_volume);
 
