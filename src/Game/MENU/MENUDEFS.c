@@ -2,6 +2,8 @@
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"
 
+STATIC int StartGameFading;
+
 void do_check_controller(void *gt)
 {
     if (((GameTracker *)gt)->gameMode == 6)
@@ -46,7 +48,24 @@ INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", options_menu);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", main_menu);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_main_menu);
+int do_main_menu(void *gt, long param, menu_ctrl_t ctrl)
+{
+    (void)param;
+
+    if ((StartGameFading == 0) && ((ctrl == menu_ctrl_start) || (ctrl == menu_ctrl_engage)))
+    {
+        ((GameTracker *)gt)->wipeType = 10;
+
+        ((GameTracker *)gt)->wipeTime = -20;
+        ((GameTracker *)gt)->maxWipeTime = 20;
+
+        StartGameFading = 1;
+
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", flashStart);
 
