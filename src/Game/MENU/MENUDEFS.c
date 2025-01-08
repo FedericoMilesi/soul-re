@@ -9,6 +9,8 @@ STATIC int StartGameFading;
 
 long *mainMenuScreen;
 
+STATIC int hack_attract;
+
 void do_check_controller(void *gt)
 {
     if (((GameTracker *)gt)->gameMode == 6)
@@ -81,7 +83,13 @@ void womp_background(char *tim_path)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", play_movie_dup1);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", menudefs_reset_hack_attract_mode);
+void menudefs_reset_hack_attract_mode()
+{
+    if (hack_attract > 0)
+    {
+        hack_attract = gameTrackerX.vblCount;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", check_hack_attract);
 
