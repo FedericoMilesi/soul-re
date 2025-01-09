@@ -6,6 +6,7 @@
 #include "Game/PSX/MAIN.h"
 #include "Game/MCARD/MEMCARD.h"
 #include "Game/CINEMA/CINEPSX.h"
+#include "Game/SOUND.h"
 
 STATIC int StartGameFading;
 
@@ -178,7 +179,27 @@ int get_volume(void *gt, sfx_t sfx)
     return (raw * 10) / 127;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", set_volume);
+void set_volume(sfx_t sfx, int cooked)
+{
+    int raw;
+
+    raw = ((cooked * 127) + 9) / 10;
+
+    switch (sfx)
+    {
+    case sfx_sound:
+        SOUND_SetSfxVolume(raw);
+        break;
+    case sfx_music:
+        SOUND_SetMusicVolume(raw);
+        break;
+    case sfx_voice:
+        SOUND_SetVoiceVolume(raw);
+        break;
+    default:
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_sound_adjust);
 

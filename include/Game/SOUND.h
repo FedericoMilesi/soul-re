@@ -39,5 +39,8 @@ unsigned long SndPlay(unsigned int sample);
 void SOUND_ResumeAllSound();
 void SOUND_PauseAllSound();
 int SndTypeIsPlayingOrRequested(unsigned int sfxToneID);
+void SOUND_SetSfxVolume(int newVolume);
+void SOUND_SetMusicVolume(int newVolume);
+void SOUND_SetVoiceVolume(int newVolume);
 
 #endif
