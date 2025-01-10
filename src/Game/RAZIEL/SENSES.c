@@ -1,4 +1,4 @@
-long UpdateAutoFaceAngle(Instance *player, Instance *instance);
+#include "Game/RAZIEL/SENSES.h"
 
 int SetEngagedInstance(Player *player, evCollideInstanceStatsData *Ptr, unsigned long Attribute)
 {

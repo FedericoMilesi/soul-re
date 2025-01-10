@@ -1,4 +1,4 @@
-void StateHandlerWallIdle(CharacterState *In, int CurrentSection, intptr_t Data);
+#include "Game/RAZIEL/SPIDER.h"
 
 void StateHandlerWallGrab(CharacterState *In, int CurrentSection, intptr_t Data)
 {

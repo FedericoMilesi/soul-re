@@ -1,4 +1,4 @@
-void StateHandlerSwimTread(CharacterState *In, int CurrentSection, intptr_t Data);
+#include "Game/RAZIEL/SWIM.h"
 
 void StateHandlerInitSwim(CharacterState *In, int CurrentSection, intptr_t Data)
 {
@@ -35,7 +35,6 @@ void StateHandlerInitSwim(CharacterState *In, int CurrentSection, intptr_t Data)
     }
 }
 
-void StateHandlerSwimCoil(CharacterState *In, int CurrentSection, intptr_t Data);
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerSwimCoil);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerSwimTread);

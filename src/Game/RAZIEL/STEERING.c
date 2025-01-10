@@ -1,13 +1,6 @@
-static int ZoneDelta = 16;
+#include "Game/RAZIEL/STEERING.h"
 
-void razDeinitWallCrawlSteering(Instance *instance);
-void razInitWallCrawlSteering(Instance *instance);
-void SteerTurn(Instance *instance, int rc);
-void SteerMove(Instance *instance, int rc);
-void SteerDisableAutoFace(Instance *instance);
-int SteerAutoFace(Instance *instance, long *controlCommand);
-void SteerSwim(Instance *instance);
-void SteerWallcrawling(Instance *instance);
+static int ZoneDelta = 16;
 
 int UpdateZoneDelta(int rc, int LastRC)
 {
