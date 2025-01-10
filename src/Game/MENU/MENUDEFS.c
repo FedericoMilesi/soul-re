@@ -10,6 +10,7 @@
 #include "Game/SOUND.h"
 #include "Game/LOCAL/LOCALSTR.h"
 #include "Game/DEBUG.h"
+#include "Game/FONT.h"
 
 STATIC int StartGameFading;
 
@@ -381,6 +382,72 @@ int do_main_menu(void *gt, long param, menu_ctrl_t ctrl)
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", flashStart);
+/*extern char D_800D1FC8[];
+char *flashStart()
+{
+    gameTrackerX.gameFramePassed = 1;
+
+    if (StartGameFading == 1)
+    {
+        hack_reset_attract = 1;
+
+        if (gameTrackerX.wipeTime == -1)
+        {
+            // womp_background("\\kain2\\game\\psx\\bkgdmenu.tim");
+            womp_background(D_800D1FC8);
+
+            gameTrackerX.wipeType = 10;
+
+            gameTrackerX.wipeTime = 20;
+            gameTrackerX.maxWipeTime = 20;
+
+            StartGameFading = 0;
+
+            menu_pop(gameTrackerX.menu);
+
+            menu_push(gameTrackerX.menu, main_menu);
+
+            return NULL;
+        }
+    }
+    else
+    {
+        STATIC int counter;
+        int intpl;
+        int fcols[2][3] = {0xC0, 0xD2, 0xD2, 0xC0, 0xC0, 0x40};
+        int r;
+        int g;
+        int b;
+
+        counter = (counter + 1) % 60;
+
+        if (counter < 10)
+        {
+            intpl = 0;
+        }
+        else if (counter < 30)
+        {
+            intpl = ((counter - 10) << 12) / 20;
+        }
+        else if (counter < 40)
+        {
+            intpl = 4096;
+        }
+        else
+        {
+            intpl = ((60 - counter) << 12) / 20;
+        }
+
+        r = ((fcols[0][0] * (4096 - intpl)) + (fcols[1][0] * intpl)) >> 12;
+        g = ((fcols[0][1] * (4096 - intpl)) + (fcols[1][1] * intpl)) >> 12;
+        b = ((fcols[0][2] * (4096 - intpl)) + (fcols[1][2] * intpl)) >> 12;
+
+        FONT_SetColorIndex(4);
+        FONT_SetColorIndexCol(4, r, g, b);
+    }
+
+    return localstr_get(LOCALSTR_press_start);
+}*/
 
 int menudefs_main_menu(void *gt, int index)
 {
