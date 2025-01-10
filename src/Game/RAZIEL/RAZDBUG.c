@@ -1,4 +1,4 @@
-
+#include "Game/RAZIEL/RAZDBUG.h"
 
 void DebugProcess(Instance *instance, Player *player)
 {

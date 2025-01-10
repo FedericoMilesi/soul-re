@@ -18,5 +18,7 @@ void StateHandlerDeCompression(CharacterState *In, int CurrentSection, intptr_t 
 void ProcessHints();
 void ProcessTimers(Instance *instance);
 int SetStates(Instance *instance, GameTracker *GT, long *controlCommand, int AnalogLength);
+long RazielAnimCallbackDuringPause(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data);
+void StateHandlerDropAction(CharacterState *In, int CurrentSection, intptr_t Data);
 
 #endif

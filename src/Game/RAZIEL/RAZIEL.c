@@ -156,7 +156,7 @@ void razSetPauseTranslation(Instance *instance);
 int razSwitchVAnimCharacterGroup(Instance *instance, int animGroup, int *frame, int *frames);
 void razLaunchForce(Instance *instance);
 void razSwitchVAnimCharacterSingle(Instance *instance, int anim, int *frame, int *frames);
-//void razAlignYRotMoveInterp(struct _Instance *source, struct _Instance *dest, short distance, unsigned char segNumber, int Frames, int extraZ);
+// void razAlignYRotMoveInterp(struct _Instance *source, struct _Instance *dest, short distance, unsigned char segNumber, int Frames, int extraZ);
 void razAlignYRotMoveInterp(Instance *source, Instance *dest, short distance, unsigned char segNumber, int Frames, short extraZ);
 void razMaterialShift();
 int razInBaseArea(char *name, int length);
@@ -308,7 +308,6 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerLookAround);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerCrouch);
 
-void StateHandlerDropAction(CharacterState *In, int CurrentSection, intptr_t Data);
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerDropAction);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerSoulSuck);
@@ -359,7 +358,6 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", DefaultStateHandler);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielAnimCallback);
 
-long RazielAnimCallbackDuringPause(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data);
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielAnimCallbackDuringPause);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielQuery);
@@ -716,29 +714,29 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielAdditionalCollide);
 
 int GetEngageEvent(Instance *instance)
 {
-	int Ability;
+    int Ability;
 
-	if (instance != NULL)
-	{
-		Ability = INSTANCE_Query(instance, 2);
+    if (instance != NULL)
+    {
+        Ability = INSTANCE_Query(instance, 2);
 
-		if ((Ability & 0x8))
-		{
-			return 0x2000000;
-		}
+        if ((Ability & 0x8))
+        {
+            return 0x2000000;
+        }
 
-		if ((Ability & 0x1))
-		{
-			return 0x2000001;
-		}
+        if ((Ability & 0x1))
+        {
+            return 0x2000001;
+        }
 
-		if ((Ability & 0x2))
-		{
-			return 0x2000004;
-		}
-	}
+        if ((Ability & 0x2))
+        {
+            return 0x2000004;
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", SetupReaction);
@@ -747,84 +745,84 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", CheckHolding);
 
 void DisableWristCollision(Instance *instance, int Side)
 {
-	if ((Side & 0x1))
-	{
-		COLLIDE_SegmentCollisionOff(instance, 31);
-	}
+    if ((Side & 0x1))
+    {
+        COLLIDE_SegmentCollisionOff(instance, 31);
+    }
 
-	if ((Side & 0x2))
-	{
-		COLLIDE_SegmentCollisionOff(instance, 41);
-	}
+    if ((Side & 0x2))
+    {
+        COLLIDE_SegmentCollisionOff(instance, 41);
+    }
 }
 
 void EnableWristCollision(Instance *instance, int Side)
 {
-	if ((Side & 0x1))
-	{
-		COLLIDE_SegmentCollisionOn(instance, 31);
-	}
+    if ((Side & 0x1))
+    {
+        COLLIDE_SegmentCollisionOn(instance, 31);
+    }
 
-	if ((Side & 0x2))
-	{
-		COLLIDE_SegmentCollisionOn(instance, 41);
-	}
+    if ((Side & 0x2))
+    {
+        COLLIDE_SegmentCollisionOn(instance, 41);
+    }
 }
 
-/*TODO: migrate to GetCollisionType*/
+/* TODO: migrate to GetCollisionType*/
 static char D_800D1DB8[0xA] = "MultiHit\n";
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", GetCollisionType);
 
 void InitGlyphSystem(Instance *instance)
 {
-	Object* GlyphOb;
-	Instance* iGlyph;
-	
-	GlyphOb = (Object*)objectAccess[20].object;
-	
-	if (GlyphOb != NULL)
-	{
-		iGlyph = INSTANCE_BirthObject(instance, GlyphOb, 0);
+    Object *GlyphOb;
+    Instance *iGlyph;
 
-		if (iGlyph != NULL)
-		{
-			Raziel.GlyphSystem = iGlyph;
-		}
-	}
+    GlyphOb = (Object *)objectAccess[20].object;
+
+    if (GlyphOb != NULL)
+    {
+        iGlyph = INSTANCE_BirthObject(instance, GlyphOb, 0);
+
+        if (iGlyph != NULL)
+        {
+            Raziel.GlyphSystem = iGlyph;
+        }
+    }
 }
 
 void mdRazielProcess(Instance *playerInstance, GameTracker *gameTracker, long *controlCommand)
 {
-	ProcessTimers(playerInstance);
+    ProcessTimers(playerInstance);
 
-	razClearPlayerEvent();
+    razClearPlayerEvent();
 
-	ProcessRazControl(controlCommand);
+    ProcessRazControl(controlCommand);
 
-	SetStates(playerInstance, gameTracker, controlCommand, -1);
+    SetStates(playerInstance, gameTracker, controlCommand, -1);
 
-	ProcessHints();
+    ProcessHints();
 
-	CAMERA_Control(&theCamera, playerInstance);
+    CAMERA_Control(&theCamera, playerInstance);
 
-	playerInstance->offset.x = 0;
-	playerInstance->offset.y = 0;
-	playerInstance->offset.z = 0;
-	
-	Raziel.collisionEdgeOffset.x = 0;
-	Raziel.collisionEdgeOffset.y = 0;
-	Raziel.collisionEdgeOffset.z = 0;
+    playerInstance->offset.x = 0;
+    playerInstance->offset.y = 0;
+    playerInstance->offset.z = 0;
 
-	Raziel.Senses.HitMonster = NULL;
+    Raziel.collisionEdgeOffset.x = 0;
+    Raziel.collisionEdgeOffset.y = 0;
+    Raziel.collisionEdgeOffset.z = 0;
 
-	if (Raziel.GlyphSystem != NULL)
-	{
-		GlyphProcess(Raziel.GlyphSystem, gameTracker);
-	}
+    Raziel.Senses.HitMonster = NULL;
 
-	Raziel.Abilities = debugRazielFlags1;
-	
-	debugRazielFlags1 |= debugRazielFlags2;
+    if (Raziel.GlyphSystem != NULL)
+    {
+        GlyphProcess(Raziel.GlyphSystem, gameTracker);
+    }
+
+    Raziel.Abilities = debugRazielFlags1;
+
+    debugRazielFlags1 |= debugRazielFlags2;
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielProcess);
@@ -835,32 +833,32 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielCollide);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_TurnHead);
 
-void RAZIEL_SetLookAround(Instance* instance)
+void RAZIEL_SetLookAround(Instance *instance)
 {
-	G2Anim_EnableController(&instance->anim, 17, 14);
-	G2Anim_EnableController(&instance->anim, 16, 14);
-	G2Anim_EnableController(&instance->anim, 14, 14);
+    G2Anim_EnableController(&instance->anim, 17, 14);
+    G2Anim_EnableController(&instance->anim, 16, 14);
+    G2Anim_EnableController(&instance->anim, 14, 14);
 
-	INSTANCE_Post(instance, 0x100009, 1);
+    INSTANCE_Post(instance, 0x100009, 1);
 
-	Raziel.throwXRot = 0;
-	Raziel.throwZRot = 0;
+    Raziel.throwXRot = 0;
+    Raziel.throwZRot = 0;
 }
 
 void RAZIEL_ResetLookAround(Instance *instance)
 {
-	G2Anim_InterpDisableController(&instance->anim, 17, 14, 300);
-	G2Anim_InterpDisableController(&instance->anim, 16, 14, 300);
-	G2Anim_InterpDisableController(&instance->anim, 14, 14, 300);
+    G2Anim_InterpDisableController(&instance->anim, 17, 14, 300);
+    G2Anim_InterpDisableController(&instance->anim, 16, 14, 300);
+    G2Anim_InterpDisableController(&instance->anim, 14, 14, 300);
 
-	INSTANCE_Post(instance, 0x100009, 0);
+    INSTANCE_Post(instance, 0x100009, 0);
 }
 
 long RAZIEL_OkToLookAround(Instance *playerInstance)
 {
     (void)playerInstance;
-    
-	if (((Raziel.Senses.Flags & 0x4)) && ((Raziel.State.SectionList[0].Process == StateHandlerIdle) || (Raziel.State.SectionList[0].Process == StateHandlerThrow2)))
+
+    if (((Raziel.Senses.Flags & 0x4)) && ((Raziel.State.SectionList[0].Process == StateHandlerIdle) || (Raziel.State.SectionList[0].Process == StateHandlerThrow2)))
     {
         return 1;
     }
@@ -869,7 +867,7 @@ long RAZIEL_OkToLookAround(Instance *playerInstance)
     {
         return 1;
     }
-    
+
     return 0;
 }
 
