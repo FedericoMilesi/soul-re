@@ -235,7 +235,29 @@ void sound_item(void *gt, char *text, sfx_t sfx)
     menu_item(((GameTracker *)gt)->menu, do_sound_adjust, sfx, D_800D1FC0, text, get_volume(gt, sfx));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", menudefs_toggle_dualshock);
+int menudefs_toggle_dualshock(void *gt, long param, menu_ctrl_t ctrl)
+{
+    (void)gt;
+    (void)param;
+
+    if (((ctrl - 3) == menu_ctrl_none) || ((ctrl - 3) == menu_ctrl_up))
+    {
+        if (GAMEPAD_DualShockEnabled() != 0)
+        {
+            GAMEPAD_DisableDualShock();
+
+            return 1;
+        }
+
+        GAMEPAD_EnableDualShock();
+
+        GAMEPAD_Shock1(128, 32768);
+
+        return 1;
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", options_menu);
 
