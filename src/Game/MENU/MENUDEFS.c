@@ -33,6 +33,12 @@ STATIC int ITEMSKIP;
 
 STATIC int hack_reset_attract;
 
+STATIC int PAUSE_XPOS;
+
+STATIC int PAUSE_YPOS;
+
+STATIC int PAUSE_WIDTH;
+
 void do_check_controller(void *gt)
 {
     if (((GameTracker *)gt)->gameMode == 6)
@@ -426,4 +432,33 @@ int menudefs_confirmexit_menu(void *gt, int index)
     return temp;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", menudefs_pause_menu);
+int menudefs_pause_menu(void *gt, int index)
+{
+    int temp; // not from decls.h
+
+    do_check_controller(gt);
+
+    hack_attract = 0;
+
+    menu_format(((GameTracker *)gt)->menu, 1, PAUSE_XPOS, PAUSE_YPOS, PAUSE_WIDTH, LINESKIP, ITEMSKIP, 1);
+
+    menu_item_flags(((GameTracker *)gt)->menu, NULL, 0, 4, localstr_get(LOCALSTR_paused));
+
+    menu_item(((GameTracker *)gt)->menu, do_function, (long)DEBUG_ContinueGame, localstr_get(LOCALSTR_resume_game));
+
+    if (!(gameTrackerX.streamFlags & 0x4))
+    {
+        menu_item(((GameTracker *)gt)->menu, do_save_menu, 0, localstr_get(LOCALSTR_save_game));
+        menu_item(((GameTracker *)gt)->menu, do_push_menu, (long)options_menu, localstr_get(LOCALSTR_options));
+        menu_item(((GameTracker *)gt)->menu, do_push_menu, (long)menudefs_confirmexit_menu, localstr_get(LOCALSTR_quit_game));
+    }
+
+    temp = index;
+
+    if (temp < 0)
+    {
+        temp = 1;
+    }
+
+    return temp;
+}
