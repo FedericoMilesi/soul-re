@@ -1,9 +1,8 @@
-#include "common.h"
+#include "Game/MONSTER/MBMISS.h"
 #include "Game/GAMELOOP.h"
 #include "Game/PHYSOBS.h"
 #include "Game/STATE.h"
 #include "Game/MONSTER/MONLIB.h"
-#include "Game/MONSTER/MBMISS.h"
 #include "Game/PSX/SUPPORT.h"
 #include "Game/OBTABLE.h"
 #include "Game/MATH3D.h"
@@ -12,7 +11,7 @@
 
 void WCBEGG_Message(Instance *instance, unsigned long message, unsigned long data)
 {
-    //PhysObData *pod; unused
+    // PhysObData *pod; unused
     Dummy *temp; // not from decls.h
 
     if (message == 0x800002)
@@ -46,7 +45,7 @@ int WCBEGG_ShouldIgniteEgg(Instance *egg, WalbossAttributes *wa)
         while (instance != NULL)
         {
             if (((INSTANCE_Query(instance, 1) & 0x20)) && (MATH3D_LengthXYZ(instance->position.x - egg->position.x,
-                instance->position.y - egg->position.y, instance->position.z - egg->position.z) < wa->eggIgniteDist))
+                                                                            instance->position.y - egg->position.y, instance->position.z - egg->position.z) < wa->eggIgniteDist))
             {
                 if ((INSTANCE_Query(instance, 3) & 0x10000))
                 {
@@ -72,7 +71,7 @@ void WCBEGG_Process(Instance *instance, GameTracker *gameTracker)
     int time;
     int lastTime;
     int timeBetween;
-    //int birthTime; unused
+    // int birthTime; unused
     Object *walboss;
     WalbossAttributes *wa;
 
@@ -237,7 +236,7 @@ void WCBEGG_SplitProcess(Instance *instance, GameTracker *gameTracker)
 
 void WCBEGG_CommonPostProcess(Instance *instance, GameTracker *gameTracker)
 {
-    //PhysObData *data; unused
+    // PhysObData *data; unused
     Dummy *temp; // not from decls.h
 
     temp = (Dummy *)instance->extraData; // extraData needs parsing to the correct struct
@@ -253,7 +252,7 @@ void WCBEGG_CommonPostProcess(Instance *instance, GameTracker *gameTracker)
 
 void WCBEGG_CommonPostProcess2(Instance *instance, GameTracker *gameTracker)
 {
-    //PhysObData *data; unused
+    // PhysObData *data; unused
     int time;
     Dummy *temp; // not from decls.h
 

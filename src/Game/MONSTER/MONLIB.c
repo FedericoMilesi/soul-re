@@ -1,6 +1,5 @@
-#include "common.h"
-#include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MONSTER/MONLIB.h"
+#include "Game/PLAN/ENMYPLAN.h"
 #include "Game/MONSTER/MONSTER.h"
 #include "Game/MONSTER/MONSENSE.h"
 #include "Game/MONSTER/MONAPI.h"

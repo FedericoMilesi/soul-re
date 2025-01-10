@@ -1,7 +1,6 @@
-#include "common.h"
+#include "Game/MONSTER/MISSILE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/PHYSOBS.h"
-#include "Game/MONSTER/MISSILE.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/STATE.h"
 #include "Game/OBTABLE.h"

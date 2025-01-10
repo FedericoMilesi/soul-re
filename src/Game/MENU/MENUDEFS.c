@@ -382,7 +382,8 @@ int do_main_menu(void *gt, long param, menu_ctrl_t ctrl)
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", flashStart);
-/*extern char D_800D1FC8[];
+/* TODO: this file needs migrating its .sdata to C for this function to match
+extern char D_800D1FC8[];
 char *flashStart()
 {
     gameTrackerX.gameFramePassed = 1;

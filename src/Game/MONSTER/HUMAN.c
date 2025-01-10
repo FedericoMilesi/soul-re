@@ -1,10 +1,9 @@
-#include "common.h"
+#include "Game/MONSTER/HUMAN.h"
 #include "Game/GAMELOOP.h"
 #include "Game/MONSTER/MONSENSE.h"
 #include "Game/MONSTER/MONTABLE.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/MONSTER/MONMSG.h"
-#include "Game/MONSTER/HUMAN.h"
 #include "Game/MONSTER/MONSTER.h"
 #include "Game/GAMEPAD.h"
 #include "Game/SAVEINFO.h"
@@ -16,12 +15,12 @@
 #include "Game/SOUND.h"
 
 MonsterStateChoice HUMAN_StateChoiceTable[] = {
-    { 9, { HUMAN_StunnedEntry, HUMAN_Stunned } },
-    { 0x17, { HUMAN_DeadEntry, HUMAN_Dead } },
-    { 0x1B, { HUMAN_EmbraceEntry, HUMAN_Embrace } },
-    { 2, { HUMAN_IdleEntry, HUMAN_Idle } },
-    { 0x13, { MON_FleeEntry, HUMAN_Flee } },
-    { -1, { NULL, NULL } },
+    {9, {HUMAN_StunnedEntry, HUMAN_Stunned}},
+    {0x17, {HUMAN_DeadEntry, HUMAN_Dead}},
+    {0x1B, {HUMAN_EmbraceEntry, HUMAN_Embrace}},
+    {2, {HUMAN_IdleEntry, HUMAN_Idle}},
+    {0x13, {MON_FleeEntry, HUMAN_Flee}},
+    {-1, {NULL, NULL}},
 };
 
 MonsterFunctionTable HUMAN_FunctionTable = {
@@ -236,7 +235,8 @@ void HUMAN_Dead(Instance *instance)
         MON_ApplyPhysics(instance);
     }
 
-    while (DeMessageQueue(&mv->messageQueue) != NULL);
+    while (DeMessageQueue(&mv->messageQueue) != NULL)
+        ;
 }
 
 void HUMAN_StunnedEntry(Instance *instance)
@@ -327,7 +327,9 @@ void HUMAN_Embrace(Instance *instance)
 
     INSTANCE_Post(gameTrackerX.playerInstance, 0x1000016, juice);
 
-    do {} while (0); // garbage code for reordering
+    do
+    {
+    } while (0); // garbage code for reordering
 
     if (mv->soulJuice < juice)
     {
@@ -519,7 +521,9 @@ void HUMAN_GetAngry()
 
             allegiances = mv->subAttr->allegiances;
 
-            do {} while (0); // garbage code for reordering
+            do
+            {
+            } while (0); // garbage code for reordering
 
             allegiances->gods &= ~0x1;
 

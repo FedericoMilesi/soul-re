@@ -1,6 +1,5 @@
-#include "common.h"
-#include "Game/STATE.h"
 #include "Game/MONSTER/MONMSG.h"
+#include "Game/STATE.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"
 #include "Game/INSTANCE.h"
