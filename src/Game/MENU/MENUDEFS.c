@@ -9,6 +9,7 @@
 #include "Game/CINEMA/CINEPSX.h"
 #include "Game/SOUND.h"
 #include "Game/LOCAL/LOCALSTR.h"
+#include "Game/DEBUG.h"
 
 STATIC int StartGameFading;
 
@@ -402,6 +403,27 @@ int menudefs_main_menu(void *gt, int index)
     return temp;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", menudefs_confirmexit_menu);
+int menudefs_confirmexit_menu(void *gt, int index)
+{
+    int temp; // not from decls.h
+
+    hack_attract = 0;
+
+    do_check_controller(gt);
+
+    menu_item_flags(((GameTracker *)gt)->menu, NULL, 0, 4, localstr_get(LOCALSTR_query_quit));
+
+    menu_item(((GameTracker *)gt)->menu, do_pop_menu, 0, localstr_get(LOCALSTR_no));
+    menu_item(((GameTracker *)gt)->menu, do_function, (long)DEBUG_ExitGame, localstr_get(LOCALSTR_yes));
+
+    temp = index;
+
+    if (temp < 0)
+    {
+        temp = 1;
+    }
+
+    return temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", menudefs_pause_menu);
