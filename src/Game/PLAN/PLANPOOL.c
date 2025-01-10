@@ -1,4 +1,4 @@
-#include "common.h"
+// #include "Game/PLAN/PLANPOOL.h" // TODO: find out why including this header causes errors
 #include "Game/PLAN/PLAN.h"
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/MATH3D.h"

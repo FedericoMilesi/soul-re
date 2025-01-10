@@ -1,7 +1,6 @@
-#include "common.h"
+#include "Game/PLAN/PLANSRCH.h"
 #include "Game/PLAN/PLAN.h"
 #include "Game/PLAN/PLANAPI.h"
-#include "Game/PLAN/PLANSRCH.h"
 #include "Game/PLAN/PLANPOOL.h"
 #include "Game/MATH3D.h"
 

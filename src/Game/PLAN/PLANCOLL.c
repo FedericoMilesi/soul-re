@@ -1,4 +1,3 @@
-#include "common.h"
 #include "Game/PLAN/PLANCOLL.h"
 #include "Game/MATH3D.h"
 #include "Game/GAMELOOP.h"

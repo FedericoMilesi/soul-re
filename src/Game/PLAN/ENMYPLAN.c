@@ -1,4 +1,3 @@
-#include "common.h"
 #include "Game/PLAN/ENMYPLAN.h"
 #include "Game/PLAN/PLANAPI.h"
 #include "Game/GAMELOOP.h"
