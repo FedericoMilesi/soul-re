@@ -271,7 +271,61 @@ int menudefs_toggle_dualshock(void *gt, long param, menu_ctrl_t ctrl)
     return 0;
 }
 
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", options_menu);
+#else
+int options_menu(void *gt, int index)
+{
+    STATIC int wasDualShock;
+    int dualShock;
+    int temp; // not from decls.h
+
+    hack_attract = 0;
+
+    MENUFACE_ChangeStateRandomly(index);
+
+    do_check_controller(gt);
+
+    menu_item_flags(((GameTracker *)gt)->menu, NULL, 0, 4, localstr_get(LOCALSTR_options));
+
+    sound_item(gt, localstr_get(LOCALSTR_sound), sfx_sound);
+    sound_item(gt, localstr_get(LOCALSTR_music), sfx_music);
+    sound_item(gt, localstr_get(LOCALSTR_voice), sfx_voice);
+
+    dualShock = GAMEPAD_ControllerIsDualShock();
+
+    if (dualShock != 0)
+    {
+        if (GAMEPAD_DualShockEnabled() != 0)
+        {
+            menu_item(((GameTracker *)gt)->menu, menudefs_toggle_dualshock, 0, localstr_get(LOCALSTR_vibration_on));
+        }
+        else
+        {
+            menu_item(((GameTracker *)gt)->menu, menudefs_toggle_dualshock, 0, localstr_get(LOCALSTR_vibration_off));
+        }
+    }
+
+    menu_item(((GameTracker *)gt)->menu, do_pop_menu, 0, localstr_get(LOCALSTR_done));
+
+    if ((dualShock != wasDualShock) && (index >= 4))
+    {
+        index = dualShock + 4;
+    }
+
+    wasDualShock = dualShock;
+
+    temp = index;
+
+    if (temp < 0)
+    {
+        temp = 1;
+    }
+
+    return temp;
+}
+#endif
 
 int main_menu(void *gt, int index)
 {
