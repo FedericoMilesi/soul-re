@@ -1,4 +1,3 @@
-#include "common.h"
 #include "Game/MONSTER/MONSTER.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"

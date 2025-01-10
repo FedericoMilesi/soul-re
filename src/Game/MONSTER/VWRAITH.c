@@ -1,6 +1,5 @@
-#include "common.h"
-#include "Game/FX.h"
 #include "Game/MONSTER/VWRAITH.h"
+#include "Game/FX.h"
 #include "Game/MONSTER/MONSTER.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONLIB.h"

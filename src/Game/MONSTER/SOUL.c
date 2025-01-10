@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/MONSTER/SOUL.h"
 #include "Game/STATE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"

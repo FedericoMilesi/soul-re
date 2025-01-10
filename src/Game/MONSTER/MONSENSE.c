@@ -1,4 +1,3 @@
-#include "common.h"
 #include "Game/MONSTER/MONSENSE.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MATH3D.h"
@@ -94,8 +93,7 @@ void MONSENSE_SenseInstance(Instance *instance, evCollideInstanceStatsData *data
 
             prop = (PhysObProperties *)data->instance->data;
 
-            if ((prop->family == 3) && ((((PhysObInteractProperties *)prop)->engageXYDistance >> 1) > data->xyDistance)
-            && (((PhysObInteractProperties *)prop)->engageZMaxDelta > data->zDelta) && (((PhysObInteractProperties *)prop)->engageZMinDelta < data->zDelta))
+            if ((prop->family == 3) && ((((PhysObInteractProperties *)prop)->engageXYDistance >> 1) > data->xyDistance) && (((PhysObInteractProperties *)prop)->engageZMaxDelta > data->zDelta) && (((PhysObInteractProperties *)prop)->engageZMinDelta < data->zDelta))
             {
                 if ((((PhysObInteractProperties *)prop)->conditions & 0x40))
                 {
@@ -414,7 +412,7 @@ extern int D_800D1B2C;
 void MONSENSE_DoSenses(Instance *instance)
 {
     MonsterVars *mv;
-    //static int doneThisFrame;
+    // static int doneThisFrame;
 
     mv = (MonsterVars *)instance->extraData;
 
@@ -429,18 +427,18 @@ void MONSENSE_DoSenses(Instance *instance)
             lastSenseFrame = gameTrackerX.frameCount - 1;
         }
 
-        //doneThisFrame = 0;
+        // doneThisFrame = 0;
         D_800D1B2C = 0;
     }
 
-    //if ((doneThisFrame == 0) && (monsterSensed[mv->senseIndex] == 0))
+    // if ((doneThisFrame == 0) && (monsterSensed[mv->senseIndex] == 0))
     if ((D_800D1B2C == 0) && (monsterSensed[(int)mv->senseIndex] == 0))
     {
         lastSenseFrame = gameTrackerX.frameCount;
 
         monsterSensed[(int)mv->senseIndex] = 1;
 
-        //doneThisFrame = 1;
+        // doneThisFrame = 1;
         D_800D1B2C = 1;
 
         mv->alertCount = 1;

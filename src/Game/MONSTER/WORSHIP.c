@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/MONSTER/WORSHIP.h"
 #include "Game/MONSTER/HUMAN.h"
 #include "Game/MONSTER/MONAPI.h"
 #include "Game/MONSTER/MONSTER.h"
