@@ -201,7 +201,32 @@ void set_volume(sfx_t sfx, int cooked)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", do_sound_adjust);
+int do_sound_adjust(void *gt, long sfxparam, menu_ctrl_t ctrl)
+{
+    int volume;
+
+    volume = get_volume(gt, (sfx_t)sfxparam);
+
+    switch (ctrl)
+    {
+    case menu_ctrl_left:
+        if (volume > 0)
+        {
+            set_volume((sfx_t)sfxparam, volume - 1);
+        }
+
+        return 1;
+    case menu_ctrl_right:
+        if (volume < 10)
+        {
+            set_volume((sfx_t)sfxparam, volume + 1);
+        }
+
+        return 1;
+    default:
+        return 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", sound_item);
 
