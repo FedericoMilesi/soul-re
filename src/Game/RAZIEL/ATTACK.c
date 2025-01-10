@@ -1,4 +1,4 @@
-void PointAt(Instance *instance, Position *Target, Rotation *Rot1);
+#include "Game/RAZIEL/ATTACK.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerDecodeHold);
 
@@ -768,7 +768,6 @@ void StateHandlerStumble(CharacterState *In, int CurrentSection, intptr_t Data)
     }
 }
 
-void StateHandlerHitReaction(CharacterState *In, int CurrentSection, intptr_t Data);
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerHitReaction);
 
 void StateHandlerThrow2(CharacterState *In, int CurrentSection, intptr_t Data)

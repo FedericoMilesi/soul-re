@@ -1,3 +1,5 @@
+#include "Game/RAZIEL/ALGOCTRL.h"
+
 static int AlgoControlFlag = 0;
 
 void InitAlgorithmicWings(Instance *instance)
