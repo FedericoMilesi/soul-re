@@ -3,7 +3,7 @@
 
 AadMemoryStruct *aadMem;
 
-EXTERN STATIC unsigned long __hblankEvent;
+STATIC unsigned long __hblankEvent;
 
 unsigned long aadGetMemorySize(AadInitAttr *attributes)
 {

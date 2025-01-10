@@ -1,4 +1,3 @@
-#include "common.h"
 #include "Game/PSX/PSX_G2/MAINVM.h"
 #include "Game/PSX/MAIN.h"
 

@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/PSX/PSX_G2/QUATVM.h"
 #include "Game/MATH3D.h"
 #include "Game/HASM.h"
 

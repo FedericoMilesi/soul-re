@@ -4,7 +4,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSEQEV", aadQueueNextEvent);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSEQEV", aadExecuteEvent);
 
-void midiNoteOff(void)
+void midiNoteOff()
 {
 }
 
@@ -16,7 +16,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSEQEV", aadUpdateSlotVolPan);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSEQEV", aadUpdateChannelPitchBend);
 
-void midiPolyphonicAftertouch(void)
+void midiPolyphonicAftertouch()
 {
 }
 
@@ -24,17 +24,17 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSEQEV", midiControlChange);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSEQEV", midiProgramChange);
 
-void midiChannelAftertouch(void)
+void midiChannelAftertouch()
 {
 }
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSEQEV", midiPitchWheelControl);
 
-void midiMetaEvent(void)
+void midiMetaEvent()
 {
 }
 
-void midiControlBankSelect(void)
+void midiControlBankSelect()
 {
 }
 
@@ -44,6 +44,6 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSEQEV", midiControlPan);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSEQEV", midiControlCallback);
 
-void midiControlDummy(void)
+void midiControlDummy()
 {
 }
