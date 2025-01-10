@@ -1,5 +1,6 @@
 #include "Game/MENU/MENUDEFS.h"
 #include "Game/MENU/MENU.h"
+#include "Game/MENU/MENUFACE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/GAMEPAD.h"
 #include "Game/MEMPACK.h"
@@ -7,6 +8,7 @@
 #include "Game/MCARD/MEMCARD.h"
 #include "Game/CINEMA/CINEPSX.h"
 #include "Game/SOUND.h"
+#include "Game/LOCAL/LOCALSTR.h"
 
 STATIC int StartGameFading;
 
@@ -17,6 +19,16 @@ STATIC int hack_attract;
 STATIC int hack_attract_movie;
 
 STATIC char *the_attract_movies[8924 + 4];
+
+STATIC int MAIN_XPOS;
+
+STATIC int MAIN_YPOS;
+
+STATIC int MAIN_WIDTH;
+
+STATIC int LINESKIP;
+
+STATIC int ITEMSKIP;
 
 void do_check_controller(void *gt)
 {
@@ -261,7 +273,30 @@ int menudefs_toggle_dualshock(void *gt, long param, menu_ctrl_t ctrl)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", options_menu);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", main_menu);
+int main_menu(void *gt, int index)
+{
+    int temp; // not from decls.h
+
+    hack_attract = 0;
+
+    menu_format(((GameTracker *)gt)->menu, 1, MAIN_XPOS, MAIN_YPOS, MAIN_WIDTH, LINESKIP, ITEMSKIP, 0);
+
+    MENUFACE_ChangeStateRandomly(index);
+
+    do_check_controller(gt);
+
+    menu_item(((GameTracker *)gt)->menu, do_start_game, 0, localstr_get(LOCALSTR_start_game));
+    menu_item(((GameTracker *)gt)->menu, do_push_menu, (long)&options_menu, localstr_get(LOCALSTR_options));
+
+    temp = index;
+
+    if (temp < 0)
+    {
+        temp = 0;
+    }
+
+    return temp;
+}
 
 int do_main_menu(void *gt, long param, menu_ctrl_t ctrl)
 {

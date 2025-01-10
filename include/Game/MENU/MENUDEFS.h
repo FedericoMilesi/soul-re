@@ -5,5 +5,6 @@
 
 int menudefs_pause_menu(void *gt, int index);
 void play_movie_dup1(char *name);
+int options_menu(void *gt, int index);
 
 #endif
