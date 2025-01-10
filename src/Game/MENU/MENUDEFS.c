@@ -30,6 +30,8 @@ STATIC int LINESKIP;
 
 STATIC int ITEMSKIP;
 
+STATIC int hack_reset_attract;
+
 void do_check_controller(void *gt)
 {
     if (((GameTracker *)gt)->gameMode == 6)
@@ -373,7 +375,32 @@ int do_main_menu(void *gt, long param, menu_ctrl_t ctrl)
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", flashStart);
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", menudefs_main_menu);
+int menudefs_main_menu(void *gt, int index)
+{
+    int temp; // not from decls.h
+
+    if (hack_reset_attract != 0)
+    {
+        hack_reset_attract = 0;
+
+        hack_attract = gameTrackerX.vblCount;
+    }
+
+    check_hack_attract();
+
+    menu_format(((GameTracker *)gt)->menu, 1, 366, 144, 100, LINESKIP, ITEMSKIP, 0);
+
+    menu_item(((GameTracker *)gt)->menu, do_main_menu, 0, flashStart());
+
+    temp = index;
+
+    if (temp < 0)
+    {
+        temp = 0;
+    }
+
+    return temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", menudefs_confirmexit_menu);
 
