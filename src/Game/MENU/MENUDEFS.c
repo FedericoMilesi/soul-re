@@ -228,7 +228,12 @@ int do_sound_adjust(void *gt, long sfxparam, menu_ctrl_t ctrl)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", sound_item);
+extern char D_800D1FC0[];
+void sound_item(void *gt, char *text, sfx_t sfx)
+{
+    // menu_item(((GameTracker*)gt)->menu, do_sound_adjust, sfx, "%s %d", text, get_volume(gt, sfx));
+    menu_item(((GameTracker *)gt)->menu, do_sound_adjust, sfx, D_800D1FC0, text, get_volume(gt, sfx));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", menudefs_toggle_dualshock);
 
