@@ -1,4 +1,4 @@
-void razPlayUnderworldSounds(Instance *instance);
+#include "Game/RAZIEL/HEALTH.h"
 
 void InitHealthSystem()
 {
