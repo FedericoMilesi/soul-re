@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/PSX/AADVOICE.h"
 #include "Game/PSX/AADLIB.h"
 
 AadSynthVoice *aadAllocateVoice(int priority)

@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/PSX/AADLIB.h"
 #include "Game/PSX/AADSEQEV.h"
 
 AadMemoryStruct *aadMem;

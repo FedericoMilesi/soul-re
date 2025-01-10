@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/PSX/MAIN.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", ClearDisplay);
 

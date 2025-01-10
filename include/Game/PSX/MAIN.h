@@ -1,6 +1,8 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
+#include "common.h"
+
 void MAIN_StartGame();
 void VblTick();
 int MainG2(void *appData);

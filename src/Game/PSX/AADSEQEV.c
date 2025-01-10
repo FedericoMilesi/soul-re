@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/PSX/AADSEQEV.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSEQEV", aadQueueNextEvent);
 

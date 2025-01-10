@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/PSX/SUPPORT.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/SUPPORT", printf);
 
@@ -8,7 +8,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/SUPPORT", vsprintf);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/SUPPORT", my_itoa);
 
-//int atoi(char *str)
+// int atoi(char *str)
 int atoi(const char *str)
 {
     int val;

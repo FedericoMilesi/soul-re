@@ -1,4 +1,4 @@
-#include "common.h"
+#include "Game/PSX/AADSQCMD.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/AADSQCMD", aadSubstituteVariables);
 

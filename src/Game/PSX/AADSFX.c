@@ -1,4 +1,3 @@
-#include "common.h"
 #include "Game/PSX/AADSFX.h"
 #include "Game/PSX/AADLIB.h"
 #include "Game/PSX/AADVOICE.h"
