@@ -627,7 +627,146 @@ void _G2Anim_InitializeSegValue(G2Anim *anim, G2AnimSegValue *segValue, int segI
     COPY_SVEC3_FAST((G2SVector3 *)&segValue->trans, (G2SVector3 *)&segment->px);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimSection_InitStatus);
+void _G2AnimSection_InitStatus(G2AnimSection *section, G2Anim *anim)
+{
+    G2AnimDecompressChannelInfo dcInfo;
+    G2AnimSegValue *segValue;
+    G2AnimChanStatusBlock **chanStatusNextBlockPtr;
+    G2AnimChanStatusBlock *chanStatusBlock;
+    G2AnimChanStatus *chanStatus;
+    G2AnimSegKeyflagInfo rotKfInfo;
+    G2AnimSegKeyflagInfo scaleKfInfo;
+    G2AnimSegKeyflagInfo transKfInfo;
+    int type;
+    unsigned long segChanFlags;
+    int segIndex;
+    int lastSeg;
+    int flagBitOffset;
+    unsigned long activeChanBits;
+    unsigned char *segKeyList;
+    int bitsPerFlagType;
+    // int chanStatusChunkCount; // unused
+
+    flagBitOffset = ((section->firstSeg << 1) + section->firstSeg) + 8;
+
+    bitsPerFlagType = ((anim->modelData->numSegments << 1) + anim->modelData->numSegments) + 7;
+
+    segKeyList = (unsigned char *)&section->keylist->sectionData[section->keylist->sectionCount];
+
+    activeChanBits = *segKeyList;
+
+    bitsPerFlagType &= ~0x7;
+
+    rotKfInfo.stream = NULL;
+    scaleKfInfo.stream = NULL;
+    transKfInfo.stream = NULL;
+
+    if ((activeChanBits & 0x1))
+    {
+        wombat(segKeyList, flagBitOffset, &rotKfInfo);
+
+        flagBitOffset += bitsPerFlagType;
+    }
+
+    if ((activeChanBits & 0x2))
+    {
+        wombat(segKeyList, flagBitOffset, &scaleKfInfo);
+
+        flagBitOffset += bitsPerFlagType;
+    }
+
+    if ((activeChanBits & 0x4))
+    {
+        wombat(segKeyList, flagBitOffset, &transKfInfo);
+    }
+
+    chanStatus = NULL;
+
+    _G2Anim_FreeChanStatusBlockList(section->chanStatusBlockList);
+
+    section->chanStatusBlockList = NULL;
+
+    activeChanBits = 0;
+
+    dcInfo.keylist = section->keylist;
+
+    dcInfo.chanData = section->keylist->sectionData[section->sectionID];
+
+    segIndex = section->firstSeg;
+
+    lastSeg = segIndex + section->segCount;
+
+    segValue = &_segValues[segIndex];
+
+    chanStatusNextBlockPtr = &section->chanStatusBlockList;
+
+    for (; segIndex < lastSeg; segIndex++, segValue++)
+    {
+        segChanFlags = kangaroo(&rotKfInfo);
+
+        segChanFlags |= kangaroo(&scaleKfInfo) << 4;
+        segChanFlags |= kangaroo(&transKfInfo) << 8;
+
+        _G2Anim_InitializeSegValue(anim, segValue, segIndex);
+
+        while (segChanFlags != 0)
+        {
+            if ((segChanFlags & 0x1))
+            {
+                type = ((unsigned char *)dcInfo.chanData)[1] & 0xE0; // TODO: ensure that this cast doesn't cause issues
+
+                if (type == 0xE0)
+                {
+                    type = 0;
+                }
+
+                switch (type)
+                {
+                case 0:
+                    dcInfo.chanData = &dcInfo.chanData[dcInfo.keylist->keyCount];
+                    break;
+                case 0x20:
+                    dcInfo.chanData = &dcInfo.chanData[2];
+                    break;
+                default:
+                    if (activeChanBits == 0)
+                    {
+                        activeChanBits = 8;
+
+                        chanStatusBlock = (G2AnimChanStatusBlock *)G2PoolMem_Allocate(&_chanStatusBlockPool);
+
+                        chanStatusBlock->next = NULL;
+
+                        *chanStatusNextBlockPtr = chanStatusBlock;
+
+                        chanStatusNextBlockPtr = (G2AnimChanStatusBlock **)chanStatusBlock;
+
+                        chanStatus = ((G2AnimChanStatusBlock *)chanStatusNextBlockPtr)->chunks;
+                    }
+
+                    switch (type)
+                    {
+                    case 0x40:
+                        _G2Anim_InitializeChannel_AdaptiveDelta(&dcInfo, chanStatus);
+                        break;
+                    case 0x60:
+                        _G2Anim_InitializeChannel_Linear(&dcInfo, chanStatus);
+                        break;
+                    }
+
+                    chanStatus++;
+
+                    activeChanBits--;
+                    break;
+                }
+            }
+
+            segChanFlags >>= 1;
+        }
+    }
+
+    section->storedTime = -section->keylist->timePerKey;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", FooBar);
 
