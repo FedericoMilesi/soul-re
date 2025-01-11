@@ -20,6 +20,10 @@
 #include "Game/RAZIEL/CONTROL.h"
 #include "Game/RAZIEL/RAZIEL.h"
 #include "Game/OBTABLE.h"
+#include "Game/RAZIEL/HEALTH.h"
+#include "Game/RAZIEL/SWIM.h"
+#include "Game/RAZIEL/STEERING.h"
+#include "Game/RAZIEL/SPIDER.h"
 
 /*.sbss*/
 STATIC Player Raziel;
@@ -113,69 +117,6 @@ CannedSound cannedSound[4] = {
     {0, 8, -260, -260, 90, 90, 0, 3500},
     {0, 418, -200, -200, 95, 95, 0, 3500},
 };
-
-void StateHandlerIdle(CharacterState *In, int CurrentSection, intptr_t Data);
-void DefaultStateHandler(CharacterState *In, int CurrentSection, intptr_t Data);
-void StateHandlerLookAround(CharacterState *In, int CurrentSection, intptr_t Data);
-void StateHandlerFall(CharacterState *In, int CurrentSection, intptr_t Data);
-void StateHandlerMove(CharacterState *In, int CurrentSection, intptr_t Data);
-void StateHandlerStopMove(CharacterState *In, int CurrentSection, intptr_t Data);
-void StateHandlerAutoFace(CharacterState *In, int CurrentSection, intptr_t Data);
-void StateHandlerCompression(CharacterState *In, int CurrentSection, intptr_t Data);
-void DisableWristCollision(Instance *instance, int Side);
-void StateHandlerGlyphs(CharacterState *In, int CurrentSection, intptr_t Data);
-void StateHandlerSoulSuck(CharacterState *In, int CurrentSection, intptr_t Data);
-void SetTimer(int ticks);
-long RazielAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data);
-void InitGlyphSystem(Instance *instance);
-void RazielCollide(Instance *instance, GameTracker *gameTracker);
-void RelocateConstrict(SVector *offset);
-void StateHandlerWallGrab(CharacterState *In, int CurrentSection, intptr_t Data);
-void SteerSwitchMode(Instance *instance, int mode);
-void StateHandlerSwim(CharacterState *In, int CurrentSection, intptr_t Data);
-void LimitRotation(Rotation *rot);
-void StateHandlerHitReaction(CharacterState *In, int CurrentSection, intptr_t Data);
-void StateHandlerGrab(CharacterState *In, int CurrentSection, intptr_t Data);
-void StateHandlerCannedReaction(CharacterState *In, int CurrentSection, intptr_t Data);
-void StateHandlerThrow2(CharacterState *In, int CurrentSection, intptr_t Data);
-int StateHandlerDecodeHold(int *Message, int *Data);
-void SetMana(int amount);
-int GetMaxHealth();
-void LoseHealth(int amount);
-void BumpUpHealth();
-Instance *razGetHeldWeapon();
-void razSetupSoundRamp(Instance *instance, SoundRamp *sound, int sfx, int startPitch, int endPitch, int startVolume, int endVolume, int timer, int distance);
-void razSpectralShift();
-void razSetPlayerEventHistory(unsigned long event);
-int razReaverOn();
-Instance *razGetHeldItem();
-void razResetMotion(Instance *instance);
-void razSetFadeEffect(short source, short dest, int steps);
-void razResetPauseTranslation(Instance *instance);
-void razSetPauseTranslation(Instance *instance);
-int razSwitchVAnimCharacterGroup(Instance *instance, int animGroup, int *frame, int *frames);
-void razLaunchForce(Instance *instance);
-void razSwitchVAnimCharacterSingle(Instance *instance, int anim, int *frame, int *frames);
-// void razAlignYRotMoveInterp(struct _Instance *source, struct _Instance *dest, short distance, unsigned char segNumber, int Frames, int extraZ);
-void razAlignYRotMoveInterp(Instance *source, Instance *dest, short distance, unsigned char segNumber, int Frames, short extraZ);
-void razMaterialShift();
-int razInBaseArea(char *name, int length);
-void razReaverImbue(int reaverType);
-int razReaverOff();
-int razPlaneShift(Instance *instance);
-void razReaverBladeOff();
-void razSetWallCrawlNodes(Instance *instance, evPhysicsWallCrawlData *data);
-int razZeroAxis(long *x, long *y, int radius);
-void razReaverPickup(Instance *instance, Instance *soulReaver);
-int razConstrictAngle(Instance *instance);
-void razLaunchBubbles(int segments, int count, int type);
-void razSetSwimVelocity(Instance *instance, int vel, int accl);
-int razPickupAndGrab(CharacterState *In, int CurrentSection);
-int razGetReaverFromMask(int reaverMask);
-void razReaverBladeOn();
-void razSetCowlNoDraw(int mode);
-void razAttachControllers();
-int razApplyMotion(CharacterState *In, int CurrentSection);
 
 #include "Game/RAZIEL/PUPPET.c"
 #include "Game/RAZIEL/ATTACK.c"

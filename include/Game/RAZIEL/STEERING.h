@@ -11,5 +11,6 @@ void SteerDisableAutoFace(Instance *instance);
 int SteerAutoFace(Instance *instance, long *controlCommand);
 void SteerSwim(Instance *instance);
 void SteerWallcrawling(Instance *instance);
+void SteerSwitchMode(Instance *instance, int mode);
 
 #endif

@@ -20,5 +20,21 @@ void ProcessTimers(Instance *instance);
 int SetStates(Instance *instance, GameTracker *GT, long *controlCommand, int AnalogLength);
 long RazielAnimCallbackDuringPause(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data);
 void StateHandlerDropAction(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerIdle(CharacterState *In, int CurrentSection, intptr_t Data);
+void DefaultStateHandler(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerLookAround(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerFall(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerMove(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerStopMove(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerAutoFace(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerCompression(CharacterState *In, int CurrentSection, intptr_t Data);
+void DisableWristCollision(Instance *instance, int Side);
+void StateHandlerGlyphs(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerSoulSuck(CharacterState *In, int CurrentSection, intptr_t Data);
+void SetTimer(int ticks);
+long RazielAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data);
+void InitGlyphSystem(Instance *instance);
+void RazielCollide(Instance *instance, GameTracker *gameTracker);
+void RelocateConstrict(SVector *offset);
 
 #endif

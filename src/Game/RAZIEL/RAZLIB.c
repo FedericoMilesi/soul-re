@@ -745,7 +745,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_StartNewGame);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razInBaseArea);
 
-void razPrepGlyph(void)
+void razPrepGlyph()
 {
     Instance *heldInst;
 

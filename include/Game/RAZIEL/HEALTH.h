@@ -4,5 +4,9 @@
 #include "common.h"
 
 void razPlayUnderworldSounds(Instance *instance);
+void SetMana(int amount);
+int GetMaxHealth();
+void LoseHealth(int amount);
+void BumpUpHealth();
 
 #endif
