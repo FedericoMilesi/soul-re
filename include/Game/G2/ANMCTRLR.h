@@ -21,5 +21,15 @@ void _G2Anim_BuildTransformsWithControllers(G2Anim *anim);
 void G2Anim_SetInterpController_Vector(G2Anim *anim, int segNumber, int type, G2SVector3 *vector, short duration);
 void _G2Anim_CopyVectorWithOrder(G2SVector3 *sourceVector, G2EulerAngles *destVector, int order);
 void G2Anim_GetControllerCurrentInterpVector(G2Anim *anim, int segNumber, int type, G2SVector3 *vector);
+G2Bool G2Anim_IsControllerActive(G2Anim *anim, int segNumber, int type);
+void G2Anim_DisableController(G2Anim *anim, int segNumber, int type);
+void G2Anim_SetControllerAngleOrder(G2Anim *anim, int segNumber, int type, int order);
+void G2Anim_EnableController(G2Anim *anim, int segNumber, int type);
+void G2Anim_SetController_Vector(G2Anim *anim, int segNumber, int type, G2SVector3 *vector);
+void G2Anim_InterpDisableController(G2Anim *anim, int segNumber, int type, short duration);
+void G2Anim_AttachControllerToSeg(G2Anim *anim, int segNumber, int type);
+void G2Anim_DetachControllerFromSeg(G2Anim *anim, int segNumber, int type);
+G2Bool G2Anim_IsControllerInterpolating(G2Anim *anim, int segNumber, int type);
+void G2Anim_SetControllerCallbackData(G2Anim *anim, int segNumber, int type, void *callbackData);
 
 #endif

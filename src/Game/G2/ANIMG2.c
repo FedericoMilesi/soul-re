@@ -6,6 +6,8 @@
 #include "Game/MATH3D.h"
 #include "Game/G2/QUATG2.h"
 #include "Game/G2/ANMINTRP.h"
+#include "Game/G2/ANMCTRLR.h"
+#include "Game/G2/ANMG2ILF.h"
 
 // TODO: this file needs migrating its .data to C
 
