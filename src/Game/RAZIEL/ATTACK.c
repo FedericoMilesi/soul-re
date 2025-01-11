@@ -1,4 +1,5 @@
 #include "Game/RAZIEL/ATTACK.h"
+#include "Game/G2/ANMCTRLR.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerDecodeHold);
 

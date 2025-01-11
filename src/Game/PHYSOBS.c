@@ -18,6 +18,8 @@
 #include "Game/COLLIDE.h"
 #include "Game/G2/QUATG2.h"
 #include "Game/HASM.h"
+#include "Game/G2/ANMCTRLR.h"
+#include "Game/G2/ANMG2ILF.h"
 
 void PHYSOB_PlayDropSound(Instance *instance)
 {

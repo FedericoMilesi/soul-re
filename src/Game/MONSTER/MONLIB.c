@@ -19,6 +19,8 @@
 #include "Game/G2/ANIMG2.h"
 #include "Game/OBTABLE.h"
 #include "Game/SAVEINFO.h"
+#include "Game/G2/ANMG2ILF.h"
+#include "Game/G2/ANMCTRLR.h"
 
 void MON_TurnOffWeaponSpheres(Instance *instance)
 {

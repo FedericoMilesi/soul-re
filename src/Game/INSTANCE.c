@@ -20,6 +20,7 @@
 #include "Game/SOUND.h"
 #include "Game/STREAM.h"
 #include "Game/STATE.h"
+#include "Game/G2/ANMG2ILF.h"
 
 void INSTANCE_Deactivate(Instance *instance)
 {

@@ -24,6 +24,7 @@
 #include "Game/RAZIEL/SWIM.h"
 #include "Game/RAZIEL/STEERING.h"
 #include "Game/RAZIEL/SPIDER.h"
+#include "Game/G2/ANMG2ILF.h"
 
 /*.sbss*/
 STATIC Player Raziel;

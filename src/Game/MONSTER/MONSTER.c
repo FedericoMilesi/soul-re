@@ -18,6 +18,8 @@
 #include "Game/GAMELOOP.h"
 #include "Game/STREAM.h"
 #include "Game/INSTANCE.h"
+#include "Game/G2/ANMCTRLR.h"
+#include "Game/G2/ANMG2ILF.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/MONSTER", MON_DoCombatTimers);
 

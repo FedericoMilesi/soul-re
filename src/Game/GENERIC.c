@@ -7,6 +7,7 @@
 #include "Game/G2/ANIMG2.h"
 #include "Game/INSTANCE.h"
 #include "Game/STREAM.h"
+#include "Game/G2/ANMG2ILF.h"
 
 void GenericInit(Instance *instance, GameTracker *gameTracker)
 {

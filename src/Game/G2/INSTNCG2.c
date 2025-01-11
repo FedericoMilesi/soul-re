@@ -4,6 +4,7 @@
 #include "Game/SPLINE.h"
 #include "Game/CAMERA.h"
 #include "Game/G2/ANIMG2.h"
+#include "Game/G2/ANMCTRLR.h"
 
 void G2Instance_BuildTransformsForList(Instance *listHead)
 {

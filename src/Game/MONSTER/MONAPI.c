@@ -16,6 +16,7 @@
 #include "Game/STREAM.h"
 #include "Game/INSTANCE.h"
 #include "Game/G2/ANIMG2.h"
+#include "Game/G2/ANMG2ILF.h"
 
 typedef void (*MONTABLE_DamageEffectFunc)(Instance *, int);
 

@@ -15,6 +15,7 @@
 #include "Game/COLLIDE.h"
 #include "Game/SOUND.h"
 #include "Game/STREAM.h"
+#include "Game/G2/ANMG2ILF.h"
 
 void SOUL_QueueHandler(Instance *instance)
 {
