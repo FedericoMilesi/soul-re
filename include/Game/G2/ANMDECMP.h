@@ -3,6 +3,6 @@
 
 #include "common.h"
 
-
+void _G2Anim_DecompressChannel_AdaptiveDelta(G2AnimDecompressChannelInfo *dcInfo, G2AnimChanStatus *status);
 
 #endif
