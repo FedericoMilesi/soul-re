@@ -861,7 +861,34 @@ void razSetWallCrawlNodes(Instance *instance, evPhysicsWallCrawlData *data)
 
 /*TODO: migrate to razSwitchVAnimCharacterGroup + razSwitchVAnimCharacterSingle*/
 int D_800D1D98[3] = {-1, -1, -1}; /*int temp[3]*/
+// Matches 100% on decomp.me but differs on this project
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchVAnimCharacterGroup);
+#else
+int razSwitchVAnimCharacterGroup(Instance *instance, int animGroup, int *frame, int *frames)
+{
+    int i;
+    int rc;
+    int temp[3] = {-1, -1, -1};
+
+    if (frame == NULL)
+    {
+        frame = temp;
+    }
+
+    if (frames == NULL)
+    {
+        frames = temp;
+    }
+
+    for (i = 0; i < 3; i++)
+    {
+        rc = razSwitchVAnimGroup(instance, i, animGroup, frame[i], frames[i]);
+    }
+
+    return rc;
+}
+#endif
 
 int razSwitchVAnimGroup(Instance *instance, int section, int animGroup, int frame, int frames)
 {

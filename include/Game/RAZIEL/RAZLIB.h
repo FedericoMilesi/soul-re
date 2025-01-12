@@ -40,5 +40,6 @@ void razReaverBladeOn();
 void razSetCowlNoDraw(int mode);
 void razAttachControllers();
 int razApplyMotion(CharacterState *In, int CurrentSection);
+int razSwitchVAnimGroup(Instance *instance, int section, int animGroup, int frame, int frames);
 
 #endif
