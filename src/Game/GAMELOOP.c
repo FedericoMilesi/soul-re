@@ -45,9 +45,9 @@ long playerCameraMode = 0xD;
 
 Object *fontsObject = NULL;
 
-EXTERN STATIC short pause_redraw_flag;
+STATIC short pause_redraw_flag;
 
-EXTERN STATIC PrimPool *primPool[2];
+STATIC PrimPool *primPool[2];
 
 STATIC InstanceList *instanceList;
 

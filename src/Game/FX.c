@@ -7,33 +7,33 @@
 #include "Game/LIST.h"
 #include "Game/GAMELOOP.h"
 
-EXTERN STATIC FXGeneralEffect *FX_GeneralEffectTracker;
+STATIC FXGeneralEffect *FX_GeneralEffectTracker;
 
-EXTERN STATIC short Spiral_Number;
+STATIC short Spiral_Number;
 
-EXTERN STATIC short Spiral_Degrees;
+STATIC short Spiral_Degrees;
 
-EXTERN STATIC long Spiral_Current;
+STATIC long Spiral_Current;
 
-EXTERN STATIC long Spiral_Max;
+STATIC long Spiral_Max;
 
-EXTERN STATIC FX_PRIM *FX_LastUsedPrim;
+STATIC FX_PRIM *FX_LastUsedPrim;
 
-EXTERN STATIC DVECTOR Spiral_Array[65];
+STATIC DVECTOR Spiral_Array[65];
 
-EXTERN STATIC DVECTOR Spiral_OffsetP[64];
+STATIC DVECTOR Spiral_OffsetP[64];
 
-EXTERN STATIC DVECTOR Spiral_OffsetM[64];
+STATIC DVECTOR Spiral_OffsetM[64];
 
-EXTERN STATIC int Spiral_Glow_X;
+STATIC int Spiral_Glow_X;
 
-EXTERN STATIC int Spiral_Glow_Y;
+STATIC int Spiral_Glow_Y;
 
-EXTERN STATIC int Spiral_Glow_Size;
+STATIC int Spiral_Glow_Size;
 
-EXTERN STATIC int Spiral_Mod;
+STATIC int Spiral_Mod;
 
-EXTERN STATIC Instance *FX_reaver_instance;
+STATIC Instance *FX_reaver_instance;
 
 INCLUDE_ASM("asm/nonmatchings/Game/FX", FX_Init);
 

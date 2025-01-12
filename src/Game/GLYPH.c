@@ -11,7 +11,7 @@
 #include "Game/DRAW.h"
 #include "Game/INSTANCE.h"
 
-EXTERN STATIC short HUD_Captured;
+STATIC short HUD_Captured;
 
 STATIC short HUD_Count;
 
@@ -37,7 +37,7 @@ STATIC SVector HUD_Cap_Pos;
 
 STATIC SVector HUD_Cap_Vel;
 
-EXTERN STATIC short fx_going;
+STATIC short fx_going;
 
 STATIC int fx_radius_old;
 
@@ -580,7 +580,7 @@ INCLUDE_ASM("asm/nonmatchings/Game/GLYPH", Glyph_Broadcast);
 void Glyph_DoSpell(Instance *instance, int glyphnum)
 {
     int fx_radius;
-    //int fx_accl; unused
+    // int fx_accl; unused
     int fx_vel;
     long fx_color;
     int fx_height1;
