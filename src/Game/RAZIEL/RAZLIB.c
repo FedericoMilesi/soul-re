@@ -5,6 +5,7 @@
 #include "Game/RAZIEL/RAZLIB.h"
 #include "Game/G2/INSTNCG2.h"
 #include "Game/G2/TIMERG2.h"
+#include "Game/RAZIEL/CONTROL.h"
 
 void razAlignYMoveRot(Instance *dest, short distance, Position *position, Rotation *rotation, int extraZ)
 {
@@ -726,7 +727,16 @@ void razResetMotion(Instance *instance)
     G2Anim_SetSpeedAdjustment(&instance->anim, 4096);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetDampingPhysics);
+void razSetDampingPhysics(Instance *instance)
+{
+    Raziel.RotationSegment = 0;
+
+    Raziel.extraRot.x = 0;
+
+    PhysicsMode = 4;
+
+    SetDampingPhysics(instance, PlayerData->SwimPhysicsFallDamping);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razEnterWater);
 
