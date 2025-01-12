@@ -714,7 +714,17 @@ int razApplyMotion(CharacterState *In, int CurrentSection)
     return -Vec.y;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razResetMotion);
+void razResetMotion(Instance *instance)
+{
+    if (G2Anim_IsControllerActive(&instance->anim, 0, 34) != G2FALSE)
+    {
+        G2Anim_DisableController(&instance->anim, 0, 34);
+    }
+
+    Raziel.passedMask = 0;
+
+    G2Anim_SetSpeedAdjustment(&instance->anim, 4096);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetDampingPhysics);
 
