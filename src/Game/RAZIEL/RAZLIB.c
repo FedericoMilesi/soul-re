@@ -3,6 +3,8 @@
 #include "Game/STREAM.h"
 #include "Game/PHYSOBS.h"
 #include "Game/RAZIEL/RAZLIB.h"
+#include "Game/G2/INSTNCG2.h"
+#include "Game/G2/TIMERG2.h"
 
 void razAlignYMoveRot(Instance *dest, short distance, Position *position, Rotation *rotation, int extraZ)
 {
@@ -665,7 +667,52 @@ void razResetPauseTranslation(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSelectMotionAnim);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razApplyMotion);
+int razApplyMotion(CharacterState *In, int CurrentSection)
+{
+    G2SVector3 Vec;
+    G2AnimSection *animSection;
+    int adjustment;
+
+    memset(&Vec, 0, sizeof(G2SVector3));
+
+    if (CurrentSection == 0)
+    {
+        animSection = In->CharacterInstance->anim.section;
+
+        if (animSection->keylist == G2Instance_GetKeylist(In->CharacterInstance, 2))
+        {
+            Vec.y = -60;
+        }
+        else if (animSection->keylist == G2Instance_GetKeylist(In->CharacterInstance, 124))
+        {
+            Vec.y = -35;
+        }
+        else if (animSection->keylist == G2Instance_GetKeylist(In->CharacterInstance, 123))
+        {
+            Vec.y = -16;
+        }
+        else if (G2Anim_IsControllerActive(&In->CharacterInstance->anim, 0, 34) != G2FALSE)
+        {
+            G2Anim_DisableController(&In->CharacterInstance->anim, 0, 34);
+        }
+
+        if (Vec.y != 0)
+        {
+            if (G2Anim_IsControllerActive(&In->CharacterInstance->anim, 0, 34) == G2FALSE)
+            {
+                G2Anim_EnableController(&In->CharacterInstance->anim, 0, 34);
+            }
+
+            adjustment = In->CharacterInstance->anim.section->speedAdjustment;
+
+            Vec.y = ((Vec.y * G2Timer_GetFrameTime() * adjustment) >> 12) / 100;
+
+            G2Anim_SetController_Vector(&In->CharacterInstance->anim, 0, 34, &Vec);
+        }
+    }
+
+    return -Vec.y;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razResetMotion);
 
