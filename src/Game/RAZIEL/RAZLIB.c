@@ -2,6 +2,7 @@
 #include "Game/FX.h"
 #include "Game/STREAM.h"
 #include "Game/PHYSOBS.h"
+#include "Game/RAZIEL/RAZIEL.h"
 #include "Game/RAZIEL/RAZLIB.h"
 #include "Game/G2/INSTNCG2.h"
 #include "Game/G2/TIMERG2.h"
@@ -738,7 +739,76 @@ void razSetDampingPhysics(Instance *instance)
     SetDampingPhysics(instance, PlayerData->SwimPhysicsFallDamping);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razEnterWater);
+void razEnterWater(CharacterState *In, int CurrentSection, evPhysicsSwimData *SwimData)
+{
+    Instance *Inst;
+
+    Inst = razGetHeldWeapon();
+
+    if ((SwimData->rc & 0x10))
+    {
+        if ((Raziel.CurrentPlane == 1) && (!(Raziel.Abilities & 0x10)))
+        {
+            Raziel.HitPoints = 65536 | 34464;
+
+            SetPhysics(In->CharacterInstance, -16, 0, 0, 0);
+
+            PhysicsMode = 0;
+        }
+        else if ((Inst != NULL) && (INSTANCE_Query(Inst, 4) == 3))
+        {
+            G2Anim_SetSpeedAdjustment(&In->CharacterInstance->anim, 2048);
+        }
+        else if ((!(Raziel.Mode & 0x40000)) && (Raziel.CurrentPlane == 1))
+        {
+            if (PhysicsMode != 4)
+            {
+                razSetDampingPhysics(In->CharacterInstance);
+            }
+
+            if ((In->CharacterInstance->zVel == 0) || ((Raziel.Mode & 0x400004)))
+            {
+                razResetMotion(In->CharacterInstance);
+
+                StateSwitchStateCharacterData(In, StateHandlerSwim, 0);
+            }
+
+            TrailWaterFX(In->CharacterInstance, 9, 1, 1);
+            TrailWaterFX(In->CharacterInstance, 13, 1, 1);
+            TrailWaterFX(In->CharacterInstance, 31, 1, 1);
+            TrailWaterFX(In->CharacterInstance, 41, 1, 1);
+        }
+    }
+
+    if (((SwimData->rc & 0x800)) && (Raziel.Senses.heldClass == 0x1))
+    {
+        if (CurrentSection == 2)
+        {
+            G2EmulationSwitchAnimation(In, CurrentSection, 61, 0, 3, 2);
+        }
+        else
+        {
+            G2EmulationSwitchAnimation(In, CurrentSection, 63, 0, 16, 2);
+        }
+    }
+
+    if (((SwimData->rc & 0x100)) && (CurrentSection == 0))
+    {
+        if (Inst != NULL)
+        {
+            INSTANCE_Query(Inst, 4);
+        }
+        else
+        {
+            razSetDampingPhysics(In->CharacterInstance);
+        }
+
+        PurgeMessageQueue(&In->SectionList[CurrentSection].Event);
+
+        TrailWaterFX(In->CharacterInstance, 9, 4, 1);
+        TrailWaterFX(In->CharacterInstance, 13, 4, 1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetSwimVelocity);
 

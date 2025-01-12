@@ -36,5 +36,6 @@ long RazielAnimCallback(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, 
 void InitGlyphSystem(Instance *instance);
 void RazielCollide(Instance *instance, GameTracker *gameTracker);
 void RelocateConstrict(SVector *offset);
+void TrailWaterFX(Instance *instance, int Segment, int Bubbles, int Type);
 
 #endif
