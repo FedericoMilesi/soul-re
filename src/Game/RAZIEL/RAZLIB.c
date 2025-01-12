@@ -863,7 +863,31 @@ void razSetWallCrawlNodes(Instance *instance, evPhysicsWallCrawlData *data)
 int D_800D1D98[3] = {-1, -1, -1}; /*int temp[3]*/
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchVAnimCharacterGroup);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchVAnimGroup);
+int razSwitchVAnimGroup(Instance *instance, int section, int animGroup, int frame, int frames)
+{
+    int index;
+    int rc;
+
+    rc = 1;
+
+    if (Raziel.Senses.heldClass != 0)
+    {
+        index = Raziel.Senses.heldClass - 1;
+
+        if (index >= 3)
+        {
+            index = 3;
+        }
+
+        animGroup += index;
+
+        razSwitchVAnim(instance, section, &PlayerData->virtualAnimations[animGroup], frame, frames);
+
+        rc = 0;
+    }
+
+    return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchVAnimCharacterSingle);
 
