@@ -810,7 +810,25 @@ void razEnterWater(CharacterState *In, int CurrentSection, evPhysicsSwimData *Sw
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetSwimVelocity);
+void razSetSwimVelocity(Instance *instance, int vel, int accl)
+{
+    instance->yAccl = 0;
+    instance->xAccl = 0;
+
+    instance->yVel = 0;
+    instance->xVel = 0;
+
+    Raziel.swimTargetSpeed = (vel * instance->anim.section->speedAdjustment) / 4096;
+
+    if (instance->zVel > vel)
+    {
+        instance->zAccl = -accl;
+    }
+    else
+    {
+        instance->zAccl = accl;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetWallCrawlNodes);
 
