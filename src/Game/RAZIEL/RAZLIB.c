@@ -830,7 +830,34 @@ void razSetSwimVelocity(Instance *instance, int vel, int accl)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetWallCrawlNodes);
+void razSetWallCrawlNodes(Instance *instance, evPhysicsWallCrawlData *data)
+{
+    G2SVector3 vec;
+
+    if ((data->rc & 0x8))
+    {
+        if ((long)MATH3D_SquareLength(data->NewPosition.x, data->NewPosition.y, data->NewPosition.z) > 100)
+        {
+            instance->position.x -= data->NewPosition.x;
+            instance->position.y -= data->NewPosition.y;
+        }
+
+        vec.x = data->DropRotation.x;
+        vec.y = data->DropRotation.y;
+        vec.z = data->DropRotation.z;
+
+        G2Anim_SetController_Vector(&instance->anim, 0, 8, &vec);
+    }
+
+    if (data->rc == 10)
+    {
+        vec.x = -data->ForwardXRotation;
+        vec.y = 0;
+        vec.z = 0;
+
+        G2EmulationSetInterpController_Vector(instance, 14, 14, &vec, 3, 0);
+    }
+}
 
 /*TODO: migrate to razSwitchVAnimCharacterGroup + razSwitchVAnimCharacterSingle*/
 int D_800D1D98[3] = {-1, -1, -1}; /*int temp[3]*/
