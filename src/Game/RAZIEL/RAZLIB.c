@@ -1021,7 +1021,30 @@ int razProcessSAnim(Instance *instance, int mode)
     return rc;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchStringAnimation);
+void razSwitchStringAnimation(Instance *instance, int anim)
+{
+    VAnim *vanim;
+    int i;
+
+    Raziel.currentSAnim = PlayerData->stringAnimations[anim];
+
+    vanim = Raziel.currentSAnim->anim;
+
+    if (vanim != NULL)
+    {
+        for (i = 0; i < 3; i++)
+        {
+            razSwitchVAnim(instance, i, vanim, -1, -1);
+        }
+
+        G2Anim_SetSpeedAdjustment(&instance->anim, Raziel.currentSAnim->speedAdjust);
+
+        if (Raziel.currentSAnim->mode == 2)
+        {
+            SetTimer(Raziel.currentSAnim->data);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", CheckStringAnimation);
 
