@@ -1110,7 +1110,88 @@ void razAttachControllers()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetPlayerEvent);
+void razSetPlayerEvent()
+{
+    void (*process)();
+    int message;
+    int data;
+
+    process = Raziel.State.SectionList->Process;
+
+    message = 0;
+
+    data = 0;
+
+    if (((Raziel.Senses.EngagedMask & 0x1)) && (Raziel.Senses.heldClass != 0x3) && (process == StateHandlerIdle))
+    {
+        Raziel.playerEvent |= 0x1;
+    }
+
+    if (((Raziel.Senses.EngagedMask & 0x4)) && (Raziel.Senses.heldClass != 0x3) && (process == StateHandlerCrouch))
+    {
+        Raziel.playerEvent |= 0x2;
+    }
+
+    if (((Raziel.Senses.EngagedMask & 0x8)) && (Raziel.Senses.heldClass != 0x3) && (process == StateHandlerIdle))
+    {
+        if (INSTANCE_Query(Raziel.Senses.EngagedList[3].instance, 4) == 9)
+        {
+            Raziel.playerEvent |= 0x8;
+        }
+        else
+        {
+            Raziel.playerEvent |= 0x4;
+        }
+    }
+
+    if (((Raziel.Senses.EngagedMask & 0x20)) && (razGetHeldItem() == NULL) && (Raziel.CurrentPlane == 1) && ((process == StateHandlerIdle) || (process == StateHandlerStartMove) || (process == StateHandlerMove) || (process == StateHandlerJump) || (process == StateHandlerFall) || (process == StateHandlerSwim) || (process == StateHandlerAutoFace)))
+    {
+        Raziel.playerEvent |= 0x10;
+    }
+
+    if (((Raziel.Senses.EngagedMask & 0x40)) && (!(INSTANCE_Query(Raziel.Senses.EngagedList[6].instance, 10) & 0x4)))
+    {
+        Raziel.playerEvent |= 0x20;
+    }
+
+    if ((StateHandlerDecodeHold(&message, &data) != 0) && (data != 0))
+    {
+        if (message == 0x1000002)
+        {
+            Raziel.playerEvent |= 0x40;
+        }
+
+        if (message == 0x100000A)
+        {
+            Raziel.playerEvent |= 0x80;
+        }
+
+        if (message == 0x1000018)
+        {
+            Raziel.playerEvent |= 0x100;
+        }
+    }
+
+    if (((Raziel.Mode & 0x20000)) && ((Raziel.Senses.heldClass == 0x1) || (Raziel.Senses.heldClass == 0x2) || (Raziel.Senses.heldClass == 0x3)))
+    {
+        Raziel.playerEvent |= 0x200;
+    }
+
+    if (message == 0x80000)
+    {
+        Raziel.playerEvent |= 0x400;
+    }
+
+    if ((Raziel.Senses.EngagedMask & 0x4000))
+    {
+        Raziel.playerEvent |= 0x800;
+    }
+
+    if ((Raziel.Senses.Flags & 0x40))
+    {
+        Raziel.playerEvent |= 0x2000;
+    }
+}
 
 void razClearPlayerEvent()
 {
