@@ -923,7 +923,31 @@ void razSwitchVAnimSingle(Instance *instance, int section, int anim, int frame, 
     razSwitchVAnim(instance, section, &PlayerData->virtualAnimSingle[anim], frame, frames);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchVAnim);
+void razSwitchVAnim(Instance *instance, int section, VAnim *vAnim, int frame, int frames)
+{
+    if (frame == -1)
+    {
+        frame = vAnim->frame;
+    }
+
+    if (frames == -1)
+    {
+        frames = vAnim->frames;
+    }
+
+    switch (section)
+    {
+    case 0:
+        G2EmulationInstanceSwitchAnimationAlpha(instance, 0, vAnim->anim0, frame, frames, vAnim->mode, vAnim->alpha);
+        break;
+    case 1:
+        G2EmulationInstanceSwitchAnimationAlpha(instance, 1, vAnim->anim1, frame, frames, vAnim->mode, vAnim->alpha);
+        break;
+    case 2:
+        G2EmulationInstanceSwitchAnimationAlpha(instance, 2, vAnim->anim2, frame, frames, vAnim->mode, vAnim->alpha);
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razProcessSAnim);
 
