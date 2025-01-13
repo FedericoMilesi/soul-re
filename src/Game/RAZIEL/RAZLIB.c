@@ -1122,7 +1122,10 @@ void razClearPlayerEvent()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetPlayerEventHistory);
+void razSetPlayerEventHistory(unsigned long event)
+{
+    Raziel.playerEventHistory |= event;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSideMoveSpiderCheck);
 
