@@ -1130,7 +1130,15 @@ void razSetPlayerEventHistory(unsigned long event)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSideMoveSpiderCheck);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_QueryEngagedInstance);
+Instance *RAZIEL_QueryEngagedInstance(int index)
+{
+    if ((Raziel.Senses.EngagedMask & (1 << index)))
+    {
+        return Raziel.Senses.EngagedList[index].instance;
+    }
+
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razUpdateSoundRamp);
 
