@@ -42,5 +42,7 @@ int SndTypeIsPlayingOrRequested(unsigned int sfxToneID);
 void SOUND_SetSfxVolume(int newVolume);
 void SOUND_SetMusicVolume(int newVolume);
 void SOUND_SetVoiceVolume(int newVolume);
+void SOUND_SetMusicModifier(long modifier);
+void SOUND_ResetMusicModifier(long modifier);
 
 #endif

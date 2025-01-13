@@ -7,6 +7,7 @@
 #include "Game/G2/INSTNCG2.h"
 #include "Game/G2/TIMERG2.h"
 #include "Game/RAZIEL/CONTROL.h"
+#include "Game/SOUND.h"
 
 void razAlignYMoveRot(Instance *dest, short distance, Position *position, Rotation *rotation, int extraZ)
 {
@@ -1135,7 +1136,31 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razUpdateSoundRamp);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetupSoundRamp);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_SetInteractiveMusic);
+void RAZIEL_SetInteractiveMusic(int modifier, int action)
+{
+    int soundFlag;
+
+    soundFlag = 1 << modifier;
+
+    if (action != 0)
+    {
+        if (!(Raziel.soundModifier & soundFlag))
+        {
+            SOUND_SetMusicModifier(modifier);
+        }
+
+        Raziel.soundModifier |= soundFlag;
+    }
+    else
+    {
+        if ((Raziel.soundModifier & soundFlag))
+        {
+            SOUND_ResetMusicModifier(modifier);
+        }
+
+        Raziel.soundModifier &= ~soundFlag;
+    }
+}
 
 void RAZIEL_DebugHurtRaziel()
 {
