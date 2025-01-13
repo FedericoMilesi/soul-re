@@ -2,30 +2,26 @@
 #include "Game/VOICEXA.h"
 #include "Game/LOAD3D.h"
 
-// TODO: this file needs migrating its .sdata to C
-
 static language_t the_language;
 
-STATIC char **LocalStrings;
+static LocalizationHeader *LocalizationTable = NULL;
 
-STATIC LocalizationHeader *LocalizationTable;
+static char **LocalStrings = NULL;
 
-XAVoiceListEntry *voiceList;
+XAVoiceListEntry *voiceList = NULL;
 
 language_t localstr_get_language()
 {
     return the_language;
 }
 
-extern char D_800D1EE8[];
 void localstr_set_language(language_t lang)
 {
     int i;
 
     (void)lang;
 
-    LocalizationTable = (LocalizationHeader *)LOAD_ReadFileFromCD(D_800D1EE8, 6);
-    // LocalizationTable = (LocalizationHeader *)LOAD_ReadFileFromCD("LOCALS.TBL", 6);
+    LocalizationTable = (LocalizationHeader *)LOAD_ReadFileFromCD("\\LOCALS.TBL;1", 6);
 
     if (LocalizationTable != NULL)
     {
@@ -42,10 +38,9 @@ void localstr_set_language(language_t lang)
     }
 }
 
-extern char D_800D1EF8[2];
 char *localstr_get(localstr_t id)
 {
-    // static char BlankStr[2];
+    static char BlankStr[2] = ".";
 
     if (LocalStrings != NULL)
     {
@@ -53,7 +48,6 @@ char *localstr_get(localstr_t id)
     }
     else
     {
-        // return &BlankStr[0];
-        return &D_800D1EF8[0];
+        return &BlankStr[0];
     }
 }

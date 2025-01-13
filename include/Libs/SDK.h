@@ -514,4 +514,6 @@ int ResetCallback(void);
 int CdSetDebug(int level);
 int CdInit(void);
 
+extern int StCdIntrFlag;
+
 #endif

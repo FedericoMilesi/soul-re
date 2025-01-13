@@ -7,13 +7,9 @@
 #include "Game/STRMLOAD.h"
 #include "Game/STREAM.h"
 
-// TODO: this file needs migrating its .data to C
+static cinema_fn_table_t *the_cine_table = NULL;
 
-extern int StCdIntrFlag;
-
-STATIC ObjectTracker *the_cine_tracker;
-
-STATIC cinema_fn_table_t *the_cine_table;
+static ObjectTracker *the_cine_tracker = NULL;
 
 int CINE_CDIntrQuery()
 {

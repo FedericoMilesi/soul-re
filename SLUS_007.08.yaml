@@ -177,11 +177,11 @@ segments:
       - [0x0BCDFC, .data, Game/MONSTER/SLUAGH]
       - [0x0BCE80, data, Game/MONSTER/VWRAITH]
       - [0x0BCED4, data, Game/MONSTER/WORSHIP]
-      - [0x0BCF10, data, Game/G2/ANIMG2]
+      - [0x0BCF10, .data, Game/G2/ANIMG2]
       - [0x0BD050, .data, Game/ENTRYPOINT]
-      - [0x0BD074, data, Game/CINEMA/CINEPSX]
+      - [0x0BD074, .data, Game/CINEMA/CINEPSX]
       - [0x0BD07C, data, Game/MENU/MENUUTIL]
-      - [0x0BD0AC, data, Game/MENU/MENUDEFS]
+      - [0x0BD0AC, .data, Game/MENU/MENUDEFS]
       - [0x0BD0BC, data, LIBS]
 
       - [0x0BFD9C, .sdata, Game/DEBUG]
@@ -227,7 +227,7 @@ segments:
       - [0x0C22E8, sdata, Game/MONSTER/MONSENSE]
       - [0x0C2330, sdata, Game/MONSTER/MONSTER]
       - [0x0C2348, .sdata, Game/MONSTER/MONTABLE]
-      - [0x0C2368, sdata, Game/MONSTER/SLUAGH]
+      - [0x0C2368, .sdata, Game/MONSTER/SLUAGH]
       - [0x0C2390, sdata, Game/MONSTER/SOUL]
       - [0x0C23B0, sdata, Game/MONSTER/VWRAITH]
       - [0x0C23D0, sdata, Game/MONSTER/WORSHIP]
@@ -238,10 +238,9 @@ segments:
       - [0x0C25C4, .sdata, Game/UNDRWRLD]
       - [0x0C25D8, .sdata, Game/SAVEINFO]
       - [0x0C26B0, .sdata, Game/VOICEXA]
-      - [0x0C26DC, sdata, Game/LOCAL/LOCALSTR]
+      - [0x0C26DC, .sdata, Game/LOCAL/LOCALSTR]
       - [0x0C26FC, sdata, Game/MENU/MENU]
-      - [0x0C2750, sdata] # Unused
-      - [0x0C2790, sdata, Game/MENU/MENUDEFS]
+      - [0x0C2750, .sdata, Game/MENU/MENUDEFS]
       - [0x0C2804, sdata, Game/MENU/MENUFACE]
 
       - {start: 0x0C28AC, type: sbss, vram: 0x800D20AC, name: Game/DEBUG}
@@ -284,7 +283,7 @@ segments:
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D7484, name: Game/ENTRYPOINT}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D7488, name: Game/VOICEXA}
       - {start: 0x0C28AC, type: .sbss, vram: 0x800D75B0, name: Game/LOCAL/LOCALSTR}
-      - {start: 0x0C28AC, type: sbss, vram: 0x800D75B4, name: Game/MENU/MENUDEFS}
+      - {start: 0x0C28AC, type: .sbss, vram: 0x800D75B4, name: Game/MENU/MENUDEFS}
       - {start: 0x0C28AC, type: sbss, vram: 0x800D75B8, name: Game/MENU/MENUFACE}
 
       - {start: 0x0C28AC, type: .bss, vram: 0x800D75BC, name: Game/SOUND}

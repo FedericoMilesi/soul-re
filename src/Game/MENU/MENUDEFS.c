@@ -12,33 +12,38 @@
 #include "Game/DEBUG.h"
 #include "Game/FONT.h"
 
-STATIC int StartGameFading;
+static char *the_attract_movies[] = {
+    "\\KAINDEM1.STR;1",
+    "\\KAINDEM2.STR;1",
+    "\\KAINDEM3.STR;1",
+    "\\KAINDEM4.STR;1",
+};
 
 long *mainMenuScreen;
 
-STATIC int hack_attract;
+static int MAIN_YPOS = 30;
 
-STATIC int hack_attract_movie;
+static int PAUSE_YPOS = 60;
 
-STATIC char *the_attract_movies[8924 + 4];
+static int MAIN_XPOS = 135;
 
-STATIC int MAIN_XPOS;
+static int MAIN_WIDTH = 172;
 
-STATIC int MAIN_YPOS;
+static int PAUSE_XPOS = 256;
 
-STATIC int MAIN_WIDTH;
+static int PAUSE_WIDTH = 256;
 
-STATIC int LINESKIP;
+static int LINESKIP = 14;
 
-STATIC int ITEMSKIP;
+static int ITEMSKIP = 2;
 
-STATIC int hack_reset_attract;
+static int hack_reset_attract = 1;
 
-STATIC int PAUSE_XPOS;
+static int StartGameFading = 0;
 
-STATIC int PAUSE_YPOS;
+static int hack_attract = 0;
 
-STATIC int PAUSE_WIDTH;
+static int hack_attract_movie = 0;
 
 void do_check_controller(void *gt)
 {
@@ -250,11 +255,9 @@ int do_sound_adjust(void *gt, long sfxparam, menu_ctrl_t ctrl)
     }
 }
 
-extern char D_800D1FC0[];
 void sound_item(void *gt, char *text, sfx_t sfx)
 {
-    // menu_item(((GameTracker*)gt)->menu, do_sound_adjust, sfx, "%s %d", text, get_volume(gt, sfx));
-    menu_item(((GameTracker *)gt)->menu, do_sound_adjust, sfx, D_800D1FC0, text, get_volume(gt, sfx));
+    menu_item(((GameTracker *)gt)->menu, do_sound_adjust, sfx, "%s %d", text, get_volume(gt, sfx));
 }
 
 int menudefs_toggle_dualshock(void *gt, long param, menu_ctrl_t ctrl)
@@ -281,15 +284,10 @@ int menudefs_toggle_dualshock(void *gt, long param, menu_ctrl_t ctrl)
     return 0;
 }
 
-// Matches 100% on decomp.me but differs on this project
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", options_menu);
-#else
 int options_menu(void *gt, int index)
 {
-    STATIC int wasDualShock;
+    static int wasDualShock;
     int dualShock;
-    int temp; // not from decls.h
 
     hack_attract = 0;
 
@@ -326,21 +324,11 @@ int options_menu(void *gt, int index)
 
     wasDualShock = dualShock;
 
-    temp = index;
-
-    if (temp < 0)
-    {
-        temp = 1;
-    }
-
-    return temp;
+    return index < 0 ? 1 : index;
 }
-#endif
 
 int main_menu(void *gt, int index)
 {
-    int temp; // not from decls.h
-
     hack_attract = 0;
 
     menu_format(((GameTracker *)gt)->menu, 1, MAIN_XPOS, MAIN_YPOS, MAIN_WIDTH, LINESKIP, ITEMSKIP, 0);
@@ -352,14 +340,7 @@ int main_menu(void *gt, int index)
     menu_item(((GameTracker *)gt)->menu, do_start_game, 0, localstr_get(LOCALSTR_start_game));
     menu_item(((GameTracker *)gt)->menu, do_push_menu, (long)&options_menu, localstr_get(LOCALSTR_options));
 
-    temp = index;
-
-    if (temp < 0)
-    {
-        temp = 0;
-    }
-
-    return temp;
+    return index < 0 ? 0 : index;
 }
 
 int do_main_menu(void *gt, long param, menu_ctrl_t ctrl)
@@ -381,9 +362,6 @@ int do_main_menu(void *gt, long param, menu_ctrl_t ctrl)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUDEFS", flashStart);
-/* TODO: this file needs migrating its .sdata to C for this function to match
-extern char D_800D1FC8[];
 char *flashStart()
 {
     gameTrackerX.gameFramePassed = 1;
@@ -394,8 +372,7 @@ char *flashStart()
 
         if (gameTrackerX.wipeTime == -1)
         {
-            // womp_background("\\kain2\\game\\psx\\bkgdmenu.tim");
-            womp_background(D_800D1FC8);
+            womp_background("\\kain2\\game\\psx\\bkgdmenu.tim");
 
             gameTrackerX.wipeType = 10;
 
@@ -413,9 +390,9 @@ char *flashStart()
     }
     else
     {
-        STATIC int counter;
+        static int counter = -1;
         int intpl;
-        int fcols[2][3] = {0xC0, 0xD2, 0xD2, 0xC0, 0xC0, 0x40};
+        int fcols[2][3] = {{0xC0, 0xD2, 0xD2}, {0xC0, 0xC0, 0x40}};
         int r;
         int g;
         int b;
@@ -448,7 +425,7 @@ char *flashStart()
     }
 
     return localstr_get(LOCALSTR_press_start);
-}*/
+}
 
 int menudefs_main_menu(void *gt, int index)
 {
