@@ -1110,7 +1110,17 @@ void razAttachControllers()
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetPlayerEvent);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razClearPlayerEvent);
+void razClearPlayerEvent()
+{
+    if ((ControlFlag & 0x100000))
+    {
+        Raziel.playerEvent &= 0x2000;
+    }
+    else
+    {
+        Raziel.playerEvent = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetPlayerEventHistory);
 
