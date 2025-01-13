@@ -1046,7 +1046,19 @@ void razSwitchStringAnimation(Instance *instance, int anim)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", CheckStringAnimation);
+int CheckStringAnimation(Instance *instance, int mode)
+{
+    int rc;
+
+    rc = 0;
+
+    if ((Raziel.currentSAnim == NULL) || (rc = razProcessSAnim(instance, mode), Raziel.currentSAnim == NULL))
+    {
+        INSTANCE_Post(instance, 0x100000, 0);
+    }
+
+    return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razLaunchBubbles);
 
