@@ -2,6 +2,7 @@
 #include "Game/STATE.h"
 #include "Game/GAMELOOP.h"
 #include "Game/INSTANCE.h"
+#include "Game/SAVEINFO.h"
 #include "Game/FX.h"
 #include "Game/MONSTER/SOUL.h"
 #include "Game/MONSTER/MONAPI.h"
@@ -26,9 +27,23 @@ MonsterStateChoice SOUL_StateChoiceTable[] = {
     {-1, {NULL, NULL}},
 };
 
+void SLUAGH_Init(Instance *instance);
+void SLUAGH_DamageEffect(Instance *instance, evFXHitData *data);
+uintptr_t SLUAGH_Query(Instance *instance, unsigned long query);
+
+MonsterFunctionTable SLUAGH_FunctionTable = {
+    SLUAGH_Init,
+    NULL,
+    SLUAGH_DamageEffect,
+    SLUAGH_Query,
+    NULL,
+    SLUAGH_StateChoiceTable,
+    monVersion,
+    NULL,
+};
+
 uintptr_t SLUAGH_Query(Instance *instance, unsigned long query)
 {
-
     MonsterVars *mv;
     MonsterAttributes *ma;
 
@@ -55,8 +70,6 @@ uintptr_t SLUAGH_Query(Instance *instance, unsigned long query)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MONSTER/SLUAGH", SLUAGH_DamageEffect);
-/* TODO: this file needs migrating its .sdata to C for this function to match
 void SLUAGH_DamageEffect(Instance *instance, evFXHitData *data)
 {
     MonsterVars *mv;
@@ -67,7 +80,7 @@ void SLUAGH_DamageEffect(Instance *instance, evFXHitData *data)
     {
         if (!(mv->auxFlags & 0x1))
         {
-            SVector accel = {0, 0, 1}; // placeholder values
+            SVector accel = {.x = 0, .y = 0, .z = -2};
 
             FX_Blood(&data->location, &data->velocity, &accel, data->amount, 0x308000, sizeof(SVector));
 
@@ -136,7 +149,6 @@ void SLUAGH_DamageEffect(Instance *instance, evFXHitData *data)
         }
     }
 }
-*/
 
 void SLUAGH_Init(Instance *instance)
 {
