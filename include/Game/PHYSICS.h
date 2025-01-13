@@ -29,5 +29,6 @@ int PhysicsUpdateTface(Instance *instance, intptr_t Data);
 void PhysicsForceSetWater(Instance *instance, int *Time, int Depth, int rate, int maxAmplitude);
 int PHYSICS_CheckDontGrabEdge(PCollideInfo *CInfo);
 void PhysicsDefaultEdgeGrabResponse(Instance *instance, evPhysicsEdgeData *Data, int blockFlag);
+int PHYSICS_CheckForValidMove(Instance *instance, SVECTOR *startVec, SVECTOR *endVec, int segment);
 
 #endif

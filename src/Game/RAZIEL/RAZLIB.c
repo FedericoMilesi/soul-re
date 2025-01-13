@@ -8,6 +8,7 @@
 #include "Game/G2/TIMERG2.h"
 #include "Game/RAZIEL/CONTROL.h"
 #include "Game/SOUND.h"
+#include "Game/PHYSICS.h"
 
 void razAlignYMoveRot(Instance *dest, short distance, Position *position, Rotation *rotation, int extraZ)
 {
@@ -1128,7 +1129,24 @@ void razSetPlayerEventHistory(unsigned long event)
     Raziel.playerEventHistory |= event;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSideMoveSpiderCheck);
+int razSideMoveSpiderCheck(Instance *instance, int x)
+{
+    SVECTOR startVec;
+    SVECTOR endVec;
+
+    PHYSICS_GenericLineCheckSetup(x, 0, 192, &startVec);
+    PHYSICS_GenericLineCheckSetup(x, -320, 192, &endVec);
+
+    if (!(PHYSICS_CheckForValidMove(instance, &startVec, &endVec, 0) & 0x1))
+    {
+        return 1;
+    }
+
+    PHYSICS_GenericLineCheckSetup(x, 0, 0, &startVec);
+    PHYSICS_GenericLineCheckSetup(x, -320, 0, &endVec);
+
+    return (PHYSICS_CheckForValidMove(instance, &startVec, &endVec, 0) & 0x1) ^ 1;
+}
 
 Instance *RAZIEL_QueryEngagedInstance(int index)
 {
