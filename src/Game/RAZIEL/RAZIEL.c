@@ -767,7 +767,16 @@ void mdRazielProcess(Instance *playerInstance, GameTracker *gameTracker, long *c
     debugRazielFlags1 |= debugRazielFlags2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielProcess);
+void RazielProcess(Instance *playerInstance, GameTracker *gameTracker)
+{
+    mdRazielProcess(gameTracker->playerInstance, gameTracker, &gameTracker->controlCommand[0][0]);
+
+    DebugProcess(playerInstance, &Raziel);
+
+    Norm.z = 0;
+    Norm.y = 0;
+    Norm.x = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielInit);
 
