@@ -1144,7 +1144,19 @@ void RAZIEL_StartNewGame()
     memset(&Raziel, 0, sizeof(Raziel));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razInBaseArea);
+int razInBaseArea(char *name, int length)
+{
+    char string[9];
+
+    if (strcpy(string, gameTrackerX.baseAreaName) != NULL)
+    {
+        string[length] = 0;
+
+        return strcmp(name, string) == 0;
+    }
+
+    return 0;
+}
 
 void razPrepGlyph()
 {
