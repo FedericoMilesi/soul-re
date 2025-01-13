@@ -1137,7 +1137,10 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetupSoundRamp);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_SetInteractiveMusic);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_DebugHurtRaziel);
+void RAZIEL_DebugHurtRaziel()
+{
+    LoseHealth(4096);
+}
 
 void RAZIEL_StartNewGame()
 {
