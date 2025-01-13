@@ -1134,7 +1134,29 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_QueryEngagedInstance);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razUpdateSoundRamp);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetupSoundRamp);
+void razSetupSoundRamp(Instance *instance, SoundRamp *sound, int sfx, int startPitch, int endPitch, int startVolume, int endVolume, int timer, int distance)
+{
+    if (sound->soundHandle == 0)
+    {
+        sound->soundHandle = SOUND_Play3dSound(&instance->position, sfx, startPitch, startVolume, distance);
+    }
+
+    if (timer == 0)
+    {
+        sound->soundHandle = 0;
+    }
+
+    sound->soundStartPitch = startPitch;
+    sound->soundEndPitch = endPitch;
+
+    sound->soundStartVolume = startVolume;
+    sound->soundEndVolume = endVolume;
+
+    sound->soundDistance = distance;
+
+    sound->soundTotalTime = timer;
+    sound->soundTimer = 0;
+}
 
 void RAZIEL_SetInteractiveMusic(int modifier, int action)
 {
