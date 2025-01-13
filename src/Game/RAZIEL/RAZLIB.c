@@ -1096,7 +1096,17 @@ void razSetCowlNoDraw(int mode)
     } while ((intptr_t)temp < (intptr_t)&cowlList[19]);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razAttachControllers);
+void razAttachControllers()
+{
+    int i;
+
+    for (i = 0; i < 24; i++)
+    {
+        G2Anim_AttachControllerToSeg(&gameTrackerX.playerInstance->anim, controllerList[i].segment, controllerList[i].type);
+
+        G2Anim_DisableController(&gameTrackerX.playerInstance->anim, controllerList[i].segment, controllerList[i].type);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSetPlayerEvent);
 
