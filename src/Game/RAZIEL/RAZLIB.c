@@ -949,7 +949,77 @@ void razSwitchVAnim(Instance *instance, int section, VAnim *vAnim, int frame, in
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razProcessSAnim);
+int razProcessSAnim(Instance *instance, int mode)
+{
+    int rc;
+    SAnim *nextAnim;
+    VAnim *vanim;
+    int i;
+
+    rc = 0;
+
+    switch (mode)
+    {
+    case 0x8000000:
+        if (Raziel.currentSAnim->mode == 1)
+        {
+            rc = 1;
+        }
+
+        break;
+    case 0x100015:
+        if (Raziel.currentSAnim->mode == 2)
+        {
+            rc = 1;
+        }
+
+        break;
+    case 0x8000003:
+        if (Raziel.currentSAnim->mode == 3)
+        {
+            rc = 1;
+        }
+
+        break;
+    }
+
+    if (rc != 0)
+    {
+        nextAnim = Raziel.currentSAnim->nextAnim;
+
+        if (nextAnim != NULL)
+        {
+            Raziel.currentSAnim = Raziel.currentSAnim->nextAnim;
+
+            vanim = nextAnim->anim;
+
+            if (vanim != NULL)
+            {
+                for (i = 0; i < 3; i++)
+                {
+                    razSwitchVAnim(instance, i, vanim, -1, -1);
+
+                    G2Anim_SetSpeedAdjustment(&instance->anim, Raziel.currentSAnim->speedAdjust);
+                }
+
+                if (Raziel.currentSAnim->mode == 2)
+                {
+                    SetTimer(Raziel.currentSAnim->data);
+                }
+            }
+        }
+        else
+        {
+            G2Anim_SetSpeedAdjustment(&instance->anim, 4096);
+
+            Raziel.currentSAnim = NULL;
+
+            rc = 0;
+        }
+    }
+
+    return rc;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSwitchStringAnimation);
 
