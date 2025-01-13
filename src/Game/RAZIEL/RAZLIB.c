@@ -1060,7 +1060,20 @@ int CheckStringAnimation(Instance *instance, int mode)
     return rc;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razLaunchBubbles);
+void razLaunchBubbles(int segments, int count, int type)
+{
+    if ((segments & 0x1))
+    {
+        TrailWaterFX(gameTrackerX.playerInstance, 32, count, type);
+        TrailWaterFX(gameTrackerX.playerInstance, 42, count, type);
+    }
+
+    if ((segments & 0x2))
+    {
+        TrailWaterFX(gameTrackerX.playerInstance, 8, count, type);
+        TrailWaterFX(gameTrackerX.playerInstance, 12, count, type);
+    }
+}
 
 void razSetCowlNoDraw(int mode)
 {
