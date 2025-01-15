@@ -638,7 +638,50 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", SetStates);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessConstrict);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RelocateConstrict);
+void RelocateConstrict(SVector *offset)
+{
+    int i;
+
+    Raziel.constrictXTotal = 0;
+    Raziel.constrictYTotal = 0;
+
+    if ((Raziel.constrictFlag & 0x2))
+    {
+        for (i = 0; i < 32; i++)
+        {
+            Raziel.constrictData[i].x += offset->x;
+            Raziel.constrictData[i].y += offset->y;
+
+            Raziel.constrictXTotal += Raziel.constrictData[i].x;
+            Raziel.constrictYTotal += Raziel.constrictData[i].y;
+        }
+    }
+    else
+    {
+        i = Raziel.constrictWaitIndex + 1;
+
+        if (i == 32)
+        {
+            i = 0;
+        }
+
+        for (; i != Raziel.constrictIndex;)
+        {
+            Raziel.constrictData[i].x += offset->x;
+            Raziel.constrictData[i].y += offset->y;
+
+            Raziel.constrictXTotal += Raziel.constrictData[i].x;
+            Raziel.constrictYTotal += Raziel.constrictData[i].y;
+
+            i++;
+
+            if (i == 32)
+            {
+                i = 0;
+            }
+        }
+    }
+}
 
 void ProcessEffects(Instance *instance)
 {
