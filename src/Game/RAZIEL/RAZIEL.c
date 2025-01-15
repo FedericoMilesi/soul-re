@@ -25,6 +25,7 @@
 #include "Game/RAZIEL/STEERING.h"
 #include "Game/RAZIEL/SPIDER.h"
 #include "Game/G2/ANMG2ILF.h"
+#include "Game/EVENT.h"
 
 /*.sbss*/
 STATIC Player Raziel;
@@ -640,7 +641,64 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RelocateConstrict);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessEffects);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessHints);
+void ProcessHints()
+{
+    long hint;
+
+    hint = HINT_GetCurrentHint();
+
+    if (!(Raziel.playerEventHistory & 0x2000))
+    {
+        if ((Raziel.playerEvent & 0x2000))
+        {
+            if (hint == -1)
+            {
+                HINT_StartHint(12);
+            }
+
+            if ((hint == 12) && (Raziel.State.SectionList->Process == StateHandlerGlyphs))
+            {
+                HINT_KillSpecificHint(hint);
+
+                HINT_StartHint(40);
+            }
+
+            if ((hint == 40) && (Raziel.State.SectionList->Process != StateHandlerGlyphs))
+            {
+                HINT_KillSpecificHint(hint);
+
+                HINT_StartHint(12);
+            }
+        }
+        else if (hint == 12)
+        {
+            HINT_KillSpecificHint(hint);
+        }
+    }
+    else if (hint == 12)
+    {
+        HINT_KillSpecificHint(hint);
+    }
+    else if (hint == 40)
+    {
+        HINT_KillSpecificHint(hint);
+    }
+
+    if (!(Raziel.playerEventHistory & 0x10000))
+    {
+        if ((Raziel.playerEvent & 0x10000))
+        {
+            if (hint == -1)
+            {
+                HINT_StartHint(32);
+            }
+        }
+        else if (hint == 32)
+        {
+            HINT_KillSpecificHint(hint);
+        }
+    }
+}
 
 void ProcessInteractiveMusic(Instance *instance)
 {

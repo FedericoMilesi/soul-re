@@ -22,5 +22,8 @@ void EVENT_ProcessEvents(EventPointers *eventPointers, Level *level);
 void EVENT_BSPProcess(StreamUnit *streamUnit);
 void EVENT_ResetAllOneTimeVariables();
 void EVENT_ProcessHints();
+long HINT_GetCurrentHint();
+void HINT_StartHint(short hintNumber);
+void HINT_KillSpecificHint(short hintNumber);
 
 #endif
