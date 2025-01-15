@@ -26,6 +26,7 @@
 #include "Game/RAZIEL/SPIDER.h"
 #include "Game/G2/ANMG2ILF.h"
 #include "Game/EVENT.h"
+#include "Game/RAZIEL/RAZLIB.h"
 
 /*.sbss*/
 STATIC Player Raziel;
@@ -639,7 +640,89 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessConstrict);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RelocateConstrict);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessEffects);
+void ProcessEffects(Instance *instance)
+{
+    Instance *heldInst;
+    int step;
+
+    heldInst = razGetHeldItem();
+
+    if (((Raziel.effectsFlags & 0x4)) && (razUpdateSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle) == 0))
+    {
+        SndEndLoop(Raziel.soundHandle);
+
+        Raziel.soundHandle = 0;
+
+        Raziel.effectsFlags &= ~0x4;
+    }
+
+    if (((Raziel.effectsFlags & 0x8)) && (razUpdateSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle2) == 0))
+    {
+        SndEndLoop(Raziel.soundHandle2);
+
+        Raziel.soundHandle2 = 0;
+
+        Raziel.effectsFlags &= ~0x8;
+    }
+
+    if ((Raziel.effectsFlags & 0x2))
+    {
+        if (Raziel.throwInstance != NULL)
+        {
+            instance = Raziel.throwInstance;
+        }
+        else if (heldInst != NULL)
+        {
+            if ((Raziel.Senses.heldClass == 0x1) || (Raziel.Senses.heldClass == 0x2) || (Raziel.Senses.heldClass == 0x3))
+            {
+                instance = heldInst;
+            }
+            else
+            {
+                Raziel.effectsFlags &= ~0x2;
+
+                Raziel.throwInstance = NULL;
+            }
+        }
+    }
+
+    if ((Raziel.effectsFlags & 0x1))
+    {
+        Raziel.effectsFadeSteps += Raziel.effectsFadeStep * gameTrackerX.timeMult;
+
+        step = Raziel.effectsFadeSteps / 4096;
+
+        instance->fadeValue += step;
+
+        if (step > 0)
+        {
+            if (instance->fadeValue > Raziel.effectsFadeDest)
+            {
+                instance->fadeValue = Raziel.effectsFadeDest;
+
+                Raziel.effectsFlags &= ~0x1;
+
+                if (instance == Raziel.throwInstance)
+                {
+                    Raziel.effectsFlags &= ~0x2;
+                }
+            }
+        }
+        else if ((step < 0) && (instance->fadeValue < Raziel.effectsFadeDest))
+        {
+            instance->fadeValue = Raziel.effectsFadeDest;
+
+            Raziel.effectsFlags &= ~0x1;
+
+            if (instance == Raziel.throwInstance)
+            {
+                Raziel.effectsFlags &= ~0x2;
+
+                Raziel.throwInstance = NULL;
+            }
+        }
+    }
+}
 
 void ProcessHints()
 {
