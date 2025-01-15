@@ -650,7 +650,69 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", SetTimer);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessSpecialAbilities);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", GetControllerMessages);
+int GetControllerMessages(long *controlCommand)
+{
+    if ((controlCommand[1] & RazielCommands[2]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x80000000, 0);
+    }
+    else if ((controlCommand[2] & RazielCommands[2]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x20000000, 0);
+    }
+
+    if ((controlCommand[1] & RazielCommands[1]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x80000002, 0);
+    }
+    else if ((controlCommand[2] & RazielCommands[1]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x20000002, 0);
+    }
+
+    if ((controlCommand[1] & RazielCommands[3]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x80000001, 0);
+    }
+    else if ((controlCommand[2] & RazielCommands[3]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x20000001, 0);
+    }
+
+    if ((controlCommand[1] & RazielCommands[7]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x80000004, 0);
+    }
+    else if ((controlCommand[2] & RazielCommands[7]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x20000004, 0);
+    }
+
+    if ((controlCommand[1] & RazielCommands[6]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x80000008, 0);
+    }
+    else if ((controlCommand[2] & RazielCommands[6]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x20000008, 0);
+    }
+
+    if ((controlCommand[1] & RazielCommands[9]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x80000020, 0);
+    }
+    else if ((controlCommand[2] & RazielCommands[9]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x20000020, 0);
+    }
+
+    if ((controlCommand[1] & RazielCommands[0]))
+    {
+        EnMessageQueueData(&Raziel.padCommands, 0x80000010, 0);
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielAdditionalCollide);
 
