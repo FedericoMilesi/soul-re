@@ -769,7 +769,10 @@ int SetupReaction(Instance *player, Instance *instance)
     return FaceAngle;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", CheckHolding);
+int CheckHolding(Instance *instance)
+{
+    return instance->LinkChild != NULL;
+}
 
 void DisableWristCollision(Instance *instance, int Side)
 {
