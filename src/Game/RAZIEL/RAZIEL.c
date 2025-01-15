@@ -867,7 +867,49 @@ void RazielProcess(Instance *playerInstance, GameTracker *gameTracker)
     Norm.x = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielInit);
+void RazielInit(Instance *instance, GameTracker *gameTracker)
+{
+    instance->data = instance->object->data;
+
+    gameTracker->playerInstance = instance;
+
+    instance->intro = NULL;
+
+    instance->zVel = 0;
+    instance->zAccl = 0;
+
+    instance->yVel = 0;
+    instance->yAccl = 0;
+
+    instance->work0 = 0;
+    instance->work1 = 0;
+
+    instance->offset.x = 0;
+    instance->offset.y = 0;
+    instance->offset.z = 0;
+
+    instance->currentMainState = 0;
+    instance->currentSubState = 0;
+
+    instance->matrix = NULL;
+
+    instance->maxZVel = 0;
+
+    instance->work3 = 0;
+
+    instance->lightGroup = 0;
+
+    instance->flags = ((instance->flags | 0x400) & ~0x100) | 0x80;
+    instance->flags2 |= 0x84;
+
+    OBTABLE_GetInstanceCollideFunc(instance);
+    OBTABLE_GetInstanceProcessFunc(instance);
+
+    DisableWristCollision(instance, 2);
+    DisableWristCollision(instance, 1);
+
+    InitStates(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielCollide);
 
