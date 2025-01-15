@@ -8,6 +8,8 @@ Soul Reaverse is a project that seeks to reconstruct the source code of the PSX 
 
 The current progress of the project is 73% completion, excluding overlays.
 
+Discord server: https://discord.gg/VwCPdfbxgm
+
 ## Building (Linux)
 
 ### Install build dependencies
