@@ -30,5 +30,6 @@ void PhysicsForceSetWater(Instance *instance, int *Time, int Depth, int rate, in
 int PHYSICS_CheckDontGrabEdge(PCollideInfo *CInfo);
 void PhysicsDefaultEdgeGrabResponse(Instance *instance, evPhysicsEdgeData *Data, int blockFlag);
 int PHYSICS_CheckForValidMove(Instance *instance, SVECTOR *startVec, SVECTOR *endVec, int segment);
+int PhysicsCheckEdgeGrabbing(Instance *instance, GameTracker *gameTracker, intptr_t Data, short Mode);
 
 #endif

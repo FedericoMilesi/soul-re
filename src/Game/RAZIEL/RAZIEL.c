@@ -743,7 +743,31 @@ int GetEngageEvent(Instance *instance)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", SetupReaction);
+int SetupReaction(Instance *player, Instance *instance)
+{
+    int FaceAngle;
+    int isEvent;
+
+    player->yVel = 0;
+    player->xVel = 0;
+
+    player->work3 = (long)instance;
+
+    isEvent = GetEngageEvent(instance) != 0x2000001;
+
+    FaceAngle = player->position.z;
+
+    if (isEvent != 0)
+    {
+        PhysicsCheckEdgeGrabbing(player, gameTracker, SetPhysicsEdgeData(400, -256, 144, 0, -196, 498, &Raziel.Senses.ForwardNormal, &Raziel.Senses.AboveNormal, &Raziel.Senses.Delta), 1);
+
+        PhysicsDefaultEdgeGrabResponse(player, (evPhysicsEdgeData *)SetPhysicsEdgeData(0, 0, 0, 0, -141, 0, &Raziel.Senses.ForwardNormal, NULL, &Raziel.Senses.Delta), 1);
+    }
+
+    player->position.z = FaceAngle;
+
+    return FaceAngle;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", CheckHolding);
 
