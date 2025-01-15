@@ -642,7 +642,71 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessEffects);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessHints);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessInteractiveMusic);
+void ProcessInteractiveMusic(Instance *instance)
+{
+    Level *level;
+    int temp; // not from decls.h
+
+    level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+    RAZIEL_SetInteractiveMusic(6, level->unitFlags & 0x2);
+    RAZIEL_SetInteractiveMusic(9, level->unitFlags & 0x200);
+    RAZIEL_SetInteractiveMusic(10, level->unitFlags & 0x100);
+    RAZIEL_SetInteractiveMusic(7, level->unitFlags & 0x40);
+    RAZIEL_SetInteractiveMusic(8, level->unitFlags & 0x80);
+    RAZIEL_SetInteractiveMusic(11, level->unitFlags & 0x400);
+    RAZIEL_SetInteractiveMusic(14, level->unitFlags & 0x4000);
+
+    if ((level->unitFlags & 0x2))
+    {
+        if (!(level->unitFlags & 0xC0))
+        {
+            temp = GAMELOOP_GetTimeOfDay();
+
+            RAZIEL_SetInteractiveMusic(7, temp != 1900);
+            RAZIEL_SetInteractiveMusic(8, temp == 1900);
+        }
+    }
+
+    RAZIEL_SetInteractiveMusic(12, Raziel.CurrentPlane == 2);
+    RAZIEL_SetInteractiveMusic(5, Raziel.Mode & 0x40000);
+
+    if (((level->unitFlags & 0x10)) || ((Raziel.Mode & 0x2000000)))
+    {
+        Raziel.soundModifier &= ~0x1E;
+
+        RAZIEL_SetInteractiveMusic(3, 1);
+        return;
+    }
+
+    if (((level->unitFlags & 0x8)) || ((Raziel.Senses.Flags & 0x20)))
+    {
+        Raziel.soundModifier &= ~0x1E;
+
+        RAZIEL_SetInteractiveMusic(2, 1);
+        return;
+    }
+
+    if ((level->unitFlags & 0x4))
+    {
+        Raziel.soundModifier &= ~0x1E;
+
+        RAZIEL_SetInteractiveMusic(1, 1);
+        return;
+    }
+
+    if ((level->unitFlags & 0x20))
+    {
+        Raziel.soundModifier &= ~0x1E;
+
+        RAZIEL_SetInteractiveMusic(4, 1);
+        return;
+    }
+
+    Raziel.soundModifier &= ~0x1E;
+
+    SOUND_SetMusicModifier(0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessTimers);
 
