@@ -894,7 +894,10 @@ void ProcessInteractiveMusic(Instance *instance)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessTimers);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", SetTimer);
+void SetTimer(int ticks)
+{
+    Raziel.timeAccumulator = ticks << 12;
+}
 
 void ProcessSpecialAbilities(Instance *instance)
 {
