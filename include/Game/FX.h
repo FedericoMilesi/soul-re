@@ -44,5 +44,6 @@ void FX_Spiral(PrimPool *primPool, unsigned long **ot);
 void FX_EndInstanceParticleEffects(Instance *instance);
 void FX_DrawAllGeneralEffects(MATRIX *wcTransform, VertexPool *vertexPool, PrimPool *primPool, unsigned long **ot);
 void FX_Blood(SVector *location, SVector *input_vel, SVector *accel, int amount, long color, long size);
+void FX_MakeWaterBubble(SVector *position, SVector *vel, SVector *accl, long splashZ, BubbleParams *BP);
 
 #endif

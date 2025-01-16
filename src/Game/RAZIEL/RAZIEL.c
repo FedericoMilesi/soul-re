@@ -1201,4 +1201,84 @@ long RAZIEL_OkToLookAround(Instance *playerInstance)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", TrailWaterFX);
+void TrailWaterFX(Instance *instance, int Segment, int Bubbles, int Type)
+{
+    SVector Pos;
+    SVector Vel;
+    SVector Accl = {0};
+    int i;
+    int j;
+    Level *level;
+    BubbleParams BP;
+    int temp, temp2; // not from decls.h
+
+    level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+    BP.DisperseFrames = 5;
+
+    BP.KillScale = 128;
+
+    BP.MinSplashSize = 2048;
+
+    BP.MaxSpeed = 24;
+    BP.MaxSpeedRange = 24;
+
+    BP.ScaleRate = 32;
+    BP.ScaleRateRange = 16;
+
+    BP.UniqueBubbles = 4;
+
+    if ((instance->matrix != NULL) && (instance->oldMatrix != NULL))
+    {
+        for (i = 0; i < 2; i++)
+        {
+            Pos.x = instance->oldMatrix[Segment].t[0] + (((instance->matrix[Segment].t[0] - instance->oldMatrix[Segment].t[0]) * i) / 2);
+            Pos.y = instance->oldMatrix[Segment].t[1] + (((instance->matrix[Segment].t[1] - instance->oldMatrix[Segment].t[1]) * i) / 2);
+            Pos.z = instance->oldMatrix[Segment].t[2] + (((instance->matrix[Segment].t[2] - instance->oldMatrix[Segment].t[2]) * i) / 2);
+
+            for (j = 0; j < Bubbles; j++)
+            {
+                Vel.x = Pos.x - instance->oldMatrix[Segment].t[0] + (rand() % 20) - 10;
+                Vel.y = Pos.y - instance->oldMatrix[Segment].t[1] + (rand() % 20) - 10;
+
+                if (Type == 0)
+                {
+                    Vel.z = Pos.z - instance->oldMatrix[Segment].t[2] + (rand() % 10);
+
+                    if ((Vel.z << 16) <= 0)
+                    {
+                        Vel.z = 1;
+                    }
+
+                    Accl.z = 0;
+
+                    BP.StartScale = 3072;
+                    BP.StartScaleRange = 256;
+
+                    FX_MakeWaterBubble(&Pos, &Vel, &Accl, level->waterZLevel, &BP);
+                }
+                else if (Type == 1)
+                {
+                    Vel.z = (rand() % 20) + 6;
+
+                    // TODO: the following temp vars aren't really needed, have to find the actual arithmetic operations
+                    temp2 = rand();
+
+                    temp = temp2;
+
+                    if (temp < 0)
+                    {
+                        temp2 = temp + 3;
+                    }
+
+                    Accl.z = (temp - ((temp2 >> 2) << 2)) + 1;
+
+                    BP.StartScale = 4096;
+                    BP.StartScaleRange = 2048;
+
+                    FX_MakeWaterBubble(&Pos, &Vel, &Accl, level->waterZLevel, &BP);
+                }
+            }
+        }
+    }
+}
