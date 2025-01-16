@@ -896,7 +896,105 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessTimers);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", SetTimer);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessSpecialAbilities);
+void ProcessSpecialAbilities(Instance *instance)
+{
+    unsigned long reaver;
+
+    if ((Raziel.Abilities & 0x8))
+    {
+        if (debugRazielFlags2 != 0)
+        {
+            unsigned long temp;
+
+            temp = 1 << (Raziel.currentSoulReaver + 9);
+
+            if (temp != debugRazielFlags2)
+            {
+                temp = debugRazielFlags2 & ~temp;
+
+                debugRazielFlags2 = temp;
+            }
+
+            reaver = razGetReaverFromMask(temp);
+        }
+        else if (Raziel.CurrentPlane == 1)
+        {
+            reaver = 2;
+
+            debugRazielFlags2 = 0x800;
+        }
+        else
+        {
+            reaver = 1;
+
+            debugRazielFlags2 = 0x400;
+        }
+
+        if (Raziel.soulReaver == NULL)
+        {
+            Object *soulReaverOb;
+
+            soulReaverOb = (Object *)objectAccess[22].object;
+
+            if (soulReaverOb != NULL)
+            {
+                razReaverPickup(instance, INSTANCE_BirthObject(instance, soulReaverOb, 0));
+
+                RAZIEL_DebugHealthFillUp();
+            }
+        }
+        else if (Raziel.currentSoulReaver != reaver)
+        {
+            INSTANCE_Post(Raziel.soulReaver, 0x800103, reaver);
+
+            Raziel.currentSoulReaver = reaver;
+        }
+        else if (reaver == 6)
+        {
+            Level *level;
+
+            level = STREAM_GetLevelWithID(instance->currentStreamUnitID);
+
+            if (instance->waterFace != NULL)
+            {
+                if (instance->matrix == NULL)
+                {
+                    return;
+                }
+
+                if (instance->matrix[41].t[2] < instance->splitPoint.z)
+                {
+                    razReaverImbue(2);
+                }
+            }
+            else
+            {
+                if (instance->matrix == NULL)
+                {
+                    return;
+                }
+
+                if (instance->matrix[41].t[2] < level->waterZLevel)
+                {
+                    razReaverImbue(2);
+                }
+            }
+        }
+    }
+    else if (Raziel.soulReaver != NULL)
+    {
+        INSTANCE_UnlinkFromParent(Raziel.soulReaver);
+
+        INSTANCE_KillInstance(Raziel.soulReaver);
+
+        Raziel.soulReaver = NULL;
+        Raziel.currentSoulReaver = 0;
+
+        debugRazielFlags2 = 0;
+
+        Raziel.Senses.heldClass = 0;
+    }
+}
 
 int GetControllerMessages(long *controlCommand)
 {
