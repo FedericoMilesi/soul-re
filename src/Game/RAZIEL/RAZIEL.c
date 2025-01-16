@@ -1161,7 +1161,78 @@ void RazielInit(Instance *instance, GameTracker *gameTracker)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielCollide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RAZIEL_TurnHead);
+void RAZIEL_TurnHead(Instance *instance, short *rotx, short *rotz, GameTracker *gameTracker)
+{
+    Rotation rot;
+    evActionLookAroundData data;
+    short rx;
+    short rz;
+
+    (void)gameTracker;
+
+    if (((Raziel.Mode & 0x20000)) && (!(Raziel.throwMode & 0x4)))
+    {
+        *rotx += gameTrackerX.controlData[0][4] / 8;
+        *rotz -= gameTrackerX.controlData[0][3] / 6;
+
+        if ((Raziel.extraRot.x != 0) && (*rotx != 0))
+        {
+            *rotx -= Raziel.throwData->coilRot;
+        }
+
+        *rotx += Raziel.extraRot.x - 4096;
+
+        rot.x = *rotx;
+        rot.y = 0;
+        rot.z = *rotz;
+
+        LimitRotation(&rot);
+
+        *rotx = rot.x - (Raziel.extraRot.x - 4096);
+        *rotz = rot.z;
+
+        ThrowSetFocusPoint(instance, &rot);
+
+        if (Raziel.extraRot.x != 0)
+        {
+            CAMERA_SetLookRot(&theCamera, *rotx + Raziel.throwData->coilRot, *rotz);
+        }
+    }
+    else
+    {
+        *rotx += gameTrackerX.controlData[0][4] / 4;
+        *rotz -= gameTrackerX.controlData[0][3] / 3;
+
+        rx = *rotx & 0xFFF;
+
+        if (rx > 2048)
+        {
+            rx |= ~0xFFF;
+        }
+
+        *rotx = rx;
+
+        rz = *rotz & 0xFFF;
+
+        if (rz > 2048)
+        {
+            rz |= ~0xFFF;
+        }
+
+        *rotz = rz;
+
+        data.minx = -768;
+        data.maxx = 512;
+
+        data.rotx = rotx;
+        data.rotz = rotz;
+
+        data.minz = -1024;
+        data.maxz = 1024;
+
+        razRotateUpperBody(instance, &data);
+    }
+}
 
 void RAZIEL_SetLookAround(Instance *instance)
 {
