@@ -59,5 +59,6 @@ void G2EmulationSetMode(CharacterState *In, int CurrentSection, int Mode);
 void G2EmulationInit();
 void G2EmulationInstanceToInstanceSwitchAnimation(Instance *instance, Instance *host, int CurrentSection, int NewAnim, int NewFrame, int Frames, int Mode);
 intptr_t SetPhysicsEdgeData(int UpperOffset, int ForwardOffset, int AboveOffset, int x, int y, int z, SVector *Normal1, SVector *Normal2, SVector *Delta);
+intptr_t SetAnimationControllerDoneData(Instance *instance, long segment, long type, intptr_t data);
 
 #endif

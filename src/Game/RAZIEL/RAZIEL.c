@@ -302,7 +302,33 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", DefaultStateHandler);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielAnimCallback);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielAnimCallbackDuringPause);
+long RazielAnimCallbackDuringPause(G2Anim *anim, int sectionID, G2AnimCallbackMsg message, long messageDataA, long messageDataB, void *data)
+{
+    evAnimationControllerDoneData *ControllerData;
+
+    (void)anim;
+    (void)sectionID;
+
+    if (message == G2ANIM_MSG_SEGCTRLR_INTERPDONE)
+    {
+        ControllerData = (evAnimationControllerDoneData *)SetAnimationControllerDoneData(Raziel.State.CharacterInstance, messageDataB, messageDataA, (intptr_t)data);
+
+        if (ControllerData->data == 2)
+        {
+            AlgorithmicWings(Raziel.State.CharacterInstance, ControllerData);
+        }
+        else if (ControllerData->data == 0)
+        {
+            G2Anim_InterpDisableController(&ControllerData->instance->anim, ControllerData->segment, ControllerData->type, 300);
+        }
+        else if (ControllerData->data == 4)
+        {
+            G2Anim_DisableController(&ControllerData->instance->anim, ControllerData->segment, ControllerData->type);
+        }
+    }
+
+    return messageDataA;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielQuery);
 

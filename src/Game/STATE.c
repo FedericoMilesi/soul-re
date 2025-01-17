@@ -388,7 +388,7 @@ intptr_t SetPhysicsDropHeightData(Position *offset, int dropOffset, int mode)
     return (intptr_t)ptr;
 }
 
-intptr_t SetAnimationControllerDoneData(Instance *instance, long segment, long type, int data)
+intptr_t SetAnimationControllerDoneData(Instance *instance, long segment, long type, intptr_t data)
 {
     evAnimationControllerDoneData *Ptr;
 
