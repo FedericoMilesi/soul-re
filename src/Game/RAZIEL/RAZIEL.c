@@ -892,7 +892,159 @@ void ProcessInteractiveMusic(Instance *instance)
     SOUND_SetMusicModifier(0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessTimers);
+void ProcessTimers(Instance *instance)
+{
+    if (Raziel.timeAccumulator > 0)
+    {
+        Raziel.timeAccumulator -= gameTrackerX.timeMult;
+
+        if (Raziel.timeAccumulator <= 0)
+        {
+            INSTANCE_Post(instance, 0x100015, -Raziel.timeAccumulator);
+
+            Raziel.timeAccumulator = 0;
+        }
+    }
+
+    if (Raziel.soundTimerNext > 0)
+    {
+        Raziel.soundTimerNext -= gameTrackerX.timeMult;
+
+        if (Raziel.soundTimerNext <= 0)
+        {
+            Raziel.soundTimerNext = 0;
+
+            switch (Raziel.soundTimerData)
+            {
+            case 1:
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle, 19, 1000, 1000, 120, 120, 4096, 3500);
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle2, 20, 1030, 1030, 120, 120, 4096, 3500);
+
+                Raziel.soundTimerNext = 122880;
+                Raziel.soundTimerData = 2;
+
+                Raziel.effectsFlags |= 0x8;
+                break;
+            case 2:
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle, 19, 1000, 1000, 120, 0, 245760, 3500);
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle2, 20, 1030, 1030, 120, 0, 245760, 3500);
+
+                Raziel.soundTimerNext = 0;
+                Raziel.soundTimerData = 0;
+                break;
+            case 3:
+                if (Raziel.soundHandle != 0)
+                {
+                    SndEndLoop(Raziel.soundHandle);
+                }
+
+                Raziel.soundHandle = 0;
+
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle, 13, 0, 0, 100, 100, 4096, 3500);
+
+                Raziel.soundTimerNext = 40960;
+                Raziel.soundTimerData = 4;
+                break;
+            case 4:
+                if (Raziel.soundHandle2 != 0)
+                {
+                    SndEndLoop(Raziel.soundHandle2);
+                }
+
+                Raziel.soundHandle2 = 0;
+
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle2, 13, 50, 50, 95, 95, 4096, 3500);
+
+                Raziel.soundTimerNext = 28672;
+                Raziel.soundTimerData = 5;
+
+                Raziel.effectsFlags |= 0x8;
+                break;
+            case 5:
+                if (Raziel.soundHandle != 0)
+                {
+                    SndEndLoop(Raziel.soundHandle);
+                }
+
+                Raziel.soundHandle = 0;
+
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle, 13, -20, -20, 80, 80, 4096, 3500);
+
+                Raziel.soundTimerNext = 32768;
+                Raziel.soundTimerData = 6;
+                break;
+            case 6:
+                if (Raziel.soundHandle2 != 0)
+                {
+                    SndEndLoop(Raziel.soundHandle2);
+                }
+
+                Raziel.soundHandle2 = 0;
+
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle2, 13, 100, 100, 75, 75, 4096, 3500);
+
+                Raziel.soundTimerNext = 40960;
+                Raziel.soundTimerData = 7;
+                break;
+            case 7:
+                if (Raziel.soundHandle != 0)
+                {
+                    SndEndLoop(Raziel.soundHandle);
+                }
+
+                Raziel.soundHandle = 0;
+
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle, 13, -100, -100, 65, 65, 4096, 3500);
+
+                Raziel.soundTimerNext = 20480;
+                Raziel.soundTimerData = 8;
+                break;
+            case 8:
+                if (Raziel.soundHandle2 != 0)
+                {
+                    SndEndLoop(Raziel.soundHandle2);
+                }
+
+                Raziel.soundHandle2 = 0;
+
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle2, 13, 30, 30, 60, 60, 4096, 3500);
+
+                Raziel.soundTimerNext = 40960;
+                Raziel.soundTimerData = 9;
+                break;
+            case 9:
+                if (Raziel.soundHandle != 0)
+                {
+                    SndEndLoop(Raziel.soundHandle);
+                }
+
+                Raziel.soundHandle = 0;
+
+                if (Raziel.soundHandle2 != 0)
+                {
+                    SndEndLoop(Raziel.soundHandle2);
+                }
+
+                Raziel.soundHandle2 = 0;
+
+                Raziel.effectsFlags &= ~0x4;
+                Raziel.effectsFlags &= ~0x8;
+                break;
+            case 10:
+                razSetupSoundRamp(instance, (SoundRamp *)&Raziel.soundHandle, 51, -200, -200, 120, 0, 245760, 3500);
+
+                Raziel.soundTimerNext = 0;
+                Raziel.soundTimerData = 0;
+                break;
+            default:
+                if (Raziel.soundHandle != 0)
+                {
+                    SndEndLoop(Raziel.soundHandle);
+                }
+            }
+        }
+    }
+}
 
 void SetTimer(int ticks)
 {
