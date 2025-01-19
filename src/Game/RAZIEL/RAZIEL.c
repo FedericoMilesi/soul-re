@@ -662,7 +662,116 @@ void RazielPost(Instance *instance, unsigned long Message, uintptr_t Data)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", SetStates);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", ProcessConstrict);
+void ProcessConstrict()
+{
+    if ((Raziel.constrictFlag & 0x1))
+    {
+        Raziel.constrictIndex = 0;
+
+        Raziel.constrictFlag = (Raziel.constrictFlag & ~0x1) | 0x4;
+
+        Raziel.constrictWaitIndex = 0;
+
+        Raziel.constrictXTotal = 0;
+        Raziel.constrictYTotal = 0;
+
+        Raziel.constrictGoodCircle = 0;
+    }
+
+    Raziel.constrictXTotal += Raziel.State.CharacterInstance->position.x;
+    Raziel.constrictYTotal += Raziel.State.CharacterInstance->position.y;
+
+    Raziel.constrictData[Raziel.constrictIndex].x = Raziel.State.CharacterInstance->position.x;
+    Raziel.constrictData[Raziel.constrictIndex].y = Raziel.State.CharacterInstance->position.y;
+
+    Raziel.constrictIndex++;
+
+    if (Raziel.constrictIndex >= 32)
+    {
+        Raziel.constrictIndex = 0;
+    }
+
+    if ((Raziel.constrictFlag & 0x4))
+    {
+        if (Raziel.constrictWaitIndex == Raziel.constrictIndex)
+        {
+            Raziel.constrictFlag |= 0x22;
+        }
+        else
+        {
+            Raziel.constrictFlag &= ~0x20;
+        }
+    }
+
+    if ((Raziel.constrictFlag & 0x2))
+    {
+        int i;
+
+        Raziel.constrictCenter.x = Raziel.constrictXTotal / 32;
+        Raziel.constrictCenter.y = Raziel.constrictYTotal / 32;
+        Raziel.constrictCenter.z = Raziel.State.CharacterInstance->position.z + 256;
+
+        Raziel.constrictXTotal -= Raziel.constrictData[Raziel.constrictIndex].x;
+        Raziel.constrictYTotal -= Raziel.constrictData[Raziel.constrictIndex].y;
+
+        Raziel.constrictGoodCircle = 1;
+
+        for (i = 0; i < 32; i++)
+        {
+            if ((MATH3D_SquareLength(Raziel.constrictData[i].x - Raziel.constrictCenter.x, Raziel.constrictData[i].y - Raziel.constrictCenter.y, 0) - 1) > 819198)
+            {
+                Raziel.constrictGoodCircle = 0;
+            }
+        }
+
+        if (Raziel.constrictGoodCircle != 0)
+        {
+            int thisIndex;
+            int nextIndex;
+
+            thisIndex = Raziel.constrictIndex - 1;
+            nextIndex = Raziel.constrictIndex;
+
+            if (thisIndex < 0)
+            {
+                thisIndex = 31;
+            }
+
+            if (MATH3D_SquareLength(Raziel.constrictData[thisIndex].x - Raziel.constrictData[nextIndex].x, Raziel.constrictData[thisIndex].y - Raziel.constrictData[nextIndex].y, 0) > 1440000)
+            {
+                Raziel.constrictGoodCircle = 0;
+            }
+
+            if (Raziel.constrictGoodCircle != 0)
+            {
+                Raziel.constrictXTotal = 0;
+                Raziel.constrictYTotal = 0;
+
+                Raziel.constrictFlag = (Raziel.constrictFlag & ~0x2) | 0x1C;
+
+                Raziel.constrictWaitIndex = Raziel.constrictIndex;
+
+                if (Raziel.constrictGoodCircle >= 2)
+                {
+                    gameTrackerX.streamFlags |= 0x4;
+
+                    FX_EndConstrict(0x1, NULL);
+
+                    Raziel.constrictFlag = 0x1;
+                }
+
+                Raziel.constrictGoodCircle++;
+                return;
+            }
+        }
+
+        Raziel.constrictGoodCircle = 1;
+
+        Raziel.constrictFlag &= ~0x10;
+
+        FX_EndConstrict(0, NULL);
+    }
+}
 
 void RelocateConstrict(SVector *offset)
 {
