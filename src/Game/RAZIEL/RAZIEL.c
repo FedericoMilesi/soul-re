@@ -746,7 +746,112 @@ void StateHandlerSlide(CharacterState *In, int CurrentSection, intptr_t Data)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerBlock);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerDeCompression);
+void StateHandlerDeCompression(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+    short temp; // not from decls.h
+
+    In->CharacterInstance->cachedTFace = -1;
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if (CurrentSection == 0)
+            {
+                In->SectionList[CurrentSection].Data1 = Raziel.Mode;
+
+                ControlFlag = 0x119;
+
+                Raziel.Mode |= 0x1000;
+
+                PhysicsMode = 3;
+
+                SteerSwitchMode(In->CharacterInstance, 0);
+            }
+            else
+            {
+                In->SectionList[CurrentSection].Data1 = In->SectionList[CurrentSection - 1].Data1;
+            }
+
+            if (CurrentSection == 0)
+            {
+                temp = G2EmulationQueryAnimation(In, 0);
+
+                if (((Raziel.Mode & 0x20)) || (temp == 17) || (temp == 18) || (temp == 19) || (In->CharacterInstance->zVel < -256))
+                {
+                    if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 44, NULL, NULL) != 0)
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 41, 0, 1, 1);
+                    }
+                }
+                else if (!(Raziel.Mode & 0x10))
+                {
+                    if (Ptr->Data != 0)
+                    {
+                        if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 12, NULL, NULL) != 0)
+                        {
+                            G2EmulationSwitchAnimationCharacter(In, 29, 0, 0, 1);
+                        }
+                    }
+                    else if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 28, NULL, NULL) != 0)
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 37, 0, 1, 1);
+                    }
+                }
+                else if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 28, NULL, NULL) != 0)
+                {
+                    G2EmulationSwitchAnimationCharacter(In, 37, 0, 1, 1);
+                }
+            }
+
+            break;
+        case 0x100004:
+            SetPhysics(In->CharacterInstance, -16, 0, 0, 0);
+            break;
+        case 0x8000000:
+            if ((*PadData & RazielCommands[6]))
+            {
+                if (CurrentSection == 0)
+                {
+                    StateSwitchStateCharacterData(In, StateHandlerCrouch, 0);
+                }
+            }
+            else if ((*PadData & 0x8000000F))
+            {
+                if (CurrentSection == 0)
+                {
+                    if (G2EmulationQueryAnimation(In, 0) == 29)
+                    {
+                        StateSwitchStateCharacterData(In, StateHandlerMove, 0);
+                    }
+                    else
+                    {
+                        StateSwitchStateCharacterData(In, StateHandlerStartMove, 5);
+                    }
+                }
+            }
+            else
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 4));
+
+                Raziel.Mode = 0x1;
+            }
+
+            In->SectionList[CurrentSection].Data1 = 0;
+            break;
+        case 0x10000000:
+        case 0x80000000:
+        case 0x80000020:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerGlide);
 
