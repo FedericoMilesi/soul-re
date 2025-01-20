@@ -586,7 +586,176 @@ short G2AnimSection_UpdateOverInterval(G2AnimSection *section, short interval)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2AnimSection_AdvanceOverInterval);
+short G2AnimSection_AdvanceOverInterval(G2AnimSection *section, short interval)
+{
+    G2AnimKeylist *keylist;
+    short newTime;
+    short extraTime;
+    short elapsedTime;
+    short endTime;
+    short loopExtraTime;
+    short *swAlarmTable;
+    short swAlarmTime;
+    G2Anim *anim;
+    G2SVector3 motionVector;
+    unsigned long message;
+
+    loopExtraTime = 0;
+
+    if (((section->flags & 0x1)) || ((section->alarmFlags & 0x1)))
+    {
+        return 0;
+    }
+
+    anim = _G2AnimSection_GetAnim(section);
+
+    anim->flags |= 0x1;
+
+    G2AnimSection_ClearAlarm(section, 0x3);
+
+    keylist = section->keylist;
+
+    elapsedTime = section->elapsedTime;
+
+    section->flags &= ~0x4;
+
+    if ((section->flags & 0x2))
+    {
+        endTime = section->loopEndTime;
+    }
+    else
+    {
+        endTime = G2AnimKeylist_GetDuration(keylist);
+    }
+
+    newTime = elapsedTime + ((interval * section->speedAdjustment) >> 12);
+
+    if (section->swAlarmTable != NULL)
+    {
+        swAlarmTable = section->swAlarmTable;
+
+        while (swAlarmTime = *swAlarmTable, swAlarmTime != -1)
+        {
+            do // this do while is fake, only the code within is valid
+            {
+                if (((elapsedTime < swAlarmTime) && (newTime >= swAlarmTime)) || ((section->storedTime <= 0) && (elapsedTime == swAlarmTime)))
+                {
+                    section->alarmFlags |= 0x20;
+
+                    if (section->callback != NULL)
+                    {
+                        section->callback(anim, section->sectionID, G2ANIM_MSG_SWALARMSET, elapsedTime, newTime, section->callbackData);
+                    }
+                }
+            } while (0);
+
+            swAlarmTable++;
+        }
+    }
+    else
+    {
+        G2AnimSection_ClearAlarm(section, 0x20);
+    }
+
+    _G2AnimSection_TriggerEffects(section, elapsedTime, newTime);
+
+    extraTime = newTime - endTime;
+
+    while (1)
+    {
+        if (extraTime >= 0)
+        {
+            if ((section->flags & 0x2))
+            {
+                message = 2;
+
+                section->alarmFlags |= 0x4;
+
+                G2AnimSection_JumpToTime(section, section->loopStartTime);
+
+                newTime = section->loopStartTime + extraTime;
+
+                loopExtraTime = newTime - endTime;
+
+                _G2AnimSection_TriggerEffects(section, section->loopStartTime - 1, newTime);
+
+                if (newTime >= endTime)
+                {
+                    newTime = endTime - 1;
+                }
+            }
+            else
+            {
+                message = 1;
+
+                newTime = endTime - 1;
+
+                section->alarmFlags |= 0x1;
+            }
+
+            if (section->firstSeg == 0)
+            {
+                anim = _G2AnimSection_GetAnim(section);
+
+                G2Anim_GetRootMotionOverInterval(anim, elapsedTime, endTime, &motionVector);
+            }
+
+            if (section->callback != NULL)
+            {
+                swAlarmTime = section->callback(_G2AnimSection_GetAnim(section), section->sectionID, message, newTime, extraTime, section->callbackData);
+
+                if (swAlarmTime != newTime)
+                {
+                    newTime = swAlarmTime;
+
+                    G2AnimSection_JumpToTime(section, swAlarmTime);
+                }
+                else if ((section->flags & 0x2))
+                {
+                    G2AnimSection_JumpToTime(section, swAlarmTime);
+
+                    section->storedTime = section->loopStartTime;
+                }
+                else
+                {
+                    *(unsigned int *)&motionVector.x = 0;
+                    motionVector.z = 0;
+                }
+            }
+
+            if (section->firstSeg == 0)
+            {
+                unsigned short z;
+                unsigned long xy;
+
+                xy = *(int *)&motionVector.x;
+                z = motionVector.z;
+
+                *(int *)&anim->rootTrans.x = xy;
+                anim->rootTrans.z = z;
+
+                section->flags |= 0x80;
+            }
+
+            if (!(section->flags & 0x2))
+            {
+                break;
+            }
+
+            endTime = section->loopEndTime;
+            extraTime = loopExtraTime;
+        }
+        else
+        {
+            extraTime = 0;
+            break;
+        }
+    }
+
+    section->elapsedTime = newTime;
+
+    return extraTime;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2AnimSection_RewindOverInterval);
 
