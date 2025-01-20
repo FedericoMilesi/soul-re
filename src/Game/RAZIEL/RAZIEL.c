@@ -245,7 +245,116 @@ void InitStates(Instance *PlayerInstance)
     gameTrackerX.raziel_collide_override = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateInitIdle);
+void StateInitIdle(CharacterState *In, int CurrentSection, intptr_t Ptr)
+{
+    evControlInitIdleData *data;
+    Instance *linkWeapon;
+
+    data = (evControlInitIdleData *)Ptr;
+
+    if (data == NULL)
+    {
+        data = (evControlInitIdleData *)SetControlInitIdleData(0, 0, 3);
+    }
+
+    linkWeapon = razGetHeldWeapon();
+
+    if (data->mode == 2)
+    {
+        if (razSwitchVAnimGroup(In->CharacterInstance, CurrentSection, 96, -1, -1) != 0)
+        {
+            G2EmulationSwitchAnimation(In, CurrentSection, 140, 0, 0, 1);
+        }
+    }
+    else if (data->mode == 3)
+    {
+        if (razSwitchVAnimGroup(In->CharacterInstance, CurrentSection, 100, -1, -1) != 0)
+        {
+            G2EmulationSwitchAnimation(In, CurrentSection, 141, 0, 0, 1);
+        }
+    }
+    else if (data->mode == 4)
+    {
+        if (razSwitchVAnimGroup(In->CharacterInstance, CurrentSection, 104, -1, -1) != 0)
+        {
+            G2EmulationSwitchAnimation(In, CurrentSection, 142, 0, 0, 1);
+        }
+    }
+    else if ((linkWeapon == NULL) || (CurrentSection != 1))
+    {
+        if (data->mode == 0)
+        {
+            G2EmulationSwitchAnimation(In, CurrentSection, 0, 0, data->frames, 2);
+        }
+        else if (data->mode == 1)
+        {
+            G2EmulationSwitchAnimation(In, CurrentSection, 55, 0, data->frames, 2);
+        }
+    }
+    else
+    {
+        if ((data->mode == 2) || (data->mode == 3) || (data->mode == 4))
+        {
+            data->mode = 0;
+        }
+
+        switch (Raziel.Senses.heldClass)
+        {
+        case 0:
+            break;
+        case 0x1:
+            if (data->mode == 0)
+            {
+                G2EmulationSwitchAnimation(In, 1, 50, 0, data->frames, 2);
+            }
+            else
+            {
+                G2EmulationSwitchAnimation(In, 1, 127, 0, data->frames, 2);
+            }
+
+            break;
+        case 0x1000:
+            if (data->mode == 0)
+            {
+                G2EmulationSwitchAnimation(In, 1, 117, 0, data->frames, 2);
+
+                razReaverScale(2800);
+            }
+            else
+            {
+                G2EmulationSwitchAnimation(In, 1, 137, 0, data->frames, 2);
+            }
+
+            break;
+        case 0x2:
+            if (data->mode == 0)
+            {
+                G2EmulationSwitchAnimation(In, 1, 84, 0, data->frames, 2);
+            }
+            else
+            {
+                G2EmulationSwitchAnimation(In, 1, 126, 0, data->frames, 2);
+            }
+
+            break;
+        case 0x3:
+            G2EmulationSwitchAnimation(In, 1, 98, 0, data->frames, 2);
+            break;
+        default:
+            if ((Raziel.Senses.heldClass != (unsigned int)CurrentSection) && (Raziel.Senses.heldClass == (unsigned int)CurrentSection))
+            {
+                if (data->mode == 0)
+                {
+                    G2EmulationSwitchAnimation(In, 1, 50, 0, data->frames, 2);
+                }
+                else
+                {
+                    G2EmulationSwitchAnimation(In, 1, 127, 0, data->frames, 2);
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerIdle);
 
