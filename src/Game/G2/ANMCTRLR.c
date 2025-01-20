@@ -511,7 +511,42 @@ void _G2AnimController_GetMatrix(G2AnimController *controller, G2Matrix *matrix)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2AnimController_GetVector);
+void _G2AnimController_GetVector(G2AnimController *controller, G2SVector3 *vector)
+{
+    G2SVector3 *dest;
+    unsigned short z;
+    unsigned long xy;
+    G2SVector3 *base;
+    G2SVector3 *offset;
+    long alpha;
+
+    base = &controller->data.vector.base;
+
+    dest = vector;
+
+    xy = *(unsigned long *)&base->x;
+    z = base->z;
+
+    *(unsigned long *)&dest->x = xy;
+    dest->z = z;
+
+    if ((controller->flags & 0x4000))
+    {
+        offset = &controller->data.vector.offset;
+
+        alpha = controller->elapsedTime;
+
+        gte_ldlvnlsv(dest);
+
+        gte_ldsv(offset);
+
+        gte_lddp(alpha);
+
+        gte_ngpl12();
+
+        gte_stlvnlsv(dest);
+    }
+}
 
 G2AnimController *_G2Anim_FindController(G2Anim *anim, int segNumber, int type)
 {
