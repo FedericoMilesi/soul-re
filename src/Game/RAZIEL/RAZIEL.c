@@ -358,7 +358,102 @@ void StateInitIdle(CharacterState *In, int CurrentSection, intptr_t Ptr)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerIdle);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerLookAround);
+void StateHandlerLookAround(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+
+    (void)Data;
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if (CurrentSection == 1)
+            {
+                Instance *instance;
+
+                instance = In->CharacterInstance;
+
+                G2Anim_EnableController(&instance->anim, 17, 14);
+                G2Anim_EnableController(&instance->anim, 16, 14);
+                G2Anim_EnableController(&instance->anim, 14, 14);
+
+                ControlFlag = 0x8001008;
+            }
+
+            if (G2EmulationQueryAnimation(In, CurrentSection) == 24)
+            {
+                StateInitIdle(In, CurrentSection, 0);
+            }
+
+            break;
+        case 0x100004:
+            if (CurrentSection == 1)
+            {
+                Instance *instance;
+
+                instance = In->CharacterInstance;
+
+                G2Anim_InterpDisableController(&instance->anim, 17, 14, 300);
+                G2Anim_InterpDisableController(&instance->anim, 16, 14, 300);
+                G2Anim_InterpDisableController(&instance->anim, 14, 14, 300);
+            }
+
+            break;
+        case 0x80000020:
+        {
+            int message;
+            int messageData;
+
+            if (StateHandlerDecodeHold(&message, &messageData) != 0)
+            {
+                if ((message == 0x80000) && (CurrentSection == 0))
+                {
+                    razLaunchForce(In->CharacterInstance);
+
+                    StateSwitchStateData(In, 0, StateHandlerThrow2, 0);
+                }
+
+                StateSwitchStateData(In, CurrentSection, StateHandlerThrow2, 0);
+
+                if ((Raziel.Senses.heldClass != 0x1000) && (Raziel.Senses.heldClass != 0x8))
+                {
+                    razSetFadeEffect(In->CharacterInstance->fadeValue, PlayerData->throwFadeValue, PlayerData->throwFadeInRate);
+                }
+
+                Raziel.returnState = StateHandlerIdle;
+
+                Raziel.throwMode = 0x2;
+            }
+
+            break;
+        }
+        case 0x100000:
+            StateSwitchStateData(In, CurrentSection, Raziel.returnState, 0);
+            break;
+        case 0x1000000:
+            if (CurrentSection == 0)
+            {
+                CAMERA_ForceEndLookaroundMode(&theCamera);
+            }
+
+            StateSwitchStateData(In, CurrentSection, StateHandlerHitReaction, Ptr->Data);
+            break;
+        case 0x40005:
+        case 0x40025:
+            StateSwitchStateData(In, CurrentSection, StateHandlerStumble, Ptr->Data);
+            break;
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+
+    if ((!(*PadData & RazielCommands[5])) || (!(*PadData & RazielCommands[4])))
+    {
+        EnMessageQueueData(&In->SectionList[CurrentSection].Defer, 0x100000, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerCrouch);
 
