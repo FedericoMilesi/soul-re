@@ -457,7 +457,73 @@ void StateHandlerLookAround(CharacterState *In, int CurrentSection, intptr_t Dat
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerCrouch);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerDropAction);
+void StateHandlerDropAction(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if ((razGetHeldItem() != NULL) && (CurrentSection == 1))
+            {
+                switch (Raziel.Senses.heldClass)
+                {
+                case 0:
+                    break;
+                case 0x1:
+                    G2EmulationSwitchAnimation(In, 1, 83, 0, 3, 1);
+                    break;
+                case 0x2:
+                    G2EmulationSwitchAnimation(In, 1, 105, 0, 3, 1);
+                    break;
+                case 0x3:
+                    G2EmulationSwitchAnimation(In, 1, 99, 0, 3, 1);
+                    break;
+                case 0x1000:
+                    break;
+                }
+
+                INSTANCE_Post(razGetHeldItem(), 0x80002C, 0);
+            }
+            else if (CurrentSection == 2)
+            {
+                G2EmulationSwitchAnimationAlpha(In, 2, 69, 0, 3, 1, 1);
+            }
+            else if (CurrentSection == 0)
+            {
+                G2EmulationSwitchAnimationAlpha(In, 0, 3, 0, 3, 1, 1);
+
+                Raziel.Mode = 0x40;
+            }
+
+            break;
+        case 0x8000000:
+            if (CurrentSection == 1)
+            {
+                if (razGetHeldItem() != NULL)
+                {
+                    INSTANCE_Post(razGetHeldItem(), 0x800008, 0);
+
+                    razReaverOn();
+                }
+
+                StateSwitchStateCharacterData(In, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+            }
+
+            break;
+        case 0x10000000:
+        case 0x20000008:
+        case 0x80000001:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerSoulSuck);
 
