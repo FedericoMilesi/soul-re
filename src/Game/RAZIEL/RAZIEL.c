@@ -691,7 +691,58 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerJump);
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerFall);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerSlide);
+void StateHandlerSlide(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if (CurrentSection == 0)
+            {
+                Raziel.Mode = 0x400000;
+
+                ControlFlag = 0x509;
+
+                PhysicsMode = 0;
+
+                ResetPhysics(In->CharacterInstance, -16);
+
+                Raziel.soundHandle = SOUND_Play3dSound(&In->CharacterInstance->position, 30, 0, 60, 3500);
+            }
+
+            break;
+        case 0x100004:
+            if (Raziel.soundHandle != 0)
+            {
+                SndEndLoop(Raziel.soundHandle);
+
+                Raziel.soundHandle = 0;
+            }
+
+            break;
+        case 0x100000:
+            StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+            break;
+        case 0x4010008:
+            StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+            break;
+        case 0x4010200:
+        case 0x20000001:
+        case 0x80000000:
+        case 0x80000001:
+        case 0x80000008:
+        case 0x80000020:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerBlock);
 
