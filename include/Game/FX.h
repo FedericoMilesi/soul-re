@@ -45,5 +45,7 @@ void FX_EndInstanceParticleEffects(Instance *instance);
 void FX_DrawAllGeneralEffects(MATRIX *wcTransform, VertexPool *vertexPool, PrimPool *primPool, unsigned long **ot);
 void FX_Blood(SVector *location, SVector *input_vel, SVector *accel, int amount, long color, long size);
 void FX_MakeWaterBubble(SVector *position, SVector *vel, SVector *accl, long splashZ, BubbleParams *BP);
+FXGlowEffect *FX_DoInstanceOneSegmentGlowWithTime(Instance *instance, long segment, long *color, long numColors, long atuColorCycleRate, long width, long height, long ATULifeTime);
+void FX_StopAllGlowEffects(Instance *instance, int fadeout_time);
 
 #endif
