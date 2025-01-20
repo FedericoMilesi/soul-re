@@ -806,22 +806,17 @@ void StateHandlerPickupObject(CharacterState *In, int CurrentSection, intptr_t D
             if ((Raziel.Mode & 0x40000))
             {
                 StateSwitchStateData(In, CurrentSection, StateHandlerSwim, 0);
-
-                Raziel.returnState = NULL;
             }
             else if ((Raziel.returnState == StateHandlerIdle) || (Raziel.returnState == NULL))
             {
                 StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
-
-                Raziel.returnState = NULL;
             }
             else
             {
                 StateSwitchStateData(In, CurrentSection, Raziel.returnState, 0);
-
-                Raziel.returnState = NULL;
             }
 
+            Raziel.returnState = NULL;
             break;
         case 0x80000000:
         case 0x80000020:
