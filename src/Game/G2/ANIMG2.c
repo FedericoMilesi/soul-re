@@ -634,7 +634,7 @@ short G2AnimSection_AdvanceOverInterval(G2AnimSection *section, short interval)
     {
         swAlarmTable = section->swAlarmTable;
 
-        while (swAlarmTime = *swAlarmTable, swAlarmTime != -1)
+        while ((swAlarmTime = *swAlarmTable) != -1)
         {
             do // this do while is fake, only the code within is valid
             {
