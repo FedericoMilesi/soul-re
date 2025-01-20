@@ -610,7 +610,76 @@ void StateInitStartMove(CharacterState *In, int CurrentSection, int Frame)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerStartMove);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateInitMove);
+void StateInitMove(CharacterState *In, int CurrentSection, int Frames)
+{
+    if ((*PadData & RazielCommands[7]))
+    {
+        Raziel.Mode = 0x2;
+
+        if ((ControlFlag & 0x800000))
+        {
+            ControlFlag = 0x800000;
+        }
+        else
+        {
+            ControlFlag = 0;
+        }
+
+        ControlFlag |= 0x22119;
+
+        if (In->SectionList[CurrentSection].Data2 != 52)
+        {
+            razResetMotion(In->CharacterInstance);
+
+            if (razSwitchVAnimGroup(In->CharacterInstance, CurrentSection, 52, -1, -1) != 0)
+            {
+                razSwitchVAnimSingle(In->CharacterInstance, CurrentSection, 1, -1, -1);
+            }
+
+            In->SectionList[CurrentSection].Data2 = 52;
+        }
+    }
+    else if ((*PadData & RazielCommands[6]))
+    {
+        Raziel.Mode = 0x1000000;
+
+        if ((ControlFlag & 0x800000))
+        {
+            ControlFlag = 0x800000;
+        }
+        else
+        {
+            ControlFlag = 0;
+        }
+
+        ControlFlag |= 0x2119;
+
+        if (In->SectionList[CurrentSection].Data2 != 56)
+        {
+            razResetMotion(In->CharacterInstance);
+
+            if (razSwitchVAnimGroup(In->CharacterInstance, CurrentSection, 56, -1, -1) != 0)
+            {
+                G2EmulationSwitchAnimation(In, CurrentSection, 74, 0, 3, 2);
+            }
+
+            In->SectionList[CurrentSection].Data2 = 56;
+        }
+    }
+    else
+    {
+        Raziel.Mode = (Raziel.Mode & 0x200800) | 0x4;
+
+        ControlFlag |= 0x28119;
+
+        if ((Raziel.Abilities & 0x20))
+        {
+            ControlFlag |= 0x200000;
+        }
+
+        razSelectMotionAnim(In, CurrentSection, Frames, &In->SectionList[CurrentSection].Data2);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerMove);
 

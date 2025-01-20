@@ -42,5 +42,6 @@ void razAttachControllers();
 int razApplyMotion(CharacterState *In, int CurrentSection);
 int razSwitchVAnimGroup(Instance *instance, int section, int animGroup, int frame, int frames);
 int razUpdateSoundRamp(Instance *instance, SoundRamp *sound);
+void razSelectMotionAnim(CharacterState *In, int CurrentSection, int Frames, int *Anim);
 
 #endif
