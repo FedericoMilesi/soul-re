@@ -40,5 +40,10 @@ void TrailWaterFX(Instance *instance, int Segment, int Bubbles, int Type);
 void StateHandlerCrouch(CharacterState *In, int CurrentSection, intptr_t Data);
 void StateHandlerStartMove(CharacterState *In, int CurrentSection, intptr_t Data);
 void StateHandlerJump(CharacterState *In, int CurrentSection, intptr_t Data);
+int GetControllerMessages(long *controlCommand);
+void ProcessConstrict();
+void ProcessEffects(Instance *instance);
+void ProcessInteractiveMusic(Instance *instance);
+void ProcessSpecialAbilities(Instance *instance);
 
 #endif

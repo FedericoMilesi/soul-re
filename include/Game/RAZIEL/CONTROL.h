@@ -11,5 +11,7 @@ void ResetPhysics(Instance *instance, short gravity);
 void InitExternalForces(Force *Forces, int MaxForces);
 void SetExternalTransitionForce(Force *in, Instance *instance, int time, int x, int y, int z);
 void SetDampingPhysics(Instance *instance, int damping);
+void SetImpulsePhysics(Instance *instance, Player *player);
+void ProcessPhysics(Player *player, CharacterState *In, int CurrentSection, int Mode);
 
 #endif

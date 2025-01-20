@@ -60,5 +60,9 @@ void G2EmulationInit();
 void G2EmulationInstanceToInstanceSwitchAnimation(Instance *instance, Instance *host, int CurrentSection, int NewAnim, int NewFrame, int Frames, int Mode);
 intptr_t SetPhysicsEdgeData(int UpperOffset, int ForwardOffset, int AboveOffset, int x, int y, int z, SVector *Normal1, SVector *Normal2, SVector *Delta);
 intptr_t SetAnimationControllerDoneData(Instance *instance, long segment, long type, intptr_t data);
+void EnMessageQueue(MessageQueue *In, Message *Element);
+intptr_t SetAnimationInstanceSwitchData(Instance *instance, int anim, int frame, int frames, int mode);
+void StateGovernState(CharacterState *In, int Frames);
+void G2EmulatePlayAnimation(CharacterState *In);
 
 #endif
