@@ -593,7 +593,20 @@ void StateHandlerStartTurn(CharacterState *In, int CurrentSection, intptr_t Data
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateInitStartMove);
+void StateInitStartMove(CharacterState *In, int CurrentSection, int Frame)
+{
+    if ((*PadData & RazielCommands[7]))
+    {
+        StateSwitchStateData(In, CurrentSection, StateHandlerMove, 3);
+    }
+
+    if (razSwitchVAnimGroup(In->CharacterInstance, CurrentSection, 48, Frame, -1) != 0)
+    {
+        razSwitchVAnimSingle(In->CharacterInstance, CurrentSection, 0, Frame, -1);
+    }
+
+    ControlFlag |= 0x2000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerStartMove);
 
