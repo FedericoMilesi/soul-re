@@ -17,7 +17,7 @@ void G2Quat_Slerp_VM(long ratio, G2Quat *quatA, G2Quat *quatB, G2Quat *quatOut, 
 
     gte_ldv0sv(quatB);
 
-    gte_rtir12();
+    gte_nrtir12();
 
     cosTemp1 = (quatA->w * quatB->w) >> 12;
 

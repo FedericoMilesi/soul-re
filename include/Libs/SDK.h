@@ -135,12 +135,6 @@
     "mtc2    %0, $8"          \
     : : "r"(r0))
 
-#define gte_nlddp(r0) __asm__( \
-    "mtc2    %0, $8;"          \
-    "nop;"                     \
-    "nop;"                     \
-    : : "r"(r0))
-
 #define gte_gpl(sf) __asm__( \
     ".word %0"               \
     : : "g"(0x4BA0003E | ((sf) & 0x1) << 19))
@@ -228,13 +222,13 @@
     "or     $12, $13;"                   \
     "ctc2	$12, $0;"                      \
     "ctc2	$14, $1;"                      \
-    "nop;"                               \
-    "nop;"                               \
     :                                    \
     : "r"(r0)                            \
     : "$12", "$13", "$14")
 
 #define gte_rtir12() gte_mvmva(1, 0, 3, 3, 0)
+
+#define gte_nrtir12() gte_nmvmva(1, 0, 3, 3, 0)
 
 #define gte_stlvnl0(r0) __asm__( \
     "swc2    $25, 0(%0)"         \
