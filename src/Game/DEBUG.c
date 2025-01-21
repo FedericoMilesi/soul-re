@@ -1685,9 +1685,6 @@ void DEBUG_ProcessSecondController(GameTracker *gameTracker)
 
 void DEBUG_ProcessCheat(GameTracker *gameTracker)
 {
-    SVECTOR v;
-    VECTOR dv;
-    MATRIX rotate_mat;
     long angleRelCamera;
 
     angleRelCamera = 0;
@@ -1730,8 +1727,9 @@ void DEBUG_ProcessCheat(GameTracker *gameTracker)
 
     if (angleRelCamera != 0)
     {
-        memset(&v, 0, sizeof(SVECTOR));
-        memset(&dv, 0, sizeof(VECTOR));
+        SVECTOR v = {0};
+        VECTOR dv = {0};
+        MATRIX rotate_mat;
 
         v.vy = -256;
 

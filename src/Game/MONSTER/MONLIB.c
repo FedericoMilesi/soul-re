@@ -2477,19 +2477,13 @@ int MON_SetUpKnockBack(Instance *instance, Instance *enemy, evMonsterHitData *da
 
 void MON_DoDrainEffects(Instance *instance, Instance *ei)
 {
-    MonsterAttributes *ma;
-    MonsterVars *mv;
+    MonsterAttributes *ma = (MonsterAttributes *)instance->data;
+    MonsterVars *mv = (MonsterVars *)instance->extraData;
     MATRIX *mat;
     SVector location;
     SVector position;
     SVector vel;
-    SVector accel;
-
-    ma = (MonsterAttributes *)instance->data;
-
-    mv = (MonsterVars *)instance->extraData;
-
-    memset(&accel, 0, sizeof(SVector));
+    SVector accel = {0};
 
     if (ei == gameTrackerX.playerInstance)
     {

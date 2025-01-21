@@ -122,7 +122,7 @@ void MonsterInit(Instance *instance, GameTracker *gameTracker)
         }
         else
         {
-            memset(mv, 0, 608);
+            memset(mv, 0, 608); // TODO: third parameter needs changing to sizeof a struct (and maybe some arithmetic operation?)
 
             InitMessageQueue(&mv->messageQueue);
 
