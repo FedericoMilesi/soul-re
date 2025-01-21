@@ -683,7 +683,102 @@ void StateInitMove(CharacterState *In, int CurrentSection, int Frames)
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerMove);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerStopMove);
+void StateHandlerStopMove(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if (CurrentSection == 0)
+            {
+                Raziel.Mode = 0x4;
+
+                if ((ControlFlag & 0x800000))
+                {
+                    ControlFlag = 0x800000;
+                }
+                else
+                {
+                    ControlFlag = 0;
+                }
+
+                ControlFlag |= 0x2119;
+
+                PhysicsMode = 3;
+            }
+
+            if (Ptr->Data == 60)
+            {
+                if (razSwitchVAnimGroup(In->CharacterInstance, CurrentSection, 88, -1, -1) != 0)
+                {
+                    razSwitchVAnimSingle(In->CharacterInstance, CurrentSection, 2, -1, -1);
+                }
+            }
+            else if (Ptr->Data == 30)
+            {
+                if (razSwitchVAnimGroup(In->CharacterInstance, CurrentSection, 92, -1, -1) != 0)
+                {
+                    razSwitchVAnimSingle(In->CharacterInstance, CurrentSection, 3, -1, -1);
+                }
+            }
+            else
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 6));
+            }
+
+            break;
+        case 0x10000000:
+            StateSwitchStateData(In, CurrentSection, StateHandlerStartMove, 0);
+            break;
+        case 0x4010080:
+            if (CurrentSection == 0)
+            {
+                if (Ptr->Data == 0)
+                {
+                    razSetPauseTranslation(In->CharacterInstance);
+
+                    StateSwitchStateCharacterData(In, StateHandlerIdle, SetControlInitIdleData(0, 0, 5));
+                }
+                else
+                {
+                    razResetPauseTranslation(In->CharacterInstance);
+                }
+            }
+
+            break;
+        case 0x2000000:
+        case 0x80000002:
+        case 0x80000010:
+            EnMessageQueueData(&In->SectionList[CurrentSection].Defer, Ptr->ID, 0);
+            break;
+        case 0x8000000:
+        case 0x8000001:
+            StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 5));
+            break;
+        case 0x80000001:
+            if (CurrentSection == 0)
+            {
+                Raziel.Mode = 0x10;
+
+                if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 0, NULL, NULL) != 0)
+                {
+                    G2EmulationSwitchAnimationCharacter(In, 26, 0, 0, 1);
+                }
+
+                StateSwitchStateCharacterData(In, StateHandlerCompression, 0);
+            }
+
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerCompression);
 
