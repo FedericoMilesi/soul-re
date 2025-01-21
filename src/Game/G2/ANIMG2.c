@@ -759,7 +759,72 @@ short G2AnimSection_AdvanceOverInterval(G2AnimSection *section, short interval)
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", G2AnimSection_RewindOverInterval);
 
-INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_BuildTransformsNoControllers);
+void _G2Anim_BuildTransformsNoControllers(G2Anim *anim)
+{
+    Segment *segment;
+    G2Matrix *segMatrix;
+    G2Bool bRootTransUpdated;
+    int segIndex;
+    int segCount;
+    unsigned long disabledBits[3];
+    unsigned long disabledMask;
+    unsigned long parentMask;
+    unsigned long parentIndex;
+    unsigned char flags; // not from decls.h
+
+    flags = anim->section->flags;
+
+    segment = anim->modelData->segmentList;
+
+    segMatrix = anim->segMatrices;
+
+    disabledMask = 0x1;
+
+    bRootTransUpdated = ((flags & 0x80)) && (!(flags & 0x8));
+
+    disabledBits[0] = anim->disabledBits[0];
+    disabledBits[1] = anim->disabledBits[1];
+    disabledBits[2] = anim->disabledBits[2];
+
+    segCount = anim->modelData->numSegments;
+
+    segIndex = 0;
+    parentIndex = 0;
+
+    while (segIndex < segCount)
+    {
+        if (segment->parent != -1)
+        {
+            parentMask = 1 << (segment->parent & 0x1F);
+
+            if ((disabledBits[segment->parent >> 5] & parentMask))
+            {
+                disabledBits[parentIndex] |= disabledMask;
+            }
+        }
+
+        if (!(disabledBits[parentIndex] & disabledMask))
+        {
+            _G2Anim_BuildSegTransformNoControllers(segMatrix, &anim->segMatrices[segment->parent], bRootTransUpdated, segIndex);
+        }
+
+        bRootTransUpdated = G2FALSE;
+
+        segment++;
+
+        segMatrix++;
+        segIndex++;
+
+        disabledMask <<= 1;
+
+        if (disabledMask == 0)
+        {
+            parentIndex++;
+
+            disabledMask = 1;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/G2/ANIMG2", _G2Anim_BuildSegTransformNoControllers);
 

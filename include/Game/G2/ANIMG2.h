@@ -62,5 +62,6 @@ void G2Anim_GetRootMotionFromTimeForDuration(G2Anim *anim, short durationStart, 
 void FooBar(G2AnimSection *section, G2Anim *anim, int decompressedKey, int targetKey, long timeOffset);
 void _G2AnimSection_InitStatus(G2AnimSection *section, G2Anim *anim);
 void _G2AnimSection_TriggerEffects(G2AnimSection *section, short startTime, short endTime);
+void _G2Anim_BuildSegTransformNoControllers(G2Matrix *segMatrix, G2Matrix *parentMatrix, G2Bool bRootTransUpdated, int segIndex);
 
 #endif
