@@ -31,5 +31,7 @@ void G2Anim_AttachControllerToSeg(G2Anim *anim, int segNumber, int type);
 void G2Anim_DetachControllerFromSeg(G2Anim *anim, int segNumber, int type);
 G2Bool G2Anim_IsControllerInterpolating(G2Anim *anim, int segNumber, int type);
 void G2Anim_SetControllerCallbackData(G2Anim *anim, int segNumber, int type, void *callbackData);
+void _G2Anim_UpdateControllers(G2Anim *anim);
+void _G2Anim_BuildSegTransformWithControllers(G2Matrix *segMatrix, G2Matrix *parentMatrix, G2AnimController *controller, G2Bool bRootTransUpdated, int segIndex);
 
 #endif

@@ -821,7 +821,7 @@ void _G2Anim_BuildTransformsNoControllers(G2Anim *anim)
         {
             parentIndex++;
 
-            disabledMask = 1;
+            disabledMask = 0x1;
         }
     }
 }
