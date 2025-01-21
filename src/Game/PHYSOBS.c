@@ -2859,10 +2859,8 @@ void ExecuteThrow(Instance *instance)
     if ((Data->throwFlags & 0x1))
     {
         short angley;
-        Position zero;
+        Position zero = {0};
         Position velocity;
-
-        memset(&zero, 0, sizeof(Position));
 
         velocity.x = (short)instance->xVel;
         velocity.y = (short)instance->yVel;

@@ -1754,11 +1754,9 @@ int PhysicsFollowWall(Instance *instance, GameTracker *gameTracker, intptr_t Dat
 
 void PhysicsMoveLocalZClamp(Instance *instance, long segment, long time, long clamp)
 {
-    Position pos;
+    Position pos = {0};
     SVECTOR v;
     SVECTOR dv;
-
-    memset(&pos, 0, sizeof(Position));
 
     PhysicsMove(instance, &pos, time);
 

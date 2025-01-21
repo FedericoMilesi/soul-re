@@ -81,11 +81,9 @@ void G2Anim_DisableController(G2Anim *anim, int segNumber, int type)
 
 void G2Anim_InterpDisableController(G2Anim *anim, int segNumber, int type, short duration)
 {
-    G2SVector3 zeroVector;
+    G2SVector3 zeroVector = {0};
     G2Quat targetQuat;
     G2AnimController *controller;
-
-    memset(&zeroVector, 0, sizeof(G2SVector3));
 
     if ((duration == 0) || (type == 32))
     {

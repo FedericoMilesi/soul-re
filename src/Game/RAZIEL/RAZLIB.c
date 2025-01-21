@@ -39,10 +39,8 @@ void razAlignYRotMove(Instance *dest, short distance, Position *position, Rotati
 {
     SVECTOR d;
     SVECTOR dd;
-    SVECTOR rot;
+    SVECTOR rot = {0};
     MATRIX mat;
-
-    memset(&rot, 0, sizeof(SVECTOR));
 
     rot.vz = rotation->z = MATH3D_AngleFromPosToPos(position, &dest->position) + extraZ;
 
@@ -673,11 +671,9 @@ INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", razSelectMotionAnim);
 
 int razApplyMotion(CharacterState *In, int CurrentSection)
 {
-    G2SVector3 Vec;
+    G2SVector3 Vec = {0};
     G2AnimSection *animSection;
     int adjustment;
-
-    memset(&Vec, 0, sizeof(G2SVector3));
 
     if (CurrentSection == 0)
     {
