@@ -47,5 +47,7 @@ void FX_Blood(SVector *location, SVector *input_vel, SVector *accel, int amount,
 void FX_MakeWaterBubble(SVector *position, SVector *vel, SVector *accl, long splashZ, BubbleParams *BP);
 FXGlowEffect *FX_DoInstanceOneSegmentGlowWithTime(Instance *instance, long segment, long *color, long numColors, long atuColorCycleRate, long width, long height, long ATULifeTime);
 void FX_StopAllGlowEffects(Instance *instance, int fadeout_time);
+void FX_StartPassthruFX(Instance *instance, SVector *normal, SVector *point);
+void FX_EndPassthruFX(Instance *instance);
 
 #endif

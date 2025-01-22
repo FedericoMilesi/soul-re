@@ -46,5 +46,6 @@ void ProcessEffects(Instance *instance);
 void ProcessInteractiveMusic(Instance *instance);
 void ProcessSpecialAbilities(Instance *instance);
 void StateHandlerGlide(CharacterState *In, int CurrentSection, intptr_t Data);
+int SetupReaction(Instance *player, Instance *instance);
 
 #endif

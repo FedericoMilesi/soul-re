@@ -1078,7 +1078,133 @@ void StateHandlerSlide(CharacterState *In, int CurrentSection, intptr_t Data)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerBlock);
+void StateHandlerBlock(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+    int Anim;
+
+    Anim = G2EmulationQueryAnimation(In, CurrentSection);
+
+    if (CurrentSection == 0)
+    {
+        BlockCount++;
+    }
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if (CurrentSection == 0)
+            {
+                Raziel.Mode = 0x800000;
+
+                ControlFlag = 0x8009;
+
+                PhysicsMode = 3;
+
+                SteerSwitchMode(In->CharacterInstance, 0);
+
+                G2EmulationSwitchAnimationCharacter(In, 81, 0, 10, 1);
+            }
+
+            In->SectionList[CurrentSection].Data1 = 0;
+            break;
+        case 0x100004:
+            COLLIDE_SegmentCollisionOn(In->CharacterInstance, 1);
+
+            BlockCount = 0;
+
+            FX_EndPassthruFX(In->CharacterInstance);
+            break;
+        case 0x8000000:
+            if (CurrentSection == 0)
+            {
+                if ((Anim == 82) || (Anim == 108))
+                {
+                    StateSwitchStateCharacterData(In, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+
+                    if (Anim == 108)
+                    {
+                        razSetPlayerEventHistory(0x10000);
+                    }
+                }
+                else if (In->SectionList[CurrentSection].Data1 != 0)
+                {
+                    Rotation rot;
+
+                    G2EmulationSwitchAnimationCharacter(In, 108, 0, 5, 1);
+
+                    COLLIDE_SegmentCollisionOff(In->CharacterInstance, 1);
+
+                    razGetRotFromNormal(&Raziel.Senses.ForwardNormal, &rot);
+
+                    In->CharacterInstance->rotation.z = rot.z;
+                }
+                else
+                {
+                    G2EmulationSwitchAnimationCharacter(In, 82, 0, 3, 1);
+
+                    Raziel.alarmTable = 1600;
+
+                    In->CharacterInstance->anim.section->swAlarmTable = &Raziel.alarmTable;
+                }
+            }
+
+            break;
+        case 0x8000004:
+            if ((Raziel.Senses.EngagedMask & 0x1))
+            {
+                razGetForwardNormal(In->CharacterInstance, Raziel.Senses.EngagedList->instance);
+
+                SetupReaction(In->CharacterInstance, Raziel.Senses.EngagedList->instance);
+
+                INSTANCE_Post(Raziel.Senses.EngagedList->instance, 0x800000, SetObjectData(-Raziel.Senses.ForwardNormal.x, -Raziel.Senses.ForwardNormal.y, 6, NULL, 0));
+            }
+
+            break;
+        case 0:
+            if ((CurrentSection == 0) && (Anim != 108))
+            {
+                StateSwitchStateCharacterData(In, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+            }
+
+            break;
+        case 0x4010400:
+        {
+            evPhysicsEdgeData *EdgeData;
+
+            EdgeData = (evPhysicsEdgeData *)Ptr->Data;
+
+            if (((EdgeData->rc & 0x20000)) && (((Raziel.Abilities & 0x1)) && (Raziel.CurrentPlane == 2)))
+            {
+                SVECTOR startVec;
+                SVECTOR endVec;
+
+                PHYSICS_GenericLineCheckSetup(0, 0, 0, &startVec);
+                PHYSICS_GenericLineCheckSetup(0, -320, 0, &endVec);
+
+                if ((PHYSICS_CheckForObjectCollide(gameTrackerX.playerInstance, &startVec, &endVec, 1) == 0) && (In->SectionList[CurrentSection].Data1 == 0))
+                {
+                    FX_StartPassthruFX(In->CharacterInstance, EdgeData->Normal1, EdgeData->Delta);
+
+                    In->SectionList[CurrentSection].Data1 = 1;
+                }
+            }
+
+            break;
+        }
+        case 0x4000001:
+        case 0x4010200:
+        case 0x80000000:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+}
 
 void StateHandlerDeCompression(CharacterState *In, int CurrentSection, intptr_t Data)
 {
