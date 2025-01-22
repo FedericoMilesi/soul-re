@@ -780,7 +780,135 @@ void StateHandlerStopMove(CharacterState *In, int CurrentSection, intptr_t Data)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerCompression);
+void StateHandlerCompression(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if (CurrentSection == 0)
+            {
+                ControlFlag = 0x111;
+
+                SetExternalForce(&ExternalForces[2], 0, 0, 0, 1, 0);
+
+                In->SectionList->Data1 = 0;
+
+                PhysicsMode = 3;
+
+                Raziel.movementMinRate = 0;
+
+                switch (Raziel.Mode)
+                {
+                case 0xF:
+                    break;
+                case 0x20:
+                    SteerSwitchMode(In->CharacterInstance, 4);
+
+                    Raziel.steeringLockRotation = In->CharacterInstance->rotation.z;
+
+                    In->CharacterInstance->yVel = 21;
+
+                    if (G2Anim_IsControllerActive(&In->CharacterInstance->anim, 1, 14) == G2FALSE)
+                    {
+                        G2Anim_EnableController(&In->CharacterInstance->anim, 1, 14);
+                    }
+
+                    break;
+                case 0x10:
+                    SteerSwitchMode(In->CharacterInstance, 4);
+
+                    Raziel.steeringLockRotation = In->CharacterInstance->rotation.z;
+
+                    In->CharacterInstance->yVel = 40;
+
+                    if (G2Anim_IsControllerActive(&In->CharacterInstance->anim, 1, 14) == G2FALSE)
+                    {
+                        G2Anim_EnableController(&In->CharacterInstance->anim, 1, 14);
+                    }
+                }
+            }
+
+            break;
+        case 0x8000000:
+            switch (Raziel.Mode)
+            {
+            case 0x8:
+                if (CurrentSection == 0)
+                {
+                    if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 4, NULL, NULL) != 0)
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 27, 0, 0, 1);
+                    }
+
+                    SetPhysics(In->CharacterInstance, -16, 0, 83, 154);
+                }
+
+                break;
+            case 0x20:
+                if (CurrentSection == 0)
+                {
+                    if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 36, NULL, NULL) != 0)
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 39, 0, 0, 1);
+                    }
+
+                    SetPhysics(In->CharacterInstance, -16, 0, 21, 195);
+
+                    In->CharacterInstance->yVel = 0;
+                }
+
+                break;
+            default:
+                if (CurrentSection == 0)
+                {
+                    if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 20, NULL, NULL) != 0)
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 35, 0, 0, 1);
+                    }
+
+                    SetPhysics(In->CharacterInstance, -16, 0, 40, 154);
+
+                    In->CharacterInstance->yVel = 0;
+
+                    if (In->SectionList[CurrentSection].Data1 == 1)
+                    {
+                        In->CharacterInstance->zVel = (In->CharacterInstance->zVel * 2) / 3;
+                    }
+                }
+            }
+
+            StateSwitchStateData(In, CurrentSection, StateHandlerJump, 0);
+            break;
+        case 0x20000001:
+            if (CurrentSection == 0)
+            {
+                if (Raziel.Mode == 0x10)
+                {
+                    In->SectionList[CurrentSection].Data1 = 1;
+                }
+
+                EnMessageQueueData(&In->SectionList[CurrentSection].Defer, 0x20000001, 0);
+            }
+
+            break;
+        case 0x80000001:
+            EnMessageQueueData(&In->SectionList[CurrentSection].Defer, 0x80000001, 0);
+            break;
+        case 0x4000001:
+        case 0x4020000:
+        case 0x80000000:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+}
 
 void StateHandlerJump(CharacterState *In, int CurrentSection, intptr_t Data)
 {
