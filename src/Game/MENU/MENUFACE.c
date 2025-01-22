@@ -106,6 +106,58 @@ void menuface_terminate()
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUFACE", MENUFACE_ChangeStateRandomly);
+void MENUFACE_ChangeStateRandomly(int index)
+{
+    menuface_t *face;
+    menuface_t *lastFace;
+    menuface_t *temp; // not from decls.h
+
+    (void)index;
+
+    if (hack_initialized != 0)
+    {
+        lastFace = &MenuFaces[8];
+
+        for (face = &MenuFaces[0], temp = &lastFace[-8]; face < lastFace; face++, temp++)
+        {
+            if (temp->delay == 0)
+            {
+                if (temp->transitionDir == 0)
+                {
+                    int temp2; // not from decls.h
+
+                    temp2 = rand();
+
+                    if (temp2 == ((temp2 / 500) * 500))
+                    {
+                        if (temp->curFrame == -1)
+                        {
+                            temp->transitionDir = 1;
+                        }
+                        else
+                        {
+                            temp->transitionDir = -1;
+                        }
+                    }
+                }
+                else
+                {
+                    temp->curFrame += temp->transitionDir;
+
+                    if (temp->curFrame == ((temp->frames * 8) - temp->frames - 1) || (temp->curFrame == -1))
+                    {
+                        temp->transitionDir = 0;
+
+                        temp->delay = 200;
+                    }
+                }
+            }
+            else
+            {
+                temp->delay--;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENUFACE", MENUFACE_RefreshFaces);
