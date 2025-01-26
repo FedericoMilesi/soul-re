@@ -1443,7 +1443,199 @@ void StateHandlerDeCompression(CharacterState *In, int CurrentSection, intptr_t 
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerGlide);
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerHang);
+void StateHandlerHang(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+    int Anim;
+
+    Anim = G2EmulationQueryAnimation(In, CurrentSection);
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+        {
+            evControlInitHangData *data;
+
+            data = (evControlInitHangData *)Ptr->Data;
+
+            if (CurrentSection == 0)
+            {
+                if ((Raziel.Mode & 0x40000))
+                {
+                    CAMERA_ChangeToOutOfWater(&theCamera, In->CharacterInstance);
+                }
+
+                In->SectionList[CurrentSection].Data2 = In->CharacterInstance->attachedID;
+
+                ControlFlag = 0x8001501;
+
+                if (In->CharacterInstance->attachedID == 0)
+                {
+                    ControlFlag = 0xC001501;
+                }
+
+                In->CharacterInstance->attachedID = 0;
+
+                Raziel.Mode = 0x100;
+
+                if (data->instance != NULL)
+                {
+                    Raziel.attachedPlatform = data->instance;
+                }
+
+                SteerSwitchMode(In->CharacterInstance, 0);
+            }
+
+            if (Raziel.iVelocity.z < 0)
+            {
+                G2EmulationSwitchAnimation(In, CurrentSection, 7, 4, data->frames, 1);
+            }
+            else
+            {
+                G2EmulationSwitchAnimation(In, CurrentSection, 7, 0, data->frames, 1);
+            }
+
+            In->SectionList[CurrentSection].Data1 = 0;
+
+            PhysicsMode = 3;
+
+            SetPhysics(In->CharacterInstance, -16, 0, 0, 0);
+
+            In->CharacterInstance->flags2 &= ~0x40;
+            break;
+        }
+        case 0x100004:
+            if (CurrentSection == 0)
+            {
+                Raziel.attachedPlatform = NULL;
+
+                ControlFlag &= ~0x400;
+
+                In->CharacterInstance->attachedID = 0;
+            }
+
+            In->CharacterInstance->flags2 |= 0x40;
+            break;
+        case 0x10000000:
+            if ((Ptr->Data == 0x10000003) && (Anim == 6))
+            {
+                if (CurrentSection == 1)
+                {
+                    SetPhysics(In->CharacterInstance, -16, 0, 0, 0);
+
+                    if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 24, NULL, NULL) != 0)
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 36, 0, 4, CurrentSection);
+                    }
+
+                    StateSwitchStateCharacterData(In, StateHandlerFall, 0);
+                }
+            }
+            else if ((Ptr->Data == 0x10000001) || ((*PadData & 0x1)))
+            {
+                if (In->SectionList[CurrentSection].Data1 == 0)
+                {
+                    G2EmulationSwitchAnimation(In, CurrentSection, 8, 0, 2, 1);
+
+                    PurgeMessageQueue(&In->SectionList[CurrentSection].Event);
+                }
+
+                In->SectionList[CurrentSection].Data1 = 1;
+            }
+
+            break;
+        case 0x8000001:
+            if (In->SectionList[CurrentSection].Data1 == 1)
+            {
+                EnMessageQueueData(&In->SectionList[CurrentSection].Event, 0x100000, 0);
+            }
+
+            break;
+        case 0x8000003:
+            if (CurrentSection == 0)
+            {
+                ControlFlag &= ~0x400;
+
+                if (In->SectionList[CurrentSection].Data2 != 0)
+                {
+                    ControlFlag |= 0x4000000;
+                }
+            }
+
+            break;
+        case 0x8000000:
+            if (In->SectionList[CurrentSection].Data1 == 1)
+            {
+                EnMessageQueueData(&In->SectionList[CurrentSection].Event, 0x100000, 0);
+
+                In->CharacterInstance->rotation.x = 0;
+                In->CharacterInstance->rotation.y = 0;
+            }
+            else if (CurrentSection == 2)
+            {
+                G2EmulationSwitchAnimation(In, 2, 0, 0, 3, CurrentSection);
+            }
+            else
+            {
+                G2EmulationSwitchAnimation(In, CurrentSection, 6, 0, 3, 0);
+            }
+
+            if (CurrentSection == 0)
+            {
+                ControlFlag &= ~0x400;
+            }
+
+            break;
+        case 0x100000:
+            if ((*PadData & 0x8000000F))
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerStartMove, 10);
+
+                In->SectionList[CurrentSection].Data1 = 0;
+            }
+            else
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+
+                Raziel.Mode = 0x1;
+
+                In->SectionList[CurrentSection].Data1 = 0;
+            }
+
+            break;
+        case 0x100014:
+            if (CurrentSection == 1)
+            {
+                SetPhysics(In->CharacterInstance, -16, 0, 0, 0);
+
+                if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 24, NULL, NULL) != 0)
+                {
+                    G2EmulationSwitchAnimationCharacter(In, 36, 0, 4, CurrentSection);
+                }
+
+                StateSwitchStateCharacterData(In, StateHandlerFall, 0);
+            }
+
+            break;
+        case 0x1000000:
+        case 0x1000001:
+        case 0x4000001:
+        case 0x4000011:
+        case 0x4010010:
+        case 0x4010200:
+        case 0x80000000:
+        case 0x80000008:
+        case 0x80000020:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerPushObject);
 
