@@ -111,6 +111,42 @@ INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", DisplayMenuBox);
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_draw_item);
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_draw);
+/* TODO: this function requires migration of .sdata
+void menu_draw(menu_t *menu)
+{
+    Extents2d ext = {2147483647, -2147483648, 2147483647, -2147483648};
+    menu_stack_t *stack;
+    int index;
+    int ypos;
+    int i;
+    menu_item_t *item;
+    int color;
+
+    stack = &menu->stack[menu->nmenus] - 1;
+
+    index = stack->index;
+
+    ypos = 0;
+
+    if (menu->drawfn != NULL)
+    {
+        menu->drawfn(menu->opaque);
+    }
+
+    for (i = 0; i < menu->nitems; i++)
+    {
+        item = &menu->items[i];
+
+        color = ((i == 0) && ((item->flags & 0x4))) ? 3 : i != index;
+
+        ypos = menu_draw_item(menu, ypos, 0, 0, item->text, color, item->flags, &ext);
+    }
+
+    if (stack->format.border != 0)
+    {
+        DisplayMenuBox(ext.xmin, ext.xmax, ext.ymin, ext.ymax);
+    }
+}*/
 
 INCLUDE_ASM("asm/nonmatchings/Game/MENU/MENU", menu_run);
 
