@@ -49,5 +49,6 @@ FXGlowEffect *FX_DoInstanceOneSegmentGlowWithTime(Instance *instance, long segme
 void FX_StopAllGlowEffects(Instance *instance, int fadeout_time);
 void FX_StartPassthruFX(Instance *instance, SVector *normal, SVector *point);
 void FX_EndPassthruFX(Instance *instance);
+void FX_MakeSoulDust(Instance *instance, short segment);
 
 #endif
