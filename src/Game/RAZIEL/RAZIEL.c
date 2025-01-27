@@ -1293,7 +1293,212 @@ void StateInitStartMove(CharacterState *In, int CurrentSection, int Frame)
     ControlFlag |= 0x2000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerStartMove);
+void StateHandlerStartMove(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+    int mode;
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            StateInitStartMove(In, CurrentSection, Ptr->Data);
+
+            In->SectionList[CurrentSection].Data2 = 1;
+
+            if (CurrentSection == 0)
+            {
+                ControlFlag = 0x2A119;
+
+                Raziel.Mode = (Raziel.Mode & 0x200800) | 0x4;
+
+                PhysicsMode = 3;
+
+                SteerSwitchMode(In->CharacterInstance, 2);
+
+                Raziel.movementMinRate = 3276;
+
+                Raziel.movementMinAnalog = 1024;
+                Raziel.movementMaxAnalog = 4096;
+
+                Raziel.passedMask = 0;
+            }
+
+            break;
+        case 0x8000000:
+        case 0x8000001:
+            StateSwitchStateData(In, CurrentSection, StateHandlerMove, 0);
+            break;
+        case 0x4010080:
+            if (CurrentSection != 2)
+            {
+                if (Ptr->Data != 0)
+                {
+                    G2EmulationSetMode(In, CurrentSection, 1);
+                }
+                else
+                {
+                    G2EmulationSetMode(In, CurrentSection, 0);
+                }
+            }
+
+            if (((Raziel.passedMask & 0x2)) && ((*PadData & 0x8000000F)))
+            {
+                G2EmulationSetMode(In, CurrentSection, 2);
+
+                ControlFlag &= ~0x2000;
+            }
+
+            break;
+        case 0x2000000:
+            if ((Raziel.Senses.EngagedMask & 0x20))
+            {
+                razPickupAndGrab(In, CurrentSection);
+                break;
+            }
+        case 0x80000002:
+        case 0x80000010:
+            if ((CurrentSection == 0) && (In->CharacterInstance->tface != NULL))
+            {
+                EnMessageQueueData(&In->SectionList[0].Defer, Ptr->ID, 0);
+
+                ControlFlag |= 0x800000;
+            }
+        case 0:
+            if (CurrentSection == 0)
+            {
+                if (((Raziel.passedMask & 0x7)) || (G2EmulationQueryMode(In, 0) == 0))
+                {
+                    mode = Raziel.passedMask;
+
+                    if ((Raziel.passedMask & 0x1))
+                    {
+                        mode = 0x2;
+                    }
+                    else if ((Raziel.passedMask & 0x2))
+                    {
+                        mode = 0x3;
+                    }
+                    else
+                    {
+                        mode &= 0x4;
+                    }
+
+                    StateSwitchStateCharacterData(In, StateHandlerIdle, SetControlInitIdleData(mode, 5, 5));
+
+                    ControlFlag &= ~0x2000;
+                }
+
+                ControlFlag |= 0x2000;
+            }
+
+            break;
+        case 0x80000001:
+            if (CurrentSection == 0)
+            {
+                Raziel.Mode = 0x8;
+
+                if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 0, NULL, NULL) != 0)
+                {
+                    G2EmulationSwitchAnimationCharacter(In, 26, 0, 0, 1);
+                }
+
+                StateSwitchStateCharacterData(In, StateHandlerCompression, 0);
+
+                ControlFlag &= ~0x2000;
+            }
+
+            break;
+        case 0x80000000:
+            if ((Raziel.passedMask & 0x4))
+            {
+                if (CurrentSection == 1)
+                {
+                    if (!(Raziel.Senses.Flags & 0x80))
+                    {
+                        StateSwitchStateData(In, 1, StateHandlerAttack2, 10);
+                    }
+
+                    break;
+                }
+
+                StateSwitchStateData(In, CurrentSection, StateHandlerMove, 0);
+                break;
+            }
+
+            if ((CurrentSection == 0) && (!(Raziel.Senses.Flags & 0x80)))
+            {
+                StateSwitchStateCharacterData(In, StateHandlerAttack2, 0);
+            }
+
+            break;
+        case 0x80000004:
+            StateSwitchStateData(In, CurrentSection, StateHandlerMove, 3);
+            break;
+        case 0x4000001:
+            if ((CurrentSection == 0) && (G2EmulationQueryFrame(In, 0) > 6))
+            {
+                PhysicsMode = 0;
+
+                SetDropPhysics(In->CharacterInstance, &Raziel);
+
+                if (In->CharacterInstance->zVel < -32)
+                {
+                    if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 24, NULL, NULL) != 0)
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 36, 0, 4, 1);
+                    }
+
+                    StateSwitchStateCharacterData(In, StateHandlerFall, 0);
+                }
+            }
+
+            break;
+        case 0x4010401:
+            StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 5, 5));
+            break;
+        case 0x10000000:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+
+    if (((*PadData & 0x8000000F)) && (In->SectionList[CurrentSection].Data2 != 0))
+    {
+        In->SectionList[CurrentSection].Data2++;
+
+        if (In->SectionList[CurrentSection].Data2 >= 8)
+        {
+            G2EmulationSetMode(In, CurrentSection, 1);
+
+            ControlFlag &= ~0x2000;
+
+            In->SectionList[CurrentSection].Data2 = 0;
+        }
+    }
+
+    if ((G2EmulationQueryFrame(In, CurrentSection) > 10) && (CurrentSection == 0) && (CheckHolding(In->CharacterInstance) != 0))
+    {
+        if (In->SectionList[1].Process == StateHandlerStartMove)
+        {
+            StateSwitchStateData(In, 1, StateHandlerMove, 11);
+        }
+
+        if (In->SectionList[2].Process == StateHandlerStartMove)
+        {
+            StateSwitchStateData(In, 2, StateHandlerMove, 11);
+        }
+    }
+
+    if (((Raziel.Magnitude != 0) && (Raziel.Magnitude < 4096)) && ((Raziel.passedMask & 0x1)))
+    {
+        StateSwitchStateData(In, CurrentSection, StateHandlerMove, 0);
+    }
+}
 
 void StateInitMove(CharacterState *In, int CurrentSection, int Frames)
 {

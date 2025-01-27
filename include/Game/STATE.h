@@ -64,5 +64,6 @@ void EnMessageQueue(MessageQueue *In, Message *Element);
 intptr_t SetAnimationInstanceSwitchData(Instance *instance, int anim, int frame, int frames, int mode);
 void StateGovernState(CharacterState *In, int Frames);
 void G2EmulatePlayAnimation(CharacterState *In);
+int G2EmulationQueryMode(CharacterState *In, int CurrentSection);
 
 #endif
