@@ -749,7 +749,238 @@ void StateHandlerLookAround(CharacterState *In, int CurrentSection, intptr_t Dat
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerCrouch);
+void StateHandlerCrouch(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+    int Anim;
+    Instance *heldInst;
+    int DropThisFrame;
+    evObjectData *data;
+    int i;
+
+    DropThisFrame = 0;
+
+    heldInst = razGetHeldItem();
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        Anim = G2EmulationQueryAnimation(In, CurrentSection);
+
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if (CurrentSection == 0)
+            {
+                Raziel.Mode = 0x40;
+
+                ControlFlag = 0x8109;
+
+                PhysicsMode = 3;
+
+                SteerSwitchMode(In->CharacterInstance, 0);
+
+                if (Ptr->Data != 0)
+                {
+                    if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 72, NULL, NULL) != 0)
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 3, 0, 3, 1);
+                    }
+                }
+                else if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 76, NULL, NULL) != 0)
+                {
+                    G2EmulationSwitchAnimationCharacter(In, 4, 0, 8, 2);
+                }
+
+                if (heldInst != NULL)
+                {
+                    INSTANCE_Post(heldInst, 0x80002C, 0);
+                }
+            }
+
+            if (Ptr->Data != 0)
+            {
+                In->SectionList[CurrentSection].Data2 = 72;
+            }
+            else
+            {
+                In->SectionList[CurrentSection].Data2 = 0;
+            }
+
+            break;
+        case 0x100004:
+            if (CurrentSection == 0)
+            {
+                COLLIDE_SegmentCollisionOn(In->CharacterInstance, 1);
+
+                if (heldInst != NULL)
+                {
+                    INSTANCE_Post(heldInst, 0x200003, 7);
+                    INSTANCE_Post(heldInst, 0x80002B, 0);
+                }
+            }
+
+            break;
+        case 0x8000000:
+            if ((Anim == 5) || (Anim == 85))
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+
+                ControlFlag &= ~0x8001000;
+
+                In->SectionList[CurrentSection].Data1 = 1;
+                break;
+            }
+
+            if (CurrentSection == 1)
+            {
+                if ((In->SectionList[CurrentSection].Data2 == 80) && (heldInst != NULL) && (DropThisFrame == 0))
+                {
+                    INSTANCE_Post(heldInst, 0x800008, 0);
+
+                    razReaverOn();
+                }
+
+                In->SectionList[0].Data2 = 76;
+
+                In->SectionList[CurrentSection].Data2 = 76;
+
+                In->SectionList[2].Data2 = 76;
+
+                if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 76, NULL, NULL) != 0)
+                {
+                    G2EmulationSwitchAnimationCharacter(In, 4, 0, 8, 2);
+                }
+            }
+
+            break;
+        case 0x100000:
+            StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+            break;
+        case 0x2000000:
+            if (((Raziel.Senses.EngagedMask & 0x4)) && (Raziel.Senses.heldClass != 0x3) && ((Anim != 5) && (Anim != 85)))
+            {
+                ControlFlag = (ControlFlag | 0x8041000) & ~0x8;
+
+                if (CurrentSection == 0)
+                {
+                    for (i = 0; i < 3; i++)
+                    {
+                        In->SectionList[i].Data1 = 0;
+
+                        PurgeMessageQueue(&In->SectionList[i].Event);
+                    }
+
+                    razCenterWithBlock(In->CharacterInstance, Raziel.Senses.EngagedList[2].instance, -141);
+
+                    data = (evObjectData *)SetObjectData(-Raziel.Senses.ForwardNormal.x, -Raziel.Senses.ForwardNormal.y, 0, NULL, 0);
+
+                    INSTANCE_Post(Raziel.Senses.EngagedList[2].instance, 0x800001, (intptr_t)data);
+
+                    if (!(data->rc & 0x1))
+                    {
+                        INSTANCE_Post(In->CharacterInstance, 0x100000, 0);
+                        break;
+                    }
+
+                    COLLIDE_SegmentCollisionOff(In->CharacterInstance, 1);
+
+                    if ((data->rc & 0x8))
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 85, 0, 0, 1);
+                    }
+                    else
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 5, 0, 0, 1);
+                    }
+
+                    razSetPlayerEventHistory(0x2);
+                }
+            }
+
+            break;
+        case 0x80000001:
+            if ((CurrentSection == 0) && ((Anim != 5) && (Anim != 85)))
+            {
+                Raziel.Mode = 0x20;
+
+                if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 32, NULL, NULL) != 0)
+                {
+                    G2EmulationSwitchAnimationCharacter(In, 38, 0, 1, 1);
+                }
+
+                StateSwitchStateCharacterData(In, StateHandlerCompression, 0);
+            }
+
+            break;
+        case 0x80000010:
+            if ((CurrentSection == 0) && (In->CharacterInstance->tface != NULL))
+            {
+                EnMessageQueueData(&In->SectionList[0].Defer, 0x80000010, 0);
+
+                ControlFlag |= 0x800000;
+            }
+
+            if (((Anim != 5) && (Anim != 85)) && (In->SectionList[CurrentSection].Data2 != 80))
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+
+                Raziel.Mode = 0x1000000;
+            }
+
+            break;
+        case 0x20000008:
+            if (((Anim != 5) && (Anim != 85)) && (In->SectionList[CurrentSection].Data2 != 80))
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerIdle, SetControlInitIdleData(0, 0, 3));
+
+                Raziel.Mode = 0x1000000;
+            }
+
+            break;
+        case 0x80000000:
+            if (heldInst != NULL)
+            {
+                DropThisFrame = 1;
+
+                razSwitchVAnimGroup(In->CharacterInstance, CurrentSection, 80, -1, -1);
+
+                In->SectionList[CurrentSection].Data2 = 80;
+
+                INSTANCE_Post(heldInst, 0x200005, 0);
+            }
+
+            break;
+        case 0x10000000:
+            if ((Raziel.Senses.heldClass != 0x3) && ((Anim != 5) && (Anim != 85)))
+            {
+                StateSwitchStateData(In, CurrentSection, StateHandlerMove, 3);
+            }
+
+            break;
+        case 0x80000020:
+            if ((Anim != 5) && (Anim != 85))
+            {
+                DefaultStateHandler(In, CurrentSection, Data);
+            }
+
+            break;
+        case 0x4010400:
+        case 0x4020000:
+        case 0x80000004:
+        case 0x80000008:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+
+    if ((!(*PadData & RazielCommands[6])) && (In->SectionList[CurrentSection].Process == StateHandlerCrouch))
+    {
+        EnMessageQueueData(&In->SectionList[CurrentSection].Event, 0x20000008, 0);
+    }
+}
 
 void StateHandlerDropAction(CharacterState *In, int CurrentSection, intptr_t Data)
 {
