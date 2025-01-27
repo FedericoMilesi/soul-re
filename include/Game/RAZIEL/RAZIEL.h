@@ -47,5 +47,10 @@ void ProcessInteractiveMusic(Instance *instance);
 void ProcessSpecialAbilities(Instance *instance);
 void StateHandlerGlide(CharacterState *In, int CurrentSection, intptr_t Data);
 int SetupReaction(Instance *player, Instance *instance);
+void StateHandlerStartTurn(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerPushObject(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerPullSwitch(CharacterState *In, int CurrentSection, intptr_t Data);
+void StateHandlerBreakOff(CharacterState *In, int CurrentSection, intptr_t Data);
+int CheckHolding(Instance *instance);
 
 #endif
