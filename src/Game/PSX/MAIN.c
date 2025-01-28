@@ -39,7 +39,13 @@ void play_movie(char *name)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", InitMainTracker);
+void InitMainTracker(MainTracker *mainTracker)
+{
+    mainTracker->mainState = 0;
+    mainTracker->previousState = 0;
+
+    mainTracker->done = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", FindTextInLine);
 
