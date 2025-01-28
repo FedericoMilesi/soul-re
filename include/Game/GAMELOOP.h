@@ -23,6 +23,7 @@ void GAMELOOP_ChangeMode();
 void Switch_For_Redraw();
 void MainRenderLevel(StreamUnit *currentUnit, unsigned long **drawot);
 void GAMELOOP_DrawSavedOT(unsigned long **newOT);
+void GAMELOOP_SetScreenWipe(int time, int maxTime, int type);
 
 GameTracker gameTrackerX;
 GameTracker *gameTracker;

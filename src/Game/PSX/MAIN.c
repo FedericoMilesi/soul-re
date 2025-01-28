@@ -1,4 +1,6 @@
 #include "Game/PSX/MAIN.h"
+#include "Game/GAMELOOP.h"
+#include "Game/RAZIEL/RAZLIB.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", ClearDisplay);
 
@@ -40,7 +42,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", MAIN_DoMainInit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", MAIN_InitVolume);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", MAIN_ResetGame);
+void MAIN_ResetGame()
+{
+    GAMELOOP_SetScreenWipe(0, 0, -1);
+
+    gameTrackerX.gameFlags &= ~0x80;
+    gameTrackerX.gameFlags &= ~0x10;
+    gameTrackerX.gameFlags &= ~0x1;
+
+    RAZIEL_StartNewGame();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", MAIN_MainMenuInit);
 
