@@ -3391,7 +3391,151 @@ long RazielAnimCallbackDuringPause(G2Anim *anim, int sectionID, G2AnimCallbackMs
     return messageDataA;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", RazielQuery);
+unsigned long RazielQuery(Instance *instance, unsigned long Query)
+{
+    Normal *Ptr;
+    unsigned long ability;
+    PlayerSaveData data;
+    evShadowSegmentData *shadowData;
+    int temp; // not from decls.h
+
+    switch (Query)
+    {
+    case 1:
+        return 1;
+    case 9:
+        return WaterStatus;
+    case 6:
+        return SetPositionData(instance->position.x, instance->position.y, instance->position.z);
+    case 8:
+        if (ExtraRot != NULL)
+        {
+            return (unsigned long)ExtraRot;
+        }
+        else
+        {
+            return 0;
+        }
+    case 7:
+        if (Raziel.steeringMode == 0x4)
+        {
+            return SetPositionData(instance->rotation.x, instance->rotation.y, Raziel.steeringLockRotation);
+        }
+        else
+        {
+            return SetPositionData(instance->rotation.x, instance->rotation.y, instance->rotation.z);
+        }
+    case 10:
+        return Raziel.Mode;
+    case 11:
+        return Raziel.CurrentPlane;
+    case 13:
+        if (instance->oldMatrix != NULL)
+        {
+            return (unsigned long)instance->oldMatrix;
+        }
+        else
+        {
+            return 0;
+        }
+    case 12:
+        if (instance->oldMatrix != NULL)
+        {
+            return (unsigned long)&instance->oldMatrix[15];
+        }
+        else
+        {
+            return 0;
+        }
+    case 16:
+        Ptr = (Normal *)CIRC_Alloc(sizeof(Normal));
+
+        if (Raziel.Mode == 0x40000)
+        {
+            Ptr->x = instance->matrix[1].m[0][2];
+            Ptr->y = instance->matrix[1].m[1][2];
+            Ptr->z = instance->matrix[1].m[2][2];
+        }
+        else
+        {
+            Ptr->x = -instance->matrix[0].m[0][1];
+            Ptr->y = -instance->matrix[0].m[1][1];
+            Ptr->z = -instance->matrix[0].m[2][1];
+        }
+
+        return (unsigned long)Ptr;
+    case 19:
+        temp = STREAM_GetLevelWithID(instance->currentStreamUnitID)->unitFlags;
+
+        ability = Raziel.Abilities & 0x1FC0000;
+
+        if (((temp & 0x800)) || (RAZIEL_OkToShift() == 0))
+        {
+            ability &= ~0x1000000;
+        }
+
+        if (((Raziel.Mode & 0x40000)) || (Raziel.CurrentPlane == 2))
+        {
+            ability &= 0x1000000;
+        }
+
+        return ability;
+    case 24:
+        temp = SetControlSaveDataData(sizeof(PlayerSaveData), &data);
+
+        data.abilities = Raziel.Abilities;
+
+        data.currentPlane = Raziel.CurrentPlane;
+
+        data.healthScale = Raziel.HealthScale;
+        data.healthBalls = Raziel.HealthBalls;
+
+        data.manaBalls = Raziel.GlyphManaBalls;
+        data.manaMax = Raziel.GlyphManaMax;
+
+        data.playerEventHistory = Raziel.playerEventHistory;
+
+        return temp;
+    case 31:
+        return Raziel.HealthBalls;
+    case 32:
+        return Raziel.GlyphManaBalls;
+    case 45:
+        return Raziel.GlyphManaMax;
+    case 34:
+        if ((Raziel.Senses.EngagedMask & 0x40))
+        {
+            return (unsigned long)Raziel.Senses.EngagedList[6].instance;
+        }
+        else
+        {
+            return 0;
+        }
+    case 36:
+        return Raziel.Abilities;
+    case 38:
+        shadowData = (evShadowSegmentData *)SetShadowSegmentData(2);
+
+        shadowData->shadowSegments[0] = 12;
+        shadowData->shadowSegments[1] = 8;
+
+        return (unsigned long)shadowData;
+    case 39:
+        return Raziel.Senses.EngagedMask;
+    case 41:
+        return Raziel.playerEvent;
+    case 42:
+        return Raziel.playerEventHistory;
+    case 43:
+        return (Raziel.HitPoints ^ GetMaxHealth()) == 0;
+    case 44:
+        return (unsigned long)razGetHeldItem();
+    case 46:
+        return Raziel.invincibleTimer;
+    }
+
+    return 0;
+}
 
 void RazielPost(Instance *instance, unsigned long Message, uintptr_t Data)
 {
