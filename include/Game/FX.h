@@ -50,5 +50,6 @@ void FX_StopAllGlowEffects(Instance *instance, int fadeout_time);
 void FX_StartPassthruFX(Instance *instance, SVector *normal, SVector *point);
 void FX_EndPassthruFX(Instance *instance);
 void FX_MakeSoulDust(Instance *instance, short segment);
+void FX_Blood2(SVector *location, SVector *input_vel, SVector *accel, int amount, long color, long dummyCrapShouldRemove);
 
 #endif

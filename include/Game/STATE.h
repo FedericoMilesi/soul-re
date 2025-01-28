@@ -65,5 +65,7 @@ intptr_t SetAnimationInstanceSwitchData(Instance *instance, int anim, int frame,
 void StateGovernState(CharacterState *In, int Frames);
 void G2EmulatePlayAnimation(CharacterState *In);
 int G2EmulationQueryMode(CharacterState *In, int CurrentSection);
+void StateSwitchStateDataDefault(CharacterState *In, int CurrentSection, void (*NewProcess)(), intptr_t Data);
+intptr_t SetControlInitHangData(Instance *instance, long frame, long frames);
 
 #endif
