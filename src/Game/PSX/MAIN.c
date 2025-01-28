@@ -1,6 +1,7 @@
 #include "Game/PSX/MAIN.h"
 #include "Game/GAMELOOP.h"
 #include "Game/RAZIEL/RAZLIB.h"
+#include "Game/PSX/AADLIB.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", ClearDisplay);
 
@@ -40,7 +41,16 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", init_menus);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", MAIN_DoMainInit);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", MAIN_InitVolume);
+void MAIN_InitVolume()
+{
+    aadInitVolume();
+
+    aadStartMasterVolumeFade(gameTrackerX.sound.gMasterVol, 256, NULL);
+
+    gameTrackerX.sound.soundsLoaded = 1;
+
+    aadSetNoUpdateMode(0);
+}
 
 void MAIN_ResetGame()
 {

@@ -35,5 +35,8 @@ unsigned long aadGetSramBlockAddr(int handle);
 void aadRelocateSfxMemory(void *oldAddress, int offset);
 void aadRelocateMusicMemoryEnd(void *oldAddress, int offset);
 void aadRelocateMusicMemoryBegin();
+void aadInitVolume();
+void aadStartMasterVolumeFade(int targetVolume, int volumeStep, void (*fadeCompleteCallback)());
+void aadSetNoUpdateMode(int noUpdate);
 
 #endif
