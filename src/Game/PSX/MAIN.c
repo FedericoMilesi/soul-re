@@ -4,6 +4,7 @@
 #include "Game/PSX/AADLIB.h"
 #include "Game/LOAD3D.h"
 #include "Game/MEMPACK.h"
+#include "Game/CINEMA/CINEPSX.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", ClearDisplay);
 
@@ -26,7 +27,17 @@ void show_screen(char *name)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", play_movie);
+void play_movie(char *name)
+{
+    if (CINE_Load() != 0)
+    {
+        CINE_Play(name, 0xFFFF, 2);
+
+        ClearDisplay();
+
+        CINE_Unload();
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", InitMainTracker);
 

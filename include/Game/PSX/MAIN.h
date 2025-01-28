@@ -8,6 +8,7 @@ void VblTick();
 int MainG2(void *appData);
 long *MAIN_LoadTim(char *name);
 void MAIN_InitVolume();
+void ClearDisplay();
 
 DISPENV disp[2];
 BLK_FILL clearRect[2];
