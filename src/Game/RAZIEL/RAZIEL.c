@@ -2557,7 +2557,236 @@ void StateHandlerDeCompression(CharacterState *In, int CurrentSection, intptr_t 
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/RAZIEL/RAZIEL", StateHandlerGlide);
+void StateHandlerGlide(CharacterState *In, int CurrentSection, intptr_t Data)
+{
+    Message *Ptr;
+    int Frame;
+    int Anim;
+    int moving;
+    evObjectDraftData *draft;
+    evPhysicsSwimData *SwimData;
+
+    moving = 0;
+
+    Anim = G2EmulationQueryAnimation(In, CurrentSection);
+
+    Frame = G2EmulationQueryFrame(In, CurrentSection);
+
+    if (CurrentSection == 0)
+    {
+        In->SectionList[CurrentSection].Data2 &= ~0x2;
+    }
+
+    while ((Ptr = PeekMessageQueue(&In->SectionList[CurrentSection].Event)) != NULL)
+    {
+        switch (Ptr->ID)
+        {
+        case 0x100001:
+            if (CurrentSection == 0)
+            {
+                Raziel.Mode = 0x2000;
+
+                ControlFlag = 0x518;
+
+                PhysicsMode = 0;
+
+                SteerSwitchMode(In->CharacterInstance, 8);
+
+                DeInitAlgorithmicWings(In->CharacterInstance);
+
+                if (In->CharacterInstance->zVel < 0)
+                {
+                    SetPhysics(In->CharacterInstance, 0, 0, 52, -24);
+                }
+            }
+
+            In->SectionList[CurrentSection].Data1 = 1;
+            In->SectionList[CurrentSection].Data2 = 0;
+
+            G2EmulationSwitchAnimation(In, CurrentSection, 16, Ptr->Data, 5, 1);
+            break;
+        case 0x100004:
+            if (CurrentSection == 0)
+            {
+                InitAlgorithmicWings(In->CharacterInstance);
+
+                In->SectionList[CurrentSection].Data2 = 0;
+            }
+
+            break;
+        case 0x8000000:
+            if (In->SectionList[CurrentSection].Data1 != 0)
+            {
+                G2EmulationSwitchAnimationAlpha(In, CurrentSection, 18, 0, 5, 2, 4);
+
+                In->SectionList[CurrentSection].Data1 = 0;
+            }
+
+            break;
+        case 0x8000003:
+            if (Anim == 16)
+            {
+                SetPhysics(In->CharacterInstance, 0, 0, 52, -24);
+            }
+
+            break;
+        case 0x4010008:
+            StateSwitchStateData(In, CurrentSection, StateHandlerDeCompression, 0);
+            break;
+        case 0x20000001:
+            if (((Frame > 12) || (Anim != 16)) && (!(*PadData & RazielCommands[3])))
+            {
+                if (CurrentSection == 0)
+                {
+                    SetPhysics(In->CharacterInstance, -16, 0, 0, 0);
+
+                    if (razSwitchVAnimCharacterGroup(In->CharacterInstance, 24, NULL, NULL) != 0)
+                    {
+                        G2EmulationSwitchAnimationCharacter(In, 36, 0, 4, 1);
+                    }
+                }
+
+                StateSwitchStateCharacterData(In, StateHandlerFall, 0);
+            }
+            else
+            {
+                EnMessageQueueData(&In->SectionList[CurrentSection].Defer, 0x20000001, 0);
+            }
+
+            break;
+        case 0x20000004:
+            if (CurrentSection == 0)
+            {
+                SetExternalTransitionForce((Force *)&ExternalForces, In->CharacterInstance, 4, 0, 52, -24);
+            }
+
+            G2EmulationSwitchAnimation(In, CurrentSection, 18, 0, 5, 2);
+
+            In->SectionList[CurrentSection].Data1 = 0;
+            break;
+        case 0x80000004:
+            if (CurrentSection == 1)
+            {
+                SetExternalTransitionForce((Force *)&ExternalForces, In->CharacterInstance, 4, 0, 24, -24);
+            }
+
+            G2EmulationSwitchAnimation(In, CurrentSection, 17, 0, 5, 2);
+
+            In->SectionList[CurrentSection].Data1 = 0;
+
+            if ((In->SectionList[CurrentSection].Data2 & 0x1))
+            {
+                razSetPlayerEventHistory(0x4000);
+            }
+
+            break;
+        case 0x10000000:
+            if (Anim != 16)
+            {
+                if (Raziel.Bearing > 0)
+                {
+                    G2EmulationSwitchAnimation(In, CurrentSection, 43, 0, 6, 1);
+
+                    In->SectionList[CurrentSection].Data1 = 2;
+                }
+
+                if (Raziel.Bearing < 0)
+                {
+                    G2EmulationSwitchAnimation(In, CurrentSection, 44, 0, 6, 1);
+
+                    In->SectionList[CurrentSection].Data1 = 2;
+                }
+
+                if (Raziel.Bearing == 0)
+                {
+                    moving = 1;
+
+                    if (In->SectionList[CurrentSection].Data1 == 2)
+                    {
+                        G2EmulationSwitchAnimation(In, CurrentSection, 18, 0, 5, 2);
+
+                        In->SectionList[CurrentSection].Data1 = 0;
+                    }
+                }
+            }
+
+            moving = 1;
+            break;
+        case 0x4000007:
+            if (CurrentSection == 0)
+            {
+                draft = (evObjectDraftData *)Ptr->Data;
+
+                if (In->CharacterInstance->zVel > draft->maxVelocity)
+                {
+                    SetExternalForce(&ExternalForces[1], 0, 0, 0, 0, 0);
+                }
+                else
+                {
+                    SetExternalForce(&ExternalForces[1], 0, 0, draft->force, 0, 4092);
+                }
+
+                In->SectionList[CurrentSection].Data2 |= 0x3;
+
+                Raziel.playerEvent |= 0x4000;
+            }
+
+            break;
+        case 0x4020000:
+            SwimData = (evPhysicsSwimData *)Ptr->Data;
+
+            if (((SwimData->WaterDepth < 0) && (SwimData->WaterDepth != -32767)) && (Raziel.CurrentPlane == 1))
+            {
+                if (CurrentSection == 0)
+                {
+                    SetPhysics(In->CharacterInstance, -16, 0, 0, 0);
+                }
+
+                G2EmulationSwitchAnimation(In, CurrentSection, 19, 0, 4, 1);
+
+                StateSwitchStateData(In, CurrentSection, StateHandlerFall, 0);
+            }
+
+            break;
+        case 0x40005:
+        case 0x1000001:
+        case 0x4000001:
+        case 0x80000000:
+        case 0x80000008:
+        case 0x80000020:
+            break;
+        default:
+            DefaultStateHandler(In, CurrentSection, Data);
+        }
+
+        DeMessageQueue(&In->SectionList[CurrentSection].Event);
+    }
+
+    if ((CurrentSection == 0) && ((In->SectionList[CurrentSection].Data2 & 0x1)))
+    {
+        if (!(In->SectionList[CurrentSection].Data2 & 0x2))
+        {
+            if (moving != 0)
+            {
+                SetExternalTransitionForce((Force *)&ExternalForces, In->CharacterInstance, 10, 0, 52, -24);
+            }
+            else
+            {
+                SetExternalTransitionForce((Force *)&ExternalForces, In->CharacterInstance, 10, 0, 0, -24);
+            }
+
+            In->SectionList[CurrentSection].Data2 = 0;
+        }
+        else if (moving == 0)
+        {
+            In->CharacterInstance->yVel = 0;
+        }
+        else
+        {
+            In->CharacterInstance->yVel = 52;
+        }
+    }
+}
 
 void StateHandlerHang(CharacterState *In, int CurrentSection, intptr_t Data)
 {
