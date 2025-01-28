@@ -3,6 +3,7 @@
 #include "Game/RAZIEL/RAZLIB.h"
 #include "Game/PSX/AADLIB.h"
 #include "Game/LOAD3D.h"
+#include "Game/MEMPACK.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", ClearDisplay);
 
@@ -11,7 +12,19 @@ void screen_to_vram(long *screen, int buffer)
     LOAD_LoadTIM2(screen, 0, buffer * 256, 512, 256);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", show_screen);
+void show_screen(char *name)
+{
+    long *screen;
+
+    screen = LOAD_ReadFile(name, 11);
+
+    if (screen != NULL)
+    {
+        screen_to_vram(screen, gameTrackerX.gameData.asmData.dispPage);
+
+        MEMPACK_Free((char *)screen);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", play_movie);
 
