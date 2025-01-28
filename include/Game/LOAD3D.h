@@ -25,5 +25,6 @@ void LOAD_DumpCurrentDir();
 void LOAD_UpdateBigFilePointers(BigFileDir *oldDir, BigFileDir *newDir);
 void LOAD_PlayXA(int number);
 long *LOAD_ReadFile(char *fileName, unsigned char memType);
+void LOAD_LoadTIM2(long *addr, long x_pos, long y_pos, long width, long height);
 
 #endif

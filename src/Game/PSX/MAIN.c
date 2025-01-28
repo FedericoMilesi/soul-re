@@ -2,10 +2,14 @@
 #include "Game/GAMELOOP.h"
 #include "Game/RAZIEL/RAZLIB.h"
 #include "Game/PSX/AADLIB.h"
+#include "Game/LOAD3D.h"
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", ClearDisplay);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", screen_to_vram);
+void screen_to_vram(long *screen, int buffer)
+{
+    LOAD_LoadTIM2(screen, 0, buffer * 256, 512, 256);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", show_screen);
 
