@@ -5,6 +5,11 @@
 #include "Game/LOAD3D.h"
 #include "Game/MEMPACK.h"
 #include "Game/CINEMA/CINEPSX.h"
+#include "Game/DEBUG.h"
+
+short mainMenuFading;
+
+MainTracker mainTrackerX;
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", ClearDisplay);
 
@@ -101,7 +106,31 @@ INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", MAIN_MainMenuInit);
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", MAIN_FreeMainMenuStuff);
 
-INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", MAIN_StartGame);
+void MAIN_StartGame()
+{
+    if (mainMenuFading != 0)
+    {
+        mainTrackerX.mainState = 2;
+
+        MAIN_FreeMainMenuStuff();
+
+        gEndGameNow = 0;
+
+        mainMenuFading = 0;
+
+        currentMenu = (DebugMenuLine *)&standardMenu;
+    }
+    else
+    {
+        gameTrackerX.gameMode = 0;
+
+        currentMenu = NULL;
+
+        mainMenuFading = 1;
+
+        GAMELOOP_SetScreenWipe(-30, 30, 10);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Game/PSX/MAIN", MAIN_DoMainMenu);
 
